@@ -1,0 +1,94 @@
+{
+  "provider": {
+    "displayName": "Local llama.cpp (RTX 4070 + RTX 3060)",
+    "api": "openai-completions",
+    "baseURL": "http://127.0.0.1:10000/v1",
+    "apiKeyEnv": "LLAMA_CPP_API_KEY",
+    "timeoutMs": 600000,
+    "streamIdleTimeoutMs": 600000,
+    "compat": {
+      "supportsDeveloperRole": false,
+      "supportsStore": false,
+      "supportsReasoningEffort": false,
+      "supportsStrictMode": false,
+      "maxTokensField": "max_tokens",
+      "thinkingFormat": "chat-template",
+      "chatTemplateKwargs": {
+        "enable_thinking": false
+      }
+    },
+    "models": [
+      {
+        "id": "Muse-Glimmer-30B-UD-Q4_K_XL",
+        "name": "Muse Glimmer 30B (UD-Q4_K_XL) | 128K | GPU layers",
+        "contextWindow": 131072,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-MXFP4_MOE",
+        "name": "Nemotron 3.5 Lightning 30B-A3B (MXFP4) | 256K | CPU offload",
+        "contextWindow": 262144,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.6-35B-A3B-MXFP4_MOE",
+        "name": "Qwen3.6 35B-A3B (MXFP4) | 256K | CPU offload",
+        "contextWindow": 262144,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.8-27B-UD-Q4_K_M",
+        "name": "Qwen3.8 27B (UD-Q4_K_M, MTP-2) | 128K | Full GPU",
+        "contextWindow": 131072,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.8-35B-A3B-IQ4_XS",
+        "name": "Empero Qwen3.8 35B-A3B (IQ4_XS) | 256K | CPU offload",
+        "contextWindow": 262144,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "gpt-oss-20b",
+        "name": "GPT-OSS 20B (MXFP4/F16) | 64K | GPU layers",
+        "contextWindow": 65536,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "gpt-oss-120b",
+        "name": "GPT-OSS 120B (MXFP4/F16) | 128K | CPU expert offload",
+        "contextWindow": 131072,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      }
+    ]
+  },
+  "defaultModel": "Qwen3.8-27B-UD-Q4_K_M"
+}

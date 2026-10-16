@@ -1,0 +1,115 @@
+[
+  {
+    "id": "Muse-Glimmer-30B-UD-Q4_K_XL",
+    "label": "Muse Glimmer 30B (UD-Q4_K_XL) | 128K | GPU layers",
+    "path": "D:\\GGUF-Models\\Muse-Glimmer-30B-GGUF\\Muse-Glimmer-30B-UD-Q4_K_XL.gguf",
+    "context": 131072,
+    "options": {
+      "load-mode": "none",
+      "fit-target": "1536,1024",
+      "ubatch-size": "128",
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0",
+      "tensor-split": "60,40",
+      "ctx-checkpoints": "4"
+    },
+    "verification": "reports/benchmarks/previous-baselines/result-Muse-Glimmer-30B-UD-Q4_K_XL-final.json"
+  },
+  {
+    "id": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-MXFP4_MOE",
+    "label": "Nemotron 3.5 Lightning 30B-A3B (MXFP4) | 256K | CPU offload",
+    "path": "D:\\GGUF-Models\\NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF\\NVIDIA-Nemotron-3.5-Lightning-30B-A3B-MXFP4_MOE.gguf",
+    "context": 262144,
+    "options": {
+      "load-mode": "mmap",
+      "fit-target": "1024,768",
+      "ubatch-size": 256,
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0"
+    },
+    "verification": "reports/benchmarks/model-tests-20260922-053138/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-MXFP4_MOE.json"
+  },
+  {
+    "id": "Qwen3.6-35B-A3B-MXFP4_MOE",
+    "label": "Qwen3.6 35B-A3B (MXFP4) | 256K | CPU offload",
+    "path": "D:\\GGUF-Models\\Qwen3.6-35B-A3B-MTP-GGUF\\Qwen3.6-35B-A3B-MXFP4_MOE.gguf",
+    "context": 262144,
+    "options": {
+      "load-mode": "mmap",
+      "fit-target": "1024,768",
+      "ubatch-size": 256,
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0"
+    },
+    "verification": "reports/benchmarks/model-tests-20260922-052143/Qwen3.6-35B-A3B-MXFP4_MOE.json"
+  },
+  {
+    "id": "Qwen3.8-27B-UD-Q4_K_M",
+    "label": "Qwen3.8 27B (UD-Q4_K_M, MTP-2) | 128K | Full GPU",
+    "path": "D:\\GGUF-Models\\Qwen3.8-27B-Q4\\Qwen3.8-27B-UD-Q4_K_M.gguf",
+    "context": 131072,
+    "options": {
+      "split-mode": "layer",
+      "tensor-split": "52,48",
+      "fit": "off",
+      "gpu-layers": "all",
+      "spec-type": "draft-mtp",
+      "spec-draft-n-max": 2,
+      "spec-draft-type-k": "q8_0",
+      "spec-draft-type-v": "q8_0",
+      "load-mode": "none",
+      "ubatch-size": 32,
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0",
+      "override-tensor": "token_embd.weight=CUDA0",
+      "kv-offload": "true",
+      "cache-ram": 0
+    },
+    "verification": "reports/benchmarks/model-tests-20260928-134251/Qwen3.8-27B-UD-Q4_K_M-32K-MTP-FULL-GPU.json"
+  },
+  {
+    "id": "Qwen3.8-35B-A3B-IQ4_XS",
+    "label": "Empero Qwen3.8 35B-A3B (IQ4_XS) | 256K | CPU offload",
+    "path": "D:\\GGUF-Models\\Empero-Qwen3.8-35B-A3B-Distill\\Qwen3.8-35B-A3B-IQ4_XS.gguf",
+    "context": 262144,
+    "options": {
+      "load-mode": "mmap",
+      "fit-target": "1024,768",
+      "ubatch-size": 256,
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0"
+    },
+    "verification": "reports/benchmarks/model-tests-20260922-051354/Qwen3.8-35B-A3B-IQ4_XS-128K.json"
+  },
+  {
+    "id": "gpt-oss-20b",
+    "label": "GPT-OSS 20B (MXFP4/F16) | 64K | GPU layers",
+    "path": "D:/GGUF-Models/gpt-oss-20b-F16.gguf",
+    "context": 65536,
+    "options": {
+      "load-mode": "none",
+      "reasoning-effort": "low",
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0"
+    },
+    "verification": "reports/benchmarks/model-tests-20260920-221733/gpt-oss-20b.json"
+  },
+  {
+    "id": "gpt-oss-120b",
+    "label": "GPT-OSS 120B (MXFP4/F16) | 128K | CPU expert offload",
+    "path": "D:/GGUF-Models/gpt-oss-120b-F16.gguf",
+    "context": 131072,
+    "options": {
+      "load-mode": "mmap",
+      "threads": "10",
+      "reasoning-effort": "low",
+      "cache-type-k": "q8_0",
+      "cache-type-v": "q8_0",
+      "n-cpu-moe": 29,
+      "tensor-split": "31,6",
+      "fit": "off",
+      "gpu-layers": "all"
+    },
+    "verification": "reports/benchmarks/model-tests-20260924-053109/gpt-oss-120b.json"
+  }
+]

@@ -1,0 +1,100 @@
+# --- secrets & private data ---
+dsh/data/.credentials.yaml
+dsh/data/.anonymous-user-id
+dsh/data/sessions/
+dsh/data/storages/
+dsh/data/.pre-move-backup-*/
+
+# --- generated / cache dirs ---
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+
+# --- dsh: bundled runtime, not our source ---
+dsh/node-v24.21.0-linux-x64/
+dsh/logs/
+
+# --- llama.cpp: vendored upstream checkout ---
+llama.cpp/
+
+# --- sglang: vendored upstream checkout + compiled extras ---
+sglang/flash-next-src/
+sglang/flash-next-extra/
+
+# --- vllm: nothing custom outside .venv (already ignored above) ---
+
+# --- llm-tools: toolchains, caches, and all model weights ---
+llm-tools/cuda-build/
+llm-tools/python/
+llm-tools/uv-x86_64-unknown-linux-gnu/
+llm-tools/runtime-cache/
+llm-tools/llama-flash-mtp-src/
+llm-tools/models/
+llm-tools/prism-llama/llama-prism-*
+llm-tools/bin/
+
+# --- model weight file types, as a safety net anywhere in the tree ---
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.so
+
+# Native Strata runtime and staged runtime builds
+strata/
+llama.cpp-new/
+llama.cpp-before-2026-10-01/
+dsh/data/.pre-upgrade-*/
+dsh/research/upgrade-2026-10-01/dsh-*/
+dsh/research/upgrade-2026-10-05/dsh-*/
+
+# Private local state and publication backups (never publish)
+dsh/data/
+dsh/workspace/
+dsh/npm-cache/
+.private-backups/
+*.bundle
+*.log
+*.zstd
+.env
+.env.*
+!.env.example
+
+# Model weights, partial downloads and packaged runtime artifacts
+*.gguf*
+*.safetensors*
+*.ckpt
+*.onnx
+*.h5
+*.npz
+*.copying
+*.whl
+*.tar
+*.tar.gz
+*.zip
+build/
+dist/
+
+# HyperQwen upstream checkout and its isolated runtime
+hyperqwen/upstream/
+hyperqwen/research/raw/
+
+# Turnstone local credentials, database, conversations and user files
+turnstone/data/
+turnstone/workspace/
+turnstone/logs/
+
+# Isolated Vulkan preparation toolchain and generated hardware candidates
+llm-tools/vulkan-sdk/
+hardware/generated/
+
+# Isolated AMD inference environments and upstream source
+.venv-rocm/
+sglang/rocm-src/
+vllm/rocm-src/
+llm-tools/rocm-sdk/
+
+# Linux-only checkpoints and download caches on primary NVMe
+/models/

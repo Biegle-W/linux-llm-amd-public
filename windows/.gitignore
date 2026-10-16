@@ -1,0 +1,12 @@
+data/
+logs/
+runtimes/
+models/
+archive/
+__pycache__/
+*.gguf
+*.gguf.part
+.env
+.env.*
+*.key
+*.pem

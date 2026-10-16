@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec /usr/bin/python3 /opt/local-llm/dsh/start-vllm.py "$@"

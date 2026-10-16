@@ -1,0 +1,39 @@
+{
+  "providerId": "strata-q3",
+  "defaultModel": "qwen3.8-flash-next-iq3_xxs",
+  "provider": {
+    "displayName": "Local Strata Q3 (RTX 4070 + RTX 3060)",
+    "api": "openai-completions",
+    "baseURL": "http://127.0.0.1:8081/v1",
+    "headers": {
+      "Authorization": "Bearer local-strata"
+    },
+    "compat": {
+      "supportsDeveloperRole": false,
+      "supportsStore": false,
+      "supportsReasoningEffort": false,
+      "supportsStrictMode": false,
+      "maxTokensField": "max_tokens",
+      "thinkingFormat": "chat-template",
+      "chatTemplateKwargs": {
+        "enable_thinking": false
+      }
+    },
+    "models": [
+      {
+        "id": "qwen3.8-flash-next-iq3_xxs",
+        "name": "Qwen3.8 Flash-Next (IQ3_XXS, MTP-3) | 128K | CPU expert offload",
+        "contextWindow": 131072,
+        "maxTokens": 32768,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      }
+    ]
+  },
+  "selectAsDefault": true,
+  "retiredProviders": {
+    "strata": "qwen3.8-flash-next-iq2_xs"
+  }
+}

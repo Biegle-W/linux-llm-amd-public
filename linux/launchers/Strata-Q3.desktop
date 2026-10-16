@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Strata Q3
+Comment=Load Flash-Next IQ3_XXS immediately; 256K context, MTP, both GPUs
+Exec=/opt/local-llm/dsh/start-strata-q3
+Path=/opt/local-llm/dsh/workspace
+Terminal=true
+Icon=applications-development
+Categories=Development;

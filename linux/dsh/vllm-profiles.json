@@ -1,0 +1,11 @@
+{
+  "qwen3.8-27b-vllm": {
+    "name": "Qwen3.8-27B vLLM AMD (64K, MTP)",
+    "context": 65536,
+    "mtp": true,
+    "memory_fraction": 0.88,
+    "kv_cache_bytes": 1879048192,
+    "runtime": "rocm",
+    "launcher": "/opt/local-llm/vllm/start-qwen-rocm"
+  }
+}

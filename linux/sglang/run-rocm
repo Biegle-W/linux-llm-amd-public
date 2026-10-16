@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "$ROOT/hardware/rocm-env.sh"
+if [[ ${1:-} == --check ]]; then
+ exec "$ROOT/sglang/.venv-rocm/bin/python" "$ROOT/hardware/rocm-probe.py"
+fi
+# JIT kernels need the same private host toolchain as the AOT build.
+export CXX="$ROOT/llm-tools/cuda-build/bin/x86_64-conda-linux-gnu-c++"
+export HIPCC_COMPILE_FLAGS_APPEND="--gcc-install-dir=$ROOT/llm-tools/cuda-build/lib/gcc/x86_64-conda-linux-gnu/14.4.0 --sysroot=$ROOT/llm-tools/cuda-build/x86_64-conda-linux-gnu/sysroot"
+export SGLANG_LOCAL_SHARE_QWEN_MTP=1
+export SGLANG_USE_AITER=0
+export SGLANG_RDNA_NO_FUSED=1
+export SGLANG_RDNA_GEMMA_TRITON=1
+# The optimized verify adapter duplicates ordered tokens on this TP1 setup.
+# Keep standard Triton verification; the benchmark can explicitly test the adapter.
+export SGLANG_RDNA_VLLM_VERIFY=${SGLANG_RDNA_VLLM_VERIFY:-0}
+export SGLANG_RDNA_CUSTOM_AR=0
+exec "$ROOT/sglang/.venv-rocm/bin/python" "$ROOT/sglang/rocm-bootstrap.py" "$@"

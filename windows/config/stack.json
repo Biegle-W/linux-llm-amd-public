@@ -1,0 +1,8 @@
+{
+  "runtime": "runtimes/llama.cpp-b11630-cuda-13.4/llama-server.exe",
+  "defaultModel": "Qwen3.8-27B-UD-Q4_K_M",
+  "preferredFastModel": "Qwen3.8-27B-UD-Q4_K_M",
+  "backendVersion": "b11630",
+  "cudaRuntime": "13.4",
+  "terminalWindow": "Local-LLM"
+}

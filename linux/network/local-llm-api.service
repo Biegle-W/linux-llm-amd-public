@@ -1,0 +1,14 @@
+[Unit]
+Description=Authenticated local LLM OpenAI API for LAN and Tailscale
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/local-llm/network/gateway.py
+WorkingDirectory=/opt/local-llm
+Environment=PYTHONUNBUFFERED=1
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

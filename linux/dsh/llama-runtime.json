@@ -1,0 +1,11 @@
+{
+  "backend": "vulkan-amd",
+  "models": [
+    "qwen3.8-27b-q4",
+    "muse-glimmer-30b",
+    "qwen3.6-35b-a3b",
+    "nemotron-3.5-bolt",
+    "empero-qwen3.8-35b-a3b"
+  ],
+  "source_commit": "f12aaa344c971556ec35be054d7aac1d901fd510"
+}

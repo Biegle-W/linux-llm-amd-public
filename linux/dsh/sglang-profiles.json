@@ -1,0 +1,38 @@
+{
+  "qwen3.8-27b-sglang": {
+    "name": "Qwen3.8-27B SGLang AMD (16K, MTP)",
+    "context": 16384,
+    "mtp": true,
+    "mtp_steps": 2,
+    "linear_replay": false,
+    "memory_fraction": 0.85,
+    "runtime": "rocm",
+    "model_path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+    "launcher": "/opt/local-llm/sglang/start-qwen-rocm"
+  },
+  "qwen3.8-27b-sglang-dflash2": {
+    "name": "Qwen3.8-27B SGLang AMD (16K, DFlash2)",
+    "context": 16384,
+    "mtp": false,
+    "memory_fraction": 0.92,
+    "runtime": "rocm",
+    "model_path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+    "launcher": "/opt/local-llm/sglang/start-qwen-rocm",
+    "min_free_vram_gib": 23.0,
+    "extra_args": [
+      "--speculative-algorithm",
+      "DFLASH",
+      "--speculative-draft-model-path",
+      "/opt/local-llm/models/HyperQwen/Qwen3.8-27B-DFlash2-W4A16",
+      "--speculative-draft-model-quantization",
+      "compressed-tensors",
+      "--speculative-num-draft-tokens",
+      "8",
+      "--speculative-draft-window-size",
+      "2048",
+      "--max-mamba-cache-size",
+      "2",
+      "--disable-radix-cache"
+    ]
+  }
+}

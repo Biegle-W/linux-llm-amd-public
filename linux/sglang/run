@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export CUDA_HOME=/opt/local-llm/llm-tools/cuda-build
+export TOOLCHAIN=/opt/local-llm/llm-tools/cuda-build
+export PATH="$TOOLCHAIN/bin:$PATH"
+export CC="$TOOLCHAIN/bin/x86_64-conda-linux-gnu-cc"
+export CXX="$TOOLCHAIN/bin/x86_64-conda-linux-gnu-c++"
+export CUDAHOSTCXX="$CXX"
+export HF_HOME=/mnt/llm-models/huggingface
+export XDG_CACHE_HOME=/opt/local-llm/llm-tools/runtime-cache
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export FLASHINFER_WORKSPACE_BASE=/opt/local-llm/llm-tools/runtime-cache/flashinfer
+export SGLANG_CACHE_DIR=/opt/local-llm/llm-tools/runtime-cache/sglang
+export MAX_JOBS=4
+export SGLANG_JIT_CACHE_DIR=/opt/local-llm/llm-tools/runtime-cache/sglang/jit
+exec /opt/local-llm/sglang/.venv/bin/python -m sglang.launch_server "$@"

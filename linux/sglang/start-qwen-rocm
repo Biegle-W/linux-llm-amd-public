@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+exec "$ROOT/sglang/run-rocm" \
+ --model-path /opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
+ --host 127.0.0.1 --port 30001 --served-model-name qwen3.8-27b-sglang \
+ --tp-size 1 --quantization gptq --dtype bfloat16 \
+ --language-only --json-model-override-args '{"language_model_only":true}' \
+ --mamba-ssm-dtype bfloat16 --mamba-radix-cache-strategy extra_buffer_lazy --kv-cache-dtype bfloat16 --attention-backend triton \
+ --context-length 16384 --max-total-tokens 16384 --mem-fraction-static 0.85 \
+ --max-running-requests 1 --max-mamba-cache-size 4 \
+ --speculative-draft-model-quantization gptq \
+ --cuda-graph-bs-decode 1 --cuda-graph-backend-prefill disabled \
+ --chunked-prefill-size 512 --max-prefill-tokens 1024 \
+ --reasoning-parser qwen3 --tool-call-parser qwen3_coder \
+ --default-chat-template-kwargs '{"enable_thinking":false}' --enable-metrics "$@"
