@@ -64,7 +64,7 @@ class UpgradeTests(unittest.TestCase):
                 rocm_runtime.require_rocm_headroom(23)
 
     def test_disabled_hyperqwen_preserves_active_backend(self):
-        with self.assertRaisesRegex(RuntimeError, 'exceeds the 4070 12 GB'):
+        with self.assertRaisesRegex(RuntimeError, 'HyperQwen is retired'):
             hardware_guard.require_hyperqwen()
 
     def test_disabled_hyperqwen_not_advertised(self):

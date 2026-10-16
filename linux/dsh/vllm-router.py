@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local serial profile switcher for the configured vLLM or HyperQwen worker."""
+"""Local serial profile switcher for the configured vLLM worker."""
 import http.client
 import json
 import os
@@ -15,12 +15,12 @@ from rocm_runtime import require_rocm_headroom
 
 ROOT = Path('/opt/local-llm/dsh')
 BACKEND = os.environ.get('LOCAL_VLLM_BACKEND', 'vllm')
-if BACKEND not in ('vllm', 'hyperqwen'):
+if BACKEND != 'vllm':
     raise SystemExit('Unknown local vLLM backend: ' + BACKEND)
 PROFILES = json.loads((ROOT / (BACKEND + '-profiles.json')).read_text())
-PUBLIC_PORT, WORKER_PORT = (18020, 18021) if BACKEND == 'hyperqwen' else (30010, 30011)
+PUBLIC_PORT, WORKER_PORT = (30010, 30011)
 MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
-DEFAULT = 'qwen3.8-27b-hyperqwen-dflash2' if BACKEND == 'hyperqwen' else 'qwen3.8-27b-vllm'
+DEFAULT = 'qwen3.8-27b-vllm'
 lock = threading.Lock()
 lifecycle = threading.RLock()
 closing = threading.Event()
@@ -71,23 +71,17 @@ def ensure_worker(model):
         if probe.connect_ex(('127.0.0.1', WORKER_PORT)) == 0:
             raise RuntimeError(f'{BACKEND} worker port {WORKER_PORT} is already occupied. Close the other server first.')
     worker_env = os.environ.copy()
-    if BACKEND == 'hyperqwen':
-        args = ['bash', str(ROOT.parent / 'hyperqwen/start-test')]
-        worker_env.update(HYPERQWEN_SPEC=cfg['spec'], HYPERQWEN_PORT=str(WORKER_PORT),
-                          HYPERQWEN_SERVED_MODEL=model, HYPERQWEN_CONTEXT=str(cfg['context']),
-                          HYPERQWEN_KV_BYTES=str(cfg['kv_cache_bytes']))
-    else:
-        launcher = cfg.get('launcher', '/opt/local-llm/vllm/start-qwen')
-        args = [launcher,
-                '--port', str(WORKER_PORT), '--served-model-name', model,
-                '--max-model-len', str(cfg['context']),
-                '--gpu-memory-utilization', str(cfg['memory_fraction'])]
-        if cfg.get('kv_cache_bytes'):
-            args += ['--kv-cache-memory-bytes', str(cfg['kv_cache_bytes'])]
-        args += cfg.get('extra_args', [])
-        if cfg['mtp']:
-            args += ['--speculative-config', json.dumps({
-                'method': 'mtp', 'num_speculative_tokens': 3})]
+    launcher = cfg.get('launcher', '/opt/local-llm/vllm/start-qwen-rocm')
+    args = [launcher,
+            '--port', str(WORKER_PORT), '--served-model-name', model,
+            '--max-model-len', str(cfg['context']),
+            '--gpu-memory-utilization', str(cfg['memory_fraction'])]
+    if cfg.get('kv_cache_bytes'):
+        args += ['--kv-cache-memory-bytes', str(cfg['kv_cache_bytes'])]
+    args += cfg.get('extra_args', [])
+    if cfg['mtp']:
+        args += ['--speculative-config', json.dumps({
+            'method': 'mtp', 'num_speculative_tokens': 3})]
     with lifecycle:
         if closing.is_set():
             raise RuntimeError(BACKEND + ' router is stopping')
@@ -141,10 +135,6 @@ class Handler(BaseHTTPRequestHandler):
         try:
             data = json.loads(self.rfile.read(int(self.headers.get('Content-Length', '0'))))
             model = data.get('model', DEFAULT)
-            # Preserve chats made with the first single-mode HyperQwen catalog.
-            if BACKEND == 'hyperqwen' and model == 'qwen3.8-27b':
-                model = DEFAULT
-                data['model'] = model
             if model not in PROFILES:
                 return self.send_json(400, {'error': 'Unknown model: ' + str(model)})
         except (ValueError, TypeError):
@@ -180,22 +170,10 @@ def interrupted(*args):
     raise KeyboardInterrupt
 
 if __name__ == '__main__':
-    if BACKEND == 'hyperqwen':
-        from hardware_guard import require_hyperqwen
-        require_hyperqwen()
     signal.signal(signal.SIGTERM, interrupted)
     signal.signal(signal.SIGHUP, interrupted)
     ThreadingHTTPServer.daemon_threads = True
     server = ThreadingHTTPServer(('127.0.0.1', PUBLIC_PORT), Handler)
-    if BACKEND == 'hyperqwen':
-        def warmup():
-            try:
-                with lock:
-                    ensure_worker(DEFAULT)
-            except Exception as error:
-                if not closing.is_set():
-                    print('HyperQwen initial load failed:', error, flush=True)
-        threading.Thread(target=warmup, daemon=True).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:

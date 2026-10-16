@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=HyperQwen
-Comment=Qwen3.8-27B, 64K, both GPUs; switch DFlash2 or MTP in DSH
-Exec=/opt/local-llm/hyperqwen/start
-Path=/opt/local-llm
-Terminal=true
-Icon=applications-development
-Categories=Development;

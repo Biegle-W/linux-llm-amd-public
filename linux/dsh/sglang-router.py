@@ -67,7 +67,7 @@ def ensure_worker(model):
     if cfg.get('runtime') == 'rocm':
         require_rocm_headroom(cfg.get('min_free_vram_gib', 22.25))
     model_path = cfg.get('model_path', MODEL)
-    launcher = cfg.get('launcher', '/opt/local-llm/sglang/start-qwen')
+    launcher = cfg.get('launcher', '/opt/local-llm/sglang/start-qwen-rocm')
     args = [launcher, '--model-path', model_path,
             '--port', '30001', '--served-model-name', model,
             '--context-length', str(cfg['context']), '--max-total-tokens', str(cfg['context']),

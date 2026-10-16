@@ -54,8 +54,11 @@ configure the model locations, and initialize private harness settings with
 `dsh/configure_local.py`. The `bin/` commands and `launchers/` entries are examples
 for separate backend and DSH launchers. Backend switching targets only configured
 inference workers. DSH and the network gateway are separate processes.
-HyperQwen is disabled for this AMD/NVIDIA combination: its former CUDA target
-exceeds 12 GB and was removed as unused. The obsolete LowLatency checkpoint,
+HyperQwen is retired from the current Linux setup: its CUDA runtime, launchers
+and profiles were removed after its unused target. Old SGLang/vLLM CUDA
+environments, the old llama.cpp CUDA build and obsolete SGLang Flash-Next
+source/dependencies were also removed. Active AMD runtimes are preserved.
+See the [cleanup record](linux/hardware/RETIRED-SETUPS-2026-10-16.md). The obsolete LowLatency checkpoint,
 separate Qwen MTP GGUF and unused Bolt vision projector were also removed from
 the active machine. Historical NVIDIA profiles remain as reference configurations.
 The SGLang DFlash2 drafter is still required.

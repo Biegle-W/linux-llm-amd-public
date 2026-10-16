@@ -12,12 +12,12 @@ def configure(default_provider=None):
     path.parent.mkdir(parents=True, exist_ok=True)
     settings = (yaml.safe_load(path.read_text()) or {}) if path.exists() else {}
     providers = settings.setdefault('llm-pi-ai', {}).setdefault('providers', {})
+    providers.pop('hyperqwen-local', None)  # Remove the retired local provider.
     catalogs = {
         'llama-local': ('Local llama.cpp', 8080, json.loads((ROOT / 'models.json').read_text())),
         'sglang-local': ('Local SGLang', 30000, [dict(id=k, **v) for k,v in json.loads((ROOT/'sglang-profiles.json').read_text()).items()]),
         'vllm-local': ('Local vLLM', 30010, [dict(id=k, **v) for k,v in json.loads((ROOT/'vllm-profiles.json').read_text()).items()]),
         'strata-local': ('Local Strata', 30020, [dict(id=k, **v) for k,v in json.loads((ROOT/'strata-profiles.json').read_text()).items()]),
-        'hyperqwen-local': ('Local HyperQwen', 18020, [dict(id=k, **v) for k,v in json.loads((ROOT/'hyperqwen-profiles.json').read_text()).items()]),
     }
     for key, (name, port, models) in catalogs.items():
         models = [m for m in models if m.get('enabled', True)]
@@ -25,7 +25,7 @@ def configure(default_provider=None):
             providers.pop(key, None)
             continue
         compat = {'supportsDeveloperRole': False, 'maxTokensField': 'max_tokens'}
-        if key in ('strata-local', 'hyperqwen-local'):
+        if key == 'strata-local':
             compat.update(supportsStore=False, supportsReasoningEffort=False, supportsStrictMode=False,
                           thinkingFormat='chat-template', chatTemplateKwargs={'enable_thinking': False})
         providers[key] = {'displayName': name, 'api': 'openai-completions',

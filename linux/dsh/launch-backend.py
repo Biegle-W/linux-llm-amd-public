@@ -6,18 +6,18 @@ from backend_guard import require_worker_ports_free
 from backend_switch import startup_handover, clear_owner
 from shared_storage import ensure_shared_models
 from terminal_logs import start_monitor, stop_monitor
-from hardware_guard import require_current_cuda_pair, require_hyperqwen, require_strata
+from hardware_guard import require_current_cuda_pair, require_strata
 from llama_runtime import launch_spec, require_amd_headroom
 from rocm_runtime import require_rocm, require_rocm_headroom
 ROOT = Path(__file__).resolve().parent
 kind = sys.argv[1]
-names = {'llama': 'llama.cpp', 'sglang': 'SGLang', 'vllm': 'vLLM', 'strata': 'Strata',
-         'hyperqwen': 'HyperQwen'}
+names = {'llama': 'llama.cpp', 'sglang': 'SGLang', 'vllm': 'vLLM', 'strata': 'Strata'}
 if kind not in names:
-    raise SystemExit('Choose llama, sglang, vllm, strata or hyperqwen.')
+    print('Choose llama, sglang, vllm or strata. HyperQwen has been retired.', file=sys.stderr)
+    raise SystemExit(1)
 ports = [(8080, 'llama.cpp'), (8081, 'llama.cpp'),
          (30000, 'SGLang'), (30001, 'SGLang'), (30010, 'vLLM'), (30011, 'vLLM'),
-         (30020, 'Strata'), (30021, 'Strata'), (18020, 'HyperQwen'), (18021, 'HyperQwen')]
+         (30020, 'Strata'), (30021, 'Strata')]
 backend = monitor = log = None
 worker_env = {**os.environ, 'CUDA_DEVICE_ORDER': 'PCI_BUS_ID', 'CUDA_VISIBLE_DEVICES': '0,1'}
 
@@ -36,8 +36,6 @@ try:
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
         require_strata()
-    elif kind == 'hyperqwen':
-        require_hyperqwen()
     elif kind != 'llama':
         require_current_cuda_pair()
     if kind in ('llama', 'strata'):
@@ -50,12 +48,6 @@ try:
         profiles = json.loads((ROOT / (kind + '-profiles.json')).read_text())
         paths = [ROOT / 'logs' / (kind + '.log'),
                  *[ROOT / 'logs' / (kind + '-' + model + '.log') for model in profiles]]
-    elif kind == 'hyperqwen':
-        worker_env['LOCAL_VLLM_BACKEND'] = 'hyperqwen'
-        cmd = [sys.executable, str(ROOT / 'vllm-router.py')]
-        profiles = json.loads((ROOT / 'hyperqwen-profiles.json').read_text())
-        paths = [ROOT / 'logs/hyperqwen.log',
-                 *[ROOT / 'logs' / ('hyperqwen-' + model + '.log') for model in profiles]]
     else:
         # Avoid long huge-page compaction during the ~40 GiB CUDA host registration.
         # Ubuntu's per-user memory-pressure monitor can kill the terminal mid-load.
@@ -74,10 +66,7 @@ try:
             require_rocm_headroom()
         monitor = start_monitor(paths)
         print(f'{names[kind]} backend only. Launch dsh separately. Ctrl+C stops this backend.', flush=True)
-        print('Loading HyperQwen DFlash2 now: both GPUs, 64K context. Wait for the ready message.\n'
-              'Select DFlash2 or MTP under Local HyperQwen in DSH to switch.\n'
-              'API: http://127.0.0.1:18020/v1' if kind == 'hyperqwen'
-              else 'Loading the selected Strata model now. Shared SATA cold loads may take a few minutes.' if kind == 'strata'
+        print('Loading the selected Strata model now. Shared SATA cold loads may take a few minutes.' if kind == 'strata'
               else 'Models load when requested by DSH or another API client.', flush=True)
         log = paths[0].open('a')
         backend = subprocess.Popen(cmd + sys.argv[2:], stdout=log, stderr=subprocess.STDOUT,

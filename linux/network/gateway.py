@@ -20,7 +20,6 @@ BACKENDS = {
     'sglang': ('sglang-profiles.json', 30000, 'SGLang'),
     'vllm': ('vllm-profiles.json', 30010, 'vLLM'),
     'strata': ('strata-profiles.json', 30020, 'Strata Q3'),
-    'hyperqwen': ('hyperqwen-profiles.json', 18020, 'HyperQwen'),
 }
 MAX_BODY = 32 * 1024 * 1024
 config = {}

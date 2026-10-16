@@ -47,15 +47,9 @@ def require_strata():
 
 
 def require_hyperqwen():
-    """Fail before handover; retained CUDA profiles are explicitly disabled on AMD."""
-    import json
-    from pathlib import Path
-    profiles = json.loads((Path(__file__).resolve().parent / 'hyperqwen-profiles.json').read_text())
-    enabled = [p for p in profiles.values() if p.get('enabled', True)]
-    if not enabled:
-        reason = next(iter(profiles.values()))['unavailable_reason']
-        raise RuntimeError(reason + ' No backend has been stopped.')
-    require_current_cuda_pair()
+    """Reject retired entry points before they can interrupt an active server."""
+    raise RuntimeError('HyperQwen is retired on this workstation; use the active AMD profiles. '
+                       'No backend has been stopped.')
 
 
 if __name__ == '__main__':
