@@ -17,3 +17,8 @@ NVIDIA and Windows snapshots unless their setups change or the user requests it.
 The private repository's AGENTS.md identifies its workspace and exact handoff
 locations. Keep the repository handoff and its Shared-drive copy identical.
 Report any blocked commit, push or handoff synchronization explicitly.
+
+Planned hardware migration: RTX 4070 retirement and a second RX 7900 XTX are
+not yet validated. Keep current single-AMD profiles and historical snapshots.
+Follow `linux/hardware/UPGRADE-DUAL-7900XTX.md` before publishing dual-AMD settings.
+Prefer a single card when the model fits with usable context and runtime headroom.

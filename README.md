@@ -1,5 +1,12 @@
 # Local LLM reference setups
 
+**Planned GPU replacement (October 16):** retire the RTX 4070 and add a second
+RX 7900 XTX 24 GB. This is a plan, not a validated hardware change. Existing
+single-AMD profiles remain active; use both cards only when one cannot fit the
+model with a usable context. Device selection and multi-GPU support must be
+validated after installation. RAM expansion is still pending.
+[Migration checklist](linux/hardware/UPGRADE-DUAL-7900XTX.md).
+
 **October 16 SGLang context update:** `qwen3.8-27b-sglang` now serves **40,960
 total tokens** on one RX 7900 XTX, retaining MTP2 and BF16 KV. The tested static
 memory fraction is 0.92, with a 23 GiB free-VRAM loading guard. A 38,410-token
@@ -35,7 +42,7 @@ models run on AMD alone; the NVIDIA card does not participate in ROCm TP.
 
 | Backend | Model / strategy | Context |
 |---|---|---:|
-| SGLang ROCm | Qwen 27B GPTQ, corrected MTP2 | 16,384 |
+| SGLang ROCm | Qwen 27B GPTQ, corrected MTP2 | 40,960 |
 | SGLang ROCm | Qwen 27B GPTQ, DFlash2 W4A16 drafter | 16,384 |
 | vLLM ROCm | Qwen 27B GPTQ, MTP3, Q4 KV | 65,536 |
 | llama.cpp Vulkan | Qwen 27B Q4, MTP3 | 65,536 |
