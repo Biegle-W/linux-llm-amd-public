@@ -1,5 +1,15 @@
 # Local LLM reference setups
 
+**October 16 SGLang context update:** `qwen3.8-27b-sglang` now serves **40,960
+total tokens** on one RX 7900 XTX, retaining MTP2 and BF16 KV. The tested static
+memory fraction is 0.92, with a 23 GiB free-VRAM loading guard. A 38,410-token
+retrieval request passed in 51.94 seconds; peak VRAM was 22.60 GiB with no sampled
+spill. Fresh short decode means: 53.50 inventory / 61.93 code / 42.78 prose t/s.
+The fresh 16K baseline was 53.74 / 62.18 / 44.66 t/s, so this is not a promise of
+zero slowdown. FP8 was tested and not selected because of its workload-dependent
+speed penalties. DFlash2 remains 16K BF16; vLLM and llama.cpp are unchanged.
+[Full comparison and limits](linux/hardware/SGLANG-CONTEXT-2026-10-16.md).
+
 **October 16 model-folder organization:** both SGLang and vLLM share
 `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/`. SGLang's DFlash2 drafter now lives in
 `models/drafts/Qwen3.8-27B-DFlash2-W4A16/`. The former empty `models/HyperQwen/`
@@ -148,13 +158,35 @@ benchmark. Different quantization, cache settings and measurement methods limit
 cross-engine comparisons. The storage move to NVMe was functionally checked but
 not rebenchmarked; these timings predate it.
 
+#### SGLang context comparison — later October 16 tests
+
+Two 512-output-token trials per short workload, same AMD GPU/runtime/checkpoint.
+MTP BF16 **40K** is now active. FP8 was measured but not selected. All rows passed
+the limited functional suite; DFlash FP8/32K was only tested to a 13K input depth.
+
+| Strategy / KV | Context | Inventory t/s | Code output t/s | Prose t/s | Peak card VRAM GiB |
+|---|---:|---:|---:|---:|---:|
+| DFLASH FP8 | 32,768 | 56.62 | 111.34 | 46.90 | 22.68 |
+| MTP BF16 | 16,384 | 53.74 | 62.18 | 44.66 | 20.99 |
+| MTP BF16 | 32,768 | 53.37 | 61.92 | 43.52 | 22.06 |
+| MTP BF16 | 40,960 | 53.50 | 61.93 | 42.78 | 22.60 |
+| MTP FP8 | 32,768 | 38.79 | 50.20 | 40.79 | 20.99 |
+
+The same 30,233-token retrieval request took 156.79 seconds with FP8/32K and
+37.92 seconds with BF16/32K. BF16/40K retrieved all markers from 38,410 input
+tokens in 51.94 seconds. These are total request times, not pure prefill rates.
+40K inventory/code speed was close to the fresh 16K baseline; prose averaged
+about 4% lower. No sampled VRAM spill. See the [full context report](linux/hardware/SGLANG-CONTEXT-2026-10-16.md)
+for limits, exact settings, and machine-readable results.
+
 #### Qwen speculative decoding by workload
 
 Same-day comparison: two synthetic 512-output-token trials per workload,
 temperature zero, warm execution. Values are mean approximate streaming decode
 rates. SGLang uses the Radeon fork `f84475ccf593`, GPTQ W4A16, BF16 KV and corrected
-standard verification. llama.cpp has a 64K configured context; both SGLang profiles
-have 16K. These are short workloads, not filled-context tests.
+standard verification. These earlier measurements used 16K for both SGLang profiles.
+The later MTP context comparison below supersedes its 16K production setting.
+These are short workloads, not filled-context tests.
 
 | Configuration | Inventory t/s | Code-copy output t/s | Prose t/s |
 |---|---:|---:|---:|

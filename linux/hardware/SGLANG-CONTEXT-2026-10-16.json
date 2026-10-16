@@ -1,0 +1,292 @@
+{
+  "date": "2026-10-16",
+  "sglang_commit": "f84475ccf593087df3d1da13c9e675eadee12352",
+  "hardware": "RX 7900 XTX 24 GB, TP1, 32 GB host RAM",
+  "results": [
+    {
+      "case": "sglang-dflash-fp8_e4m3-32768-0.92",
+      "context": 32768,
+      "kv": "fp8_e4m3",
+      "mode": "dflash",
+      "memory_fraction": 0.92,
+      "status": "passed",
+      "memory": {
+        "amd_vram_bytes": 24352747520,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "allocated_token_capacity": [
+          32768
+        ]
+      },
+      "decode_tps": {
+        "inventory": [
+          55.614875755762775,
+          57.62459643637078
+        ],
+        "code_edit": [
+          111.62937720664969,
+          111.05946133785116
+        ],
+        "prose": [
+          52.03194027353703,
+          41.76262740100058
+        ]
+      },
+      "long_retrieval": {},
+      "moderate_retrieval": {
+        "usage": {
+          "prompt_tokens": 13048,
+          "total_tokens": 13070,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "passed": true
+      }
+    },
+    {
+      "case": "sglang-mtp-bfloat16-16384-0.85",
+      "context": 16384,
+      "kv": "bfloat16",
+      "mode": "mtp",
+      "memory_fraction": 0.85,
+      "status": "passed",
+      "memory": {
+        "amd_vram_bytes": 22537785344,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "allocated_token_capacity": [
+          16384
+        ]
+      },
+      "decode_tps": {
+        "inventory": [
+          53.94685376061114,
+          53.53003528007111
+        ],
+        "code_edit": [
+          62.17524191295698,
+          62.19318065362814
+        ],
+        "prose": [
+          46.17150493695275,
+          43.148991473683346
+        ]
+      },
+      "long_retrieval": {},
+      "moderate_retrieval": {
+        "usage": {
+          "prompt_tokens": 13048,
+          "total_tokens": 13070,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "passed": true
+      }
+    },
+    {
+      "case": "sglang-mtp-bfloat16-32768-0.9",
+      "context": 32768,
+      "kv": "bfloat16",
+      "mode": "mtp",
+      "memory_fraction": 0.9,
+      "status": "passed",
+      "memory": {
+        "amd_vram_bytes": 23689134080,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "allocated_token_capacity": [
+          32768
+        ]
+      },
+      "decode_tps": {
+        "inventory": [
+          53.06039701419118,
+          53.67697513487377
+        ],
+        "code_edit": [
+          62.037442779253325,
+          61.79303420176978
+        ],
+        "prose": [
+          43.308508778858574,
+          43.72306104665879
+        ]
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 30233,
+          "total_tokens": 30255,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "seconds": 37.91945139299787,
+        "passed": true
+      },
+      "moderate_retrieval": {
+        "usage": {
+          "prompt_tokens": 13048,
+          "total_tokens": 13070,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "passed": true
+      }
+    },
+    {
+      "case": "sglang-mtp-bfloat16-40960-0.92",
+      "context": 40960,
+      "kv": "bfloat16",
+      "mode": "mtp",
+      "memory_fraction": 0.92,
+      "status": "passed",
+      "memory": {
+        "amd_vram_bytes": 24263770112,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "allocated_token_capacity": [
+          40960
+        ]
+      },
+      "decode_tps": {
+        "inventory": [
+          53.58227540768158,
+          53.42373451652898
+        ],
+        "code_edit": [
+          61.997242732441485,
+          61.859074078146676
+        ],
+        "prose": [
+          43.45439037799496,
+          42.11294633596788
+        ]
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 38410,
+          "total_tokens": 38432,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "seconds": 51.94155491700076,
+        "passed": true
+      },
+      "moderate_retrieval": {
+        "usage": {
+          "prompt_tokens": 13048,
+          "total_tokens": 13070,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "passed": true
+      }
+    },
+    {
+      "case": "sglang-mtp-fp8_e4m3-32768-0.85",
+      "context": 32768,
+      "kv": "fp8_e4m3",
+      "mode": "mtp",
+      "memory_fraction": 0.85,
+      "status": "passed",
+      "memory": {
+        "amd_vram_bytes": 22541246464,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "decode_tps": {
+        "inventory": [
+          38.54634136124236,
+          39.03670756140214
+        ],
+        "code_edit": [
+          50.259592773644584,
+          50.13052687866763
+        ],
+        "prose": [
+          40.05328574070244,
+          41.534449937712765
+        ]
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 30233,
+          "total_tokens": 30255,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "seconds": 156.79368537400296,
+        "passed": true
+      },
+      "moderate_retrieval": {
+        "usage": {
+          "prompt_tokens": 13048,
+          "total_tokens": 13070,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "passed": true
+      }
+    },
+    {
+      "case": "sglang-mtp-fp8_e5m2-32768-0.85",
+      "context": 32768,
+      "kv": "fp8_e5m2",
+      "mode": "mtp",
+      "memory_fraction": 0.85,
+      "status": "failed",
+      "memory": {
+        "amd_vram_bytes": 22421671936,
+        "amd_gtt_bytes": 35102720,
+        "nonresident_vram_bytes": 0
+      },
+      "alerts": [],
+      "validation": {},
+      "decode_tps": {
+        "inventory": [],
+        "code_edit": [],
+        "prose": []
+      },
+      "long_retrieval": {},
+      "moderate_retrieval": {},
+      "error": "Long test too large: 38683"
+    }
+  ]
+}

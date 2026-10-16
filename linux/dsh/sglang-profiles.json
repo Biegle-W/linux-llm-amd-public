@@ -1,14 +1,15 @@
 {
   "qwen3.8-27b-sglang": {
-    "name": "Qwen3.8-27B SGLang AMD (16K, MTP)",
-    "context": 16384,
+    "name": "Qwen3.8-27B SGLang AMD (40K, MTP)",
+    "context": 40960,
     "mtp": true,
     "mtp_steps": 2,
     "linear_replay": false,
-    "memory_fraction": 0.85,
+    "memory_fraction": 0.92,
     "runtime": "rocm",
     "model_path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
-    "launcher": "/opt/local-llm/sglang/start-qwen-rocm"
+    "launcher": "/opt/local-llm/sglang/start-qwen-rocm",
+    "min_free_vram_gib": 23.0
   },
   "qwen3.8-27b-sglang-dflash2": {
     "name": "Qwen3.8-27B SGLang AMD (16K, DFlash2)",
