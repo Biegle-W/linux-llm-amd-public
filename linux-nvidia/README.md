@@ -69,6 +69,14 @@ target weights remain INT4. The DFlash KV pool was reduced to 1 GiB/rank after a
 larger pool caused a long-prompt CUDA OOM. Strata retains the process-local
 `STRATA_NO_ARENA_THP=1` loading workaround and bounded conversation parking.
 
+## Saved benchmarks
+
+See the [public README benchmark tables](../README.md#previous-rtx-4070-12-gb--rtx-3060-12-gb)
+for per-model prefill/decode, the direct HyperQwen comparison, and longer-input
+results, plus the October 15 INT8-MLP TTFT comparison. Measurements retain their
+original dates, runtime versions and settings; earlier decode results predate
+the October 14 runtime update and must not be attributed to this archived build. Brief smoke-test outputs are labeled separately.
+
 ## Validation scope
 
 The saved October 14 update record reports functional checks on all five engines,
