@@ -1,5 +1,13 @@
 # Local LLM reference setups
 
+**October 16 model-folder organization:** both SGLang and vLLM share
+`models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/`. SGLang's DFlash2 drafter now lives in
+`models/drafts/Qwen3.8-27B-DFlash2-W4A16/`. The former empty `models/HyperQwen/`
+folder was removed. This was an in-place rename on Linux NVMe; all model file
+inodes and sizes were verified unchanged. SGLang's profile and benchmark helper
+use the new location. No model was loaded or benchmark rerun; model weights
+remain ignored by Git.
+
 Sanitized Linux and Windows launchers, configuration examples, and model-switching
 helpers for local OpenAI-compatible inference. This repository starts with fresh
 history. It contains no model weights, installed runtimes, personal connection

@@ -18,7 +18,8 @@ inventory estimated roughly 22 GiB. Detailed manifest is private/ignored in
 No process was using these installations. No active environment had symlinks
 into them. No inference job was stopped and no weights were removed in this
 cleanup. All five active GGUFs, AutoRound GPTQ and the SGLang DFlash2 drafter
-remain. Preserve the `models/HyperQwen/` drafter despite that directory name.
+remain. The retained drafter was subsequently moved into
+`models/drafts/Qwen3.8-27B-DFlash2-W4A16/`; the empty old model folder was removed.
 
 Preserved: AMD llama.cpp Vulkan and HIP builds, both ROCm environments and their
 private SDK/toolchain, DSH, Turnstone, gateway, Strata Q3 and HIP preparation.

@@ -23,7 +23,7 @@
       "--speculative-algorithm",
       "DFLASH",
       "--speculative-draft-model-path",
-      "/opt/local-llm/models/HyperQwen/Qwen3.8-27B-DFlash2-W4A16",
+      "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
       "--speculative-draft-model-quantization",
       "compressed-tensors",
       "--speculative-num-draft-tokens",
