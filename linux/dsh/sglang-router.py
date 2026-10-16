@@ -14,7 +14,7 @@ from rocm_runtime import require_rocm_headroom
 
 ROOT = Path('/opt/local-llm/dsh')
 PROFILES = json.loads((ROOT / 'sglang-profiles.json').read_text())
-MODEL = '/opt/local-llm/models/Qwen3.8-27B-INT4-MTP-LowLatency'
+MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
 DEFAULT = 'qwen3.8-27b-sglang'
 lock = threading.Lock()
 worker = None

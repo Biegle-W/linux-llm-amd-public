@@ -19,7 +19,7 @@ if BACKEND not in ('vllm', 'hyperqwen'):
     raise SystemExit('Unknown local vLLM backend: ' + BACKEND)
 PROFILES = json.loads((ROOT / (BACKEND + '-profiles.json')).read_text())
 PUBLIC_PORT, WORKER_PORT = (18020, 18021) if BACKEND == 'hyperqwen' else (30010, 30011)
-MODEL = '/opt/local-llm/models/Qwen3.8-27B-INT4-MTP-LowLatency'
+MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
 DEFAULT = 'qwen3.8-27b-hyperqwen-dflash2' if BACKEND == 'hyperqwen' else 'qwen3.8-27b-vllm'
 lock = threading.Lock()
 lifecycle = threading.RLock()

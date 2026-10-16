@@ -72,6 +72,7 @@ class UpgradeTests(unittest.TestCase):
         gateway = importlib.util.module_from_spec(gateway_spec)
         gateway_spec.loader.exec_module(gateway)
         self.assertFalse(any('hyperqwen' in model for model in gateway.catalog()))
+        self.assertFalse(any('flash-next' in model for model in gateway.catalog()))
 
     def test_current_pair_is_accepted(self):
         hardware_guard.require_current_cuda_pair([card('RTX 4070'), card('RTX 3060')])
@@ -106,6 +107,19 @@ class UpgradeTests(unittest.TestCase):
             probe.assert_called_once_with(kind)
             handover.assert_not_called()
             cuda_guard.assert_not_called()
+
+    def test_nvme_rocm_launchers_do_not_require_shared_mount(self):
+        import shared_storage
+        for kind in ('sglang', 'vllm'):
+            with self.subTest(kind=kind), \
+                 patch.object(sys, 'argv', ['launch-backend.py', kind]), \
+                 patch.object(rocm_runtime, 'require_rocm'), \
+                 patch.object(shared_storage, 'ensure_shared_models', side_effect=RuntimeError('Shared absent')) as mount, \
+                 patch.object(backend_switch, 'startup_handover', side_effect=RuntimeError('Reached handover')) as handover, \
+                 patch.object(backend_switch, 'clear_owner'), self.assertRaises(SystemExit):
+                runpy.run_path(str(ROOT / 'dsh/launch-backend.py'), run_name='__main__')
+            mount.assert_not_called()
+            handover.assert_called_once_with(kind)
 
     def test_invalid_amd_runtime_fails_without_handover(self):
         with patch.object(sys, 'argv', ['launch-backend.py', 'llama']), \

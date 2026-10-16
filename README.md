@@ -24,7 +24,7 @@ models run on AMD alone; the NVIDIA card does not participate in ROCm TP.
 | llama.cpp Vulkan | Muse, Qwen MoE, Empero | 32,768 |
 | llama.cpp Vulkan | Nemotron Bolt | 65,536 |
 
-Qwen GPTQ/retained HF-format checkpoints and the DFlash drafter belong under
+The Qwen GPTQ checkpoint and the DFlash drafter belong under
 `/opt/local-llm/models` on Linux storage. GGUFs used by both operating systems
 belong under the example shared path `/mnt/llm-models`. `dsh/shared_storage.py`
 requires a real shared-drive mount path and UUID: replace
@@ -54,8 +54,17 @@ configure the model locations, and initialize private harness settings with
 `dsh/configure_local.py`. The `bin/` commands and `launchers/` entries are examples
 for separate backend and DSH launchers. Backend switching targets only configured
 inference workers. DSH and the network gateway are separate processes.
-HyperQwen is disabled for this AMD/NVIDIA combination because its retained CUDA
-checkpoint exceeds 12 GB. Strata's historical CUDA profile remains deferred.
+HyperQwen is disabled for this AMD/NVIDIA combination: its former CUDA target
+exceeds 12 GB and was removed as unused. The obsolete LowLatency checkpoint,
+separate Qwen MTP GGUF and unused Bolt vision projector were also removed from
+the active machine. Historical NVIDIA profiles remain as reference configurations.
+The SGLang DFlash2 drafter is still required.
+
+Strata's Q3 assets are preserved, but its profile is disabled until RAM is installed
+and the AMD HIP candidate is validated. See the [RAM-expansion preparation](linux/hardware/STRATA-AFTER-RAM.md)
+for the inactive AMD-only 32K candidate and read-only readiness check. The HIP
+build passed AMD device detection and a 64 MiB allocator self-test. No Strata
+model load or new speed benchmark was performed during preparation.
 
 ## Previous NVIDIA setup
 

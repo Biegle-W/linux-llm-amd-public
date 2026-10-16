@@ -161,6 +161,11 @@ def interrupted(*_):
 
 
 if __name__ == '__main__':
+    from hardware_guard import require_strata
+    try:
+        require_strata()
+    except RuntimeError as error:
+        raise SystemExit(str(error))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', choices=list(PROFILES), default=DEFAULT)
     args = parser.parse_args()

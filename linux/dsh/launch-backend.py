@@ -6,7 +6,7 @@ from backend_guard import require_worker_ports_free
 from backend_switch import startup_handover, clear_owner
 from shared_storage import ensure_shared_models
 from terminal_logs import start_monitor, stop_monitor
-from hardware_guard import require_current_cuda_pair, require_hyperqwen
+from hardware_guard import require_current_cuda_pair, require_hyperqwen, require_strata
 from llama_runtime import launch_spec, require_amd_headroom
 from rocm_runtime import require_rocm, require_rocm_headroom
 ROOT = Path(__file__).resolve().parent
@@ -34,6 +34,8 @@ try:
     if rocm:
         require_rocm(kind)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
+    elif kind == 'strata':
+        require_strata()
     elif kind == 'hyperqwen':
         require_hyperqwen()
     elif kind != 'llama':
