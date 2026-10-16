@@ -1,0 +1,85 @@
+--- a/srt/models/qwen3_5.py
++++ b/srt/models/qwen3_5.py
+@@ -1731,7 +1731,12 @@
+         alt_stream = get_stream("alt") if _is_cuda or _hip_use_alt_stream else None
+ 
+         # Embedding layer
+-        self.embed_tokens = self._build_embed_tokens(config)
++        if is_nextn and get_bool_env_var("SGLANG_LOCAL_SHARE_QWEN_MTP") and get_parallel().pp_size == 1:
++            with torch.device("meta"):
++                self.embed_tokens = self._build_embed_tokens(config)
++            self.embed_tokens.weight = nn.Parameter(torch.empty(0, device="cuda"), requires_grad=False)
++        else:
++            self.embed_tokens = self._build_embed_tokens(config)
+ 
+         # Decoder layers
+         def get_layer(idx: int, prefix: str):
+@@ -2371,7 +2376,7 @@
+ 
+     def get_embed_and_head(self):
+         embed = self.model.embed_tokens.weight if self.pp_group.is_first_rank else None
+-        head = self.lm_head.weight if self.pp_group.is_last_rank else None
++        head = getattr(self.lm_head, "weight", None) if self.pp_group.is_last_rank else None
+         return embed, head
+ 
+     def set_embed_and_head(self, embed, head):
+@@ -2582,7 +2587,7 @@
+ 
+     def get_embed_and_head(self):
+         embed = self.model.embed_tokens.weight if self.pp_group.is_first_rank else None
+-        head = self.lm_head.weight if self.pp_group.is_last_rank else None
++        head = getattr(self.lm_head, "weight", None) if self.pp_group.is_last_rank else None
+         return embed, head
+ 
+     def set_embed_and_head(self, embed, head):
+--- a/srt/models/qwen3_5_mtp.py
++++ b/srt/models/qwen3_5_mtp.py
+@@ -146,12 +146,20 @@
+             if config.tie_word_embeddings:
+                 self.lm_head = self.model.embed_tokens
+             else:
+-                self.lm_head = ParallelLMHead(
+-                    config.vocab_size,
+-                    config.hidden_size,
+-                    quant_config=quant_config,
+-                    prefix=add_prefix("lm_head", prefix),
+-                )
++                if get_bool_env_var("SGLANG_LOCAL_SHARE_QWEN_MTP") and get_parallel().pp_size == 1:
++                    with torch.device("meta"):
++                        self.lm_head = ParallelLMHead(
++                            config.vocab_size, config.hidden_size,
++                            quant_config=None, prefix=add_prefix("lm_head", prefix),
++                        )
++                    self.lm_head.weight = nn.Parameter(torch.empty(0, device="cuda"), requires_grad=False)
++                else:
++                    self.lm_head = ParallelLMHead(
++                        config.vocab_size,
++                        config.hidden_size,
++                        quant_config=quant_config,
++                        prefix=add_prefix("lm_head", prefix),
++                    )
+ 
+         self.logits_processor = LogitsProcessor(config)
+ 
+@@ -348,6 +356,8 @@
+                 param_name = "model.embed_tokens.weight"
+                 if param_name in params_dict:
+                     param = params_dict[param_name]
++                    if get_bool_env_var("SGLANG_LOCAL_SHARE_QWEN_MTP") and param.numel() == 0:
++                        continue
+                     weight_loader = getattr(
+                         param, "weight_loader", default_weight_loader
+                     )
+--- a/srt/model_executor/model_runner.py
++++ b/srt/model_executor/model_runner.py
+@@ -445,6 +445,10 @@
+         try:
+             if not is_mps_device:
+                 torch.get_device_module(self.device).set_device(get_device().gpu_id)
++                if self.device == "cuda":
++                    from sglang.kernels.jit.utils.arch import _init_jit_cuda_arch_once
++                    _init_jit_cuda_arch_once()
++                    _init_jit_cuda_arch_once.__wrapped__()
+         except Exception:
+             import os
+ 

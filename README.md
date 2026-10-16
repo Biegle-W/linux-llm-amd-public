@@ -57,6 +57,15 @@ inference workers. DSH and the network gateway are separate processes.
 HyperQwen is disabled for this AMD/NVIDIA combination because its retained CUDA
 checkpoint exceeds 12 GB. Strata's historical CUDA profile remains deferred.
 
+## Previous NVIDIA setup
+
+The [linux-nvidia/](linux-nvidia/README.md) archive contains the previous RTX 4070
+12 GB + RTX 3060 12 GB / 64 GB RAM configuration: CUDA llama.cpp, SGLang, vLLM,
+HyperQwen and Strata, plus separate DSH/Turnstone launchers. It includes historical
+TP2/offload profiles, compatibility patches and [pinned build notes](linux-nvidia/BUILD.md).
+Use it as an alternative to `linux/`; both use the same example workspace and ports.
+It does not change the current AMD configuration or restore retired model files.
+
 ## Windows
 
 The `windows/` directory contains configuration and PowerShell/Python helpers

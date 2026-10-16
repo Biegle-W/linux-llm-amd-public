@@ -1,0 +1,20 @@
+--- a/srt/distributed/device_communicators/triton_symm_mem_ag.py
++++ b/srt/distributed/device_communicators/triton_symm_mem_ag.py
+@@ -7,6 +7,7 @@
+ """
+ 
+ import logging
++import os
+ from dataclasses import dataclass
+ from typing import Any
+ 
+@@ -466,6 +467,9 @@
+         self._max_tokens = int(max_tokens)
+         self._skip_entry_sync = skip_entry_sync
+         # None => always NCCL; _UNINIT => build on first eager call.
++        # No NVLink multicast on RTX 3060/4070. Skip the symmetric allocation
++        # and collective probe, using the same NCCL fallback as failed probes.
++        enabled = enabled and os.environ.get("SGLANG_LOCAL_DISABLE_MULTIMEM_AG") != "1"
+         self._state = self._UNINIT if enabled else None
+         if self._state is self._UNINIT:
+             # Lazy import avoids a module-load dependency on the distributed facade.

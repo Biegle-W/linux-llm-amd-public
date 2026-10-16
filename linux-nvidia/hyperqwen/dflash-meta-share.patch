@@ -1,0 +1,40 @@
+--- a/model_executor/models/qwen3_dflash.py
++++ b/model_executor/models/qwen3_dflash.py
+@@ -178,6 +178,19 @@
+             )
+ 
+     return sliding_window, _dflash_layer_causal(config, layer_idx)
++
++
++
++def _local_shared_dflash_module(factory, *args, **kwargs):
++    # Opt-in only for a drafter whose checkpoint has no embedding/head weights.
++    # load_dflash_model() replaces these placeholders with the target modules.
++    import os
++    if os.environ.get("VLLM_LOCAL_DFLASH_META_SHARE") == "1":
++        if get_current_vllm_config().parallel_config.pipeline_parallel_size != 1:
++            raise ValueError("Local DFlash meta sharing requires PP1")
++        with torch.device("meta"):
++            return factory(*args, **kwargs)
++    return factory(*args, **kwargs)
+ 
+ 
+ class DFlashQwen3Attention(nn.Module):
+@@ -471,7 +484,7 @@
+ 
+         current_vllm_config = get_current_vllm_config()
+ 
+-        self.embed_tokens = VocabParallelEmbedding(
++        self.embed_tokens = _local_shared_dflash_module(VocabParallelEmbedding,
+             self.config.vocab_size,
+             self.config.hidden_size,
+             prefix=maybe_prefix(prefix, "embed_tokens"),
+@@ -801,7 +814,7 @@
+         )
+ 
+         logit_scale = getattr(self.config, "logit_scale", 1.0)
+-        self.lm_head = ParallelLMHead(
++        self.lm_head = _local_shared_dflash_module(ParallelLMHead,
+             self.config.draft_vocab_size,
+             self.config.hidden_size,
+             quant_config=(

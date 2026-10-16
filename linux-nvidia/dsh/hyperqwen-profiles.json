@@ -1,0 +1,14 @@
+{
+  "qwen3.8-27b-hyperqwen-dflash2": {
+    "name": "Qwen3.8-27B HyperQwen DFlash2 (64K)",
+    "context": 65536,
+    "spec": "dflash2",
+    "kv_cache_bytes": 1073741824
+  },
+  "qwen3.8-27b-hyperqwen-mtp": {
+    "name": "Qwen3.8-27B HyperQwen MTP (64K)",
+    "context": 65536,
+    "spec": "mtp",
+    "kv_cache_bytes": 1610612736
+  }
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export PATH=/opt/local-llm/dsh/node-v24.21.0-linux-x64/bin:$PATH
+export DSH_HOME=/opt/local-llm/dsh/data
+export LOCAL_LLAMA_API_KEY=local-llama-server
+export npm_config_cache=/opt/local-llm/dsh/npm-cache
+exec /opt/local-llm/dsh/node_modules/.bin/dsh "$@"

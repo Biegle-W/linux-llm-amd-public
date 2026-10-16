@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec /opt/local-llm/strata/.venv/bin/python /opt/local-llm/dsh/start-dsh.py "$@"
