@@ -1,5 +1,18 @@
 # Local LLM reference setups
 
+**October 17 protocol/MTP tests:** production settings remain unchanged.
+SGLang MTP2 auto measured **88.29 code / 66.30 prose t/s**; forcing RCCL Simple
+measured **87.34 / 65.92**; MTP1 measured **57.37 / 49.31**. These are medians
+of three warm 256-token runs using the saved NVIDIA prompts and sampling.
+Arithmetic, ascending/descending JSON and tool round trips passed in all three
+completed cases. Both GPUs held model allocations, with no sampled VRAM spill.
+RCCL integrity checks passed for auto and Simple; no consistent latency gain.
+MTP3 startup hit the host-memory guard while Unsloth Studio competed for RAM.
+The optimized-verifier attempt was cancelled during loading; DFlash2/vLLM
+protocol comparisons remain untested. This is not evidence of MTP3 or verifier
+incompatibility. Keep MTP2, auto protocol and standard verification. No workers
+remain running. [Measurements and limits](linux/hardware/DUAL-TUNING-2026-10-17.md).
+
 **October 17 motherboard update:** MSI MPG Z690 CARBON WIFI, two RX 7900 XTX
 24 GB cards, both CPU-connected at **PCIe 4.0 x8**. There is still 32 GB system
 RAM; another 32 GB is pending. ROCm P2P remains unavailable.

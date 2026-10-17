@@ -1,0 +1,601 @@
+{
+  "date": "2026-10-17",
+  "hardware": "i5-13600KF, MSI Z690 Carbon WiFi, dual RX 7900 XTX 24 GB, PCIe4 x8/x8, 32 GB RAM, no ROCm peer access",
+  "runtime": "SGLang f84475ccf593087df3d1da13c9e675eadee12352; vLLM 0.32.0rc1.dev190+g3f1bcfd82.rocm723; ROCm 7.2.3; RCCL 2.27.7 no-hostcall",
+  "method": "Saved NVIDIA user-only code/prose prompts, temperature 0.6, top_p 0.95, seed 42, thinking false, max_tokens 256, three warm timed runs after one warm-up per task. Prefix caching retained. External approximate decode=(completion_tokens-1)/(stream_end-first_output). TTFT includes cached prefix and is not pure prefill. Unsloth Studio left open; startup paged idle host memory to swap. Results compare complete profiles and do not isolate GPU hardware.",
+  "collectives": [
+    {
+      "protocol": "auto",
+      "correctness": true,
+      "results": [
+        {
+          "operation": "all_reduce",
+          "bytes": 2,
+          "median_us": 41.136166631379936,
+          "samples_us": [
+            49.22836663657411,
+            41.11123331919468,
+            41.136166631379936
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 2,
+          "median_us": 49.81026668247068,
+          "samples_us": [
+            51.7510000160352,
+            49.81026668247068,
+            49.45170003338717
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 10240,
+          "median_us": 66.82570001430577,
+          "samples_us": [
+            68.53006671008188,
+            66.82570001430577,
+            66.65349998608387
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 10240,
+          "median_us": 53.671833362993006,
+          "samples_us": [
+            53.671833362993006,
+            53.030433385477714,
+            53.81750003531731
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 262144,
+          "median_us": 77.24953332702475,
+          "samples_us": [
+            86.00753329422636,
+            77.24953332702475,
+            75.70369998575188
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 262144,
+          "median_us": 83.95280001423089,
+          "samples_us": [
+            83.95280001423089,
+            82.99610005148375,
+            86.4070666769597
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 2097152,
+          "median_us": 373.3827333538405,
+          "samples_us": [
+            373.3827333538405,
+            379.24169998101814,
+            372.1189666975988
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 2097152,
+          "median_us": 441.68616665653343,
+          "samples_us": [
+            441.9541999595822,
+            441.68616665653343,
+            439.97320002138923
+          ]
+        }
+      ]
+    },
+    {
+      "protocol": "Simple",
+      "correctness": true,
+      "results": [
+        {
+          "operation": "all_reduce",
+          "bytes": 2,
+          "median_us": 56.43786662403727,
+          "samples_us": [
+            62.44023334147641,
+            56.25466668182829,
+            56.43786662403727
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 2,
+          "median_us": 56.54093335275926,
+          "samples_us": [
+            56.54093335275926,
+            53.964066682965495,
+            688.67970003339
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 10240,
+          "median_us": 64.85723333753413,
+          "samples_us": [
+            65.26739998662379,
+            64.85723333753413,
+            64.76633334386861
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 10240,
+          "median_us": 56.14306671001638,
+          "samples_us": [
+            56.14306671001638,
+            71.91240001702681,
+            53.29820002467992
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 262144,
+          "median_us": 87.57986664325774,
+          "samples_us": [
+            87.57986664325774,
+            88.37120003590826,
+            83.53896670693454
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 262144,
+          "median_us": 84.35796668588107,
+          "samples_us": [
+            84.35796668588107,
+            87.42829995753709,
+            82.37563336782235
+          ]
+        },
+        {
+          "operation": "all_reduce",
+          "bytes": 2097152,
+          "median_us": 372.31006663205335,
+          "samples_us": [
+            372.31006663205335,
+            372.6548999717731,
+            366.4611000203877
+          ]
+        },
+        {
+          "operation": "all_gather",
+          "bytes": 2097152,
+          "median_us": 435.78519998845877,
+          "samples_us": [
+            435.78519998845877,
+            435.7275999912721,
+            435.79786664243636
+          ]
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case": "sglang-mtp1-auto-verify0",
+      "settings": {
+        "engine": "sglang",
+        "mode": "mtp",
+        "steps": 1,
+        "protocol": "auto",
+        "verify": 0,
+        "repeats": 3,
+        "long": false
+      },
+      "context": 40960,
+      "status": "passed",
+      "startup_seconds": 76.10129702300037,
+      "medians": {
+        "code": {
+          "decode_tps": 57.37224023030975,
+          "ttft_seconds": 0.15182915900004446
+        },
+        "prose": {
+          "decode_tps": 49.31044147153074,
+          "ttft_seconds": 0.13234700400062138
+        }
+      },
+      "peak_vram_bytes": [
+        17336033280,
+        13851811840
+      ],
+      "min_host_available_bytes": 2787246080,
+      "max_nonresident_vram_bytes": 0,
+      "alerts": [],
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "reverse_json": true
+      },
+      "trials": [
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.1410314639997523,
+          "total_seconds": 5.258166953999535,
+          "decode_tps_approx": 49.832567556269815,
+          "workload": "code",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.1193410470004892,
+          "total_seconds": 4.998988311001085,
+          "decode_tps_approx": 52.257875662704635,
+          "workload": "prose",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.15182915900004446,
+          "total_seconds": 4.538807123000879,
+          "decode_tps_approx": 58.126574168484126,
+          "workload": "code",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.13649393700143264,
+          "total_seconds": 5.5172502220011665,
+          "decode_tps_approx": 47.3911075866564,
+          "workload": "prose",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.17996705299992755,
+          "total_seconds": 4.624625287999152,
+          "decode_tps_approx": 57.37224023030975,
+          "workload": "code",
+          "repeat": 2
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.13234700400062138,
+          "total_seconds": 5.303665539999201,
+          "decode_tps_approx": 49.31044147153074,
+          "workload": "prose",
+          "repeat": 2
+        }
+      ]
+    },
+    {
+      "case": "sglang-mtp2-Simple-verify0",
+      "settings": {
+        "engine": "sglang",
+        "mode": "mtp",
+        "steps": 2,
+        "protocol": "Simple",
+        "verify": 0,
+        "repeats": 3,
+        "long": false
+      },
+      "context": 40960,
+      "status": "passed",
+      "startup_seconds": 78.1103417129998,
+      "medians": {
+        "code": {
+          "decode_tps": 87.33726118038831,
+          "ttft_seconds": 0.10561963799955265
+        },
+        "prose": {
+          "decode_tps": 65.91914042601239,
+          "ttft_seconds": 0.1108465380002599
+        }
+      },
+      "peak_vram_bytes": [
+        15967076352,
+        13802057728
+      ],
+      "min_host_available_bytes": 3028000768,
+      "max_nonresident_vram_bytes": 0,
+      "alerts": [],
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "reverse_json": true
+      },
+      "trials": [
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10407086399936816,
+          "total_seconds": 3.008036817000175,
+          "decode_tps_approx": 87.81094686612849,
+          "workload": "code",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.1108465380002599,
+          "total_seconds": 3.979222222998942,
+          "decode_tps_approx": 65.91914042601239,
+          "workload": "prose",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.18809999199947924,
+          "total_seconds": 3.4799831569998787,
+          "decode_tps_approx": 77.46325954431893,
+          "workload": "code",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.11231294999925012,
+          "total_seconds": 3.8613623500004906,
+          "decode_tps_approx": 68.01724191735528,
+          "workload": "prose",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10561963799955265,
+          "total_seconds": 3.025335651000205,
+          "decode_tps_approx": 87.33726118038831,
+          "workload": "code",
+          "repeat": 2
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10533182899962412,
+          "total_seconds": 4.049704675999237,
+          "decode_tps_approx": 64.64906079910072,
+          "workload": "prose",
+          "repeat": 2
+        }
+      ]
+    },
+    {
+      "case": "sglang-mtp2-auto-verify0",
+      "settings": {
+        "engine": "sglang",
+        "mode": "mtp",
+        "steps": 2,
+        "protocol": "auto",
+        "verify": 0,
+        "repeats": 3,
+        "long": false
+      },
+      "context": 40960,
+      "status": "passed",
+      "startup_seconds": 80.11922170199978,
+      "medians": {
+        "code": {
+          "decode_tps": 88.28791991944787,
+          "ttft_seconds": 0.10440048100099375
+        },
+        "prose": {
+          "decode_tps": 66.29504275903152,
+          "ttft_seconds": 0.10024268000051961
+        }
+      },
+      "peak_vram_bytes": [
+        15987200000,
+        13802037248
+      ],
+      "min_host_available_bytes": 2733248512,
+      "max_nonresident_vram_bytes": 0,
+      "alerts": [],
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true,
+        "reverse_json": true
+      },
+      "trials": [
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10440048100099375,
+          "total_seconds": 2.98872944499999,
+          "decode_tps_approx": 88.40877832688462,
+          "workload": "code",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.1081162869995751,
+          "total_seconds": 4.003889911000442,
+          "decode_tps_approx": 65.45554865637214,
+          "workload": "prose",
+          "repeat": 0
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10666568400120013,
+          "total_seconds": 2.996469366000383,
+          "decode_tps_approx": 88.24128835755013,
+          "workload": "code",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10024268000051961,
+          "total_seconds": 3.9411985429997003,
+          "decode_tps_approx": 66.3897240935451,
+          "workload": "prose",
+          "repeat": 1
+        },
+        {
+          "usage": {
+            "prompt_tokens": 29,
+            "total_tokens": 285,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.10074349800015625,
+          "total_seconds": 2.98902085500049,
+          "decode_tps_approx": 88.28791991944787,
+          "workload": "code",
+          "repeat": 2
+        },
+        {
+          "usage": {
+            "prompt_tokens": 25,
+            "total_tokens": 281,
+            "completion_tokens": 256,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 0.09827978599969356,
+          "total_seconds": 3.944721229998322,
+          "decode_tps_approx": 66.29504275903152,
+          "workload": "prose",
+          "repeat": 2
+        }
+      ]
+    },
+    {
+      "case": "sglang-mtp3-auto-verify0",
+      "settings": {
+        "engine": "sglang",
+        "mode": "mtp",
+        "steps": 3,
+        "protocol": "auto",
+        "verify": 0,
+        "repeats": 3,
+        "long": false
+      },
+      "context": 40960,
+      "status": "aborted_resource_guard",
+      "peak_vram_bytes": [
+        4959657984,
+        538451968
+      ],
+      "min_host_available_bytes": 1983176704,
+      "max_nonresident_vram_bytes": 0,
+      "alerts": [
+        "Host available memory below 2 GiB"
+      ],
+      "trials": [],
+      "failure_category": "host-memory guard"
+    },
+    {
+      "case": "sglang-mtp2-auto-verify1",
+      "settings": {
+        "engine": "sglang",
+        "mode": "mtp",
+        "steps": 2,
+        "protocol": "auto",
+        "verify": 1
+      },
+      "context": 40960,
+      "status": "cancelled_resource_pressure",
+      "trials": [],
+      "quality": {}
+    }
+  ],
+  "production_changes": [],
+  "deferred": [
+    "MTP3 measurement after host-memory guard aborted startup",
+    "Optimized verifier validation; its loading attempt was cancelled after the memory guard stopped the prior case",
+    "DFlash2 auto versus Simple",
+    "vLLM auto versus Simple",
+    "HiCache until RAM upgrade"
+  ]
+}
