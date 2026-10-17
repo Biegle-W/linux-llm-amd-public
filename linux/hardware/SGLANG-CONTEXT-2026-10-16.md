@@ -1,5 +1,8 @@
 # SGLang context optimization — October 16, 2026
 
+> Historical single-AMD measurements. Current dual-AMD settings and the blocked
+> SGLang MTP profile are documented in the [migration report](UPGRADE-DUAL-7900XTX.md).
+
 ## Activated setting
 
 `qwen3.8-27b-sglang`: **40,960 total tokens**, MTP2, BF16 KV/state,

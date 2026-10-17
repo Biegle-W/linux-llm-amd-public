@@ -3,7 +3,7 @@ import json, os
 from pathlib import Path
 import yaml
 ROOT = Path(__file__).resolve().parent
-LOCAL = {'llama-local': 'qwen3.8-27b-q4', 'sglang-local': 'qwen3.8-27b-sglang',
+LOCAL = {'llama-local': 'qwen3.8-27b-q4', 'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm', 'strata-local': 'qwen3.8-flash-next-iq3_xxs',
          'hyperqwen-local': 'qwen3.8-27b-hyperqwen-dflash2'}
 

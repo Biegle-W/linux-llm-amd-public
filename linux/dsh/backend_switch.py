@@ -9,6 +9,7 @@ import signal
 import subprocess
 import time
 import xml.etree.ElementTree as ET
+from amd_device import graphics_devices
 
 ROOT = Path(__file__).resolve().parent.parent
 KINDS = {'llama', 'sglang', 'vllm', 'strata', 'hyperqwen'}
@@ -169,6 +170,10 @@ def wait_exit(owned, seconds):
 
 
 def gpu_compute_pids():
+    # An AMD-only host has no NVIDIA contexts to wait for. Owned AMD workers
+    # are stopped above; each AMD launcher checks its own VRAM headroom.
+    if not graphics_devices('0x10de'):
+        return set()
     # --query-compute-apps also lists C+G Vulkan terminals. Those are graphics apps,
     # not our headless CUDA inference workers, and must not block their own startup.
     result = subprocess.run(['nvidia-smi', '-q', '-x'],

@@ -283,6 +283,9 @@ if __name__ == '__main__':
     OUT.mkdir(parents=True, exist_ok=True)
     sys.path.insert(0, str(ROOT / 'dsh'))
     import backend_switch
+    from amd_device import graphics_devices
+    if len(graphics_devices("0x1002")) != 1:
+        parser.error("Historical single-AMD harness; use hardware/test-dual-amd.py for the current pair")
     existing = [p.pid for p in backend_switch.processes().values() if
         backend_switch.is_inference(p) or (p.args and p.args[0] ==
         str(ROOT / 'llama.cpp/build-vulkan/bin/llama-server'))]

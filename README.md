@@ -1,13 +1,44 @@
 # Local LLM reference setups
 
-**Planned GPU replacement (October 16):** retire the RTX 4070 and add a second
-RX 7900 XTX 24 GB. This is a plan, not a validated hardware change. Existing
-single-AMD profiles remain active; use both cards only when one cannot fit the
-model with a usable context. Device selection and multi-GPU support must be
-validated after installation. RAM expansion is still pending.
-[Migration checklist](linux/hardware/UPGRADE-DUAL-7900XTX.md).
+## Current dual-AMD results — October 16
 
-**October 16 SGLang context update:** `qwen3.8-27b-sglang` now serves **40,960
+Every enabled model now uses **both RX 7900 XTX cards**. llama.cpp splits layers
+1:1 with GPU-resident weights; SGLang and vLLM use ROCm tensor parallelism 2.
+The existing Desktop/PATH launchers and separate DSH launcher remain in use.
+Seven profiles passed arithmetic, ordered JSON and tool round-trip checks.
+
+| Model / strategy | Engine | Context budget | Short decode t/s | Sampled peak VRAM GPU0 / GPU1 GiB |
+|---|---|---:|---:|---:|
+| Qwen3.8 27B Q4 · MTP3 | llama.cpp Vulkan | 65,536 | 56.27 | 9.77 / 10.06 |
+| Muse Glimmer 30B Q4 | llama.cpp Vulkan | 32,768 | 34.89 | 8.80 / 7.87 |
+| Empero Qwen3.8 35B A3B IQ4 · MTP3 | llama.cpp Vulkan | 32,768 | 111.16 | 10.47 / 10.05 |
+| Qwen3.6 35B A3B MXFP4 · MTP3 | llama.cpp Vulkan | 32,768 | 101.11 | 11.86 / 11.02 |
+| Nemotron 3.5 Bolt 74B A9B | llama.cpp Vulkan | 65,536 | 47.82 | 10.83 / 11.72 |
+| Qwen3.8 27B GPTQ · DFlash2 | SGLang ROCm TP2 | 16,384 | 77.70 | 13.54 / 12.96 |
+| Qwen3.8 27B GPTQ · MTP3 | vLLM ROCm TP2 | 65,536 | 53.67 | 13.79 / 13.29 |
+
+These are **single short smoke measurements**, not repeated benchmark averages
+or full-context stress tests. Each sample requested at most 256 output tokens;
+timing includes emitted reasoning. Muse's throughput sample used all 256 tokens
+for reasoning and did not reach a final answer; its separate short correctness
+checks passed. No new prefill benchmark was run. Earlier single-card/NVIDIA
+results below are historical and are not a controlled speed comparison.
+Context budgets are retained, not newly established maximums. Sampled VRAM
+includes desktop/runtime allocations and can miss brief peaks.
+
+**SGLang MTP2 is blocked** on this dual-card topology after repeatable HIP
+buffer/index failures. It is hidden from DSH, Turnstone and API model lists;
+direct requests fail before unloading a working model. SGLang defaults to the
+working DFlash2 profile. vLLM and llama.cpp retain working MTP. Strata remains
+deferred until RAM expansion and dual-HIP validation; its Q3 assets are preserved.
+
+The second card is behind a chipset PCIe 4.0 x4 link and neither card exposes
+ROCm peer access. Both-card execution does not guarantee higher speed. The
+isolated RCCL compatibility library fixes initial collective failures without
+replacing the system/SDK library. See the [migration report](linux/hardware/UPGRADE-DUAL-7900XTX.md)
+and [sanitized result data](linux/hardware/dual-amd-2026-10-16.json).
+
+**Historical single-AMD SGLang context update (earlier October 16):** `qwen3.8-27b-sglang` now serves **40,960
 total tokens** on one RX 7900 XTX, retaining MTP2 and BF16 KV. The tested static
 memory fraction is 0.92, with a 23 GiB free-VRAM loading guard. A 38,410-token
 retrieval request passed in 51.94 seconds; peak VRAM was 22.60 GiB with no sampled
@@ -37,12 +68,12 @@ Adapt paths, GPU selection, memory budgets and runtime versions before launching
 
 The `linux/` tree corresponds to a runtime workspace at `/opt/local-llm`.
 Copy its contents there or update the example absolute paths consistently.
-The reference hardware is RX 7900 XTX 24 GB + RTX 4070 12 GB. Current activated
-models run on AMD alone; the NVIDIA card does not participate in ROCm TP.
+The current reference hardware is two RX 7900 XTX 24 GB cards. Both participate
+in each active model; the earlier RTX 4070 is retired. RAM remains 32 GB.
 
 | Backend | Model / strategy | Context |
 |---|---|---:|
-| SGLang ROCm | Qwen 27B GPTQ, corrected MTP2 | 40,960 |
+| SGLang ROCm | Qwen 27B GPTQ, MTP2 — **disabled pending dual-GPU fix** | 40,960 (inactive) |
 | SGLang ROCm | Qwen 27B GPTQ, DFlash2 W4A16 drafter | 16,384 |
 | vLLM ROCm | Qwen 27B GPTQ, MTP3, Q4 KV | 65,536 |
 | llama.cpp Vulkan | Qwen 27B Q4, MTP3 | 65,536 |
@@ -58,10 +89,10 @@ PCI-device paths and GPU discovery in the guards on your machine.
 
 The SGLang profiles use standard Triton verification
 (`SGLANG_RDNA_VLLM_VERIFY=0`). The optimized verification adapter produced invalid
-ordered-number output in this single-card configuration. DFlash uses eight draft
+ordered-number output in the earlier single-card configuration. DFlash uses eight draft
 tokens, a 2,048-token draft window, two recurrent-state slots and disabled prefix
 caching. Repeated conversation history must therefore be processed again.
-DFlash requires 23 GiB free AMD VRAM at startup.
+Both active ROCm launchers require 21 GiB free VRAM on each card at startup.
 
 Runtime versions used for these measurements:
 

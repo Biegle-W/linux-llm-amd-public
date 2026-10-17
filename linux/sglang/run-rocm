@@ -12,7 +12,7 @@ export SGLANG_LOCAL_SHARE_QWEN_MTP=1
 export SGLANG_USE_AITER=0
 export SGLANG_RDNA_NO_FUSED=1
 export SGLANG_RDNA_GEMMA_TRITON=1
-# The optimized verify adapter duplicates ordered tokens on this TP1 setup.
+# The optimized verify adapter failed the earlier TP1 ordered-token check.
 # Keep standard Triton verification; the benchmark can explicitly test the adapter.
 export SGLANG_RDNA_VLLM_VERIFY=${SGLANG_RDNA_VLLM_VERIFY:-0}
 export SGLANG_RDNA_CUSTOM_AR=0

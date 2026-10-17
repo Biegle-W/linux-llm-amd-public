@@ -65,7 +65,7 @@ def ensure_worker(model):
     stop_worker()
     cfg = PROFILES[model]
     if cfg.get('runtime') == 'rocm':
-        require_rocm_headroom()
+        require_rocm_headroom(cfg.get('min_free_vram_gib', 21.0))
     with socket.socket() as probe:
         probe.settimeout(1)
         if probe.connect_ex(('127.0.0.1', WORKER_PORT)) == 0:

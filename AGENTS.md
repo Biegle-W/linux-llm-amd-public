@@ -18,7 +18,8 @@ The private repository's AGENTS.md identifies its workspace and exact handoff
 locations. Keep the repository handoff and its Shared-drive copy identical.
 Report any blocked commit, push or handoff synchronization explicitly.
 
-Planned hardware migration: RTX 4070 retirement and a second RX 7900 XTX are
-not yet validated. Keep current single-AMD profiles and historical snapshots.
-Follow `linux/hardware/UPGRADE-DUAL-7900XTX.md` before publishing dual-AMD settings.
-Prefer a single card when the model fits with usable context and runtime headroom.
+Current hardware policy: use BOTH RX 7900 XTX cards for every active model.
+This supersedes the previous single-card preference. Validate per-engine dual-card
+settings and report unsupported profiles rather than silently using one card.
+Preserve historical NVIDIA/Windows snapshots. See
+`linux/hardware/UPGRADE-DUAL-7900XTX.md` for validation status.

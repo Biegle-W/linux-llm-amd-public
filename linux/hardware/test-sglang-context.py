@@ -12,6 +12,8 @@ p.add_argument('--context',type=int,required=True)
 p.add_argument('--memory',type=float,default=.85)
 p.add_argument('--long',action='store_true')
 a=p.parse_args()
+from amd_device import graphics_devices
+if len(graphics_devices("0x1002")) != 1:p.error("Historical single-AMD harness; use hardware/test-dual-amd.py for the current pair")
 case=f'sglang-{a.mode}-{a.kv}-{a.context}-{a.memory}'
 s.OUT=ROOT/'hardware/generated/sglang-context-2026-10-16'
 original_launch=s.launch

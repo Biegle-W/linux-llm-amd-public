@@ -15,7 +15,7 @@ from rocm_runtime import require_rocm_headroom
 ROOT = Path('/opt/local-llm/dsh')
 PROFILES = json.loads((ROOT / 'sglang-profiles.json').read_text())
 MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
-DEFAULT = 'qwen3.8-27b-sglang'
+DEFAULT = 'qwen3.8-27b-sglang-dflash2'
 lock = threading.Lock()
 worker = None
 active = None
@@ -60,10 +60,12 @@ def cache_capacities(value):
 
 def ensure_worker(model):
     global worker, active, logfile
+    cfg = PROFILES[model]
+    if not cfg.get('enabled', True):
+        raise RuntimeError(cfg.get('disabled_reason', 'This profile is disabled.'))
     if active == model and worker is not None and worker.poll() is None:
         return
     stop_worker()
-    cfg = PROFILES[model]
     if cfg.get('runtime') == 'rocm':
         require_rocm_headroom(cfg.get('min_free_vram_gib', 22.25))
     model_path = cfg.get('model_path', MODEL)
@@ -120,7 +122,8 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': [
                 {'id': key, 'object': 'model', 'owned_by': 'local-sglang',
-                 'context_length': cfg['context']} for key, cfg in PROFILES.items()]})
+                 'context_length': cfg['context']} for key, cfg in PROFILES.items()
+                if cfg.get('enabled', True)]})
         self.send_json(404, {'error': 'Unknown endpoint'})
 
     def do_POST(self):

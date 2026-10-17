@@ -39,15 +39,15 @@ class UpgradeTests(unittest.TestCase):
             binary = base / 'llama.cpp/build-vulkan/bin/llama-server'
             binary.parent.mkdir(parents=True); binary.touch()
             inventories = [
-                'Vulkan0: NVIDIA GeForce RTX 4070\nVulkan1: AMD Radeon RX 7900 XTX (RADV NAVI31)\n',
-                'Vulkan0: AMD Radeon RX 7900 XTX (RADV NAVI31)\n',
+                'Vulkan0: NVIDIA GeForce RTX 4070\nVulkan1: AMD Radeon RX 7900 XTX (RADV NAVI31)\nVulkan2: AMD Radeon RX 7900 XTX (RADV NAVI31)\n',
+                'Vulkan0: AMD Radeon RX 7900 XTX (RADV NAVI31)\nVulkan1: AMD Radeon RX 7900 XTX (RADV NAVI31)\n',
             ]
-            with patch.object(llama_runtime, 'ROOT', root), patch.object(llama_runtime, 'AMD', amd), \
+            with patch.object(llama_runtime, 'ROOT', root), patch.object(llama_runtime, 'amd_devices', return_value=[amd, amd]), \
                  patch.object(llama_runtime.subprocess, 'run', side_effect=[
                      subprocess.CompletedProcess([], 0, text, '') for text in inventories]) as run:
                 selected, preset, env, models = llama_runtime.launch_spec()
             self.assertEqual(run.call_count, 2)
-            self.assertEqual(env['GGML_VK_VISIBLE_DEVICES'], '1')
+            self.assertEqual(env['GGML_VK_VISIBLE_DEVICES'], '1,2')
             self.assertEqual(preset, root / 'models-amd.ini')
             self.assertEqual(models, {'bolt'})
 
@@ -56,7 +56,7 @@ class UpgradeTests(unittest.TestCase):
             amd = Path(directory)
             (amd / 'mem_info_vram_total').write_text(str(24 * 1024**3))
             (amd / 'mem_info_vram_used').write_text(str(int(1.5 * 1024**3)))
-            with patch.object(rocm_runtime, 'AMD', amd), patch.object(rocm_runtime.time, 'sleep'):
+            with patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
                 rocm_runtime.require_rocm_headroom()
                 with self.assertRaisesRegex(RuntimeError, '23 GiB'):
                     rocm_runtime.require_rocm_headroom(23)

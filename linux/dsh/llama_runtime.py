@@ -7,8 +7,9 @@ import subprocess
 import time
 from hardware_guard import require_current_cuda_pair
 
+from amd_device import amd_devices
+
 ROOT = Path(__file__).resolve().parent
-AMD = Path('/sys/bus/pci/devices/0000:03:00.0')
 
 
 
@@ -17,20 +18,20 @@ def select_vulkan_devices(binary, env, mixed=False):
     env.pop('GGML_VK_VISIBLE_DEVICES', None)
     inventory = subprocess.run([str(binary), '--list-devices'], env=env,
                                capture_output=True, text=True, timeout=30, check=True)
-    names = ['AMD Radeon RX 7900 XTX']
     if mixed:
-        names.append('NVIDIA GeForce RTX 4070')
+        raise RuntimeError('Mixed-vendor profiles are retired.')
+    names = ['AMD Radeon RX 7900 XTX']
     indices = []
     for name in names:
         matches = re.findall(r'^\s*Vulkan(\d+): ' + re.escape(name) + r'(?:\s|\()',
                              inventory.stdout + inventory.stderr, re.MULTILINE)
-        if len(matches) != 1:
-            raise RuntimeError('Cannot uniquely identify ' + name + '; no backend has been stopped.')
-        indices.append(matches[0])
+        if len(matches) != 2:
+            raise RuntimeError('Expected exactly two devices named ' + name + '; no backend has been stopped.')
+        indices.extend(matches)
     env['GGML_VK_VISIBLE_DEVICES'] = ','.join(indices)
     filtered = subprocess.run([str(binary), '--list-devices'], env=env,
                               capture_output=True, text=True, timeout=30, check=True)
-    for index, name in enumerate(names):
+    for index, name in enumerate(['AMD Radeon RX 7900 XTX'] * 2):
         if f'Vulkan{index}: {name}' not in filtered.stdout + filtered.stderr:
             raise RuntimeError('Filtered Vulkan device identity changed; no backend has been stopped.')
     return env
@@ -60,15 +61,14 @@ def launch_spec():
         env = dict(item.decode().split('=', 1) for item in result.stdout.split(b'\0') if item)
         env['LD_LIBRARY_PATH'] += ':' + str(ROOT.parent / 'llm-tools/cuda-build/lib')
         env.pop('GGML_CUDA_ENABLE_UNIFIED_MEMORY', None)
-    if (not binary.is_file() or (AMD / 'vendor').read_text().strip() != '0x1002'
-            or (AMD / 'driver').resolve().name != 'amdgpu'
-            or int((AMD / 'mem_info_vram_total').read_text()) < 23 * 1024**3):
+    devices = amd_devices()
+    if (not binary.is_file() or len(devices) != 2):
         raise RuntimeError('Selected 24 GB AMD runtime is unavailable; no backend has been stopped.')
     if hip:
         inventory = subprocess.run([str(binary), '--list-devices'], env=env,
                                    capture_output=True, text=True, timeout=30, check=True)
-        if 'ROCm0: AMD Radeon RX 7900 XTX' not in inventory.stdout + inventory.stderr:
-            raise RuntimeError('ROCm0 is not the validated 7900 XTX; no backend has been stopped.')
+        if any(f'ROCm{i}: AMD Radeon RX 7900 XTX' not in inventory.stdout + inventory.stderr for i in range(2)):
+            raise RuntimeError('Both ROCm devices must be 7900 XTX cards; no backend has been stopped.')
     else:
         env = select_vulkan_devices(binary, env)
     settings = json.loads(config.read_text())
@@ -79,14 +79,13 @@ def launch_spec():
 
 
 def require_amd_headroom():
-    total = int((AMD / 'mem_info_vram_total').read_text())
-    mode = json.loads((ROOT / 'llama-runtime.json').read_text())['backend']
-    required = (22.75 if mode == 'hip-amd' else 22.0) * 1024**3
-    # Device enumeration/previous workers may release allocations asynchronously.
+    devices = amd_devices()
+    required = 18 * 1024**3
     for _ in range(50):
-        used = int((AMD / 'mem_info_vram_used').read_text())
-        if total - used >= required:
+        free = [int((d / 'mem_info_vram_total').read_text()) -
+                int((d / 'mem_info_vram_used').read_text()) for d in devices]
+        if min(free) >= required:
             return
         time.sleep(0.2)
-    if total - used < required:
-        raise RuntimeError('Insufficient free AMD VRAM for the validated llama.cpp profiles. Close GPU-heavy applications and retry; no unrelated application was stopped.')
+    raise RuntimeError('Dual-AMD llama.cpp requires 18 GiB free VRAM on each card. '
+                       'No unrelated application was stopped.')

@@ -1,4 +1,4 @@
-"""Apply opt-in single-stage MTP vocabulary sharing to the pinned RDNA3 fork."""
+"""Apply MTP sharing and chipset-compatible KV bounds checks to the pinned fork."""
 from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,4 +59,16 @@ for name, transform in [('qwen3_5.py',qwen),('qwen3_5_mtp.py',mtp)]:
     changes[p] = transform(s)
 for p,s in changes.items(): compile(s,str(p),'exec')
 for p,s in changes.items(): p.write_text(s)
-print('ROCm MTP sharing patch applied; other paths unchanged.')
+kv = base / 'kernels/jit/csrc/elementwise/kvcache.cuh'
+source = kv.read_text()
+if 'Chipset-connected RDNA3' not in source:
+    source = one(source, '  assert(index >= 0 && index < size_limit);', '''#if defined(__HIP_PLATFORM_AMD__)
+  // A device assert introduces a hostcall requirement even for valid indices.
+  // Chipset-connected RDNA3 can lack PCIe atomics; preserve bounds enforcement
+  // with a device trap instead of disabling the check with NDEBUG.
+  if (!(index >= 0 && index < size_limit)) __builtin_trap();
+#else
+  assert(index >= 0 && index < size_limit);
+#endif''')
+    kv.write_text(source)
+print('ROCm MTP sharing and HIP KV bounds-trap patches applied.')

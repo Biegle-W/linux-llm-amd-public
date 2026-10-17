@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-16",
+  "hardware": "2 x RX 7900 XTX 24 GB; 32 GB system RAM; CPU x16 + chipset x4 PCIe 4.0; no ROCm P2P",
+  "method": "One streamed 256-token-limit guide sample after arithmetic, ordered JSON and tool round-trip checks. Approximate decode=(completion tokens-1)/(stream end-first content or reasoning). No fresh prefill or full-context benchmark.",
+  "results": [
+    {
+      "case": "qwen3.8-27b-q4",
+      "engine": "llama.cpp Vulkan",
+      "model_strategy": "Qwen3.8 27B Q4 \u00b7 MTP3",
+      "context_budget": 65536,
+      "status": "passed",
+      "decode_tps_approx": 56.27,
+      "sampled_peak_vram_gib": [
+        9.77,
+        10.06
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 1080,
+      "reasoning_characters": 0
+    },
+    {
+      "case": "muse-glimmer-30b",
+      "engine": "llama.cpp Vulkan",
+      "model_strategy": "Muse Glimmer 30B Q4",
+      "context_budget": 32768,
+      "status": "passed",
+      "decode_tps_approx": 34.89,
+      "sampled_peak_vram_gib": [
+        8.8,
+        7.87
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 0,
+      "reasoning_characters": 1238
+    },
+    {
+      "case": "empero-qwen3.8-35b-a3b",
+      "engine": "llama.cpp Vulkan",
+      "model_strategy": "Empero Qwen3.8 35B A3B IQ4 \u00b7 MTP3",
+      "context_budget": 32768,
+      "status": "passed",
+      "decode_tps_approx": 111.16,
+      "sampled_peak_vram_gib": [
+        10.47,
+        10.05
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 1029,
+      "reasoning_characters": 0
+    },
+    {
+      "case": "qwen3.6-35b-a3b",
+      "engine": "llama.cpp Vulkan",
+      "model_strategy": "Qwen3.6 35B A3B MXFP4 \u00b7 MTP3",
+      "context_budget": 32768,
+      "status": "passed",
+      "decode_tps_approx": 101.11,
+      "sampled_peak_vram_gib": [
+        11.86,
+        11.02
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 1132,
+      "reasoning_characters": 0
+    },
+    {
+      "case": "nemotron-3.5-bolt",
+      "engine": "llama.cpp Vulkan",
+      "model_strategy": "Nemotron 3.5 Bolt 74B A9B",
+      "context_budget": 65536,
+      "status": "passed",
+      "decode_tps_approx": 47.82,
+      "sampled_peak_vram_gib": [
+        10.83,
+        11.72
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 1106,
+      "reasoning_characters": 0
+    },
+    {
+      "case": "sglang-dflash2",
+      "engine": "SGLang ROCm TP2",
+      "model_strategy": "Qwen3.8 27B GPTQ \u00b7 DFlash2",
+      "context_budget": 16384,
+      "status": "passed",
+      "decode_tps_approx": 77.7,
+      "sampled_peak_vram_gib": [
+        13.54,
+        12.96
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 963,
+      "reasoning_characters": 0,
+      "reported_cache_capacities": [
+        16384
+      ]
+    },
+    {
+      "case": "vllm",
+      "engine": "vLLM ROCm TP2",
+      "model_strategy": "Qwen3.8 27B GPTQ \u00b7 MTP3",
+      "context_budget": 65536,
+      "status": "passed",
+      "decode_tps_approx": 53.67,
+      "sampled_peak_vram_gib": [
+        13.79,
+        13.29
+      ],
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "completion_tokens": 256,
+      "final_answer_characters": 951,
+      "reasoning_characters": 0
+    }
+  ],
+  "blocked": {
+    "qwen3.8-27b-sglang": "MTP2 fails HIP buffer/index operations on second GPU. Hidden and rejected before unloading a working model. No TP1 fallback."
+  }
+}

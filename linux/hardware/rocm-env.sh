@@ -6,8 +6,8 @@ export HIP_PATH="$ROCM_PATH"
 export LD_LIBRARY_PATH="$ROCM_PATH/lib:$ROCM_PATH/lib64:$ROOT/llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu"
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rocm-sdk/mpi4/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH:$ROOT/llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu/pmix2/lib"
 export PATH="$ROCM_PATH/bin:$ROCM_PATH/llvm/bin:$ROOT/llm-tools/cuda-build/bin:$PATH"
-export HIP_VISIBLE_DEVICES=0
-export ROCR_VISIBLE_DEVICES=0
+export HIP_VISIBLE_DEVICES=0,1
+export ROCR_VISIBLE_DEVICES=0,1
 unset CUDA_VISIBLE_DEVICES CUDA_HOME CUDAHOSTCXX
 export PYTORCH_ROCM_ARCH=gfx1100
 export AMDGPU_TARGET=gfx1100
@@ -16,3 +16,11 @@ export HF_HOME=/opt/local-llm/models/huggingface
 export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
+
+# Both installed cards report no peer access; use RCCL host transport.
+export NCCL_P2P_DISABLE=1
+# Isolated gfx1100 RCCL 2.27.7 without device hostcalls (chipset slot lacks atomics).
+export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"
+export SGLANG_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
+export VLLM_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
+export HSA_ENABLE_SDMA=0

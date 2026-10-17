@@ -178,6 +178,9 @@ if __name__=='__main__':
     parser.add_argument('--cases',nargs='+',required=True,choices=['sglang-plain','sglang-plain-jit','sglang-mtp2-jit','sglang-mtp1-jit','sglang-mtp2-standard-verify','sglang-mtp2-no-graph','sglang-mtp2','sglang-mtp2-check','sglang-dflash8','sglang-dflash8-budget','sglang-dflash8-compact','sglang-dflash8-nocache','sglang-dflash8-standard-verify','sglang-dflash8-standard-nocache','llama-mtp','llama-ngram'])
     parser.add_argument('--stop-on-quality-failure',action='store_true')
     args=parser.parse_args()
+    from amd_device import graphics_devices
+    if len(graphics_devices("0x1002")) != 1:
+        parser.error("Historical single-AMD harness; use hardware/test-dual-amd.py for the current pair")
     if any(backend_switch.is_inference(p) for p in backend_switch.processes().values()): parser.error('Stop existing configured inference first')
     with socket.socket() as sock:
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

@@ -5,6 +5,14 @@ The planned configuration has 64 GB system RAM; current OS memory is approximate
 30.6 GiB. The approximately 40 GiB Strata expert pack remains capacity-gated.
 
 
+## Current GPU policy
+
+Both RX 7900 XTX cards are now installed. The user requests both for every model.
+The old single-AMD candidate below is preserved only as a historical starting point;
+it is not permitted as an automatic fallback. After RAM expansion, check this Strata
+fork's dual-HIP support and the chipset card's lack of PCIe atomics before enabling
+it. The other engines' RCCL workaround does not establish Strata compatibility.
+
 ## Preserved assets and inactive candidate
 
 All 112.81 GiB under `/mnt/llm-models/Strata` remains intact:

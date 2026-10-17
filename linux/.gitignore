@@ -98,3 +98,6 @@ llm-tools/rocm-sdk/
 
 # Linux-only checkpoints and download caches on primary NVMe
 /models/
+
+# Isolated dual-Radeon RCCL library and downloaded verification sources
+llm-tools/rccl-nohostcall/
