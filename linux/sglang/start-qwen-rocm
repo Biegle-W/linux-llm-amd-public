@@ -8,7 +8,7 @@ exec "$ROOT/sglang/run-rocm" \
  --language-only --json-model-override-args '{"language_model_only":true}' \
  --mamba-ssm-dtype bfloat16 --mamba-radix-cache-strategy extra_buffer_lazy --kv-cache-dtype bfloat16 --attention-backend triton \
  --context-length 40960 --max-total-tokens 40960 --mem-fraction-static 0.85 \
- --max-running-requests 1 --max-mamba-cache-size 4 --disable-radix-cache \
+ --max-running-requests 1 --max-mamba-cache-size 4 \
  --speculative-draft-model-quantization gptq \
  --cuda-graph-bs-decode 1 --cuda-graph-backend-prefill disabled \
  --chunked-prefill-size 512 --max-prefill-tokens 1024 \

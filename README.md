@@ -4,12 +4,25 @@
 24 GB cards, both CPU-connected at **PCIe 4.0 x8**. There is still 32 GB system
 RAM; another 32 GB is pending. ROCm P2P remains unavailable.
 
-**SGLang MTP is restored:** its dual-card 40K profile passed arithmetic, JSON
-and tool-call checks. One short decode sample measured **75.82 t/s**; this is
-not a full-context or repeated benchmark. Eight profiles are enabled in DSH,
-Turnstone and the API catalog. Every active model still uses both GPUs. Strata
-remains deferred. See the [new-board verification](linux/hardware/Z690-2026-10-17.md).
+**October 17 SGLang tuning:** DFlash2 now has a **65,536-token** context,
+GPU prefix caching and 2,048-token prefill chunks. MTP retains **40,960 tokens**
+and now also caches prefixes. Both use both RX 7900 XTX cards. Near-window
+retrieval, arithmetic, JSON and tool-call checks passed with no sampled VRAM spill.
+Eight profiles remain enabled; DFlash2 remains the SGLang default and llama.cpp
+Qwen Q4 remains the DSH default. HiCache and Strata wait for the RAM upgrade.
 
+| Current SGLang profile | Context budget | Inventory / code / prose decode t/s | Cold / repeated 8K TTFT |
+|---|---:|---:|---:|
+| DFlash2, chunk 2,048, GPU prefix cache | 65,536 | 104.23 / 200.57 / 60.12 | 5.564 / 0.292 s |
+| MTP2, chunk 512, GPU prefix cache | 40,960 | 74.46 / 89.32 / 66.18 | 5.977 / 0.111 s |
+
+Decode values average two short 256-token samples per workload; TTFT values are
+single retrieval probes, not pure prefill throughput. DFlash2's near-64K input
+passed in 66.6 seconds; MTP's near-40K input passed in 37.0 seconds. Short decode
+is broadly comparable to the DFlash2 16K baseline, but the selected profile's
+prose mean was 2.8% lower. Large prompts still take time to process; cache gains
+require a matching prefix and disappear when the worker unloads.
+[Settings, comparison and limits](linux/hardware/SGLANG-DUAL-CONTEXT-2026-10-17.md).
 
 ## Previous motherboard results — October 16
 
