@@ -130,7 +130,10 @@ if __name__ == '__main__':
     signal.signal(signal.SIGHUP, interrupted)
     parser = argparse.ArgumentParser()
     parser.add_argument('cases', nargs='+')
+    parser.add_argument('--output-dir', type=Path, default=OUT,
+                        help='Separate output directory for a new hardware validation; preserves earlier results')
     args = parser.parse_args()
+    OUT = args.output_dir
     if any(backend_switch.is_inference(p) for p in backend_switch.processes().values()):
         parser.error('Another configured inference is running')
     with socket.socket() as probe:

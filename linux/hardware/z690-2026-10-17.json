@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-17",
+  "motherboard": "MSI MPG Z690 CARBON WIFI (MS-7D30)",
+  "gpus": "2 x RX 7900 XTX 24 GB",
+  "upstream_links": [
+    "CPU PCIe 4.0 x8",
+    "CPU PCIe 4.0 x8"
+  ],
+  "system_ram_gb_installed": 32,
+  "additional_ram_gb_pending": 32,
+  "rocm_peer_access": [
+    false,
+    false
+  ],
+  "collectives": "FP32/BF16 two-rank all-reduce and all-gather passed at 1, 4096 and 1048576 elements",
+  "model": "qwen3.8-27b-sglang",
+  "strategy": "TP2, MTP2, BF16 KV, prefix cache disabled, graphs enabled",
+  "context_budget": 40960,
+  "reported_cache_capacities": [
+    40960
+  ],
+  "validation": {
+    "arithmetic": true,
+    "ordered_json": true,
+    "tool_roundtrip": true
+  },
+  "decode_tps_approx": 75.82,
+  "sampled_peak_vram_gib": [
+    13.48,
+    12.22
+  ],
+  "completion_tokens": 256,
+  "limitations": "One short 256-token-limit sample. No full-context, repeat-average, prefill or other-model benchmark on the new motherboard."
+}

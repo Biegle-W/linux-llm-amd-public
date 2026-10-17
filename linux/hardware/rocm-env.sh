@@ -19,7 +19,7 @@ export TOKENIZERS_PARALLELISM=false
 
 # Both installed cards report no peer access; use RCCL host transport.
 export NCCL_P2P_DISABLE=1
-# Isolated gfx1100 RCCL 2.27.7 without device hostcalls (chipset slot lacks atomics).
+# Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"
 export SGLANG_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
 export VLLM_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"

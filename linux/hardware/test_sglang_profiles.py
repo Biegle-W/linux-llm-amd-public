@@ -17,10 +17,11 @@ with patch.object(Path, 'read_text', return_value=source):
 
 class ProfileTests(unittest.TestCase):
     def test_disabled_profile_rejected_before_stopping_worker(self):
-        with patch.object(router, 'stop_worker') as stop, \
+        with patch.dict(router.PROFILES, {'test-blocked': {'enabled': False, 'disabled_reason': 'blocked for validation'}}), \
+                patch.object(router, 'stop_worker') as stop, \
                 patch.object(router.subprocess, 'Popen') as start:
             with self.assertRaisesRegex(RuntimeError, 'blocked'):
-                router.ensure_worker('qwen3.8-27b-sglang')
+                router.ensure_worker('test-blocked')
             stop.assert_not_called()
             start.assert_not_called()
 
@@ -28,11 +29,13 @@ class ProfileTests(unittest.TestCase):
         handler = object.__new__(router.Handler)
         handler.path = '/v1/models'
         handler.send_json = Mock()
-        handler.do_GET()
+        with patch.dict(router.PROFILES, {'test-blocked': {'enabled': False}}):
+            handler.do_GET()
         status, payload = handler.send_json.call_args.args
         self.assertEqual(status, 200)
         ids = {row['id'] for row in payload['data']}
-        self.assertNotIn('qwen3.8-27b-sglang', ids)
+        self.assertNotIn('test-blocked', ids)
+        self.assertIn('qwen3.8-27b-sglang', ids)
         self.assertIn(router.DEFAULT, ids)
         self.assertTrue(router.PROFILES[router.DEFAULT].get('enabled', True))
 

@@ -1,6 +1,6 @@
 {
   "qwen3.8-27b-sglang": {
-    "name": "Qwen3.8-27B SGLang dual AMD (40K MTP, blocked)",
+    "name": "Qwen3.8-27B SGLang dual AMD (40K, MTP)",
     "context": 40960,
     "mtp": true,
     "mtp_steps": 2,
@@ -12,9 +12,7 @@
     "min_free_vram_gib": 21.0,
     "extra_args": [
       "--disable-radix-cache"
-    ],
-    "enabled": false,
-    "disabled_reason": "SGLang MTP is blocked on the dual-7900-XTX setup: HIP buffer/index operations fail on the chipset-connected GPU. Use qwen3.8-27b-sglang-dflash2 or qwen3.8-27b-vllm. No single-card fallback is enabled."
+    ]
   },
   "qwen3.8-27b-sglang-dflash2": {
     "name": "Qwen3.8-27B SGLang dual AMD (16K, DFlash2)",

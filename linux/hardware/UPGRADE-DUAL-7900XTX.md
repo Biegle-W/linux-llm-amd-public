@@ -1,5 +1,10 @@
 # Two RX 7900 XTX migration — October 16, 2026
 
+> **Superseded hardware/status:** the October 17 MSI Z690 upgrade changes both
+> upstream links to CPU PCIe4 x8 and restores SGLang MTP. See
+> [current verification](Z690-2026-10-17.md). The old topology and MTP failures
+> below are historical; the RAM upgrade remains pending.
+
 The user reports installing the second RX 7900 XTX and explicitly requests both
 cards for every active model. This supersedes the earlier single-card preference.
 After a reboot during the session, Linux and ROCm enumerate two gfx1100 devices

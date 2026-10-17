@@ -23,3 +23,7 @@ This supersedes the previous single-card preference. Validate per-engine dual-ca
 settings and report unsupported profiles rather than silently using one card.
 Preserve historical NVIDIA/Windows snapshots. See
 `linux/hardware/UPGRADE-DUAL-7900XTX.md` for validation status.
+
+October 17 hardware: MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8. SGLang MTP
+passed and is enabled again; another 32 GB RAM is pending (32 GB installed).
+See `linux/hardware/Z690-2026-10-17.md`. Keep GPU-resident weights until then.

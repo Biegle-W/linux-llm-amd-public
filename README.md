@@ -1,6 +1,17 @@
 # Local LLM reference setups
 
-## Current dual-AMD results — October 16
+**October 17 motherboard update:** MSI MPG Z690 CARBON WIFI, two RX 7900 XTX
+24 GB cards, both CPU-connected at **PCIe 4.0 x8**. There is still 32 GB system
+RAM; another 32 GB is pending. ROCm P2P remains unavailable.
+
+**SGLang MTP is restored:** its dual-card 40K profile passed arithmetic, JSON
+and tool-call checks. One short decode sample measured **75.82 t/s**; this is
+not a full-context or repeated benchmark. Eight profiles are enabled in DSH,
+Turnstone and the API catalog. Every active model still uses both GPUs. Strata
+remains deferred. See the [new-board verification](linux/hardware/Z690-2026-10-17.md).
+
+
+## Previous motherboard results — October 16
 
 Every enabled model now uses **both RX 7900 XTX cards**. llama.cpp splits layers
 1:1 with GPU-resident weights; SGLang and vLLM use ROCm tensor parallelism 2.
@@ -26,9 +37,8 @@ results below are historical and are not a controlled speed comparison.
 Context budgets are retained, not newly established maximums. Sampled VRAM
 includes desktop/runtime allocations and can miss brief peaks.
 
-**SGLang MTP2 is blocked** on this dual-card topology after repeatable HIP
-buffer/index failures. It is hidden from DSH, Turnstone and API model lists;
-direct requests fail before unloading a working model. SGLang defaults to the
+**On the previous motherboard, SGLang MTP2 was blocked** after repeatable HIP
+buffer/index failures. It was hidden from DSH, Turnstone and API model lists until the October 17 retry passed. SGLang defaults to the
 working DFlash2 profile. vLLM and llama.cpp retain working MTP. Strata remains
 deferred until RAM expansion and dual-HIP validation; its Q3 assets are preserved.
 
@@ -73,7 +83,7 @@ in each active model; the earlier RTX 4070 is retired. RAM remains 32 GB.
 
 | Backend | Model / strategy | Context |
 |---|---|---:|
-| SGLang ROCm | Qwen 27B GPTQ, MTP2 — **disabled pending dual-GPU fix** | 40,960 (inactive) |
+| SGLang ROCm | Qwen 27B GPTQ, MTP2 — restored on Z690 | 40,960 |
 | SGLang ROCm | Qwen 27B GPTQ, DFlash2 W4A16 drafter | 16,384 |
 | vLLM ROCm | Qwen 27B GPTQ, MTP3, Q4 KV | 65,536 |
 | llama.cpp Vulkan | Qwen 27B Q4, MTP3 | 65,536 |
