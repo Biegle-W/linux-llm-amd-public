@@ -4,6 +4,14 @@
 24 GB cards, both CPU-connected at **PCIe 4.0 x8**. There is still 32 GB system
 RAM; another 32 GB is pending. ROCm P2P remains unavailable.
 
+**October 17 P2P diagnosis:** the 13600KF graphics root ports lack documented
+P2P memory read/write routing. amdgpu rejects the cross-root topology; both HIP
+peer queries remain false with fine-grain PCIe enabled. Large BARs and kernel
+P2P options are already enabled. The proposed remedy while retaining this CPU
+and board is a real active PCIe switch shared by both GPUs, pending hardware and
+transfer validation. No software fix, kernel/BIOS change or speedup was deployed.
+[Evidence and switch requirements](linux/hardware/PCIE-P2P-2026-10-17.md).
+
 **October 17 SGLang tuning:** DFlash2 now has a **65,536-token** context,
 GPU prefix caching and 2,048-token prefill chunks. MTP retains **40,960 tokens**
 and now also caches prefixes. Both use both RX 7900 XTX cards. Near-window

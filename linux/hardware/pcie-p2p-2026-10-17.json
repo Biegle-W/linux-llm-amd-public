@@ -1,0 +1,162 @@
+{
+  "kernel": "7.0.0-38-generic",
+  "cpu": "13th Gen Intel(R) Core(TM) i5-13600KF",
+  "board": "MPG Z690 CARBON WIFI (MS-7D30)",
+  "amdgpu_pcie_p2p": "Y",
+  "gpus": [
+    {
+      "pci": "0000:03:00.0",
+      "vendor": "0x1002",
+      "device": "0x744c",
+      "bar0_bytes": 34359738368,
+      "upstream_pci_devices": [
+        "0000:02:00.0",
+        "0000:01:00.0",
+        "0000:00:01.0"
+      ]
+    },
+    {
+      "pci": "0000:06:00.0",
+      "vendor": "0x1002",
+      "device": "0x744c",
+      "bar0_bytes": 34359738368,
+      "upstream_pci_devices": [
+        "0000:05:00.0",
+        "0000:04:00.0",
+        "0000:00:01.1"
+      ]
+    }
+  ],
+  "capability_cases": [
+    {
+      "name": "default",
+      "environment": {},
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_pcie",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_no_sdma",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1",
+        "HSA_ENABLE_SDMA": "0"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    }
+  ],
+  "kernel_p2p_config": [
+    "CONFIG_PCI_P2PDMA=y",
+    "CONFIG_HSA_AMD_P2P=y",
+    "CONFIG_DMABUF_MOVE_NOTIFY=y"
+  ],
+  "host_bridge": {
+    "vendor": "0x8086",
+    "device": "0xa704"
+  },
+  "kfd_gpu_links": [
+    {
+      "node": 1,
+      "io_links": [
+        {
+          "type": "2",
+          "version_major": "0",
+          "version_minor": "0",
+          "node_from": "1",
+          "node_to": "0",
+          "weight": "20",
+          "min_latency": "0",
+          "max_latency": "0",
+          "min_bandwidth": "0",
+          "max_bandwidth": "16000",
+          "recommended_transfer_size": "0",
+          "recommended_sdma_engine_id_mask": "3",
+          "flags": "1"
+        }
+      ]
+    },
+    {
+      "node": 2,
+      "io_links": [
+        {
+          "type": "2",
+          "version_major": "0",
+          "version_minor": "0",
+          "node_from": "2",
+          "node_to": "0",
+          "weight": "20",
+          "min_latency": "0",
+          "max_latency": "0",
+          "min_bandwidth": "0",
+          "max_bandwidth": "16000",
+          "recommended_transfer_size": "0",
+          "recommended_sdma_engine_id_mask": "3",
+          "flags": "1"
+        }
+      ]
+    }
+  ],
+  "transfer_validation": "Not performed: this is a capability-only diagnostic.",
+  "date": "2026-10-17",
+  "kernel_peer_rejections": [
+    "amdgpu 0000:06:00.0: PCIe P2P access from peer device 0000:03:00.0 is not supported by the chipset",
+    "amdgpu 0000:03:00.0: PCIe P2P access from peer device 0000:06:00.0 is not supported by the chipset"
+  ],
+  "status": "peer_unavailable",
+  "conclusion": "Current cross-root-port layout fails kernel topology eligibility. Intel documents no P2P memory reads/writes for Raptor Lake S graphics ports PEG10/PEG11. Active common PCIe switch is the proposed topology remedy; not installed or validated here.",
+  "sources": {
+    "intel_pcie_support": "https://edc.intel.com/content/www/us/en/design/products/platforms/details/raptor-lake-s/13th-generation-core-processors-datasheet-volume-1-of-2/pci-express-support/",
+    "linux_p2pdma": "https://github.com/torvalds/linux/blob/v7.0/drivers/pci/p2pdma.c",
+    "amdgpu_peer_check": "https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c",
+    "kernel_topology_documentation": "https://docs.kernel.org/driver-api/pci/p2pdma.html"
+  }
+}

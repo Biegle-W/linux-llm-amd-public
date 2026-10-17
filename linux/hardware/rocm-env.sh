@@ -17,7 +17,8 @@ export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
 
-# Both installed cards report no peer access; use RCCL host transport.
+# Raptor Lake graphics ports fail the kernel cross-root P2P check.
+# Keep validated host transport; see hardware/PCIE-P2P-2026-10-17.md.
 export NCCL_P2P_DISABLE=1
 # Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"
