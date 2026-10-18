@@ -5,7 +5,8 @@ Installed as `ft-rocm`. The incompatible NVIDIA-only Desktop beta
 at the user's request later on October 18. Saved Desktop application data is
 retained; the AMD runtime and Qwen profile still work. This is a source-built
 inference engine,
-not an AMD-enabled replacement Desktop installer.
+not an AMD-enabled replacement Desktop installer. A later frontend-only test
+passed through a custom ROCm bridge; see the Desktop section below.
 
 The user explicitly allows **one RX 7900 XTX for FreeToken only**. GPU1 is the
 default; every other engine still requires both cards. Upstream GGUF embeddings
@@ -107,14 +108,20 @@ starting FreeToken. No FreeToken model is left running by validation.
 
 ## Desktop frontend and API clients
 
-The installed AMD engine is the source-built CLI, not a verified one-click
-AMD Desktop package. The removed Desktop beta bootstrapped a CUDA engine.
-Upstream still describes [AMD installation as WIP](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/docs/install_amd.md);
-[Desktop release artifacts](https://github.com/FlashML-org/FreeToken-Web/releases)
-do not establish that its GPU selector/bootstrap works with this isolated build.
-The [installer](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/install.sh)
-has a `FREETOKEN_HOME` engine-discovery mechanism, but connecting
-that Desktop frontend to this ROCm environment has not been validated here.
+The isolated source-built engine now also passed a real **Desktop beta.23** test
+through an explicit `FREETOKEN_FT_BIN` wrapper: Start, arithmetic, JSON content,
+streamed code and Stop all worked on **GPU1 / Qwen27B Q4 / 8K**. Warm code sample:
+100 output tokens in 2.650 s, **37.7 output t/s end-to-end** (one sample, includes
+prefill/API; not isolated decode). Peak GPU1 VRAM 19.009 GiB, zero worker swap/spill.
+[Exact configuration, evidence and limitations](DESKTOP-AMD-2026-10-18.md).
+
+The frontend still reports no NVIDIA GPU, exposes no AMD VRAM gauges, and shows
+incomplete local-GGUF metadata. Its engine bootstrap/updater remains CUDA-oriented:
+do not use Install/Reinstall/Update engine to manage this ROCm build. Only the
+frontend was extracted into ignored test storage; the retired system package,
+CUDA engine and original `ft` link remain removed. Saved user app data was not
+modified. The test frontend/worker were closed and Nemotron Q4 restored afterward.
+This validates a custom frontend bridge, not an official one-click AMD installer.
 
 Use `ft-rocm qwen` and an OpenAI-compatible API client on the Linux PC. Base URL
 `http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`; this loopback test

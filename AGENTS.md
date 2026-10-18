@@ -76,7 +76,12 @@ The user explicitly permits one RX 7900 XTX for FreeToken only while its
 GGUF model implementation lacks TP2. Keep both GPUs required for every other
 engine. The user subsequently requested removal of the incompatible NVIDIA Desktop
 beta and its CUDA environment: they and the original `ft` link are now removed.
-Retain the separate AMD `ft-rocm` build; do not reinstall the retired beta.
+Retain the separate AMD `ft-rocm` build and keep the retired CUDA engine removed.
+The user's subsequent Desktop AMD test authorized extracting only the beta.23
+frontend with isolated test state. Real Chat/Start/Stop passed through an explicit
+`FREETOKEN_FT_BIN` ROCm bridge; the native GPU panel still reports no NVIDIA GPU.
+The system Desktop package stays uninstalled. Do not use the beta engine updater
+to replace the isolated AMD environment. See the Desktop AMD test report.
 CPU-backed experts plus a bounded GPU hot-expert cache remain required for MoE serving. Keep automatic
 shutdown targets limited to the previously authorized engines; do not silently
 add FreeToken to other launchers' process-kill lists.

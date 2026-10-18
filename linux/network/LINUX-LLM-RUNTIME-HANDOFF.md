@@ -324,8 +324,12 @@ Installed separately under `freetoken/` in the Linux runtime root. The new
 PATH command is `ft-rocm`. The user subsequently requested removal of the
 incompatible NVIDIA Desktop beta: package `0.2.0-beta.23`, its CUDA engine
 environment and the original `ft` link are now removed. Saved application data
-is retained; the AMD build remains available. This is an experimental AMD
-engine source build, not an
+is retained; the AMD build remains available. The subsequent user-authorized
+Desktop AMD test extracted only the beta.23 frontend into ignored local test
+storage. Real Start/Chat/Stop worked through an explicit `FREETOKEN_FT_BIN`
+ROCm bridge; the system package and CUDA engine remain removed. Native GPU
+monitoring still lists no AMD cards and its updater is CUDA-oriented. This is
+an experimental source-built engine/custom frontend bridge, not an official
 AMD Desktop installer. Linux binaries/environments cannot be reused by Windows.
 
 Only FreeToken may use a single RX 7900 XTX, default GPU1. Both cards pass native
@@ -346,9 +350,15 @@ probe took 2.584 s (38.7 output t/s end-to-end, not isolated decode throughput).
 Full 8K filling and MTP remain untested. Use `ft-rocm qwen` after closing the
 existing inference terminal. For a terminal chat interface, start
 `ft-rocm qwen` in one terminal, wait
-for ready, then run `ft-rocm shell` in a second terminal. The Desktop frontend
-has not been validated with this ROCm build; its removed beta bootstrapped CUDA.
-Its experimental loopback API is
+for ready, then run `ft-rocm shell` in a second terminal. A separate actual
+Desktop test passed arithmetic, JSON content and streamed code; its warm code
+sample was 100 output tokens in 2.650 s (37.7 output t/s end-to-end). Peak GPU1
+VRAM was 19.009 GiB, zero worker swap/spill. Desktop Stop released its worker
+and port. Test-only XDG state preserved the original saved app data, and the
+frontend/worker were closed; Nemotron Q4 was restored in its normal visible
+llama.cpp terminal afterward. [Desktop configuration and limits](../freetoken/DESKTOP-AMD-2026-10-18.md).
+Do not use Desktop's Install/Reinstall/Update engine controls for ROCm.
+The validated CLI profile's experimental loopback API is
 `http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`.
 Exact build and [validation report](../freetoken/README.md).
 

@@ -4,7 +4,12 @@
 **October 18 FreeToken AMD experiment:** installed current upstream source in a
 separate ROCm environment as `ft-rocm`. The incompatible NVIDIA Desktop beta,
 its CUDA environment and original `ft` link were subsequently removed at the
-user's request; saved application data is retained. Only FreeToken has the
+user's request; saved application data is retained. A subsequent frontend-only
+Desktop beta.23 test passed real Start/Chat/Stop through an explicit ROCm bridge:
+**37.7 output t/s end-to-end** for 100 warm code tokens at 8K/GPU1, zero swap/spill.
+Native AMD GPU monitoring and the packaged engine updater remain incomplete.
+[Desktop test and configuration](linux/freetoken/DESKTOP-AMD-2026-10-18.md).
+Only FreeToken has the
 user's **single-7900-XTX exception**;
 other engines remain dual-GPU. `ft-rocm qwen` passed Qwen 27B Q4 arithmetic,
 JSON and tools at **8K / GPU1**; 100-token short probe: **38.7 output t/s
