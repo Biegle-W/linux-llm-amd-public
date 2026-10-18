@@ -5,6 +5,9 @@ repositories listed below. The previous custom artwork has been replaced.
 Artwork is copied without redrawing, recoloring or adding a background; the
 desktop scales each icon normally. Turnstone embeds its official SVG in its
 HTML: only that existing data URI was decoded into a standalone SVG file.
+DSH uses its official desktop PNG with an opaque light background, replacing
+the transparent web favicon so it stays readable against wallpaper. The
+background and shadow are part of the original upstream artwork.
 
 | App | Asset and pinned upstream source | Original repository license |
 |---|---|---|
@@ -12,7 +15,7 @@ HTML: only that existing data URI was decoded into a standalone SVG file.
 | SGLang | [`sglang.png`](https://github.com/sgl-project/sglang/blob/f84475ccf593087df3d1da13c9e675eadee12352/assets/logo_square.png) | [Apache-2.0](licenses/sglang.LICENSE) |
 | vLLM | [`vllm.png`](https://github.com/vllm-project/vllm/blob/83c9a547bf9a3b4f2653fb5766886bdc5dba35be/docs/assets/logos/vllm-logo-only-light.png) | [Apache-2.0](licenses/vllm.LICENSE) |
 | Strata Q3 | [`strata.svg`](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/serve/web/favicon.svg) | [MIT](licenses/strata.LICENSE) |
-| dsh | [`dsh.svg`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/web/public/favicon.svg) | [MIT](licenses/dsh.LICENSE) |
+| dsh | [`dsh.png`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/desktop/resources/icon.png) | [MIT](licenses/dsh.LICENSE) |
 | Turnstone | [`turnstone.svg`](https://github.com/turnstonelabs/turnstone/blob/5c82b17700a73ad0ee84421f77549c8a3d46b06b/turnstone/ui/static/index.html) | [Apache-2.0](licenses/turnstone.LICENSE) |
 
 [SOURCES.json](SOURCES.json) records complete commits, original paths, exact byte

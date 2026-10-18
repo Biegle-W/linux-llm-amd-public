@@ -94,7 +94,9 @@ and `launchers/icons/SOURCES.json` for pinned URLs, SHA-256 values and extractio
 notes. Artwork is unchanged; Turnstone's existing embedded favicon was decoded
 from its official HTML. `Icon=` points to the corresponding SVG/PNG in the runtime
 workspace; retain those files and update paths if moving the setup. Backend
-commands, terminal visibility, models, contexts and Strata's deferred status remain.
+commands, terminal visibility, models, contexts and Strata's deferred status remain. DSH
+uses the official desktop PNG with its own opaque light tile/background; the
+transparent web favicon was replaced for visibility against wallpaper.
 
 Backend Desktop launchers **llama.cpp**, **SGLang** and **vLLM** start only their
 backend, with live terminal logs. Models load on the first matching request.
