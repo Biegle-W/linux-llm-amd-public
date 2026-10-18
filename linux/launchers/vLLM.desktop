@@ -5,5 +5,5 @@ Comment=vLLM inference backend only; live logs in this terminal
 Exec=env GSK_RENDERER=cairo /usr/bin/ptyxis --standalone --new-window --title=vLLM -- /opt/local-llm/dsh/start-backend-terminal vllm
 Path=/opt/local-llm/dsh/workspace
 Terminal=false
-Icon=/opt/local-llm/launchers/icons/vllm.svg
+Icon=/opt/local-llm/launchers/icons/vllm.png
 Categories=Development;

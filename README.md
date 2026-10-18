@@ -218,11 +218,12 @@ Adapt paths, GPU selection, memory budgets and runtime versions before launching
 
 ## Linux
 
-Custom SVG icons were added October 18 for llama.cpp, SGLang, vLLM, Strata Q3,
-dsh and Turnstone. [Icon assets and install-location notes](linux/launchers/icons/README.md)
-are retained with the Linux setup. Set each desktop entry's absolute `Icon=` path
-when adjusting `Exec=` and `Path=` for your installation. This only changes
-appearance; model selection, visible terminals and the Strata readiness gate remain.
+Official upstream logos/favicons replaced the initial custom artwork on
+October 18 for llama.cpp, SGLang, vLLM, Strata Q3, dsh and Turnstone.
+[Logo sources, pinned checksums and original licenses](linux/launchers/icons/README.md)
+are retained with the setup. Assets are unchanged; Turnstone's existing inline
+SVG favicon is decoded from its official HTML. Update each absolute `Icon=` path
+when moving the installation. Backend commands and model settings are unaffected.
 
 The `linux/` tree corresponds to a runtime workspace at `/opt/local-llm`.
 Copy its contents there or update the example absolute paths consistently.

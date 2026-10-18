@@ -1,15 +1,31 @@
-# Desktop launcher icons
+# Official desktop launcher logos
 
-Six original SVG launcher symbols: llama (amber), SGLang (green network), vLLM
-(violet lightning), Strata (cyan layers), dsh (blue terminal/chat) and Turnstone
-(coral bird). These are custom launcher artwork, not official project logos.
-They are source vectors with no fonts, external assets, scripts or network reads.
+All six launchers use project-owned logo/favicon assets from the official
+repositories listed below. The previous custom artwork has been replaced.
+Artwork is copied without redrawing, recoloring or adding a background; the
+desktop scales each icon normally. Turnstone embeds its official SVG in its
+HTML: only that existing data URI was decoded into a standalone SVG file.
 
-The desktop entry `Icon=` uses an absolute path to the corresponding SVG in
-`launchers/icons/`. Keep that directory when copying/reinstalling the setup.
-For another install location, update `Icon=` together with the existing `Exec=`
-and `Path=` values in the desktop files, then copy them to your Desktop. Preserve
-the executable bit and existing desktop trust state. This only changes appearance;
-backend commands, terminal behavior, model selection and Strata's RAM gate remain.
+| App | Asset and pinned upstream source | Original repository license |
+|---|---|---|
+| llama.cpp | [`llama.svg`](https://github.com/ggml-org/llama.cpp/blob/f12aaa344c971556ec35be054d7aac1d901fd510/media/llama1-icon.svg) | [MIT](licenses/llama.LICENSE) |
+| SGLang | [`sglang.png`](https://github.com/sgl-project/sglang/blob/f84475ccf593087df3d1da13c9e675eadee12352/assets/logo_square.png) | [Apache-2.0](licenses/sglang.LICENSE) |
+| vLLM | [`vllm.png`](https://github.com/vllm-project/vllm/blob/83c9a547bf9a3b4f2653fb5766886bdc5dba35be/docs/assets/logos/vllm-logo-only-light.png) | [Apache-2.0](licenses/vllm.LICENSE) |
+| Strata Q3 | [`strata.svg`](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/serve/web/favicon.svg) | [MIT](licenses/strata.LICENSE) |
+| dsh | [`dsh.svg`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/web/public/favicon.svg) | [MIT](licenses/dsh.LICENSE) |
+| Turnstone | [`turnstone.svg`](https://github.com/turnstonelabs/turnstone/blob/5c82b17700a73ad0ee84421f77549c8a3d46b06b/turnstone/ui/static/index.html) | [Apache-2.0](licenses/turnstone.LICENSE) |
 
-Original artwork is provided under the MIT license in [LICENSE](LICENSE).
+[SOURCES.json](SOURCES.json) records complete commits, original paths, exact byte
+sizes and SHA-256 values. Each asset retains its upstream ownership. Original
+repository licenses are included per asset; these are not relicensed as locally
+created artwork. Turnstone’s [NOTICE](licenses/turnstone.NOTICE) is retained.
+Use of a logo here identifies the locally installed app and does not imply
+upstream endorsement of this setup. See the upstream
+[DeepSeek Harness brand guidelines](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/BRAND_GUIDELINES.md).
+
+The desktop entry `Icon=` points to the corresponding file in `launchers/icons/`.
+Keep that directory when copying/reinstalling the setup. For another install
+location, update the absolute `Icon=` paths alongside `Exec=` and `Path=` values,
+then copy the launchers to your Desktop. Preserve their executable bits and
+existing desktop trust state. Backend commands, terminal settings and models
+are unaffected by this icon replacement.
