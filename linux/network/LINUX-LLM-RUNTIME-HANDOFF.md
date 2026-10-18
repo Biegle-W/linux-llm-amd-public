@@ -122,6 +122,10 @@ commands, terminal visibility, models, contexts and Strata's deferred status rem
 uses the official desktop PNG with its own opaque light tile/background; the
 transparent web favicon was replaced for visibility against wallpaper.
 
+October 18 menu preference: Turnstone was removed from the application menu.
+Its Desktop launcher and `turnstone` PATH command remain available; this change
+did not stop or uninstall Turnstone or affect any inference backend.
+
 Backend Desktop launchers **llama.cpp**, **SGLang** and **vLLM** start only their
 backend, with live terminal logs. Models load on the first matching request.
 The **dsh** and **Turnstone** launchers are separate optional harnesses; external
