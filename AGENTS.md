@@ -77,3 +77,13 @@ Its software, isolated environments, Desktop app state, launchers and caches are
 removed. Shared model weights remain for other engines. The former single-GPU
 exception is obsolete. Keep all active engines on both GPUs, and do not reinstall
 FreeToken unless requested. Historical results remain in the hardware reports.
+
+## Public documentation scope
+
+The public repository demonstrates hardware configurations, inference-engine
+setup, reproducible tuning and measured performance. Keep personal workstation
+fault investigations, repair narratives and warranty disputes in private records.
+Publish the measured RAM capacity needed to interpret results, without exporting
+personal hardware-failure reports or troubleshooting histories. Apply this scope
+when synchronizing future documentation; private and public content need not be
+identical.

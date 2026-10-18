@@ -14,7 +14,7 @@ historical; do not use it as the current generated candidate.
 Status: **inactive; no Strata inference attempted on the new GPU pair**.
 The planned configuration has 64 GB system RAM; current OS memory is approximately
 30.6 GiB. The approximately 40 GiB Strata expert pack remains capacity-gated.
-
+The separately validated smaller MoE profiles fit the current memory budget.
 
 ## Current GPU policy
 

@@ -216,7 +216,7 @@ includes desktop/runtime allocations and can miss brief peaks.
 **On the previous motherboard, SGLang MTP2 was blocked** after repeatable HIP
 buffer/index failures. It was hidden from DSH, Turnstone and API model lists until the October 17 retry passed. SGLang defaults to the
 working DFlash2 profile. vLLM and llama.cpp retain working MTP. Strata remains
-deferred until RAM expansion and dual-HIP validation; its Q3 assets are preserved.
+deferred until the planned RAM expansion and dual-HIP validation; its Q3 assets are preserved.
 
 The second card is behind a chipset PCIe 4.0 x4 link and neither card exposes
 ROCm peer access. Both-card execution does not guarantee higher speed. The
@@ -312,8 +312,8 @@ separate Qwen MTP GGUF and unused Bolt vision projector were also removed from
 the active machine. Historical NVIDIA profiles remain as reference configurations.
 The SGLang DFlash2 drafter is still required.
 
-Strata's Q3 assets are preserved, but its profile is disabled until RAM is installed
-and the AMD HIP candidate is validated. See the [RAM-expansion preparation](linux/hardware/STRATA-AFTER-RAM.md)
+Strata's Q3 assets are preserved, but its profile is disabled until the planned 64 GB RAM is installed
+and the AMD HIP candidate is validated. See the [RAM-capacity preparation](linux/hardware/STRATA-AFTER-RAM.md)
 for the inactive AMD-only 32K candidate and read-only readiness check. The HIP
 build passed AMD device detection and a 64 MiB allocator self-test. No Strata
 model load or new speed benchmark was performed during preparation.

@@ -13,7 +13,7 @@ on AMD alone; see [migration validation](LLAMA-MIGRATION-2026-10-16.md).
 Qwen SGLang/vLLM ROCm profiles are also active. HyperQwen is disabled because
 its CUDA-only 14.707 GiB target cannot fit the remaining 12 GB NVIDIA card.
 The unused HyperQwen target has now been removed. Strata remains deferred;
-[the current RAM-expansion preparation](STRATA-AFTER-RAM.md) supersedes the Strata
+[the current RAM-capacity preparation](STRATA-AFTER-RAM.md) supersedes the Strata
 build/storage planning below. Earlier planning notes below are historical.
 
 **Current policy:** choose the fastest validated runtime per model. Bolt keeps

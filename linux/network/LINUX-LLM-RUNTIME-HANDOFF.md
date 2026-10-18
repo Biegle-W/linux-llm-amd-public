@@ -156,7 +156,7 @@ OpenAI-compatible clients do not need either one.
 | `llm-llama` | llama.cpp model router |
 | `llm-sglang` | SGLang router; DFlash2 default, MTP selectable in client |
 | `llm-vllm` | vLLM router, Qwen 27B |
-| `llm-strata` | Retained but blocked until RAM expansion and dual-AMD validation |
+| `llm-strata` | Retained but blocked until the planned RAM expansion and dual-AMD validation |
 | `dsh` | DSH frontend only |
 | `turnstone --no-browser` | Turnstone frontend without opening a host browser |
 | `llm-upgrade-check` | Hardware/readiness inspection; success is not an inference test |
@@ -402,7 +402,7 @@ including the public NVIDIA/Windows reference trees. Private binary archives and
 cleanup logs are excluded from Git. Future package installations may redownload
 packages; repeating removed experiments requires rebuilding their caches.
 
-After stable 64 GB RAM is installed, `python3 hardware/check-strata-ready.py`
+After 64 GB RAM is installed and validated, `python3 hardware/check-strata-ready.py`
 checks prerequisites; exit zero is not proof of successful inference. A future
 Strata migration must validate **both AMD GPUs**, HIP kernel/library compatibility,
 MTP on/off correctness, GPU/RAM residency, tools/streaming and progressively
