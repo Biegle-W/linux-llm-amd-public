@@ -25,6 +25,25 @@ class ProfileTests(unittest.TestCase):
             stop.assert_not_called()
             start.assert_not_called()
 
+    def test_unrepaired_verify_rejected_before_unloading_worker(self):
+        with patch.dict(router.PROFILES, {'test-unsafe': {'rdna_verify': True}}), \
+                patch.object(router, 'stop_worker') as stop, \
+                patch.object(router.subprocess, 'Popen') as start:
+            with self.assertRaisesRegex(RuntimeError, 'KV-walk repair'):
+                router.ensure_worker('test-unsafe')
+            stop.assert_not_called()
+            start.assert_not_called()
+
+    def test_profile_verifier_flags_override_inherited_environment(self):
+        with patch.dict(router.os.environ, {'SGLANG_RDNA_VLLM_VERIFY': '1',
+                                          'SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX': '1'}):
+            env = router.worker_environment({})
+        self.assertEqual(env['SGLANG_RDNA_VLLM_VERIFY'], '0')
+        self.assertEqual(env['SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX'], '0')
+        env = router.worker_environment({'rdna_verify': True, 'rdna_verify_walk_fix': True})
+        self.assertEqual(env['SGLANG_RDNA_VLLM_VERIFY'], '1')
+        self.assertEqual(env['SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX'], '1')
+
     def test_catalog_hides_failed_profile_and_keeps_working_default(self):
         handler = object.__new__(router.Handler)
         handler.path = '/v1/models'

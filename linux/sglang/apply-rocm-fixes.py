@@ -72,3 +72,64 @@ if 'Chipset-connected RDNA3' not in source:
 #endif''')
     kv.write_text(source)
 print('ROCm MTP sharing and HIP KV bounds-trap patches applied.')
+
+# The pinned backend now passes PREFIX-ONLY metadata to TARGET_VERIFY. The
+# vendored unified adapter expects prefix+draft; keep this repair opt-in until
+# its numerical/model tests pass on a deployment.
+attention = base / 'srt/layers/attention/triton_backend.py'
+source = attention.read_text()
+if 'SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX' not in source:
+    start = source.index('    def _rdna_unified_verify(')
+    end = source.index('    def _rdna_unified_decode(', start)
+    part = source[start:end]
+    part = one(part, '        if extend_meta is not None:\n            from sglang.kernels.ops.attention.rdna_verify_adapter import (', '''        verify_seq_lens = forward_batch.seq_lens
+        if (
+            os.environ.get("SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX", "0") == "1"
+            and extend_meta is None
+            and forward_batch.forward_mode.is_target_verify()
+        ):
+            # This repair supports only a linear chain in an untranslated pool.
+            if self.topk not in (0, 1) or self.dcp_size != 1 or self.kv_index_translator.is_translating:
+                raise ValueError("KV-walk repair requires linear TP verification without pool translation")
+            if q.shape[0] != bs * num_draft_tokens or meta.max_extend_len != num_draft_tokens:
+                raise ValueError("KV-walk repair requires the configured fixed verify window")
+            # TARGET_VERIFY's ordinary Triton path takes prefix KV separately
+            # from this forward's K/V. Rebuild the causal chain expected by the
+            # unified adapter, using the same scatter locations as the KV store.
+            from sglang.kernels.ops.attention.rdna_verify_adapter import rdna_fill_extend
+
+            verify_seq_lens = forward_batch.seq_lens + num_draft_tokens
+            full_indptr = torch.zeros_like(kv_indptr)
+            full_indptr[1:] = torch.cumsum(verify_seq_lens[:bs], dim=0)
+            rdna_fill_extend(
+                rdna_verify_bufs, kv_indices, kv_indptr,
+                forward_batch.out_cache_loc, verify_seq_lens, bs,
+                num_draft_tokens, full_indptr,
+            )
+            skip_fill = True
+
+        if extend_meta is not None:
+            from sglang.kernels.ops.attention.rdna_verify_adapter import (''')
+    part = one(part, '            kv_indices,\n            forward_batch.seq_lens,\n            layer.scaling,', '            kv_indices,\n            verify_seq_lens,\n            layer.scaling,')
+    source = source[:start] + part + source[end:]
+    compile(source, str(attention), 'exec')
+    attention.write_text(source)
+print('Opt-in unified-verifier KV-walk repair is available.')
+
+# Qwen TP2 uses 12 query / 2 KV heads (GQA=6). A 16-row tile holds two
+# complete query groups and four partial lanes; those lanes must not race the
+# next query block. Preserve the original kernel unless the repair is enabled.
+unified = base / 'kernels/ops/attention/rdna_unified_verify.py'
+source = unified.read_text()
+if 'MASK_PARTIAL_Q_ROWS' not in source:
+    source = one(source, 'import torch\n', 'import torch\nimport os\n')
+    source = one(source, '    IS_3D: tl.constexpr,\n    q_block_offsets_ptr,',
+                 '    IS_3D: tl.constexpr,\n    MASK_PARTIAL_Q_ROWS: tl.constexpr,\n    q_block_offsets_ptr,')
+    source = one(source, '    query_mask_0 = tl.where(query_pos < cur_batch_query_len, 1, 0).to(tl.int1)', '''    query_mask_0 = tl.where(query_pos < cur_batch_query_len, 1, 0).to(tl.int1)
+    if MASK_PARTIAL_Q_ROWS:
+        query_mask_0 = query_mask_0 & ((offs_m // num_queries_per_kv) < BLOCK_Q)''')
+    source = one(source, '        IS_3D=use_3d,', '''        IS_3D=use_3d,
+        MASK_PARTIAL_Q_ROWS=(os.environ.get("SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX", "0") == "1"),''')
+    compile(source, str(unified), 'exec')
+    unified.write_text(source)
+print('Opt-in partial-GQA query-row masking repair is available.')

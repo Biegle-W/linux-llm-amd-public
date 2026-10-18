@@ -101,3 +101,6 @@ llm-tools/rocm-sdk/
 
 # Isolated dual-Radeon RCCL library and downloaded verification sources
 llm-tools/rccl-nohostcall/
+
+# Pinned benchmark tool and its isolated environment
+/llm-tools/llama-benchy-0.4.0/

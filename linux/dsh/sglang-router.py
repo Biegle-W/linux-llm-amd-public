@@ -58,11 +58,22 @@ def cache_capacities(value):
         for item in value:
             yield from cache_capacities(item)
 
+def worker_environment(cfg):
+    verify = cfg.get('rdna_verify', False)
+    repair = cfg.get('rdna_verify_walk_fix', False)
+    if verify and not repair:
+        raise RuntimeError('Optimized verification requires the validated KV-walk repair')
+    return {**os.environ, 'SGLANG_LOCAL_SHARE_QWEN_MTP': '1',
+            'SGLANG_RDNA_VLLM_VERIFY': str(int(bool(verify))),
+            'SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX': str(int(bool(repair)))}
+
+
 def ensure_worker(model):
     global worker, active, logfile
     cfg = PROFILES[model]
     if not cfg.get('enabled', True):
         raise RuntimeError(cfg.get('disabled_reason', 'This profile is disabled.'))
+    env = worker_environment(cfg)
     if active == model and worker is not None and worker.poll() is None:
         return
     stop_worker()
@@ -86,7 +97,7 @@ def ensure_worker(model):
                 '-p', 'MemoryMax=' + cfg['scope_memory_max'], *args]
     logfile = (ROOT / 'logs' / ('sglang-' + model + '.log')).open('a')
     worker = subprocess.Popen(args, stdout=logfile, stderr=subprocess.STDOUT,
-                              env={**os.environ, 'SGLANG_LOCAL_SHARE_QWEN_MTP': '1'},
+                              env=env,
                               start_new_session=True)
     for _ in range(600):
         if worker.poll() is not None:

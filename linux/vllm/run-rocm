@@ -5,6 +5,13 @@ source "$ROOT/hardware/rocm-env.sh"
 if [[ ${1:-} == --check ]]; then
  exec "$ROOT/vllm/.venv-rocm/bin/python" "$ROOT/hardware/rocm-probe.py"
 fi
+# TP2 host transport: Simple improved both saved short workloads locally.
+# LOCAL_LLM_NCCL_PROTO=auto restores automatic selection for comparisons.
+if [[ ${LOCAL_LLM_NCCL_PROTO:-} == auto ]]; then
+ unset NCCL_PROTO
+else
+ export NCCL_PROTO=${NCCL_PROTO:-${LOCAL_LLM_NCCL_PROTO:-Simple}}
+fi
 export VLLM_LOCAL_SHARE_QWEN_MTP=1
 export VLLM_USE_V2_MODEL_RUNNER=1
 exec "$ROOT/vllm/.venv-rocm/bin/python" "$ROOT/vllm/rocm-bootstrap.py" "$@"

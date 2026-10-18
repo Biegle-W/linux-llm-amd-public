@@ -1,5 +1,29 @@
 # Local LLM reference setups
 
+**October 17 clean retry — current settings:** SGLang MTP now uses **MTP3**
+and the repaired unified verifier at **40,960 tokens**. DFlash2 uses the same
+validated repair at **65,536 tokens**. Both retain GPU prefix caching and TP2.
+vLLM retains 65,536 tokens/MTP3 and now defaults to RCCL `Simple` for its small
+measured gain; SGLang keeps automatic protocol selection. This supersedes the
+earlier October 17 MTP2/standard-verifier selection below.
+
+| Selected Qwen profile | Code / prose median decode t/s | Context |
+|---|---:|---:|
+| SGLang DFlash2, repaired verifier | 205.59 / 71.84 | 65,536 |
+| SGLang MTP3, repaired verifier | 114.57 / 66.05 | 40,960 |
+| vLLM MTP3, RCCL Simple | 79.16 / 42.50 | 65,536 |
+
+Three warm 256-token runs per task, saved NVIDIA prompts, temperature 0.6,
+top-p 0.95, seed 42, thinking disabled. Repairs passed numerical/graph checks
+on both GPUs, stronger JSON/reversal/tools checks and near-40K/64K retrieval.
+No sampled VRAM spill or post-load swap growth in the repaired runs. Book-based
+benchmark gains were smaller and variable; these rates are not universal.
+DSH currently defaults to vLLM; select **Local SGLang /
+`qwen3.8-27b-sglang-dflash2`** for the faster measured profile. Its saved selection
+is preserved. GPU0 reached 108°C hotspot and SMU reported hotspot-limit activity;
+a cooling A/B test is still needed to quantify any associated slowdown.
+[Full comparison, forum differences and limits](linux/hardware/CLEAN-TUNING-2026-10-17.md).
+
 **October 17 Harness update:** DeepSeek Harness is pinned to
 `@deepseek-ai/dsh@0.2.1-rc.2`, the newest official npm prerelease checked on
 October 17 (`next` tag), upgraded from `0.1.5-rc.2`. Private Node.js remains
@@ -12,7 +36,7 @@ without recreating legacy settings. Two configuration regression tests passed.
 No inference throughput or model-generation tests were repeated for this UI
 upgrade. Harness was stopped after validation; launch it normally when needed.
 
-**October 17 protocol/MTP tests:** production settings remain unchanged.
+**Earlier October 17 protocol/MTP tests (superseded selection):** production settings then remained unchanged.
 SGLang MTP2 auto measured **88.29 code / 66.30 prose t/s**; forcing RCCL Simple
 measured **87.34 / 65.92**; MTP1 measured **57.37 / 49.31**. These are medians
 of three warm 256-token runs using the saved NVIDIA prompts and sampling.
