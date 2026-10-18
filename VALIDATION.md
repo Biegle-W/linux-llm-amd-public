@@ -35,3 +35,10 @@ Radiance comparisons are documented with contexts and quant/cache differences.
 No GPU peer-access prerequisite was available. Manual fan A/B remains pending.
 Only source, sanitized metrics and documentation are distributed; generated
 runtimes, model files, raw outputs and private paths remain excluded.
+
+October 18 vLLM desktop-startup recovery: real saved profile/router passed
+functional, 64K marker retrieval and prefix-cache checks with utilization 0.82,
+20 GiB admission per GPU and the same fixed 3.5 GiB KV allocation. Wrapper tests
+verified error logging, interactive failure retention and noninteractive exit
+status. Python/shell syntax, reviewed public paths and secret scans were checked
+before publication. Historical throughput results were not rerun or relabeled.

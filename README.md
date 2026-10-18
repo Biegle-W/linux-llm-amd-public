@@ -1,5 +1,16 @@
 # Local LLM reference setups
 
+<!-- vllm-startup-2026-10-18 -->
+**October 18 vLLM startup fix:** the desktop terminal was closing on a 21 GiB
+VRAM admission refusal with about 20.78 GiB free on the display GPU. The validated
+profile now uses utilization 0.82 and a 20 GiB admission threshold per card.
+TP2, 65,536 context, MTP3 and fixed 3.5 GiB KV per GPU are preserved. Long retrieval,
+tools/JSON and prefix caching passed with GPU-resident weights. Startup host
+swap was observed on the 32 GB system; see the validation limits.
+Desktop startup errors are logged and remain visible until Enter; CLI/SSH failures still return normally.
+[Diagnosis, validation and limits](linux/hardware/VLLM-STARTUP-2026-10-18.md).
+<!-- /vllm-startup-2026-10-18 -->
+
 <!-- level1-tests-2026-10-17 -->
 **October 17–18 Level1Techs candidate tests:** current production profiles are
 retained. All model trials use both RX 7900 XTX cards and 65,536 configured

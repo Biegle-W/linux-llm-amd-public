@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Desktop entry point: retain startup failures in a log and the visible terminal.
+set -uo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+case "${1:-}" in
+    vllm|sglang|llama|strata) kind=$1 ;;
+    *) echo 'Usage: start-backend-terminal {vllm|sglang|llama|strata}' >&2; exit 2 ;;
+esac
+mkdir -p "$ROOT/logs"
+log="$ROOT/logs/$kind-launcher.log"
+printf '\nLaunch %s: %s\n' "$kind" "$(date --iso-8601=seconds)" | tee -a "$log"
+/usr/bin/python3 "$ROOT/launch-backend.py" "$@" 2>&1 | tee -a "$log"
+status=${PIPESTATUS[0]}
+if (( status != 0 )) && [[ -t 0 ]]; then
+    printf '\nBackend exited with code %s. Log: %s\nPress Enter to close.\n' "$status" "$log"
+    read -r _ || true
+fi
+exit "$status"

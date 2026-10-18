@@ -4,10 +4,10 @@
     "context": 65536,
     "mtp": true,
     "mtp_steps": 3,
-    "memory_fraction": 0.88,
+    "memory_fraction": 0.82,
     "kv_cache_bytes": 3758096384,
     "runtime": "rocm",
     "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
-    "min_free_vram_gib": 21.0
+    "min_free_vram_gib": 20.0
   }
 }

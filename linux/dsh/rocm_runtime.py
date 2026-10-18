@@ -28,5 +28,9 @@ def require_rocm_headroom(min_free_gib=21.0):
         if free >= min_free_gib * 1024**3:
             return
         time.sleep(0.2)
-    raise RuntimeError(f'Qwen ROCm requires {min_free_gib:g} GiB free AMD VRAM on each card before loading. '
+    available = ', '.join(f'GPU{index}: '
+                         f'{(int((device / "mem_info_vram_total").read_text()) - int((device / "mem_info_vram_used").read_text())) / 1024**3:.2f} GiB'
+                         for index, device in enumerate(devices))
+    raise RuntimeError(f'Qwen ROCm requires {min_free_gib:g} GiB free AMD VRAM on each card before loading '
+                       f'({available}). '
                        'Close GPU-heavy applications and retry. No unrelated application was stopped.')

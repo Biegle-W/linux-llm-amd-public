@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-18",
+  "status": "passed",
+  "reproduced_failure": "Launcher VRAM admission rejected about 20.78 GiB free on GPU0 against a 21 GiB threshold; desktop terminal closed when the command exited. No new engine crash or kernel reset was recorded.",
+  "initial_free_vram_gib": [
+    20.775226593017578,
+    23.614044189453125
+  ],
+  "old_memory_fraction": 0.88,
+  "new_memory_fraction": 0.82,
+  "old_min_free_vram_gib": 21,
+  "new_min_free_vram_gib": 20,
+  "effective_admission": {
+    "--gpu-memory-utilization": [
+      "0.82",
+      "0.82"
+    ],
+    "--kv-cache-memory-bytes": [
+      "3758096384",
+      "3758096384"
+    ],
+    "--max-model-len": [
+      "65536",
+      "65536"
+    ],
+    "--tensor-parallel-size": [
+      "2"
+    ]
+  },
+  "validation": {
+    "model": "qwen3.8-27b-vllm",
+    "status": "passed",
+    "effective": {
+      "context": 65536,
+      "tp": 2,
+      "kv": "bfloat16",
+      "cache_bytes": 3758096384,
+      "dtype": "bfloat16",
+      "chunk": 2048,
+      "compilation": {
+        "mode": 3,
+        "cudagraph_mode": "FULL_DECODE_ONLY"
+      },
+      "speculation": {
+        "method": "mtp",
+        "num_speculative_tokens": 3
+      }
+    },
+    "rdna_prefill_enabled": true,
+    "quality": {
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "ordered_100": true
+    },
+    "long_retrieval": {
+      "usage": {
+        "prompt_tokens": 64033,
+        "total_tokens": 64055,
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "ttft_seconds": 53.15574266700423,
+      "total_seconds": 53.528522751999844,
+      "passed": true
+    },
+    "prefix_cache": {
+      "initial_ttft_seconds": 5.56319995100057,
+      "warm_ttft_seconds": 0.533528304003994,
+      "counter_deltas": {
+        "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"qwen3.8-27b-vllm\"}": 8191.0,
+        "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"qwen3.8-27b-vllm\"}": 7488.0
+      }
+    },
+    "nonresident_vram_bytes": 0,
+    "gpu_vram_bytes": [
+      18112819200,
+      15723618304
+    ]
+  },
+  "sampled_resources": {
+    "peak_vram_bytes": [
+      18125402112,
+      15723618304
+    ],
+    "max_nonresident_vram_bytes": 0,
+    "max_owned_swap_bytes": 3927998464,
+    "min_host_available_bytes": 17376735232,
+    "samples": 132
+  },
+  "benchmark_rerun": false,
+  "desktop_api_validation": {
+    "desktop_router": true,
+    "authenticated_gateway": true,
+    "arithmetic": true,
+    "model": "qwen3.8-27b-vllm",
+    "usage": {
+      "prompt_tokens": 28,
+      "total_tokens": 32,
+      "completion_tokens": 4,
+      "prompt_tokens_details": null,
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    }
+  }
+}

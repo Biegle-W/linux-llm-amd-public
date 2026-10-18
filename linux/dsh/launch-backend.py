@@ -63,7 +63,8 @@ try:
         if llama_spec and llama_spec[3] is not None:
             require_amd_headroom()
         if rocm:
-            require_rocm_headroom()
+            require_rocm_headroom(max(profile.get('min_free_vram_gib', 21.0)
+                                      for profile in profiles.values()))
         monitor = start_monitor(paths)
         print(f'{names[kind]} backend only. Launch dsh separately. Ctrl+C stops this backend.', flush=True)
         print('Loading the selected Strata model now. Shared SATA cold loads may take a few minutes.' if kind == 'strata'

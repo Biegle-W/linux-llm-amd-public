@@ -1,5 +1,17 @@
 # Sanitized Linux runtime handoff — October 17, 2026
 
+<!-- vllm-startup-2026-10-18 -->
+**October 18 vLLM startup fix:** the desktop terminal was closing on a 21 GiB
+VRAM admission refusal with about 20.78 GiB free on the display GPU. The validated
+profile now uses utilization 0.82 and a 20 GiB admission threshold per card.
+TP2, 65,536 context, MTP3 and fixed 3.5 GiB KV per GPU are preserved. Long retrieval,
+tools/JSON and prefix caching passed with GPU-resident weights. Startup host
+swap was observed on the 32 GB system; see the validation limits.
+Desktop startup errors are logged and remain visible until Enter; CLI/SSH failures still return normally.
+The desktop backend and authenticated API passed a fresh request; vLLM was left running.
+[Diagnosis, validation and limits](../hardware/VLLM-STARTUP-2026-10-18.md).
+<!-- /vllm-startup-2026-10-18 -->
+
 **October 17–18 Level1Techs tests:** retain the normal vLLM and Vulkan profiles.
 The isolated rocWMMA port passed 84 CPU-reference cases but reduced 16K prefill
 from 1,001.78 to 465.65 t/s. Radiance was tested separately with existing GPTQ
