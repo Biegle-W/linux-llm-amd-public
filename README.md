@@ -1,5 +1,17 @@
 # Local LLM reference setups
 
+**October 17 Harness update:** DeepSeek Harness is pinned to
+`@deepseek-ai/dsh@0.2.1-rc.2`, the newest official npm prerelease checked on
+October 17 (`next` tag), upgraded from `0.1.5-rc.2`. Private Node.js remains
+24.21.0. The normal launcher, authenticated web page, four frontend assets and
+native terminal smoke check passed. All eight local models, default selection,
+chat/session files, stored data and credentials were preserved. This release
+imports `data/settings.yaml` into `data/profiles/web/cordis.patch.yml` and retains
+`settings.yaml.imported`; the configuration helper now refreshes that profile
+without recreating legacy settings. Two configuration regression tests passed.
+No inference throughput or model-generation tests were repeated for this UI
+upgrade. Harness was stopped after validation; launch it normally when needed.
+
 **October 17 protocol/MTP tests:** production settings remain unchanged.
 SGLang MTP2 auto measured **88.29 code / 66.30 prose t/s**; forcing RCCL Simple
 measured **87.34 / 65.92**; MTP1 measured **57.37 / 49.31**. These are medians

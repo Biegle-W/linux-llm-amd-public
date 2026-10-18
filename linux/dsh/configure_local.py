@@ -9,8 +9,19 @@ LOCAL = {'llama-local': 'qwen3.8-27b-q4', 'sglang-local': 'qwen3.8-27b-sglang-df
 
 def configure(default_provider=None):
     path = ROOT / 'data/settings.yaml'
+    profile_path = ROOT / 'data/profiles/web/cordis.patch.yml'
+    use_profile = profile_path.exists() and not path.exists()
+    entries = None
+    if use_profile:
+        entries = yaml.safe_load(profile_path.read_text()) or []
+        if not isinstance(entries, list):
+            raise ValueError('The DSH web profile patch must be a list')
+        settings = {entry['id']: entry.get('config', {}) for entry in entries
+                    if isinstance(entry, dict) and 'id' in entry}
+        path = profile_path
+    else:
+        settings = (yaml.safe_load(path.read_text()) or {}) if path.exists() else {}
     path.parent.mkdir(parents=True, exist_ok=True)
-    settings = (yaml.safe_load(path.read_text()) or {}) if path.exists() else {}
     providers = settings.setdefault('llm-pi-ai', {}).setdefault('providers', {})
     providers.pop('hyperqwen-local', None)  # Remove the retired local provider.
     catalogs = {
@@ -41,8 +52,17 @@ def configure(default_provider=None):
     if default_provider or not selection or invalid_local:
         key = default_provider or (provider if invalid_local and provider in providers else 'llama-local')
         settings['agent-default-model'] = {'provider': key, 'model': LOCAL[key]}
-    tmp = path.with_suffix('.yaml.tmp')
-    tmp.write_text(yaml.safe_dump(settings, sort_keys=False)); os.replace(tmp, path)
+    if use_profile:
+        for entry_id in ('llm-pi-ai', 'agent-default-model'):
+            entry = next((item for item in entries if isinstance(item, dict)
+                          and item.get('id') == entry_id), None)
+            if entry is None:
+                entry = {'id': entry_id, 'name': '@deepseek-ai/dsh-' + entry_id}
+                entries.append(entry)
+            entry['config'] = settings[entry_id]
+    tmp = path.with_name(path.name + '.tmp')
+    tmp.write_text(yaml.safe_dump(entries if use_profile else settings, sort_keys=False))
+    os.replace(tmp, path)
 
 if __name__ == '__main__':
     configure()
