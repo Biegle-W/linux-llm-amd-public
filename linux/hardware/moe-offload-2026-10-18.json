@@ -1,0 +1,299 @@
+{
+  "date": "2026-10-18",
+  "hardware": "i5-13600KF, dual RX 7900 XTX 24 GB, PCIe4 x8/x8, 32 GB RAM",
+  "source_commit": "f12aaa344c971556ec35be054d7aac1d901fd510",
+  "results": [
+    {
+      "model": "qwen3.6-35b-a3b",
+      "context_allocated": 262144,
+      "cpu_expert_layers": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38
+      ],
+      "host_expert_gib": 8.816,
+      "gpu_cache_budget_mib_total": 12288,
+      "cache_allocation_mib": [
+        4929.75,
+        4103.63
+      ],
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true,
+        "retrieval": true
+      },
+      "short_code": {
+        "cache_n": 0,
+        "prompt_n": 35,
+        "prompt_ms": 269.419,
+        "prompt_per_token_ms": 7.697685714285714,
+        "prompt_per_second": 129.9091749282716,
+        "predicted_n": 48,
+        "predicted_ms": 485.79,
+        "predicted_per_token_ms": 10.33595744680851,
+        "predicted_per_second": 96.74962432326724,
+        "draft_n": 42,
+        "draft_n_accepted": 34
+      },
+      "retrieval": {
+        "cache_n": 0,
+        "prompt_n": 63911,
+        "prompt_ms": 152940.523,
+        "prompt_per_token_ms": 2.3930234701381607,
+        "prompt_per_second": 417.8814008632624,
+        "predicted_n": 19,
+        "predicted_ms": 224.362,
+        "predicted_per_token_ms": 12.464555555555556,
+        "predicted_per_second": 80.22748950357013,
+        "draft_n": 15,
+        "draft_n_accepted": 13
+      },
+      "retrieval_elapsed_seconds": 153.228,
+      "telemetry": {
+        "min_available_gib": 14.737,
+        "peak_vram_gib": [
+          13.391,
+          16.885
+        ],
+        "max_worker_swap_mib": 0.0
+      },
+      "cache_stats": [
+        "llama_moe_cache: ubatch <= 8: hits = 15992, misses = 2076, hit rate = 88.51%, uploaded = 3659.30 MiB",
+        "llama_moe_cache: ubatch  > 8: hits = 1156, misses = 1753, hit rate = 39.74%, uploaded = 3093.12 MiB",
+        "llama_moe_cache: large batches: 1025706 experts copied from the cache, 598328.50 MiB"
+      ],
+      "validation": "Single run; 256K allocation, approximately 64K retrieval; full 256K not filled."
+    },
+    {
+      "model": "nemotron-3.5-bolt",
+      "context_allocated": 262144,
+      "cpu_expert_layers": [
+        1,
+        5,
+        10,
+        14,
+        19,
+        23,
+        28,
+        32,
+        37,
+        41,
+        45,
+        50,
+        54,
+        59,
+        63,
+        67,
+        72,
+        76,
+        81,
+        85
+      ],
+      "host_expert_gib": 7.833,
+      "gpu_cache_budget_mib_total": 12288,
+      "cache_allocation_mib": [
+        3550.08,
+        4485.94
+      ],
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true,
+        "retrieval": true
+      },
+      "short_code": {
+        "cache_n": 0,
+        "prompt_n": 39,
+        "prompt_ms": 293.588,
+        "prompt_per_token_ms": 7.527897435897437,
+        "prompt_per_second": 132.8392168617246,
+        "predicted_n": 87,
+        "predicted_ms": 2111.781,
+        "predicted_per_token_ms": 24.555593023255813,
+        "predicted_per_second": 40.723919762513255
+      },
+      "retrieval": {
+        "cache_n": 0,
+        "prompt_n": 63911,
+        "prompt_ms": 121419.772,
+        "prompt_per_token_ms": 1.8998258828683638,
+        "prompt_per_second": 526.3640257865086,
+        "predicted_n": 19,
+        "predicted_ms": 530.709,
+        "predicted_per_token_ms": 29.48383333333333,
+        "predicted_per_second": 33.91689230821411
+      },
+      "retrieval_elapsed_seconds": 121.983,
+      "telemetry": {
+        "min_available_gib": 16.292,
+        "peak_vram_gib": [
+          11.298,
+          14.988
+        ],
+        "max_worker_swap_mib": 0.0,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "cache_stats": [
+        "llama_moe_cache: ubatch <= 8: hits = 30208, misses = 3059, hit rate = 90.80%, uploaded = 3581.14 MiB",
+        "llama_moe_cache: ubatch  > 8: hits = 1728, misses = 2460, hit rate = 41.26%, uploaded = 2838.52 MiB",
+        "llama_moe_cache: large batches: 503556 experts copied from the cache, 275482.45 MiB"
+      ],
+      "validation": "Single run; 256K allocation, approximately 64K retrieval; full 256K not filled."
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "context_allocated": 262144,
+      "cpu_expert_layers": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38
+      ],
+      "host_expert_gib": 7.969,
+      "gpu_cache_budget_mib_total": 12288,
+      "cache_allocation_mib": [
+        4489.59,
+        3673.59
+      ],
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true,
+        "retrieval": true
+      },
+      "short_code": {
+        "cache_n": 0,
+        "prompt_n": 35,
+        "prompt_ms": 214.653,
+        "prompt_per_token_ms": 6.132942857142857,
+        "prompt_per_second": 163.05385901897483,
+        "predicted_n": 128,
+        "predicted_ms": 1211.222,
+        "predicted_per_token_ms": 9.537181102362204,
+        "predicted_per_second": 104.85278503858088,
+        "draft_n": 112,
+        "draft_n_accepted": 89
+      },
+      "retrieval": {
+        "cache_n": 0,
+        "prompt_n": 63911,
+        "prompt_ms": 139596.393,
+        "prompt_per_token_ms": 2.1842310869803323,
+        "prompt_per_second": 457.82701563069753,
+        "predicted_n": 19,
+        "predicted_ms": 213.923,
+        "predicted_per_token_ms": 11.884611111111111,
+        "predicted_per_second": 84.14242507818234,
+        "draft_n": 15,
+        "draft_n_accepted": 13
+      },
+      "retrieval_elapsed_seconds": 139.872,
+      "telemetry": {
+        "min_available_gib": 15.787,
+        "peak_vram_gib": [
+          11.961,
+          16.399
+        ],
+        "max_worker_swap_mib": 0.0,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "cache_stats": [
+        "llama_moe_cache: ubatch <= 8: hits = 27465, misses = 2539, hit rate = 91.54%, uploaded = 4046.53 MiB",
+        "llama_moe_cache: ubatch  > 8: hits = 1215, misses = 1995, hit rate = 37.85%, uploaded = 3179.53 MiB",
+        "llama_moe_cache: large batches: 1208409 experts copied from the cache, 641967.28 MiB"
+      ],
+      "validation": "Single run; 256K allocation, approximately 64K retrieval; full 256K not filled."
+    }
+  ],
+  "normal_launcher_integration": {
+    "passed": true,
+    "generation_via_authenticated_gateway": [
+      {
+        "model": "qwen3.6-35b-a3b",
+        "arithmetic": true,
+        "elapsed_seconds": 45.332,
+        "catalog_models": 5
+      },
+      {
+        "model": "qwen3.6-35b-a3b",
+        "arithmetic": true,
+        "elapsed_seconds": 0.101,
+        "catalog_models": 5
+      },
+      {
+        "model": "empero-qwen3.8-35b-a3b",
+        "arithmetic": true,
+        "elapsed_seconds": 47.295,
+        "catalog_models": 5
+      },
+      {
+        "model": "nemotron-3.5-bolt",
+        "arithmetic": true,
+        "elapsed_seconds": 46.09,
+        "catalog_models": 5
+      },
+      {
+        "model": "qwen3.8-27b-q4",
+        "arithmetic": true,
+        "elapsed_seconds": 41.471,
+        "catalog_models": 5
+      }
+    ],
+    "llama_catalog_count": 5,
+    "gateway_catalog_count": 8,
+    "transitions": [
+      "Vulkan -> HIP",
+      "HIP model -> same model (cache retained)",
+      "HIP -> other HIP models",
+      "HIP -> Vulkan"
+    ]
+  },
+  "unit_validation": {
+    "hardware_memory_tests_in_each_repo": 35,
+    "dsh_config_tests_in_each_repo": 2,
+    "operational_backend_ownership_tests": 14
+  },
+  "restored_session": {
+    "passed": true,
+    "backend": "vllm",
+    "model": "qwen3.8-27b-vllm",
+    "visible_terminal": true,
+    "api_generation": true,
+    "dsh_preserved": true,
+    "dsh_http_status": 401
+  }
+}

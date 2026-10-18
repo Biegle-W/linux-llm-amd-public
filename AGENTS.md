@@ -26,7 +26,7 @@ Preserve historical NVIDIA/Windows snapshots. See
 
 October 17 hardware: MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8. SGLang MTP
 passed and is enabled again; another 32 GB RAM is pending (32 GB installed).
-See `linux/hardware/Z690-2026-10-17.md`. Keep GPU-resident weights until then.
+See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident; follow the newer MoE policy below.
 
 ## Forum research and source citations
 
@@ -55,3 +55,17 @@ root client/upgrade/Windows handoffs. The private maintained source and Shared
 copy must match exactly. Public exports use example addresses/paths and exclude
 private archives and staging files. Preserve historical NVIDIA/Windows source
 snapshots; historical evidence is not a current validated profile.
+
+## MoE expert offload and caching — October 18
+
+The user explicitly requests CPU expert offload plus GPU hot-expert caching for
+all MoE models, and plans another 32 GB RAM. This supersedes the earlier
+GPU-resident-only MoE policy. Keep both RX 7900 XTX cards active. Size current
+profiles for the actual 32 GB installation with bounded RAM/VRAM, swap and
+residency checks; prepare separately gated 64 GB candidates. Preserve dense
+Qwen 27B and Muse GPU placement. Use actual expert-count metadata to identify
+MoE models. Expert caching is distinct from KV/prompt caching; do not label
+`cache-ram` or static CPU placement as a hot-expert cache. Validate the installed
+backend's real cache implementation and MTP behavior before activation. Keep
+Strata's larger model deferred until its RAM and dual-HIP validation pass.
+Do not silently re-enable full-GPU-only MoE defaults during later updates.

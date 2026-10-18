@@ -1,5 +1,16 @@
 # Strata preparation after RAM expansion — October 16, 2026
 
+**October 18 plan update:** CPU expert backing plus GPU expert caching is now the
+requested MoE policy. The inactive generator uses **both RX 7900 XTX cards**,
+HIP, automatic layer split, one slot and no single-card fallback. Its CPU-resident
+expert mode is supported with layer split by the retained source; older forum
+warnings describe an earlier implementation. The 64 GB/available-RAM gate still
+blocks this approximately 40 GiB expert pack on the current 32 GB installation.
+See [current MoE/cache plan](MOE-OFFLOAD-2026-10-18.md) and
+[forum/primary-source trail](FORUM-OPTIMIZATION-SOURCES.md). No Strata inference
+or maximum-context validation is claimed. The older single-card recipe below is
+historical; do not use it as the current generated candidate.
+
 Status: **inactive; no Strata inference attempted on the new GPU pair**.
 The planned configuration has 64 GB system RAM; current OS memory is approximately
 30.6 GiB. The approximately 40 GiB Strata expert pack remains capacity-gated.
@@ -10,8 +21,9 @@ The planned configuration has 64 GB system RAM; current OS memory is approximate
 Both RX 7900 XTX cards are now installed. The user requests both for every model.
 The old single-AMD candidate below is preserved only as a historical starting point;
 it is not permitted as an automatic fallback. After RAM expansion, check this Strata
-fork's dual-HIP support and the chipset card's lack of PCIe atomics before enabling
-it. The other engines' RCCL workaround does not establish Strata compatibility.
+fork's dual-HIP inference, residency and cache behavior before enabling it.
+The motherboard is now Z690 with both cards at CPU-connected PCIe4 x8; old
+chipset-slot observations below describe the prior board. The other engines' RCCL workaround does not establish Strata compatibility.
 
 ## Preserved assets and inactive candidate
 

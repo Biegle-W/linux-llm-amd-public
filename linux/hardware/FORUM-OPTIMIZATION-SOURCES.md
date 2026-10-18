@@ -105,3 +105,39 @@ collectives and the fan comparison that still needs administrator access. The
 restored rocWMMA port reduced 16K-depth prefill from 1,001.78 to 465.65 t/s in
 the matched HIP pair; it is not enabled in production. Source-linked forum
 suggestions are candidates until the retained hardware profile is validated.
+
+## October 18: CPU expert backing and GPU expert caches
+
+The user's newer policy keeps CPU expert offload plus hot-expert GPU caches for
+all MoE models; it supersedes GPU-resident-only MoE defaults. Dense Qwen 27B
+and Muse are separate. See [implementation, tests and RAM plan](MOE-OFFLOAD-2026-10-18.md).
+
+- **lcz.me, [topic 2059](https://lcz.me/topic/2059)**, guonetnet, retrieved
+  October 18 (page-reader publication date unavailable): single 7900 XTX,
+  Xeon E5-2683 v3, 64 GB quad-channel DDR4 and Strata. Its CPU-resident experts,
+  GPU cache and bounded resident KV are relevant; its throughput is not our
+  dual-XTX/13600KF result. Primary source: [Strata AMD guide](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/docs/AMD_HIP.md).
+- **lcz.me, [topic 2249, post 8](https://lcz.me/topic/2249/8)**, user discussion,
+  retrieved October 18: dual modified 2080 Ti/NVLink expert-cache recipes.
+  Historical option incompatibilities must be checked against current source:
+  retained Strata now explicitly supports CPU expert residency with layer split;
+  remote helper caches remain incompatible. Do not import the NVIDIA topology.
+- **Level1Techs, [FreeToken discussion](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396)**,
+  eduncan911, August 25, 2026: adaptive CPU execution/PCIe cache-fill scheduling
+  is a useful lead. The opening post describes CUDA-focused support; it is not
+  proof of AMD compatibility or permission to replace the installed engine.
+  [Primary project](https://github.com/FlashML-org/FreeToken).
+- **Level1Techs, [7900 XTX notes](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869)**,
+  ivgranite, May 31, 2026: retain per-model validation, one request, desktop VRAM
+  reserve and completed-answer measurements. Its 96 GB/single-card system is
+  not a capacity or speed match for the temporary 32 GB installation.
+
+The retained llama.cpp `f12aaa344c971556ec35be054d7aac1d901fd510` already contains
+[host-expert GPU caching, PR 29887](https://github.com/ggml-org/llama.cpp/pull/29887)
+and [multi-GPU cache placement, PR 30112](https://github.com/ggml-org/llama.cpp/pull/30112).
+Use its actual `--moe-cache-mib` mechanism with explicit CPU expert placement,
+not `--cache-ram` (prompt/KV parking). Cache budgets compete with KV and compute
+VRAM. Keep layer splitting; the cache rejects tensor split mode. We did not add
+expert pruning, change router top-k, use CUDA-only cache forks, or install a new
+engine based solely on a forum speed claim. Test outcomes and limits are recorded
+separately in the local report linked above.

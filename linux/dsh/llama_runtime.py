@@ -8,6 +8,7 @@ import time
 from hardware_guard import require_current_cuda_pair
 
 from amd_device import amd_devices
+from moe_memory import validate_profiles
 
 ROOT = Path(__file__).resolve().parent
 
@@ -37,14 +38,15 @@ def select_vulkan_devices(binary, env, mixed=False):
     return env
 
 
-def launch_spec():
+def launch_spec(backend=None):
     config = ROOT / 'llama-runtime.json'
-    mode = json.loads(config.read_text())['backend'] if config.exists() else 'cuda'
+    mode = backend or (json.loads(config.read_text())['backend'] if config.exists() else 'cuda')
     if mode == 'cuda':
         require_current_cuda_pair()
         return ROOT.parent / 'llama.cpp/llama-server', ROOT / 'models.ini', dict(os.environ), None
     if mode not in ('vulkan-amd', 'hip-amd'):
         raise RuntimeError('Unknown llama runtime selection; no backend has been stopped.')
+    validate_profiles(ROOT)
     hip = mode == 'hip-amd'
     binary = ROOT.parent / ('llama.cpp/build-hip/bin/llama-server' if hip else 'llama.cpp/build-vulkan/bin/llama-server')
     env = dict(os.environ)

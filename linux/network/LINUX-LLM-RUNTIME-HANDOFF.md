@@ -11,7 +11,7 @@ The previous nine Shared Markdown documents are preserved byte-for-byte in
 references, not alternative current configurations. Their old CUDA commands,
 addresses, defaults and single-GPU policies must not override the settings here.
 No model files, runtime settings, credentials or inference processes were changed
-by this consolidation.
+by the original consolidation; the subsequent MoE offload update is documented below.
 
 ## Current status and hardware
 
@@ -20,23 +20,31 @@ by this consolidation.
   is obsolete. RTX 4070 and RTX 3060 are retired from this Linux setup.
 - **32 GB system RAM** is installed, about 30.6 GiB usable; another 32 GB is
   pending. Old B1/B2/A2 troubleshooting notes describe the previous motherboard,
-  not a diagnosis of the current board. Keep active model weights GPU-resident.
+  not a diagnosis of the current board. Dense models keep GPU-resident weights;
+  all three active MoEs now use CPU expert backing and GPU hot-expert caches.
 - Use **both AMD cards for every active model**. llama.cpp uses layer split 1:1;
   SGLang/vLLM use TP2. There is no silent single-card fallback.
 - ROCm peer access is unavailable; TP2 works through host transport. Retain the
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
   root port is a proposed remedy, not installed or validated hardware.
-- At the **01:58 EDT October 18** read-only consolidation check, the authenticated
-  gateway listed **eight enabled profiles**, vLLM was the available backend and
-  its model was `qwen3.8-27b-vllm`. This is a timestamped observation; consult
-  `/health` for current availability. No generation or benchmark was run here.
+- At the **04:41 EDT October 18** final MoE-update check, the authenticated gateway
+  listed **eight enabled profiles** and the prior vLLM session had been restored
+  with `qwen3.8-27b-vllm`. Authenticated generation passed; DSH remained running
+  and its user selection was preserved. Consult `/health` for live availability.
+  All three MoEs passed the separately documented CPU/cache validation below.
 
 Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
 is dual-boot: booting this same PC into Windows stops the Linux inference server.
 
 ## Active model catalog
+
+October 18 MoE update: the normal managed llama launcher passed authenticated
+API generation for all three MoEs, a repeated cached-model request, switching
+between MoEs and switching back to dense Qwen/Vulkan. All five llama models and
+eight gateway profiles remained discoverable. DSH/Turnstone catalogs were
+refreshed without changing the saved default. No new model files were downloaded.
 
 All contexts below include system instructions, tool definitions/results,
 conversation history, user input **and output**. They are configured budgets,
@@ -46,17 +54,29 @@ not guarantees of full-window speed or general long-context accuracy.
 |---|---|---:|---|---|
 | llama.cpp / Vulkan | `qwen3.8-27b-q4` | 65,536 | Q4_K_M | MTP3 |
 | llama.cpp / Vulkan | `muse-glimmer-30b` | 32,768 | UD-Q4_K_XL | Off |
-| llama.cpp / Vulkan | `qwen3.6-35b-a3b` | 32,768 | MXFP4_MOE | MTP3 |
-| llama.cpp / Vulkan | `nemotron-3.5-bolt` | 65,536 | 24GB IQ2 GGUF | Off |
-| llama.cpp / Vulkan | `empero-qwen3.8-35b-a3b` | 32,768 | IQ4_XS | MTP3 |
+| llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
+| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | 24GB IQ2 GGUF | Off |
+| llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 65,536 | GPTQ INT4/group64 | MTP3 |
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
-microbatch 128, one slot, embeddings on GPU0 and no CPU weight offload. Effective
-placement comes from `dsh/models-amd.ini` plus `dsh/llama_runtime.py`; legacy
-`device`/`split_mode` metadata in `models.json` is not the effective device list.
+microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
+GPU-resident weights; MoEs use HIP with 20 alternating expert layers backed by
+CPU RAM and a 12,288 MiB total GPU expert-cache ceiling. Actual cache allocation
+is capped by the host expert set. MTP draft experts remain on GPU. Effective
+placement comes from `dsh/models-amd.ini`, `dsh/models-hip.ini`,
+`dsh/moe-offload.json` and the model-specific runtime overrides.
+
+*MoE 256K allocation passed with approximately 64K actual retrieval, tools/JSON
+and arithmetic; full 256K filling, quality and sustained speed are untested.
+The same launcher/router switches Vulkan/HIP automatically for the selected
+model. CPU/cache profiles require their expert bytes plus 4 GiB available RAM;
+loaded requests need 3 GiB. A scoped monitor stops only an unsafe owned worker
+on sustained low memory, owned swap or dedicated VRAM spill. No unrelated
+application/frontend is stopped. See [measurements and both forums' source trail](../hardware/MOE-OFFLOAD-2026-10-18.md).
+
 Bolt's vision projector is retained but vision is disabled and unvalidated.
 
 SGLang uses BF16 activations/KV/Mamba, Triton attention, memory fraction 0.85,
@@ -77,9 +97,13 @@ and authenticated API generation. It preserves 65,536 context and MTP3.
 Startup host-page swapping was observed with 32 GB RAM; GPU weights stayed
 resident. This is not a promise of swap-free startup or a new throughput claim.
 
-Saved DSH default at consolidation: **Local vLLM / `qwen3.8-27b-vllm`**.
+The catalog refresh preserves the user's saved DSH provider/model, including a
+non-local provider; it does not force a default. The original consolidation
+recorded Local vLLM, but a user can change that selection in DSH at any time.
 Existing conversations may retain another model. The SGLang launcher defaults
-to DFlash2; the llama.cpp router defaults to Qwen Q4. Choose a model belonging
+to DFlash2; the llama.cpp router initially starts its dense Vulkan parent.
+Selecting a MoE in Local llama.cpp switches only its native worker to HIP.
+Choose a model belonging
 to the backend actually running. A DSH model selection does not launch another
 backend, and the gateway requires an explicit model ID in each generation request.
 Older Strata defaults in historical notes/private network metadata are not active
@@ -406,8 +430,10 @@ readiness test. Use authenticated `/v1/models` and `/health` instead.
 
 The latest October 18 authenticated API/generation recovery was checked from
 Linux loopback. Earlier host self-access checks covered LAN/Tailscale; a separate
-remote device must still test its own network/ACL path. No service restart,
-model reload, benchmark, driver, BIOS, firewall or credential change was made here.
+remote device must still test its own network/ACL path. The October 18 MoE
+update ran bounded local model validation and refreshed catalogs;
+no driver, BIOS, firewall or credential changes were required. The original
+consolidation check above remains a timestamped historical observation.
 
 ## Where the originals went
 

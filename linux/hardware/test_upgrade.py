@@ -135,13 +135,17 @@ class UpgradeTests(unittest.TestCase):
         original = json.dumps(source)
         cfg = candidates.strata_candidate(source)
         self.assertEqual(json.dumps(source), original)
-        self.assertEqual(cfg['gpu'], [0])
+        self.assertEqual(cfg['gpu'], [0, 1])
+        self.assertFalse(cfg['split_skip_if_fits'])
+        self.assertEqual(cfg['parallel'], 1)
         self.assertEqual(cfg['backend'], 'hip')
         for option in ('--native', '--pack', '--ple-gguf', '--mtp', '--spec'):
             self.assertEqual(cfg['args'][cfg['args'].index(option)+1],
                              source['args'][source['args'].index(option)+1])
         self.assertIn('--resident-cpu-experts', cfg['args'])
-        self.assertEqual(cfg['lib_dirs'], [])
+        self.assertTrue(any('rocm-sdk' in path for path in cfg['lib_dirs']))
+        self.assertFalse(any(path.endswith('cuda-build/lib64') for path in cfg['lib_dirs']))
+        self.assertEqual(cfg['minimum_host_ram_gib'], 60)
 
     def test_llama_does_not_inherit_dual_cuda_overrides(self):
         text = candidates.llama_candidate((ROOT / 'dsh/models.ini').read_text())

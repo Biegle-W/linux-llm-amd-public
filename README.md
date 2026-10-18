@@ -1,5 +1,25 @@
 # Local LLM reference setups
 
+<!-- moe-offload-2026-10-18 -->
+**October 18 current MoE policy:** Qwen 35B-A3B, Empero and Nemotron Bolt now
+use CPU expert storage plus real GPU hot-expert caches on **both RX 7900 XTX**
+cards through llama.cpp HIP. Each has **262,144 tokens allocated**; arithmetic,
+JSON, tools and approximately 64K retrieval passed. Full 256K usage is untested.
+Dense Qwen 27B/Muse and SGLang/vLLM settings stay as before. Strata Q3 remains
+gated until 64 GB RAM and dual-HIP validation. Earlier GPU-only rows are historical.
+
+| Current MoE API ID | Context allocated | Short code decode t/s | ~64K retrieval prefill t/s |
+|---|---:|---:|---:|
+| `qwen3.6-35b-a3b` | 262,144 | 96.7 | 417.9 |
+| `nemotron-3.5-bolt` | 262,144 | 40.7 | 526.4 |
+| `empero-qwen3.8-35b-a3b` | 262,144 | 104.9 | 457.8 |
+
+Single runs with differing short output lengths; not matched speed rankings. CPU/cache
+placement, memory limits, measured token counts and both forums' direct sources:
+[validation report](linux/hardware/MOE-OFFLOAD-2026-10-18.md). The normal llama launcher
+selects Vulkan for dense models and HIP for MoEs; DSH model IDs remain unchanged.
+<!-- /moe-offload-2026-10-18 -->
+
 <!-- cleanup-review-2026-10-18 -->
 **October 18 workspace cleanup completed:** removed the five user-approved
 groups of obsolete NVIDIA originals, CUDA caches, downloaded installers,

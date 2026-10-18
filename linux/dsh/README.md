@@ -1,5 +1,7 @@
 # DeepSeek Harness runtime
 
+Current October 18 MoE placement uses CPU expert backing plus GPU expert caching on both AMD cards; select models through the existing llama.cpp provider. See [current configuration and validation](../hardware/MOE-OFFLOAD-2026-10-18.md). Older single-card/GPU-only notes below are historical.
+
 **October 17 Harness update:** DeepSeek Harness is pinned to
 `@deepseek-ai/dsh@0.2.1-rc.2`, the newest official npm prerelease checked on
 October 17 (`next` tag), upgraded from `0.1.5-rc.2`. Private Node.js remains

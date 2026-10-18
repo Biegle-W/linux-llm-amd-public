@@ -20,12 +20,20 @@ def strata_candidate(source):
             args.remove(option)
     args += ['--mmap-experts', '--resident-cpu-experts', '--adapt-every', '0',
              '--pcie-frac', '0', '--pool-workers', '6']
-    cfg.update(backend='hip', gpu=[0], gpus_asked=True, layer_split='auto',
+    cfg.update(backend='hip', gpu=[0, 1], gpus_asked=True, layer_split='auto',
+               split_skip_if_fits=False, parallel=1,
                exe=str(ROOT / 'strata/build-hip/strata'),
                log=str(ROOT / 'dsh/logs/strata-amd-candidate.log'),
-               port=18030, lib_dirs=[],
+               port=18030, lib_dirs=[str(ROOT / 'llm-tools/rocm-sdk/opt/rocm-7.2.3/lib'),
+                                      str(ROOT / 'llm-tools/rocm-sdk/opt/rocm-7.2.3/lib64'),
+                                      str(ROOT / 'llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu'),
+                                      str(ROOT / 'llm-tools/cuda-build/lib')],
                env={'STRATA_PREFILL_MMQ': '1', 'STRATA_NO_ARENA_THP': '1'})
-    # lib_dirs and the optional hipBLASLt table must match the SDK used to build HIP.
+    # Source-reviewed dual-HIP CPU expert residency + auto GPU expert cache.
+    # Still inactive and gated on restored RAM and live validation.
+    cfg['minimum_host_ram_gib'] = 60
+    cfg['validation_status'] = 'inactive: dual-HIP inference and long context unvalidated'
+    # lib_dirs and any optional hipBLASLt table must match the SDK used to build HIP.
     return cfg
 
 

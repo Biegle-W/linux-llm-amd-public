@@ -45,8 +45,8 @@ def inspect():
                 amd.append(p.name)
         except (OSError, ValueError):
             continue
-    if not amd:
-        problems.append('A 24 GB AMD GPU is not detected; confirm actual device identity with strata-device.')
+    if len(amd) != 2:
+        problems.append('Exactly two 24 GB AMD GPUs are required; confirm both identities with strata-device.')
     kfd_ok = os.access('/dev/kfd', os.R_OK | os.W_OK)
     if not kfd_ok:
         problems.append('KFD access is unavailable in this execution environment.')
