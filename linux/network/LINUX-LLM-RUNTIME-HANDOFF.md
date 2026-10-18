@@ -18,10 +18,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
 - Intel i5-13600KF, **MSI MPG Z690 CARBON WIFI**, two **RX 7900 XTX 24 GB** cards.
   Both GPUs have CPU-connected PCIe 4.0 x8 links; the earlier chipset x4 layout
   is obsolete. RTX 4070 and RTX 3060 are retired from this Linux setup.
-- **32 GB system RAM** is installed, about 30.6 GiB usable; another 32 GB is
-  pending. Old B1/B2/A2 troubleshooting notes describe the previous motherboard,
-  not a diagnosis of the current board. Dense models keep GPU-resident weights;
-  all three active MoEs now use CPU expert backing and GPU hot-expert caches.
+- **32 GB system RAM** is installed, about 30.6 GiB usable; a 64 GB
+  configuration is planned. Benchmarks must state the memory capacity used.
+  Dense models keep GPU-resident weights; all three active MoEs use CPU expert
+  backing and GPU hot-expert caches.
 - Use **both AMD cards for every production model**. llama.cpp uses layer split 1:1;
   SGLang/vLLM use TP2. FreeToken and its former single-card exception are retired.
 - ROCm peer access is unavailable; TP2 works through host transport. Retain the

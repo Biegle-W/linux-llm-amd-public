@@ -1,5 +1,7 @@
 # Local LLM reference setups
 
+Reference hardware configurations, inference-engine setup, reproducible tuning and measured performance for Linux and Windows.
+
 Image/video planning: [ComfyUI setup walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md), with both forums and upstream sources. Proposed only; no new runtime or models installed. [Existing Unsloth model inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
 
 <!-- freetoken-rocm-2026-10-18 -->
