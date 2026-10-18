@@ -1,5 +1,11 @@
 # Local LLM reference setups
 
+**Research sources:** [Level1Techs](https://forum.level1techs.com/) and
+[lcz.me](https://lcz.me/) are now part of the standing HIP/ROCm/C++ research
+workflow. See the [source review and optimization decisions](linux/hardware/FORUM-OPTIMIZATION-SOURCES.md)
+for direct posts, upstream code, applicability and local validation status.
+Forum-derived changes must retain citations in both repositories.
+
 <!-- vllm-tuning-2026-10-17 -->
 **October 17 vLLM optimization — current:** Qwen3.8-27B keeps its INT4 model weights and now uses **BF16 KV**, compiled MTP3, tuned Radeon prefill tiles and 2,048-token prefill chunks on both RX7900XTX cards. Context stays **65,536 tokens**; KV budget is 3.5 GiB per GPU. The existing vLLM launcher and DSH model ID `qwen3.8-27b-vllm` use this profile.
 

@@ -27,3 +27,19 @@ Preserve historical NVIDIA/Windows snapshots. See
 October 17 hardware: MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8. SGLang MTP
 passed and is enabled again; another 32 GB RAM is pending (32 GB installed).
 See `linux/hardware/Z690-2026-10-17.md`. Keep GPU-resident weights until then.
+
+## Forum research and source citations
+
+Standing user instruction: consult both [lcz.me](https://lcz.me/) and
+[Level1Techs Forums](https://forum.level1techs.com/) when researching local
+inference optimizations, including HIP kernels, ROCm and C++ runtimes. In BOTH
+GitHub repositories, cite direct topic/post URLs beside forum-derived claims,
+recommendations and changes. Record author/date when available, relevant hardware,
+model, quantization, context and workload. Link the primary upstream GitHub
+commit/PR or official documentation supporting implementation details; pin
+reviewed source revisions when practical. Mark forum reports, proposed candidates
+and locally validated results separately. Never present another system's speed
+as a local measurement or assume newer posts apply to gfx1100. Maintain the
+source trail in hardware/FORUM-OPTIMIZATION-SOURCES.md (under linux/ in the public
+repository) and link it from applicable reports/handoffs. This is a research and
+citation rule, not authorization to deploy unvalidated changes or schedule checks.

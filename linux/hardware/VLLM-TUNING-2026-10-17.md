@@ -73,3 +73,11 @@ Production-router validation: **passed**, actual TP2/context/cache/compilation/s
 An identical ~8K marker request restored its GPU prefix cache: initial TTFT 6.502s, repeat 0.528s, with positive server hit-counter deltas and correct retrieval on both requests.
 
 [Sanitized measurements and per-run metadata](vllm-tuning-2026-10-17.json). [Earlier NVIDIA measurements](../../README.md).
+
+## Forum research provenance
+
+The comparison workload was informed by [lcz.me topic 1814](https://lcz.me/topic/1814);
+[topic 1252](https://lcz.me/topic/1252) documents the native W4A16/MTP setup. These
+are other users' configurations, not matching local runs. The
+[Level1Techs and lcz.me source review](FORUM-OPTIMIZATION-SOURCES.md) records
+applicability, primary code links and remaining HIP/ROCm/C++ candidates.

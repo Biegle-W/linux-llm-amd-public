@@ -23,3 +23,7 @@ checks. The public copy contains sanitized source, benchmark metadata and a
 short runtime handoff; models, binaries, raw logs and private history are excluded.
 The historical Windows/NVIDIA snapshots were preserved. Public paths remain
 examples; operational inference validation used the private installation.
+
+October 17 forum review: documentation and maintenance-policy changes only.
+Source links and relative document targets were checked; public identity/secret
+scans were repeated. No inference or performance tests were rerun.

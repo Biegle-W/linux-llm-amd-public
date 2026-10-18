@@ -1,5 +1,11 @@
 # Sanitized Linux runtime handoff — October 17, 2026
 
+**October 17 forum research:** Level1Techs and lcz.me are both required research
+sources for HIP/ROCm/C++ tuning. Cite direct posts and primary implementation
+links in both repositories. [Source review and decisions](../hardware/FORUM-OPTIMIZATION-SOURCES.md)
+separates existing optimizations, untested candidates and hardware-specific
+reports. This review changes no runtime flags, model profiles or benchmark data.
+
 The current Qwen vLLM profile is `qwen3.8-27b-vllm`: the existing GPTQ INT4/group64 model, BF16 activations, BF16 KV/Mamba state, compiled MTP3, TP2 across both RX7900XTX cards, 65,536-token served context, 3.5 GiB KV allocation per GPU, and 2,048-token prefill chunks. The allocator reports 98,114 tokens. Keep the one existing vLLM launcher/model entry and launch DSH separately.
 
 Runtime: vLLM `0.32.0rc1.dev190+g3f1bcfd82.rocm723`, isolated ROCm 7.2.3, no-hostcall RCCL 2.27.7, standard host transport, `NCCL_PROTO=Simple`. The current platform has CPU PCIe4 x8/x8 and 32 GB RAM. Weights stay GPU-resident. Peer access remains unavailable; no BIOS, P2P, fan, clock or power changes were applied.
