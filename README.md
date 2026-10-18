@@ -218,6 +218,12 @@ Adapt paths, GPU selection, memory budgets and runtime versions before launching
 
 ## Linux
 
+Custom SVG icons were added October 18 for llama.cpp, SGLang, vLLM, Strata Q3,
+dsh and Turnstone. [Icon assets and install-location notes](linux/launchers/icons/README.md)
+are retained with the Linux setup. Set each desktop entry's absolute `Icon=` path
+when adjusting `Exec=` and `Path=` for your installation. This only changes
+appearance; model selection, visible terminals and the Strata readiness gate remain.
+
 The `linux/` tree corresponds to a runtime workspace at `/opt/local-llm`.
 Copy its contents there or update the example absolute paths consistently.
 The current reference hardware is two RX 7900 XTX 24 GB cards. Both participate

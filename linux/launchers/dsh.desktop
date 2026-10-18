@@ -5,5 +5,5 @@ Comment=DeepSeek Harness; start an inference backend separately
 Exec=/opt/local-llm/dsh/start-dsh
 Path=/opt/local-llm/dsh/workspace
 Terminal=true
-Icon=applications-development
+Icon=/opt/local-llm/launchers/icons/dsh.svg
 Categories=Development;

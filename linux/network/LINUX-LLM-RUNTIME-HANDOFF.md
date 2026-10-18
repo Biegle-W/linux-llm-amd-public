@@ -87,6 +87,13 @@ catalog entries and must not be copied into a client configuration.
 
 ## Start, stop and switch
 
+Desktop icon update, October 18: all six LLM launchers use distinct custom SVG
+icons from `launchers/icons/` (llama.cpp, SGLang, vLLM, Strata Q3, dsh, Turnstone).
+The desktop entry `Icon=` is an absolute path within the runtime workspace;
+see [icon assets and reinstall notes](../launchers/icons/README.md). Keep the SVGs
+with the setup and adjust icon paths if moving it. Backend commands, terminal
+visibility, models, contexts and Strata's deferred status are unchanged.
+
 Backend Desktop launchers **llama.cpp**, **SGLang** and **vLLM** start only their
 backend, with live terminal logs. Models load on the first matching request.
 The **dsh** and **Turnstone** launchers are separate optional harnesses; external

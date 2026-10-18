@@ -5,5 +5,5 @@ Comment=Local agent harness; start an inference backend separately
 Exec=/opt/local-llm/bin/turnstone
 Path=/opt/local-llm/turnstone/workspace
 Terminal=true
-Icon=applications-development
+Icon=/opt/local-llm/launchers/icons/turnstone.svg
 Categories=Development;

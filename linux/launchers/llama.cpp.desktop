@@ -5,5 +5,5 @@ Comment=llama.cpp inference backend only; live logs in this terminal
 Exec=env GSK_RENDERER=cairo /usr/bin/ptyxis --standalone --new-window --title=llama.cpp -- /opt/local-llm/dsh/start-llama
 Path=/opt/local-llm/dsh/workspace
 Terminal=false
-Icon=applications-development
+Icon=/opt/local-llm/launchers/icons/llama.svg
 Categories=Development;
