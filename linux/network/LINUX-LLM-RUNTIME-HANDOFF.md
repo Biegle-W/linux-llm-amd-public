@@ -330,6 +330,15 @@ without a new request.
 remain as reference. MoE API tests passed, but the final MoE GUI chat/Stop test
 was cancelled before completion; it must not be reported as passed.
 
+## Image/video generation planning — October 18
+
+A [ComfyUI walkthrough](../hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) now records
+forum research and proposed ROCm/core multi-GPU component placement for Qwen-Image
+2.1, Wan2.2 and later H3/LTX tests. **No installation, model download, launcher,
+network listener or generation benchmark was performed.** Existing LLM profiles
+and automatic shutdown scope are unchanged. Native H3 sequence parallelism remains
+an unvalidated candidate for 24 GB cards; R9700/32 GB speeds are not local results.
+
 ## Retained Strata and retired setups
 
 **Strata Q3 is disabled**, absent from the live API catalog and not AMD-validated.

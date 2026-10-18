@@ -196,3 +196,16 @@ recipe. The successful per-model 26 GiB/no-swap scope is a local finding using
 The [pinned GGUF expert loader](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/python/freetoken/models/gguf/experts.py)
 requires CPU backing for all routed banks in offload mode. Published measurements
 exclude hardware UUIDs, raw command paths, request traces and private app state.
+
+## October 18: proposed image/video setup (not installed)
+
+The [ComfyUI walkthrough](IMAGE-VIDEO-SETUP-2026-10-18.md) records current core
+component placement across both AMD cards, an isolated ROCm nightly candidate,
+Qwen-Image 2.1, Wan2.2 and gated H3/LTX candidates. No local generation speed
+is established. [lcz.me 49](https://lcz.me/topic/49/13700cpu-32g-1g-7900xtx)
+(i7-13700/32 GB/XTX) and [1410](https://lcz.me/topic/1410) (XTX/H3) were checked;
+the latter's AI-assistant reply is not firsthand validation.
+[Level1Techs](https://forum.level1techs.com/t/my-experiences-with-comfyui-on-an-rx-9070xt/252735),
+locutusofborg780, July 16, i5-12600K/32 GB/9070 XT, shows why rollback/pinning
+matters, not a speed prediction for this machine. Direct upstream model, device-node,
+H3-correctness and archive-status sources are linked beside the guide's claims.
