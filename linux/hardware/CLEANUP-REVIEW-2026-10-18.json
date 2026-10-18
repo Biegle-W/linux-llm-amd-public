@@ -1,5 +1,5 @@
 {
-  "status": "PENDING USER APPROVAL \u2014 no deletion performed",
+  "status": "COMPLETED \u2014 user approved all five groups; setup records retained",
   "date": "2026-10-18",
   "workspace_relative_paths": true,
   "groups": [
@@ -118,5 +118,21 @@
     "No deletion before explicit user approval.",
     "Recheck active references, running workers and filesystem inventory before an approved deletion.",
     "Group A requires a verified NVIDIA recovery archive outside this workspace."
-  ]
+  ],
+  "execution": {
+    "completed_date": "2026-10-18",
+    "approved_groups": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+    ],
+    "removed_root_or_file_count": 73,
+    "observed_free_bytes_increase": 59675832320,
+    "archive_checksum_rechecked": true,
+    "model_inventory_unchanged": true,
+    "required_runtime_paths_present": true,
+    "tracked_setup_files_removed": 0
+  }
 }

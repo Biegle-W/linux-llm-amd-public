@@ -1,14 +1,17 @@
 # NVIDIA recovery archive — October 18, 2026
 
 The retired NVIDIA setup has been archived separately from the active dual-AMD
-workspace. **No original files have been deleted.** Their proposed removal remains
-subject to explicit user confirmation in the [cleanup review](CLEANUP-REVIEW-2026-10-18.md).
+workspace. **The user approved removal of the original rollback environments
+and unused Flash-MTP source tree on October 18.** Their deletion is recorded in
+the [completed cleanup](CLEANUP-REVIEW-2026-10-18.md). Historical setup records,
+source pins, patches and benchmark reports remain in Git for future reference.
 
 Archive directory: `/mnt/shared/LLM-ARCHIVE/NVIDIA/2026-10-18` (example Shared mount).
 It contains `nvidia-recovery.tar.zst`, `MANIFEST.json`, `SHA256SUMS` and `README.md`.
 The compressed archive is **10,913,993,973 bytes (10.16 GiB)** on Shared SATA.
 GNU tar compared every archived member's content/metadata against the original
-sources successfully. The compressed archive also has a recorded SHA-256.
+sources successfully. The compressed archive also has a recorded SHA-256, rechecked successfully
+immediately before deleting the approved source copies.
 The exact checksum and source locations are recorded privately in the archive manifest.
 
 ## Contents and version boundaries
@@ -52,3 +55,6 @@ Keep the current `llm-tools/cuda-build` directory: AMD build scripts and SGLang
 JIT still use its C++ compiler, sysroot and libraries. Current ROCm environments,
 SDK, RCCL, active kernel caches, Vulkan builds, models and Strata preparation
 stay in place. Historical tracked configuration paths and reports also stay.
+
+The historical [Flash-MTP patch, license and setup notes](../../linux-nvidia/research/flash-mtp-2026-09-18/README.md)
+are also retained as text in Git, independently of the private binary archive.

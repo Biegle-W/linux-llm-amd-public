@@ -2,7 +2,9 @@
 
 **Archive status, October 18:** this tree remains the historical configuration
 snapshot. Offline NVIDIA rollback files and research were separately archived
-while preparing the AMD workspace cleanup; no installed runtime or model is
+before the user-approved AMD workspace cleanup. Original rollback environments
+and unused source were removed after checksum verification; this reference tree
+and all tracked setup files are retained. No installed runtime or model is
 included in this public tree. See [archive scope and version boundaries](../linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md).
 
 Historical reference from October 15, 2026, before the AMD migration:
@@ -16,6 +18,9 @@ patches, with personal paths and storage identity replaced by examples. It does
 not contain compiled binaries, installed Python environments, model weights,
 credentials or private Git history. It is a configuration snapshot, not a new
 validation on the current AMD hardware.
+
+The historical [Flash-MTP patch and setup provenance](research/flash-mtp-2026-09-18/README.md)
+are retained separately as text for future reference.
 
 ## Placement and launch
 

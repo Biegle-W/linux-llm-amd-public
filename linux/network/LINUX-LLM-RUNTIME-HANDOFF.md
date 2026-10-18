@@ -272,7 +272,7 @@ claim. Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and
 GPT-OSS-20B/120B, Qwen 27B Q5, Bonsai 2 and old Nemotron Lightning setups are
 retired. Historical NVIDIA/Windows reference snapshots remain in the public repo.
 
-### Workspace archive and pending cleanup — October 18
+### Workspace archive and completed cleanup — October 18
 
 The retired NVIDIA recovery collection is now in
 `/mnt/shared/LLM-ARCHIVE/NVIDIA/2026-10-18/nvidia-recovery.tar.zst` (example mount):
@@ -282,15 +282,19 @@ rollback environments and the later configuration snapshot; these have different
 versions and must not be treated as one tested runtime. See the
 [archive boundaries and recovery notes](../hardware/NVIDIA-ARCHIVE-2026-10-18.md).
 
-**No source copies or caches have been deleted.** A
-[review awaiting user confirmation](../hardware/CLEANUP-REVIEW-2026-10-18.md)
-proposes about 55.39 GiB of ignored NVIDIA originals, old CUDA kernels, downloaded
-ROCm installer packages, unselected test builds/caches and UV package cache.
-Current models, active ROCm kernel cache and toolchains remain. In particular,
-`llm-tools/cuda-build` is still required for AMD C++ builds/JIT. No runtime
-configuration or benchmark result changed. The public NVIDIA/Windows reference
-trees and historical measurements remain available; private binary archives are
-excluded from Git. Only explicitly approved paths may be removed later.
+**All five cleanup groups were explicitly approved and removed.** The
+[completed scope and checks](../hardware/CLEANUP-REVIEW-2026-10-18.md) record 73
+exact directory roots/installer files and **55.58 GiB observed NVMe recovery**.
+Removed: unused NVIDIA rollback originals/Flash-MTP source, old CUDA kernels,
+downloaded ROCm installers, unselected test build/cache files and UV package cache.
+The archive SHA-256 was rechecked before removal; current model-file metadata
+matched before/after and required runtime paths remain. Current AMD compiled
+kernel caches and `llm-tools/cuda-build` remain; the latter is still required for
+C++ builds/JIT. No runtime configuration or benchmark result changed. Historical
+setup records, patches, source pins and benchmarks remain in both Git repositories,
+including the public NVIDIA/Windows reference trees. Private binary archives and
+cleanup logs are excluded from Git. Future package installations may redownload
+packages; repeating removed experiments requires rebuilding their caches.
 
 After stable 64 GB RAM is installed, `python3 hardware/check-strata-ready.py`
 checks prerequisites; exit zero is not proof of successful inference. A future
