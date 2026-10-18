@@ -5,6 +5,39 @@ contains Qwen-Image 2.1 BF16/Q4, two quantized Qwen text encoders, and H3 Q2
 with both VAEs and Q2/Q4 text encoders. Check reuse and loader compatibility
 before following download steps. The FP8 repository has text encoders only.
 
+**Current walkthrough choice:** the user selected ComfyUI. Unsloth's existing H3
+render produced corrupt tiled output; see the [diagnosis and limits](UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md).
+That render does not validate any ComfyUI workflow. The candidate downloads below
+are alternatives, not a request to download all of them.
+
+## Daily workflow after setup and validation
+
+1. Open ComfyUI's local page and load the matching Qwen-Image template.
+   Connect the exact model, text encoder and VAE through compatible loaders.
+   Existing Diffusers shards are not a single Comfy checkpoint; existing GGUF
+   files require an architecture-compatible GGUF loader. Reuse confirmed
+   compatible components before downloading missing ones.
+2. Generate one still image at 1024x1024, batch 1. Use the schedule for the
+   actual base or Turbo model; the downloaded Qwen base is not the 8-step Turbo
+   checkpoint. Keep a fixed seed while changing one prompt detail at a time.
+3. Save the selected PNG and workflow JSON. If editing, use the matching image
+   editing template, provide the PNG, and describe the requested change.
+4. Release the image pipeline and load H3's image-to-video template. Feed the
+   selected PNG into its first-frame input, and describe motion, camera movement
+   and optional sound. The downloaded fl2va model is appropriate for first/last
+   frames; it is not the separate ref2va model.
+5. First validate a very short, small clip allowed by the template, with its
+   own sampler/schedule. Inspect decoded frames before a 124-frame draft at
+   864x480. Test caching/attention speedups only after obtaining correct output.
+6. Decode video with the H3 video VAE and audio with its audio VAE, then connect
+   both to Create Video and Save Video. Export MP4 plus workflow JSON. Increase
+   resolution or duration one at a time after a successful draft.
+
+For the two cards, initially propose denoising on one and text encoding/VAE on
+the other using core placement nodes. This uses both at different stages, not
+two-card tensor parallel denoising. Actual placement and output correctness must
+be validated; merely detecting two GPUs is insufficient.
+
 Research checked October 18, 2026. **Proposed setup only: not installed or locally
 benchmarked.** Current workstation: i5-13600KF, two 24 GB gfx1100 cards, CPU
 PCIe4 x8/x8, 32 GB RAM with another 32 GB pending, no native ROCm peer access.

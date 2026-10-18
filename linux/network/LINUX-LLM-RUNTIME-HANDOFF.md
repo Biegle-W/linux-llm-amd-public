@@ -352,7 +352,18 @@ Read-only follow-up found 93.18 GiB of existing Unsloth weights on Shared:
 Qwen-Image 2.1 BF16/Q4 plus FP8/INT8 text encoders, MiniMax H3 Q2 plus Q2/Q4
 text encoders and both VAEs, and a small embedding model. The FP8 image
 transformer itself is absent. [Inventory and format/reuse limits](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
-No model/runtime files were changed and no generation test was performed.
+No model/runtime files were changed during that inventory.
+
+The user chose ComfyUI for the image/video walkthrough; it remains uninstalled.
+An existing user-generated Unsloth H3 Q2 clip was inspected after a corruption
+report. All 30 steps completed, but a decoded frame shows repeating tiles.
+The managed ROCm engine fell back to upstream `master-951-f89d9b1` instead of
+requested `master-951-f89d9b1-uafac7a7` and warned about missing H3 fixes and
+host RAM pressure. CFG 1.0 and flow shift 12 were already set; the downloaded
+GGUF's normalization/1D weights retain floating-point precision. Root cause
+is unconfirmed, and no working image/video profile or speed result is claimed.
+[Diagnostic evidence and next validation](../hardware/UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md).
+No runtime replacement, download or new inference test was performed.
 
 ## Retained Strata and retired setups
 
