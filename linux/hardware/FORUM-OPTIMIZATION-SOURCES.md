@@ -54,3 +54,41 @@ For future experiments, cite the originating forum post and exact implementation
 then report matched prefill/TTFT, decode, completed-answer latency, cache hits,
 quality, context, concurrency, residency and thermal conditions. Distinguish
 microbenchmarks from end-to-end results. No new speedup is claimed by this review.
+
+## Follow-up: additional Level1Techs leads
+
+Checked October 17, 2026; no runtime changes or new measurements.
+
+- **Patched rocWMMA attention / direct-P2P llama.cpp:**
+  [Twitch_Blade's August 21–25 dual-R9700 report](https://forum.level1techs.com/t/dual-r9700-llama-cpp-rocm-tensor-split-working-p2p-on-proxmox-qwen3-8-27b/254183)
+  reports better prefill after re-enabling rocWMMA. Its direct-P2P patch measured
+  decode 28.58→31.42 t/s but prefill 934.58→871.65 t/s. This is RDNA4 on AM4
+  inside Proxmox with working P2P, not our RDNA3/Intel platform. Primary patch:
+  [JohnTDI-cpu/llama-hip-p2p-allreduce](https://github.com/JohnTDI-cpu/llama-hip-p2p-allreduce).
+  A rocWMMA port would require actual source adaptation, not adding the removed
+  build flag. Neither path has been validated here.
+- **Radiance-derived RDNA3 candidate:** the same Level1Techs thread points to
+  Radiance, whose [GitHub mirror](https://github.com/magiccodingman/vllm-radiance)
+  targets R9700. Further primary-source review found a separate
+  [gfx1100 deployment/port](https://github.com/mkadrlik/vllm-radiance-p2p), with
+  Qwen3.8-27B AWQ INT4/group32, TP2 and MTP. This is more relevant than copying
+  the R9700 FP8 command. Its advertised AWQ gain compares against its own W8A8
+  setup, not our already-INT4 GPTQ configuration. It requires working P2P and
+  describes IOMMU/ACS changes; those do not establish usable peer reads on our
+  Intel root ports. Treat it as an isolated future comparison, not a proven
+  upgrade or an instruction to change host security/topology settings.
+- **ROCm sources:** [ajc9988's AMD AI links](https://forum.level1techs.com/t/the-twisted-links-of-amd-ai-collection-of-useful-links-for-amd-ai-dev-and-deployment/244053)
+  provide official SDK/nightly entry points, but no measured speedup for this
+  machine. An SDK replacement needs compatibility testing with the existing
+  PyTorch/vLLM/SGLang patches; a newer version number is not performance evidence.
+
+Local priority: a controlled cooling A/B test before another broad software
+migration. Existing [SGLang telemetry](CLEAN-TUNING-2026-10-17.md) records a
+108°C GPU0 hotspot and SMU hotspot/power-limit activity; the selected vLLM run
+reached 107°C. This is local evidence, not a Level1Techs benchmark. The speed loss
+has not been quantified, so no percentage gain is promised. Keep stock memory
+clocks during comparisons. After cooling, the worthwhile software experiments
+are an isolated rocWMMA port or native HIP attention test with matching model,
+context and correctness checks. Direct-P2P collectives remain conditional on
+validated peer access. Do not replace the working production profiles merely
+because another machine has a higher headline rate.

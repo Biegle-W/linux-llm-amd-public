@@ -17,3 +17,9 @@ Use the existing Desktop/PATH vLLM launcher (`llm-vllm`) on Linux, then select L
 Measured short code/prose medians improved from 79.06/42.27 to 131.34/77.46 t/s. Seeded book PP2048 estimate improved from 1,114.44 to 1,585.23 t/s and book decode from 38.97 to 88.93 t/s. The 64,033-input marker probe returned all markers at 53.73s TTFT. MTP4 was slower and is not selected. An actual production-router test verified the saved flags and prefix reuse: an identical 8K request changed TTFT from 6.50s to 0.53s and hit 7,488 cached tokens. Test workers were stopped; the gateway and unrelated applications were preserved. These tests are narrower than broad accuracy or sustained near-limit decode testing.
 
 See [full measurements and reproduction](../hardware/VLLM-TUNING-2026-10-17.md), [sanitized per-run metadata](../hardware/vllm-tuning-2026-10-17.json), and the [retained Linux/Windows/NVIDIA catalogs](../../README.md). SGLang and other model profiles are unchanged by this task. Historical Windows and NVIDIA snapshots are preserved.
+
+October 17 Level1Techs follow-up: source review now covers patched rocWMMA,
+direct-P2P llama.cpp and a separate gfx1100 Radiance/AWQ candidate. None is
+locally validated or enabled. Cooling A/B remains the first suggested diagnostic
+from existing hotspot-limit telemetry. See the
+[research follow-up](../hardware/FORUM-OPTIMIZATION-SOURCES.md#follow-up-additional-level1techs-leads).
