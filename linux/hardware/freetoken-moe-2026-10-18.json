@@ -1,0 +1,329 @@
+{
+  "date": "2026-10-18",
+  "source": "8f49e0af98ba444dd261af69e82d5a1841778c68",
+  "hardware": {
+    "gpu": "RX7900XTX24GB",
+    "gpu_index": 1,
+    "tp": 1,
+    "installed_ram_gb": 32
+  },
+  "new_weights_downloaded": false,
+  "models": [
+    {
+      "id": "empero-qwen3.8-35b-a3b",
+      "filename": "Qwen3.8-35B-A3B-IQ4_XS.gguf",
+      "serving_test_passed": true,
+      "context": 8192,
+      "cache_gib": 12.0,
+      "requires_no_swap_scope": true,
+      "selected_variant": "empero-8k-cache12",
+      "output_tokens_per_second_end_to_end": 28.738,
+      "enabled": false
+    },
+    {
+      "id": "qwen3.6-35b-a3b",
+      "filename": "Qwen3.6-35B-A3B-MXFP4_MOE.gguf",
+      "serving_test_passed": true,
+      "context": 8192,
+      "cache_gib": 12.0,
+      "requires_no_swap_scope": true,
+      "selected_variant": "qwen-8k-cache12",
+      "output_tokens_per_second_end_to_end": 16.961,
+      "enabled": false
+    },
+    {
+      "id": "nemotron-3.5-bolt",
+      "serving_test_passed": false,
+      "status": "architecture_unsupported",
+      "architecture": "nemotron_h_moe",
+      "reason": "The installed FreeToken GGUF registry rejects this architecture.",
+      "enabled": false
+    },
+    {
+      "id": "qwen3.8-flash-next-strata-iq3",
+      "serving_test_passed": false,
+      "status": "not_admitted_ram",
+      "raw_expert_tensor_bytes": 42912972800,
+      "reason": "The retained roughly 70.6 GiB split GGUF has about 40 GiB of routed expert tensors; full CPU expert backing is not admitted with 32 GB RAM.",
+      "enabled": false
+    }
+  ],
+  "trials": [
+    {
+      "model": "empero-qwen3.8-35b-a3b-freetoken",
+      "context": 4096,
+      "expert_cache_gib": 4.0,
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true
+      },
+      "passed": true,
+      "ready_seconds": 84.188,
+      "code_probe": {
+        "usage": {
+          "prompt_tokens": 35,
+          "completion_tokens": 128,
+          "total_tokens": 163
+        },
+        "elapsed_seconds": 4.452,
+        "timings": null
+      },
+      "telemetry": {
+        "min_available_ram_gib": 6.204,
+        "max_worker_swap_mib": 0.0,
+        "max_parent_swap_mib": 0.0,
+        "max_descendant_swap_mib": 0.0,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.058,
+          7.873
+        ]
+      },
+      "memory_scope": {
+        "memory_max_gib": 26,
+        "swap_max_bytes": 0
+      },
+      "variant": "empero-noswap",
+      "output_tokens_per_second_end_to_end": 28.751,
+      "expert_layers": 40,
+      "cpu_expert_banks_gib": 15.9
+    },
+    {
+      "model": "qwen3.6-35b-a3b-freetoken",
+      "context": 4096,
+      "expert_cache_gib": 4.0,
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true
+      },
+      "passed": true,
+      "ready_seconds": 102.299,
+      "code_probe": {
+        "usage": {
+          "prompt_tokens": 35,
+          "completion_tokens": 47,
+          "total_tokens": 82
+        },
+        "elapsed_seconds": 2.81,
+        "timings": null
+      },
+      "telemetry": {
+        "min_available_ram_gib": 3.943,
+        "max_worker_swap_mib": 0.0,
+        "max_parent_swap_mib": 0.0,
+        "max_descendant_swap_mib": 0.0,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.061,
+          9.736
+        ]
+      },
+      "memory_scope": {
+        "memory_max_gib": 26,
+        "swap_max_bytes": 0
+      },
+      "variant": "qwen-noswap",
+      "output_tokens_per_second_end_to_end": 16.726,
+      "expert_layers": 40,
+      "cpu_expert_banks_gib": 17.7,
+      "scope_properties": {
+        "MemoryPeak": 27917287424,
+        "MemorySwapCurrent": 0,
+        "MemoryMax": 27917287424,
+        "MemorySwapMax": 0
+      }
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b-freetoken",
+      "context": 8192,
+      "expert_cache_gib": 12.0,
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true
+      },
+      "passed": true,
+      "ready_seconds": 110.139,
+      "code_probe": {
+        "usage": {
+          "prompt_tokens": 35,
+          "completion_tokens": 128,
+          "total_tokens": 163
+        },
+        "elapsed_seconds": 4.454,
+        "timings": null
+      },
+      "telemetry": {
+        "min_available_ram_gib": 5.79,
+        "max_worker_swap_mib": 0.0,
+        "max_parent_swap_mib": 0.0,
+        "max_descendant_swap_mib": 0.0,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.058,
+          16.835
+        ]
+      },
+      "memory_scope": {
+        "memory_max_gib": 26,
+        "swap_max_bytes": 0
+      },
+      "variant": "empero-8k-cache12",
+      "output_tokens_per_second_end_to_end": 28.738,
+      "expert_layers": 40,
+      "cpu_expert_banks_gib": 15.9,
+      "scope_properties": {
+        "MemoryPeak": 27917287424,
+        "MemorySwapCurrent": 0,
+        "MemoryMax": 27917287424,
+        "MemorySwapMax": 0
+      }
+    },
+    {
+      "model": "qwen3.6-35b-a3b-freetoken",
+      "context": 8192,
+      "expert_cache_gib": 12.0,
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "tools_roundtrip": true
+      },
+      "passed": true,
+      "ready_seconds": 99.129,
+      "code_probe": {
+        "usage": {
+          "prompt_tokens": 35,
+          "completion_tokens": 47,
+          "total_tokens": 82
+        },
+        "elapsed_seconds": 2.771,
+        "timings": null
+      },
+      "telemetry": {
+        "min_available_ram_gib": 3.936,
+        "max_worker_swap_mib": 0.0,
+        "max_parent_swap_mib": 0.0,
+        "max_descendant_swap_mib": 0.0,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.061,
+          17.807
+        ]
+      },
+      "memory_scope": {
+        "memory_max_gib": 26,
+        "swap_max_bytes": 0
+      },
+      "variant": "qwen-8k-cache12",
+      "output_tokens_per_second_end_to_end": 16.961,
+      "expert_layers": 40,
+      "cpu_expert_banks_gib": 17.7,
+      "scope_properties": {
+        "MemoryPeak": 27917287424,
+        "MemorySwapCurrent": 0,
+        "MemoryMax": 27917287424,
+        "MemorySwapMax": 0
+      }
+    }
+  ],
+  "prior_guarded_trials": [
+    {
+      "variant": "empero-default",
+      "model": "empero-qwen3.8-35b-a3b-freetoken",
+      "context": 4096,
+      "cache_gib": 4.0,
+      "passed": false,
+      "stop_reason": "memory_guard",
+      "telemetry": {
+        "min_available_ram_gib": 6.943,
+        "max_worker_swap_mib": 1134.16,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.058,
+          8.086
+        ]
+      },
+      "alerts": [
+        {
+          "available_gib": 7.450630187988281,
+          "swap_mib": 1134.16015625,
+          "spill_mib": 0.0
+        }
+      ]
+    },
+    {
+      "variant": "empero-parent-cap",
+      "model": "empero-qwen3.8-35b-a3b-freetoken",
+      "context": 4096,
+      "cache_gib": 4.0,
+      "passed": false,
+      "stop_reason": "memory_guard",
+      "telemetry": {
+        "min_available_ram_gib": 15.903,
+        "max_worker_swap_mib": 1976.922,
+        "max_parent_swap_mib": 1259.484,
+        "max_descendant_swap_mib": 717.438,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.041,
+          3.279
+        ]
+      },
+      "alerts": [
+        {
+          "available_gib": 16.850181579589844,
+          "swap_mib": 1976.921875,
+          "spill_mib": 0.0,
+          "parent_swap_mib": 1259.484375,
+          "descendant_swap_mib": 717.4375
+        }
+      ]
+    },
+    {
+      "variant": "qwen-parent-cap",
+      "model": "qwen3.6-35b-a3b-freetoken",
+      "context": 4096,
+      "cache_gib": 4.0,
+      "passed": false,
+      "stop_reason": "memory_guard",
+      "telemetry": {
+        "min_available_ram_gib": 20.032,
+        "max_worker_swap_mib": 1633.434,
+        "max_parent_swap_mib": 1247.195,
+        "max_descendant_swap_mib": 386.238,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.032,
+          4.244
+        ]
+      },
+      "alerts": [
+        {
+          "available_gib": 20.8245849609375,
+          "swap_mib": 1633.43359375,
+          "spill_mib": 0.0,
+          "parent_swap_mib": 1247.1953125,
+          "descendant_swap_mib": 386.23828125
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "One short code sample per configuration, including prefill/API overhead; not isolated decode or a matched dual-GPU engine comparison.",
+    "Allocated 4K/8K capacity; full-window filling, long conversations, vision, MTP and hybrid CPU compute were not validated.",
+    "CPU expert storage and GPU hot-expert caching use offload mode. No system-wide swap settings were changed."
+  ],
+  "desktop": {
+    "status": "removed",
+    "gui_moe_start_chat_stop": "not_completed_before_user_cancelled",
+    "note": "MoE worker Start succeeded; GUI chat and Stop were not validated."
+  },
+  "cleanup": {
+    "initial_managed_backend": "none",
+    "final_model_worker": "none",
+    "software": "removed at user request"
+  },
+  "status": "retired_by_user_2026-10-18"
+}

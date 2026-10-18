@@ -1,22 +1,9 @@
 # Local LLM reference setups
 
 <!-- freetoken-rocm-2026-10-18 -->
-**October 18 FreeToken AMD experiment:** installed current upstream source in a
-separate ROCm environment as `ft-rocm`. The incompatible NVIDIA Desktop beta,
-its CUDA environment and original `ft` link were subsequently removed at the
-user's request; saved application data is retained. A subsequent frontend-only
-Desktop beta.23 test passed real Start/Chat/Stop through an explicit ROCm bridge:
-**37.7 output t/s end-to-end** for 100 warm code tokens at 8K/GPU1, zero swap/spill.
-Native AMD GPU monitoring and the packaged engine updater remain incomplete.
-[Desktop test and configuration](linux/freetoken/DESKTOP-AMD-2026-10-18.md).
-Only FreeToken has the
-user's **single-7900-XTX exception**;
-other engines remain dual-GPU. `ft-rocm qwen` passed Qwen 27B Q4 arithmetic,
-JSON and tools at **8K / GPU1**; 100-token short probe: **38.7 output t/s
-end-to-end** (includes prefill/API, one run; not isolated decode or a comparison).
-GGUF TP2 is unsupported upstream. CPU-backed MoE
-startup hit bounded swap guards and is not a validated replacement for the
-working llama.cpp offload profiles. [Build, usage and validation](linux/freetoken/README.md).
+**October 18: FreeToken removed at the user's request.** Runtime, Desktop app,
+launchers, saved app data and caches are removed. Shared models and other engines
+remain. [Historical measurements and limits](linux/hardware/FREETOKEN-RETIRED-2026-10-18.md).
 <!-- /freetoken-rocm-2026-10-18 -->
 
 <!-- moe-offload-2026-10-18 -->

@@ -23,18 +23,18 @@ by the original consolidation; the subsequent MoE offload update is documented b
   not a diagnosis of the current board. Dense models keep GPU-resident weights;
   all three active MoEs now use CPU expert backing and GPU hot-expert caches.
 - Use **both AMD cards for every production model**. llama.cpp uses layer split 1:1;
-  SGLang/vLLM use TP2. The user explicitly permits **one card for FreeToken only**
-  because its current GGUF embeddings cannot shard over TP2. No other engine
-  inherits this exception.
+  SGLang/vLLM use TP2. FreeToken and its former single-card exception are retired.
 - ROCm peer access is unavailable; TP2 works through host transport. Retain the
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
   root port is a proposed remedy, not installed or validated hardware.
-- At the final October 18 Q4-replacement check, the authenticated gateway listed
+- At the earlier October 18 Q4-replacement check, the authenticated gateway listed
   **eight enabled profiles** and `nemotron-3.5-bolt` Q4 was running through the
   normal llama.cpp HIP backend in a visible terminal. Authenticated generation
   passed. DSH remained running and its saved selection was preserved; consult
-  `/health` for live availability. FreeToken remains a separate experiment.
+  `/health` for live availability. At the later FreeToken removal check, no
+  FreeToken worker was running and port 1919 was closed. No inference backend
+  was started during removal. FreeToken is completely removed.
 
 Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
@@ -308,8 +308,6 @@ Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
 | vLLM | `0.32.0rc1.dev190+g3f1bcfd82.rocm723`, locally patched |
 | ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
 | Strata source, retained inactive | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
-| FreeToken, separate ROCm experiment | `8f49e0af98ba444dd261af69e82d5a1841778c68`, 0.1.3 |
-| FreeToken-only Torch / modular SDK / reported HIP | `2.14.0+rocm10.1.0` / `10.1.0` / `7.16.26385` |
 
 Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
 `dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
@@ -318,56 +316,19 @@ version string is not a substitute for its pinned fork revision. User preference
 is latest capable upstream development/nightly candidates, with exact pins and
 local validation before activation; this handoff is not permission to auto-upgrade.
 
-## FreeToken ROCm experiment
+## FreeToken removed — October 18
 
-Installed separately under `freetoken/` in the Linux runtime root. The new
-PATH command is `ft-rocm`. The user subsequently requested removal of the
-incompatible NVIDIA Desktop beta: package `0.2.0-beta.23`, its CUDA engine
-environment and the original `ft` link are now removed. Saved application data
-is retained; the AMD build remains available. The subsequent user-authorized
-Desktop AMD test extracted only the beta.23 frontend into ignored local test
-storage. Real Start/Chat/Stop worked through an explicit `FREETOKEN_FT_BIN`
-ROCm bridge; the system package and CUDA engine remain removed. Native GPU
-monitoring still lists no AMD cards and its updater is CUDA-oriented. This is
-an experimental source-built engine/custom frontend bridge, not an official
-AMD Desktop installer. Linux binaries/environments cannot be reused by Windows.
+The user requested complete removal because performance was unsatisfactory.
+The AMD source/runtime, extracted Desktop frontend, saved app state, menu/PATH
+launchers, environment setting and FreeToken-specific caches are removed.
+The former single-GPU exception is retired. Shared GGUF weights, production
+ROCm and the other inference engines remain. No FreeToken API is served on
+port 1919. No model backend was started during removal. Do not reinstall it
+without a new request.
 
-Only FreeToken may use a single RX 7900 XTX, default GPU1. Both cards pass native
-RCCL communication tests, but the upstream GGUF embedding implementation rejects
-TP2. Existing production profiles/catalog IDs and dual-card policies remain.
-
-CPU-backed experts plus a bounded GPU expert cache remain required for MoEs.
-Two Qwen 35B/8K startup attempts with a 6 GiB cache were stopped by local worker
-swap limits (449 MiB and 1,110 MiB); no VRAM spill was observed. They did not
-reach validated generation. Retry offload separately after the extra RAM arrives;
-this does not prove the models inherently require 64 GB.
-
-Dense Qwen 27B Q4 passed arithmetic, JSON and a complete tool-call/result
-round trip on GPU1 at 8,192 context and prefill chunks of 128. The first 256-token
-chunk trial failed in upstream Q6_K dispatch; the wrapper caps chunks at 128.
-Peak GPU1 VRAM was 18.97 GiB with no worker swap or VRAM spill. A 100-token code
-probe took 2.584 s (38.7 output t/s end-to-end, not isolated decode throughput).
-Full 8K filling and MTP remain untested. Use `ft-rocm qwen` after closing the
-existing inference terminal. For a terminal chat interface, start
-`ft-rocm qwen` in one terminal, wait
-for ready, then run `ft-rocm shell` in a second terminal. A separate actual
-Desktop test passed arithmetic, JSON content and streamed code; its warm code
-sample was 100 output tokens in 2.650 s (37.7 output t/s end-to-end). Peak GPU1
-VRAM was 19.009 GiB, zero worker swap/spill. Desktop Stop released its worker
-and port. Test-only XDG state preserved the original saved app data, and the
-frontend/worker were closed; Nemotron Q4 was restored in its normal visible
-llama.cpp terminal afterward. [Desktop configuration and limits](../freetoken/DESKTOP-AMD-2026-10-18.md).
-Do not use Desktop's Install/Reinstall/Update engine controls for ROCm.
-The validated CLI profile's experimental loopback API is
-`http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`.
-Exact build and [validation report](../freetoken/README.md).
-
-FreeToken has not been added to DSH, the authenticated LAN/Tailscale gateway or
-other engines' automatic process-kill targets. Raw serving defaults are restricted
-to one GPU and refuse occupied inference ports. Close its own terminal before
-starting another engine. Do not replace production ROCm with its isolated SDK.
-Source links, dependency patch, reproduction and validation limits are in the
-report above and [both forums' source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md).
+[Historical measurements and validation limits](../hardware/FREETOKEN-RETIRED-2026-10-18.md)
+remain as reference. MoE API tests passed, but the final MoE GUI chat/Stop test
+was cancelled before completion; it must not be reported as passed.
 
 ## Retained Strata and retired setups
 

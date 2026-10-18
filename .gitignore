@@ -36,10 +36,3 @@
 
 # Private handoff originals and consolidation staging
 **/LLM-HANDOFF-ARCHIVE/
-
-# Experimental FreeToken source, isolated AMD runtime and private state
-**/freetoken/upstream/
-**/freetoken/.venv-rocm/
-**/freetoken/cache/
-**/freetoken/logs/
-**/freetoken/generated/

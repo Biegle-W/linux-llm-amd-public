@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-FREETOKEN_SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-source "$FREETOKEN_SCRIPT_DIR/env.sh"
-if [[ ! -x "$FREETOKEN_VENV/bin/ft" ]]; then
-    echo 'The isolated FreeToken ROCm environment is not installed. See freetoken/README.md.' >&2
-    exit 1
-fi
-exec "$FREETOKEN_VENV/bin/python" "$FREETOKEN_SCRIPT_DIR/cli.py" "$@"

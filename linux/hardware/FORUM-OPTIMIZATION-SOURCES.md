@@ -142,25 +142,27 @@ expert pruning, change router top-k, use CUDA-only cache forks, or install a new
 engine based solely on a forum speed claim. Test outcomes and limits are recorded
 separately in the local report linked above.
 
-## October 18: isolated FreeToken ROCm installation
+## October 18: historical FreeToken ROCm experiment (removed)
 
-The Level1Techs FreeToken lead above now has a separate local ROCm source build,
-pinned to [8f49e0af98ba](https://github.com/FlashML-org/FreeToken/tree/8f49e0af98ba444dd261af69e82d5a1841778c68).
+The Level1Techs FreeToken lead above prompted a separate local ROCm source build,
+since removed, pinned to [8f49e0af98ba](https://github.com/FlashML-org/FreeToken/tree/8f49e0af98ba444dd261af69e82d5a1841778c68).
 [RDNA support merged in PR 132](https://github.com/FlashML-org/FreeToken/pull/132);
 the [upstream AMD guide](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/docs/install_amd.md)
 still describes an older Torch stack than current source requires. Official AMD
-Torch 2.14/ROCm 10.1 packages are isolated from production ROCm 7.2.3.
+Torch 2.14/ROCm 10.1 packages were isolated from production ROCm 7.2.3 and
+were removed with the experiment.
 
 Both local gfx1100 cards pass FP32/BF16 RCCL all-reduce/all-gather without P2P;
 this does **not** establish model TP2.
 [GGUF embeddings explicitly reject TP sharding](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/python/freetoken/layers/quantization/embedding/gguf.py).
-The user permits one GPU for FreeToken only. Two Qwen MoE loads were stopped
-by local swap guards; this is not a successful offload benchmark.
+The user temporarily permitted one GPU for FreeToken; that exception is retired.
+Two early Qwen MoE loads were stopped
+by local swap guards; later guarded API trials are recorded below.
 
 The [lcz.me single-XTX/64 GB topic](https://lcz.me/topic/2059) discusses Strata,
 while the [Level1Techs FreeToken topic](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396)
 is the FreeToken research lead. Neither establishes this 32 GB machine's
-FreeToken serving speed. See the [exact build, tests and current limitations](../freetoken/README.md).
+FreeToken serving speed. See the [historical tests and limitations](FREETOKEN-RETIRED-2026-10-18.md).
 
 ## October 18: Nemotron Q4 candidate and legacy FreeToken removal
 
@@ -178,6 +180,19 @@ is used without a new inference fork. See [the replacement report](NEMOTRON-Q4-2
 for actual validation status and limits.
 
 The incompatible NVIDIA-only FreeToken beta/CUDA environment was subsequently
-removed at the user's request. `ft-rocm` and its validated single-card Qwen
-profile remain; the earlier installation report is not an instruction to
-reinstall the retired Desktop beta.
+removed at the user's request. A later request removed the AMD build, Desktop
+frontend, saved app data and all FreeToken launchers/caches as well. See the
+[retirement report](FREETOKEN-RETIRED-2026-10-18.md).
+
+## October 18: historical MoE tests in FreeToken AMD (removed)
+
+[Historical MoE validation](FREETOKEN-RETIRED-2026-10-18.md) passed existing
+Empero IQ4_XS and Qwen35B MXFP4 with CPU expert banks and GPU hot-expert caching.
+[Level1Techs FreeToken discussion](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396)
+(eduncan911, August 26, NVIDIA A5500/64 GB) and [lcz.me topic 2059](https://lcz.me/topic/2059)
+(7900 XTX/X99/Strata) were checked; neither is a measured FreeToken AMD/32 GB
+recipe. The successful per-model 26 GiB/no-swap scope is a local finding using
+[systemd resource controls](https://www.freedesktop.org/software/systemd/man/latest/systemd.resource-control.html).
+The [pinned GGUF expert loader](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/python/freetoken/models/gguf/experts.py)
+requires CPU backing for all routed banks in offload mode. Published measurements
+exclude hardware UUIDs, raw command paths, request traces and private app state.
