@@ -104,3 +104,6 @@ llm-tools/rccl-nohostcall/
 
 # Pinned benchmark tool and its isolated environment
 /llm-tools/llama-benchy-0.4.0/
+
+# Isolated Radeon vLLM optimization source; never vendor its Git history
+/llm-tools/vllm-rdna3-src/

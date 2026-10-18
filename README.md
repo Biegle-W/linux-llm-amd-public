@@ -1,6 +1,19 @@
 # Local LLM reference setups
 
-**October 17 clean retry — current settings:** SGLang MTP now uses **MTP3**
+<!-- vllm-tuning-2026-10-17 -->
+**October 17 vLLM optimization — current:** Qwen3.8-27B keeps its INT4 model weights and now uses **BF16 KV**, compiled MTP3, tuned Radeon prefill tiles and 2,048-token prefill chunks on both RX7900XTX cards. Context stays **65,536 tokens**; KV budget is 3.5 GiB per GPU. The existing vLLM launcher and DSH model ID `qwen3.8-27b-vllm` use this profile.
+
+| Matched benchmark | Original profile | Optimized profile |
+|---|---:|---:|
+| Code decode, median t/s | 79.06 | 131.34 |
+| Prose decode, median t/s | 42.27 | 77.46 |
+| Book PP2048 estimate, t/s | 1,114.44 | 1,585.23 |
+| Book decode, mean t/s | 38.97 | 88.93 |
+
+Three timed runs plus excluded warm-up, saved NVIDIA code/prose prompts and sampling; separate seeded llama-benchy book workload. The tuned INT8-cache profile took 130.38s TTFT on the same 64,033-input marker probe; BF16 took **53.73s** and returned all markers correctly. Small functional and numerical/graph checks passed; rates depend on text and speculative acceptance. No sampled VRAM spill or backend-owned post-load swap growth in the selected run. DSH selection and connection settings are preserved. See [measurements, configuration and limits](linux/hardware/VLLM-TUNING-2026-10-17.md).
+<!-- /vllm-tuning-2026-10-17 -->
+
+**Earlier October 17 clean retry — SGLang retained; vLLM superseded above:** SGLang MTP now uses **MTP3**
 and the repaired unified verifier at **40,960 tokens**. DFlash2 uses the same
 validated repair at **65,536 tokens**. Both retain GPU prefix caching and TP2.
 vLLM retains 65,536 tokens/MTP3 and now defaults to RCCL `Simple` for its small
@@ -155,7 +168,7 @@ in each active model; the earlier RTX 4070 is retired. RAM remains 32 GB.
 |---|---|---:|
 | SGLang ROCm | Qwen 27B GPTQ, MTP2 — restored on Z690 | 40,960 |
 | SGLang ROCm | Qwen 27B GPTQ, DFlash2 W4A16 drafter | 16,384 |
-| vLLM ROCm | Qwen 27B GPTQ, MTP3, Q4 KV | 65,536 |
+| vLLM ROCm | Qwen 27B GPTQ, compiled MTP3, BF16 KV | 65,536 |
 | llama.cpp Vulkan | Qwen 27B Q4, MTP3 | 65,536 |
 | llama.cpp Vulkan | Muse, Qwen MoE, Empero | 32,768 |
 | llama.cpp Vulkan | Nemotron Bolt | 65,536 |

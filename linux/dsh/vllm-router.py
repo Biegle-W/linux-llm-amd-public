@@ -81,7 +81,7 @@ def ensure_worker(model):
     args += cfg.get('extra_args', [])
     if cfg['mtp']:
         args += ['--speculative-config', json.dumps({
-            'method': 'mtp', 'num_speculative_tokens': 3})]
+            'method': 'mtp', 'num_speculative_tokens': cfg.get('mtp_steps', 3)})]
     with lifecycle:
         if closing.is_set():
             raise RuntimeError(BACKEND + ' router is stopping')

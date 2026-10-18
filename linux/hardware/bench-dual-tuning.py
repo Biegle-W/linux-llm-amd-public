@@ -25,7 +25,7 @@ PROMPTS = {
     'prose': 'Write a short story about a lighthouse keeper finding a letter.'}
 
 
-def stream(prompt, *, limit=256, sampled=True):
+def stream(prompt, *, limit=256, sampled=True, timeout=180):
     body = dict(model=checks.MODEL, messages=[{'role':'user','content':prompt}],
                 temperature=.6 if sampled else 0, max_tokens=limit,
                 stream=True, stream_options={'include_usage':True},
@@ -38,7 +38,7 @@ def stream(prompt, *, limit=256, sampled=True):
     start = time.monotonic()
     first = usage = None
     text = ''
-    with urllib.request.urlopen(request, timeout=180) as response:
+    with urllib.request.urlopen(request, timeout=timeout) as response:
         for line in response:
             line = line.decode().strip()
             if not line.startswith('data: ') or line == 'data: [DONE]':
@@ -66,6 +66,16 @@ def memory_info():
     return {line.split(':')[0]:int(line.split()[1])*1024 for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith(('MemAvailable:', 'SwapTotal:', 'SwapFree:'))}
 
 
+def process_swap_bytes(pids):
+    total = 0
+    for pid in pids:
+        try:
+            total += sum(int(line.split()[1])*1024 for line in Path(f'/proc/{pid}/status').read_text().splitlines() if line.startswith('VmSwap:'))
+        except (FileNotFoundError,ProcessLookupError,PermissionError):
+            pass
+    return total
+
+
 def run(args):
     initial_memory = memory_info()
     if initial_memory['MemAvailable'] < 12*1024**3:
@@ -88,27 +98,42 @@ def run(args):
     else:
         context = 65536
         cmd = [str(ROOT/'vllm/start-qwen-rocm'),'--port',str(checks.PORT),
-               '--served-model-name', checks.MODEL, '--speculative-config',
-               json.dumps({'method':'mtp','num_speculative_tokens':3})]
+               '--served-model-name', checks.MODEL,
+               '--kv-cache-dtype',args.vllm_kv,
+               '--dtype',args.vllm_dtype,
+               '--kv-cache-memory-bytes',str(args.vllm_kv_bytes),
+               '--max-num-batched-tokens',str(args.chunk),
+               '--compilation-config',json.dumps({'mode':args.compile_mode,'cudagraph_mode':'FULL_DECODE_ONLY'})]
+        if args.mode == 'mtp':
+            cmd += ['--speculative-config',json.dumps({'method':'mtp','num_speculative_tokens':args.steps}),
+                    '--cudagraph-capture-sizes','1',str(args.steps+1)]
     env = dict(os.environ, SGLANG_RDNA_VLLM_VERIFY=str(args.verify),
                SGLANG_CUDA_COREDUMP_BEFORE_CRASH_WAIT_SECS='0')
     env['SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX'] = str(int(args.verify_walk_fix))
     env['LOCAL_LLM_NCCL_PROTO'] = args.protocol
+    env['VLLM_LOCAL_RDNA_PREFILL'] = str(int(args.rdna_prefill))
     env.pop('NCCL_PROTO', None)
     if args.protocol != 'auto':
         env['NCCL_PROTO'] = args.protocol
-    case = f'{args.engine}-{args.mode}{args.steps if args.mode == "mtp" else 8}-{args.protocol}-verify{args.verify}'
+    depth = args.steps if args.mode == 'mtp' else (8 if args.mode == 'dflash' else 0)
+    case = f'{args.engine}-{args.mode}{depth}-{args.protocol}-verify{args.verify}'
     if args.verify_walk_fix:
         case += '-walkfix'
     if args.tag:
         case += '-' + args.tag
+    if args.engine == 'vllm':
+        case += f'-{args.vllm_dtype}-{args.vllm_kv}-chunk{args.chunk}-compile{args.compile_mode}'
+        if args.rdna_prefill:
+            case += '-rdna-prefill'
     OUT.mkdir(parents=True, exist_ok=True)
     result = dict(case=case, settings=vars(args), context=context, status='running', trials=[],
                   peak_vram_bytes=[0,0], peak_clock_mhz=[0,0], peak_power_watts=[0,0], peak_temp_celsius=[0,0], peak_junction_celsius=[0,0], peak_memory_celsius=[0,0], min_host_available_bytes=2**63,
-                  max_nonresident_vram_bytes=0, max_swap_growth_bytes=0, max_startup_swap_growth_bytes=0, alerts=[])
+                  max_nonresident_vram_bytes=0, max_swap_growth_bytes=0, max_owned_swap_growth_bytes=0,
+                  max_startup_swap_growth_bytes=0, alerts=[])
     done = threading.Event()
     ready = threading.Event()
     ready_swap = [None]
+    ready_owned_swap = [None]
     print('START',case,flush=True)
     with (OUT/(case+'.log')).open('w') as log:
         proc = subprocess.Popen(cmd,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
@@ -138,8 +163,6 @@ def run(args):
                         ready_swap[0] = swap_used
                     swap_growth = max(0,swap_used-ready_swap[0])
                     result['max_swap_growth_bytes'] = max(swap_growth,result['max_swap_growth_bytes'])
-                    if swap_growth > 1024**3:
-                        result['alerts'].append('Post-load swap use grew by more than 1 GiB')
                 else:
                     result['max_startup_swap_growth_bytes'] = max(result['max_startup_swap_growth_bytes'],swap_used-initial_swap)
                 result['min_host_available_bytes'] = min(available,result['min_host_available_bytes'])
@@ -150,6 +173,12 @@ def run(args):
                     ids = {proc.pid}
                     for _ in range(8):
                         ids.update(p.pid for p in tree.values() if p.parent in ids)
+                    owned_swap = process_swap_bytes(ids)
+                    if ready_owned_swap[0] is None:
+                        ready_owned_swap[0] = owned_swap
+                    result['max_owned_swap_growth_bytes'] = max(result['max_owned_swap_growth_bytes'],owned_swap-ready_owned_swap[0])
+                    if result['max_owned_swap_growth_bytes'] > 1024**3:
+                        result['alerts'].append('Backend-owned post-load swap use grew by more than 1 GiB')
                     spill = sum(checks.gpu.amd_residency(pid)['nonresident_vram_bytes'] for pid in ids)
                     result['max_nonresident_vram_bytes'] = max(spill,result['max_nonresident_vram_bytes'])
                     if spill > 256*1024**2:
@@ -184,7 +213,7 @@ def run(args):
             ordered = stream('Return only a JSON array counting down from 20 to 1, in order. No markdown.',sampled=False)
             result['quality']['reverse_json'] = json.loads(ordered['content']) == list(range(20,0,-1))
             assert result['quality']['reverse_json'], 'Reverse ordering failed'
-            if args.verify_walk_fix:
+            if args.verify_walk_fix or args.engine == 'vllm':
                 count = stream('Return only a JSON array containing the integers 1 through 100 in ascending order. No markdown.',limit=1024,sampled=False)
                 result['quality']['ordered_100'] = json.loads(count['content']) == list(range(1,101))
                 assert result['quality']['ordered_100'], 'Long ordered-output check failed'
@@ -196,8 +225,12 @@ def run(args):
                 stream(prompt)  # Exclude warm-up from medians.
             for repeat in range(args.repeats):
                 for name,prompt in PROMPTS.items():
+                    before = vllm_spec_counters() if args.engine == 'vllm' else {}
                     trial = stream(prompt)
                     trial.update(workload=name,repeat=repeat)
+                    if args.engine == 'vllm':
+                        after = vllm_spec_counters()
+                        trial['speculation_counter_deltas'] = {key:value-before.get(key,0) for key,value in after.items()}
                     if args.engine == 'sglang':
                         with urllib.request.urlopen(f'http://127.0.0.1:{checks.PORT}/metrics',timeout=5) as metrics:
                             lines = metrics.read().decode().splitlines()
@@ -210,7 +243,7 @@ def run(args):
                 prompt,codes = base.marker_prompt(context-1500)
                 if args.engine == 'sglang':
                     checks.request('/flush_cache',{})
-                trial = stream(prompt,limit=128,sampled=False)
+                trial = stream(prompt,limit=128,sampled=False,timeout=600)
                 result['long_retrieval'] = trial
                 trial['passed'] = all(code in trial['content'] for code in codes)
                 assert trial['passed'], 'Near-window retrieval failed'
@@ -248,11 +281,28 @@ def run(args):
     return result
 
 
+def vllm_spec_counters():
+    with urllib.request.urlopen(f'http://127.0.0.1:{checks.PORT}/metrics',timeout=5) as response:
+        lines = response.read().decode().splitlines()
+    values = {}
+    for line in lines:
+        if line.startswith('vllm:spec_decode') and '_total{' in line:
+            metric, value = line.rsplit(' ',1)
+            values[metric] = float(value)
+    return values
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--engine',choices=['sglang','vllm'],default='sglang')
-    parser.add_argument('--mode',choices=['mtp','dflash'],default='mtp')
-    parser.add_argument('--steps',type=int,choices=[1,2,3],default=2)
+    parser.add_argument('--mode',choices=['mtp','dflash','plain'],default='mtp')
+    parser.add_argument('--steps',type=int,choices=[1,2,3,4],default=None)
+    parser.add_argument('--vllm-kv',choices=['int4_per_token_head','int8_per_token_head','bfloat16'],default='int4_per_token_head')
+    parser.add_argument('--vllm-dtype',choices=['bfloat16','float16'],default='bfloat16')
+    parser.add_argument('--vllm-kv-bytes',type=int,default=1879048192)
+    parser.add_argument('--chunk',type=int,default=512)
+    parser.add_argument('--compile-mode',type=int,choices=[0,3],default=0)
+    parser.add_argument('--rdna-prefill',action='store_true',help='Test the gated gfx1100 INT8 prefill tiles')
     parser.add_argument('--protocol',choices=['auto','Simple'],default='auto')
     parser.add_argument('--verify',type=int,choices=[0,1],default=0)
     parser.add_argument('--verify-walk-fix',action='store_true',help='Test the opt-in prefix+draft KV adapter repair')
@@ -261,6 +311,10 @@ if __name__ == '__main__':
     parser.add_argument('--tag',default='',help='Separate a repeat batch from earlier measurements')
     parser.add_argument('--benchy-depth',type=int,nargs='+',default=None,help='Also run pinned llama-benchy 0.4.0 at these depths')
     args = parser.parse_args()
+    if args.steps is None:
+        args.steps = 3 if args.engine == 'vllm' else 2
+    if (args.engine == 'sglang' and (args.mode == 'plain' or args.steps == 4)) or (args.engine == 'vllm' and args.mode == 'dflash'):
+        parser.error('Unsupported engine/mode/steps combination')
     if any(base.backend_switch.is_inference(p) for p in base.backend_switch.processes().values()):
         parser.error('Another configured inference worker is active')
     with socket.socket() as probe:
