@@ -30,11 +30,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
   root port is a proposed remedy, not installed or validated hardware.
-- At the **04:41 EDT October 18** final MoE-update check, the authenticated gateway
-  listed **eight enabled profiles** and the prior vLLM session had been restored
-  with `qwen3.8-27b-vllm`. Authenticated generation passed; DSH remained running
-  and its user selection was preserved. Consult `/health` for live availability.
-  All three MoEs passed the separately documented CPU/cache validation below.
+- At the final October 18 Q4-replacement check, the authenticated gateway listed
+  **eight enabled profiles** and `nemotron-3.5-bolt` Q4 was running through the
+  normal llama.cpp HIP backend in a visible terminal. Authenticated generation
+  passed. DSH remained running and its saved selection was preserved; consult
+  `/health` for live availability. FreeToken remains a separate experiment.
 
 Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
@@ -46,7 +46,8 @@ October 18 MoE update: the normal managed llama launcher passed authenticated
 API generation for all three MoEs, a repeated cached-model request, switching
 between MoEs and switching back to dense Qwen/Vulkan. All five llama models and
 eight gateway profiles remained discoverable. DSH/Turnstone catalogs were
-refreshed without changing the saved default. No new model files were downloaded.
+refreshed without changing the saved default. That initial update reused
+existing weights; Bolt was subsequently replaced by the Q4 files documented below.
 
 All contexts below include system instructions, tool definitions/results,
 conversation history, user input **and output**. They are configured budgets,
@@ -57,7 +58,7 @@ not guarantees of full-window speed or general long-context accuracy.
 | llama.cpp / Vulkan | `qwen3.8-27b-q4` | 65,536 | Q4_K_M | MTP3 |
 | llama.cpp / Vulkan | `muse-glimmer-30b` | 32,768 | UD-Q4_K_XL | Off |
 | llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
-| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | 24GB IQ2 GGUF | Off |
+| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | Q4_K_M, two GGUF shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
@@ -65,11 +66,13 @@ not guarantees of full-window speed or general long-context accuracy.
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
 microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
-GPU-resident weights; MoEs use HIP with 20 alternating expert layers backed by
-CPU RAM and a 12,288 MiB total GPU expert-cache ceiling. Actual cache allocation
-is capped by the host expert set. MTP draft experts remain on GPU. Effective
-placement comes from `dsh/models-amd.ini`, `dsh/models-hip.ini`,
-`dsh/moe-offload.json` and the model-specific runtime overrides.
+GPU-resident weights. Qwen/Empero use HIP with layer split 1:1, 20 CPU expert
+layers and a 12,288 MiB total cache ceiling. Bolt Q4 uses HIP with layer split
+21:19, 12 CPU expert layers (12.73 GiB backing) and a 7,168 MiB total GPU
+expert-cache ceiling. CPU backing and cached copies both consume memory. Actual
+cache allocation is bounded by each GPU's host-expert set. Qwen/Empero MTP draft
+experts remain on GPU. Effective settings come from `dsh/models-amd.ini`,
+`dsh/models-hip.ini`, `dsh/moe-offload.json` and model-specific overrides.
 
 *MoE 256K allocation passed with approximately 64K actual retrieval, tools/JSON
 and arithmetic; full 256K filling, quality and sustained speed are untested.
@@ -79,7 +82,17 @@ loaded requests need 3 GiB. A scoped monitor stops only an unsafe owned worker
 on sustained low memory, owned swap or dedicated VRAM spill. No unrelated
 application/frontend is stopped. See [measurements and both forums' source trail](../hardware/MOE-OFFLOAD-2026-10-18.md).
 
-Bolt's vision projector is retained but vision is disabled and unvalidated.
+Bolt vision remains disabled and unvalidated; this Q4 text profile uses no projector.
+
+Bolt Q4 source: `darioooooo0o/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF`,
+revision `b739f8c7c5484413ae3e55e6da8383f0f2570cee`. The two verified shards
+are in `GGUF-Models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-GGUF/Q4_K_M/`
+on Shared/D:. Pass `NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-00001-of-00002.gguf`
+to the runtime; keep shard 2 beside it. The old 24GB IQ2 model was removed after
+Q4 validation. API ID stays `nemotron-3.5-bolt`; clients need no model-ID change.
+Q4 passed arithmetic/JSON/tools and 63,911-token retrieval. Short code decode:
+**35.7 t/s**; long prefill: **424.0 t/s**. Single probes, not matched
+IQ2/Q4 speed rankings or full 256K validation. See [replacement details](../hardware/NEMOTRON-Q4-2026-10-18.md).
 
 SGLang uses BF16 activations/KV/Mamba, Triton attention, memory fraction 0.85,
 one simultaneous request, graphs, GPU prefix caching and eight Mamba cache
@@ -308,8 +321,11 @@ local validation before activation; this handoff is not permission to auto-upgra
 ## FreeToken ROCm experiment
 
 Installed separately under `freetoken/` in the Linux runtime root. The new
-PATH command is `ft-rocm`; the original `ft` and NVIDIA-only FreeToken Desktop
-beta remain intact. This is an experimental AMD engine source build, not an
+PATH command is `ft-rocm`. The user subsequently requested removal of the
+incompatible NVIDIA Desktop beta: package `0.2.0-beta.23`, its CUDA engine
+environment and the original `ft` link are now removed. Saved application data
+is retained; the AMD build remains available. This is an experimental AMD
+engine source build, not an
 AMD Desktop installer. Linux binaries/environments cannot be reused by Windows.
 
 Only FreeToken may use a single RX 7900 XTX, default GPU1. Both cards pass native
@@ -328,7 +344,11 @@ chunk trial failed in upstream Q6_K dispatch; the wrapper caps chunks at 128.
 Peak GPU1 VRAM was 18.97 GiB with no worker swap or VRAM spill. A 100-token code
 probe took 2.584 s (38.7 output t/s end-to-end, not isolated decode throughput).
 Full 8K filling and MTP remain untested. Use `ft-rocm qwen` after closing the
-existing inference terminal. Its experimental loopback API is
+existing inference terminal. For a terminal chat interface, start
+`ft-rocm qwen` in one terminal, wait
+for ready, then run `ft-rocm shell` in a second terminal. The Desktop frontend
+has not been validated with this ROCm build; its removed beta bootstrapped CUDA.
+Its experimental loopback API is
 `http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`.
 Exact build and [validation report](../freetoken/README.md).
 
@@ -393,7 +413,8 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-No benchmark was rerun for this consolidation. The maintained README contains
+The original consolidation did not rerun benchmarks. The later Q4 replacement
+measurements are in the report above. The maintained README contains
 all model results with dates/hardware/methods. Selected recent Qwen measurements:
 
 | Profile | Code / prose decode t/s | Evidence |

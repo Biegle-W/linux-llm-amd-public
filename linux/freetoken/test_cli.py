@@ -1,5 +1,5 @@
 import unittest
-from cli import serve_defaults
+from cli import serve_defaults, vram_headroom_reason
 
 
 class CliDefaultsTests(unittest.TestCase):
@@ -26,6 +26,10 @@ class CliDefaultsTests(unittest.TestCase):
     def test_reject_known_unsupported_prefill_shape(self):
         with self.assertRaisesRegex(ValueError,'128'):
             serve_defaults(['serve','--max-prefill-length','256'])
+
+    def test_admission_before_another_backend_opens_its_port(self):
+        self.assertIsNotNone(vram_headroom_reason(24*1024**3,5*1024**3))
+        self.assertIsNone(vram_headroom_reason(24*1024**3,1*1024**3))
 
     def test_explicit_other_card_is_preserved(self):
         args=serve_defaults(['serve','--gpu','0','--tensor-parallel-size','1'])

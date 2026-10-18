@@ -1,8 +1,10 @@
 # FreeToken ROCm experiment — October 18, 2026
 
-Installed separately from the NVIDIA-only FreeToken Desktop beta. The new
-command is `ft-rocm`; the original `ft`, Desktop application and its CUDA
-virtual environment are preserved. This is a source-built inference engine,
+Installed as `ft-rocm`. The incompatible NVIDIA-only Desktop beta
+`0.2.0-beta.23`, its CUDA engine environment and original `ft` link were removed
+at the user's request later on October 18. Saved Desktop application data is
+retained; the AMD runtime and Qwen profile still work. This is a source-built
+inference engine,
 not an AMD-enabled replacement Desktop installer.
 
 The user explicitly allows **one RX 7900 XTX for FreeToken only**. GPU1 is the
@@ -42,7 +44,8 @@ kernel drivers and compatible Linux headers. Run from the repository:
 to GPU1/TP1, one request, Triton attention, native torch/RCCL routing, 128-token
 prefill chunks and graphs disabled. Chunks above 128 are rejected because the
 GGUF Q6_K dispatcher failed at 256 on gfx1100. It refuses
-to start while known inference ports are occupied. It does not automatically
+to start while known inference ports are occupied or the selected GPU has
+less than 20 GiB free, including while another backend is still loading. It does not automatically
 terminate programs or expand existing backend shutdown targets. Stop its own
 terminal before starting another backend; existing managed launchers refuse
 unknown GPU compute processes.
@@ -90,9 +93,34 @@ This fixed profile reuses the existing Qwen 27B GGUF path from `dsh/models.json`
 loads on GPU1 and stays in the foreground. API base: `http://127.0.0.1:1919/v1`;
 model: `qwen3.8-27b-q4-freetoken`. It is loopback-only and is not registered in
 DSH or the authenticated LAN/Tailscale gateway. Ctrl+C stops its own runtime.
-Use `ft-rocm serve --help` for upstream custom-serving options.
-The previous vLLM session was restored after testing; no FreeToken model is
-left running by the validation script.
+For a terminal chat interface, open a second terminal after the server is ready:
+
+```bash
+ft-rocm shell
+```
+
+This attaches to the existing server without starting another model. Use
+`ft-rocm serve --help` for upstream custom-serving options.
+Initial FreeToken validation restored the then-running vLLM session. The later
+Nemotron Q4 update left llama.cpp active; close that inference terminal before
+starting FreeToken. No FreeToken model is left running by validation.
+
+## Desktop frontend and API clients
+
+The installed AMD engine is the source-built CLI, not a verified one-click
+AMD Desktop package. The removed Desktop beta bootstrapped a CUDA engine.
+Upstream still describes [AMD installation as WIP](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/docs/install_amd.md);
+[Desktop release artifacts](https://github.com/FlashML-org/FreeToken-Web/releases)
+do not establish that its GPU selector/bootstrap works with this isolated build.
+The [installer](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/install.sh)
+has a `FREETOKEN_HOME` engine-discovery mechanism, but connecting
+that Desktop frontend to this ROCm environment has not been validated here.
+
+Use `ft-rocm qwen` and an OpenAI-compatible API client on the Linux PC. Base URL
+`http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`; this loopback test
+profile does not require an API key (a client may use a dummy value such as
+`local`). Close the running inference backend first. The wrapper also refuses
+the owned MoE validation port 18030 to prevent overlap during Q4 testing.
 
 ## Sources
 

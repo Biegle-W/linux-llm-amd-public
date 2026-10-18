@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-18",
+  "removed": {
+    "desktop_package": "free-token-desktop",
+    "desktop_version": "0.2.0-beta.23",
+    "cuda_engine": "0.1.3+gd3512b43a",
+    "legacy_command": "ft",
+    "file_bytes": 16360595484
+  },
+  "retained": [
+    "ft-rocm",
+    "saved Desktop application data",
+    "production inference environments",
+    "historical NVIDIA reference records"
+  ],
+  "amd_cli_verified": "freetoken version 0.1.3"
+}

@@ -74,8 +74,9 @@ Do not silently re-enable full-GPU-only MoE defaults during later updates.
 
 The user explicitly permits one RX 7900 XTX for FreeToken only while its
 GGUF model implementation lacks TP2. Keep both GPUs required for every other
-engine. Install FreeToken ROCm separately from the existing NVIDIA Desktop beta;
-do not replace its `ft` command or CUDA environment. CPU-backed experts plus a
-bounded GPU hot-expert cache remain required for MoE serving. Keep automatic
+engine. The user subsequently requested removal of the incompatible NVIDIA Desktop
+beta and its CUDA environment: they and the original `ft` link are now removed.
+Retain the separate AMD `ft-rocm` build; do not reinstall the retired beta.
+CPU-backed experts plus a bounded GPU hot-expert cache remain required for MoE serving. Keep automatic
 shutdown targets limited to the previously authorized engines; do not silently
 add FreeToken to other launchers' process-kill lists.

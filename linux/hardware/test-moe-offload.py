@@ -25,7 +25,7 @@ def stop(p):
   os.killpg(p.pid,signal.SIGTERM)
   try:p.wait(20)
   except subprocess.TimeoutExpired:os.killpg(p.pid,signal.SIGKILL);p.wait()
-def run(model,context=65536,cache=8192,backend='vulkan',long_tokens=8000,no_host=False,half_cpu=False):
+def run(model,context=65536,cache=8192,backend='vulkan',long_tokens=8000,no_host=False,half_cpu=False,cpu_layers=None,tensor_split="1,1"):
  binary,preset,env,_=launch_spec()
  if backend=='hip':
   result=subprocess.run(['bash','-c','source "$1"; env -0','bash',str(ROOT/'hardware/rocm-env.sh')],capture_output=True,check=True)
@@ -33,12 +33,14 @@ def run(model,context=65536,cache=8192,backend='vulkan',long_tokens=8000,no_host
  devices='ROCm0,ROCm1' if backend=='hip' else 'Vulkan0,Vulkan1';dev0=devices.split(',')[0]
  ncmoe=88 if model=='nemotron-3.5-bolt' else 40
  name=model+'-'+backend+'-c'+str(context)+'-cache'+str(cache)+('-plain-host' if no_host else '')+('-half-cpu' if half_cpu else '')
- cmd=[str(binary),'--model',CAT[model]['path'],'--alias',model,'--host','127.0.0.1','--port',str(PORT),'--device',devices,'--n-gpu-layers','99','--split-mode','layer','--tensor-split','1,1','--override-tensor','token_embd.*='+dev0,'--n-cpu-moe',str(ncmoe),'--moe-cache-mib',str(cache),'--load-mode','none','--ctx-size',str(context),'--parallel','1','--batch-size','512','--ubatch-size','128','--threads','6','--threads-batch','6','--flash-attn','on','--cache-type-k','q8_0','--cache-type-v','q8_0','--cache-ram','0','--ctx-checkpoints','0','--jinja','--reasoning','off','--chat-template-kwargs','{"enable_thinking":false}','--log-colors','off','-lv','4','--spec-type','draft-mtp' if CAT[model].get('mtp') else 'none']
+ cmd=[str(binary),'--model',CAT[model]['path'],'--alias',model,'--host','127.0.0.1','--port',str(PORT),'--device',devices,'--n-gpu-layers','99','--fit','off','--split-mode','layer','--tensor-split',tensor_split,'--override-tensor','token_embd.*='+dev0,'--n-cpu-moe',str(ncmoe),'--moe-cache-mib',str(cache),'--load-mode','none','--ctx-size',str(context),'--parallel','1','--batch-size','512','--ubatch-size','128','--threads','6','--threads-batch','6','--flash-attn','on','--cache-type-k','q8_0','--cache-type-v','q8_0','--cache-ram','0','--ctx-checkpoints','0','--jinja','--reasoning','off','--chat-template-kwargs','{"enable_thinking":false}','--log-colors','off','-lv','4','--spec-type','draft-mtp' if CAT[model].get('mtp') else 'none']
  if CAT[model].get('mtp'):cmd+=['--spec-draft-n-max','3','--spec-draft-type-k','q8_0','--spec-draft-type-v','q8_0']
  if no_host:cmd+=['--no-host','--no-repack']
  if half_cpu:
   policy=ROOT/'dsh/moe-offload.json'
-  if policy.exists():
+  if cpu_layers is not None:
+   layers=cpu_layers
+  elif policy.exists():
    layers=json.loads(policy.read_text())['models'][model]['cpu_expert_layers']
   else:
    meta=next(x for x in json.loads((OUT/'model-metadata.json').read_text()) if x['id']==model)
@@ -46,14 +48,17 @@ def run(model,context=65536,cache=8192,backend='vulkan',long_tokens=8000,no_host
   pattern=r'^blk\.(?:'+'|'.join(map(str,layers))+r')\.ffn_.*_exps\.weight$=CPU'
   cmd[cmd.index('--n-cpu-moe')+1]='0'
   cmd[cmd.index('--override-tensor')+1]+=','+pattern
- logpath=OUT/(name+'.log');p=None;done=threading.Event();samples=[];alerts=[];record={'model':model,'backend':backend,'context':context,'cache_mib_total':cache,'n_cpu_moe':0 if half_cpu else ncmoe,'cpu_expert_layers':layers if half_cpu else list(range(ncmoe)),'command':cmd,'checks':{},'started':time.time()}
+ logpath=OUT/(name+'.log');p=None;done=threading.Event();samples=[];alerts=[];record={'model':model,'backend':backend,'context':context,'cache_mib_total':cache,'tensor_split':tensor_split,'n_cpu_moe':0 if half_cpu else ncmoe,'cpu_expert_layers':layers if half_cpu else list(range(ncmoe)),'command':cmd,'checks':{},'started':time.time()}
  def watch():
   low=0
   while not done.wait(1):
    m=mem();m['process_swap'],m['nonresident_vram']=worker_memory(p.pid);samples.append(m)
    low=low+1 if m['available']<3*GIB else 0
    if low>=3 or m['process_swap']>256*1024**2 or max(m['vram'])>23*GIB or m['nonresident_vram']>256*1024**2:
-    alerts.append(m);stop(p);return
+    alerts.append(m)
+    try:(OUT/(name+'-memory-at-guard.txt')).write_text((Path('/proc')/str(p.pid)/'smaps').read_text())
+    except OSError:pass
+    stop(p);return
  try:
   require_amd_headroom()
   with logpath.open('w') as log:
@@ -100,8 +105,14 @@ def run(model,context=65536,cache=8192,backend='vulkan',long_tokens=8000,no_host
  return record
 if __name__=='__main__':
  import argparse
- ap=argparse.ArgumentParser();ap.add_argument('--model',default='qwen3.6-35b-a3b');ap.add_argument('--context',type=int,default=65536);ap.add_argument('--cache',type=int,default=8192);ap.add_argument('--backend',default='vulkan');ap.add_argument('--long',type=int,default=8000);ap.add_argument('--plain-host',action='store_true');ap.add_argument('--half-cpu',action='store_true');a=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('--model',default='qwen3.6-35b-a3b');ap.add_argument('--context',type=int,default=65536);ap.add_argument('--cache',type=int,default=8192);ap.add_argument('--backend',default='vulkan');ap.add_argument('--long',type=int,default=8000);ap.add_argument('--plain-host',action='store_true');ap.add_argument('--half-cpu',action='store_true');ap.add_argument('--model-path');ap.add_argument('--cpu-layers');ap.add_argument('--output-dir');ap.add_argument('--tensor-split',default='1,1');a=ap.parse_args()
+ if a.model_path:
+  CAT[a.model]['path']=str(Path(a.model_path).resolve())
+  if not Path(CAT[a.model]['path']).is_file():ap.error('Candidate model is not downloaded yet')
+ if a.output_dir:
+  OUT=Path(a.output_dir).resolve();OUT.mkdir(parents=True,exist_ok=True)
+ candidate_layers=[int(x) for x in a.cpu_layers.split(',')] if a.cpu_layers else None
  with startup_handover('llama') as state:state.register()
- try:rec=run(a.model,a.context,a.cache,a.backend,a.long,a.plain_host,a.half_cpu)
+ try:rec=run(a.model,a.context,a.cache,a.backend,a.long,a.plain_host,a.half_cpu,candidate_layers,a.tensor_split)
  finally:clear_owner()
  sys.exit(0 if rec['passed'] else 1)

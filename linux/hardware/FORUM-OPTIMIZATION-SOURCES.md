@@ -161,3 +161,23 @@ The [lcz.me single-XTX/64 GB topic](https://lcz.me/topic/2059) discusses Strata,
 while the [Level1Techs FreeToken topic](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396)
 is the FreeToken research lead. Neither establishes this 32 GB machine's
 FreeToken serving speed. See the [exact build, tests and current limitations](../freetoken/README.md).
+
+## October 18: Nemotron Q4 candidate and legacy FreeToken removal
+
+The user requested a Q4 replacement for the old 24GB IQ2 Bolt quant. The
+selected [Q4_K_M model repository](https://huggingface.co/darioooooo0o/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF)
+is pinned to `b739f8c7c5484413ae3e55e6da8383f0f2570cee`; tensor metadata and
+local memory guards determine CPU/cache placement rather than assuming all
+45 GiB of weights plus context fit in 48 GB VRAM.
+
+The previously cited [lcz.me Strata offload setup](https://lcz.me/topic/2059)
+and [Level1Techs 7900 XTX notes](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869)
+remain research context, not Q4 measurements on this machine. The retained
+[native cache implementation](https://github.com/ggml-org/llama.cpp/blob/f12aaa344c971556ec35be054d7aac1d901fd510/src/llama-moe-cache.cpp)
+is used without a new inference fork. See [the replacement report](NEMOTRON-Q4-2026-10-18.md)
+for actual validation status and limits.
+
+The incompatible NVIDIA-only FreeToken beta/CUDA environment was subsequently
+removed at the user's request. `ft-rocm` and its validated single-card Qwen
+profile remain; the earlier installation report is not an instruction to
+reinstall the retired Desktop beta.

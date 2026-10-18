@@ -46,6 +46,24 @@ def serve_defaults(args):
     return args
 
 
+def vram_headroom_reason(total,used):
+    free=total-used
+    if free<20*1024**3:
+        return f'FreeToken needs 20 GiB free on its selected GPU; only {free/1024**3:.2f} GiB is free. Close the running inference terminal first.'
+    return None
+
+
+def require_vram_headroom(args):
+    sys.path.insert(0,str(ROOT/'dsh'))
+    from amd_device import amd_devices
+    try:
+        device=amd_devices()[int(option(args,('--gpu',)))]
+        reason=vram_headroom_reason(int((device/'mem_info_vram_total').read_text()),int((device/'mem_info_vram_used').read_text()))
+    except (OSError,RuntimeError) as error:
+        raise ValueError('Cannot verify AMD VRAM headroom; no FreeToken worker started: '+str(error)) from error
+    if reason:raise ValueError(reason)
+
+
 def main():
     args=sys.argv[1:]
     if args and args[0]=='qwen':
@@ -59,11 +77,12 @@ def main():
             '--memory-ratio','0.75','--cache-type','naive',*args[1:]]
     if args and args[0]=='serve' and not any(a in ('--help','-h') for a in args):
         args=serve_defaults(args)
-        for port in (8080,8081,30000,30001,30010,30011,30020,30021,1919):
+        for port in (8080,8081,30000,30001,30010,30011,30020,30021,18030,1919):
             with socket.socket() as probe:
                 probe.settimeout(.25)
                 if probe.connect_ex(('127.0.0.1',port))==0:
                     raise ValueError(f'Inference port {port} is occupied. Close its inference terminal before starting raw FreeToken; no process was stopped.')
+        require_vram_headroom(args)
     binary=ROOT/'freetoken/.venv-rocm/bin/ft'
     os.execv(str(binary),[str(binary),*args])
 

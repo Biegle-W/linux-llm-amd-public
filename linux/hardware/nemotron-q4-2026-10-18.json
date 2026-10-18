@@ -1,0 +1,329 @@
+{
+  "date": "2026-10-18",
+  "hardware": "i5-13600KF, dual RX 7900 XTX 24 GB, PCIe4 x8/x8, 32 GB RAM",
+  "runtime_commit": "f12aaa344c971556ec35be054d7aac1d901fd510",
+  "weights": {
+    "repo": "darioooooo0o/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF",
+    "revision": "b739f8c7c5484413ae3e55e6da8383f0f2570cee",
+    "files": [
+      {
+        "name": "Q4_K_M/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-00001-of-00002.gguf",
+        "size": 44987736448,
+        "sha256": "5b7ede1409d6f41c20d19727981829a7bb9bf1b4a168171084db64059d6965a2",
+        "verified": true
+      },
+      {
+        "name": "Q4_K_M/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-00002-of-00002.gguf",
+        "size": 3353905888,
+        "sha256": "82495ee888458135ef05e3128a251f935bcc98f8af4444bc3c7ae14f7fc9e6bf",
+        "verified": true
+      }
+    ],
+    "completed": true
+  },
+  "selected_profile": {
+    "id": "nemotron-3.5-bolt",
+    "quant": "Q4_K_M",
+    "cpu_expert_layers": [
+      1,
+      10,
+      19,
+      28,
+      37,
+      45,
+      50,
+      59,
+      67,
+      76,
+      81,
+      85
+    ],
+    "host_expert_bytes": 13673005056,
+    "gpu_expert_cache_mib": 7168,
+    "context": 262144,
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-00001-of-00002.gguf",
+    "status": "validated active Q4 profile; 64K retrieval, arithmetic, JSON and tools passed",
+    "tensor_split": "21,19"
+  },
+  "checks": {
+    "arithmetic": true,
+    "json": true,
+    "tools_roundtrip": true,
+    "retrieval": true
+  },
+  "short_code": {
+    "cache_n": 0,
+    "prompt_n": 39,
+    "prompt_ms": 405.91,
+    "prompt_per_token_ms": 10.407948717948718,
+    "prompt_per_second": 96.08041191397108,
+    "predicted_n": 101,
+    "predicted_ms": 2803.868,
+    "predicted_per_token_ms": 28.03868,
+    "predicted_per_second": 35.66501704074515
+  },
+  "retrieval": {
+    "cache_n": 0,
+    "prompt_n": 63911,
+    "prompt_ms": 150734.258,
+    "prompt_per_token_ms": 2.358502573891818,
+    "prompt_per_second": 423.99784128701515,
+    "predicted_n": 19,
+    "predicted_ms": 619.055,
+    "predicted_per_token_ms": 34.39194444444444,
+    "predicted_per_second": 29.076576394666066
+  },
+  "retrieval_elapsed_seconds": 151.386,
+  "telemetry": {
+    "min_available_gib": 13.597,
+    "peak_vram_gib": [
+      22.75,
+      22.822
+    ],
+    "max_worker_swap_mib": 0.0,
+    "max_nonresident_vram_mib": 0.0
+  },
+  "cache_lines": [
+    "1.32.851.931 I impl:      ROCm0 MoE cache size =  3754.48 MiB for 5775.28 MiB of host experts",
+    "1.32.851.935 I impl:      ROCm1 MoE cache size =  3396.05 MiB for 7264.31 MiB of host experts",
+    "4.17.382.016 I llama_moe_cache: ubatch <= 8: hits = 17451, misses = 4230, hit rate = 80.49%, uploaded = 12527.06 MiB",
+    "4.17.382.018 I llama_moe_cache: ubatch  > 8: hits = 206, misses = 384, hit rate = 34.92%, uploaded = 1273.92 MiB",
+    "4.17.382.018 I llama_moe_cache: large batches: 250876 experts copied from the cache, 370278.93 MiB"
+  ],
+  "startup_seconds": 94.232,
+  "validation_limit": "256K allocation; about 64K actual retrieval; single functional probes, full-window filling and sustained decode not tested.",
+  "guarded_startups": [
+    {
+      "cache_mib_total": 12288,
+      "cpu_expert_layers": [
+        1,
+        5,
+        10,
+        14,
+        19,
+        28,
+        32,
+        37,
+        41,
+        45,
+        50,
+        54,
+        59,
+        67,
+        72,
+        76,
+        81,
+        85
+      ],
+      "tensor_split": "21,19",
+      "error": "worker exited -15",
+      "telemetry": {
+        "min_available_gib": 9.642,
+        "peak_vram_gib": [
+          13.561,
+          16.184
+        ],
+        "max_worker_swap_mib": 1916.52,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "alerts": [
+        {
+          "available": 12183965696,
+          "vram": [
+            14561488896,
+            17373474816
+          ],
+          "swap_used": 7493353472,
+          "process_swap": 2009620480,
+          "nonresident_vram": 0
+        }
+      ]
+    },
+    {
+      "cache_mib_total": 12288,
+      "cpu_expert_layers": [
+        1,
+        5,
+        10,
+        14,
+        19,
+        28,
+        32,
+        37,
+        41,
+        45,
+        50,
+        54,
+        59,
+        67,
+        72,
+        76,
+        81,
+        85
+      ],
+      "tensor_split": "21,19",
+      "error": "worker exited -15",
+      "telemetry": {
+        "min_available_gib": 9.508,
+        "peak_vram_gib": [
+          13.561,
+          16.242
+        ],
+        "max_worker_swap_mib": 491.91,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "alerts": [
+        {
+          "available": 10557190144,
+          "vram": [
+            14561501184,
+            17425989632
+          ],
+          "swap_used": 3918925824,
+          "process_swap": 515801088,
+          "nonresident_vram": 0
+        }
+      ]
+    },
+    {
+      "cache_mib_total": 15360,
+      "cpu_expert_layers": [
+        1,
+        5,
+        10,
+        14,
+        19,
+        28,
+        32,
+        37,
+        41,
+        45,
+        50,
+        54,
+        59,
+        67,
+        72,
+        76,
+        81,
+        85
+      ],
+      "tensor_split": "21,19",
+      "error": "worker exited -15",
+      "telemetry": {
+        "min_available_gib": 8.965,
+        "peak_vram_gib": [
+          22.042,
+          23.841
+        ],
+        "max_worker_swap_mib": 204.53,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "alerts": [
+        {
+          "available": 9626066944,
+          "vram": [
+            23667388416,
+            25599545344
+          ],
+          "swap_used": 3824709632,
+          "process_swap": 6766592,
+          "nonresident_vram": 0
+        }
+      ]
+    },
+    {
+      "cache_mib_total": 8192,
+      "cpu_expert_layers": [
+        1,
+        10,
+        19,
+        28,
+        37,
+        45,
+        50,
+        59,
+        67,
+        76,
+        81,
+        85
+      ],
+      "tensor_split": "21,19",
+      "error": "worker exited 0",
+      "telemetry": {
+        "min_available_gib": 13.889,
+        "peak_vram_gib": [
+          23.057,
+          22.93
+        ],
+        "max_worker_swap_mib": 0.0,
+        "max_nonresident_vram_mib": 0.0
+      },
+      "alerts": [
+        {
+          "available": 14913515520,
+          "vram": [
+            24757243904,
+            24620699648
+          ],
+          "swap_used": 2911973376,
+          "process_swap": 0,
+          "nonresident_vram": 0
+        }
+      ]
+    }
+  ],
+  "retired_iq2_source": {
+    "repo": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF",
+    "revision": "e0fecb69cb3e5e4c5e8a056fa2aec98c78e91246",
+    "files": [
+      {
+        "rfilename": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+        "blobId": "d85b5c32c7448e807b0f0092b01232310ca18e66",
+        "size": 22018326528,
+        "lfs": {
+          "sha256": "91d63363e782c8a3d5f4be42816eba8e0d42dd2530bd07a7d0d2dc440599af75",
+          "size": 22018326528,
+          "pointerSize": 136
+        }
+      },
+      {
+        "rfilename": "mmproj-NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+        "blobId": "a92b19772514a938cb53e030f2805db22a1c5477",
+        "size": 1733692736,
+        "lfs": {
+          "sha256": "0ee891eadc7bf0cae6289b249c74eb1ef420534351f6ef8b64d49f0ca6a926b0",
+          "size": 1733692736,
+          "pointerSize": 135
+        }
+      }
+    ]
+  },
+  "managed_validation": {
+    "passed": true,
+    "model": "nemotron-3.5-bolt",
+    "answer": "85",
+    "gateway_profiles": 8,
+    "catalog_name": "Nemotron 3.5 Bolt 74B-A9B Q4_K_M (256K, dual AMD HIP, CPU experts + GPU cache)",
+    "usage": {
+      "completion_tokens": 3,
+      "prompt_tokens": 31,
+      "total_tokens": 34,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "route": "authenticated gateway to normal managed llama.cpp HIP backend"
+  },
+  "removal": {
+    "removed_file": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+    "removed_bytes": 22018326528,
+    "removed_after": "Q4 SHA256 verification, full functional/retrieval probe and authenticated managed-backend generation",
+    "q4_retained": true
+  },
+  "configuration_checks": {
+    "moe_memory_tests": 11,
+    "dsh_catalog_tests": 2,
+    "freetoken_cli_tests": 6,
+    "both_operational_and_public": true
+  }
+}

@@ -1,5 +1,9 @@
 # MoE CPU offload and expert caching — October 18, 2026
 
+**Bolt update later October 18:** its IQ2 setup/results below are historical.
+The active model is now [Q4_K_M with adjusted CPU/cache placement](NEMOTRON-Q4-2026-10-18.md).
+Qwen and Empero profiles below remain current.
+
 The three active MoEs now use CPU-backed expert weights and llama.cpp's real GPU
 hot-expert cache on both RX 7900 XTX cards. Dense Qwen 27B and Muse retain Vulkan
 GPU-resident profiles. Existing model files, launchers and API model IDs are reused.

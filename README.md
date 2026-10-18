@@ -2,8 +2,10 @@
 
 <!-- freetoken-rocm-2026-10-18 -->
 **October 18 FreeToken AMD experiment:** installed current upstream source in a
-separate ROCm environment as `ft-rocm`. The existing NVIDIA Desktop beta and
-`ft` are preserved. Only FreeToken has the user's **single-7900-XTX exception**;
+separate ROCm environment as `ft-rocm`. The incompatible NVIDIA Desktop beta,
+its CUDA environment and original `ft` link were subsequently removed at the
+user's request; saved application data is retained. Only FreeToken has the
+user's **single-7900-XTX exception**;
 other engines remain dual-GPU. `ft-rocm qwen` passed Qwen 27B Q4 arithmetic,
 JSON and tools at **8K / GPU1**; 100-token short probe: **38.7 output t/s
 end-to-end** (includes prefill/API, one run; not isolated decode or a comparison).
@@ -23,8 +25,12 @@ gated until 64 GB RAM and dual-HIP validation. Earlier GPU-only rows are histori
 | Current MoE API ID | Context allocated | Short code decode t/s | ~64K retrieval prefill t/s |
 |---|---:|---:|---:|
 | `qwen3.6-35b-a3b` | 262,144 | 96.7 | 417.9 |
-| `nemotron-3.5-bolt` | 262,144 | 40.7 | 526.4 |
+| `nemotron-3.5-bolt` (Q4_K_M) | 262,144 | 35.7 | 424.0 |
 | `empero-qwen3.8-35b-a3b` | 262,144 | 104.9 | 457.8 |
+
+Nemotron now uses **Q4_K_M**, 12 CPU expert layers, a 7 GiB GPU cache ceiling
+and layer split 21:19. [Replacement, measurements and source](linux/hardware/NEMOTRON-Q4-2026-10-18.md).
+Its retired IQ2 results remain in the historical report.
 
 Single runs with differing short output lengths; not matched speed rankings. CPU/cache
 placement, memory limits, measured token counts and both forums' direct sources:
