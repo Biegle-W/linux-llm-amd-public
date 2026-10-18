@@ -43,3 +43,15 @@ as a local measurement or assume newer posts apply to gfx1100. Maintain the
 source trail in hardware/FORUM-OPTIMIZATION-SOURCES.md (under linux/ in the public
 repository) and link it from applicable reports/handoffs. This is a research and
 citation rule, not authorization to deploy unvalidated changes or schedule checks.
+
+## Consolidated Shared handoff
+
+Keep `linux/network/LINUX-LLM-RUNTIME-HANDOFF.md` as the single current Shared
+handoff. Update its current sections in place after relevant changes rather
+than prepending incompatible chronological snapshots. It covers client access
+and Windows differences as well as runtime state. Preserve the nine original
+Shared files in `LLM-HANDOFF-ARCHIVE/2026-10-18/`; do not recreate the superseded
+root client/upgrade/Windows handoffs. The private maintained source and Shared
+copy must match exactly. Public exports use example addresses/paths and exclude
+private archives and staging files. Preserve historical NVIDIA/Windows source
+snapshots; historical evidence is not a current validated profile.

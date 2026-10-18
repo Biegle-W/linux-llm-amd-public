@@ -1,5 +1,13 @@
 # Local LLM reference setups
 
+<!-- consolidated-handoff-2026-10-18 -->
+**Shared handoff consolidated October 18:** use the single
+[current Linux/Windows-client guide](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
+It reconciles eight active profiles, both AMD cards, current contexts, vLLM's
+startup fix, client/API/SSH access and deferred/retired setups. Nine original
+Shared documents are preserved in a dated archive; their old settings are historical.
+<!-- /consolidated-handoff-2026-10-18 -->
+
 <!-- vllm-startup-2026-10-18 -->
 **October 18 vLLM startup fix:** the desktop terminal was closing on a 21 GiB
 VRAM admission refusal with about 20.78 GiB free on the display GPU. The validated

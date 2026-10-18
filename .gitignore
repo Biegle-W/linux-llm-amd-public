@@ -33,3 +33,6 @@
 *.so
 *.dll
 *.exe
+
+# Private handoff originals and consolidation staging
+**/LLM-HANDOFF-ARCHIVE/

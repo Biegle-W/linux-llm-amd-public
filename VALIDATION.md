@@ -42,3 +42,10 @@ functional, 64K marker retrieval and prefix-cache checks with utilization 0.82,
 verified error logging, interactive failure retention and noninteractive exit
 status. Python/shell syntax, reviewed public paths and secret scans were checked
 before publication. Historical throughput results were not rerun or relabeled.
+
+October 18 handoff consolidation: current guide reconciled against the eight
+saved enabled profiles, actual llama.cpp presets, current runtime/source pins,
+private network configuration and read-only authenticated gateway catalogs.
+Original Shared documents archived with byte counts/SHA-256; no inference,
+benchmark, restart or runtime/configuration change was performed. Public guide
+uses example paths/addresses and omits the private historical archive.
