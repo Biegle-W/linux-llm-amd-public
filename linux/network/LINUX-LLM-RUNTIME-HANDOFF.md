@@ -339,6 +339,12 @@ network listener or generation benchmark was performed.** Existing LLM profiles
 and automatic shutdown scope are unchanged. Native H3 sequence parallelism remains
 an unvalidated candidate for 24 GB cards; R9700/32 GB speeds are not local results.
 
+Read-only follow-up found 93.18 GiB of existing Unsloth weights on Shared:
+Qwen-Image 2.1 BF16/Q4 plus FP8/INT8 text encoders, MiniMax H3 Q2 plus Q2/Q4
+text encoders and both VAEs, and a small embedding model. The FP8 image
+transformer itself is absent. [Inventory and format/reuse limits](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
+No model/runtime files were changed and no generation test was performed.
+
 ## Retained Strata and retired setups
 
 **Strata Q3 is disabled**, absent from the live API catalog and not AMD-validated.

@@ -1,6 +1,6 @@
 # Local LLM reference setups
 
-Image/video planning: [ComfyUI setup walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md), with both forums and upstream sources. Proposed only; no new runtime or models installed.
+Image/video planning: [ComfyUI setup walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md), with both forums and upstream sources. Proposed only; no new runtime or models installed. [Existing Unsloth model inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
 
 <!-- freetoken-rocm-2026-10-18 -->
 **October 18: FreeToken removed at the user's request.** Runtime, Desktop app,

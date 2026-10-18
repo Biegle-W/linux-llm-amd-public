@@ -1,5 +1,10 @@
 # Image and video generation on two RX 7900 XTX cards
 
+**Existing weights found after this guide was drafted:** the [Unsloth inventory](UNSLOTH-MODEL-INVENTORY-2026-10-18.md)
+contains Qwen-Image 2.1 BF16/Q4, two quantized Qwen text encoders, and H3 Q2
+with both VAEs and Q2/Q4 text encoders. Check reuse and loader compatibility
+before following download steps. The FP8 repository has text encoders only.
+
 Research checked October 18, 2026. **Proposed setup only: not installed or locally
 benchmarked.** Current workstation: i5-13600KF, two 24 GB gfx1100 cards, CPU
 PCIe4 x8/x8, 32 GB RAM with another 32 GB pending, no native ROCm peer access.
