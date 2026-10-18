@@ -115,6 +115,16 @@ def run(args):
     env.pop('NCCL_PROTO', None)
     if args.protocol != 'auto':
         env['NCCL_PROTO'] = args.protocol
+    launch = None
+    if args.launch_json:
+        launch = json.loads(Path(args.launch_json).read_text())
+        if not re.fullmatch(r'[a-z0-9-]+', launch['case']):
+            raise ValueError('Invalid isolated case name')
+        cmd = launch['command']
+        if not isinstance(cmd, list) or not cmd or not all(isinstance(v,str) for v in cmd):
+            raise ValueError('Isolated command must be a nonempty string list')
+        env.update(launch.get('env', {}))
+        context = launch.get('context', context)
     depth = args.steps if args.mode == 'mtp' else (8 if args.mode == 'dflash' else 0)
     case = f'{args.engine}-{args.mode}{depth}-{args.protocol}-verify{args.verify}'
     if args.verify_walk_fix:
@@ -125,11 +135,23 @@ def run(args):
         case += f'-{args.vllm_dtype}-{args.vllm_kv}-chunk{args.chunk}-compile{args.compile_mode}'
         if args.rdna_prefill:
             case += '-rdna-prefill'
+    if launch:
+        case = launch['case']
+        if args.tag:
+            case += '-' + args.tag
     OUT.mkdir(parents=True, exist_ok=True)
     result = dict(case=case, settings=vars(args), context=context, status='running', trials=[],
                   peak_vram_bytes=[0,0], peak_clock_mhz=[0,0], peak_power_watts=[0,0], peak_temp_celsius=[0,0], peak_junction_celsius=[0,0], peak_memory_celsius=[0,0], min_host_available_bytes=2**63,
                   max_nonresident_vram_bytes=0, max_swap_growth_bytes=0, max_owned_swap_growth_bytes=0,
                   max_startup_swap_growth_bytes=0, alerts=[])
+    if launch:
+        result['effective_launch'] = launch
+    result['fan_settings_before'] = []
+    result['peak_fan_rpm'] = [0,0]
+    for device in devices:
+        hwmon = next((device/'hwmon').glob('hwmon*'))
+        result['fan_settings_before'].append({name:(hwmon/name).read_text().strip()
+            for name in ('pwm1_enable','pwm1','fan1_input') if (hwmon/name).exists()})
     done = threading.Event()
     ready = threading.Event()
     ready_swap = [None]
@@ -145,6 +167,8 @@ def run(args):
                         clock = next(int(re.search(r'(\d+)Mhz',line).group(1)) for line in (device/'pp_dpm_sclk').read_text().splitlines() if '*' in line)
                         result['peak_clock_mhz'][index] = max(clock,result['peak_clock_mhz'][index])
                         hwmon = next((device/'hwmon').glob('hwmon*'))
+                        if (hwmon/'fan1_input').exists():
+                            result['peak_fan_rpm'][index] = max(result['peak_fan_rpm'][index],int((hwmon/'fan1_input').read_text()))
                         power = int((hwmon/'power1_average').read_text())/1e6
                         temp = int((hwmon/'temp1_input').read_text())/1000
                         result['peak_power_watts'][index] = max(power,result['peak_power_watts'][index])
@@ -221,9 +245,9 @@ def run(args):
                 result['quality']['irregular_reverse'] = json.loads(reverse['content']) == [-6,37,12,9,64,-29,0,51,3,88,-4,17]
                 assert result['quality']['irregular_reverse'], 'Irregular reversal check failed'
             print('QUALITY passed',case,flush=True)
-            for prompt in PROMPTS.values():
+            for prompt in ([] if args.quality_only else PROMPTS.values()):
                 stream(prompt)  # Exclude warm-up from medians.
-            for repeat in range(args.repeats):
+            for repeat in range(0 if args.quality_only else args.repeats):
                 for name,prompt in PROMPTS.items():
                     before = vllm_spec_counters() if args.engine == 'vllm' else {}
                     trial = stream(prompt)
@@ -238,7 +262,7 @@ def run(args):
                     result['trials'].append(trial)
                     print('TRIAL',case,name,repeat,round(trial['decode_tps_approx'],2),round(trial['ttft_seconds'],3),flush=True)
             result['medians'] = {name:dict(decode_tps=statistics.median(t['decode_tps_approx'] for t in result['trials'] if t['workload']==name),
-                                         ttft_seconds=statistics.median(t['ttft_seconds'] for t in result['trials'] if t['workload']==name)) for name in PROMPTS}
+                                         ttft_seconds=statistics.median(t['ttft_seconds'] for t in result['trials'] if t['workload']==name)) for name in PROMPTS} if result['trials'] else {}
             if args.long:
                 prompt,codes = base.marker_prompt(context-1500)
                 if args.engine == 'sglang':
@@ -309,6 +333,8 @@ if __name__ == '__main__':
     parser.add_argument('--repeats',type=int,default=3)
     parser.add_argument('--long',action='store_true')
     parser.add_argument('--tag',default='',help='Separate a repeat batch from earlier measurements')
+    parser.add_argument('--quality-only',action='store_true',help='Skip short timings; functional and explicitly requested long/book checks still run')
+    parser.add_argument('--launch-json',help='Explicit isolated command/env/context/case; leaves saved profiles unchanged')
     parser.add_argument('--benchy-depth',type=int,nargs='+',default=None,help='Also run pinned llama-benchy 0.4.0 at these depths')
     args = parser.parse_args()
     if args.steps is None:

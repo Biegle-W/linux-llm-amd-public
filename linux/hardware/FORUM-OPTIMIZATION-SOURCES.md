@@ -73,10 +73,14 @@ Checked October 17, 2026; no runtime changes or new measurements.
   [gfx1100 deployment/port](https://github.com/mkadrlik/vllm-radiance-p2p), with
   Qwen3.8-27B AWQ INT4/group32, TP2 and MTP. This is more relevant than copying
   the R9700 FP8 command. Its advertised AWQ gain compares against its own W8A8
-  setup, not our already-INT4 GPTQ configuration. It requires working P2P and
+  setup, not our already-INT4 GPTQ configuration. Its published deployment assumes working P2P and
   describes IOMMU/ACS changes; those do not establish usable peer reads on our
   Intel root ports. Treat it as an isolated future comparison, not a proven
   upgrade or an instruction to change host security/topology settings.
+  Follow-up local testing established that the existing GPTQ checkpoint can run
+  using ordinary host transport with custom collectives disabled; working P2P
+  is a prerequisite for the peer fast path, not all Radiance execution. The
+  [local candidate tests](LEVEL1-TESTS-2026-10-17.md) record that distinction.
 - **ROCm sources:** [ajc9988's AMD AI links](https://forum.level1techs.com/t/the-twisted-links-of-amd-ai-collection-of-useful-links-for-amd-ai-dev-and-deployment/244053)
   provide official SDK/nightly entry points, but no measured speedup for this
   machine. An SDK replacement needs compatibility testing with the existing
@@ -92,3 +96,12 @@ are an isolated rocWMMA port or native HIP attention test with matching model,
 context and correctness checks. Direct-P2P collectives remain conditional on
 validated peer access. Do not replace the working production profiles merely
 because another machine has a higher headline rate.
+
+## Local validation
+
+[October 17–18 candidate measurements](LEVEL1-TESTS-2026-10-17.md) distinguish
+CPU-reference/model correctness checks, actual throughput, unsupported peer
+collectives and the fan comparison that still needs administrator access. The
+restored rocWMMA port reduced 16K-depth prefill from 1,001.78 to 465.65 t/s in
+the matched HIP pair; it is not enabled in production. Source-linked forum
+suggestions are candidates until the retained hardware profile is validated.

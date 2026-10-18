@@ -1,5 +1,14 @@
 # Sanitized Linux runtime handoff — October 17, 2026
 
+**October 17–18 Level1Techs tests:** retain the normal vLLM and Vulkan profiles.
+The isolated rocWMMA port passed 84 CPU-reference cases but reduced 16K prefill
+from 1,001.78 to 465.65 t/s. Radiance was tested separately with existing GPTQ
+weights, native host transport, and custom collectives disabled. Its optional
+AITER path needs a writable JIT directory in the read-only container. No new
+model quantization or normal launcher was added. The peer fast-path prerequisite
+remains false in both directions; manual fan A/B is pending administrator access.
+[Measurements and exact experimental scope](../hardware/LEVEL1-TESTS-2026-10-17.md).
+
 **October 17 forum research:** Level1Techs and lcz.me are both required research
 sources for HIP/ROCm/C++ tuning. Cite direct posts and primary implementation
 links in both repositories. [Source review and decisions](../hardware/FORUM-OPTIMIZATION-SOURCES.md)

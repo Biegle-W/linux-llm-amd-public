@@ -1,5 +1,27 @@
 # Local LLM reference setups
 
+<!-- level1-tests-2026-10-17 -->
+**October 17–18 Level1Techs candidate tests:** current production profiles are
+retained. All model trials use both RX 7900 XTX cards and 65,536 configured
+context; timed book depth reaches 16K plus the prompt/template. All rates are t/s.
+
+| Profile | Code / prose decode | Book PP / decode, depth 0 | Book PP / decode, depth 16K |
+|---|---:|---:|---:|
+| Current vLLM, MTP3 | 133.1 / 78.5 | 1556.0 / 92.6 | 1457.4 / 67.5 |
+| llama.cpp Vulkan, MTP3 | 79.4 / 45.5 | 1171.1 / 50.4 | 1031.3 / 51.5 |
+| llama.cpp HIP native, MTP3 | 67.0 / 40.9 | 1150.1 / 38.8 | 1001.8 / 36.0 |
+| llama.cpp restored rocWMMA | 65.8 / 35.3 | 979.7 / 44.4 | 465.7 / 46.7 |
+| Radiance ROCM_ATTN/AITER, MTP3 | 95.3 / 60.4 | 1606.6 / 60.0 | 1264.5 / 21.5 |
+| vLLM queue cap 1 trial | 124.7 / 73.6 | 1577.4 / 88.9 | 1420.5 / 64.8 |
+
+Three timed runs plus warm-up per workload; the HIP native/rocWMMA pair is
+matched, while cross-engine rows compare complete profiles and quant/cache
+formats differ. Restored rocWMMA passed 84 CPU-reference cases but reduced long
+prefill speed; Radiance used the existing GPTQ model. P2P remains unavailable;
+manual fan A/B still needs administrator access. See [measurements, sources and
+limits](linux/hardware/LEVEL1-TESTS-2026-10-17.md).
+<!-- /level1-tests-2026-10-17 -->
+
 **Research sources:** [Level1Techs](https://forum.level1techs.com/) and
 [lcz.me](https://lcz.me/) are now part of the standing HIP/ROCm/C++ research
 workflow. See the [source review and optimization decisions](linux/hardware/FORUM-OPTIMIZATION-SOURCES.md)

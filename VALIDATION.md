@@ -27,3 +27,11 @@ examples; operational inference validation used the private installation.
 October 17 forum review: documentation and maintenance-policy changes only.
 Source links and relative document targets were checked; public identity/secret
 scans were repeated. No inference or performance tests were rerun.
+
+October 17–18 Level1Techs experiments: the isolated head-256 rocWMMA port passed
+84 CPU-reference cases across two GPUs and off/on modes, followed by model/tools
+and benchmark checks. Current vLLM, native HIP, restored rocWMMA, Vulkan and
+Radiance comparisons are documented with contexts and quant/cache differences.
+No GPU peer-access prerequisite was available. Manual fan A/B remains pending.
+Only source, sanitized metrics and documentation are distributed; generated
+runtimes, model files, raw outputs and private paths remain excluded.

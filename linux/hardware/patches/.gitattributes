@@ -1,0 +1,2 @@
+# A single space marks a blank context line in a unified source patch.
+*.patch whitespace=-blank-at-eol
