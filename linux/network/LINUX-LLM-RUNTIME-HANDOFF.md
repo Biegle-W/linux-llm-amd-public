@@ -28,6 +28,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
   root port is a proposed remedy, not installed or validated hardware.
+- Second-GPU display output is under investigation: the owner reports BIOS
+  video but a black screen in Linux. Both AMD GPUs load successfully; the current
+  active monitor is Sapphire DP-1 at 4K/60 Hz. PowerColor outputs report disconnected
+  while inspected. No display fix or inference change was applied. See the
+  [display handoff findings](../hardware/DISPLAY-SECOND-GPU-2026-10-18.md).
 - At the earlier October 18 Q4-replacement check, the authenticated gateway listed
   **eight enabled profiles** and `nemotron-3.5-bolt` Q4 was running through the
   normal llama.cpp HIP backend in a visible terminal. Authenticated generation
@@ -281,6 +286,10 @@ or the Responses API. Browser CORS is not enabled; use a native client or a
 server-side connector. Tool-calling clients must execute tools and return results.
 
 ## Storage and runtime pins
+
+The Shared SATA drive was found unmounted after the latest reboot and restored
+with the existing UUID-checking storage helper. Model files were not moved or
+re-downloaded, and no inference backend was started.
 
 Linux runtime/repository root: `/opt/local-llm` on ext4 NVMe.
 Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
