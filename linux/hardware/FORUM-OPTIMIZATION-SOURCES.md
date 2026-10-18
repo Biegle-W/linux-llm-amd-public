@@ -141,3 +141,23 @@ VRAM. Keep layer splitting; the cache rejects tensor split mode. We did not add
 expert pruning, change router top-k, use CUDA-only cache forks, or install a new
 engine based solely on a forum speed claim. Test outcomes and limits are recorded
 separately in the local report linked above.
+
+## October 18: isolated FreeToken ROCm installation
+
+The Level1Techs FreeToken lead above now has a separate local ROCm source build,
+pinned to [8f49e0af98ba](https://github.com/FlashML-org/FreeToken/tree/8f49e0af98ba444dd261af69e82d5a1841778c68).
+[RDNA support merged in PR 132](https://github.com/FlashML-org/FreeToken/pull/132);
+the [upstream AMD guide](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/docs/install_amd.md)
+still describes an older Torch stack than current source requires. Official AMD
+Torch 2.14/ROCm 10.1 packages are isolated from production ROCm 7.2.3.
+
+Both local gfx1100 cards pass FP32/BF16 RCCL all-reduce/all-gather without P2P;
+this does **not** establish model TP2.
+[GGUF embeddings explicitly reject TP sharding](https://github.com/FlashML-org/FreeToken/blob/8f49e0af98ba444dd261af69e82d5a1841778c68/python/freetoken/layers/quantization/embedding/gguf.py).
+The user permits one GPU for FreeToken only. Two Qwen MoE loads were stopped
+by local swap guards; this is not a successful offload benchmark.
+
+The [lcz.me single-XTX/64 GB topic](https://lcz.me/topic/2059) discusses Strata,
+while the [Level1Techs FreeToken topic](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396)
+is the FreeToken research lead. Neither establishes this 32 GB machine's
+FreeToken serving speed. See the [exact build, tests and current limitations](../freetoken/README.md).

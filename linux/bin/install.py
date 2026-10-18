@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 
 ROOT = Path(__file__).resolve().parent
-COMMANDS = ('llm-llama', 'llm-sglang', 'llm-vllm', 'llm-strata', 'dsh', 'turnstone', 'llm-upgrade-check')
+COMMANDS = ('llm-llama', 'llm-sglang', 'llm-vllm', 'llm-strata', 'dsh', 'turnstone', 'llm-upgrade-check', 'ft-rocm')
 BEGIN = '# BEGIN local-llm SSH PATH'
 END = '# END local-llm SSH PATH'
 BLOCK = '''# BEGIN local-llm SSH PATH

@@ -22,8 +22,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
   pending. Old B1/B2/A2 troubleshooting notes describe the previous motherboard,
   not a diagnosis of the current board. Dense models keep GPU-resident weights;
   all three active MoEs now use CPU expert backing and GPU hot-expert caches.
-- Use **both AMD cards for every active model**. llama.cpp uses layer split 1:1;
-  SGLang/vLLM use TP2. There is no silent single-card fallback.
+- Use **both AMD cards for every production model**. llama.cpp uses layer split 1:1;
+  SGLang/vLLM use TP2. The user explicitly permits **one card for FreeToken only**
+  because its current GGUF embeddings cannot shard over TP2. No other engine
+  inherits this exception.
 - ROCm peer access is unavailable; TP2 works through host transport. Retain the
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
@@ -293,6 +295,8 @@ Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
 | vLLM | `0.32.0rc1.dev190+g3f1bcfd82.rocm723`, locally patched |
 | ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
 | Strata source, retained inactive | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
+| FreeToken, separate ROCm experiment | `8f49e0af98ba444dd261af69e82d5a1841778c68`, 0.1.3 |
+| FreeToken-only Torch / modular SDK / reported HIP | `2.14.0+rocm10.1.0` / `10.1.0` / `7.16.26385` |
 
 Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
 `dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
@@ -300,6 +304,40 @@ and private `dsh/data/network-access.json`. The installed SGLang wheel's generic
 version string is not a substitute for its pinned fork revision. User preference
 is latest capable upstream development/nightly candidates, with exact pins and
 local validation before activation; this handoff is not permission to auto-upgrade.
+
+## FreeToken ROCm experiment
+
+Installed separately under `freetoken/` in the Linux runtime root. The new
+PATH command is `ft-rocm`; the original `ft` and NVIDIA-only FreeToken Desktop
+beta remain intact. This is an experimental AMD engine source build, not an
+AMD Desktop installer. Linux binaries/environments cannot be reused by Windows.
+
+Only FreeToken may use a single RX 7900 XTX, default GPU1. Both cards pass native
+RCCL communication tests, but the upstream GGUF embedding implementation rejects
+TP2. Existing production profiles/catalog IDs and dual-card policies remain.
+
+CPU-backed experts plus a bounded GPU expert cache remain required for MoEs.
+Two Qwen 35B/8K startup attempts with a 6 GiB cache were stopped by local worker
+swap limits (449 MiB and 1,110 MiB); no VRAM spill was observed. They did not
+reach validated generation. Retry offload separately after the extra RAM arrives;
+this does not prove the models inherently require 64 GB.
+
+Dense Qwen 27B Q4 passed arithmetic, JSON and a complete tool-call/result
+round trip on GPU1 at 8,192 context and prefill chunks of 128. The first 256-token
+chunk trial failed in upstream Q6_K dispatch; the wrapper caps chunks at 128.
+Peak GPU1 VRAM was 18.97 GiB with no worker swap or VRAM spill. A 100-token code
+probe took 2.584 s (38.7 output t/s end-to-end, not isolated decode throughput).
+Full 8K filling and MTP remain untested. Use `ft-rocm qwen` after closing the
+existing inference terminal. Its experimental loopback API is
+`http://127.0.0.1:1919/v1`, model `qwen3.8-27b-q4-freetoken`.
+Exact build and [validation report](../freetoken/README.md).
+
+FreeToken has not been added to DSH, the authenticated LAN/Tailscale gateway or
+other engines' automatic process-kill targets. Raw serving defaults are restricted
+to one GPU and refuse occupied inference ports. Close its own terminal before
+starting another engine. Do not replace production ROCm with its isolated SDK.
+Source links, dependency patch, reproduction and validation limits are in the
+report above and [both forums' source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md).
 
 ## Retained Strata and retired setups
 

@@ -69,3 +69,13 @@ MoE models. Expert caching is distinct from KV/prompt caching; do not label
 backend's real cache implementation and MTP behavior before activation. Keep
 Strata's larger model deferred until its RAM and dual-HIP validation pass.
 Do not silently re-enable full-GPU-only MoE defaults during later updates.
+
+## FreeToken AMD exception - October 18
+
+The user explicitly permits one RX 7900 XTX for FreeToken only while its
+GGUF model implementation lacks TP2. Keep both GPUs required for every other
+engine. Install FreeToken ROCm separately from the existing NVIDIA Desktop beta;
+do not replace its `ft` command or CUDA environment. CPU-backed experts plus a
+bounded GPU hot-expert cache remain required for MoE serving. Keep automatic
+shutdown targets limited to the previously authorized engines; do not silently
+add FreeToken to other launchers' process-kill lists.

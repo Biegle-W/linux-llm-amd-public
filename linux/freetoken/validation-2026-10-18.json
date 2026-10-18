@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-18",
+  "source": "8f49e0af98ba444dd261af69e82d5a1841778c68",
+  "runtime": {
+    "torch": "2.14.0+rocm10.1.0",
+    "hip": "7.16.26385",
+    "devices": [
+      {
+        "index": 0,
+        "name": "AMD Radeon RX 7900 XTX",
+        "architecture": "gfx1100"
+      },
+      {
+        "index": 1,
+        "name": "AMD Radeon RX 7900 XTX",
+        "architecture": "gfx1100"
+      }
+    ],
+    "gpu_calculations": true,
+    "collectives": "FP32/BF16 all-reduce and all-gather passed on both GPUs",
+    "model_serving": "not established by this check",
+    "freetoken": "0.1.3",
+    "native_extensions": true
+  },
+  "cli_tests_passed": 5,
+  "upstream_rocm_tests_passed": 7,
+  "dependency_check": "passed",
+  "tp2_model_serving": "blocked by upstream GGUF embedding sharding restriction",
+  "moe_startup_attempts": [
+    {
+      "model": "qwen3.6-35b-a3b-freetoken",
+      "gpu": 1,
+      "context": 8192,
+      "expert_cache_gib": 6,
+      "checks": {},
+      "passed": false,
+      "error": "FreeToken exited -15",
+      "telemetry": {
+        "min_available_ram_gib": 12.471,
+        "max_worker_swap_mib": 449.402,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.042,
+          5.972
+        ]
+      },
+      "alerts": [
+        {
+          "available_gib": 13.139766693115234,
+          "swap_mib": 449.40234375,
+          "spill_mib": 0.0
+        }
+      ]
+    },
+    {
+      "model": "qwen3.6-35b-a3b-freetoken",
+      "gpu": 1,
+      "context": 8192,
+      "expert_cache_gib": 6,
+      "checks": {},
+      "passed": false,
+      "error": "FreeToken exited -15",
+      "telemetry": {
+        "min_available_ram_gib": 6.373,
+        "max_worker_swap_mib": 1109.512,
+        "max_vram_spill_mib": 0.0,
+        "peak_vram_gib": [
+          0.057,
+          6.202
+        ]
+      },
+      "alerts": [
+        {
+          "available_gib": 6.8287353515625,
+          "swap_mib": 1109.51171875,
+          "spill_mib": 0.0
+        }
+      ]
+    }
+  ],
+  "dense_serving": {
+    "model": "qwen3.8-27b-q4-freetoken",
+    "gpu": 1,
+    "context": 8192,
+    "prefill_chunk": 128,
+    "expert_cache_gib": 0,
+    "checks": {
+      "arithmetic": true,
+      "json": true,
+      "tools_roundtrip": true
+    },
+    "passed": true,
+    "ready_seconds": 64.08,
+    "startup_worker_swap_mib": 0.0,
+    "code_probe": {
+      "usage": {
+        "prompt_tokens": 35,
+        "completion_tokens": 100,
+        "total_tokens": 135
+      },
+      "elapsed_seconds": 2.584,
+      "timings": null
+    },
+    "telemetry": {
+      "min_available_ram_gib": 20.07,
+      "max_worker_swap_mib": 0.0,
+      "max_vram_spill_mib": 0.0,
+      "peak_vram_gib": [
+        0.026,
+        18.971
+      ]
+    },
+    "alerts": []
+  },
+  "dense_prefill256_failure": {
+    "arithmetic": true,
+    "json": true,
+    "tools": false,
+    "cause": "upstream ggml Q6_K dispatch has no selected kernel at M=256 on gfx1100",
+    "resolution": "128-token chunks passed tool-call round trip; wrapper caps chunks at 128"
+  }
+}

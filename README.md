@@ -1,5 +1,17 @@
 # Local LLM reference setups
 
+<!-- freetoken-rocm-2026-10-18 -->
+**October 18 FreeToken AMD experiment:** installed current upstream source in a
+separate ROCm environment as `ft-rocm`. The existing NVIDIA Desktop beta and
+`ft` are preserved. Only FreeToken has the user's **single-7900-XTX exception**;
+other engines remain dual-GPU. `ft-rocm qwen` passed Qwen 27B Q4 arithmetic,
+JSON and tools at **8K / GPU1**; 100-token short probe: **38.7 output t/s
+end-to-end** (includes prefill/API, one run; not isolated decode or a comparison).
+GGUF TP2 is unsupported upstream. CPU-backed MoE
+startup hit bounded swap guards and is not a validated replacement for the
+working llama.cpp offload profiles. [Build, usage and validation](linux/freetoken/README.md).
+<!-- /freetoken-rocm-2026-10-18 -->
+
 <!-- moe-offload-2026-10-18 -->
 **October 18 current MoE policy:** Qwen 35B-A3B, Empero and Nemotron Bolt now
 use CPU expert storage plus real GPU hot-expert caches on **both RX 7900 XTX**
