@@ -1,5 +1,16 @@
 # Local LLM reference setups
 
+<!-- cleanup-review-2026-10-18 -->
+**October 18 workspace cleanup — pending approval:** the review identifies
+approximately **55.39 GiB** of obsolete runtime originals, old CUDA caches,
+downloaded installers, unselected experiment build/cache files and package cache.
+No deletion has been performed. Active AMD toolchains, compiled kernel caches,
+model weights, Strata preparation and private state are excluded.
+[Exact scope and consequences](linux/hardware/CLEANUP-REVIEW-2026-10-18.md).
+The [NVIDIA recovery archive](linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md)
+is verified on Shared SATA (10.16 GiB); its originals remain pending approval.
+<!-- /cleanup-review-2026-10-18 -->
+
 <!-- consolidated-handoff-2026-10-18 -->
 **Shared handoff consolidated October 18:** use the single
 [current Linux/Windows-client guide](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).

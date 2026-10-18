@@ -1,0 +1,122 @@
+{
+  "status": "PENDING USER APPROVAL \u2014 no deletion performed",
+  "date": "2026-10-18",
+  "workspace_relative_paths": true,
+  "groups": [
+    {
+      "id": "A",
+      "description": "NVIDIA rollback originals",
+      "paths": [
+        ".private-backups/runtime-upgrade-2026-10-14",
+        "llm-tools/llama-flash-mtp-src"
+      ],
+      "allocated_regular_bytes": 25895256064
+    },
+    {
+      "id": "B",
+      "description": "obsolete CUDA kernel caches",
+      "paths": [
+        "llm-tools/runtime-cache/vllm",
+        "llm-tools/runtime-cache/sglang",
+        "llm-tools/runtime-cache/sglang-flash-next",
+        "llm-tools/runtime-cache/flashinfer",
+        "llm-tools/runtime-cache/nvidia"
+      ],
+      "allocated_regular_bytes": 6704005120
+    },
+    {
+      "id": "C",
+      "description": "downloaded ROCm installers",
+      "paths": [
+        "hardware/generated/amd-qwen/comgr_3.0.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hip-dev_7.2.53211.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hip-runtime-amd_7.2.53211.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipblas-common-dev_1.4.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipblas-dev_3.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipblas_3.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipblaslt-dev_1.2.2.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipblaslt_1.2.2.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipcc_1.1.1.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipcub-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipfft-dev_1.0.22.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipfft_1.0.22.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hiprand-dev_3.1.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hiprand_3.1.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipsolver-dev_3.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipsolver_3.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipsparse-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipsparse_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hipsparselt_0.2.6.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hsa-amd-aqlprofile_1.0.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hsa-rocr-dev_1.18.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/hsa-rocr_1.18.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/libevent-core-2.1-7t64_2.1.12-stable-10ubuntu0.2_amd64.deb",
+        "hardware/generated/amd-qwen/libevent-pthreads-2.1-7t64_2.1.12-stable-10ubuntu0.2_amd64.deb",
+        "hardware/generated/amd-qwen/libfabric1_2.1.0-1.1build1_amd64.deb",
+        "hardware/generated/amd-qwen/libhwloc-plugins_2.13.0-2_amd64.deb",
+        "hardware/generated/amd-qwen/libhwloc15_2.13.0-2_amd64.deb",
+        "hardware/generated/amd-qwen/libibverbs1_61.0-2ubuntu3_amd64.deb",
+        "hardware/generated/amd-qwen/libicu74_74.2-1ubuntu3.1_amd64.deb",
+        "hardware/generated/amd-qwen/libopenmpi3t64_4.1.6-7ubuntu2_amd64.deb",
+        "hardware/generated/amd-qwen/libopenmpi40_5.0.10-1_amd64.deb",
+        "hardware/generated/amd-qwen/libpmix2t64_6.0.0+really5.0.9-3build1_amd64.deb",
+        "hardware/generated/amd-qwen/libpsm2-2_11.2.185-2.1build1_amd64.deb",
+        "hardware/generated/amd-qwen/librdmacm1t64_61.0-2ubuntu3_amd64.deb",
+        "hardware/generated/amd-qwen/libucc1_1.7.0~rc1-1_amd64.deb",
+        "hardware/generated/amd-qwen/libucx0_1.20.0+ds-4ubuntu2_amd64.deb",
+        "hardware/generated/amd-qwen/libxml2_2.9.14+dfsg-1.3ubuntu3.10_amd64.deb",
+        "hardware/generated/amd-qwen/miopen-hip_3.5.1.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rccl-dev_2.27.7.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rccl_2.27.7.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocblas-dev_5.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocblas_5.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocfft_1.0.36.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocm-core_7.2.3.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocm-device-libs_1.0.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocm-llvm_22.0.0.26084.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocm-smi-lib_7.8.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocminfo_1.0.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocprim-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocprofiler-register_0.6.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocprofiler-sdk-rocpd_1.1.0-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocprofiler-sdk-roctx_1.1.0-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocprofiler-sdk_1.1.0-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocrand-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocrand_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocsolver-dev_3.32.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocsolver_3.32.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocsparse-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocsparse_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/rocthrust-dev_4.2.0.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/roctracer-dev_4.1.70203.70203-90~24.04_amd64.deb",
+        "hardware/generated/amd-qwen/roctracer_4.1.70203.70203-90~24.04_amd64.deb"
+      ],
+      "allocated_regular_bytes": 4671483904
+    },
+    {
+      "id": "D",
+      "description": "unselected experiment caches/build",
+      "paths": [
+        "hardware/generated/level1-tests-2026-10-17/cache",
+        "hardware/generated/level1-tests-2026-10-17/test-rw",
+        "hardware/generated/level1-tests-2026-10-17/llama-rocwmma/build-test"
+      ],
+      "allocated_regular_bytes": 3685249024
+    },
+    {
+      "id": "E",
+      "description": "UV package cache",
+      "paths": [
+        "llm-tools/runtime-cache/uv"
+      ],
+      "allocated_regular_bytes": 18516279296
+    }
+  ],
+  "estimated_reclaimable_regular_bytes": 59472261120,
+  "rules": [
+    "Only exact listed files/directories are candidates, including descendants of listed directories.",
+    "No deletion before explicit user approval.",
+    "Recheck active references, running workers and filesystem inventory before an approved deletion.",
+    "Group A requires a verified NVIDIA recovery archive outside this workspace."
+  ]
+}

@@ -1,5 +1,10 @@
 # Previous dual-NVIDIA Linux setup
 
+**Archive status, October 18:** this tree remains the historical configuration
+snapshot. Offline NVIDIA rollback files and research were separately archived
+while preparing the AMD workspace cleanup; no installed runtime or model is
+included in this public tree. See [archive scope and version boundaries](../linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md).
+
 Historical reference from October 15, 2026, before the AMD migration:
 RTX 4070 12 GB + RTX 3060 12 GB, Intel i5-13600KF, 64 GB RAM and approximately
 33 GB swap. GPU order is PCI order: 4070 = CUDA0; 3060 = CUDA1. Both cards were

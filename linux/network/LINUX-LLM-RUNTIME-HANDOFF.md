@@ -272,6 +272,26 @@ claim. Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and
 GPT-OSS-20B/120B, Qwen 27B Q5, Bonsai 2 and old Nemotron Lightning setups are
 retired. Historical NVIDIA/Windows reference snapshots remain in the public repo.
 
+### Workspace archive and pending cleanup — October 18
+
+The retired NVIDIA recovery collection is now in
+`/mnt/shared/LLM-ARCHIVE/NVIDIA/2026-10-18/nvidia-recovery.tar.zst` (example mount):
+10.16 GiB compressed, with `MANIFEST.json`, `SHA256SUMS` and recovery instructions.
+Full tar content/metadata comparison passed. It includes old pre-October-14
+rollback environments and the later configuration snapshot; these have different
+versions and must not be treated as one tested runtime. See the
+[archive boundaries and recovery notes](../hardware/NVIDIA-ARCHIVE-2026-10-18.md).
+
+**No source copies or caches have been deleted.** A
+[review awaiting user confirmation](../hardware/CLEANUP-REVIEW-2026-10-18.md)
+proposes about 55.39 GiB of ignored NVIDIA originals, old CUDA kernels, downloaded
+ROCm installer packages, unselected test builds/caches and UV package cache.
+Current models, active ROCm kernel cache and toolchains remain. In particular,
+`llm-tools/cuda-build` is still required for AMD C++ builds/JIT. No runtime
+configuration or benchmark result changed. The public NVIDIA/Windows reference
+trees and historical measurements remain available; private binary archives are
+excluded from Git. Only explicitly approved paths may be removed later.
+
 After stable 64 GB RAM is installed, `python3 hardware/check-strata-ready.py`
 checks prerequisites; exit zero is not proof of successful inference. A future
 Strata migration must validate **both AMD GPUs**, HIP kernel/library compatibility,
