@@ -209,3 +209,46 @@ the latter's AI-assistant reply is not firsthand validation.
 locutusofborg780, July 16, i5-12600K/32 GB/9070 XT, shows why rollback/pinning
 matters, not a speed prediction for this machine. Direct upstream model, device-node,
 H3-correctness and archive-status sources are linked beside the guide's claims.
+
+## October 18 image/video model fit assessment
+
+Checked October 18, 2026; forum results are reports, not local measurements.
+
+- [lcz.me 1168](https://lcz.me/topic/1168), Ang Lee (post date not rendered):
+  single RX 7900 XTX, 64 GiB guest RAM; H3 pruned INT8 ConvRot, NVFP4-AWQ
+  encoder, matched 8-step Turbo LoRA, 1024x768 / 175 frames / muted audio.
+  Reports about 445 seconds. Different RAM, precision, steps and workload from
+  the local failed 30-step Q2 render; no speed ratio is valid. The listed
+  attention settings are not blindly reproduced: current official Comfy docs
+  warn that Comfy Kitchen attention does not support INT8 ConvRot checkpoints.
+- [lcz.me 2050](https://lcz.me/topic/2050), perter (date not rendered):
+  Viggle Qwen-Image 2.1 Turbo v0.3, 6-step schedule and LoRA workflows.
+  Its 8/30-second image timings lack matching XTX hardware context; no local
+  timing prediction is made. [Viggle's own workflows](https://huggingface.co/Viggle/Qwen-Image-2.1-viggle-turbo/tree/main/comfyui)
+  confirm v0.3 workflow files. The [official Comfy Qwen card](https://huggingface.co/Comfy-Org/Qwen-Image-2.1)
+  separately documents an 8-step Turbo model/LoRA; these are distinct schedules.
+- [lcz.me 1469](https://lcz.me/topic/1469), Chi Kui Chan (date not rendered):
+  dual R9700 32 GB, 64 GB RAM, mixed INT8 H3 and custom Dual-Sage attention.
+  Higher-resolution pass uses about 27.5-30.3 GB on one GPU; this is not a
+  ready-to-copy recipe for dual 24 GB RDNA3. Its 1.5675x figure is a synthetic
+  attention result, not full-workflow speedup.
+- [Level1Techs 252735](https://forum.level1techs.com/t/my-experiences-with-comfyui-on-an-rx-9070xt/252735),
+  locutusofborg780, July 16 / August 18, 2026: RX 9070 XT, i5-12600K, 32 GB;
+  reports version-dependent OOM/stalls and RAM pressure. Supports isolation and
+  measured version selection, not extrapolating RDNA4 timings or downgrading
+  this gfx1100 machine blindly. No matching dual-XTX H3 comparison was found
+  there in this search.
+- [Comfy H3 issue 15314](https://github.com/Comfy-Org/ComfyUI/issues/15314),
+  October 15 and 18 firsthand gfx1100 updates report clean newer-stack I2V/R2V
+  results with INT8/W6A8 variants. These are PyTorch/Comfy results, not proof
+  that Unsloth's sd.cpp corruption has the same cause or fix.
+  [Official H3 guide](https://docs.comfy.org/tutorials/video/minimax/minimax-h3)
+  documents 16 GB W6A8, 21 GB INT8, mode-specific Turbo adapters and attention
+  constraints. [Comfy H3 model card](https://huggingface.co/Comfy-Org/MiniMax-H3)
+  states its NVFP4-AWQ encoder does not require Blackwell; the label does not
+  establish native FP4 acceleration on RDNA3. Validate the loader/kernel path.
+
+Recommendation is a test order, not a proven optimum: retain Qwen base as a
+baseline, test matched Turbo for images, then a native H3 INT8 or W6A8 candidate
+with the correct fl2va Turbo adapter and explicit two-card component placement.
+Do not delete existing weights before a replacement produces correct output.

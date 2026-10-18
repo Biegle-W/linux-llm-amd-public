@@ -364,6 +364,9 @@ GGUF's normalization/1D weights retain floating-point precision. Root cause
 is unconfirmed, and no working image/video profile or speed result is claimed.
 [Diagnostic evidence and next validation](../hardware/UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md).
 No runtime replacement, download or new inference test was performed.
+A [forum-based model fit assessment](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md#hardware-fit-assessment--october-18-follow-up)
+now distinguishes the downloaded base/Q2 files from untested Turbo/INT8/W6A8
+candidates. Recommendations are a test order, not validated production changes.
 
 ## Retained Strata and retired setups
 

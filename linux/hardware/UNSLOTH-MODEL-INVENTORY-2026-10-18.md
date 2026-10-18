@@ -62,3 +62,29 @@ or delete Unsloth's snapshots while it still references them.
 The [ComfyUI walkthrough](IMAGE-VIDEO-SETUP-2026-10-18.md) remains a proposal;
 this inventory supersedes any assumption there that no generation weights are
 available. Prefer testing reuse of the existing Qwen/H3 components first.
+
+## Hardware fit assessment — October 18 follow-up
+
+The downloaded families are reasonable candidates, but this inventory does not
+establish the best quants or fastest runnable profiles for two 24 GB gfx1100
+cards and the last verified 32 GB host RAM. No new benchmark was run.
+
+- Qwen base BF16 is useful as a quality baseline; Q4 is a compact alternative.
+  Neither is the speed-oriented Turbo model. Keep existing components until a
+  compatible Comfy loader is verified. An INT8 text encoder is a useful candidate,
+  not a proven faster option than BF16 on this installation.
+- For fast images, test the official 8-step Qwen Turbo model/LoRA first, or a
+  separately tested Viggle v0.3 6-step workflow. Do not apply Turbo schedules to
+  the unmodified base. These adapters/models are not downloaded yet.
+- H3 Q2 plus Q2/Q4 text encoders is a memory-saving sd.cpp collection, not a
+  locally validated quality/speed optimum. The existing Q2 render is corrupt;
+  that does not prove Q2 caused it. Native Comfy H3 INT8 plus a matched 8-step
+  fl2va Turbo LoRA has closer firsthand XTX evidence. W6A8 is a smaller native
+  candidate when INT8 activation headroom is inadequate, not an established
+  local winner. Existing H3 VAEs may be reused through compatible loaders.
+- Allocate denoising and text/VAE work explicitly between cards. Two cards do
+  not automatically provide one 48 GB allocation, or double generation speed.
+  This placement remains unvalidated locally.
+
+See the [forum source assessment](FORUM-OPTIMIZATION-SOURCES.md#october-18-imagevideo-model-fit-assessment).
+No models were added, removed or changed following this comparison.
