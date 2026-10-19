@@ -353,6 +353,12 @@ Adapt paths, GPU selection, memory budgets and runtime versions before launching
 
 ## Linux
 
+October 19: **Strata App** is available in the application menu with its official
+bundled desktop logo. It opens the existing AMD AppImage; **Strata Q3** remains
+the separate managed DSH backend. See [app-menu installation](linux/launchers/STRATA-APP.md).
+Menu registration was validated without starting the app or another model.
+
+
 Official upstream logos/favicons replaced the initial custom artwork on
 October 18 for llama.cpp, SGLang, vLLM, Strata Q3, dsh and Turnstone.
 [Logo sources, pinned checksums and original licenses](linux/launchers/icons/README.md)

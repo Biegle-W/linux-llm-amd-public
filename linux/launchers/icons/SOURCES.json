@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-18",
+  "updated": "2026-10-19",
   "policy": "Use unchanged official project assets; no generated or custom replacement logos.",
   "assets": [
     {
@@ -105,6 +105,20 @@
       "extraction": "Official icon copied unchanged; matches frontend package 1.55.18",
       "official_upstream_verified": true,
       "repository_license": "GPL-3.0"
+    },
+    {
+      "app": "Strata App",
+      "file": "strata-app.png",
+      "repository": "Niko1221/Strata",
+      "source_url": "https://github.com/Niko1221/Strata#option-a-the-strata-app",
+      "distribution": "Strata-0.2.0-beta-linux-amd-rx7900.AppImage",
+      "upstream_path": "usr/share/icons/hicolor/512x512/apps/strata-desktop.png",
+      "sha256": "3b26050bea645356aa3fad98cc4f42dc35ac09ffbc57b9485639fc031b6b97b1",
+      "bytes": 9537,
+      "repository_license": "MIT",
+      "license_file": "licenses/strata.LICENSE",
+      "extraction": "Official 512x512 PNG extracted unchanged from the existing AMD AppImage using unsquashfs; application was not started.",
+      "official_upstream_verified": true
     }
   ]
 }

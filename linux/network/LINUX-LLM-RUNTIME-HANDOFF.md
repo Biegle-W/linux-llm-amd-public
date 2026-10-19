@@ -136,6 +136,15 @@ catalog entries and must not be copied into a client configuration.
 
 ## Start, stop and switch
 
+October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
+AppImage, with its official bundled 512×512 logo. The installed entry is
+`~/.local/share/applications/Strata.desktop`; icon name is `strata-desktop`.
+Tracked source and reinstall instructions: [launchers/STRATA-APP.md](../launchers/STRATA-APP.md).
+**Strata Q3** and `llm-strata` still start the managed DSH backend. The app owns
+its own settings/model worker; it does not inherit the managed profile or memory
+watchdog. Avoid loading both workers concurrently. Registration was validated
+without starting the app or interrupting the existing backend.
+
 Desktop icon update, October 18: all six LLM launchers now use official upstream
 logo/favicon assets (llama.cpp, SGLang, vLLM, Strata Q3, dsh and Turnstone),
 replacing the initial custom icons. See [logo sources and original licenses](../launchers/icons/README.md)

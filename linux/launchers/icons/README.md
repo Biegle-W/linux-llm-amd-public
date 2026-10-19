@@ -1,6 +1,6 @@
 # Official desktop launcher logos
 
-All six launchers use project-owned logo/favicon assets from the official
+The launchers use project-owned logo/favicon assets from the official
 repositories listed below. The previous custom artwork has been replaced.
 Artwork is copied without redrawing, recoloring or adding a background; the
 desktop scales each icon normally. Turnstone embeds its official SVG in its
@@ -33,3 +33,12 @@ location, update the absolute `Icon=` paths alongside `Exec=` and `Path=` values
 then copy the launchers to your Desktop. Preserve their executable bits and
 existing desktop trust state. Backend commands, terminal settings and models
 are unaffected by this icon replacement.
+
+Strata App uses `strata-app.png`, the unchanged 512×512 desktop logo bundled in
+`Strata-0.2.0-beta-linux-amd-rx7900.AppImage` at
+`usr/share/icons/hicolor/512x512/apps/strata-desktop.png`.
+See the [official Strata App distribution](https://github.com/Niko1221/Strata#option-a-the-strata-app)
+and the retained [Strata license](licenses/strata.LICENSE). Its checksum is in
+`SOURCES.json`; this asset comes from the binary distribution rather than a
+claimed source commit. Install it as `strata-desktop.png` in the user hicolor
+icon directory, as described in [the app-menu setup](../STRATA-APP.md).

@@ -41,3 +41,6 @@
 **/runtime/comfyui/
 **/graphics/generated/
 **/graphics/outputs/
+
+# Desktop app distributions are installed locally, never uploaded
+*.AppImage
