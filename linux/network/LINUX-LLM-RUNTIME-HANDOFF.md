@@ -572,6 +572,16 @@ Different platforms' headline speeds are not local measurements.
 
 ## Troubleshooting and maintenance
 
+October 19 public documentation cleanup: the
+[public README](https://github.com/Biegle-W/local-llm-public#amd-latest-setup-and-results)
+now presents two hardware result sets: latest dual-AMD setup and archived dual-NVIDIA.
+Each model/backend has context, prefill, TTFT and decode fields, with measured
+build/date, missing metrics and older-build timings labeled. Short and long-input
+workloads are separate. The old public README is preserved in
+`linux/hardware/README-ARCHIVE-2026-10-19.md` in the public repository; the dated
+benchmark ledger retains all intermediate experiments. No benchmark, runtime,
+profile, launcher or client endpoint changed during this documentation task.
+
 | Symptom | Action |
 |---|---|
 | Terminal closes immediately | vLLM now preserves startup errors; inspect its launcher log. Check per-GPU free VRAM and runtime probe. |

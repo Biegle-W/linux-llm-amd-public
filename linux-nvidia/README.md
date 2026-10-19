@@ -81,7 +81,7 @@ larger pool caused a long-prompt CUDA OOM. Strata retains the process-local
 
 ## Saved benchmarks
 
-See the [public README benchmark tables](../README.md#previous-rtx-4070-12-gb--rtx-3060-12-gb)
+See the [public README NVIDIA result set](../README.md#nvidia-archived-setup-and-results)
 for per-model prefill/decode, the direct HyperQwen comparison, and longer-input
 results, plus the October 15 INT8-MLP TTFT comparison. Measurements retain their
 original dates, runtime versions and settings; earlier decode results predate

@@ -5,6 +5,29 @@ the October 19 Strata optimization adds fresh measurements and validation. Dates
 This is the index of measured updates, including older hardware and retired
 profiles; it does not imply that every historical configuration remains installed.
 
+## October 19 publication: two hardware result sets
+
+The public README now groups results into the current dual-AMD setup and the
+archived dual-NVIDIA setup, with per-model/backend context, prefill, TTFT and
+decode. This is a saved-evidence reorganization, not a runtime update or a new
+benchmark. The newest llama.cpp build has functional checks only; its older
+speeds remain explicitly dated. Missing metrics stay unmeasured.
+
+Additional short TTFT medians below are extracted from existing curated timing
+records, not inferred from native prompt durations. Values are seconds, code /
+prose; their decode rates and methods remain in the dated sections below.
+
+| Hardware / measured profile | Short TTFT s | Saved source |
+|---|---|---|
+| Dual AMD, llama.cpp Vulkan Qwen Q4/MTP3, old `f12aaa3` | 0.127 / 0.124 | [Level1 result record](level1-tests-2026-10-17.json), `llama-current-vulkan-q8-mtp3` medians |
+| Dual AMD, SGLang repaired DFlash2 `f84475c` | 0.100 / 0.098 | [Clean-tuning record](dual-tuning-clean-2026-10-17.json), `sglang-dflash8-auto-verify1-walkfix-fixed` medians |
+| Dual AMD, SGLang repaired MTP3 `f84475c` | 0.101 / 0.090 | Same record, `sglang-mtp3-auto-verify1-walkfix-fixed` medians |
+| Dual AMD, vLLM dev329 MTP3 | 0.069 / 0.091 | [Upgrade record](runtime-upgrade-2026-10-18.json), median of three timed trials/task |
+
+Strata's saved native prompt durations and full-request wall times are not
+relabeled as TTFT. The previous public README is retained as a historical
+publication snapshot in the public tree, with relative source links adjusted.
+
 ## How to read the results
 
 - Context is the configured **total token budget**, including instructions,
