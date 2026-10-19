@@ -1,0 +1,8 @@
+# Copy into ComfyUI's root as extra_model_paths.yaml, or merge with its file.
+# Actual model files stay on Shared SATA; no shortcuts or duplicated weights.
+shared_graphics:
+  base_path: /mnt/shared/Graphics-Models
+  is_default: true
+  diffusion_models: diffusion_models
+  text_encoders: text_encoders
+  vae: vae

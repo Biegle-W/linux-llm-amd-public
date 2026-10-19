@@ -1,94 +1,58 @@
 # Image and video generation on two RX 7900 XTX cards
 
-**Existing weights found after this guide was drafted:** the [Unsloth inventory](UNSLOTH-MODEL-INVENTORY-2026-10-18.md)
-contains Qwen-Image 2.1 BF16/Q4, two quantized Qwen text encoders, and H3 Q2
-with both VAEs and Q2/Q4 text encoders. Check reuse and loader compatibility
-before following download steps. The FP8 repository has text encoders only.
+Current model selection: **one Qwen-Image 2.1 BF16 base and one MiniMax H3
+fl2va pruned INT8 base**, with one encoder and the required VAEs per family.
+See the [retained collection](../graphics/README.md) and
+[current inventory](UNSLOTH-MODEL-INVENTORY-2026-10-18.md). The former Unsloth
+Q4/Q2/alternate-encoder cache copies are retired. Do not redownload them.
 
-**Current walkthrough choice:** the user selected ComfyUI. Unsloth's existing H3
-render produced corrupt tiled output; see the [diagnosis and limits](UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md).
-That render does not validate any ComfyUI workflow. The candidate downloads below
-are alternatives, not a request to download all of them.
+**Model-file preparation and runtime setup are separate.** ComfyUI remains
+uninstalled and no new generation or speed benchmark is claimed. The earlier
+[Unsloth H3 Q2 corrupt-output report](UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md)
+is historical, not a result for the new native INT8 pipeline.
 
-## Daily workflow after setup and validation
+Target hardware: i5-13600KF, two 24 GB gfx1100 GPUs at CPU PCIe4 x8/x8,
+32 GB RAM, no native ROCm peer access. Use an isolated ROCm PyTorch environment;
+keep existing LLM engines independent. DSH remains the chat harness.
 
-1. Open ComfyUI's local page and load the matching Qwen-Image template.
-   Connect the exact model, text encoder and VAE through compatible loaders.
-   Existing Diffusers shards are not a single Comfy checkpoint; existing GGUF
-   files require an architecture-compatible GGUF loader. Reuse confirmed
-   compatible components before downloading missing ones.
-2. Generate one still image at 1024x1024, batch 1. Use the schedule for the
-   actual base or Turbo model; the downloaded Qwen base is not the 8-step Turbo
-   checkpoint. Keep a fixed seed while changing one prompt detail at a time.
-3. Save the selected PNG and workflow JSON. If editing, use the matching image
+## 1. Use the retained files first
+
+Use native Qwen/H3 templates, then change their loader dropdowns to the actual
+retained filenames. Do not accept automatic downloads merely because a template
+names a different VAE or quant. The selected files are native safetensors layouts;
+this collection does not require a GGUF plugin. The lossless Qwen transformer
+keeps its supported unfused MLP layout. Select `qwen_image` for Qwen's CLIPLoader
+and `minimax` for H3's. Preserve base-model schedules; no Turbo LoRA is installed.
+
+Daily workflow:
+
+1. Load the Qwen-Image text-to-image template, select the BF16 transformer,
+   BF16 encoder and FP32 VAE, and start with batch 1 and a fixed seed. Validate
+   a small image before 1024x1024. Use the base schedule, not an 8-step Turbo
+   or Viggle schedule.
+2. Save the chosen PNG and workflow JSON. For edits, open the matching Qwen
    editing template, provide the PNG, and describe the requested change.
-4. Release the image pipeline and load H3's image-to-video template. Feed the
-   selected PNG into its first-frame input, and describe motion, camera movement
-   and optional sound. The downloaded fl2va model is appropriate for first/last
-   frames; it is not the separate ref2va model.
-5. First validate a very short, small clip allowed by the template, with its
-   own sampler/schedule. Inspect decoded frames before a 124-frame draft at
-   864x480. Test caching/attention speedups only after obtaining correct output.
-6. Decode video with the H3 video VAE and audio with its audio VAE, then connect
-   both to Create Video and Save Video. Export MP4 plus workflow JSON. Increase
-   resolution or duration one at a time after a successful draft.
+3. Release the image pipeline and open H3's native image-to-video template.
+   Select the retained INT8 model, native compact encoder and both H3 VAEs.
+   Feed the PNG into the first-frame input; describe motion, camera and sound.
+4. Validate a small, short shape accepted by the template before a 124-frame,
+   864x480 draft at 24 fps. Native base H3 defaults to 20 steps. Do not use a
+   Turbo schedule without its corresponding adapter. Keep default supported
+   attention first; Comfy Kitchen attention does not support INT8 ConvRot H3.
+5. Decode video/audio separately through their matching VAEs, connect both to
+   Create Video / Save Video, and save MP4 plus workflow JSON. Increase duration
+   or resolution one at a time only after visually correct drafts.
 
-For the two cards, initially propose denoising on one and text encoding/VAE on
-the other using core placement nodes. This uses both at different stages, not
-two-card tensor parallel denoising. Actual placement and output correctness must
-be validated; merely detecting two GPUs is insufficient.
-
-Research checked October 18, 2026. **Proposed setup only: not installed or locally
-benchmarked.** Current workstation: i5-13600KF, two 24 GB gfx1100 cards, CPU
-PCIe4 x8/x8, 32 GB RAM with another 32 GB pending, no native ROCm peer access.
-Use ComfyUI with an isolated ROCm PyTorch environment. Keep existing LLM engines
-and their environments independent. DSH remains the chat harness; ComfyUI provides
-the image/video workflow interface.
-
-## 1. Choose a small initial model set
-
-| Purpose | First candidate | Initial settings proposed for this hardware |
-| --- | --- | --- |
-| Images / editing | Qwen-Image 2.1 Turbo BF16 | 1024x1024, batch 1, 8 steps, CFG 1 |
-| First video pipeline test | Wan2.2 TI2V 5B FP16 | Template defaults, batch 1, short low-resolution clip |
-| Higher-end video/audio | MiniMax H3 pruned INT8 ConvRot | 864x480, 124 frames; stock schedule first, matched Turbo LoRA later |
-| Additional video candidate | LTX-2.3 distilled FP8 | Short low-resolution template; check memory/offload before scaling |
-
-These are candidates and starting targets, not confirmed performance or fit
-claims. A file fitting VRAM does not leave room automatically for activations,
-attention, text encoding and VAE decode. Quantization labels do not establish
-kernel acceleration on gfx1100. Prefer a BF16 correctness baseline for the
-smaller image model, then compare INT8 at fixed settings if needed.
-
-Qwen's official [Comfy model card](https://huggingface.co/Comfy-Org/Qwen-Image-2.1)
-provides base/Turbo variants and 8-step CFG-1 guidance. Download only:
-
-- `diffusion_models/qwen_image_2.1_turbo_bf16.safetensors`
-- `text_encoders/qwen3vl_8b_bf16.safetensors`
-- `vae/qwen_image_2.1_vae_bf16.safetensors`
-
-Use the native Qwen-Image-2.1 template and select these files; preserve its
-scheduler/sampler. BF16 text weights can live on the second card. INT8 text
-encoding is a later comparison, not a required first download.
-
-The [official Wan2.2 tutorial](https://docs.comfy.org/tutorials/video/wan/wan2_2)
-provides the starter video workflow and model links:
-
-- `diffusion_models/wan2.2_ti2v_5B_fp16.safetensors`
-- `text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors`
-- `vae/wan2.2_vae.safetensors`
-
-Keep the template schedule. Begin with a short draft, such as 49 frames at
-640x352 if accepted by the workflow's resolution/frame grid; adjust to the
-node's constraints. This is a pipeline test, not a final-quality recommendation.
-Do not use the 14B model's VAE for this 5B workflow.
+These are starting candidates, not locally validated speed/fit claims. Use both
+GPUs through explicit component placement below; detecting two cards alone does
+not prove the workflow used both.
 
 ## 2. Prepare disk and host memory
 
 Keep the runtime and virtual environment on a Linux filesystem. Store model
-weights in one central Shared SATA folder, for example `SHARED/ComfyUI-Models`,
-with subdirectories `diffusion_models`, `text_encoders`, `vae`, `checkpoints`,
-`loras` and `latent_upscale_models`. Use ComfyUI's `extra_model_paths.yaml` so
+weights in `SHARED/Graphics-Models` on Shared SATA, with `diffusion_models`,
+`text_encoders` and `vae` subdirectories. Add adapter directories only when
+needed. Use ComfyUI's `extra_model_paths.yaml` so
 there are no duplicate weights or model shortcuts. Windows may reuse the
 weights but needs its own environment and configuration.
 
@@ -161,20 +125,17 @@ Create `extra_model_paths.yaml` inside the ComfyUI directory, replacing the
 example Shared mount with the real path:
 
 ```yaml
-shared_generation:
-  base_path: /mnt/shared/ComfyUI-Models
+shared_graphics:
+  base_path: /mnt/shared/Graphics-Models
   is_default: true
   diffusion_models: diffusion_models
   text_encoders: text_encoders
   vae: vae
-  checkpoints: checkpoints
-  loras: loras
-  latent_upscale_models: latent_upscale_models
 ```
 
 This uses the [official path configuration](https://github.com/Comfy-Org/ComfyUI/blob/master/extra_model_paths.yaml.example).
 Use the templates' official model links. A missing loader filename is distinct
-from a missing custom node; native Qwen/Wan templates should be tested before
+from a missing custom node; native Qwen/H3 templates should be tested before
 adding large custom-node packs.
 
 ## 5. Launch visibly and place components across both GPUs
@@ -217,11 +178,11 @@ The older [ComfyUI-MultiGPU repository is archived](https://github.com/pollockjj
 as of September 30. Do not install it as a maintained default when core
 component-placement nodes cover the initial need.
 
-## 6. Add higher-end video after the small workflow passes
+## 6. Validate retained H3 before speed experiments
 
 MiniMax H3: follow the [official native template](https://docs.comfy.org/tutorials/video/minimax/minimax-h3).
-Start with pruned INT8 ConvRot, its template-matched text encoder, video VAE and
-audio VAE. Load one variant only. Use 864x480/124 frames and the template schedule;
+Use the retained pruned INT8 ConvRot, native compact text encoder, FP16 video
+VAE and FP32 audio VAE. Load one variant only. Use 864x480/124 frames and the template schedule;
 compare its matched 8-step Turbo LoRA after correctness. W6A8 is a smaller recent
 candidate, not validated locally. Do not treat NVIDIA FP4 filenames as proof of
 native AMD FP4 acceleration.
@@ -241,11 +202,6 @@ The recorded envelope approaches 26 GiB per card and validates ComfyUI 0.30.0
 only. This is not a drop-in 24 GB XTX preset. Gate it on local RCCL transfer tests,
 current-version compatibility, reduced memory settings and actual video parity;
 keep any RCCL workaround isolated from the production LLM environment.
-
-LTX-2.3: the [official templates](https://docs.comfy.org/tutorials/video/ltx/ltx-2-3)
-include distilled FP8 checkpoints and separate text encoder downloads. Treat this
-as an additional candidate after Wan/H3; 22B FP8 weights plus activations can
-still exceed one 24 GB card. FP8 storage is not proof of fast native RDNA3 compute.
 
 ## 7. Measure before expanding
 

@@ -252,3 +252,19 @@ Recommendation is a test order, not a proven optimum: retain Qwen base as a
 baseline, test matched Turbo for images, then a native H3 INT8 or W6A8 candidate
 with the correct fl2va Turbo adapter and explicit two-card component placement.
 Do not delete existing weights before a replacement produces correct output.
+
+## October 18 selected graphics files after cache cleanup
+
+The user selected native H3 INT8 and one quality-oriented Qwen precision.
+See [retained collection](../graphics/README.md) and
+[verified inventory](UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
+[lcz.me 1168](https://lcz.me/topic/1168), Ang Lee, is firsthand XTX/64 GiB
+INT8/Turbo evidence, not a local speed target. The chosen base H3 has no Turbo
+adapter. [Level1Techs 252735](https://forum.level1techs.com/t/my-experiences-with-comfyui-on-an-rx-9070xt/252735),
+locutusofborg780, July 16/August 18, 2026, concerns RDNA4/32 GB stability;
+it motivates isolated validation, not copying its version pin to gfx1100.
+Native file/loader details are checked against
+[Comfy Qwen](https://huggingface.co/Comfy-Org/Qwen-Image-2.1),
+[Comfy H3](https://huggingface.co/Comfy-Org/MiniMax-H3) and
+[ComfyUI source 8f04fd6](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76).
+File integrity/format is validated; no new generation or speed result is claimed.

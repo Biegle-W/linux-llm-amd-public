@@ -339,34 +339,33 @@ without a new request.
 remain as reference. MoE API tests passed, but the final MoE GUI chat/Stop test
 was cancelled before completion; it must not be reported as passed.
 
-## Image/video generation planning — October 18
+## Image/video generation models — October 18
 
-A [ComfyUI walkthrough](../hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) now records
-forum research and proposed ROCm/core multi-GPU component placement for Qwen-Image
-2.1, Wan2.2 and later H3/LTX tests. **No installation, model download, launcher,
-network listener or generation benchmark was performed.** Existing LLM profiles
-and automatic shutdown scope are unchanged. Native H3 sequence parallelism remains
-an unvalidated candidate for 24 GB cards; R9700/32 GB speeds are not local results.
+The graphics collection now has **seven weight files / 70.40 GiB** in the
+Shared SATA `Graphics-Models` directory: Qwen-Image 2.1 BF16 with BF16 encoder
+and FP32 VAE; H3 fl2va pruned INT8 ConvRot with native NVFP4-AWQ encoder,
+FP16 video VAE and FP32 audio VAE. Qwen's existing weights were losslessly
+repacked; the H3 VAEs were moved intact. The H3 model/encoder replacements
+were downloaded at pinned Comfy-Org revision
+`e5eb578a89295337b8ff433a035929ce0279e0b6` and SHA-256 verified.
 
-Read-only follow-up found 93.18 GiB of existing Unsloth weights on Shared:
-Qwen-Image 2.1 BF16/Q4 plus FP8/INT8 text encoders, MiniMax H3 Q2 plus Q2/Q4
-text encoders and both VAEs, and a small embedding model. The FP8 image
-transformer itself is absent. [Inventory and format/reuse limits](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md).
-No model/runtime files were changed during that inventory.
+The old Qwen Q4/alternate encoders, H3 Q2/old GGUF encoders, embedding model
+and original repacked shard copies were removed from the five Unsloth cache
+repositories after verification. Net model-byte reduction: 22.78 GiB.
+No model weights or partial downloads are included in Git; no shortcuts were
+created. User media, app state, other LLM models and launchers are unchanged.
 
-The user chose ComfyUI for the image/video walkthrough; it remains uninstalled.
-An existing user-generated Unsloth H3 Q2 clip was inspected after a corruption
-report. All 30 steps completed, but a decoded frame shows repeating tiles.
-The managed ROCm engine fell back to upstream `master-951-f89d9b1` instead of
-requested `master-951-f89d9b1-uafac7a7` and warned about missing H3 fixes and
-host RAM pressure. CFG 1.0 and flow shift 12 were already set; the downloaded
-GGUF's normalization/1D weights retain floating-point precision. Root cause
-is unconfirmed, and no working image/video profile or speed result is claimed.
-[Diagnostic evidence and next validation](../hardware/UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md).
-No runtime replacement, download or new inference test was performed.
-A [forum-based model fit assessment](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md#hardware-fit-assessment--october-18-follow-up)
-now distinguishes the downloaded base/Q2 files from untested Turbo/INT8/W6A8
-candidates. Recommendations are a test order, not validated production changes.
+[Current inventory and limits](../hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md),
+[collection and Comfy path configuration](../graphics/README.md).
+On Windows, use the corresponding `D:/Graphics-Models` path.
+
+**ComfyUI remains uninstalled and generation is unvalidated.** The intended
+two-card arrangement is denoiser on one XTX, encoder/VAEs on the other, with
+bounded memory and native placement nodes. This is not tensor-parallel H3 or
+a measured performance claim. The earlier user-generated Unsloth Q2 render
+was corrupt; [its historical report](../hardware/UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md)
+does not validate or diagnose the new native INT8 pipeline. No Turbo adapter
+was added: follow the actual base template's sampler/schedule.
 
 ## Retained Strata and retired setups
 
