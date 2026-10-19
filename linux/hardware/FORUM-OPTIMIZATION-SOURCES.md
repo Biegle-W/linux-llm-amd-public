@@ -289,3 +289,14 @@ reloads the loader factory. Two maintained direct CLIP/VAE loaders now pass the
 target device to core load APIs at construction, with no upstream patch or
 weight change. Larger sizes, full-length video and speed tuning remain separate
 work. The old Unsloth Q2 corruption has not been attributed to the same cause.
+
+## October 18 Strata low-RAM community check
+
+[Research and limits](STRATA-LOW-RAM-COMMUNITY-2026-10-18.md):
+[Strata #364](https://github.com/Niko1221/Strata/issues/364) reports 32 GB /
+dual 24 GB NVIDIA success; [lcz.me 2053](https://lcz.me/topic/2053) reports
+about 30 GB / one 48 GB gfx1100 card. Neither establishes the exact dual-XTX
+32 GB profile. [Level1Techs](https://forum.level1techs.com/t/creating-an-agent-harness-and-self-hosting-part-2-my-hardware-setup/252909)
+was checked without a matched result. The retained source supports complementary
+resident storage across a layer split; the local 64 GB readiness gate is
+conservative, not an engine minimum. No local inference or benchmark was run.

@@ -387,6 +387,12 @@ native INT8 pipeline. The seven real model files remain on Shared SATA.
 ## Retained Strata and retired setups
 
 **Strata Q3 is disabled**, absent from the live API catalog and not AMD-validated.
+[October 18 low-RAM research](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md)
+found 32 GB / dual-3090 and about 30 GB / single-W7800 success reports. The
+local 64 GB readiness gate is conservative, not a Strata hardware minimum.
+A bounded-RAM dual-XTX IQ3_XXS strategy needs separate local validation; this
+research leaves the profile, runtime and gate unchanged.
+
 The old disabled metadata names 262,144 context; that is not an active capacity
 claim. Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and
 `mtp/rt` data. Q2's model/pack is removed; do not follow archived Q2 install or

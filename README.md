@@ -6,6 +6,9 @@ Reference hardware configurations, inference-engine setup, reproducible tuning a
 
 Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](linux/graphics/INSTALL.md) are current.
 
+Strata RAM requirements: [community evidence at 32 GB](linux/hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md). The local
+64 GB gate is conservative; dual-XTX operation at 32 GB remains untested.
+
 <!-- comfyui-validation-2026-10-18 -->
 
 | Graphics validation | Shape / base steps | Denoising | Total including loading |

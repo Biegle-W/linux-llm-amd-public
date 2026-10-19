@@ -4,8 +4,9 @@
 requested MoE policy. The inactive generator uses **both RX 7900 XTX cards**,
 HIP, automatic layer split, one slot and no single-card fallback. Its CPU-resident
 expert mode is supported with layer split by the retained source; older forum
-warnings describe an earlier implementation. The 64 GB/available-RAM gate still
-blocks this approximately 40 GiB expert pack on the current 32 GB installation.
+warnings describe an earlier implementation. The local 64 GB/available-RAM gate
+remains conservative and untested; it is not a Strata minimum. [New 32 GB community evidence](STRATA-LOW-RAM-COMMUNITY-2026-10-18.md)
+supports a separate bounded-RAM experiment, not automatic activation.
 See [current MoE/cache plan](MOE-OFFLOAD-2026-10-18.md) and
 [forum/primary-source trail](FORUM-OPTIMIZATION-SOURCES.md). No Strata inference
 or maximum-context validation is claimed. The older single-card recipe below is
