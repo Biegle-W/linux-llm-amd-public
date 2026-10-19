@@ -362,3 +362,48 @@ KV precision and context separate from the existing GPTQ/GGUF measurements.
 
 Local measurements, retained settings and validation limits are recorded in
 [the October19 optimization report](STRATA-OPTIMIZATION-2026-10-19.md).
+
+## October 19: one versus two 12 GB NVIDIA cards in Strata
+
+Research only; no local runtime, model, launcher or benchmark changed. Do not
+interpret these external results as a measurement of the current AMD setup.
+
+- [Upstream README, Option A](https://github.com/Niko1221/Strata#option-a-the-strata-app),
+  reviewed October 19: the app and terminal use the same inference engine and
+  models. Installing the app is not a separate inference-speed optimization.
+- [Upstream multi-GPU measurements](https://github.com/Niko1221/Strata/blob/main/docs/MULTI_GPU.md#measured):
+  the matched Coder/32K example uses RTX5080 + RTX3090 / Ryzen9950X3D, not two
+  12 GB cards. At 28K prompt length, single5080 1,970 -> best split2,357 t/s
+  (+19.6%); prose83-87 ->84 t/s; code88-105 ->110 t/s. Strata splits layers,
+  caches their experts on their owning GPU and pipelines prompt chunks; this
+  is not tensor parallelism and does not require NVLink/P2P. Extra cache room
+  can reduce CPU expert work, but each card also consumes buffers; 12+12 GB
+  is not equivalent to one24 GB GPU. This does not establish a 3060 gain.
+- [Strata issue2007](https://github.com/Niko1221/Strata/issues/2007), jds1-ai,
+  October14: two RTX3060 12 GB on Linux, CUDA13.3, driver595.91.07,
+  PCIe3x16 each (12.3 GB/s probes), IQ3_XXS, 128K allocation /32K resident
+  INT8 KV, spec4, auto split26. Nine short requests per start: decode medians
+  61.6 t/s (0.1.43.1),58.9 (0.1.44),63.4 (0.1.44 plus LINK_ABS).
+  This is a version/setting comparison with both cards, not a single/dual A/B;
+  reported spread under about7% was not a demonstrated optimization gain.
+- [Strata0.1.42 release](https://github.com/Niko1221/Strata/releases/tag/v0.1.42):
+  one RTX3060 / IQ3_XXS already measured47.7 ->62.1 t/s by adjusting CPU/PCIe
+  share (five interleaved pairs, tail-skip on in both). CPU/RAM/workload are not
+  established as matched to issue2007. Neither 62.1 versus61.6 nor older30 versus newer60
+  is a valid estimate of the second card's benefit.
+- [lcz.me1988/50](https://lcz.me/topic/1988/50), benson Playben, reviewed
+  October19: single RTX3060 12 GB, Swift1.5,128K allocation, reported32 t/s;
+  missing controlled prompt/build/RAM details. [lcz.me2048](https://lcz.me/topic/2048)
+  documents RTX4070+3060 12+12 GB, i5-13600KF/64 GB, Strata0.1.31,
+  IQ2_XS/IQ3_XXS128K; its differing links, workloads and quantizations do not
+  supply an identical3060 single/dual control. Preserve its historical status.
+- [Level1Techs local-server discussion](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001),
+  October8: discusses single3090 Strata and a separate dual-R9700 Radiance
+  report. Neither is a matched one/two12 GB NVIDIA Strata result. No exact
+  matched comparison was located in the forum searches reviewed this date.
+
+Conclusion: the second12 GB card adds expert-cache/context capacity, but a fixed
+percentage decode improvement is not established. The upstream roughly20%
+prefill example is evidence on different cards, not a forecast for dual3060.
+A credible percentage needs the same engine, quant, CPU/RAM, actual prompt
+length, MTP, routing flags and warmed workloads, with single/dual runs interleaved.
