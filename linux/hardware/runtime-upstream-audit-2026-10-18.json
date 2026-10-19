@@ -1,0 +1,68 @@
+{
+  "checked_local_date": "2026-10-18",
+  "timezone": "America/Toronto",
+  "installed": {
+    "llama.cpp": {
+      "commit": "f12aaa344c971556ec35be054d7aac1d901fd510",
+      "backends": [
+        "HIP",
+        "Vulkan"
+      ]
+    },
+    "Strata": {
+      "version": "0.1.44.1",
+      "commit": "296b59d2f73c8f04a805df29c2fa97655adace78",
+      "backend": "HIP gfx1100"
+    },
+    "SGLang": {
+      "version": "editable 0.0.0; identify by source commit",
+      "commit": "f84475ccf593087df3d1da13c9e675eadee12352",
+      "branch": "gfx1100-support",
+      "local_fixes": true
+    },
+    "vLLM": {
+      "version": "0.32.0rc1.dev190+g3f1bcfd82.rocm723",
+      "local_fixes": true
+    }
+  },
+  "upstream": {
+    "Strata main": {
+      "sha": "477ac13cbe8e582c20484871ce459d20d82df09d",
+      "date": "2026-10-16T20:39:03Z",
+      "title": "verify: the side-projection q8_1 interleave copies need two or more columns (STRATA_SIDE_MIXER=2 on a 1-column window threw on Q2_0 packs: the queries' branch and the GDN gate branch)",
+      "url": "https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d"
+    },
+    "SGLang gfx1100 fork": {
+      "sha": "f84475ccf593087df3d1da13c9e675eadee12352",
+      "date": "2026-09-11T08:22:04Z",
+      "title": "docs: correct drafter attribution \u2014 production DFlash2 runs the W4A16 drafter",
+      "url": "https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352"
+    },
+    "SGLang official main": {
+      "sha": "df078cc729718723cbdd071e606e416c1dc96cea",
+      "date": "2026-10-19T01:47:17Z",
+      "title": "[Fix] DSv4.1: Support CUDA image requests with encoder bounded replay and CI Test (#45048)",
+      "url": "https://github.com/sgl-project/sglang/commit/df078cc729718723cbdd071e606e416c1dc96cea"
+    },
+    "vLLM official main": {
+      "sha": "b0d61e5d26561f865bf89688eb0aea5000133a42",
+      "date": "2026-10-19T01:37:04Z",
+      "title": "[Model] Add Reflection Beam (#62074)",
+      "url": "https://github.com/vllm-project/vllm/commit/b0d61e5d26561f865bf89688eb0aea5000133a42"
+    },
+    "vLLM ROCm723 nightly": {
+      "versions": [
+        "0.32.0rc1.dev329%2Bg39983a5e7.rocm723",
+        "0.32.0rc1.dev329+g39983a5e7.rocm723"
+      ],
+      "url": "https://wheels.vllm.ai/rocm/nightly/rocm723/vllm/"
+    },
+    "llama.cpp master": {
+      "sha": "31288c9c66e59377f7788d920678a565bb89dd37",
+      "date": "2026-10-19T01:08:11Z",
+      "title": "hexagon: FLASH_ATTN_EXT improvements for longer context and SWA models (#30731)",
+      "url": "https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37"
+    }
+  },
+  "runtime_modified": false
+}

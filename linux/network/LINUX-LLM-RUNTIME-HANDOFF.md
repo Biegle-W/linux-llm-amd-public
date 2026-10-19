@@ -319,6 +319,13 @@ Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
 | ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
 | Strata HIP source | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
 
+**October 18 upstream audit:** the Strata setup reused installed builds. Newer
+Strata 0.1.45 (`477ac13cbe8e`), llama.cpp master (`31288c9c66e5`) and vLLM ROCm723
+nightly dev329 were found. SGLang matches the retained gfx1100 fork head
+`f84475ccf593`, but differs from official main. These updates are **not installed
+or AMD-validated**; current runtime/profile pins above remain authoritative.
+[Exact snapshot and NVIDIA comparison](../hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md).
+
 Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
 `dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
 and private `dsh/data/network-access.json`. The installed SGLang wheel's generic

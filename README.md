@@ -20,6 +20,13 @@ One sample each, thinking off, MTP enabled. Long retrieval, tools/results and
 streaming passed; zero sampled worker swap/VRAM spill, 8.7 GiB minimum available
 RAM. The short retrieval reply does not establish sustained long-context decode.
 
+**Comparison and version audit:** the best saved 4070/3060 Strata profile measured
+68.8 / 64.6 code/prose t/s versus the current AMD sample's 59.8 / 47.8. The old
+system had 64 GB RAM and different batching/MTP settings; this is not a controlled
+GPU comparison. **The latest setup did not upgrade all engines**: newer Strata
+0.1.45, llama.cpp source and vLLM dev329 wheels were found. SGLang matches the
+retained gfx1100 fork, not official main. [Exact versions and limitations](linux/hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md).
+
 
 <!-- comfyui-validation-2026-10-18 -->
 
