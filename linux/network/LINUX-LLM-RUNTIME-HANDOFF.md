@@ -359,13 +359,30 @@ created. User media, app state, other LLM models and launchers are unchanged.
 [collection and Comfy path configuration](../graphics/README.md).
 On Windows, use the corresponding `D:/Graphics-Models` path.
 
-**ComfyUI remains uninstalled and generation is unvalidated.** The intended
-two-card arrangement is denoiser on one XTX, encoder/VAEs on the other, with
-bounded memory and native placement nodes. This is not tensor-parallel H3 or
-a measured performance claim. The earlier user-generated Unsloth Q2 render
-was corrupt; [its historical report](../hardware/UNSLOTH-H3-CORRUPT-OUTPUT-2026-10-18.md)
-does not validate or diagnose the new native INT8 pipeline. No Turbo adapter
-was added: follow the actual base template's sampler/schedule.
+**ComfyUI is installed and both families passed generation.** Use the ComfyUI
+Desktop/menu launcher or the `comfyui` PATH command; live logs stay in a visible
+terminal. Web UI: `http://127.0.0.1:8188` (loopback; use SSH forwarding remotely).
+Choose saved workflows **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**.
+The runtime is `runtime/comfyui` in the Linux repository, isolated Python 3.12.14,
+ComfyUI 0.42.0 at `8f04fd6ecf4a548937971e840af2a985529fab76`, Torch
+`2.15.0.dev20260827+rocm7.2`, Kitchen 0.2.39, aimdo 0.5.6, frontend 1.55.18.
+
+Denoiser runs on GPU 0; encoder/VAEs on GPU 1. Both-card activity was confirmed.
+Direct component loaders use core APIs without the duplicate-encoder retarget
+copy. This is staged placement, not TP. Qwen passed 512x512/40 base steps in
+100.9 s total (~13 s denoising); H3 passed 608x352/39 frames/20 base steps in
+232.4 s total (~29 s denoising), with coherent motion and finite 32 kHz stereo
+audio. H3 used swap during loading on the 32 GB host. Models were unloaded after
+the test and the server was left running. The existing LLM kill guard does not
+terminate ComfyUI; run large graphics and LLM workloads separately.
+
+[Validation details](../graphics/VALIDATION-2026-10-18.md),
+[install/start guide](../graphics/INSTALL.md),
+[exact versions](../graphics/runtime-versions.json).
+No new weight quant or Turbo adapter was downloaded. Larger sizes, 124+ frame
+video, I2V/editing, Turbo and Windows execution remain unvalidated. The earlier
+Unsloth Q2 corrupt render is historical and not a controlled comparison with this
+native INT8 pipeline. The seven real model files remain on Shared SATA.
 
 ## Retained Strata and retired setups
 

@@ -91,6 +91,20 @@
       "license_file": "licenses/turnstone.LICENSE",
       "extraction": "Official inline SVG favicon extracted from the HTML link data URI by URL decoding only. No geometry, colors or artwork changed.",
       "official_upstream_verified": true
+    },
+    {
+      "app": "ComfyUI",
+      "file": "comfyui.svg",
+      "repository": "Comfy-Org/ComfyUI_frontend",
+      "commit": "79a53509d11d1d5a065b543c148bd11d0f24b36e",
+      "upstream_path": "public/assets/images/comfy-logo-single.svg",
+      "source_url": "https://github.com/Comfy-Org/ComfyUI_frontend/blob/79a53509d11d1d5a065b543c148bd11d0f24b36e/public/assets/images/comfy-logo-single.svg",
+      "sha256": "6e798cc5474f3af23192ac4d79b530e283235adf0237f2423e5b1b25ce685968",
+      "bytes": 2030,
+      "license_file": "licenses/comfyui.LICENSE",
+      "extraction": "Official icon copied unchanged; matches frontend package 1.55.18",
+      "official_upstream_verified": true,
+      "repository_license": "GPL-3.0"
     }
   ]
 }

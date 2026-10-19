@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+runtime=${COMFYUI_DIR:-"$repo/runtime/comfyui"}
+paths=${COMFYUI_MODEL_PATHS:-"$repo/graphics/extra_model_paths.yaml"}
+state="$repo/graphics/generated"
+mkdir -p "$state" "$repo/graphics/outputs"
+exec 9>"$state/server.lock"
+if ! flock -n 9; then
+    printf 'ComfyUI is already running. Open http://127.0.0.1:8188\n'
+    if [[ " $* " == *" --auto-launch "* ]]; then
+        xdg-open http://127.0.0.1:8188 >/dev/null 2>&1 || true
+    fi
+    exit 0
+fi
+
+unset PYTORCH_ALLOC_CONF PYTORCH_CUDA_ALLOC_CONF
+unset HIP_VISIBLE_DEVICES CUDA_VISIBLE_DEVICES HSA_OVERRIDE_GFX_VERSION
+export ROCR_VISIBLE_DEVICES=0,1
+export OMP_NUM_THREADS=8
+export PYTHONUNBUFFERED=1
+
+install -D -m 644 "$repo/graphics/comfyui-device-loaders/__init__.py" \
+    "$runtime/custom_nodes/local_graphics_devices/__init__.py"
+"$runtime/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
+cd -- "$runtime"
+"$runtime/.venv/bin/python" main.py \
+    --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188 \
+    --extra-model-paths-config "$paths" \
+    --output-directory "$repo/graphics/outputs" \
+    --reserve-vram 2 --disable-pinned-memory --disable-async-offload \
+    --disable-dynamic-vram --cache-none --use-pytorch-cross-attention \
+    --disable-partner-nodes "$@" 2>&1 | tee "$state/comfyui-$(date +%Y%m%d-%H%M%S).log"

@@ -1,10 +1,22 @@
 # Local LLM reference setups
 
-Graphics models: [one retained Qwen-Image/H3 set and ComfyUI paths](linux/graphics/README.md); 70.40 GiB on Shared SATA. Files verified; ComfyUI runtime validation pending.
+Graphics models: [one retained Qwen-Image/H3 set and ComfyUI paths](linux/graphics/README.md); 70.40 GiB on Shared SATA. Both families passed ComfyUI generation on the two RX 7900 XTX cards.
 
 Reference hardware configurations, inference-engine setup, reproducible tuning and measured performance for Linux and Windows.
 
-Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). Model files are prepared; ComfyUI runtime installation and generation validation remain pending.
+Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](linux/graphics/INSTALL.md) are current.
+
+<!-- comfyui-validation-2026-10-18 -->
+
+| Graphics validation | Shape / base steps | Denoising | Total including loading |
+|---|---|---:|---:|
+| Qwen-Image 2.1 BF16 | 512x512 / 40 | ~13 s | 100.9 s |
+| MiniMax H3 INT8 | 608x352, 39 frames at 24 fps / 20 | ~29 s | 232.4 s |
+
+Both passed coherent output checks; H3 also produced finite stereo audio.
+Single validation runs on 32 GB RAM with SATA weights; H3 staged through swap.
+These are staged two-GPU component workflows, not TP or maximum-capacity tests.
+[Methods, versions and limits](linux/graphics/VALIDATION-2026-10-18.md).
 
 <!-- freetoken-rocm-2026-10-18 -->
 **October 18: FreeToken removed at the user's request.** Runtime, Desktop app,

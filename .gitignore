@@ -36,3 +36,8 @@
 
 # Private handoff originals and consolidation staging
 **/LLM-HANDOFF-ARCHIVE/
+
+# Local ComfyUI checkout/environment and generated media
+**/runtime/comfyui/
+**/graphics/generated/
+**/graphics/outputs/

@@ -62,10 +62,11 @@
   ],
   "original_weight_bytes": 100050424232,
   "retained_weight_bytes": 75586194719,
-  "generation_validation": "not performed; ComfyUI runtime not installed",
-  "gpu_policy": "both RX 7900 XTX cards; proposed denoiser / encoder-VAE placement, not validated",
+  "generation_validation": "passed: Qwen 512x512/40 steps; H3 608x352/39 frames/20 steps with finite stereo audio; see validation-results.json",
+  "gpu_policy": "validated staged placement: denoiser GPU 0; encoder/VAEs GPU 1; not tensor parallel",
   "source_model_cache_cleanup": "five exact Unsloth model repositories; user media/app/LLM model directories preserved",
   "old_model_cache_removed": true,
   "native_safetensors_parser_validated": true,
-  "qwen_tensor_payloads_verified": 1285
+  "qwen_tensor_payloads_verified": 1285,
+  "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76"
 }

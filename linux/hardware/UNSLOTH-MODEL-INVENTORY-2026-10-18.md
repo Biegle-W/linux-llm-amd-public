@@ -62,12 +62,14 @@ and private app data remain untouched.
   and have valid contiguous extents; parser checks loaded no inference tensors.
 - Full file hashes are in [graphics/MANIFEST.json](../graphics/MANIFEST.json)
   and the collection's `SHA256SUMS`. Model binaries are ignored by Git.
-- Current RAM remains 32 GB. Plan denoising on one XTX and text/VAE work on the
-  other with native device-placement nodes. Both-card generation, activations,
-  host offload and output quality still need runtime validation.
-- **ComfyUI was not installed or benchmarked in this file-only task.** No new
-  image/video speed is claimed, and the former corrupt Q2 render is not a
-  result for this replacement. No Turbo LoRA or extra model family was added.
+- ComfyUI 0.42.0 is now installed in an isolated ROCm environment. Both model
+  families passed two-card generation: denoiser GPU 0, encoder/VAEs GPU 1.
+  [Measured results and limits](../graphics/VALIDATION-2026-10-18.md): Qwen
+  512x512/40 steps, 100.9 s total; H3 608x352/39 frames/20 steps, 232.4 s total.
+  H3 video was coherent and its stereo audio decoded as finite and nonzero.
+- Current RAM remains 32 GB; staging used swap. Larger sizes and Windows
+  execution remain unvalidated. No extra quant, model family or Turbo LoRA
+  was downloaded by the installation. Existing LLM engines are unchanged.
 
 Use the [collection setup](../graphics/README.md),
 [path configuration](../graphics/extra_model_paths.yaml) and

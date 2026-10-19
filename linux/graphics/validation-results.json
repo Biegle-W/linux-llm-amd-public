@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-18",
+  "runtime": "runtime-versions.json",
+  "method": "One successful API workflow per family; batch 1; seed 42; base schedule; 2-second resource samples. Initial Qwen core-retarget staging attempt was stopped and is excluded.",
+  "hardware": "2 x RX 7900 XTX 24 GB, PCIe4 x8/x8, 32 GB RAM; Shared SATA weights; no native P2P",
+  "placement": "Denoiser cuda:0; encoder and VAEs cuda:1; staged components, not TP",
+  "runs": [
+    {
+      "model": "Qwen-Image 2.1 BF16",
+      "shape_width_height_frames": [
+        512,
+        512,
+        1
+      ],
+      "steps": 40,
+      "seed": 42,
+      "batch": 1,
+      "server_prompt_seconds": 100.862,
+      "denoise_seconds_approx": 13.1,
+      "sampler": "euler",
+      "scheduler": "simple",
+      "cfg": 1,
+      "gpu_samples": [
+        {
+          "device": 0,
+          "peak_total_vram_GiB": 14.36,
+          "sampled_busy_max_percent": 100
+        },
+        {
+          "device": 1,
+          "peak_total_vram_GiB": 21.35,
+          "sampled_busy_max_percent": 12
+        }
+      ],
+      "min_available_RAM_GiB": 7.6,
+      "peak_swap_growth_GiB": 2.77,
+      "result": "pass: coherent image"
+    },
+    {
+      "model": "MiniMax H3 fl2va pruned INT8 ConvRot",
+      "shape_width_height_frames": [
+        608,
+        352,
+        39
+      ],
+      "steps": 20,
+      "seed": 42,
+      "batch": 1,
+      "server_prompt_seconds": 232.443,
+      "denoise_seconds_approx": 29.2,
+      "sampler": "res_multistep",
+      "scheduler": "simple",
+      "cfg": 1,
+      "gpu_samples": [
+        {
+          "device": 0,
+          "peak_total_vram_GiB": 21.1,
+          "sampled_busy_max_percent": 100
+        },
+        {
+          "device": 1,
+          "peak_total_vram_GiB": 20.52,
+          "sampled_busy_max_percent": 100
+        }
+      ],
+      "min_available_RAM_GiB": 3.64,
+      "peak_swap_growth_GiB": 8.39,
+      "result": "pass: coherent moving steam, nonblank video; finite nonzero stereo audio"
+    }
+  ],
+  "h3_media": {
+    "video": {
+      "width": 608,
+      "height": 352,
+      "fps": 24.0,
+      "frames": 39,
+      "duration": 1.625,
+      "frame_std_min": 71.18281879426372,
+      "temporal_mean_abs_diff": 0.8015013961900864
+    },
+    "audio": {
+      "sample_rate": 32000,
+      "channels": 2,
+      "decoded_samples": 52000,
+      "finite": true,
+      "peak": 0.08581782877445221,
+      "rms": 0.011077193543314934
+    }
+  }
+}

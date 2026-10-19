@@ -17,6 +17,7 @@ background and shadow are part of the original upstream artwork.
 | Strata Q3 | [`strata.svg`](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/serve/web/favicon.svg) | [MIT](licenses/strata.LICENSE) |
 | dsh | [`dsh.png`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/desktop/resources/icon.png) | [MIT](licenses/dsh.LICENSE) |
 | Turnstone | [`turnstone.svg`](https://github.com/turnstonelabs/turnstone/blob/5c82b17700a73ad0ee84421f77549c8a3d46b06b/turnstone/ui/static/index.html) | [Apache-2.0](licenses/turnstone.LICENSE) |
+| ComfyUI | [`comfyui.svg`](https://github.com/Comfy-Org/ComfyUI_frontend/blob/79a53509d11d1d5a065b543c148bd11d0f24b36e/public/assets/images/comfy-logo-single.svg) | [GPL-3.0](licenses/comfyui.LICENSE) |
 
 [SOURCES.json](SOURCES.json) records complete commits, original paths, exact byte
 sizes and SHA-256 values. Each asset retains its upstream ownership. Original

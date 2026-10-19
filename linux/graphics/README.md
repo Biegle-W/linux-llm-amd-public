@@ -1,8 +1,9 @@
 # Graphics model collection
 
 One quality-oriented precision per image/video model, with one required encoder
-and the corresponding VAEs. Runtime installation and full generation validation
-are separate from this file migration. No new speed benchmark is claimed.
+and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
+both families passed two-GPU generation. See [measured results](VALIDATION-2026-10-18.md)
+and [start/install instructions](INSTALL.md).
 
 | Role | Retained file | Origin |
 |---|---|---|
@@ -24,7 +25,8 @@ Hub entries: loading a missing cached model there can download it again.
 The installed Unsloth application and generated user media are not removed.
 
 Use the native `Load Diffusion Model`, `CLIPLoader` and `VAELoader` nodes.
-Choose `qwen_image` for Qwen's encoder and `minimax` for H3's encoder.
+Choose `qwen_image` for Qwen's encoder and `minimax` for H3's encoder. The saved
+workflows use the maintained direct CLIP/VAE loaders for efficient two-card placement.
 The model files here are safetensors; no GGUF plugin is required for this set.
 H3 `fl2va` supports text and first/last frames; it is not a `ref2va` checkpoint.
 
@@ -36,18 +38,17 @@ future choices, not duplicate model quants to retain now.
 
 ## Hardware placement and limits
 
-Target hardware is two 24 GB gfx1100 GPUs and 32 GB system RAM. Propose the
-denoiser on one GPU and the encoder/VAEs on the other, explicitly through Comfy
-device-placement nodes. Both GPUs must be validated before enabling production
-profiles. This is staged component placement, not a combined 48 GB allocation
-or a proven tensor-parallel speedup. Activations still need headroom; H3 can need
-bounded offload at larger resolutions. The full H3 BF16 denoiser is about 40 GB,
-so it cannot be treated as a GPU-resident module on either 24 GB card.
+Current hardware is two 24 GB gfx1100 GPUs and 32 GB system RAM. The validated
+workflows use the denoiser on GPU 0 and encoder/VAEs on GPU 1. Direct loaders set
+the target at construction to avoid native retargeting's second encoder copy.
+This is staged component placement, not TP or a combined 48 GB allocation.
 
-Header/key/shape checks, lossless tensor-byte verification and download hashes
-validate file integrity and format. They do not prove generation speed, quality
-or a successful maximum-resolution run. ComfyUI remains uninstalled by this
-storage-only task; existing LLM engines and launchers are unchanged.
+Qwen passed 512x512 / 40 steps in 100.9 seconds total (about 13 seconds denoising).
+H3 passed 608x352 / 39 frames / 20 steps in 232.4 seconds total (about 29 seconds
+denoising), with coherent video and finite stereo audio. The 32 GB host swapped
+while staging; larger sizes and maximum capacity remain untested. Model files
+stay on Shared SATA without additional quants or NVMe model copies. See the
+[validation report](VALIDATION-2026-10-18.md) for sampling and timing limits.
 
 ## Provenance and reproduction
 

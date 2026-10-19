@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=ComfyUI
+Comment=Image and video generation on both Radeon GPUs, with live terminal logs
+Exec=env GSK_RENDERER=cairo /usr/bin/ptyxis --standalone --new-window --title=ComfyUI -- /opt/local-llm/graphics/start-comfyui --auto-launch
+Path=/opt/local-llm
+Terminal=false
+Icon=/opt/local-llm/launchers/icons/comfyui.svg
+Categories=Graphics;

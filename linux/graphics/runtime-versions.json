@@ -1,0 +1,22 @@
+{
+  "validated_on": "2026-10-18",
+  "comfyui_version": "0.42.0",
+  "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+  "python": "3.12.14",
+  "torch": "2.15.0.dev20260827+rocm7.2",
+  "torchvision": "0.30.0.dev20260831+rocm7.2",
+  "torchaudio": "2.11.0.dev20260831+rocm7.2",
+  "hip": "7.2.53211",
+  "comfy_kitchen": "0.2.39",
+  "comfy_aimdo": "0.5.6",
+  "frontend": "1.55.18",
+  "workflow_templates": "0.11.89",
+  "gpu": "2 x RX 7900 XTX 24 GB (gfx1100)",
+  "system_ram_GiB": 30.63,
+  "placement": "denoiser cuda:0; encoder and VAEs cuda:1; staged component placement, not TP",
+  "custom_nodes": [
+    "local_graphics_devices (maintained direct CLIP/VAE loaders)"
+  ],
+  "weights": "Shared SATA Graphics-Models; no duplicate NVMe model weights",
+  "requirements": "requirements-validated.txt"
+}

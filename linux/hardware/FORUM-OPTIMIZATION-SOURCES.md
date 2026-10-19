@@ -267,4 +267,25 @@ Native file/loader details are checked against
 [Comfy Qwen](https://huggingface.co/Comfy-Org/Qwen-Image-2.1),
 [Comfy H3](https://huggingface.co/Comfy-Org/MiniMax-H3) and
 [ComfyUI source 8f04fd6](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76).
-File integrity/format is validated; no new generation or speed result is claimed.
+File integrity/format was validated during preparation; generation results now follow below.
+
+## October 18 ComfyUI installation validation
+
+Local generation now passes on both RX 7900 XTX cards using staged components.
+[Results](../graphics/VALIDATION-2026-10-18.md) and
+[exact runtime](../graphics/runtime-versions.json) separate denoising from full
+SATA/32 GB staging time. Qwen BF16: 512x512/40 steps, 100.9 s total; H3 INT8:
+608x352/39 frames/20 steps, 232.4 s total. These are single local base-model
+runs, not a matched comparison with [Ang Lee's XTX/64 GiB Turbo report](https://lcz.me/topic/1168).
+The [Level1Techs RDNA4/32 GB report](https://forum.level1techs.com/t/my-experiences-with-comfyui-on-an-rx-9070xt/252735)
+remains a version-isolation rationale, not an XTX speed claim. No Turbo adapter,
+Comfy Kitchen attention override or archived MultiGPU pack was installed.
+
+[ComfyUI issue 15314](https://github.com/Comfy-Org/ComfyUI/issues/15314) motivated
+avoiding the inherited expandable allocator and checking decoded output.
+The initial core retarget test was stopped after duplicate encoder staging;
+[the exact deepclone source](https://github.com/Comfy-Org/ComfyUI/blob/8f04fd6ecf4a548937971e840af2a985529fab76/comfy/model_patcher.py)
+reloads the loader factory. Two maintained direct CLIP/VAE loaders now pass the
+target device to core load APIs at construction, with no upstream patch or
+weight change. Larger sizes, full-length video and speed tuning remain separate
+work. The old Unsloth Q2 corruption has not been attributed to the same cause.
