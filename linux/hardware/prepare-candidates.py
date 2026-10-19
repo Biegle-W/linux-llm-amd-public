@@ -13,33 +13,12 @@ def strata_candidate(source, ram_gib=32):
         raise ValueError('Choose the 32 GB profile or the gated 64 GB candidate')
     cfg = copy.deepcopy(source)
     args = cfg['args']
-    # Remove mode options before regenerating from an already migrated profile.
-    for option in ('--resident-budget-gib', '--ple-io', '--adapt-every', '--pcie-frac', '--pool-workers'):
-        if option in args:
-            i = args.index(option); del args[i:i+2]
-    for option in ('--mmap-experts', '--resident-cpu-experts'):
-        if option in args:
-            args.remove(option)
-    for option, value in {'--max-context': '32768' if ram_gib == 32 else '131072', '--kv-resident': '32768',
-                          '--kv': 'int8', '--spec': '3', '--spec-min-p': '0.7',
-                          '--prefill': '512' if ram_gib == 32 else '2048', '--vram-reserve-mib': '6144',
-                          '--conversation-cache-mib': '0'}.items():
-        args[args.index(option) + 1] = value
-    for option in ('--remote-expert-opt', '--trim-stage-weights'):
-        if option in args:
-            args.remove(option)
-    args += ['--mmap-experts', '--resident-cpu-experts', '--adapt-every', '0',
-             '--pcie-frac', '0', '--pool-workers', '6',
-             '--resident-budget-gib', '8' if ram_gib == 32 else '20', '--ple-io', 'mmap']
-    cfg.update(backend='hip', gpu=[0, 1], gpus_asked=True, layer_split='auto',
-               split_skip_if_fits=False, parallel=1,
-               exe=str(ROOT / 'strata/build-hip/strata'),
-               log=str(ROOT / 'dsh/logs/strata-amd-candidate.log'),
-               port=18030, lib_dirs=[str(ROOT / 'llm-tools/rocm-sdk/opt/rocm-7.2.3/lib'),
-                                      str(ROOT / 'llm-tools/rocm-sdk/opt/rocm-7.2.3/lib64'),
-                                      str(ROOT / 'llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu'),
-                                      str(ROOT / 'llm-tools/cuda-build/lib')],
-               env={'STRATA_PREFILL_MMQ': '1', 'STRATA_NO_ARENA_THP': '1', 'STRATA_IO_STATS': '1'})
+    # Preserve the validated placement, KV window, desktop reserves and overlap.
+    # RAM restoration must not regenerate the obsolete 32K/128K presets.
+    if ram_gib == 64:
+        args[args.index('--max-context') + 1] = '262144'
+        args[args.index('--resident-budget-gib') + 1] = '20'
+    cfg.update(log=str(ROOT / 'dsh/logs/strata-amd-candidate.log'), port=18030)
     # Candidates never activate automatically when memory capacity changes.
     cfg['minimum_host_ram_gib'] = 29 if ram_gib == 32 else 60
     cfg['worker_swap_max_bytes'] = 0

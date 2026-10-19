@@ -1,7 +1,7 @@
 {
   "qwen3.8-flash-next-iq3_xxs": {
-    "name": "Qwen3.8-Flash-Next Strata (32K, IQ3_XXS, dual AMD, MTP)",
-    "context": 32768,
+    "name": "Qwen3.8-Flash-Next Strata (256K, IQ3_XXS, dual AMD, MTP)",
+    "context": 262144,
     "config": "strata-iq3-profile.json",
     "enabled": true
   }

@@ -407,3 +407,17 @@ percentage decode improvement is not established. The upstream roughly20%
 prefill example is evidence on different cards, not a forecast for dual3060.
 A credible percentage needs the same engine, quant, CPU/RAM, actual prompt
 length, MTP, routing flags and warmed workloads, with single/dual runs interleaved.
+
+
+## October 19: RAM-backed native 256K on 32 GB / dual XTX
+
+[Local context sweep](STRATA-CONTEXT-2026-10-19.md) passed 64K,128K and 256K
+with INT8 KV/32K GPU residency, bounded CPU expert complement and unchanged
+HIP 0.1.45. [Pinned setup accounting](https://github.com/Niko1221/Strata/blob/477ac13cbe8e582c20484871ce459d20d82df09d/setup.py)
+and [multi-GPU implementation](https://github.com/Niko1221/Strata/blob/477ac13cbe8e582c20484871ce459d20d82df09d/docs/MULTI_GPU.md)
+support streamed host KV. The new admission check budgets full host KV beside
+experts and headroom. [lcz.me topic 2163](https://lcz.me/topic/2163), reviewed October 19,
+is the dual5060Ti IQ3_S196K/256K precedent; its hardware/speed are different.
+[Level1Techs October 8 discussion](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001)
+provides offload/PCIe context, no matched dual-XTX 32 GB experiment. No forum
+speed was imported. No experimental RoPE extension or new weight quant was used.

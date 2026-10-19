@@ -48,7 +48,8 @@ def main():
     runtime_env['LD_LIBRARY_PATH'] = ':'.join(cfg.get('lib_dirs', []))
     version = subprocess.run([cfg['exe'], '--version'], env=runtime_env,
                              capture_output=True, text=True, check=True, timeout=15).stdout.strip()
-    result = {'model':model,'runtime':version,'context':32768,'tests':[]}
+    configured_context = int(cfg['args'][cfg['args'].index('--max-context') + 1])
+    result = {'model':model,'runtime':version,'context':configured_context,'tests':[]}
     def save():
         a.output.parent.mkdir(parents=True, exist_ok=True)
         a.output.write_text(json.dumps(result,indent=2)+'\n')

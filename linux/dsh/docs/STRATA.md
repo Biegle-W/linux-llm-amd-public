@@ -1,14 +1,17 @@
 # Current Strata Q3 — October 19, 2026
 
-Use **Strata Q3** / `llm-strata` for a visible backend terminal, then launch
-**dsh** separately and choose **Local Strata** / `qwen3.8-flash-next-iq3_xxs`.
-Existing chats retain their own model selections. Context: **32,768 total tokens**.
+Use **Strata Q3** / `llm-strata` for a visible backend terminal. Launch **dsh**
+separately and select **Local Strata** / `qwen3.8-flash-next-iq3_xxs`.
+Context: **262,144 total tokens**, INT8 KV with 32K GPU residency and RAM backing.
+DSH replies remain capped at4096; history/tools/input/output share the total.
 
-HIP0.1.45, both RX7900XTX, explicit split26/stage trimming and overlapping handoff,
-2048 prefill, 14 GiB CPU expert budget, INT8 KV and MTP3. Each card reserves
-7 GiB; the scoped RAM/VRAM watchdog unloads only Strata when headroom is unsafe.
-A guard stop requires explicit `/models/load` or restart after freeing resources.
-This is layer splitting, not TP. The 64 GB /128K candidate remains inactive.
+HIP 0.1.45, both RX 7900 XTX, split 26/stage trimming and overlapped handoff,
+2048 prefill,13.5 GiB CPU expert budget, MTP3. Startup reserve7/8 GiB; scoped
+RAM/VRAM guard and no-swap scope remain. A guard stop requires explicit reload
+or restart after freeing resources. This is layer splitting, not TP.
 
-[Exact measurements, protection thresholds and source links](../../hardware/STRATA-OPTIMIZATION-2026-10-19.md).
-[Current client/runtime handoff](../../network/LINUX-LLM-RUNTIME-HANDOFF.md).
+Near-full retrieval/code: **258,044 input / 256 output**, native PP **775.1**,
+decode **39.9 t/s** in one sample. Short three-run medians: **72.2/48.0**
+code/prose. See [configuration, limits and results](../../hardware/STRATA-CONTEXT-2026-10-19.md)
+and [current handoff](../../network/LINUX-LLM-RUNTIME-HANDOFF.md).
+The 64 GB candidate is inactive and retains native 256K; it never activates itself.

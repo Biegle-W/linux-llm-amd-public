@@ -1,71 +1,32 @@
 # Strata: current 32 GB profile and 64 GB preparation
 
-The retained **Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS** uses both RX 7900 XTX
-cards through HIP layer splitting. Weights, prepared pack, tokenizer and MTP
-runtime remain on Shared SATA. No new quant or conversion is needed.
+The existing IQ3_XXS model now runs at **262,144 native context** on both AMD
+cards with 32 GB RAM. The old 32K cap was a validated conservative choice, not a
+hardware maximum. See [the current settings and measured limits](STRATA-CONTEXT-2026-10-19.md).
 
-The earlier blanket 64 GB requirement was a conservative local gate, not an
-engine minimum. See [community evidence](STRATA-LOW-RAM-COMMUNITY-2026-10-18.md)
-and [upstream resident split support](https://github.com/Niko1221/Strata/pull/848).
-The [local validation report](STRATA-DUAL-AMD-2026-10-18.md) distinguishes actual
-measurements from proposed settings.
+INT8 KV retains 32K on the GPUs and uses about 3.352 GiB host backing. The expert
+budget is13.5 GiB; startup requires29 GiB physical /22.852 GiB available RAM.
+Reserves are7/8 GiB. Both GPUs, overlapped split 26, stage trimming, MTP3,2048
+prefill, worker-only no-swap scope and continuous guard remain enabled.
 
-## Current 32 GB settings
+Start **Strata Q3** or `llm-strata`; DSH is separate. Keep other large graphics
+workloads separate. GPU headroom belongs to the whole desktop, not just Strata.
 
-- Source 0.1.45, commit `477ac13cbe8e582c20484871ce459d20d82df09d`;
-  [development-update validation](RUNTIME-UPGRADE-2026-10-18.md).
-- Separate `strata/build-hip/strata`, gfx1100, private ROCm 7.2.3 SDK.
-- Both GPUs, explicit split26 and stage trimming, overlapped handoff; one session, no single-card fallback.
-- 32,768 context; INT8 KV fully resident at this length; prefill chunk 2048.
-- Automatic GPU expert cache; up to **14 GiB** CPU-resident expert complement;
-  mmap fallback for anything outside that budget. PLE uses bounded mmap reads.
-- MTP `--spec 3 --spec-min-p 0.7`; six CPU expert workers.
-- 7 GiB VRAM reserve per card; fixed expert placement, PCIe expert alias off.
-- Conversation parking disabled to preserve RAM. Thinking defaults off.
-- Preflight requires 29 GiB physical RAM, retained assets/KFD and both GPUs.
-  After managed handover releases the old worker, require 20 GiB available RAM
-  and at least 16 GiB free VRAM on each card. These are admission gates, not measured peaks.
-- The worker runs in its own systemd scope with `MemorySwapMax=0`; global swap
-  and other applications are unchanged. A 0.5-second monitor checks both cards' free VRAM, host RAM, owned swap/spill and telemetry.
-  It unloads only Strata and requires explicit reload/restart after a guard stop.
-  [Exact thresholds and tested settings](STRATA-OPTIMIZATION-2026-10-19.md). Other applications stay running.
+## Additional 32 GB
 
-Start the Desktop **Strata Q3** launcher or run `llm-strata`; logs remain in its
-terminal. DSH has a separate launcher: select **Local Strata**, model
-`qwen3.8-flash-next-iq3_xxs`. Router API: `http://127.0.0.1:30020/v1`; its private
-worker is on 30021. The existing authenticated gateway exposes the enabled ID.
-Managed launches stop only configured LLM inference, including detached HIP
-Strata workers, before loading another backend.
+The inactive `dsh/strata-iq3-64gb-candidate.json` retains native 256K and the same
+KV/placement/MTP, with 20 GiB expert budget. It requires60 GiB physical and29.352 GiB
+available RAM. More memory does not automatically activate or validate it.
 
-## When the additional 32 GB arrives
-
-`dsh/strata-iq3-64gb-candidate.json` is prepared but **not an enabled model**.
-It retains both GPUs and the same files/MTP, proposes 131,072 context with INT8
-KV streaming (32,768 resident positions), a 2,048-token prefill chunk, and
-caps CPU experts at 20 GiB.
-It requires at least 60 GiB OS-visible RAM and 26 GiB available before loading.
-No 128K inference or speed result is claimed on the present 32 GB installation.
-Installing more RAM does not silently switch the live profile.
-
-After installing RAM and booting Linux:
+After installing RAM, boot Linux and run:
 
 ```bash
 free -h
-cd /opt/local-llm
 python3 hardware/check-strata-ready.py --ram 64
 ```
 
-Then validate the candidate on both cards: actual long-prompt retrieval, tools,
-streaming, MTP acceptance, RAM/VRAM residency and storage activity, before promoting
-its context into the active catalog. A readiness pass alone does not validate it.
-Use 64K first if 128K leaves insufficient memory or slows the intended workload.
-The 32K profile remains the usable default until that validation is complete.
-
-`python3 hardware/prepare-candidates.py` regenerates ignored 32/64 GB candidates;
-it does not activate either. `hardware/validate-strata.py --long` checks an already
-running 32K production router and writes ignored synthetic test evidence.
-
-No direct GPU P2P is required: Strata uses layer hand-offs through pinned host
-memory. This is not tensor parallelism. Preserve the Shared pack's compatibility
-with Windows; the historical 4070/3060 CUDA split and its 256K measurements do
-not establish current Linux/Windows AMD capacity or performance.
+Validate actual long-context retrieval/code, tools, streaming and memory on both
+cards before changing the active profile. Retain the validated256K profile
+until then. `hardware/prepare-candidates.py` writes inactive candidates only;
+it now preserves the current context/placement/reserves. Beyond256K uses
+experimental RoPE extension and is not enabled by either retained profile.

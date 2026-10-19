@@ -20,13 +20,13 @@
     "--mtp",
     "/mnt/llm-models/Strata/mtp/rt",
     "--max-context",
-    "131072",
+    "262144",
     "--kv",
     "int8",
     "--kv-resident",
     "32768",
     "--vram-reserve-mib",
-    "6144",
+    "7168",
     "--conversation-cache-mib",
     "0",
     "--conversation-cache-slots",
@@ -46,7 +46,10 @@
     "--resident-budget-gib",
     "20",
     "--ple-io",
-    "mmap"
+    "mmap",
+    "--trim-stage-weights",
+    "--vram-reserve-later-mib",
+    "8192"
   ],
   "cwd": "/opt/local-llm/strata",
   "tokenizer": "/mnt/llm-models/Strata/packs/iq3_xxs/tokenizer",
@@ -64,7 +67,7 @@
     1
   ],
   "gpus_asked": true,
-  "layer_split": "auto",
+  "layer_split": "26",
   "host": "127.0.0.1",
   "draft_vocab": "cjk",
   "open_browser": false,
@@ -74,9 +77,10 @@
   "env": {
     "STRATA_PREFILL_MMQ": "1",
     "STRATA_NO_ARENA_THP": "1",
-    "STRATA_IO_STATS": "1"
+    "STRATA_IO_STATS": "1",
+    "STRATA_SPLIT_OVERLAP": "1"
   },
   "minimum_host_ram_gib": 60,
-  "validation_status": "inactive: requires >=60 GiB OS-visible RAM and local 128K long-prompt validation",
+  "validation_status": "inactive: native 256K with 20 GiB expert budget; requires >=60 GiB OS-visible RAM and fresh validation",
   "worker_swap_max_bytes": 0
 }

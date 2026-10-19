@@ -11,13 +11,34 @@ ROOT = Path(__file__).resolve().parent.parent
 GIB = 1024**3
 
 
-def memory_blockers(total, available, minimum=29, budget=8, *, check_available=True):
+def kv_backing_gib(cfg):
+    """Budget full host backing when the KV context exceeds the resident window.
+
+    Twelve target QSA layers plus the INT8 draft layer; matches the installed
+    engine's streaming layout. The pinned host copy covers the full context.
+    """
+    args = cfg['args']
+    def value(flag, default):
+        return args[args.index(flag) + 1] if flag in args else default
+    context = int(value('--max-context', 32768))
+    resident = int(value('--kv-resident', context))
+    if not 0 < resident < context:
+        return 0.0
+    cell = {'int8': 1056, 'q4_0': 576, 'k8v4': 816}.get(value('--kv', 'int8'))
+    if cell is None:
+        raise RuntimeError('Unsupported KV format in the bounded Strata profile.')
+    return context * (12 * cell + 1056) / GIB
+
+
+def memory_blockers(total, available, minimum=29, budget=8, *, check_available=True, kv_gib=0):
     problems = []
     if total < minimum * GIB:
         problems.append(f'Strata needs {minimum:g} GiB OS-visible RAM for this profile; found {total/GIB:.1f}.')
-    if check_available and available < (budget + 6) * GIB:
-        problems.append(f'Strata needs {budget+6:g} GiB available RAM before loading '
-                        f'({budget:g} GiB expert budget plus 6 GiB headroom); found {available/GIB:.1f}. '
+    required = budget + kv_gib + 6
+    if check_available and available < required * GIB:
+        problems.append(f'Strata needs {required:.2f} GiB available RAM before loading '
+                        f'({budget:g} GiB expert budget, {kv_gib:.2f} GiB host KV and 6 GiB headroom); '
+                        f'found {available/GIB:.1f}. '
                         'Swap does not replace physical RAM.')
     return problems
 
@@ -39,7 +60,7 @@ def check_config(cfg, total, available, *, check_available=True):
     if not 0 < budget <= 24:
         raise RuntimeError('Unexpected Strata expert RAM budget.')
     problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], budget,
-                               check_available=check_available)
+                               check_available=check_available, kv_gib=kv_backing_gib(cfg))
     if problems:
         raise RuntimeError(' '.join(problems))
 

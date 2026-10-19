@@ -68,7 +68,7 @@ MoE models. Expert caching is distinct from KV/prompt caching; do not label
 `cache-ram` or static CPU placement as a hot-expert cache. Validate the installed
 backend's real cache implementation and MTP behavior before activation. Use the validated bounded 32 GB Strata profile on both AMD
 GPUs. Keep its
-separate 64 GB / 128K candidate inactive until physical-memory and live
+separate 64 GB candidate inactive until physical-memory and live
 long-context checks pass; more installed RAM does not activate it automatically.
 Do not silently re-enable full-GPU-only MoE defaults during later updates.
 
@@ -104,4 +104,10 @@ Strata desktop protection (October19): preserve at least a 6 GiB per-card startu
 reserve, continuous whole-card VRAM/owned-memory watchdog and latched guard
 failure. Unload only its owned worker; never reclaim space by killing unrelated
 GPU apps. The current measured profile and rollback limits are maintained in
-`linux/hardware/STRATA-OPTIMIZATION-2026-10-19.md`; overlap is layer splitting, not TP.
+`linux/hardware/STRATA-CONTEXT-2026-10-19.md`; overlap is layer splitting, not TP.
+
+Native 256K Strata is now validated on 32 GB RAM with INT8 KV / 32K GPU residency
+and full host backing. Preserve the streamed-KV admission budget beside expert
+RAM and desktop headroom. The 64 GB candidate retains native 256K and remains
+inactive; do not regenerate the obsolete 32K/128K context presets. Beyond 256K
+requires experimental RoPE/quality validation, not just successful allocation.

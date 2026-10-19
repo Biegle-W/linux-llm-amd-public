@@ -20,7 +20,7 @@
     "--mtp",
     "/mnt/llm-models/Strata/mtp/rt",
     "--max-context",
-    "32768",
+    "262144",
     "--kv",
     "int8",
     "--kv-resident",
@@ -44,10 +44,12 @@
     "--pool-workers",
     "6",
     "--resident-budget-gib",
-    "14",
+    "13.5",
     "--ple-io",
     "mmap",
-    "--trim-stage-weights"
+    "--trim-stage-weights",
+    "--vram-reserve-later-mib",
+    "8192"
   ],
   "cwd": "/opt/local-llm/strata",
   "tokenizer": "/mnt/llm-models/Strata/packs/iq3_xxs/tokenizer",
@@ -79,6 +81,6 @@
     "STRATA_SPLIT_OVERLAP": "1"
   },
   "minimum_host_ram_gib": 29,
-  "validation_status": "passed: dual-HIP 32K, overlap, stage trimming, 30070-input retrieval, tools/SSE; zero worker swap/spill and monitored desktop VRAM headroom",
+  "validation_status": "passed: dual AMD native 256K, 258044-input/256-output retrieval+code; production follow-up reused 258048 tokens; tools/SSE/authenticated gateway passed; zero worker swap/spill",
   "worker_swap_max_bytes": 0
 }

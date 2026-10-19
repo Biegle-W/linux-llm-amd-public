@@ -26,6 +26,21 @@ class StrataMemoryTests(unittest.TestCase):
     def test_64gb_profile_accepts_restored_ram_and_budget(self):
         self.assertEqual(strata_runtime.memory_blockers(62*GIB, 40*GIB, 60, 20), [])
 
+    def test_streamed_context_reserves_full_host_kv_beside_experts(self):
+        cfg = {'args':['--max-context','262144','--kv-resident','32768','--kv','int8']}
+        backing = strata_runtime.kv_backing_gib(cfg)
+        self.assertAlmostEqual(backing, 3.3515625)
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB,22*GIB,budget=14,kv_gib=backing))
+        self.assertEqual(strata_runtime.memory_blockers(30*GIB,24*GIB,budget=14,kv_gib=backing), [])
+
+    def test_fully_resident_kv_needs_no_host_context_copy(self):
+        cfg = {'args':['--max-context','32768','--kv-resident','32768','--kv','int8']}
+        self.assertEqual(strata_runtime.kv_backing_gib(cfg),0)
+
+    def test_q4_stream_keeps_int8_draft_backing(self):
+        cfg = {'args':['--max-context','524288','--kv-resident','32768','--kv','q4_0']}
+        self.assertAlmostEqual(strata_runtime.kv_backing_gib(cfg),3.890625)
+
     def test_profile_cannot_remove_desktop_vram_reserve(self):
         cfg = {'backend':'hip','gpu':[0,1],'parallel':1,'worker_swap_max_bytes':0,
                'minimum_host_ram_gib':29,

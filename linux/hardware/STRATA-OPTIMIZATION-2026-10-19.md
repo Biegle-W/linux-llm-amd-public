@@ -1,5 +1,7 @@
 # Strata dual-AMD handoff and desktop headroom — October 19, 2026
 
+**Historical 32K tuning:** the later [native256K profile](STRATA-CONTEXT-2026-10-19.md) supersedes the active settings below. Original measurements are preserved.
+
 Scope: existing Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS, Strata HIP 0.1.45,
 source `477ac13cbe8e582c20484871ce459d20d82df09d`, two RX7900XTX 24 GB,
 i5-13600KF/Z690 CPU PCIe4 x8/x8 and 32 GB RAM. Both GPUs are required.

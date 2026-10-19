@@ -42,7 +42,7 @@ Only one configured inference backend/model is active at a time.
 | Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, MTP3 | 40,960 | 39,440 | Book PP 1,488.15 at depth 0 | Code 114.57 / prose 66.05 | Oct 17, repaired `f84475c` fork [C17] |
 | Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, DFlash2 | 65,536 | 64,033 | Book PP 1,575.97 at depth 0 | Code 205.59 / prose 71.84 | Oct 17, repaired `f84475c` fork [C17] |
 | Qwen3.8-27B GPTQ INT4/group64 | vLLM ROCm TP2, compiled MTP3 | 65,536 | 64,033; latest TTFT 54.56 s | No fresh PP on dev329; previous dev190 Book PP 1,556.04 at depth 0 | Code 130.61 / prose 72.69 | Oct 18, dev329, three warm samples/task [U18] |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlapped layer split, expert cache/MTP3 | 32,768 | 30,070 | Native PP 1063.6 at 30,070 input | Code 77.6 / prose 52.3 | Oct 19, 0.1.45, three warm samples/task [OPT19] |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlapped layer split, CPU experts/MTP3/streamed INT8 KV | 262,144 | 258,044 | Native PP 775.1 at 258,044 input | Short code 72.2 / prose 48.0; long code 39.9 | Oct 19, 0.1.45; three warm short runs, one long sample [CTX19] |
 
 **Latest-build limits:** llama.cpp is now `31288c9c66e5`, but its five profiles
 received allocation, math, streaming and tool validation only; the table's
@@ -51,11 +51,10 @@ plus repairs and received functional/cache-capacity revalidation, without fresh
 timed workloads. vLLM is `0.32.0rc1.dev329+g39983a5e7.rocm723`; Strata HIP is
 0.1.45 / `477ac13cbe8e`. Exact pins: [runtime upgrade][U18].
 
-The three 256K MoE allocations passed approximately 64K retrieval, **not full
+The three llama.cpp 256K MoE allocations passed approximately 64K retrieval, **not full
 256K filling or sustained decode there**. The current dense-model retrieval
 figures above predate dual-card migration and are explicitly not fresh dual-card
-capacity measurements. Strata's 64 GB / 128K candidate remains inactive and
-unmeasured. October 18 Strata 0.1.45 timings had background C++ compilation; October 19
+capacity measurements. Strata's 64 GB candidate retains native 256K and remains inactive/unmeasured. October 18 Strata 0.1.45 timings had background C++ compilation; October 19
 Strata timing runs did not. vLLM's new
 short benchmark did not. Do not infer a controlled old/new speedup.
 
@@ -388,3 +387,18 @@ READMEs and the consolidated Shared handoff when relevant.
 [NVB]: https://github.com/Biegle-W/local-llm-public/blob/main/linux-nvidia/BUILD.md
 
 [OPT19]: STRATA-OPTIMIZATION-2026-10-19.md
+
+
+## October 19: native 256K Strata on 32 GB RAM
+
+The context sweep passed 64K,128K and 256K with 32K resident INT8 KV, RAM backing,
+both GPUs and unchanged HIP 0.1.45 source. Actual near-limit input/output:
+**258,044/256**, native PP **775.1**, native decode **39.9 t/s**.
+Short code/prose medians: **72.2/48.0**, three warm 512-token-cap samples/task.
+Expert budget 13.5 GiB, reserve7/8 GiB, split 26/trim/overlap. No worker swap/spill
+was sampled; tools and SSE passed. No model/runtime update or RoPE extension.
+These are complete-profile comparisons, not a context-only speedup claim.
+[CTX19]: STRATA-CONTEXT-2026-10-19.md
+
+[Report and all samples][CTX19]. Earlier 32K/64 GB candidate references in the
+dated history describe that earlier state; the current table is authoritative.

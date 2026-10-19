@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 GIB = 1024**3
 sys.path.insert(0, str(ROOT / "dsh"))
-from strata_runtime import memory_blockers
+from strata_runtime import memory_blockers, kv_backing_gib
 
 
 def inspect(ram=32):
@@ -19,7 +19,8 @@ def inspect(ram=32):
     source = json.loads(source_path.read_text())
     args = source['args']
     budget = float(args[args.index('--resident-budget-gib')+1])
-    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'], budget)
+    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'], budget,
+                               kv_gib=kv_backing_gib(source))
     args = source['args']
     paths = {option: Path(args[args.index(option)+1]) for option in ('--pack', '--native', '--ple-gguf', '--mtp')}
     required = [paths['--native'], paths['--ple-gguf'], paths['--pack'] / 'dense.bin',

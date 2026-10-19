@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Strata Q3
-Comment=Load Flash-Next IQ3_XXS immediately; 32K context, bounded RAM, MTP, both AMD GPUs
+Comment=Load Flash-Next IQ3_XXS immediately; 256K native context, RAM-backed KV, bounded RAM, MTP, both AMD GPUs
 Exec=/opt/local-llm/dsh/start-strata-q3
 Path=/opt/local-llm/dsh/workspace
 Terminal=true

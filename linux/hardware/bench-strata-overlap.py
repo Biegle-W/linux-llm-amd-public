@@ -54,10 +54,11 @@ def main():
     reserve = int(engine.args[engine.args.index('--vram-reserve-mib')+1])
     assert reserve >= 6144
     out = ROOT/'hardware/generated/strata-optimization-2026-10-19'/f'{args.tag}.json'
-    result = {'tag': args.tag, 'context':32768, 'overlap':env.get('STRATA_SPLIT_OVERLAP'),
+    context = int(engine.args[engine.args.index('--max-context')+1])
+    result = {'tag': args.tag, 'context':context, 'overlap':env.get('STRATA_SPLIT_OVERLAP'),
               'prefill_chunk':int(engine.args[engine.args.index('--prefill')+1]),
               'reserve_mib':reserve, 'split':26, 'trim_stage_weights':True,
-              'resident_budget_gib':int(engine.args[engine.args.index('--resident-budget-gib')+1]),
+              'resident_budget_gib':float(engine.args[engine.args.index('--resident-budget-gib')+1]),
               'runs':[], 'functional':{}, 'method':'native timing, greedy, 512 output cap, thinking off; one excluded warmup per task'}
     def save():
         out.parent.mkdir(parents=True,exist_ok=True)
