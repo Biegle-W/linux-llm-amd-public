@@ -82,7 +82,7 @@ def is_inference(p, root=ROOT):
     binaries = {str(root / name) for name in
                 ('llama.cpp/llama-server', 'llama.cpp/build/bin/llama-server',
                  'llama.cpp/build-vulkan/bin/llama-server', 'llama.cpp/build-hip/bin/llama-server',
-                 'strata/engine/strata')}
+                 'strata/engine/strata', 'strata/build-hip/strata')}
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':

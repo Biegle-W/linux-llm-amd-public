@@ -20,7 +20,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
   is obsolete. RTX 4070 and RTX 3060 are retired from this Linux setup.
 - **32 GB system RAM** is installed, about 30.6 GiB usable; a 64 GB
   configuration is planned. Benchmarks must state the memory capacity used.
-  Dense models keep GPU-resident weights; all three active MoEs use CPU expert
+  Dense models keep GPU-resident weights; all active MoEs use CPU expert
   backing and GPU hot-expert caches.
 - Use **both AMD cards for every production model**. llama.cpp uses layer split 1:1;
   SGLang/vLLM use TP2. FreeToken and its former single-card exception are retired.
@@ -68,6 +68,7 @@ not guarantees of full-window speed or general long-context accuracy.
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 65,536 | GPTQ INT4/group64 | MTP3 |
+| Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 32,768 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
 microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
@@ -138,7 +139,7 @@ and `launchers/icons/SOURCES.json` for pinned URLs, SHA-256 values and extractio
 notes. Artwork is unchanged; Turnstone's existing embedded favicon was decoded
 from its official HTML. `Icon=` points to the corresponding SVG/PNG in the runtime
 workspace; retain those files and update paths if moving the setup. Backend
-commands, terminal visibility, models, contexts and Strata's deferred status remain. DSH
+commands and terminal visibility remain; Strata now uses the tested dual-AMD profile below. DSH
 uses the official desktop PNG with its own opaque light tile/background; the
 transparent web favicon was replaced for visibility against wallpaper.
 
@@ -277,7 +278,7 @@ backends**. Internal routers/workers remain loopback-only:
 | llama.cpp | 8080 / 8081 |
 | SGLang | 30000 / 30001 |
 | vLLM | 30010 / 30011 |
-| Strata, inactive | 30020 / 30021 |
+| Strata / HIP | 30020 / 30021 |
 
 Do not use those internal ports for remote clients or confuse Linux's port 8081
 with the historical Windows Strata API. The gateway exposes chat/completions,
@@ -316,7 +317,7 @@ Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
 | SGLang Radeon fork (`gfx1100-support`) | `f84475ccf593087df3d1da13c9e675eadee12352`, locally repaired |
 | vLLM | `0.32.0rc1.dev190+g3f1bcfd82.rocm723`, locally patched |
 | ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
-| Strata source, retained inactive | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
+| Strata HIP source | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
 
 Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
 `dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
@@ -384,21 +385,50 @@ video, I2V/editing, Turbo and Windows execution remain unvalidated. The earlier
 Unsloth Q2 corrupt render is historical and not a controlled comparison with this
 native INT8 pipeline. The seven real model files remain on Shared SATA.
 
-## Retained Strata and retired setups
+## Strata and retired setups
 
-**Strata Q3 is disabled**, absent from the live API catalog and not AMD-validated.
-[October 18 low-RAM research](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md)
-found 32 GB / dual-3090 and about 30 GB / single-W7800 success reports. The
-local 64 GB readiness gate is conservative, not a Strata hardware minimum.
-A bounded-RAM dual-XTX IQ3_XXS strategy needs separate local validation; this
-research leaves the profile, runtime and gate unchanged.
+Latest local validation: the selected 32 GB profile passed a fresh **30,070-input**
+three-marker retrieval in **39.72 s** (763.1 t/s engine prefill). Short code/prose
+samples measured **59.8 / 47.8 t/s**; the 19-token long reply measured 68.5 t/s,
+not sustained full-context speed. Tools/results, SSE and MTP drafts passed;
+minimum available RAM 8.70 GiB, worker swap and sampled VRAM spill both zero.
+The worker has its own `MemorySwapMax=0` systemd scope; global swap is unchanged.
+Managed relaunch and authenticated gateway generation passed afterward; Strata
+is left running in its visible terminal with exactly one HIP engine.
 
-The old disabled metadata names 262,144 context; that is not an active capacity
-claim. Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and
-`mtp/rt` data. Q2's model/pack is removed; do not follow archived Q2 install or
-"leave Q2 running" instructions. HyperQwen, old CUDA environments/builds,
-GPT-OSS-20B/120B, Qwen 27B Q5, Bonsai 2 and old Nemotron Lightning setups are
-retired. Historical NVIDIA/Windows reference snapshots remain in the public repo.
+**Strata Q3 is enabled** as `qwen3.8-flash-next-iq3_xxs`, 32,768 total context,
+through `strata/build-hip/strata` 0.1.44.1 on both RX 7900 XTX cards. It uses
+an automatic layer split, INT8 KV (32K resident), MTP `--spec 3 --spec-min-p 0.7`,
+512-token prefill, six expert workers and 3 GiB VRAM reserve per card. Up to
+8 GiB CPU-resident experts complement the GPU cache, with mapped file fallback;
+PLE is mmap, conversation parking is off, and thinking defaults off.
+
+The Desktop **Strata Q3** launcher and `llm-strata` start only the backend in a
+visible terminal. DSH remains separate; **Local Strata** is registered and selected
+for new default sessions. Existing sessions keep their saved model selection.
+Router 30020 and private worker 30021 stay on loopback; the authenticated gateway
+exports the enabled ID. No new weights were downloaded or copied to NVMe.
+
+See [actual local checks and benchmark limits](../hardware/STRATA-DUAL-AMD-2026-10-18.md)
+and [community sources](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md).
+The old blanket 64 GB gate is replaced by per-profile physical-memory admission:
+29 GiB physical capacity before handover; 14 GiB available after managed
+workers release memory and before this 8 GiB-budget profile loads, without counting swap. A scoped monitor unloads only the owned Strata worker on sustained low RAM
+or worker swap. Managed handover now recognizes detached HIP Strata engines.
+
+The additional 32 GB RAM has a separate, inactive
+`dsh/strata-iq3-64gb-candidate.json`: 131,072 context, 32K resident INT8 KV with
+host backing, 2,048-token prefill, 20 GiB expert budget, same files and both GPUs. It requires 60 GiB
+total / 26 GiB available RAM and still needs live long-context validation.
+Installing RAM does not promote it automatically. Run
+`python3 hardware/check-strata-ready.py --ram 64` after boot; retain 32K until
+candidate validation passes. [Procedure](../hardware/STRATA-AFTER-RAM.md).
+
+Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and `mtp/rt`.
+Q2's model/pack is removed; do not follow archived Q2 instructions. HyperQwen,
+old CUDA environments/builds, GPT-OSS-20B/120B, Qwen 27B Q5, Bonsai 2 and old
+Nemotron Lightning setups remain retired. Historical NVIDIA/Windows reference
+snapshots remain in the public repo.
 
 ### Workspace archive and completed cleanup — October 18
 
@@ -424,14 +454,10 @@ including the public NVIDIA/Windows reference trees. Private binary archives and
 cleanup logs are excluded from Git. Future package installations may redownload
 packages; repeating removed experiments requires rebuilding their caches.
 
-After 64 GB RAM is installed and validated, `python3 hardware/check-strata-ready.py`
-checks prerequisites; exit zero is not proof of successful inference. A future
-Strata migration must validate **both AMD GPUs**, HIP kernel/library compatibility,
-MTP on/off correctness, GPU/RAM residency, tools/streaming and progressively
-larger real prompts before enabling a profile. The old single-AMD candidate and
-4070/3060 CUDA layer splits are starting/history references, not current recipes.
-Do not delete or regenerate shared Windows-compatible packs during a Linux-only
-experiment without a specific reason and authorization.
+For the future 64 GB Strata candidate, validate both GPUs, residency, tools,
+streaming and progressively larger actual prompts before enabling its larger
+context. Preserve the Shared Windows-compatible packs. The old single-AMD
+candidate and 4070/3060 CUDA layer splits are historical references.
 
 The Windows handoffs were last validated on the **old NVIDIA hardware**. Their
 Strata 0.1.44.1/CUDA 13.0, llama.cpp b11630, port 8081, Windows MagicDNS name and
@@ -495,7 +521,7 @@ Different platforms' headline speeds are not local measurements.
 |---|---|
 | Terminal closes immediately | vLLM now preserves startup errors; inspect its launcher log. Check per-GPU free VRAM and runtime probe. |
 | HTTP 401 | Configure the actual private Linux API key, not `local-strata`. |
-| HTTP 404 / unknown model | Copy an exact enabled ID from `/v1/models`; do not use Q2, HyperQwen or disabled Strata. |
+| HTTP 404 / unknown model | Copy an exact enabled ID from `/v1/models`; do not use Q2, HyperQwen or retired IDs. |
 | HTTP 503 | Start the required backend and inspect its terminal; gateway availability is separate from worker readiness. |
 | Refused / timed out | Check Linux session, address, service, client LAN/Tailscale path and TCP 10000 access. |
 | All Shared GGUF models fail after reboot | Confirm Shared is mounted; open it in Files if the mount helper lacks permission. Do not redownload first. |

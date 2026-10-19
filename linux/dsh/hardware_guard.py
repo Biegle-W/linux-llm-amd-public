@@ -1,4 +1,4 @@
-"""Reject stale two-NVIDIA profiles before any backend handover or model load."""
+"""Validate backend hardware before any inference handover or model load."""
 import csv
 import io
 import subprocess
@@ -36,14 +36,9 @@ def require_current_cuda_pair(cards=None):
             'No backend has been stopped.')
 
 
-def require_strata():
-    """Do not activate CPU expert residency or the old GPU split before migration."""
-    import json
-    from pathlib import Path
-    profiles = json.loads((Path(__file__).resolve().parent / 'strata-profiles.json').read_text())
-    if not any(p.get('enabled', True) for p in profiles.values()):
-        raise RuntimeError(next(iter(profiles.values()))['unavailable_reason'] + ' No backend has been stopped.')
-    require_current_cuda_pair()
+def require_strata(before_handover=False):
+    from strata_runtime import require_strata as require_hip_strata
+    return require_hip_strata(before_handover=before_handover)
 
 
 def require_hyperqwen():

@@ -300,3 +300,14 @@ about 30 GB / one 48 GB gfx1100 card. Neither establishes the exact dual-XTX
 was checked without a matched result. The retained source supports complementary
 resident storage across a layer split; the local 64 GB readiness gate is
 conservative, not an engine minimum. No local inference or benchmark was run.
+
+## October 18 dual-XTX Strata validation
+
+The [local 32 GB report](STRATA-DUAL-AMD-2026-10-18.md) now supplies an actual
+dual-RX7900XTX result, distinct from [lcz.me 2053](https://lcz.me/topic/2053)
+and [Strata #364](https://github.com/Niko1221/Strata/issues/364). The
+[Level1Techs review](https://forum.level1techs.com/t/creating-an-agent-harness-and-self-hosting-part-2-my-hardware-setup/252909)
+remains general supporting discussion. Source-reviewed resident split support
+was used with an 8 GiB bound, fixed GPU cache and a worker-only no-swap scope.
+Near-32K retrieval/tools/streaming passed; a future 64 GB / 128K candidate is
+prepared but inactive. All measured rates and failure limits are in the report.

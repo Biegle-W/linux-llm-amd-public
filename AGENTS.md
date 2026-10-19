@@ -66,8 +66,10 @@ residency checks; prepare separately gated 64 GB candidates. Preserve dense
 Qwen 27B and Muse GPU placement. Use actual expert-count metadata to identify
 MoE models. Expert caching is distinct from KV/prompt caching; do not label
 `cache-ram` or static CPU placement as a hot-expert cache. Validate the installed
-backend's real cache implementation and MTP behavior before activation. Keep
-Strata's larger model deferred until its RAM and dual-HIP validation pass.
+backend's real cache implementation and MTP behavior before activation. Use the validated bounded 32 GB Strata profile on both AMD
+GPUs. Keep its
+separate 64 GB / 128K candidate inactive until physical-memory and live
+long-context checks pass; more installed RAM does not activate it automatically.
 Do not silently re-enable full-GPU-only MoE defaults during later updates.
 
 ## FreeToken retired — October 18

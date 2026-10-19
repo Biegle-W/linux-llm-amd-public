@@ -6,8 +6,20 @@ Reference hardware configurations, inference-engine setup, reproducible tuning a
 
 Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](linux/graphics/INSTALL.md) are current.
 
-Strata RAM requirements: [community evidence at 32 GB](linux/hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md). The local
-64 GB gate is conservative; dual-XTX operation at 32 GB remains untested.
+**Strata IQ3_XXS on dual RX 7900 XTX:** current 32K/32 GB profile uses MTP,
+bounded CPU expert backing and GPU caching. A gated 64 GB / 128K candidate is
+prepared. [Configuration and local results](linux/hardware/STRATA-DUAL-AMD-2026-10-18.md).
+
+| Strata IQ3_XXS, dual RX 7900 XTX / 32 GB RAM | Prefill t/s | Decode t/s |
+|---|---:|---:|
+| Python merge task, 29 input / 408 output | 85.5 | 59.8 |
+| Prose, 25 input / 512 output | 80.1 | 47.8 |
+| Fresh 30,070-token retrieval / 19 output | 763.1 | 68.5 |
+
+One sample each, thinking off, MTP enabled. Long retrieval, tools/results and
+streaming passed; zero sampled worker swap/VRAM spill, 8.7 GiB minimum available
+RAM. The short retrieval reply does not establish sustained long-context decode.
+
 
 <!-- comfyui-validation-2026-10-18 -->
 
@@ -32,8 +44,8 @@ remain. [Historical measurements and limits](linux/hardware/FREETOKEN-RETIRED-20
 use CPU expert storage plus real GPU hot-expert caches on **both RX 7900 XTX**
 cards through llama.cpp HIP. Each has **262,144 tokens allocated**; arithmetic,
 JSON, tools and approximately 64K retrieval passed. Full 256K usage is untested.
-Dense Qwen 27B/Muse and SGLang/vLLM settings stay as before. Strata Q3 remains
-gated until 64 GB RAM and dual-HIP validation. Earlier GPU-only rows are historical.
+Dense Qwen 27B/Muse and SGLang/vLLM settings stay as before. Strata Q3 now
+uses the bounded 32 GB dual-HIP profile above. Earlier GPU-only rows are historical.
 
 | Current MoE API ID | Context allocated | Short code decode t/s | ~64K retrieval prefill t/s |
 |---|---:|---:|---:|
@@ -189,7 +201,8 @@ GPU prefix caching and 2,048-token prefill chunks. MTP retains **40,960 tokens**
 and now also caches prefixes. Both use both RX 7900 XTX cards. Near-window
 retrieval, arithmetic, JSON and tool-call checks passed with no sampled VRAM spill.
 Eight profiles remain enabled; DFlash2 remains the SGLang default and llama.cpp
-Qwen Q4 remains the DSH default. HiCache and Strata wait for the RAM upgrade.
+Qwen Q4 was the DSH default at that check. HiCache remained deferred; Strata
+was subsequently enabled at 32K with bounded expert backing.
 
 | Current SGLang profile | Context budget | Inventory / code / prose decode t/s | Cold / repeated 8K TTFT |
 |---|---:|---:|---:|
@@ -232,8 +245,8 @@ includes desktop/runtime allocations and can miss brief peaks.
 
 **On the previous motherboard, SGLang MTP2 was blocked** after repeatable HIP
 buffer/index failures. It was hidden from DSH, Turnstone and API model lists until the October 17 retry passed. SGLang defaults to the
-working DFlash2 profile. vLLM and llama.cpp retain working MTP. Strata remains
-deferred until the planned RAM expansion and dual-HIP validation; its Q3 assets are preserved.
+working DFlash2 profile. vLLM and llama.cpp retain working MTP. Strata was
+still deferred at that historical check; its current 32K dual-HIP setup is above.
 
 The second card is behind a chipset PCIe 4.0 x4 link and neither card exposes
 ROCm peer access. Both-card execution does not guarantee higher speed. The
@@ -329,11 +342,12 @@ separate Qwen MTP GGUF and unused Bolt vision projector were also removed from
 the active machine. Historical NVIDIA profiles remain as reference configurations.
 The SGLang DFlash2 drafter is still required.
 
-Strata's Q3 assets are preserved, but its profile is disabled until the planned 64 GB RAM is installed
-and the AMD HIP candidate is validated. See the [RAM-capacity preparation](linux/hardware/STRATA-AFTER-RAM.md)
-for the inactive AMD-only 32K candidate and read-only readiness check. The HIP
-build passed AMD device detection and a 64 MiB allocator self-test. No Strata
-model load or new speed benchmark was performed during preparation.
+Strata's current Q3 profile reuses the retained Shared SATA files on both AMD
+cards at 32K with MTP and an 8 GiB CPU expert budget. Click **Strata Q3** or run
+`llm-strata`; DSH stays separate. Select **Local Strata** /
+`qwen3.8-flash-next-iq3_xxs`; local API `http://127.0.0.1:30020/v1`.
+The prepared 64 GB / 128K candidate remains inactive until the installed-memory
+gate and actual long-context checks pass. [Settings and upgrade procedure](linux/hardware/STRATA-AFTER-RAM.md).
 
 ## Previous NVIDIA setup
 

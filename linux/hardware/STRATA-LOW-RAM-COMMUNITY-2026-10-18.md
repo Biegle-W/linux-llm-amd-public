@@ -4,6 +4,11 @@ Scope: Qwen3.8-Flash-Next in Strata. These are community reports and source
 checks, not new local inference measurements. The retained Linux Strata profile
 remains inactive; no model was loaded by this research.
 
+**Subsequent local test:** the user authorized execution after this research.
+The [32 GB / dual-XTX validation](STRATA-DUAL-AMD-2026-10-18.md) now passes at
+32K with bounded CPU backing and a no-swap scope. The research-only status below
+describes the earlier check, not the current active profile.
+
 ## Closest first-person reports
 
 | Source | RAM / GPU | Model and context | Reported result |

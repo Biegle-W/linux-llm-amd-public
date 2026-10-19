@@ -35,7 +35,8 @@ try:
         require_rocm(kind)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
-        require_strata()
+        require_strata(before_handover=True)
+        worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind != 'llama':
         require_current_cuda_pair()
     if kind in ('llama', 'strata'):
@@ -49,8 +50,7 @@ try:
         paths = [ROOT / 'logs' / (kind + '.log'),
                  *[ROOT / 'logs' / (kind + '-' + model + '.log') for model in profiles]]
     else:
-        # Avoid long huge-page compaction during the ~40 GiB CUDA host registration.
-        # Ubuntu's per-user memory-pressure monitor can kill the terminal mid-load.
+        # Keep low-RAM native allocations out of expensive huge-page compaction.
         worker_env['STRATA_NO_ARENA_THP'] = '1'
         cmd = [sys.executable, str(ROOT / 'strata-router.py')]
         profiles = json.loads((ROOT / 'strata-profiles.json').read_text())
@@ -65,6 +65,9 @@ try:
         if rocm:
             require_rocm_headroom(max(profile.get('min_free_vram_gib', 21.0)
                                       for profile in profiles.values()))
+        if kind == 'strata':
+            require_strata()
+            require_rocm_headroom(16)
         monitor = start_monitor(paths)
         print(f'{names[kind]} backend only. Launch dsh separately. Ctrl+C stops this backend.', flush=True)
         print('Loading the selected Strata model now. Shared SATA cold loads may take a few minutes.' if kind == 'strata'

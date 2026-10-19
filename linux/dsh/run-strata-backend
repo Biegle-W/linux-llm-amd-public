@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /opt/local-llm/strata
-export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=0,1
-export XDG_CONFIG_HOME=/opt/local-llm/strata/local-config
-exec .venv/bin/python serve/server.py --engine strata --config /opt/local-llm/dsh/strata-iq3-profile.json --host 127.0.0.1 --port 30020 "$@"
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "$ROOT/hardware/rocm-env.sh"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$ROOT/llm-tools/cuda-build/lib"
+export XDG_CONFIG_HOME="$ROOT/strata/local-config"
+cd "$ROOT/strata"
+exec .venv/bin/python serve/server.py --engine strata --config "$ROOT/dsh/strata-iq3-profile.json" --host 127.0.0.1 --port 30020 "$@"

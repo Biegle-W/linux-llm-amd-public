@@ -12,6 +12,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from strata_prefix import add_document_prefix
+from moe_memory import host_memory, worker_memory
 
 ROOT = Path(__file__).resolve().parent
 PROFILES = json.loads((ROOT / 'strata-profiles.json').read_text())
@@ -21,6 +22,25 @@ requests = threading.Lock()
 lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
+
+
+def watch_memory():
+    """Stop only this router's worker if physical memory stays exhausted."""
+    low = 0
+    while not stopping.wait(3):
+        proc = worker
+        if proc is None or proc.poll() is not None:
+            low = 0
+            continue
+        _, available = host_memory()
+        swap, _ = worker_memory(proc.pid)
+        low = low + 1 if available < 2 * 1024**3 or swap > 1024**3 else 0
+        if low >= 3:
+            print('Strata memory guard: sustained low RAM or worker swap; unloading only the owned Strata worker.', flush=True)
+            with lifecycle:
+                if worker is proc:
+                    stop_worker()
+            low = 0
 
 
 def stop_worker():
@@ -49,11 +69,14 @@ def ensure_worker(model):
         if active == model and worker is not None and worker.poll() is None:
             return
         stop_worker()
+        from hardware_guard import require_strata
+        require_strata()
         profile = PROFILES[model]
         config = ROOT / profile['config']
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from Shared SATA; other Strata weights are unloaded.', flush=True)
-        worker = subprocess.Popen([str(ROOT / 'run-strata-backend'),
+        worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
+                                   '--property=MemorySwapMax=0', str(ROOT / 'run-strata-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
         proc = worker
@@ -93,7 +116,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(data)))
         self.end_headers()
-        self.wfile.write(data)
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            self.close_connection = True
 
     def do_GET(self):
         if self.path == '/health':
@@ -174,6 +200,7 @@ if __name__ == '__main__':
     for sig in (signal.SIGTERM, signal.SIGHUP):
         signal.signal(sig, interrupted)
     server = ThreadingHTTPServer(('127.0.0.1', 30020), Handler)
+    threading.Thread(target=watch_memory, daemon=True).start()
     try:
         ensure_worker(DEFAULT)
         print('Strata Q3 ready on 30020:', DEFAULT, '(close this terminal before switching backends).', flush=True)

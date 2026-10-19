@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """Read-only Strata preparation check; never loads a model or stops another job."""
+import argparse
 import json
+import sys
 import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GIB = 1024**3
+sys.path.insert(0, str(ROOT / "dsh"))
+from strata_runtime import memory_blockers
 
 
-def memory_blockers(total, available):
-    problems = []
-    if total < 60 * GIB:
-        problems.append('Restore the planned 64 GB RAM before CPU-resident expert testing (at least 60 GiB OS-visible).')
-    if available < 48 * GIB:
-        problems.append('Leave at least 48 GiB host RAM available for the first conservative test; this is not a measured peak requirement.')
-    return problems
-
-
-def inspect():
+def inspect(ram=32):
     mem = {line.split(':')[0]: int(line.split()[1]) * 1024
            for line in Path('/proc/meminfo').read_text().splitlines()}
-    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'])
-    source = json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text())
+    source_path = ROOT / ('dsh/strata-iq3-profile.json' if ram == 32 else 'dsh/strata-iq3-64gb-candidate.json')
+    source = json.loads(source_path.read_text())
+    args = source['args']
+    budget = float(args[args.index('--resident-budget-gib')+1])
+    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'], budget)
     args = source['args']
     paths = {option: Path(args[args.index(option)+1]) for option in ('--pack', '--native', '--ple-gguf', '--mtp')}
     required = [paths['--native'], paths['--ple-gguf'], paths['--pack'] / 'dense.bin',
@@ -50,19 +48,19 @@ def inspect():
     kfd_ok = os.access('/dev/kfd', os.R_OK | os.W_OK)
     if not kfd_ok:
         problems.append('KFD access is unavailable in this execution environment.')
-    candidate = ROOT / 'hardware/generated/strata-7900xtx-candidate.json'
-    if not candidate.is_file():
-        problems.append('Generate the inactive candidate with hardware/prepare-candidates.py.')
     return {'eligible_for_manual_testing': not problems,
             'ram_total_gib': round(mem['MemTotal']/GIB,2),
             'ram_available_gib': round(mem['MemAvailable']/GIB,2),
             'assets_present': assets_ok, 'tokenizer_present': tokenizer_ok,
             'hip_engine_present': engine_ok, 'amd_pci_candidates': amd,
             'kfd_access': kfd_ok, 'blockers': problems,
-            'note': 'Passing permits planning a manual test only. It does not establish repaired RAM stability, HIP correctness, model fit, speed or usable context. No inference was started.'}
+            'profile_ram_gb': ram, 'expert_budget_gib': budget,
+            'note': 'Read-only readiness, not a benchmark or proof of maximum context. No inference was started.'}
 
 
 if __name__ == '__main__':
-    result = inspect()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--ram', type=int, choices=(32, 64), default=32)
+    result = inspect(parser.parse_args().ram)
     print(json.dumps(result, indent=2))
     raise SystemExit(0 if result['eligible_for_manual_testing'] else 2)

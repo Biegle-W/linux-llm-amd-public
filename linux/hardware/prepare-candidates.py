@@ -8,18 +8,29 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def strata_candidate(source):
+def strata_candidate(source, ram_gib=32):
+    if ram_gib not in (32, 64):
+        raise ValueError('Choose the 32 GB profile or the gated 64 GB candidate')
     cfg = copy.deepcopy(source)
     args = cfg['args']
-    for option, value in {'--max-context': '32768', '--kv-resident': '32768',
-                          '--prefill': '512', '--vram-reserve-mib': '3072',
+    # Remove mode options before regenerating from an already migrated profile.
+    for option in ('--resident-budget-gib', '--ple-io', '--adapt-every', '--pcie-frac', '--pool-workers'):
+        if option in args:
+            i = args.index(option); del args[i:i+2]
+    for option in ('--mmap-experts', '--resident-cpu-experts'):
+        if option in args:
+            args.remove(option)
+    for option, value in {'--max-context': '32768' if ram_gib == 32 else '131072', '--kv-resident': '32768',
+                          '--kv': 'int8', '--spec': '3', '--spec-min-p': '0.7',
+                          '--prefill': '512' if ram_gib == 32 else '2048', '--vram-reserve-mib': '3072',
                           '--conversation-cache-mib': '0'}.items():
         args[args.index(option) + 1] = value
     for option in ('--remote-expert-opt', '--trim-stage-weights'):
         if option in args:
             args.remove(option)
     args += ['--mmap-experts', '--resident-cpu-experts', '--adapt-every', '0',
-             '--pcie-frac', '0', '--pool-workers', '6']
+             '--pcie-frac', '0', '--pool-workers', '6',
+             '--resident-budget-gib', '8' if ram_gib == 32 else '20', '--ple-io', 'mmap']
     cfg.update(backend='hip', gpu=[0, 1], gpus_asked=True, layer_split='auto',
                split_skip_if_fits=False, parallel=1,
                exe=str(ROOT / 'strata/build-hip/strata'),
@@ -28,10 +39,10 @@ def strata_candidate(source):
                                       str(ROOT / 'llm-tools/rocm-sdk/opt/rocm-7.2.3/lib64'),
                                       str(ROOT / 'llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu'),
                                       str(ROOT / 'llm-tools/cuda-build/lib')],
-               env={'STRATA_PREFILL_MMQ': '1', 'STRATA_NO_ARENA_THP': '1'})
-    # Source-reviewed dual-HIP CPU expert residency + auto GPU expert cache.
-    # Still inactive and gated on restored RAM and live validation.
-    cfg['minimum_host_ram_gib'] = 60
+               env={'STRATA_PREFILL_MMQ': '1', 'STRATA_NO_ARENA_THP': '1', 'STRATA_IO_STATS': '1'})
+    # Candidates never activate automatically when memory capacity changes.
+    cfg['minimum_host_ram_gib'] = 29 if ram_gib == 32 else 60
+    cfg['worker_swap_max_bytes'] = 0
     cfg['validation_status'] = 'inactive: dual-HIP inference and long context unvalidated'
     # lib_dirs and any optional hipBLASLt table must match the SDK used to build HIP.
     return cfg
@@ -70,8 +81,11 @@ spec-draft-n-max = 3
 def main():
     dest = ROOT / 'hardware/generated'
     dest.mkdir(parents=True, exist_ok=True)
-    cfg = strata_candidate(json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text()))
-    (dest / 'strata-7900xtx-candidate.json').write_text(json.dumps(cfg, indent=2) + '\n')
+    source = json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text())
+    for ram in (32, 64):
+        cfg = strata_candidate(source, ram)
+        (dest / f'strata-{ram}gb-candidate.json').write_text(json.dumps(cfg, indent=2) + '\n')
+        (dest / f'strata-{ram}gb-candidate.shared-settings.json').write_text('{"reasoning_effort":"none"}\n')
     (dest / 'llama-7900xtx-candidate.ini').write_text(llama_candidate((ROOT / 'dsh/models.ini').read_text()))
     print('Wrote inactive candidates to', dest)
     print('No launchers, API catalogs, runtimes or model files changed.')

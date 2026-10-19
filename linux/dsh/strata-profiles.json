@@ -1,9 +1,8 @@
 {
   "qwen3.8-flash-next-iq3_xxs": {
-    "name": "Qwen3.8-Flash-Next Strata (256K, IQ3_XXS, MTP)",
-    "context": 262144,
+    "name": "Qwen3.8-Flash-Next Strata (32K, IQ3_XXS, dual AMD, MTP)",
+    "context": 32768,
     "config": "strata-iq3-profile.json",
-    "enabled": false,
-    "unavailable_reason": "Strata Q3 is deferred until the planned 64 GB RAM is installed and the AMD HIP profile passes validation. Shared model assets are retained. Run hardware/check-strata-ready.py after the RAM expansion; the previous two-NVIDIA profile must not be launched on the current GPU pair."
+    "enabled": true
   }
 }

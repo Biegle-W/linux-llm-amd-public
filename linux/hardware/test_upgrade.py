@@ -72,7 +72,7 @@ class UpgradeTests(unittest.TestCase):
         gateway = importlib.util.module_from_spec(gateway_spec)
         gateway_spec.loader.exec_module(gateway)
         self.assertFalse(any('hyperqwen' in model for model in gateway.catalog()))
-        self.assertFalse(any('flash-next' in model for model in gateway.catalog()))
+        self.assertIn('qwen3.8-flash-next-iq3_xxs', gateway.catalog())
 
     def test_current_pair_is_accepted(self):
         hardware_guard.require_current_cuda_pair([card('RTX 4070'), card('RTX 3060')])
@@ -88,6 +88,7 @@ class UpgradeTests(unittest.TestCase):
             with self.subTest(kind=kind), \
                  patch.object(sys, 'argv', ['launch-backend.py', kind]), \
                  patch.object(hardware_guard, 'nvidia_inventory', return_value=[card('RTX 4070')]), \
+                 patch('strata_runtime.amd_devices', side_effect=RuntimeError('AMD unavailable')), \
                  patch.object(backend_switch, 'startup_handover') as handover, \
                  patch.object(backend_switch, 'clear_owner'), \
                  self.assertRaises(SystemExit) as result:
@@ -145,7 +146,10 @@ class UpgradeTests(unittest.TestCase):
         self.assertIn('--resident-cpu-experts', cfg['args'])
         self.assertTrue(any('rocm-sdk' in path for path in cfg['lib_dirs']))
         self.assertFalse(any(path.endswith('cuda-build/lib64') for path in cfg['lib_dirs']))
-        self.assertEqual(cfg['minimum_host_ram_gib'], 60)
+        self.assertEqual(cfg['minimum_host_ram_gib'], 29)
+        future = candidates.strata_candidate(source, 64)
+        self.assertEqual(future['minimum_host_ram_gib'], 60)
+        self.assertIn('131072', future['args'])
 
     def test_llama_does_not_inherit_dual_cuda_overrides(self):
         text = candidates.llama_candidate((ROOT / 'dsh/models.ini').read_text())
