@@ -13,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from strata_prefix import add_document_prefix
 from moe_memory import host_memory, worker_memory
+from strata_memory import MemoryGuard, vram_snapshot
 
 ROOT = Path(__file__).resolve().parent
 PROFILES = json.loads((ROOT / 'strata-profiles.json').read_text())
@@ -22,35 +23,43 @@ requests = threading.Lock()
 lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
+memory_fault = None
 
 
 def watch_memory():
-    """Stop only this router's worker if physical memory stays exhausted."""
-    low = 0
-    while not stopping.wait(3):
+    """Unload only the owned worker before desktop headroom is exhausted."""
+    global memory_fault
+    guard = MemoryGuard()
+    while not stopping.wait(.5):
         proc = worker
         if proc is None or proc.poll() is not None:
-            low = 0
+            guard = MemoryGuard()
             continue
         _, available = host_memory()
-        swap, _ = worker_memory(proc.pid)
-        low = low + 1 if available < 2 * 1024**3 or swap > 1024**3 else 0
-        if low >= 3:
-            print('Strata memory guard: sustained low RAM or worker swap; unloading only the owned Strata worker.', flush=True)
+        swap, spill = worker_memory(proc.pid)
+        try:
+            readings = vram_snapshot()
+        except (OSError, ValueError, RuntimeError):
+            readings = None
+        reason = guard.check(available, swap, spill, readings)
+        if reason:
             with lifecycle:
                 if worker is proc:
-                    stop_worker()
-            low = 0
+                    memory_fault = reason
+                    print('Strata memory guard: ' + reason +
+                          '; unloading only the owned worker. Explicit reload or restart required.', flush=True)
+                    stop_worker(timeout=3)
+            guard = MemoryGuard()
 
 
-def stop_worker():
+def stop_worker(timeout=40):
     global worker, active, logfile
     proc, worker = worker, None
     active = None
     if proc is not None and proc.poll() is None:
         try:
             os.killpg(proc.pid, signal.SIGTERM)
-            proc.wait(timeout=40)
+            proc.wait(timeout=timeout)
         except ProcessLookupError:
             pass
         except subprocess.TimeoutExpired:
@@ -66,6 +75,8 @@ def ensure_worker(model):
     with lifecycle:
         if stopping.is_set():
             raise RuntimeError('Strata is shutting down')
+        if memory_fault:
+            raise RuntimeError(memory_fault + '; use /models/load explicitly or restart after freeing GPU memory')
         if active == model and worker is not None and worker.poll() is None:
             return
         stop_worker()
@@ -123,7 +134,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/health':
-            return self.send_json(200, {'status': 'ok', 'active_model': active})
+            return self.send_json(200, {'status': 'degraded' if memory_fault else 'ok',
+                                        'active_model': active, 'memory_fault': memory_fault})
         if self.path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': [
                 {'id': key, 'object': 'model', 'owned_by': 'local-strata',
@@ -133,6 +145,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_json(404, {'error': 'Unknown endpoint'})
 
     def do_POST(self):
+        global memory_fault
         if self.path not in ('/v1/chat/completions', '/models/load', '/models/unload'):
             return self.send_json(404, {'error': 'Unknown endpoint'})
         try:
@@ -155,6 +168,9 @@ class Handler(BaseHTTPRequestHandler):
                         if active == model:
                             stop_worker()
                     return self.send_json(200, {'success': True})
+                if self.path == '/models/load':
+                    with lifecycle:
+                        memory_fault = None
                 ensure_worker(model)
                 if self.path == '/models/load':
                     return self.send_json(200, {'success': True})

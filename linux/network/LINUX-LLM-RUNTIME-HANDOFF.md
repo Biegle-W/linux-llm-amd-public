@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 19, 2026 (America/Toronto)**. Runtime checks remain dated October 18;
-the October 19 change consolidates saved benchmark history without rerunning it.
+Updated **October 19, 2026 (America/Toronto)**. Most runtime checks remain dated October 18; October 19 adds measured Strata
+overlap/prefill tuning and desktop headroom protection.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
@@ -418,24 +418,25 @@ native INT8 pipeline. The seven real model files remain on Shared SATA.
 
 ## Strata and retired setups
 
-Latest local validation: the selected 32 GB profile passed a fresh **30,070-input**
-three-marker retrieval in **37.82 s** (801.4 t/s engine prefill) on HIP 0.1.45.
-Short code/prose samples measured **66.7 / 48.5 t/s**; the 19-token long reply
-measured 68.7 t/s, not sustained full-context speed. These are single validation
-samples with a background C++ build, not a controlled version comparison.
-Tools/results, SSE and MTP drafts passed; minimum available RAM 14.2 GiB,
-worker swap and sampled VRAM spill both zero. Whole-card peaks were 22.23 /
-23.77 GiB, including unrelated allocations; the second card was close to full.
-The worker has its own `MemorySwapMax=0` systemd scope; global swap is unchanged.
-Managed relaunch and authenticated gateway generation passed afterward; Strata
-is left running in its visible terminal with exactly one HIP engine.
+Latest October 19 validation: **Strata Q3** `qwen3.8-flash-next-iq3_xxs`,
+HIP0.1.45/source `477ac13cbe8e`, both RX7900XTX, **32,768 total context**.
+Explicit boundary26 (layers0–25 /26–47), `--trim-stage-weights`,
+`STRATA_SPLIT_OVERLAP=1`, INT8 KV32K resident, MTP3/minimum probability 0.7,
+2048-token prefill, six workers, **14 GiB CPU expert budget** and **7 GiB
+VRAM reserve on each card**. Same SATA model/pack/MTP/tokenizer; PLE remains mmap.
+Conversation parking and adaptive expert swaps remain off; thinking defaults off.
 
-**Strata Q3 is enabled** as `qwen3.8-flash-next-iq3_xxs`, 32,768 total context,
-through `strata/build-hip/strata` 0.1.45 on both RX 7900 XTX cards. It uses
-an automatic layer split, INT8 KV (32K resident), MTP `--spec 3 --spec-min-p 0.7`,
-512-token prefill, six expert workers and 3 GiB VRAM reserve per card. Up to
-8 GiB CPU-resident experts complement the GPU cache, with mapped file fallback;
-PLE is mmap, conversation parking is off, and thinking defaults off.
+Three warm short medians: **77.6/52.3 t/s code/prose**. Fresh **30,070 input**
+retrieval passed at native PP **1063.6 t/s**; its short answer does not establish
+sustained full-window decode. Tools/results and SSE passed, owned swap/spill were
+zero. [Controls, method and results](../hardware/STRATA-OPTIMIZATION-2026-10-19.md).
+
+The worker retains its own `MemorySwapMax=0` scope. Every 0.5 seconds the router checks
+both cards: below 3 GiB free twice or below 1.5 GiB once unloads only Strata.
+It also checks host RAM, owned swap/spill and missing GPU telemetry. Guard
+failures latch: chat requests return an error until explicit `/models/load` or
+restart after freeing resources. The independent frontend/gateway and other
+apps are preserved. This is sampled protection, not a guarantee against bursts.
 
 The Desktop **Strata Q3** launcher and `llm-strata` start only the backend in a
 visible terminal. DSH remains separate; **Local Strata** is registered and selected
@@ -447,9 +448,9 @@ See [current upgrade checks](../hardware/RUNTIME-UPGRADE-2026-10-18.md),
 [original 0.1.44.1 measurements and limits](../hardware/STRATA-DUAL-AMD-2026-10-18.md)
 and [community sources](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md).
 The old blanket 64 GB gate is replaced by per-profile physical-memory admission:
-29 GiB physical capacity before handover; 14 GiB available after managed
-workers release memory and before this 8 GiB-budget profile loads, without counting swap. A scoped monitor unloads only the owned Strata worker on sustained low RAM
-or worker swap. Managed handover now recognizes detached HIP Strata engines.
+29 GiB physical capacity before handover; 20 GiB available after managed
+workers release memory and before this 14 GiB-budget profile loads, without counting swap.
+The scoped RAM/VRAM watchdog stops only its owned Strata worker. Managed handover now recognizes detached HIP Strata engines.
 
 The additional 32 GB RAM has a separate, inactive
 `dsh/strata-iq3-64gb-candidate.json`: 131,072 context, 32K resident INT8 KV with
@@ -511,9 +512,9 @@ separately from actual input tested, PP separately from TTFT, exact measured
 builds and validation-only updates. The three 256K MoE allocations have 63,911-token
 retrieval evidence; full 256K is untested. Latest llama.cpp/SGLang checks did not
 rerun throughput. Latest vLLM dev329 code/prose medians are 130.61/72.69 t/s;
-Strata 0.1.45 single samples are 66.7/48.5 t/s at 32K allocation. Earlier results
+Strata 0.1.45 October 19 medians are 77.6/52.3 t/s at 32K allocation. Earlier results
 below retain their original dates/builds and are not latest-build measurements.
-No worker or runtime configuration changed during the October 19 compilation.
+The original history compilation changed no runtime; subsequent October 19 Strata tuning is documented above.
 The [published history](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/BENCHMARK-HISTORY.md)
 is also accessible to clients reading this handoff directly from Shared.
 

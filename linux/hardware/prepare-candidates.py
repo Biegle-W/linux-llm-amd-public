@@ -22,7 +22,7 @@ def strata_candidate(source, ram_gib=32):
             args.remove(option)
     for option, value in {'--max-context': '32768' if ram_gib == 32 else '131072', '--kv-resident': '32768',
                           '--kv': 'int8', '--spec': '3', '--spec-min-p': '0.7',
-                          '--prefill': '512' if ram_gib == 32 else '2048', '--vram-reserve-mib': '3072',
+                          '--prefill': '512' if ram_gib == 32 else '2048', '--vram-reserve-mib': '6144',
                           '--conversation-cache-mib': '0'}.items():
         args[args.index(option) + 1] = value
     for option in ('--remote-expert-opt', '--trim-stage-weights'):

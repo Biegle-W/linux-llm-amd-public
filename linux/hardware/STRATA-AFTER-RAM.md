@@ -15,19 +15,20 @@ measurements from proposed settings.
 - Source 0.1.45, commit `477ac13cbe8e582c20484871ce459d20d82df09d`;
   [development-update validation](RUNTIME-UPGRADE-2026-10-18.md).
 - Separate `strata/build-hip/strata`, gfx1100, private ROCm 7.2.3 SDK.
-- Both GPUs, automatic layer split, one session, no single-card fallback.
-- 32,768 context; INT8 KV fully resident at this length; prefill chunk 512.
-- Automatic GPU expert cache; up to **8 GiB** CPU-resident expert complement;
+- Both GPUs, explicit split26 and stage trimming, overlapped handoff; one session, no single-card fallback.
+- 32,768 context; INT8 KV fully resident at this length; prefill chunk 2048.
+- Automatic GPU expert cache; up to **14 GiB** CPU-resident expert complement;
   mmap fallback for anything outside that budget. PLE uses bounded mmap reads.
 - MTP `--spec 3 --spec-min-p 0.7`; six CPU expert workers.
-- 3 GiB VRAM reserve per card; fixed expert placement, PCIe expert alias off.
+- 7 GiB VRAM reserve per card; fixed expert placement, PCIe expert alias off.
 - Conversation parking disabled to preserve RAM. Thinking defaults off.
 - Preflight requires 29 GiB physical RAM, retained assets/KFD and both GPUs.
-  After managed handover releases the old worker, require 14 GiB available RAM
+  After managed handover releases the old worker, require 20 GiB available RAM
   and at least 16 GiB free VRAM on each card. These are admission gates, not measured peaks.
 - The worker runs in its own systemd scope with `MemorySwapMax=0`; global swap
-  and other applications are unchanged. A monitor unloads only the owned Strata worker after sustained less than
-  2 GiB available RAM or over 1 GiB worker swap. Other applications stay running.
+  and other applications are unchanged. A 0.5-second monitor checks both cards' free VRAM, host RAM, owned swap/spill and telemetry.
+  It unloads only Strata and requires explicit reload/restart after a guard stop.
+  [Exact thresholds and tested settings](STRATA-OPTIMIZATION-2026-10-19.md). Other applications stay running.
 
 Start the Desktop **Strata Q3** launcher or run `llm-strata`; logs remain in its
 terminal. DSH has a separate launcher: select **Local Strata**, model

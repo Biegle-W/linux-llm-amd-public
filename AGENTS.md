@@ -99,3 +99,9 @@ workload/method and saved evidence. Label functional-only checks as validation
 only; preserve earlier speeds with their original dates/builds. Distinguish
 native prefill, benchmark estimates and TTFT. Do not imply that an allocated
 window was fully tested or invent throughput for an unmeasured update.
+
+Strata desktop protection (October19): preserve at least a 6 GiB per-card startup
+reserve, continuous whole-card VRAM/owned-memory watchdog and latched guard
+failure. Unload only its owned worker; never reclaim space by killing unrelated
+GPU apps. The current measured profile and rollback limits are maintained in
+`linux/hardware/STRATA-OPTIMIZATION-2026-10-19.md`; overlap is layer splitting, not TP.

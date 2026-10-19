@@ -29,6 +29,10 @@ def check_config(cfg, total, available, *, check_available=True):
     if cfg.get('worker_swap_max_bytes') != 0:
         raise RuntimeError('Strata must retain its worker-only no-swap policy.')
     args = cfg['args']
+    reserve = int(args[args.index('--vram-reserve-mib') + 1]) if '--vram-reserve-mib' in args else 0
+    later = int(args[args.index('--vram-reserve-later-mib') + 1]) if '--vram-reserve-later-mib' in args else reserve
+    if min(reserve, later) < 6144:
+        raise RuntimeError('Strata must reserve at least 6 GiB on each desktop/inference GPU.')
     if '--resident-cpu-experts' not in args or '--resident-budget-gib' not in args:
         raise RuntimeError('Strata requires bounded CPU expert backing plus GPU expert caching.')
     budget = float(args[args.index('--resident-budget-gib') + 1])

@@ -5,7 +5,7 @@
 
 [Full dated history: every retained model/engine, hardware phase, context,
 prefill/decode and validation-only update](linux/hardware/BENCHMARK-HISTORY.md).
-Compiled from saved results; **no benchmarks rerun**. This table is the current
+History compiled from saved results; October 19 Strata tuning adds new measurements. This table is the current
 nine-profile index; older dated sections below retain their historical settings.
 All current profiles use **both RX 7900 XTX cards**, with 32 GB system RAM.
 
@@ -19,14 +19,14 @@ All current profiles use **both RX 7900 XTX cards**, with 32 GB system RAM.
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, MTP3 | 40,960 | Code 114.57 / prose 66.05 | Oct 17, repaired `f84475c` |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | Code 205.59 / prose 71.84 | Oct 17, repaired `f84475c` |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | Code 130.61 / prose 72.69 | Oct 18, dev329 |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, MTP3/expert cache | 32,768 | Code 66.7 / prose 48.5 | Oct 18, 0.1.45, single samples |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3/expert cache | 32,768 | Code 77.6 / prose 52.3 | Oct 19, 0.1.45, three warm samples/task |
 
 These are different workloads/methods, not a matched ranking. Muse's smoke
 spent its output cap in reasoning. The three 256K MoE profiles were tested at
 **63,911 actual input tokens**, not a filled 256K window. Their native prefill
 rates were **417.9 / 424.0 / 457.8 t/s** in table order. SGLang MTP/DFlash
 retrieved **39,440 / 64,033 input tokens**; latest vLLM retrieved **64,033**
-(TTFT **54.56 s**), Strata **30,070** (native prefill **801.4 t/s**).
+(TTFT **54.56 s**), Strata **30,070** (latest native prefill **1063.6 t/s**).
 These short retrieval answers do not establish sustained full-window decode.
 The latest llama.cpp `31288c9c66e5` update and unchanged SGLang fork received
 functional revalidation, **not fresh speed tests**. Keep earlier speeds dated.
@@ -40,6 +40,14 @@ Reference hardware configurations, inference-engine setup, reproducible tuning a
 
 Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](linux/graphics/INSTALL.md) are current.
 
+**October 19 Strata tuning:** overlap enabled on both RX7900XTX cards, explicit
+split26/stage trimming, 2048-token prefill and 14 GiB CPU expert budget.
+32K context retained. Latest three-run short medians: **77.6 code / 52.3
+prose t/s**; 30,070-input retrieval prefill **1063.6 t/s**. A 7 GiB reserve on
+each card plus a continuous owned-worker guard protects desktop headroom; guard
+stops latch until explicit reload/restart. This is layer splitting, **not TP**.
+[Matched controls, individual results, safety behavior and both forum sources](linux/hardware/STRATA-OPTIMIZATION-2026-10-19.md).
+
 **October 18 development updates:** llama.cpp HIP/Vulkan `31288c9c66e5`,
 Strata HIP **0.1.45** and vLLM ROCm **dev329 / 39983a5e7** replace the earlier
 builds. SGLang retains the latest gfx1100 fork head `f84475ccf593` with its local
@@ -48,7 +56,8 @@ repairs; official main is not a compatible unchanged replacement.
 
 **Strata IQ3_XXS on both RX 7900 XTX cards:** 32K context on the installed
 32 GB RAM, MTP3, bounded CPU expert backing and GPU caches. Its separately gated
-64 GB / 128K candidate remains inactive. New **HIP 0.1.45 validation samples**:
+64 GB / 128K candidate remains inactive. Historical **October 18 HIP0.1.45 samples
+before October 19 tuning**:
 
 | Workload | Input / output tokens | Prefill t/s | Decode t/s |
 |---|---:|---:|---:|

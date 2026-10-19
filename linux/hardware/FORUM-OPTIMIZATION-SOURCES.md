@@ -337,3 +337,28 @@ The new [RX 7900 XTX ExLlamaV3 ROCm port](https://github.com/phoenixhaxor/exllam
 is a promising source-backed candidate, with single-card DFlash2 results. It is
 not a locally validated dual-card profile. Keep its new EXL3 format, workload,
 KV precision and context separate from the existing GPTQ/GGUF measurements.
+
+## October 19: Strata dual-gfx1100 handoff and desktop headroom
+
+- Primary: [Strata handoff PR936](https://github.com/Niko1221/Strata/pull/936),
+  bsvinay, October 5, and the [pinned multi-GPU guide](https://github.com/Niko1221/Strata/blob/477ac13cbe8e582c20484871ce459d20d82df09d/docs/MULTI_GPU.md).
+  Its two-XTX/9900X/52 GB report motivates testing `STRATA_SPLIT_OVERLAP=1`;
+  the author's 53→70.1 code / 45→55.9 prose t/s are not local measurements.
+  This overlaps layer-stage handoff; it does not implement TP or require P2P.
+- [lcz.me dual-XTX Strata report, topic2062](https://lcz.me/topic/2062),
+  reviewed October 19: Swift IQ3_XXS, Strata0.1.38/HIP7.2, 128K allocation,
+  CPU x8 plus OCuLink x4. Its report explicitly distinguishes layer splitting
+  from TP and records roughly 50 GiB host use after dual-card startup. Different
+  RAM, checkpoint/profile and topology prevent importing its speeds or context.
+- [Level1Techs 7900-XTX inference notes](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869),
+  ivgranite, reviewed October 19: broader gfx1100/ROCm/memory-budget experience,
+  not a matching Strata overlap experiment. No performance gain is attributed
+  to that discussion. The local bounded test uses only both existing AMD cards.
+- Desktop safety basis: [pinned AMD guide](https://github.com/Niko1221/Strata/blob/477ac13cbe8e582c20484871ce459d20d82df09d/docs/AMD_HIP.md)
+  discusses graphics headroom alongside expert caching. A startup reserve is
+  not a hard allocation cap; continuous checks cannot guarantee prevention of
+  every burst allocation or driver fault. Local code stops only the owned
+  Strata worker and latches a guard failure until explicit reload/restart.
+
+Local measurements, retained settings and validation limits are recorded in
+[the October19 optimization report](STRATA-OPTIMIZATION-2026-10-19.md).

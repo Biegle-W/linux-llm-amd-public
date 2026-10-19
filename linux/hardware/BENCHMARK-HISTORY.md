@@ -1,7 +1,7 @@
 # LLM benchmark and context history
 
-Compiled October 19, 2026 from saved results; **no benchmarks rerun**. Last
-runtime validation/measurements: October 18. Dates below are local dates in 2026.
+Maintained October 19, 2026. The original compilation used saved results;
+the October 19 Strata optimization adds fresh measurements and validation. Dates below are local dates in 2026.
 This is the index of measured updates, including older hardware and retired
 profiles; it does not imply that every historical configuration remains installed.
 
@@ -42,7 +42,7 @@ Only one configured inference backend/model is active at a time.
 | Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, MTP3 | 40,960 | 39,440 | Book PP 1,488.15 at depth 0 | Code 114.57 / prose 66.05 | Oct 17, repaired `f84475c` fork [C17] |
 | Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, DFlash2 | 65,536 | 64,033 | Book PP 1,575.97 at depth 0 | Code 205.59 / prose 71.84 | Oct 17, repaired `f84475c` fork [C17] |
 | Qwen3.8-27B GPTQ INT4/group64 | vLLM ROCm TP2, compiled MTP3 | 65,536 | 64,033; latest TTFT 54.56 s | No fresh PP on dev329; previous dev190 Book PP 1,556.04 at depth 0 | Code 130.61 / prose 72.69 | Oct 18, dev329, three warm samples/task [U18] |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, expert backing/cache, MTP3 | 32,768 | 30,070 | Native PP 801.4 at 30,070 input | Code 66.7 / prose 48.5 | Oct 18, 0.1.45, one sample/task [U18] |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlapped layer split, expert cache/MTP3 | 32,768 | 30,070 | Native PP 1063.6 at 30,070 input | Code 77.6 / prose 52.3 | Oct 19, 0.1.45, three warm samples/task [OPT19] |
 
 **Latest-build limits:** llama.cpp is now `31288c9c66e5`, but its five profiles
 received allocation, math, streaming and tool validation only; the table's
@@ -55,7 +55,8 @@ The three 256K MoE allocations passed approximately 64K retrieval, **not full
 256K filling or sustained decode there**. The current dense-model retrieval
 figures above predate dual-card migration and are explicitly not fresh dual-card
 capacity measurements. Strata's 64 GB / 128K candidate remains inactive and
-unmeasured. Strata 0.1.45 timings had background C++ compilation; vLLM's new
+unmeasured. October 18 Strata 0.1.45 timings had background C++ compilation; October 19
+Strata timing runs did not. vLLM's new
 short benchmark did not. Do not infer a controlled old/new speedup.
 
 ## Update history: NVIDIA pair, 64 GB RAM
@@ -307,6 +308,58 @@ test results/limitations remain in the [retirement record][FT], not mixed into
 these dual-GPU production comparisons. Image/video generation has step/time
 metrics rather than LLM context/decode; see [graphics validation](../graphics/VALIDATION-2026-10-18.md).
 
+## October 19: Strata protected overlap and prefill tuning
+
+Both RX7900XTX cards, 32 GB RAM, HIP0.1.45 at unchanged source `477ac13cbe8e`.
+Retained **32,768 context**; explicit split26/stage trimming and continuous
+desktop protection. Controls reserve 6 GiB/card; the selected profile reserves 7 GiB/card. A matched serial/overlap/serial sequence used 512 prefill, 10 GiB expert
+budget, three timed greedy code/prose samples per arm plus warm-up. Subsequent
+prefill candidates are complete-profile comparisons, not isolated overlap gains.
+
+| Arm | Overlap | Prefill chunk / expert RAM budget / VRAM reserve per card | Code / prose median decode t/s | Native PP at 8,022 input t/s | Minimum free VRAM GPU0 / GPU1 GiB |
+|---|---:|---|---:|---:|---|
+| serial-1 | 0 | 512 / 10 GiB / 6 GiB reserve | 65.9 / 46.2 | 774.8 | 5.249 / 3.708 |
+| overlap-1 | 1 | 512 / 10 GiB / 6 GiB reserve | 79.4 / 53.4 | 772.7 | 5.249 / 3.845 |
+| serial-2 | 0 | 512 / 10 GiB / 6 GiB reserve | 66.3 / 46.8 | 780.8 | 5.249 / 3.81 |
+| prefill-2048 | 1 | 2048 / 12 GiB / 6 GiB reserve | 81.0 / 53.7 | 984.2 | 4.568 / 3.125 |
+| prefill-2048-reserve7 | 1 | 2048 / 14 GiB / 7 GiB reserve | 77.6 / 52.3 | 938.1 | 5.568 / 4.115 |
+
+Selected: **overlap enabled, 2048-token prefill, 14 GiB CPU expert budget**,
+explicit split26 and stage trimming, 7 GiB reserve/card, unchanged 32K context,
+INT8 KV and MTP3/minimum probability 0.7. Cold expert loading is excluded.
+The matched overlap arm improved code/prose medians by **20.5%/15.6%**
+versus the first serial control; repeating serial returned close to the original
+speeds. The 6 GiB/2K candidate was faster (81.0/53.7 t/s, PP984.2), but left
+only 3.125 GiB free on the display card, close to the 3 GiB guard threshold.
+The selected 7 GiB candidate left **4.115 GiB free** there, trading about
+4.2% code /2.6% prose /4.7% prefill speed for one more GiB of margin.
+Compared with the first protected serial control, the retained complete profile
+improved code/prose by **17.8%/13.2%** and the same 8,022-input prefill by **21.1%**.
+These are small sequential samples; they do not isolate each later setting.
+
+The selected startup reported **11.79 GiB pinned CPU expert backing** and
+**14.65/13.53 GiB GPU expert caches**. Dense/head/MTP weights, KV, prompt/graph
+buffers and unrelated desktop allocations occupy additional memory. The 14 GiB
+value is a CPU expert budget, not a claim that exactly 14 GiB is consumed.
+
+The matched serial→overlap comparison is separate from later complete-profile
+prefill/RAM changes. Compare actual output counts/hashes in the data; identical
+outputs occurred in several runs, but not every greedy output was identical.
+
+Production validation passed arithmetic, a complete tool-call/result round trip,
+authenticated gateway access (recorded separately), SSE and **30,070 input**
+three-marker retrieval: native PP **1063.6 t/s**, **28.53 s total**.
+Its 19-token answer is not sustained full-context decode. Latest
+short-task medians are **77.6/52.3 t/s**. Full validation minimum
+available RAM: **13.24 GiB**; maximum
+worker swap and sampled dedicated-VRAM spill were zero. Monitoring cannot prove
+long-duration stability or prevent every burst. The selected model remains in its
+visible terminal; DSH stays separate and API IDs/endpoints/context are unchanged.
+
+[Curated settings, individual timings, output hashes and memory checks](strata-optimization-2026-10-19.json).
+Guard/admission/ownership regression tests passed in both repositories. Tests use
+synthetic memory pressure; no GPU-exhaustion or deliberate desktop-crash test was run.
+
 ## Recording future updates
 
 After a runtime, hardware, quantization, context or placement change, append a
@@ -333,3 +386,5 @@ READMEs and the consolidated Shared handoff when relevant.
 [FT]: FREETOKEN-RETIRED-2026-10-18.md
 [PUB]: https://github.com/Biegle-W/local-llm-public#saved-benchmark-results
 [NVB]: https://github.com/Biegle-W/local-llm-public/blob/main/linux-nvidia/BUILD.md
+
+[OPT19]: STRATA-OPTIMIZATION-2026-10-19.md

@@ -151,6 +151,8 @@ class UpgradeTests(unittest.TestCase):
         future = candidates.strata_candidate(source, 64)
         self.assertEqual(future['minimum_host_ram_gib'], 60)
         self.assertIn('131072', future['args'])
+        for candidate in (cfg, future):
+            self.assertEqual(candidate['args'][candidate['args'].index('--vram-reserve-mib')+1], '6144')
 
     def test_llama_does_not_inherit_dual_cuda_overrides(self):
         text = candidates.llama_candidate((ROOT / 'dsh/models.ini').read_text())

@@ -26,7 +26,7 @@
     "--kv-resident",
     "32768",
     "--vram-reserve-mib",
-    "3072",
+    "6144",
     "--conversation-cache-mib",
     "0",
     "--conversation-cache-slots",
