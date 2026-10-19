@@ -421,3 +421,15 @@ is the dual5060Ti IQ3_S196K/256K precedent; its hardware/speed are different.
 [Level1Techs October 8 discussion](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001)
 provides offload/PCIe context, no matched dual-XTX 32 GB experiment. No forum
 speed was imported. No experimental RoPE extension or new weight quant was used.
+
+## October 19: Nemotron Super 32/64 GB preparation
+
+Both forums were searched for matching Super VL/dual-XTX results; no matching
+measurement was established. [lcz.me single-XTX Qwen/KVMem report](https://lcz.me/topic/1972/9)
+and [Level1Techs RAM/partial-offload tests](https://forum.level1techs.com/t/ryzen-9950x-ram-tuning-and-benchmarks/219347)
+have different models, memory and/or GPU hardware. They were reviewed for
+applicability, not copied as local benchmarks or direct configuration recipes.
+Use the [Unsloth primary guide](https://unsloth.ai/docs/models/nemotron-3.5-super-vl)
+and installed [llama.cpp implementation](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37)
+for architecture/cache support, and the [new local result](NEMOTRON-SUPER-2026-10-19.md)
+for actual capacity and throughput. No runtime update was required.

@@ -436,3 +436,17 @@ These are complete-profile comparisons, not a context-only speedup claim.
 
 [Report and all samples][CTX19]. Earlier 32K/64 GB candidate references in the
 dated history describe that earlier state; the current table is authoritative.
+
+## October 19: Nemotron Super IQ3 added after the nine-profile batch
+
+New 120B-total/12B-active model, UD-IQ3_XXS, llama.cpp HIP `31288c9c66e5`,
+both XTX cards, 32 GB RAM, CPU experts + GPU cache, 32K/non-MTP.
+Three fixed ~8K-input/256-output runs per workload: native prefill **95.75 /
+97.13 t/s**, external TTFT **84.699 / 83.521 s**, external decode **14.16 /
+16.32 t/s** (code/prose). A separate **28,546-input/22-output** marker probe
+passed, with native prefill **100.08 t/s** and TTFT **285.249 s**.
+These fixed-input TTFT/decode trials differ from the earlier batch's short
+prompts; do not combine them into an unqualified hardware speed comparison.
+[Settings and validation](NEMOTRON-SUPER-2026-10-19.md),
+[numeric trials and rejected splits](results/nemotron-super-2026-10-19.json).
+Q4 is prepared but inactive, with no local performance result.

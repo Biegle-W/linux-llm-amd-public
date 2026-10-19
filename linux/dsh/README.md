@@ -1,5 +1,7 @@
 # DeepSeek Harness runtime
 
+October 19 addition: select **Local llama.cpp / Nemotron 3.5 Super VL 120B UD-IQ3_XXS** for the validated 32K dual-HIP CPU-expert/cache profile. Q4_K_XL is prepared for 64 GB RAM and remains inactive. [Settings, measured results and gates](../hardware/NEMOTRON-SUPER-2026-10-19.md).
+
 Current October 18 MoE placement uses CPU expert backing plus GPU expert caching on both AMD cards; select models through the existing llama.cpp provider. See [current configuration and validation](../hardware/MOE-OFFLOAD-2026-10-18.md). Older single-card/GPU-only notes below are historical.
 
 **October 17 Harness update:** DeepSeek Harness is pinned to

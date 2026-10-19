@@ -72,6 +72,8 @@ def admit_model(model, call, port):
               if item.get('status', {}).get('value') == 'loaded']
     same = model in loaded
     reason = memory_reason(profile, total, available, same)
+    if not same:
+        reason = reason or vram_headroom_reason(profile, 'min_start_vram_gib')
     if reason and not same:
         for previous in loaded:
             if previous != model:
@@ -79,6 +81,7 @@ def admit_model(model, call, port):
         for _ in range(20):
             total, available = host_memory()
             reason = memory_reason(profile, total, available)
+            reason = reason or vram_headroom_reason(profile, 'min_start_vram_gib')
             if not reason:
                 break
             time.sleep(.25)
@@ -127,6 +130,22 @@ def worker_memory(pid):
     return swap, nonresident
 
 
+def vram_headroom_reason(profile, reserve_key='min_free_vram_gib'):
+    """Optional whole-card reserve, including desktop and unrelated GPU users."""
+    reserve = profile.get(reserve_key, 0) * GIB
+    if not reserve:
+        return None
+    from amd_device import amd_devices
+    try:
+        for device in amd_devices():
+            free = int((device/'mem_info_vram_total').read_text()) - int((device/'mem_info_vram_used').read_text())
+            if free < reserve:
+                return f'MoE requires {reserve/GIB:g} GiB free VRAM per card; {device.name} has {free/GIB:.2f} GiB.'
+    except (OSError, RuntimeError, ValueError) as error:
+        return f'Cannot verify the required per-card VRAM reserve: {error}'
+    return None
+
+
 def watch_worker(proc, active_model, stop):
     """Stop only the owned native parent when CPU residency becomes unsafe."""
     done = threading.Event()
@@ -136,16 +155,19 @@ def watch_worker(proc, active_model, stop):
         while not done.wait(1):
             if proc.poll() is not None:
                 return
-            if active_model() not in profiles():
+            profile = profiles().get(active_model())
+            if not profile:
                 low = 0
                 continue
             _, available = host_memory()
             swap, spill = worker_memory(proc.pid)
-            low = low + 1 if available < 3*GIB else 0
+            vram_reason = vram_headroom_reason(profile)
+            low = low + 1 if available < 3*GIB or vram_reason else 0
             spill_count = spill_count + 1 if spill > 256*1024**2 else 0
             if low >= 3 or swap > 256*1024**2 or spill_count >= 3:
                 print(f'MoE memory guard: available={available/GIB:.2f} GiB, '
                       f'owned swap={swap/1024**2:.0f} MiB, dedicated VRAM spill={spill/1024**2:.0f} MiB. '
+                      f'{vram_reason or ""} '
                       'Stopping only this native model worker; DSH and other apps remain.', flush=True)
                 stop(proc)
                 return

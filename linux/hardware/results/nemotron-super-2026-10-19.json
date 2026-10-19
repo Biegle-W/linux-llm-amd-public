@@ -1,0 +1,514 @@
+{
+  "date": "2026-10-19",
+  "hardware": {
+    "cpu": "Intel Core i5-13600KF",
+    "gpu": "2 x RX 7900 XTX 24 GB",
+    "ram_gb": 32,
+    "pcie": "CPU PCIe4 x8/x8"
+  },
+  "model_revision": "75a5829055f69a0359085ae6bbd0a81b60bc05c6",
+  "runtime_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
+  "selected": "iq3-32k-split-21-19",
+  "method": {
+    "timed_input": "fixed 8108 code / 8111 prose tokens, uncached across three repeats each",
+    "output_tokens": 256,
+    "prefill": "native prompt_per_second",
+    "ttft": "monotonic submission to first SSE content/reasoning delta",
+    "decode": "(completion_tokens-1)/(stream_end-first_output)",
+    "long_probe": "28546 input / 22 output, three-marker retrieval; not sustained long decode",
+    "warmup": "excluded short task warmups after the long probe",
+    "memory": "one-second whole-card and owned-worker samples; worker-only no-swap scope",
+    "integration_worker_memory_scope": "Native llama-server parents/children, excluding the separate Python HTTP router"
+  },
+  "trials": {
+    "iq3-16k-split-1-1": {
+      "model": "nemotron-3.5-super-iq3",
+      "runtime_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
+      "context": 16384,
+      "split": "1,1",
+      "mtp": false,
+      "phase": "split",
+      "host_expert_bytes": 20533739520,
+      "cache_mib": 2048,
+      "trials": [],
+      "status": "failed",
+      "memory": {
+        "min_available_bytes": 5944938496,
+        "max_gpu_used_bytes": [
+          19646754816,
+          23417782272
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_worker_spill_bytes": 0
+      },
+      "error": "Worker exited during startup; inspect the saved log",
+      "guard_failure": "Owned-worker guard: insufficient RAM/VRAM headroom, swapping, or VRAM spill"
+    },
+    "iq3-16k-split-19-21": {
+      "model": "nemotron-3.5-super-iq3",
+      "runtime_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
+      "context": 16384,
+      "split": "19,21",
+      "mtp": false,
+      "phase": "split",
+      "host_expert_bytes": 20533739520,
+      "cache_mib": 2048,
+      "trials": [],
+      "status": "failed",
+      "memory": {
+        "min_available_bytes": 7484940288,
+        "max_gpu_used_bytes": [
+          19453661184,
+          23652229120
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_worker_spill_bytes": 0
+      },
+      "error": "Worker exited during startup; inspect the saved log",
+      "guard_failure": "Owned-worker guard: insufficient RAM/VRAM headroom, swapping, or VRAM spill"
+    },
+    "iq3-16k-split-21-19": {
+      "model": "nemotron-3.5-super-iq3",
+      "runtime_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
+      "context": 16384,
+      "split": "21,19",
+      "mtp": false,
+      "phase": "split",
+      "host_expert_bytes": 20533739520,
+      "cache_mib": 2048,
+      "trials": [
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8108,
+            "total_tokens": 8364,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.62162683199858,
+          "total_seconds": 100.46644914199715,
+          "decode_tps_sse": 15.138182837858725,
+          "content_sha256": "8c0430c191d6556dd482c63f65d67ea4fac1d207d0ed5b13530a6dd0b2882b05",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8108,
+            "prompt_ms": 83612.199,
+            "prompt_per_token_ms": 10.312308707449432,
+            "prompt_per_second": 96.97149575027922,
+            "predicted_n": 256,
+            "predicted_ms": 16844.826,
+            "predicted_per_token_ms": 66.05814117647058,
+            "predicted_per_second": 15.138179521711889
+          },
+          "prefill_native_tps": 96.97149575027922,
+          "prefill_native_tokens": 8108,
+          "effective_input_per_ttft": 96.96056280140917,
+          "cached_tokens": 0,
+          "task": "code",
+          "trial": 1
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8111,
+            "total_tokens": 8367,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.59446141500666,
+          "total_seconds": 99.22342195500096,
+          "decode_tps_sse": 16.315864343470476,
+          "content_sha256": "334a1ae5671909ebca9383f0b1882d4da382fb588328b17f5d4d501b9b8ee5e4",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8111,
+            "prompt_ms": 83584.976,
+            "prompt_per_token_ms": 10.305138207372703,
+            "prompt_per_second": 97.03897025704715,
+            "predicted_n": 256,
+            "predicted_ms": 15628.217,
+            "predicted_per_token_ms": 61.28712549019608,
+            "predicted_per_second": 16.31664059950025
+          },
+          "prefill_native_tps": 97.03897025704715,
+          "prefill_native_tokens": 8111,
+          "effective_input_per_ttft": 97.02795930142729,
+          "cached_tokens": 0,
+          "task": "prose",
+          "trial": 1
+        }
+      ],
+      "status": "passed",
+      "memory": {
+        "min_available_bytes": 6412349440,
+        "max_gpu_used_bytes": [
+          21396684800,
+          22145712128
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_worker_spill_bytes": 0
+      },
+      "load_seconds": 128.5102794389968,
+      "functional": {
+        "arithmetic": true,
+        "json": true,
+        "tool_roundtrip": true,
+        "streaming": true,
+        "stream_usage": {
+          "completion_tokens": 4,
+          "prompt_tokens": 26,
+          "total_tokens": 30,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "medians": {
+        "code": {
+          "prefill_native_tps": 96.97149575027922,
+          "ttft_seconds": 83.62162683199858,
+          "decode_tps_sse": 15.138182837858725
+        },
+        "prose": {
+          "prefill_native_tps": 97.03897025704715,
+          "ttft_seconds": 83.59446141500666,
+          "decode_tps_sse": 16.315864343470476
+        }
+      },
+      "expert_cache_log": [
+        "2.07.035.457 I impl:      ROCm0 MoE cache size =  1071.64 MiB for 10846.50 MiB of host experts",
+        "2.07.035.459 I impl:      ROCm1 MoE cache size =   972.56 MiB for 8736.00 MiB of host experts",
+        "8.32.771.528 I llama_moe_cache: ubatch <= 8: hits = 111254, misses = 109355, hit rate = 50.43%, uploaded = 256603.08 MiB",
+        "8.32.771.530 I llama_moe_cache: large batches: 167362 experts copied from the cache, 197416.10 MiB"
+      ]
+    },
+    "iq3-32k-split-21-19": {
+      "model": "nemotron-3.5-super-iq3",
+      "runtime_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
+      "context": 32768,
+      "split": "21,19",
+      "mtp": false,
+      "phase": "long",
+      "host_expert_bytes": 20533739520,
+      "cache_mib": 2048,
+      "trials": [
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8108,
+            "total_tokens": 8364,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.37799798500782,
+          "total_seconds": 102.30345795900212,
+          "decode_tps_sse": 13.473912937936444,
+          "content_sha256": "8c0430c191d6556dd482c63f65d67ea4fac1d207d0ed5b13530a6dd0b2882b05",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8108,
+            "prompt_ms": 83368.704,
+            "prompt_per_token_ms": 10.282277257030094,
+            "prompt_per_second": 97.2547204284236,
+            "predicted_n": 256,
+            "predicted_ms": 18925.134,
+            "predicted_per_token_ms": 74.21621176470587,
+            "predicted_per_second": 13.474145017942808
+          },
+          "prefill_native_tps": 97.2547204284236,
+          "prefill_native_tokens": 8108,
+          "effective_input_per_ttft": 97.2438796318652,
+          "cached_tokens": 0,
+          "task": "code",
+          "trial": 1
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8108,
+            "total_tokens": 8364,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 85.85565921399393,
+          "total_seconds": 103.86670976200548,
+          "decode_tps_sse": 14.157974812199523,
+          "content_sha256": "8c0430c191d6556dd482c63f65d67ea4fac1d207d0ed5b13530a6dd0b2882b05",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8108,
+            "prompt_ms": 85837.797,
+            "prompt_per_token_ms": 10.586802787370498,
+            "prompt_per_second": 94.45722377986937,
+            "predicted_n": 256,
+            "predicted_ms": 18015.821,
+            "predicted_per_token_ms": 70.65027843137256,
+            "predicted_per_second": 14.154225888456596
+          },
+          "prefill_native_tps": 94.45722377986937,
+          "prefill_native_tokens": 8108,
+          "effective_input_per_ttft": 94.43757201596848,
+          "cached_tokens": 0,
+          "task": "code",
+          "trial": 2
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8108,
+            "total_tokens": 8364,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 84.69883796598879,
+          "total_seconds": 101.35848545999033,
+          "decode_tps_sse": 15.30644631537462,
+          "content_sha256": "8c0430c191d6556dd482c63f65d67ea4fac1d207d0ed5b13530a6dd0b2882b05",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8108,
+            "prompt_ms": 84682.678,
+            "prompt_per_token_ms": 10.444336211149482,
+            "prompt_per_second": 95.74567304071323,
+            "predicted_n": 256,
+            "predicted_ms": 16659.581,
+            "predicted_per_token_ms": 65.33169019607843,
+            "predicted_per_second": 15.306507408559677
+          },
+          "prefill_native_tps": 95.74567304071323,
+          "prefill_native_tokens": 8108,
+          "effective_input_per_ttft": 95.72740541323371,
+          "cached_tokens": 0,
+          "task": "code",
+          "trial": 3
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8111,
+            "total_tokens": 8367,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.9687732750026,
+          "total_seconds": 99.60313868400408,
+          "decode_tps_sse": 16.310223877278954,
+          "content_sha256": "7190d0c2d3adce59f94dcc73ce3d9ec4d47d8bb88b648cbbb31da9010854eaf8",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8111,
+            "prompt_ms": 83959.25,
+            "prompt_per_token_ms": 10.351282209345333,
+            "prompt_per_second": 96.6063894091479,
+            "predicted_n": 256,
+            "predicted_ms": 15634.2,
+            "predicted_per_token_ms": 61.31058823529412,
+            "predicted_per_second": 16.310396438576966
+          },
+          "prefill_native_tps": 96.6063894091479,
+          "prefill_native_tokens": 8111,
+          "effective_input_per_ttft": 96.59543284544606,
+          "cached_tokens": 0,
+          "task": "prose",
+          "trial": 1
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8111,
+            "total_tokens": 8367,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.52137350800331,
+          "total_seconds": 99.14735992100032,
+          "decode_tps_sse": 16.318969776391345,
+          "content_sha256": "334a1ae5671909ebca9383f0b1882d4da382fb588328b17f5d4d501b9b8ee5e4",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8111,
+            "prompt_ms": 83510.884,
+            "prompt_per_token_ms": 10.296003452102084,
+            "prompt_per_second": 97.12506456044699,
+            "predicted_n": 256,
+            "predicted_ms": 15625.974,
+            "predicted_per_token_ms": 61.27832941176471,
+            "predicted_per_second": 16.318982739891926
+          },
+          "prefill_native_tps": 97.12506456044699,
+          "prefill_native_tokens": 8111,
+          "effective_input_per_ttft": 97.11286655532282,
+          "cached_tokens": 0,
+          "task": "prose",
+          "trial": 2
+        },
+        {
+          "usage": {
+            "completion_tokens": 256,
+            "prompt_tokens": 8111,
+            "total_tokens": 8367,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 83.37650069700612,
+          "total_seconds": 98.99726294900756,
+          "decode_tps_sse": 16.32442744382257,
+          "content_sha256": "dbbd51e683406e5e7bbe3773731bd1038ac6a49dd326c491b964aec085331123",
+          "reasoning_tokens_present": false,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 8111,
+            "prompt_ms": 83367.204,
+            "prompt_per_token_ms": 10.27828923683886,
+            "prompt_per_second": 97.2924556759754,
+            "predicted_n": 256,
+            "predicted_ms": 15620.76,
+            "predicted_per_token_ms": 61.25788235294118,
+            "predicted_per_second": 16.324429797269786
+          },
+          "prefill_native_tps": 97.2924556759754,
+          "prefill_native_tokens": 8111,
+          "effective_input_per_ttft": 97.28160731374098,
+          "cached_tokens": 0,
+          "task": "prose",
+          "trial": 3
+        }
+      ],
+      "status": "passed",
+      "memory": {
+        "min_available_bytes": 6269497344,
+        "max_gpu_used_bytes": [
+          21470015488,
+          22486536192
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_worker_spill_bytes": 0
+      },
+      "load_seconds": 126.78144082200015,
+      "allocated_context": 32768,
+      "functional": {
+        "arithmetic": true,
+        "json": true,
+        "tool_roundtrip": true,
+        "streaming": true,
+        "stream_usage": {
+          "completion_tokens": 4,
+          "prompt_tokens": 26,
+          "total_tokens": 30,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "long_context": {
+        "usage": {
+          "completion_tokens": 22,
+          "prompt_tokens": 28546,
+          "total_tokens": 28568,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "ttft_seconds": 285.248842312998,
+        "total_seconds": 286.69294664599875,
+        "decode_tps_sse": 14.541885596564775,
+        "content_sha256": "ba36d31c7106fd13b7e0b885f5bfdb2325ceeff8c15d501e3b4dc9d81b1a5ee5",
+        "reasoning_tokens_present": false,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 28546,
+          "prompt_ms": 285217.85,
+          "prompt_per_token_ms": 9.991517200308273,
+          "prompt_per_second": 100.08490001590013,
+          "predicted_n": 22,
+          "predicted_ms": 1437.519,
+          "predicted_per_token_ms": 68.45328571428571,
+          "predicted_per_second": 14.608502565879128
+        },
+        "prefill_native_tps": 100.08490001590013,
+        "prefill_native_tokens": 28546,
+        "effective_input_per_ttft": 100.07402578229232,
+        "cached_tokens": 0,
+        "markers_passed": true
+      },
+      "medians": {
+        "code": {
+          "prefill_native_tps": 95.74567304071323,
+          "ttft_seconds": 84.69883796598879,
+          "decode_tps_sse": 14.157974812199523
+        },
+        "prose": {
+          "prefill_native_tps": 97.12506456044699,
+          "ttft_seconds": 83.52137350800331,
+          "decode_tps_sse": 16.318969776391345
+        }
+      },
+      "expert_cache_log": [
+        "2.05.353.424 I impl:      ROCm0 MoE cache size =  1071.64 MiB for 10846.50 MiB of host experts",
+        "2.05.353.427 I impl:      ROCm1 MoE cache size =   972.56 MiB for 8736.00 MiB of host experts",
+        "17.18.656.441 I llama_moe_cache: ubatch <= 8: hits = 297467, misses = 290191, hit rate = 50.62%, uploaded = 680661.04 MiB",
+        "17.18.656.445 I llama_moe_cache: large batches: 380192 experts copied from the cache, 448207.76 MiB"
+      ]
+    }
+  },
+  "mtp": {
+    "status": "not_tested_insufficient_headroom",
+    "minimum_additional_expert_gib": 2.7890625,
+    "spare_gib_beyond_combined_reserve_at_peak": 1.0310211181640625,
+    "reason": "MTP expert weights alone exceed spare VRAM beyond 3 GiB reserve per card; baseline remains non-MTP"
+  },
+  "q4": {
+    "status": "prepared_inactive",
+    "minimum_host_ram_gib": 60,
+    "host_expert_bytes": 50921472000,
+    "minimum_available_ram_gib": 51.42431640625,
+    "context_target": 32768,
+    "cache_mib": 4096,
+    "benchmarks": null
+  },
+  "saved_default_unchanged": true,
+  "managed_integration": {
+    "gateway_catalog_count": 10,
+    "q4_hidden": true,
+    "authenticated_generation": true,
+    "functional": {
+      "arithmetic": true,
+      "json": true,
+      "tool_roundtrip": true,
+      "streaming": true,
+      "stream_usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 26,
+        "total_tokens": 30,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      }
+    },
+    "context": 32768,
+    "max_owned_swap_bytes": 0,
+    "max_nonresident_vram_bytes": 0,
+    "native_scope_swap_max_bytes": 0,
+    "gpu_vram_bytes": [
+      21426040832,
+      22212567040
+    ],
+    "hip_vulkan_hip_switch": true,
+    "status": "passed"
+  }
+}

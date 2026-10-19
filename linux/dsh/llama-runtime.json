@@ -5,12 +5,14 @@
     "muse-glimmer-30b",
     "qwen3.6-35b-a3b",
     "nemotron-3.5-bolt",
-    "empero-qwen3.8-35b-a3b"
+    "empero-qwen3.8-35b-a3b",
+    "nemotron-3.5-super-iq3"
   ],
   "source_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
   "runtime_overrides": {
     "qwen3.6-35b-a3b": "hip-amd",
     "nemotron-3.5-bolt": "hip-amd",
-    "empero-qwen3.8-35b-a3b": "hip-amd"
+    "empero-qwen3.8-35b-a3b": "hip-amd",
+    "nemotron-3.5-super-iq3": "hip-amd"
   }
 }

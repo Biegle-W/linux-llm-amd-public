@@ -1,7 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 Updated **October 19, 2026 (America/Toronto)**. Most runtime checks remain dated October 18; October 19 adds measured Strata
-overlap/prefill tuning, desktop headroom protection and validated native256K RAM-backed KV.
+overlap/prefill tuning, desktop headroom protection, validated native256K RAM-backed KV,
+and the separately validated Nemotron Super IQ3 32K profile.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
@@ -41,6 +42,53 @@ Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
 is dual-boot: booting this same PC into Windows stops the Linux inference server.
 
+## Nemotron Super: 32 GB active profile / 64 GB candidate
+
+`nemotron-3.5-super-iq3` is added to the existing llama.cpp launcher, DSH and
+this authenticated gateway, with **32,768 total context**, both AMD cards,
+HIP layer split **21:19**, Q8 K/V, Flash Attention, CPU expert backing
+**20,533,739,520 bytes (19.124 GiB)** and a **2,048 MiB total GPU cache ceiling**.
+Text and tools are validated; vision is disabled and no projector is installed.
+The saved default model and connection settings are unchanged.
+The normal launcher/gateway passed authenticated generation, tools/JSON/streaming,
+zero-swap native scopes and IQ3/HIP -> Qwen/Vulkan -> IQ3/HIP switching. The
+gateway lists 10 enabled profiles, with Q4 hidden. Validation workers were
+stopped afterward; no inference backend was left running by this task.
+
+All six Unsloth IQ3/Q4 shards are on Shared SATA beneath
+`/mnt/llm-models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/`,
+pinned to `75a5829055f69a0359085ae6bbd0a81b60bc05c6`, with size/SHA-256 verification
+in `download-manifest.json`. llama.cpp remains at `31288c9c66e59377f7788d920678a565bb89dd37`.
+There is no new model-weight copy or cache on the primary NVMe.
+
+IQ3 passed arithmetic, JSON, streaming, a tool-call/result round trip and
+three-marker retrieval at **28,546 uncached input tokens**. Three approximately
+8K-input/256-output trials each measured code/prose medians of **95.75 / 97.13
+native prefill t/s**, **84.699 / 83.521 s external TTFT**, and **14.16 / 16.32
+external decode t/s**. These are not the earlier batch's short-prompt timings.
+Peak whole-card VRAM was **20.00 / 20.94 GiB**, available host RAM stayed above
+**5.84 GiB**, and worker swap/nonresident VRAM were zero. The 1:1 and 19:21 split
+trials were stopped for insufficient per-card reserve, without swap or spill.
+
+New loads need **23.124 GiB available RAM** and **21 GiB free VRAM per card**.
+The owned-worker monitor retains **3 GiB available RAM / 3 GiB free per GPU**;
+it does not terminate DSH or unrelated applications. MTP stays off: its expert
+head alone adds 2.789 GiB, exceeding spare VRAM beyond the combined reserve.
+No MTP speed comparison was run because that memory admission failed.
+
+`nemotron-3.5-super-q4` is a prepared candidate only and is absent from active
+API/DSH catalogs. It requires **60 GiB OS-visible total / 51.424 GiB available
+RAM**, uses **47.424 GiB CPU expert backing**, a **4 GiB cache ceiling** and a
+32K target. Installing RAM does not activate it. Its context and speed are not
+locally validated. The inactive metadata and physical-memory gates are in
+`dsh/candidates/nemotron-super.json`; validate after the upgrade before activation.
+
+Start `llm-llama` or the existing llama.cpp Desktop launcher, then start DSH
+separately and select the IQ3 model under Local llama.cpp. Remote clients use
+the existing authenticated base URL and model ID `nemotron-3.5-super-iq3`.
+Windows remains a client of the Linux HIP service; its historical NVIDIA
+runtime configuration is not an AMD profile. [Settings and evidence](../hardware/NEMOTRON-SUPER-2026-10-19.md).
+
 ## Active model catalog
 
 Latest October 18 runtime update: all **nine enabled profiles** passed production
@@ -68,6 +116,7 @@ not guarantees of full-window speed or general long-context accuracy.
 | llama.cpp / Vulkan | `muse-glimmer-30b` | 32,768 | UD-Q4_K_XL | Off |
 | llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | Q4_K_M, two GGUF shards | Off |
+| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |

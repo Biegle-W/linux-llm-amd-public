@@ -10,7 +10,7 @@ Model weights, installed runtimes, credentials and personal app data are exclude
 - [Install, launch and connect](#install-launch-and-connect)
 - [Complete benchmark history and experiments](linux/hardware/BENCHMARK-HISTORY.md)
 
-Fresh **October 19, 2026 AMD benchmarks** cover all nine current profiles.
+Fresh **October 19, 2026 AMD benchmarks** cover the original nine-profile batch.
 The archived NVIDIA measurements retain their original dates and builds.
 [Full fresh AMD method, token counts and numeric evidence](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
@@ -47,7 +47,7 @@ October 18–19 records, not a live claim about today's upstream head.
 
 | Engine | Installed build | Validation after this update |
 |---|---|---|
-| llama.cpp HIP / Vulkan | [`31288c9c66e5`](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37) | Fresh prefill, TTFT and code/prose decode on all five profiles |
+| llama.cpp HIP / Vulkan | [`31288c9c66e5`](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37) | Original five profiles plus the separate Nemotron Super IQ3 validation |
 | SGLang ROCm | [gfx1100 fork `f84475ccf593`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local repairs | Fresh prefill, TTFT and code/prose decode on both profiles |
 | vLLM ROCm | `0.32.0rc1.dev329+g39983a5e7.rocm723` | Fresh prefill, TTFT and code/prose decode; earlier 64K retrieval retained |
 | Strata HIP | [0.1.45 / `477ac13cbe8e`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Fresh prefill, TTFT and code/prose decode; earlier native 256K check retained |
@@ -55,7 +55,25 @@ October 18–19 records, not a live claim about today's upstream head.
 [Build dependencies, fixes, validation and rollback](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
 SGLang uses its Radeon-specific fork; official main was not an unchanged compatible replacement.
 
-### Every active model and backend — freshly measured
+### Nemotron Super IQ3: 32 GB RAM profile
+
+The additional `nemotron-3.5-super-iq3` profile uses **32,768 total context**, both
+AMD GPUs with HIP layer split **21:19**, **19.124 GiB CPU expert backing** and a
+**2 GiB total GPU expert-cache ceiling**, with MTP off. It passed tools, JSON,
+streaming and three-marker retrieval at **28,546 actual input tokens**.
+
+| Workload, median of 3 | Actual input / output | Native prefill t/s | External TTFT s | External decode t/s |
+|---|---:|---:|---:|---:|
+| Code | 8,108 / 256 | 95.75 | 84.699 | 14.16 |
+| Prose | 8,111 / 256 | 97.13 | 83.521 | 16.32 |
+
+These TTFT values include approximately 8K input processing; the original
+nine-profile batch below uses separate short prompts for short TTFT/decode.
+Q4_K_XL remains an inactive **64 GB RAM candidate**, without measured speed.
+[Settings, memory peaks, rejected splits and activation gates](linux/hardware/NEMOTRON-SUPER-2026-10-19.md)
+· [Every numeric trial](linux/hardware/results/nemotron-super-2026-10-19.json).
+
+### Original nine-profile benchmark batch
 
 All rows below were timed on the installed builds above, with production
 contexts retained. Medians of three timed requests/workload; one excluded short

@@ -40,6 +40,25 @@ class MoeMemoryTests(unittest.TestCase):
         _, stopped = self.run_monitor('dense', 2*GIB)
         self.assertEqual(stopped, [])
 
+    def test_profile_without_explicit_vram_reserve_keeps_existing_behavior(self):
+        self.assertIsNone(moe_memory.vram_headroom_reason(PROFILE))
+
+    def test_whole_card_reserve_counts_other_gpu_consumers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            device = root/'gpu'
+            device.mkdir()
+            (device/'mem_info_vram_total').write_text(str(24*GIB))
+            (device/'mem_info_vram_used').write_text(str(22*GIB))
+            with patch('amd_device.amd_devices', return_value=[device]):
+                self.assertIn('free VRAM', moe_memory.vram_headroom_reason({'min_free_vram_gib':3}))
+                self.assertIsNone(moe_memory.vram_headroom_reason({'min_free_vram_gib':1}))
+
+    def test_sustained_vram_reserve_violation_stops_only_owned_worker(self):
+        with patch.object(moe_memory, 'vram_headroom_reason', return_value='Low whole-card VRAM'):
+            proc, stopped = self.run_monitor('moe', 10*GIB)
+        self.assertEqual(stopped, [proc])
+
     def test_actual_32gb_can_admit_bounded_experts(self):
         self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, 14*GIB))
 

@@ -17,7 +17,7 @@ vllm/.venv-rocm/bin/python hardware/benchmark-current-amd.py --kind llama --outp
 ```
 
 Repeat for `sglang`, `vllm` and `strata` after switching with the normal launcher.
-SGLang tests both configured strategies; llama.cpp tests all five models. Use
+SGLang tests both configured strategies; llama.cpp tests all six models. Use
 `--model API_ID` to select one configured profile. For the complete Muse batch
 that retains retrieval failures explicitly, run:
 
@@ -36,3 +36,8 @@ Older builds, hardware phases, near-window tests and retired profiles remain
 in [BENCHMARK-HISTORY.md](../BENCHMARK-HISTORY.md) and their dated source reports.
 They are historical evidence, not substitute measurements of the current build.
 The public root README keeps the archived NVIDIA setup as its separate result set.
+
+The later [Nemotron Super IQ3 addition](../NEMOTRON-SUPER-2026-10-19.md) has a
+[separate numeric record](nemotron-super-2026-10-19.json): 32K with near-28K
+retrieval, fixed ~8K-input/256-output timing trials and rejected split results.
+It does not replace the original nine-profile batch or historical NVIDIA data.

@@ -95,6 +95,38 @@
       "load_mode": "none",
       "mtp_draft_experts_on_gpu": true,
       "validation": "256K allocated; approximately 64K actual retrieval plus tools/JSON/arithmetic; full-window quality/speed not established"
+    },
+    "nemotron-3.5-super-iq3": {
+      "backend": "hip-amd",
+      "context": 32768,
+      "minimum_host_ram_gib": 28,
+      "cpu_expert_layers": [
+        3,
+        12,
+        17,
+        21,
+        26,
+        30,
+        34,
+        39,
+        43,
+        48,
+        52,
+        59,
+        65,
+        74,
+        81,
+        85
+      ],
+      "host_expert_bytes": 20533739520,
+      "gpu_expert_cache_mib": 2048,
+      "kv_cache": "q8_0",
+      "load_mode": "none",
+      "min_free_vram_gib": 3,
+      "min_start_vram_gib": 21,
+      "validation": "Passed arithmetic, JSON, tool round trip, streaming, residency and fixed ~8K timing trials; near-28K input marker retrieval passed",
+      "tensor_split": "21,19",
+      "mtp_draft_experts_on_gpu": false
     }
   }
 }
