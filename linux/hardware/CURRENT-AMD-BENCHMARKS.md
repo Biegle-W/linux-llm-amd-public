@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks — October 19, 2026
 
-Fresh measurements of all nine active production profiles on **two RX 7900 XTX
+Saved measurements of all ten active production profiles on **two RX 7900 XTX
 24 GB cards**, i5-13600KF, MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8 and
 **32 GB installed RAM**. Both GPUs participate in every row. Production contexts,
 quantization, MTP/DFlash, expert placement, cache policies and memory guards
@@ -17,7 +17,10 @@ were retained. No engine update or model download was performed in this task.
 
 llama.cpp/Strata use layer splitting; SGLang/vLLM use TP2 with host transport,
 without direct P2P. [Build dependencies and local fixes](RUNTIME-UPGRADE-2026-10-18.md).
-Source/config hashes and every trial are in [the curated numeric record](results/current-amd-2026-10-19.json).
+Source/config hashes and every trial of the original nine-profile batch are in
+[its curated numeric record](results/current-amd-2026-10-19.json). The tenth
+profile has a [separate record](results/nemotron-super-2026-10-19.json).
+Documentation was reconciled during maintenance; no timings were rerun or changed.
 
 ## Results
 
@@ -39,6 +42,28 @@ not the input length filled by these tests.
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | 8,186–8,188 | 1491.5 | 5.510 | 0.086 / 0.083 | 210.42 / 70.88 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | 8,184–8,189 | 1488.2 | 5.513 | 0.067 / 0.081 | 131.05 / 73.31 |
 | Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,186–8,189 | 900.9 | 9.126 | 0.238 / 0.245 | 71.50 / 48.46 |
+
+## Tenth profile: Nemotron Super IQ3
+
+`nemotron-3.5-super-iq3` uses llama.cpp HIP `31288c9c`, both GPUs with layer
+split 21:19, UD-IQ3_XXS, 32,768 total context, 19.124 GiB CPU expert backing,
+a 2 GiB total expert-cache ceiling and MTP off. Q4 remains an inactive 64 GB
+candidate, with no measured speed.
+
+| Workload, median of 3 | Actual input / output | Native prefill t/s | External TTFT s | External decode t/s |
+|---|---:|---:|---:|---:|
+| Code | 8,108 / 256 | 95.75 | 84.699 | 14.16 |
+| Prose | 8,111 / 256 | 97.13 | 83.521 | 16.32 |
+
+Unlike the original batch's short-prompt decode test, these code/prose requests
+process approximately 8K uncached input tokens before generating 256 tokens.
+Their TTFT is not short TTFT; do not place it in that column or rank these
+workloads as a controlled model comparison. One separate three-marker retrieval
+passed at 28,546 input / 22 output tokens (100.08 native PP, 285.249 s external
+TTFT); this is not full-window sustained generation. Peak whole-card VRAM was
+20.00 / 20.94 GiB, available RAM stayed above 5.84 GiB, with zero worker swap
+and sampled VRAM spill. See [complete validation and failed splits](NEMOTRON-SUPER-2026-10-19.md)
+and [all trials](results/nemotron-super-2026-10-19.json).
 
 ## Method and limits
 

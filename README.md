@@ -10,7 +10,7 @@ Model weights, installed runtimes, credentials and personal app data are exclude
 - [Install, launch and connect](#install-launch-and-connect)
 - [Complete benchmark history and experiments](linux/hardware/BENCHMARK-HISTORY.md)
 
-Fresh **October 19, 2026 AMD benchmarks** cover the original nine-profile batch.
+Saved **October 19, 2026 AMD benchmarks** cover all ten profiles in two distinct batches.
 The archived NVIDIA measurements retain their original dates and builds.
 [Full fresh AMD method, token counts and numeric evidence](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
@@ -135,7 +135,13 @@ backing, 13.5 GiB CPU expert budget, split 26, 2,048-token prefill and 7/8 GiB
 startup VRAM reserves. Its 64 GB candidate stays at native 256K and requires
 separate validation; no experimental 512K/RoPE result is claimed. [CTX19]
 
+
+Maintenance reconciled saved results without rerunning timings or changing profiles.
+The purchased PEX88096 switch is pending installation/P2P validation.
+[Maintenance record](linux/hardware/WORKSPACE-MAINTENANCE-2026-10-19.md).
+
 <a id="previous-rtx-4070-12-gb--rtx-3060-12-gb"></a>
+
 ## NVIDIA: archived setup and results
 
 **RTX 4070 12 GB + RTX 3060 12 GB (24 GB total VRAM), i5-13600KF, 64 GB RAM.**

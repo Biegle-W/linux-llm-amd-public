@@ -9,15 +9,19 @@ the original nine files are preserved in the dated Shared archive described ther
 The authenticated gateway uses TCP **10000** and OpenAI-compatible Chat
 Completions. Start the chosen GPU backend separately with its Desktop launcher
 or `llm-*` PATH command; starting the gateway alone does not load a model.
-Eight profiles are enabled. Strata is deferred pending RAM expansion/dual-AMD
-validation; HyperQwen and old CUDA setups are retired locally.
+Ten profiles are enabled, including the validated managed Strata Q3 backend.
+HyperQwen and old CUDA setups are retired locally.
 
 Credentials and live addresses stay in ignored `dsh/data/` configuration.
 Public documentation uses example paths and addresses. Never place an actual
 API key in a handoff, source file or chat. Keep the selected backend's terminal
 open and obtain exact IDs/readiness from authenticated `/v1/models` and `/health`.
 
-Historical `network/check.py` assertions describe the old 12-model Strata
-catalog and are not a current readiness check. Current connection examples and
-validated limits are in the consolidated guide. This documentation change
-restarts no service and changes no model, address, firewall or authentication.
+`python3 -B network/check.py` validates authentication, health, the exact enabled
+profile IDs and contexts, and retired-Q2 rejection without loading a model.
+It derives the catalog from local profile configuration and writes no report
+unless `--output PATH` is supplied. Generation requires the explicit
+`--generate` option; it was not used for the October 19 maintenance check.
+Loopback/LAN/Tailscale host self-access passed for all ten profiles; a remote
+client still needs its own connectivity test. No service restart or production
+inference setting change was made.

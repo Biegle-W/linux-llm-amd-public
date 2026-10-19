@@ -2,14 +2,16 @@
 
 Updated **October 19, 2026 (America/Toronto)**. Most runtime checks remain dated October 18; October 19 adds measured Strata
 overlap/prefill tuning, desktop headroom protection, validated native256K RAM-backed KV,
-and the separately validated Nemotron Super IQ3 32K profile.
+and the separately validated Nemotron Super IQ3 32K profile. Maintenance reconciles
+all ten enabled profiles from saved evidence, validates launch paths and archives
+unused working files; no timing rerun or runtime update is part of maintenance.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
 The previous nine Shared Markdown documents are preserved byte-for-byte in
-`D:\LLM-HANDOFF-ARCHIVE\2026-10-18\` (Linux:
-`/mnt/shared/LLM-HANDOFF-ARCHIVE/2026-10-18/`). They are historical
+`D:\LLM-ARCHIVE\LLM-HANDOFF-ARCHIVE\2026-10-18\` (Linux:
+`/mnt/shared/LLM-ARCHIVE/LLM-HANDOFF-ARCHIVE/2026-10-18/`). They are historical
 references, not alternative current configurations. Their old CUDA commands,
 addresses, defaults and single-GPU policies must not override the settings here.
 No model files, runtime settings, credentials or inference processes were changed
@@ -24,19 +26,19 @@ by the original consolidation; the subsequent MoE offload update is documented b
   configuration is planned. Benchmarks must state the memory capacity used.
   Dense models keep GPU-resident weights; all active MoEs use CPU expert
   backing and GPU hot-expert caches.
-- Use **both AMD cards for every production model**. llama.cpp uses layer split 1:1;
+- Use **both AMD cards for every production model**. llama.cpp uses validated model-specific layer splits (1:1 or 21:19);
   SGLang/vLLM use TP2. FreeToken and its former single-card exception are retired.
 - ROCm peer access is unavailable; TP2 works through host transport. Retain the
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
-  and disabled custom all-reduce. A genuine active PCIe switch under one common
-  root port is a proposed remedy, not installed or validated hardware.
-- At the earlier October 18 Q4-replacement check, the authenticated gateway listed
-  **eight enabled profiles** and `nemotron-3.5-bolt` Q4 was running through the
-  normal llama.cpp HIP backend in a visible terminal. Authenticated generation
-  passed. DSH remained running and its saved selection was preserved; consult
-  `/health` for live availability. At the later FreeToken removal check, no
-  FreeToken worker was running and port 1919 was closed. No inference backend
-  was started during removal. FreeToken is completely removed.
+  and disabled custom all-reduce. The owner purchased the PEX88096 four-slot GPU kit (listing title uses
+  “plx8096”). It remains pending installation and local P2P/Gen4/RCCL validation.
+  Keep current transport settings until validation passes; external forum results
+  are not local measurements. [Source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md#pcie-switch-purchase-october-19).
+- October 19 maintenance: authenticated gateway health and enabled-catalog checks
+  cover **10 profiles**. No managed inference backend was available at the initial
+  audit; catalog presence does not mean a model is loaded. This maintenance does
+  not start models, repeat generation/timings or change the saved DSH default.
+  FreeToken and HyperQwen remain retired from the current AMD setup.
 
 Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
@@ -91,20 +93,13 @@ runtime configuration is not an AMD profile. [Settings and evidence](../hardware
 
 ## Active model catalog
 
-Latest October 18 runtime update: all **nine enabled profiles** passed production
-model checks on both AMD cards. llama.cpp's five profiles passed configured-context
-allocation, arithmetic, authenticated streaming and tool-call/results with the
-worker-only no-swap scope, zero owned swap and zero sampled VRAM spill. SGLang's
-two profiles passed cache-capacity/tools checks; vLLM repeated 64K retrieval;
-Strata HIP 0.1.45 repeated 30K retrieval. Fresh near-full-context checks were not
-repeated for every model. [Validation scope and pins](../hardware/RUNTIME-UPGRADE-2026-10-18.md).
-
-October 18 MoE update: the normal managed llama launcher passed authenticated
-API generation for all three MoEs, a repeated cached-model request, switching
-between MoEs and switching back to dense Qwen/Vulkan. All five llama models and
-eight gateway profiles remained discoverable. DSH/Turnstone catalogs were
-refreshed without changing the saved default. That initial update reused
-existing weights; Bolt was subsequently replaced by the Q4 files documented below.
+The current catalog has **10 enabled profiles**: six llama.cpp, two SGLang,
+one vLLM and one Strata. The original nine-profile benchmark batch and later
+Nemotron Super IQ3 measurements remain separate because input lengths and timing
+methods differ. All were measured on the stated builds; no maintenance rerun was
+performed. [Current results and limits](../hardware/CURRENT-AMD-BENCHMARKS.md).
+Earlier runtime/placement checks remain in their dated reports and must not
+replace the catalog and settings below.
 
 All contexts below include system instructions, tool definitions/results,
 conversation history, user input **and output**. They are configured budgets,
@@ -329,7 +324,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all eight enabled profiles even when their backends are
+`GET /v1/models` lists all ten enabled profiles even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -399,9 +394,11 @@ guard remains enabled. This follows an observed guard stop during an unscoped
 MoE load; global swap and unrelated processes are unchanged. An active systemd
 user manager is required for Desktop/SSH launches; preflight rejects its absence
 before stopping another backend. Do not remove the scope or disable the guard
-to work around a model-loading failure. Rollback environments/builds are retained
-under ignored `hardware/generated/runtime-upgrade-2026-10-18/` on Linux NVMe;
-these are not model weights or public repository artifacts.
+to work around a model-loading failure. Obsolete rollback environments/builds are archived during October 19 maintenance
+under `D:\LLM-ARCHIVE\MAINTENANCE\2026-10-19\obsolete-working-files.tar.zst`.
+Restore the original relative paths from that private archive before following
+older rollback instructions. The archive manifest and SHA-256 are kept beside it;
+active runtime environments and selected compiled caches stay on Linux NVMe.
 
 [Qwen 27B AMD speculative-decoding research](../hardware/QWEN27B-AMD-SPECULATION-2026-10-18.md)
 traces the ~1,000 t/s headline to aggregate concurrency. Experimental ExLlamaV3
@@ -562,7 +559,7 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-October 19 fresh AMD benchmark refresh: all nine active production profiles
+October 19 original AMD benchmark refresh: the then-nine production profiles
 were remeasured on llama.cpp `31288c9c`, repaired SGLang `f84475c`, vLLM dev329
 and Strata HIP 0.1.45. Prefill and TTFT use three fresh ~8K marker requests;
 code/prose decode and short TTFT use three warm timed requests/task. Production
@@ -580,20 +577,23 @@ counts differ by tokenizer (Muse ~6.35K, Nemotron ~7.92K, others ~8.19K).
 [Public benchmark report](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
 The [benchmark/context history](../hardware/BENCHMARK-HISTORY.md) is the
-current nine-profile index and dated update ledger. It records allocated context
+current ten-profile index and dated update ledger. It records allocated context
 separately from actual input tested, PP separately from TTFT, exact measured
-builds and validation-only updates. The three llama.cpp 256K MoE allocations have 63,911-token
-retrieval evidence; full 256K is untested. Latest llama.cpp/SGLang checks did not
-rerun throughput. Latest vLLM dev329 code/prose medians are 130.61/72.69 t/s;
-Strata 0.1.45 October 19 native 256K profile medians are 72.2/48.0 t/s; near-full evidence is above. Earlier results
-below retain their original dates/builds and are not latest-build measurements.
-The original history compilation changed no runtime; subsequent October 19 Strata tuning is documented above.
+builds and validation-only updates. The three llama.cpp 256K MoE allocations have
+63,911-token retrieval evidence on the older build; full 256K is untested.
+The current nine-profile batch measured vLLM dev329 code/prose at 131.05/73.31
+t/s and Strata 0.1.45 at 71.50/48.46, using 256-token caps. Earlier tuning batches
+on those builds recorded 130.61/72.69 and 72.2/48.0 respectively with their own
+workloads; Strata used a 512-token cap. Do not merge those samples.
+Nemotron Super IQ3's separate ~8K-input trials measured 14.16/16.32 t/s at 32K
+context, with 95.75/97.13 native PP and 84.699/83.521 s TTFT. These are not
+short-prompt TTFT/decode tests. All maintenance documentation uses saved results.
 The [published history](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/BENCHMARK-HISTORY.md)
 is also accessible to clients reading this handoff directly from Shared.
 
 The original consolidation did not rerun benchmarks. The later Q4 replacement
 measurements are in the report above. The maintained README contains
-all model results with dates/hardware/methods. Selected recent Qwen measurements:
+all model results with dates/hardware/methods. Selected earlier Qwen tuning measurements (historical, not the current batch):
 
 | Profile | Code / prose decode t/s | Evidence |
 |---|---:|---|
@@ -675,9 +675,10 @@ systemctl --user restart local-llm-api.service
 ```
 
 These are maintenance instructions for a future authorized change; they were not
-run during consolidation. The legacy `network/check.py` still encodes a retired
-12-model Strata snapshot; do not treat its historical assertions as a current
-readiness test. Use authenticated `/v1/models` and `/health` instead.
+run during consolidation. `python3 -B network/check.py` derives the expected catalog and contexts from enabled
+local profiles and checks authentication, health and retired-Q2 rejection without
+loading models. It writes nothing unless `--output` is supplied. `--generate`
+remains an explicit optional generation test; it was not used during maintenance.
 
 The latest October 18 authenticated API/generation recovery was checked from
 Linux loopback. Earlier host self-access checks covered LAN/Tailscale; a separate
@@ -688,7 +689,7 @@ consolidation check above remains a timestamped historical observation.
 
 ## Where the originals went
 
-`LLM-HANDOFF-ARCHIVE/2026-10-18/` contains all nine pre-consolidation originals
+`LLM-ARCHIVE/LLM-HANDOFF-ARCHIVE/2026-10-18/` contains all nine pre-consolidation originals
 plus `MANIFEST.json` (filenames, byte counts and SHA-256) and an archive README:
 
 | Original file | Historical material retained |
@@ -709,3 +710,20 @@ Do not prepend incompatible historical snapshots or recreate the old root guides
 Public exports use example addresses/paths and omit private archives, credentials,
 raw logs and personal settings. Archive content documents history; it does not
 provide authorization to start models, change security settings or message agents.
+
+## October 19 maintenance and launch paths
+
+`llm-llama`, `llm-sglang`, `llm-vllm`, `llm-strata`, `dsh`, `turnstone`,
+`comfyui` and `llm-upgrade-check` remain the supported PATH commands. Inventory
+now targets two 24 GiB Navi31/amdgpu devices without requiring NVIDIA software;
+it reports every PCI path so internal GPU x16 links are not mistaken for slot
+bandwidth. A successful inventory is not an inference or P2P validation.
+
+The separate Strata GUI is restored to
+`/opt/appimages/Strata-0.2.0-beta-linux-amd-rx7900.AppImage`; its menu
+entry points to the actual file. It was not launched and has its own worker and
+settings. Keep the managed Strata Q3 launcher separate. [Menu details](../launchers/STRATA-APP.md).
+
+[Maintenance record and documentation index](../hardware/WORKSPACE-MAINTENANCE-2026-10-19.md)
+describes the archive and checks. Active models, candidates, profiles, credentials,
+frontend data and source pins remain unchanged. The private client guide is preserved.

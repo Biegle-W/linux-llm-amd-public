@@ -50,7 +50,7 @@ Keep `linux/network/LINUX-LLM-RUNTIME-HANDOFF.md` as the single current Shared
 handoff. Update its current sections in place after relevant changes rather
 than prepending incompatible chronological snapshots. It covers client access
 and Windows differences as well as runtime state. Preserve the nine original
-Shared files in `LLM-HANDOFF-ARCHIVE/2026-10-18/`; do not recreate the superseded
+Shared files in `LLM-ARCHIVE/LLM-HANDOFF-ARCHIVE/2026-10-18/`; do not recreate the superseded
 root client/upgrade/Windows handoffs. The private maintained source and Shared
 copy must match exactly. Public exports use example addresses/paths and exclude
 private archives and staging files. Preserve historical NVIDIA/Windows source
@@ -116,7 +116,9 @@ requires experimental RoPE/quality validation, not just successful allocation.
 
 Use `linux/hardware/results/README.md` as the current-results entry point and
 `linux/hardware/results/current-amd-2026-10-19.json` for the fresh nine-profile
-AMD measurements. Keep dated historical records; do not promote an older build's
+AMD measurements; `hardware/results/nemotron-super-2026-10-19.json`
+(under `linux/` publicly) adds the tenth active profile with a different timing workload.
+Keep dated historical records; do not promote an older build's
 speed into a current table. Update current README tables, dated benchmark ledger
 and canonical handoff together. Distinguish native prompt timing, engine prefill
 phase timing, external SSE TTFT/decode and input/TTFT proxies. New ~8K probes are

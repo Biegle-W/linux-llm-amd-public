@@ -1,3 +1,8 @@
+> October 19 maintenance: the obsolete rollback trees described below are now in
+> `LLM-ARCHIVE/MAINTENANCE/2026-10-19/obsolete-working-files.tar.zst` on Shared.
+> Restore their original relative paths before using the historical rollback steps.
+> Active runtimes and source pins are unchanged. [Maintenance record](WORKSPACE-MAINTENANCE-2026-10-19.md).
+
 # AMD backend development updates — October 18, 2026
 
 This is the dated installation/functional-validation record. Fresh throughput

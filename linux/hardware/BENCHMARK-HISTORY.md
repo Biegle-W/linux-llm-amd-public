@@ -10,8 +10,9 @@ profiles; it does not imply that every historical configuration remains installe
 The public README now groups results into the current dual-AMD setup and the
 archived dual-NVIDIA setup, with per-model/backend context, prefill, TTFT and
 decode. This is a saved-evidence reorganization, not a runtime update or a new
-benchmark. The newest llama.cpp build has functional checks only; its older
-speeds remain explicitly dated. Missing metrics stay unmeasured.
+benchmark. At that earlier publication, the newest llama.cpp build had only
+functional checks; the later October 19 batches below add its timings. Missing
+metrics stay unmeasured.
 
 Additional short TTFT medians below are extracted from existing curated timing
 records, not inferred from native prompt durations. Values are seconds, code /
@@ -50,8 +51,10 @@ publication snapshot in the public tree, with relative source links adjusted.
 
 ## Current profiles: fresh October 19 evidence
 
-All nine current production profiles now have fresh prefill, external TTFT and
-code/prose decode measurements on their installed builds. See
+All ten current profiles have saved prefill, external TTFT and code/prose decode
+measurements on their installed builds: the original nine-profile batch below
+and the [later Nemotron Super IQ3 batch](NEMOTRON-SUPER-2026-10-19.md). Their
+input lengths and timing methods differ. This maintenance did not rerun them. See
 [the current benchmark report](CURRENT-AMD-BENCHMARKS.md) and
 [all numeric trials](results/current-amd-2026-10-19.json). Three fresh ~8K marker
 probes and three warm short runs/task; production context allocations retained.
@@ -61,7 +64,7 @@ This update changes result publication, not runtime versions or model settings.
 
 ### Superseded summary before the fresh nine-profile batch
 
-Current hardware: i5-13600KF, MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**,
+Hardware at this historical summary: i5-13600KF, MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**,
 CPU PCIe4 x8/x8, **32 GB RAM**. All nine profiles use both GPUs. llama.cpp and
 Strata split layers; SGLang/vLLM use TP2 with host transport, without direct P2P.
 Only one configured inference backend/model is active at a time.
@@ -450,3 +453,10 @@ prompts; do not combine them into an unqualified hardware speed comparison.
 [Settings and validation](NEMOTRON-SUPER-2026-10-19.md),
 [numeric trials and rejected splits](results/nemotron-super-2026-10-19.json).
 Q4 is prepared but inactive, with no local performance result.
+
+## October 19 documentation reconciliation
+
+No performance run or engine update was performed. The [current report](CURRENT-AMD-BENCHMARKS.md)
+now covers ten enabled profiles, retaining the original nine-profile record and
+the separate approximately-8K Nemotron Super timing batch. Previous results and
+measured builds remain unchanged. See [maintenance](WORKSPACE-MAINTENANCE-2026-10-19.md).

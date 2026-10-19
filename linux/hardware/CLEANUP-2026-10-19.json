@@ -1,0 +1,206 @@
+{
+  "date": "2026-10-19",
+  "archive": {
+    "archive": "/mnt/shared/LLM-ARCHIVE/MAINTENANCE/2026-10-19/obsolete-working-files.tar.zst",
+    "sha256": "1079044ec983ba5bb62a5655c259dfab7e7fb8acd7accaa02911ba157bc8fe88",
+    "verified_entries": 177653,
+    "archive_bytes": 3175306186
+  },
+  "archive_roots": [
+    {
+      "path": "hardware/generated/runtime-upgrade-2026-10-18/vllm-venv-rollback",
+      "entries": 125647,
+      "regular_file_bytes": 11126474911
+    },
+    {
+      "path": "hardware/generated/runtime-upgrade-2026-10-18/llamacpp-build-hip-rollback",
+      "entries": 595,
+      "regular_file_bytes": 230959817
+    },
+    {
+      "path": "hardware/generated/runtime-upgrade-2026-10-18/llamacpp-build-vulkan-rollback",
+      "entries": 2658,
+      "regular_file_bytes": 452926247
+    },
+    {
+      "path": "hardware/generated/runtime-upgrade-2026-10-18/strata-build-hip-rollback",
+      "entries": 529,
+      "regular_file_bytes": 98169353
+    },
+    {
+      "path": "hardware/generated/runtime-upgrade-2026-10-18/sglang-main",
+      "entries": 13027,
+      "regular_file_bytes": 197751039
+    },
+    {
+      "path": "dsh/logs/empero-web-check",
+      "entries": 1080,
+      "regular_file_bytes": 176106
+    },
+    {
+      "path": "dsh/logs/fast32k",
+      "entries": 15,
+      "regular_file_bytes": 392909
+    },
+    {
+      "path": "dsh/logs/flash-next",
+      "entries": 13,
+      "regular_file_bytes": 261624
+    },
+    {
+      "path": "dsh/logs/flash-next-1m",
+      "entries": 5,
+      "regular_file_bytes": 70468
+    },
+    {
+      "path": "dsh/logs/flash-next-32k",
+      "entries": 3,
+      "regular_file_bytes": 18739
+    },
+    {
+      "path": "dsh/logs/flash-next-dsh",
+      "entries": 3,
+      "regular_file_bytes": 74089
+    },
+    {
+      "path": "dsh/logs/flash-next-dsh-native-final",
+      "entries": 3,
+      "regular_file_bytes": 40241
+    },
+    {
+      "path": "dsh/logs/flash-next-int2",
+      "entries": 24,
+      "regular_file_bytes": 443896
+    },
+    {
+      "path": "dsh/logs/flash-next-max-context",
+      "entries": 3,
+      "regular_file_bytes": 27381
+    },
+    {
+      "path": "dsh/logs/harness-upgrade-2026-10-17",
+      "entries": 29629,
+      "regular_file_bytes": 228669044
+    },
+    {
+      "path": "dsh/logs/hyperqwen-integration",
+      "entries": 532,
+      "regular_file_bytes": 20434
+    },
+    {
+      "path": "dsh/logs/hyperqwen-integration-dflash2",
+      "entries": 532,
+      "regular_file_bytes": 20718
+    },
+    {
+      "path": "dsh/logs/hyperqwen-integration-mtp",
+      "entries": 532,
+      "regular_file_bytes": 20730
+    },
+    {
+      "path": "dsh/logs/new-models",
+      "entries": 581,
+      "regular_file_bytes": 323329
+    },
+    {
+      "path": "dsh/logs/optimization-2026-10-15-dsh-hyperqwen-1792069677815763762",
+      "entries": 532,
+      "regular_file_bytes": 49221
+    },
+    {
+      "path": "dsh/logs/optimization-2026-10-15-dsh-strata-1792069864344582532",
+      "entries": 532,
+      "regular_file_bytes": 49207
+    },
+    {
+      "path": "dsh/logs/optimization-2026-10-15-dsh-strata-1792070040110650187",
+      "entries": 532,
+      "regular_file_bytes": 49233
+    },
+    {
+      "path": "dsh/logs/ram-upgrade-validation",
+      "entries": 22,
+      "regular_file_bytes": 252334
+    },
+    {
+      "path": "dsh/logs/sglang-compatibility",
+      "entries": 2,
+      "regular_file_bytes": 607
+    },
+    {
+      "path": "dsh/logs/sglang-flash-next",
+      "entries": 31,
+      "regular_file_bytes": 12816258
+    },
+    {
+      "path": "dsh/logs/sglang-qwen",
+      "entries": 25,
+      "regular_file_bytes": 1501201
+    },
+    {
+      "path": "dsh/logs/vllm-tests",
+      "entries": 559,
+      "regular_file_bytes": 369031
+    },
+    {
+      "path": "hyperqwen/benchmark-mtp.log",
+      "entries": 1,
+      "regular_file_bytes": 9539
+    },
+    {
+      "path": "hyperqwen/benchmark-dflash.log",
+      "entries": 1,
+      "regular_file_bytes": 10464
+    },
+    {
+      "path": "hyperqwen/benchmark-baseline.log",
+      "entries": 1,
+      "regular_file_bytes": 9505
+    },
+    {
+      "path": "sglang/smoke-test.log",
+      "entries": 1,
+      "regular_file_bytes": 875
+    },
+    {
+      "path": "sglang/smoke-test-dual.log",
+      "entries": 1,
+      "regular_file_bytes": 1884
+    },
+    {
+      "path": "vllm/smoke-test.log",
+      "entries": 1,
+      "regular_file_bytes": 10089
+    },
+    {
+      "path": "vllm/smoke-test-dual.log",
+      "entries": 1,
+      "regular_file_bytes": 13468
+    }
+  ],
+  "caches_removed": [
+    "dsh/__pycache__",
+    "hardware/__pycache__",
+    "graphics/__pycache__",
+    "network/__pycache__",
+    "bin/__pycache__",
+    "turnstone/__pycache__",
+    "sglang/__pycache__",
+    "vllm/__pycache__"
+  ],
+  "cache_allocated_bytes": 1011712,
+  "observed_nvme_free_delta_bytes": 1622269952,
+  "model_inventory_unchanged": true,
+  "dependency_checks": {
+    "blocking_references": [],
+    "inaccessible_process_trees": 403
+  },
+  "retained": [
+    "active runtime environments and builds",
+    "llm-tools/cuda-build AMD C++/JIT toolchain",
+    "llm-tools/runtime-cache/rocm",
+    "models and inactive 64 GB candidates",
+    "sessions, frontend settings and private client guide"
+  ],
+  "verification": "Every archived regular file verified by SHA-256; symlinks, hardlinks and entry set checked before removal. Source metadata and dependencies rechecked before deletion. Model path/size/mtime inventories identical before/after."
+}

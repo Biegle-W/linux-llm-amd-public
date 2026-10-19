@@ -2,6 +2,7 @@
 """Check API auth/catalogs; --generate also checks Q3 SDK streaming and tools."""
 import argparse
 import json
+from datetime import datetime
 import time
 import urllib.error
 import urllib.request
@@ -10,19 +11,22 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--generate', action='store_true')
+parser.add_argument('--output', type=Path, help='Optional JSON report; no file is written by default')
 args = parser.parse_args()
+from gateway import catalog
+expected_catalog = catalog()
 config = json.loads((ROOT / 'dsh/data/network-access.json').read_text())
 key = Path(config['key_file']).read_text().strip()
 opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 model = 'qwen3.8-flash-next-iq3_xxs'
 expected_context = json.loads((ROOT / 'dsh/strata-profiles.json').read_text())[model]['context']
 labels = dict(zip(config['listen'], ('loopback', 'lan', 'tailscale')))
-result = {'date': '2026-10-07', 'auth_and_catalog': {}, 'generation': {},
+result = {'date': datetime.now().astimezone().isoformat(), 'auth_and_catalog': {}, 'generation': {},
           'remote_peer_tested': False, 'no_performance_benchmark': True}
 
 
 def request(address, path, body=None, auth=key):
-    req = urllib.request.Request(f'http://{address}:10000' + path,
+    req = urllib.request.Request(f'http://{address}:{config["port"]}' + path,
                                  data=None if body is None else json.dumps(body).encode(),
                                  headers={'Content-Type': 'application/json',
                                           **({'Authorization': 'Bearer ' + auth} if auth else {})})
@@ -39,15 +43,19 @@ for address in config['listen']:
             assert error.code == 401
     data = request(address, '/v1/models')
     ids = [m['id'] for m in data['data']]
-    assert len(ids) == 12 and model in ids and not any('iq2_xs' in m for m in ids)
+    assert len(ids) == len(set(ids)) and set(ids) == set(expected_catalog), 'API catalog differs from enabled local profiles'
+    assert all(m['context_length'] == expected_catalog[m['id']]['context_length'] for m in data['data']), 'Context metadata mismatch'
+    assert model in ids and not any('iq2_xs' in m for m in ids)
     try:
-        request(address, '/v1/chat/completions', {'model': 'qwen3.8-flash-next-iq2_xs',
-                                                'messages': [{'role': 'user', 'content': 'test'}]})
+        request(address, '/v1/models/qwen3.8-flash-next-iq2_xs')
         raise AssertionError('Retired Q2 accepted')
     except urllib.error.HTTPError as error:
         assert error.code == 404
+    health = request(address, '/health')
+    assert health['status'] == 'ok'
     result['auth_and_catalog'][labels[address]] = {'unauthenticated_401': True, 'wrong_key_401': True,
-                                         'catalog_count': len(ids), 'q2_rejected': True}
+                                         'catalog_count': len(ids), 'q2_rejected': True,
+                                         'health_ok': True, 'available_models': sorted(m['id'] for m in data['data'] if m.get('backend_available'))}
 
 if args.generate:
     from openai import OpenAI
@@ -62,7 +70,7 @@ if args.generate:
     for address in config['listen']:
         # The HTTP client bypasses unrelated proxy environment settings.
         import httpx
-        client = OpenAI(base_url=f'http://{address}:10000/v1', api_key=key, timeout=600,
+        client = OpenAI(base_url=f'http://{address}:{config["port"]}/v1', api_key=key, timeout=600,
                         http_client=httpx.Client(trust_env=False))
         assert model in [m.id for m in client.models.list().data]
         stream = client.chat.completions.create(
@@ -73,7 +81,7 @@ if args.generate:
         assert 'NETWORK_API_OK' in text, 'Streaming response check failed'
         result['generation'][labels[address]] = {'openai_sdk_models': True, 'streaming_passed': True}
         client.close()
-    client = OpenAI(base_url=f'http://{config["listen"][1]}:10000/v1', api_key=key, timeout=600,
+    client = OpenAI(base_url=f'http://{config["listen"][1]}:{config["port"]}/v1', api_key=key, timeout=600,
                     http_client=httpx.Client(trust_env=False))
     tools = [{'type': 'function', 'function': {'name': 'get_test_value',
              'description': 'Get a test value', 'parameters': {'type': 'object',
@@ -98,7 +106,7 @@ if args.generate:
     assert health['loaded'] and health['model'] == model and health['max_context'] == expected_context
     result['strata_health'] = {k: health[k] for k in ('loaded', 'model', 'max_context')}
 
-folder = ROOT / 'network/research'
-folder.mkdir(exist_ok=True)
-(folder / 'host-check.json').write_text(json.dumps(result, indent=2) + '\n')
+if args.output:
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2) + '\n')
 print(json.dumps(result, indent=2))

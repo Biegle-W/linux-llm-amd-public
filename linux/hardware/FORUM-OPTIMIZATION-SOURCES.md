@@ -433,3 +433,25 @@ Use the [Unsloth primary guide](https://unsloth.ai/docs/models/nemotron-3.5-supe
 and installed [llama.cpp implementation](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37)
 for architecture/cache support, and the [new local result](NEMOTRON-SUPER-2026-10-19.md)
 for actual capacity and throughput. No runtime update was required.
+
+<a id="pcie-switch-purchase-october-19"></a>
+
+## PCIe switch purchase — October 19
+
+The owner reports buying the four-GPU PEX88096 kit whose listing spells it
+“plx8096 PCIe4.0扩展 四卡GPU”. Installation, link negotiation, HIP peer access,
+RCCL correctness and inference speed are pending local validation. Current
+benchmarks still use the motherboard x8/x8 layout and host transport.
+
+- [lcz.me, 张光璞, September 2026 purchase thread](https://lcz.me/topic/1791):
+  Taobao four-slot kit, reported RMB 2,380 including host card/two cables.
+- [Same owner's dual-7900-XTX follow-up](https://lcz.me/topic/1791/118):
+  PEX88096, 32 GiB BARs, 7.23 GB/s peer copy / 7.06 GB/s direct peer kernel read;
+  GPU-facing links remained Gen2 x16. These are forum results, not this PC's.
+- [Level1Techs, TrailFeatures, May 2026](https://forum.level1techs.com/t/does-the-lrlink-pcie-bridge-fix-rccls-broken-p2p-on-dual-r9700-update-yes-it-does/249623/14):
+  different dual-R9700 hardware; firmware/ACS/BAR configuration mattered.
+- [Broadcom PEX88000 product brief](https://docs.broadcom.com/doc/BC-0484EN)
+  documents the switch family. Chip capability does not validate a board's
+  routing, signal integrity or RX 7900 XTX compatibility.
+
+No PCI register, BIOS, kernel or runtime-transport changes were applied for this purchase.

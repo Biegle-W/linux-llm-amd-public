@@ -7,7 +7,9 @@ API gateway and watchdog are not automatically inherited by the app. Avoid
 loading both workers concurrently. Adding this menu entry does not start either.
 
 Source: [official Strata App](https://github.com/Niko1221/Strata#option-a-the-strata-app).
-The existing download is `Strata-0.2.0-beta-linux-amd-rx7900.AppImage`. It is not included in Git.
+The restored application is `/opt/appimages/Strata-0.2.0-beta-linux-amd-rx7900.AppImage`.
+It is the actual executable file, restored from Trash with SHA-256 comparison;
+Downloads is not required. The AppImage is not included in Git.
 The official bundled icon is retained in `icons/strata-app.png` with provenance
 and checksum in [icons/SOURCES.json](icons/SOURCES.json).
 
@@ -23,6 +25,9 @@ desktop-file-validate "$HOME/.local/share/applications/Strata.desktop"
 update-desktop-database "$HOME/.local/share/applications"
 gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor"
 ```
+
+October 19 maintenance restored the existing AppImage to `~/Applications` and
+updated both `Exec` and `TryExec`; the application was not started.
 
 October 19 validation: desktop entry syntax, executable target, installed icon
 and desktop application registration checked without launching the AppImage or

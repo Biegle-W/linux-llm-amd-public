@@ -1,7 +1,9 @@
 # Current benchmark results
 
-Start with [the current AMD benchmark report](../CURRENT-AMD-BENCHMARKS.md).
-Its [October 19 numeric record](current-amd-2026-10-19.json) contains each
+Start with [the current AMD benchmark report](../CURRENT-AMD-BENCHMARKS.md),
+covering ten enabled profiles across two saved measurement batches.
+Maintenance reconciled documentation only; no benchmark was rerun.
+The original nine-profile [October 19 numeric record](current-amd-2026-10-19.json) contains each
 profile's exact measured build, production context, all timed trials, actual
 input/output token counts, TTFT, prefill source, decode, output hashes and memory
 summaries. It contains no generated answer text or private connection settings.
