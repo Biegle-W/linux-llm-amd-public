@@ -111,3 +111,13 @@ and full host backing. Preserve the streamed-KV admission budget beside expert
 RAM and desktop headroom. The 64 GB candidate retains native 256K and remains
 inactive; do not regenerate the obsolete 32K/128K context presets. Beyond 256K
 requires experimental RoPE/quality validation, not just successful allocation.
+
+## Current benchmark publication
+
+Use `linux/hardware/results/README.md` as the current-results entry point and
+`linux/hardware/results/current-amd-2026-10-19.json` for the fresh nine-profile
+AMD measurements. Keep dated historical records; do not promote an older build's
+speed into a current table. Update current README tables, dated benchmark ledger
+and canonical handoff together. Distinguish native prompt timing, engine prefill
+phase timing, external SSE TTFT/decode and input/TTFT proxies. New ~8K probes are
+not full-window context validation. The historical NVIDIA setup remains separate.

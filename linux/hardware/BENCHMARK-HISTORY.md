@@ -48,7 +48,18 @@ publication snapshot in the public tree, with relative source links adjusted.
   profiles, not a controlled GPU or version speed comparison. A three-token
   smoke response is not a useful sustained speed benchmark.
 
-## Current profiles: latest saved evidence
+## Current profiles: fresh October 19 evidence
+
+All nine current production profiles now have fresh prefill, external TTFT and
+code/prose decode measurements on their installed builds. See
+[the current benchmark report](CURRENT-AMD-BENCHMARKS.md) and
+[all numeric trials](results/current-amd-2026-10-19.json). Three fresh ~8K marker
+probes and three warm short runs/task; production context allocations retained.
+Muse's complete final 1,024-output-allowance batch retains all three marker
+outcomes, including failures, beside its timing data.
+This update changes result publication, not runtime versions or model settings.
+
+### Superseded summary before the fresh nine-profile batch
 
 Current hardware: i5-13600KF, MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**,
 CPU PCIe4 x8/x8, **32 GB RAM**. All nine profiles use both GPUs. llama.cpp and

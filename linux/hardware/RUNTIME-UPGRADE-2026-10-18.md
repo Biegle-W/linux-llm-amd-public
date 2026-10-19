@@ -1,5 +1,10 @@
 # AMD backend development updates — October 18, 2026
 
+This is the dated installation/functional-validation record. Fresh throughput
+for all nine profiles is now in [Current AMD benchmarks](CURRENT-AMD-BENCHMARKS.md).
+The 32K Strata settings below describe this earlier update; its current native
+256K profile is recorded in [the October 19 context report](STRATA-CONTEXT-2026-10-19.md).
+
 Development builds selected for the current dual-Radeon workstation; live checks
 are recorded below. All model assets were reused.
 

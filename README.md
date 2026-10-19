@@ -10,8 +10,9 @@ Model weights, installed runtimes, credentials and personal app data are exclude
 - [Install, launch and connect](#install-launch-and-connect)
 - [Complete benchmark history and experiments](linux/hardware/BENCHMARK-HISTORY.md)
 
-Documentation reorganized **October 19, 2026** using existing records only.
-No inference benchmarks were rerun for this cleanup.
+Fresh **October 19, 2026 AMD benchmarks** cover all nine current profiles.
+The archived NVIDIA measurements retain their original dates and builds.
+[Full fresh AMD method, token counts and numeric evidence](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
 <a id="saved-benchmark-results"></a>
 ## Reading the measurements
@@ -46,40 +47,45 @@ October 18–19 records, not a live claim about today's upstream head.
 
 | Engine | Installed build | Validation after this update |
 |---|---|---|
-| llama.cpp HIP / Vulkan | [`31288c9c66e5`](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37) | Five profiles loaded; arithmetic, streaming and tool round trips; **no fresh throughput** |
-| SGLang ROCm | [gfx1100 fork `f84475ccf593`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local repairs | Both profiles revalidated; retained October 17 speed tests use this repaired build |
-| vLLM ROCm | `0.32.0rc1.dev329+g39983a5e7.rocm723` | Fresh short decode and 64K retrieval |
-| Strata HIP | [0.1.45 / `477ac13cbe8e`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Fresh native 256K retrieval/code, short decode and tools |
+| llama.cpp HIP / Vulkan | [`31288c9c66e5`](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37) | Fresh prefill, TTFT and code/prose decode on all five profiles |
+| SGLang ROCm | [gfx1100 fork `f84475ccf593`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local repairs | Fresh prefill, TTFT and code/prose decode on both profiles |
+| vLLM ROCm | `0.32.0rc1.dev329+g39983a5e7.rocm723` | Fresh prefill, TTFT and code/prose decode; earlier 64K retrieval retained |
+| Strata HIP | [0.1.45 / `477ac13cbe8e`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Fresh prefill, TTFT and code/prose decode; earlier native 256K check retained |
 
 [Build dependencies, fixes, validation and rollback](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
 SGLang uses its Radeon-specific fork; official main was not an unchanged compatible replacement.
 
-### Every active model and backend
+### Every active model and backend — freshly measured
 
-Context below is the **current configured allocation**. The evidence column
-identifies the build actually timed. **Older llama.cpp timings are retained
-reference results, not measurements of `31288c9c66e5`.** Their latest-build speed
-remains unmeasured. vLLM has no fresh native or Book PP measurement on dev329.
+All rows below were timed on the installed builds above, with production
+contexts retained. Medians of three timed requests/workload; one excluded short
+warm-up per task. New prefill probes use a shared synthetic corpus sized around 8K Qwen tokens,
+not a filled window. Actual per-model token counts are shown; Muse tokenizes
+this corpus to about 6.35K, Nemotron to about 7.92K.
 
-| Model / quant | Backend / strategy | Context tokens | Prefill t/s | Short TTFT s, code / prose | Decode t/s | Timed evidence |
-|---|---|---:|---|---|---|---|
-| Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 1,171.05 Book | 0.127 / 0.124 | 79.38 / 45.53 code/prose | Oct 17–18, **older** `f12aaa3` [L1] |
-| Muse-Glimmer-30B UD-Q4_K_XL | llama.cpp Vulkan | 32,768 | — on dual AMD | — | 34.89, guide smoke | Oct 16, **older** `f12aaa3`, previous board [D16] |
-| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, CPU experts/GPU cache, MTP3 | 262,144 | 417.9 native, 63,911 input | — | 96.7, single 48-token code probe | Oct 18, **older** `f12aaa3` [MOE] |
-| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, CPU experts/GPU cache | 262,144 | 424.0 native, 63,911 input | — | 35.7, single 101-token code probe | Oct 18, **older** `f12aaa3` [Q4] |
-| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, CPU experts/GPU cache, MTP3 | 262,144 | 457.8 native, 63,911 input | — | 104.9, single 128-token code probe | Oct 18, **older** `f12aaa3` [MOE] |
-| Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, MTP3 | 40,960 | 1,488.15 Book | 0.101 / 0.090 | 114.57 / 66.05 code/prose | Oct 17, repaired `f84475c` [C17] |
-| Qwen3.8-27B GPTQ INT4/group64 | SGLang ROCm TP2, DFlash2 | 65,536 | 1,575.97 Book | 0.100 / 0.098 | 205.59 / 71.84 code/prose | Oct 17, repaired `f84475c` [C17] |
-| Qwen3.8-27B GPTQ INT4/group64 | vLLM ROCm TP2, compiled MTP3 | 65,536 | — on dev329 | 0.069 / 0.091 | 130.61 / 72.69 code/prose | Oct 18, dev329 [U18] |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, layer overlap, MTP3, streamed INT8 KV | 262,144 | 775.1 native, 258,044 input | — | 72.2 / 48.0 code/prose; 39.9 long code | Oct 19, 0.1.45 [CTX19] |
+| Model / quant | Backend / strategy | Context tokens | Actual prefill input tokens | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,189 | 695.1 | 11.788 | 0.132 / 0.129 | 75.80 / 45.58 |
+| Muse-Glimmer-30B UD-Q4_K_XL | llama.cpp Vulkan | 32,768 | 6,346–6,349 | 1375.5 | 4.725 | 0.258 / 0.259 | 37.85 / 37.92 |
+| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,191 | 379.3 | 21.603 | 0.061 / 0.060 | 123.70 / 76.34 |
+| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, expert cache | 262,144 | 7,920–7,926 | 222.8 | 35.549 | 0.387 / 0.249 | 36.49 / 36.29 |
+| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,190 | 399.2 | 20.515 | 0.058 / 0.058 | 120.48 / 76.46 |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, MTP3 | 40,960 | 8,186–8,190 | 1397.7 | 5.871 | 0.084 / 0.080 | 115.22 / 68.85 |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | 8,186–8,188 | 1491.5 | 5.510 | 0.086 / 0.083 | 210.42 / 70.88 |
+| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | 8,184–8,189 | 1488.2 | 5.513 | 0.067 / 0.081 | 131.05 / 73.31 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,186–8,189 | 900.9 | 9.126 | 0.238 / 0.245 | 71.50 / 48.46 |
 
-Short code/prose inputs are 29/25 tokens for the saved merge-function/lighthouse
-workloads. SGLang/vLLM use a 256-output-token cap, temperature 0.6, top-p 0.95,
-seed 42; Strata uses greedy sampling and a 512-token cap. The llama.cpp Qwen
-control uses the saved short-task method in [L1]. SSE decode is approximately
-`(output_tokens - 1) / (last_output_time - first_output_time)`; speculative
-bursts limit precision. Strata and MoE probes use native timing. Muse's smoke
-spent its output cap in reasoning and is not a sustained final-answer benchmark.
+Short code/prose uses the saved 29/25-token prompts, temperature 0.6, top-p 0.95,
+seed 42 and 256 output-token cap. Actual counts are retained. Native prompt PP
+is used for llama.cpp/Strata; SGLang/vLLM use their measured engine prefill phases.
+TTFT/decode use external SSE timing. Phase definitions differ; this is not a
+kernel-only comparison. Muse may spend its short cap in reasoning; its final
+marker probes use a 1,024-output allowance and passed 2/3 checks.
+Retrieval failures remain in the reported medians. Other marker probes use 64.
+
+[Complete method, all trials, input lengths, memory and reproduction](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
+All accepted marker probes reported zero cached input; experts were warmed by
+preceding requests. Older-build and single-AMD speeds remain in the history.
 
 ### Long input, cache behavior and capacity
 

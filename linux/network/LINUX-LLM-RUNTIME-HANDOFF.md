@@ -513,6 +513,23 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
+October 19 fresh AMD benchmark refresh: all nine active production profiles
+were remeasured on llama.cpp `31288c9c`, repaired SGLang `f84475c`, vLLM dev329
+and Strata HIP 0.1.45. Prefill and TTFT use three fresh ~8K marker requests;
+code/prose decode and short TTFT use three warm timed requests/task. Production
+contexts and placement are unchanged; these are not full-window tests. See
+[the canonical current report](../hardware/CURRENT-AMD-BENCHMARKS.md) and
+[results index](../hardware/results/README.md). Native/engine-phase prefill is
+kept separate from API TTFT; previous speed tables are historical. The private
+operational README was consolidated; its old dated notes remain in a private
+archive. NVIDIA/Windows setup and benchmark history are preserved.
+Muse returned all markers in 2/3 final probes within a 1,024-output-token
+allowance; its failed trial remains in the medians. SGLang MTP/DFlash2 showed
+about 5.29/8.32 GiB aggregate managed VmSwap; timed swap I/O was not recorded.
+Do not claim universal retrieval success or zero paging. Actual corpus token
+counts differ by tokenizer (Muse ~6.35K, Nemotron ~7.92K, others ~8.19K).
+[Public benchmark report](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/CURRENT-AMD-BENCHMARKS.md).
+
 The [benchmark/context history](../hardware/BENCHMARK-HISTORY.md) is the
 current nine-profile index and dated update ledger. It records allocated context
 separately from actual input tested, PP separately from TTFT, exact measured
@@ -572,7 +589,7 @@ Different platforms' headline speeds are not local measurements.
 
 ## Troubleshooting and maintenance
 
-October 19 public documentation cleanup: the
+Earlier October 19 public documentation cleanup (before the fresh benchmark batch): the
 [public README](https://github.com/Biegle-W/local-llm-public#amd-latest-setup-and-results)
 now presents two hardware result sets: latest dual-AMD setup and archived dual-NVIDIA.
 Each model/backend has context, prefill, TTFT and decode fields, with measured
