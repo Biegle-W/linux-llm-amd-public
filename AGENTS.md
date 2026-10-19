@@ -89,3 +89,13 @@ Publish the measured RAM capacity needed to interpret results, without exporting
 personal hardware-failure reports or troubleshooting histories. Apply this scope
 when synchronizing future documentation; private and public content need not be
 identical.
+
+## Benchmark/context update ledger
+
+Keep `hardware/BENCHMARK-HISTORY.md` (under `linux/` in the public copy) and
+the README overview current after relevant updates. Record the exact measured
+build, hardware/RAM, configured context, actual tested input/output lengths,
+workload/method and saved evidence. Label functional-only checks as validation
+only; preserve earlier speeds with their original dates/builds. Distinguish
+native prefill, benchmark estimates and TTFT. Do not imply that an allocated
+window was fully tested or invent throughput for an unmeasured update.

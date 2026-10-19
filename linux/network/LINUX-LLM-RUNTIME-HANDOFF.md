@@ -1,7 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 18, 2026 (America/Toronto)**. This is the **single current
-handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
+Updated **October 19, 2026 (America/Toronto)**. Runtime checks remain dated October 18;
+the October 19 change consolidates saved benchmark history without rerunning it.
+This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
@@ -503,6 +504,18 @@ assets only. The original recipes, checksums, benchmark caveats and Windows
 network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
+
+The [benchmark/context history](../hardware/BENCHMARK-HISTORY.md) is the
+current nine-profile index and dated update ledger. It records allocated context
+separately from actual input tested, PP separately from TTFT, exact measured
+builds and validation-only updates. The three 256K MoE allocations have 63,911-token
+retrieval evidence; full 256K is untested. Latest llama.cpp/SGLang checks did not
+rerun throughput. Latest vLLM dev329 code/prose medians are 130.61/72.69 t/s;
+Strata 0.1.45 single samples are 66.7/48.5 t/s at 32K allocation. Earlier results
+below retain their original dates/builds and are not latest-build measurements.
+No worker or runtime configuration changed during the October 19 compilation.
+The [published history](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/BENCHMARK-HISTORY.md)
+is also accessible to clients reading this handoff directly from Shared.
 
 The original consolidation did not rerun benchmarks. The later Q4 replacement
 measurements are in the report above. The maintained README contains

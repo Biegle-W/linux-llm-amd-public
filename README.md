@@ -1,5 +1,39 @@
 # Local LLM reference setups
 
+<!-- benchmark-history-2026-10-19 -->
+## Benchmark and context overview — October 19
+
+[Full dated history: every retained model/engine, hardware phase, context,
+prefill/decode and validation-only update](linux/hardware/BENCHMARK-HISTORY.md).
+Compiled from saved results; **no benchmarks rerun**. This table is the current
+nine-profile index; older dated sections below retain their historical settings.
+All current profiles use **both RX 7900 XTX cards**, with 32 GB system RAM.
+
+| Model | Engine / strategy | Total context | Latest saved decode t/s | Speed measured on |
+|---|---|---:|---|---|
+| Qwen3.8-27B Q4 | llama.cpp Vulkan, MTP3 | 65,536 | Code 79.38 / prose 45.53 | Oct 17–18, older `f12aaa3` |
+| Muse-Glimmer-30B Q4 | llama.cpp Vulkan | 32,768 | 34.89, one guide smoke | Oct 16, older `f12aaa3` / previous board |
+| Qwen3.6-35B-A3B MXFP4 | llama.cpp HIP, CPU experts/cache, MTP3 | 262,144 | 96.7, one short code probe | Oct 18, older `f12aaa3` |
+| Nemotron-3.5-Bolt-74B-A9B Q4 | llama.cpp HIP, CPU experts/cache | 262,144 | 35.7, one short code probe | Oct 18, older `f12aaa3` |
+| Empero Qwen3.8-35B-A3B IQ4 | llama.cpp HIP, CPU experts/cache, MTP3 | 262,144 | 104.9, one short code probe | Oct 18, older `f12aaa3` |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, MTP3 | 40,960 | Code 114.57 / prose 66.05 | Oct 17, repaired `f84475c` |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | Code 205.59 / prose 71.84 | Oct 17, repaired `f84475c` |
+| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | Code 130.61 / prose 72.69 | Oct 18, dev329 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, MTP3/expert cache | 32,768 | Code 66.7 / prose 48.5 | Oct 18, 0.1.45, single samples |
+
+These are different workloads/methods, not a matched ranking. Muse's smoke
+spent its output cap in reasoning. The three 256K MoE profiles were tested at
+**63,911 actual input tokens**, not a filled 256K window. Their native prefill
+rates were **417.9 / 424.0 / 457.8 t/s** in table order. SGLang MTP/DFlash
+retrieved **39,440 / 64,033 input tokens**; latest vLLM retrieved **64,033**
+(TTFT **54.56 s**), Strata **30,070** (native prefill **801.4 t/s**).
+These short retrieval answers do not establish sustained full-window decode.
+The latest llama.cpp `31288c9c66e5` update and unchanged SGLang fork received
+functional revalidation, **not fresh speed tests**. Keep earlier speeds dated.
+[Methods, actual tested lengths, historical NVIDIA/single-AMD results and all
+update stages](linux/hardware/BENCHMARK-HISTORY.md).
+<!-- /benchmark-history-2026-10-19 -->
+
 Graphics models: [one retained Qwen-Image/H3 set and ComfyUI paths](linux/graphics/README.md); 70.40 GiB on Shared SATA. Both families passed ComfyUI generation on the two RX 7900 XTX cards.
 
 Reference hardware configurations, inference-engine setup, reproducible tuning and measured performance for Linux and Windows.
@@ -105,7 +139,7 @@ remain in Git for future reference.
 <!-- consolidated-handoff-2026-10-18 -->
 **Shared handoff consolidated October 18:** use the single
 [current Linux/Windows-client guide](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
-It reconciles eight active profiles, both AMD cards, current contexts, vLLM's
+It reconciles nine active profiles, both AMD cards, current contexts, vLLM's
 startup fix, client/API/SSH access and deferred/retired setups. Nine original
 Shared documents are preserved in a dated archive; their old settings are historical.
 <!-- /consolidated-handoff-2026-10-18 -->
