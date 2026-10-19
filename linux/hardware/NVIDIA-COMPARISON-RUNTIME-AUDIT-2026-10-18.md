@@ -1,6 +1,10 @@
 # NVIDIA comparison and backend version audit — October 18, 2026
 
-The running Strata executable is the **AMD HIP gfx1100 build**, not CUDA or
+**Historical snapshot before the authorized runtime update.** Current installed
+versions and validation are maintained in [the upgrade record](RUNTIME-UPGRADE-2026-10-18.md).
+The following comparisons retain their original measured versions.
+
+At audit time, the running Strata executable was the **AMD HIP gfx1100 build**, not CUDA or
 Vulkan. Both RX 7900 XTX cards participate by layer splitting. It uses the
 private ROCm 7.2.3 SDK and remains engine 0.1.44.1 at `296b59d2f73c`.
 The preceding task configured and validated existing runtimes; it did not update
@@ -63,7 +67,7 @@ were inspected; no Git fetch/reset, package install, build or inference restart
 was performed in this audit. llama.cpp's HIP and Vulkan build-info files both
 identify `f12aaa3`, matching the retained source/configuration pin.
 
-Upgrades remain pending. Newer source must retain or adapt the local AMD fixes
+At this audit snapshot, upgrades remained pending. Newer source must retain or adapt the local AMD fixes
 and pass both-card loading, MTP/tools, context and residency checks before replacing
 the working profiles. These audit findings do not establish that a newer build
 is faster or that official SGLang main can replace the RDNA3 fork unchanged.

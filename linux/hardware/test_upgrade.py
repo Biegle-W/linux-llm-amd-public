@@ -43,6 +43,7 @@ class UpgradeTests(unittest.TestCase):
                 'Vulkan0: AMD Radeon RX 7900 XTX (RADV NAVI31)\nVulkan1: AMD Radeon RX 7900 XTX (RADV NAVI31)\n',
             ]
             with patch.object(llama_runtime, 'ROOT', root), patch.object(llama_runtime, 'amd_devices', return_value=[amd, amd]), \
+                 patch.object(llama_runtime, 'require_worker_scope'), \
                  patch.object(llama_runtime.subprocess, 'run', side_effect=[
                      subprocess.CompletedProcess([], 0, text, '') for text in inventories]) as run:
                 selected, preset, env, models = llama_runtime.launch_spec()

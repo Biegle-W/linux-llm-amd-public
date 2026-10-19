@@ -76,9 +76,13 @@ def activate_native(mode, spec=None):
     active_model = None
     if enabled is not None:
         require_amd_headroom()
-    native = subprocess.Popen([str(binary),
+    args = [str(binary),
         '--models-preset', str(preset), '--models-max', '1',
-        '--host', '127.0.0.1', '--port', str(native_port)], env=env, start_new_session=True)
+        '--host', '127.0.0.1', '--port', str(native_port)]
+    if enabled is not None:
+        args = ['systemd-run', '--user', '--scope', '--quiet',
+                '--property=MemorySwapMax=0', *args]
+    native = subprocess.Popen(args, env=env, start_new_session=True)
     ready(native, native_port)
     active_mode = mode
     memory_watch = watch_worker(native, lambda: active_model, stop_process)

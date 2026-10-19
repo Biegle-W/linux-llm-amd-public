@@ -6,27 +6,47 @@ Reference hardware configurations, inference-engine setup, reproducible tuning a
 
 Image/video setup: [ComfyUI walkthrough](linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](linux/graphics/INSTALL.md) are current.
 
-**Strata IQ3_XXS on dual RX 7900 XTX:** current 32K/32 GB profile uses MTP,
-bounded CPU expert backing and GPU caching. A gated 64 GB / 128K candidate is
-prepared. [Configuration and local results](linux/hardware/STRATA-DUAL-AMD-2026-10-18.md).
+**October 18 development updates:** llama.cpp HIP/Vulkan `31288c9c66e5`,
+Strata HIP **0.1.45** and vLLM ROCm **dev329 / 39983a5e7** replace the earlier
+builds. SGLang retains the latest gfx1100 fork head `f84475ccf593` with its local
+repairs; official main is not a compatible unchanged replacement.
+[Exact versions, validation and rollback](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
 
-| Strata IQ3_XXS, dual RX 7900 XTX / 32 GB RAM | Prefill t/s | Decode t/s |
-|---|---:|---:|
-| Python merge task, 29 input / 408 output | 85.5 | 59.8 |
-| Prose, 25 input / 512 output | 80.1 | 47.8 |
-| Fresh 30,070-token retrieval / 19 output | 763.1 | 68.5 |
+**Strata IQ3_XXS on both RX 7900 XTX cards:** 32K context on the installed
+32 GB RAM, MTP3, bounded CPU expert backing and GPU caches. Its separately gated
+64 GB / 128K candidate remains inactive. New **HIP 0.1.45 validation samples**:
 
-One sample each, thinking off, MTP enabled. Long retrieval, tools/results and
-streaming passed; zero sampled worker swap/VRAM spill, 8.7 GiB minimum available
-RAM. The short retrieval reply does not establish sustained long-context decode.
+| Workload | Input / output tokens | Prefill t/s | Decode t/s |
+|---|---:|---:|---:|
+| Python merge function | 29 / 375 | 87.7 | 66.7 |
+| Lighthouse prose | 25 / 512 | 82.1 | 48.5 |
+| Fresh retrieval | 30,070 / 19 | 801.4 | 68.7 |
 
-**Comparison and version audit:** the best saved 4070/3060 Strata profile measured
-68.8 / 64.6 code/prose t/s versus the current AMD sample's 59.8 / 47.8. The old
-system had 64 GB RAM and different batching/MTP settings; this is not a controlled
-GPU comparison. **The latest setup did not upgrade all engines**: newer Strata
-0.1.45, llama.cpp source and vLLM dev329 wheels were found. SGLang matches the
-retained gfx1100 fork, not official main. [Exact versions and limitations](linux/hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md).
+One temperature-zero sample each, with a background C++ build. These are not a
+controlled version comparison. Tools/results, streaming and retrieval passed;
+worker swap and sampled VRAM spill were zero. Minimum available RAM was 14.2 GiB;
+whole-card VRAM peaks were 22.23 / 23.77 GiB. The short retrieval answer does not
+establish sustained full-context decode. [Original 0.1.44.1 measurements](linux/hardware/STRATA-DUAL-AMD-2026-10-18.md)
+and [historical NVIDIA comparison](linux/hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
+keep their actual versions and methods.
 
+**Updated vLLM dev329, both cards:** three warm SSE decode samples per saved
+short workload, 64K configured, compiled MTP3/BF16 KV:
+
+| Workload | Median decode t/s |
+|---|---:|
+| Code | 130.61 |
+| Prose | 72.69 |
+
+No background compilation; temperature 0.6, top-p 0.95, seed 42, 256-token cap.
+This is not a controlled old/new comparison. Fresh 64,033-token retrieval passed
+with 54.56 s TTFT; its short answer is not sustained decode.
+[Method and result data](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
+
+**Fast Qwen 27B research:** the verified ~1,000 t/s headline is aggregate
+concurrency, rather than ordinary single-stream decode. Experimental Radeon
+ExLlamaV3 ports are promising; the current dual-card SGLang DFlash2 profile remains
+the established local choice. [AMD options, primary benchmarks and both forum source trails](linux/hardware/QWEN27B-AMD-SPECULATION-2026-10-18.md).
 
 <!-- comfyui-validation-2026-10-18 -->
 
@@ -303,12 +323,14 @@ in each active model; the earlier RTX 4070 is retired. RAM remains 32 GB.
 
 | Backend | Model / strategy | Context |
 |---|---|---:|
-| SGLang ROCm | Qwen 27B GPTQ, MTP2 — restored on Z690 | 40,960 |
-| SGLang ROCm | Qwen 27B GPTQ, DFlash2 W4A16 drafter | 16,384 |
-| vLLM ROCm | Qwen 27B GPTQ, compiled MTP3, BF16 KV | 65,536 |
-| llama.cpp Vulkan | Qwen 27B Q4, MTP3 | 65,536 |
-| llama.cpp Vulkan | Muse, Qwen MoE, Empero | 32,768 |
-| llama.cpp Vulkan | Nemotron Bolt | 65,536 |
+| SGLang ROCm TP2 | Qwen 27B GPTQ, MTP3, repaired verification and prefix cache | 40,960 |
+| SGLang ROCm TP2 | Qwen 27B GPTQ, DFlash2 W4A16 drafter, prefix cache | 65,536 |
+| vLLM ROCm TP2 | Qwen 27B GPTQ, compiled MTP3, BF16 KV | 65,536 |
+| llama.cpp Vulkan, two-GPU layer split | Qwen 27B Q4, MTP3 | 65,536 |
+| llama.cpp Vulkan, two-GPU layer split | Muse Glimmer 30B | 32,768 |
+| llama.cpp HIP, two-GPU layer split | Qwen 35B MoE / Empero, CPU experts + GPU cache, MTP3 | 262,144 |
+| llama.cpp HIP, two-GPU layer split | Nemotron Bolt Q4, CPU experts + GPU cache, no MTP | 262,144 |
+| Strata HIP, two-GPU layer split | Flash-Next IQ3_XXS, bounded CPU experts + GPU cache, MTP3 | 32,768 |
 
 The Qwen GPTQ checkpoint and the DFlash drafter belong under
 `/opt/local-llm/models` on Linux storage. GGUFs used by both operating systems
@@ -317,14 +339,16 @@ requires a real shared-drive mount path and UUID: replace
 `CONFIGURE_SHARED_DRIVE_UUID` before using shared-storage launchers. Review AMD
 PCI-device paths and GPU discovery in the guards on your machine.
 
-The SGLang profiles use standard Triton verification
-(`SGLANG_RDNA_VLLM_VERIFY=0`). The optimized verification adapter produced invalid
-ordered-number output in the earlier single-card configuration. DFlash uses eight draft
-tokens, a 2,048-token draft window, two recurrent-state slots and disabled prefix
-caching. Repeated conversation history must therefore be processed again.
-Both active ROCm launchers require 21 GiB free VRAM on each card at startup.
+The SGLang profiles enable the optimized Radeon verifier with the locally
+validated prefix/draft KV-walk repair (`SGLANG_RDNA_VLLM_VERIFY=1`,
+`SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX=1`). Both support prefix reuse and eight Mamba
+cache states. DFlash2 uses eight draft tokens and a 2,048-token draft window.
+SGLang requires 21 GiB free VRAM per card before loading; vLLM's selected profile
+requires 20 GiB. These are admission gates, not actual model allocation sizes.
 
-Runtime versions used for these measurements:
+Runtime versions for older measurements remain attached to their dated reports.
+See the [current development update](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md)
+for newly installed pins and validation. Earlier baseline pins:
 
 - [Radeon SGLang fork](https://github.com/StevenChenSE/sglang), branch
   `gfx1100-support`, commit `f84475ccf593087df3d1da13c9e675eadee12352`.

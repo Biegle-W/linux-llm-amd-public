@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Load the saved vLLM profile through its real router and validate integration."""
+"""Validate the real vLLM router; run with vllm/.venv-rocm/bin/python.
+
+Long/context-cache checks need the environment's tokenizers package.
+"""
 import importlib.util
 import argparse
 import json
@@ -22,7 +25,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--long',action='store_true')
     parser.add_argument('--cache',action='store_true')
+    parser.add_argument('--bench',action='store_true',help='Run saved code/prose prompts after an excluded warm-up')
     options = parser.parse_args()
+    if (options.long or options.cache) and importlib.util.find_spec('tokenizers') is None:
+        raise RuntimeError('Long/cache checks need vllm/.venv-rocm/bin/python; tokenizers is missing.')
     bench = load('vllm_production_checks',ROOT/'hardware/bench-dual-tuning.py')
     if any(bench.base.backend_switch.is_inference(p) for p in bench.base.backend_switch.processes().values()):
         raise RuntimeError('Another configured inference worker is active')
@@ -81,6 +87,15 @@ def main():
             delta = {key:value-before.get(key,0) for key,value in after.items()}
             result['prefix_cache'] = dict(initial_ttft_seconds=cold['ttft_seconds'],warm_ttft_seconds=warm['ttft_seconds'],counter_deltas=delta)
             assert sum(value for key,value in delta.items() if 'hits_total{' in key) > 0
+        if options.bench:
+            import statistics
+            result['short_benchmarks'] = {}
+            for name,prompt in bench.PROMPTS.items():
+                bench.stream(prompt)
+                trials = [bench.stream(prompt) for _ in range(3)]
+                result['short_benchmarks'][name] = {
+                    'decode_tps_median':statistics.median(t['decode_tps_approx'] for t in trials),
+                    'trials':[{k:v for k,v in t.items() if k != 'content'} for t in trials]}
         tree = bench.base.backend_switch.processes()
         owned = {manager.worker.pid}
         for _ in range(8):

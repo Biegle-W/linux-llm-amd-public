@@ -1,0 +1,536 @@
+{
+  "date_local": "2026-10-18",
+  "hardware": {
+    "cpu": "Intel Core i5-13600KF",
+    "board": "MSI MPG Z690 CARBON WIFI",
+    "gpus": [
+      "RX 7900 XTX 24 GB",
+      "RX 7900 XTX 24 GB"
+    ],
+    "ram_installed_gb": 32,
+    "pcie": "CPU PCIe4 x8/x8",
+    "direct_peer_access": false
+  },
+  "versions": {
+    "llama_cpp": "31288c9c66e59377f7788d920678a565bb89dd37",
+    "strata": "0.1.45",
+    "strata_source": "477ac13cbe8e582c20484871ce459d20d82df09d",
+    "vllm": "0.32.0rc1.dev329+g39983a5e7.rocm723",
+    "sglang_fork": "f84475ccf593087df3d1da13c9e675eadee12352",
+    "sglang_official_candidate_not_promoted": "fea48754de4b73276cad1062d6b5ae013288204d",
+    "rocm_sdk": "7.2.3",
+    "torch": "2.13.0+git733fca1",
+    "rccl": "2.27.7 no-hostcall"
+  },
+  "vllm": {
+    "model": "qwen3.8-27b-vllm",
+    "status": "passed",
+    "effective": {
+      "context": 65536,
+      "tp": 2,
+      "kv": "bfloat16",
+      "cache_bytes": 3758096384,
+      "dtype": "bfloat16",
+      "chunk": 2048,
+      "compilation": {
+        "mode": 3,
+        "cudagraph_mode": "FULL_DECODE_ONLY"
+      },
+      "speculation": {
+        "method": "mtp",
+        "num_speculative_tokens": 3
+      }
+    },
+    "rdna_prefill_enabled": true,
+    "quality": {
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "ordered_100": true
+    },
+    "long_retrieval": {
+      "usage": {
+        "prompt_tokens": 64033,
+        "total_tokens": 64055,
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "ttft_seconds": 54.557950835000156,
+      "total_seconds": 54.897316933000184,
+      "decode_tps_approx": 61.88007618839489,
+      "passed": true
+    },
+    "prefix_cache": {
+      "initial_ttft_seconds": 5.734840179000457,
+      "warm_ttft_seconds": 0.5503088850000495,
+      "counter_deltas": {
+        "vllm:prefix_cache_queries_total{engine=\"0\",model_name=\"qwen3.8-27b-vllm\"}": 8191.0,
+        "vllm:prefix_cache_hits_total{engine=\"0\",model_name=\"qwen3.8-27b-vllm\"}": 7488.0
+      }
+    },
+    "nonresident_vram_bytes": 0,
+    "gpu_vram_bytes": [
+      15728156672,
+      17714610176
+    ]
+  },
+  "sglang": {
+    "status": "passed",
+    "profiles": [
+      {
+        "model": "qwen3.8-27b-sglang",
+        "context": 40960,
+        "reported_cache_capacities": [
+          40960
+        ],
+        "speculative_algorithm": "EAGLE",
+        "mtp_steps": 3,
+        "quality": {
+          "arithmetic": true,
+          "ordered_json": true,
+          "tool_roundtrip": true
+        },
+        "repaired_verifier": true,
+        "vram_bytes": [
+          14263873536,
+          16206835712
+        ],
+        "nonresident_vram_bytes": 0
+      },
+      {
+        "model": "qwen3.8-27b-sglang-dflash2",
+        "context": 65536,
+        "reported_cache_capacities": [
+          65536
+        ],
+        "speculative_algorithm": "DFLASH",
+        "mtp_steps": 1,
+        "quality": {
+          "arithmetic": true,
+          "ordered_json": true,
+          "tool_roundtrip": true
+        },
+        "repaired_verifier": true,
+        "vram_bytes": [
+          16655896576,
+          18386006016
+        ],
+        "nonresident_vram_bytes": 0
+      }
+    ]
+  },
+  "strata": {
+    "model": "qwen3.8-flash-next-iq3_xxs",
+    "runtime": "strata 0.1.45",
+    "context": 32768,
+    "tests": [
+      {
+        "name": "math",
+        "wall_seconds": 0.553,
+        "usage": {
+          "prompt_tokens": 29,
+          "completion_tokens": 4,
+          "total_tokens": 33,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 29,
+          "prompt_ms": 472.2,
+          "prompt_per_token_ms": 16.283,
+          "prompt_per_second": 61.4,
+          "predicted_n": 4,
+          "predicted_ms": 71.5,
+          "predicted_per_token_ms": 17.875,
+          "predicted_per_second": 55.9,
+          "draft_n": 2,
+          "draft_n_accepted": 2
+        }
+      },
+      {
+        "name": "code",
+        "wall_seconds": 5.957,
+        "usage": {
+          "prompt_tokens": 29,
+          "completion_tokens": 375,
+          "total_tokens": 404,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 29,
+          "prompt_ms": 330.6,
+          "prompt_per_token_ms": 11.4,
+          "prompt_per_second": 87.7,
+          "predicted_n": 375,
+          "predicted_ms": 5623.7,
+          "predicted_per_token_ms": 14.997,
+          "predicted_per_second": 66.7,
+          "draft_n": 253,
+          "draft_n_accepted": 222
+        }
+      },
+      {
+        "name": "prose",
+        "wall_seconds": 10.868,
+        "usage": {
+          "prompt_tokens": 25,
+          "completion_tokens": 512,
+          "total_tokens": 537,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 25,
+          "prompt_ms": 304.5,
+          "prompt_per_token_ms": 12.18,
+          "prompt_per_second": 82.1,
+          "predicted_n": 512,
+          "predicted_ms": 10560.7,
+          "predicted_per_token_ms": 20.626,
+          "predicted_per_second": 48.5,
+          "draft_n": 293,
+          "draft_n_accepted": 203
+        }
+      },
+      {
+        "name": "tool",
+        "wall_seconds": 1.497,
+        "usage": {
+          "prompt_tokens": 276,
+          "completion_tokens": 18,
+          "total_tokens": 294,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 276,
+          "prompt_ms": 1207.7,
+          "prompt_per_token_ms": 4.376,
+          "prompt_per_second": 228.5,
+          "predicted_n": 18,
+          "predicted_ms": 285.2,
+          "predicted_per_token_ms": 15.844,
+          "predicted_per_second": 63.1,
+          "draft_n": 14,
+          "draft_n_accepted": 11
+        }
+      },
+      {
+        "name": "tool_result",
+        "wall_seconds": 0.739,
+        "usage": {
+          "prompt_tokens": 74,
+          "completion_tokens": 12,
+          "total_tokens": 86,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 74,
+          "prompt_ms": 528.9,
+          "prompt_per_token_ms": 7.147,
+          "prompt_per_second": 139.9,
+          "predicted_n": 12,
+          "predicted_ms": 206.8,
+          "predicted_per_token_ms": 17.233,
+          "predicted_per_second": 58.0,
+          "draft_n": 8,
+          "draft_n_accepted": 7
+        }
+      },
+      {
+        "name": "long_retrieval",
+        "wall_seconds": 37.82,
+        "usage": {
+          "prompt_tokens": 30070,
+          "completion_tokens": 19,
+          "total_tokens": 30089,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "timings": {
+          "cache_n": 0,
+          "prompt_n": 30070,
+          "prompt_ms": 37521.5,
+          "prompt_per_token_ms": 1.248,
+          "prompt_per_second": 801.4,
+          "predicted_n": 19,
+          "predicted_ms": 276.7,
+          "predicted_per_token_ms": 14.563,
+          "predicted_per_second": 68.7,
+          "draft_n": 12,
+          "draft_n_accepted": 12
+        }
+      }
+    ],
+    "stream_passed": true,
+    "long_retrieval_passed": true,
+    "functional_status": "passed",
+    "memory": {
+      "minimum_available_gib": 14.2,
+      "maximum_worker_swap_bytes": 0,
+      "maximum_nonresident_vram_bytes": 0,
+      "peak_vram_gib": [
+        22.23,
+        23.77
+      ]
+    },
+    "status": "passed"
+  },
+  "measurement_limits": [
+    "Strata timings are single validation samples with a background C++ build, not controlled speed comparisons.",
+    "Strata long retrieval generated only 19 output tokens.",
+    "vLLM long retrieval generated only 22 output tokens.",
+    "Unchanged SGLang fork received production-profile revalidation, not new full-window or repeated speed measurements.",
+    "Separate per-card attention checks were rejected by automatic approval review under the dual-GPU policy; dual-GPU model integration was used."
+  ],
+  "llama_cpp": [
+    {
+      "model": "qwen3.8-27b-q4",
+      "context": 65536,
+      "gateway_streaming": true,
+      "tool_roundtrip": true,
+      "one_loaded_model": true,
+      "nonresident_vram_bytes": 0,
+      "worker_swap_bytes": 0,
+      "gpu_vram_bytes": [
+        10936061952,
+        11922554880
+      ]
+    },
+    {
+      "model": "muse-glimmer-30b",
+      "context": 32768,
+      "gateway_streaming": true,
+      "tool_roundtrip": true,
+      "one_loaded_model": true,
+      "nonresident_vram_bytes": 0,
+      "worker_swap_bytes": 0,
+      "gpu_vram_bytes": [
+        8585465856,
+        10876125184
+      ]
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "context": 262144,
+      "gateway_streaming": true,
+      "tool_roundtrip": true,
+      "one_loaded_model": true,
+      "nonresident_vram_bytes": 0,
+      "worker_swap_bytes": 0,
+      "gpu_vram_bytes": [
+        14805942272,
+        17779388416
+      ]
+    },
+    {
+      "model": "nemotron-3.5-bolt",
+      "context": 262144,
+      "gateway_streaming": true,
+      "tool_roundtrip": true,
+      "one_loaded_model": true,
+      "nonresident_vram_bytes": 0,
+      "worker_swap_bytes": 0,
+      "gpu_vram_bytes": [
+        24857333760,
+        25074753536
+      ]
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "context": 262144,
+      "gateway_streaming": true,
+      "tool_roundtrip": true,
+      "one_loaded_model": true,
+      "nonresident_vram_bytes": 0,
+      "worker_swap_bytes": 0,
+      "gpu_vram_bytes": [
+        13308227584,
+        16331022336
+      ]
+    }
+  ],
+  "llama_worker_scope": {
+    "qwen3.8-27b-q4": {
+      "memory_swap_max_bytes": 0,
+      "observed": true
+    },
+    "muse-glimmer-30b": {
+      "memory_swap_max_bytes": 0,
+      "observed": true
+    },
+    "qwen3.6-35b-a3b": {
+      "memory_swap_max_bytes": 0,
+      "observed": true
+    },
+    "nemotron-3.5-bolt": {
+      "memory_swap_max_bytes": 0,
+      "observed": true
+    },
+    "empero-qwen3.8-35b-a3b": {
+      "memory_swap_max_bytes": 0,
+      "observed": true
+    }
+  },
+  "vllm_new_short_benchmark": {
+    "model": "qwen3.8-27b-vllm",
+    "status": "passed",
+    "effective": {
+      "context": 65536,
+      "tp": 2,
+      "kv": "bfloat16",
+      "cache_bytes": 3758096384,
+      "dtype": "bfloat16",
+      "chunk": 2048,
+      "compilation": {
+        "mode": 3,
+        "cudagraph_mode": "FULL_DECODE_ONLY"
+      },
+      "speculation": {
+        "method": "mtp",
+        "num_speculative_tokens": 3
+      }
+    },
+    "rdna_prefill_enabled": true,
+    "quality": {
+      "arithmetic": true,
+      "ordered_json": true,
+      "tool_roundtrip": true,
+      "ordered_100": true
+    },
+    "short_benchmarks": {
+      "code": {
+        "decode_tps_median": 130.6117653588839,
+        "trials": [
+          {
+            "usage": {
+              "prompt_tokens": 29,
+              "total_tokens": 285,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 1189,
+              "pswpout": 0
+            },
+            "ttft_seconds": 0.09741494199988665,
+            "total_seconds": 2.049765859999752,
+            "decode_tps_approx": 130.6117653588839
+          },
+          {
+            "usage": {
+              "prompt_tokens": 29,
+              "total_tokens": 285,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 616,
+              "pswpout": 0
+            },
+            "ttft_seconds": 0.06878524300009303,
+            "total_seconds": 2.0244876600008865,
+            "decode_tps_approx": 130.3879351906004
+          },
+          {
+            "usage": {
+              "prompt_tokens": 29,
+              "total_tokens": 285,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 398,
+              "pswpout": 0
+            },
+            "ttft_seconds": 0.06818713499887963,
+            "total_seconds": 2.0169280379996053,
+            "decode_tps_approx": 130.85372180947394
+          }
+        ]
+      },
+      "prose": {
+        "decode_tps_median": 72.69277512560338,
+        "trials": [
+          {
+            "usage": {
+              "prompt_tokens": 25,
+              "total_tokens": 281,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 6173,
+              "pswpout": 1536
+            },
+            "ttft_seconds": 0.0914245630010555,
+            "total_seconds": 3.6728522630000953,
+            "decode_tps_approx": 71.20065553747416
+          },
+          {
+            "usage": {
+              "prompt_tokens": 25,
+              "total_tokens": 281,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 3873,
+              "pswpout": 0
+            },
+            "ttft_seconds": 0.09140517899868428,
+            "total_seconds": 3.5993191299985483,
+            "decode_tps_approx": 72.69277512560338
+          },
+          {
+            "usage": {
+              "prompt_tokens": 25,
+              "total_tokens": 281,
+              "completion_tokens": 256,
+              "completion_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "swap_io_pages": {
+              "pswpin": 3189,
+              "pswpout": 0
+            },
+            "ttft_seconds": 0.09438998199948401,
+            "total_seconds": 3.5964353759991354,
+            "decode_tps_approx": 72.81459013549994
+          }
+        ]
+      }
+    },
+    "nonresident_vram_bytes": 0,
+    "gpu_vram_bytes": [
+      15665176576,
+      17862021120
+    ]
+  }
+}

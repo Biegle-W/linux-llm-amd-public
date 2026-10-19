@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the vLLM project
-"""Opt-in RDNA3 prefill tiles for the pinned vLLM 3f1bcfd82 source.
+"""Opt-in RDNA3 prefill tiles for the reviewed vLLM attention source.
 
 Tile sizes follow JartX/vllm perf/rdna3_full_stack (822d275), Apache-2.0.
 This narrow port keeps the current wheel's quantized cache and split-K paths.
 """
 import hashlib
+import os
 from pathlib import Path
 
-file = Path(__file__).resolve().parent/'.venv-rocm/lib/python3.12/site-packages/vllm/v1/attention/ops/triton_unified_attention.py'
+environment = Path(os.environ.get('VLLM_ENV_PATH', Path(__file__).resolve().parent/'.venv-rocm'))
+file = environment/'lib/python3.12/site-packages/vllm/v1/attention/ops/triton_unified_attention.py'
 source = file.read_text()
 digest = hashlib.sha256(source.encode()).hexdigest()
 patched_hash = 'b2c2a9edeb0e2f9d4b339e1db5d976bdf420adbc0453cec69bc83d9e411be58e'

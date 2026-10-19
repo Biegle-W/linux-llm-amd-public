@@ -28,11 +28,6 @@ by the original consolidation; the subsequent MoE offload update is documented b
   isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and disabled custom all-reduce. A genuine active PCIe switch under one common
   root port is a proposed remedy, not installed or validated hardware.
-- Second-GPU display output is under investigation: the owner reports BIOS
-  video but a black screen in Linux. Both AMD GPUs load successfully; the current
-  active monitor is Sapphire DP-1 at 4K/60 Hz. PowerColor outputs report disconnected
-  while inspected. No display fix or inference change was applied. See the
-  [display handoff findings](../hardware/DISPLAY-SECOND-GPU-2026-10-18.md).
 - At the earlier October 18 Q4-replacement check, the authenticated gateway listed
   **eight enabled profiles** and `nemotron-3.5-bolt` Q4 was running through the
   normal llama.cpp HIP backend in a visible terminal. Authenticated generation
@@ -46,6 +41,14 @@ binaries, Python environments and build caches are Linux-specific. The machine
 is dual-boot: booting this same PC into Windows stops the Linux inference server.
 
 ## Active model catalog
+
+Latest October 18 runtime update: all **nine enabled profiles** passed production
+model checks on both AMD cards. llama.cpp's five profiles passed configured-context
+allocation, arithmetic, authenticated streaming and tool-call/results with the
+worker-only no-swap scope, zero owned swap and zero sampled VRAM spill. SGLang's
+two profiles passed cache-capacity/tools checks; vLLM repeated 64K retrieval;
+Strata HIP 0.1.45 repeated 30K retrieval. Fresh near-full-context checks were not
+repeated for every model. [Validation scope and pins](../hardware/RUNTIME-UPGRADE-2026-10-18.md).
 
 October 18 MoE update: the normal managed llama launcher passed authenticated
 API generation for all three MoEs, a repeated cached-model request, switching
@@ -313,18 +316,38 @@ Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
 
 | Component | Selected source / version |
 |---|---|
-| llama.cpp Vulkan, retained HIP alternative | `f12aaa344c971556ec35be054d7aac1d901fd510` |
+| llama.cpp Vulkan (dense), HIP (MoE) | `31288c9c66e59377f7788d920678a565bb89dd37` |
 | SGLang Radeon fork (`gfx1100-support`) | `f84475ccf593087df3d1da13c9e675eadee12352`, locally repaired |
-| vLLM | `0.32.0rc1.dev190+g3f1bcfd82.rocm723`, locally patched |
+| vLLM | `0.32.0rc1.dev329+g39983a5e7.rocm723`, locally patched |
 | ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
-| Strata HIP source | `296b59d2f73c8f04a805df29c2fa97655adace78`, 0.1.44.1 |
+| Strata HIP source | `477ac13cbe8e582c20484871ce459d20d82df09d`, 0.1.45 |
 
-**October 18 upstream audit:** the Strata setup reused installed builds. Newer
-Strata 0.1.45 (`477ac13cbe8e`), llama.cpp master (`31288c9c66e5`) and vLLM ROCm723
-nightly dev329 were found. SGLang matches the retained gfx1100 fork head
-`f84475ccf593`, but differs from official main. These updates are **not installed
-or AMD-validated**; current runtime/profile pins above remain authoritative.
-[Exact snapshot and NVIDIA comparison](../hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md).
+**October 18 authorized development update:** llama.cpp HIP/Vulkan, Strata HIP
+and the official ROCm723 vLLM nightly were rebuilt/replaced at the pins above.
+The existing SGLang gfx1100 branch has no newer commits. Official main was checked
+at `fea48754de4b73276cad1062d6b5ae013288204d`, but cannot use the retained Radeon
+GPTQ path unchanged; the tested fork and local verifier/MTP fixes remain.
+[Exact upgrade and validation](../hardware/RUNTIME-UPGRADE-2026-10-18.md).
+The promoted vLLM dev329 measured 130.61 / 72.69 t/s code/prose medians in
+three warm short samples per task. These are not a controlled version A/B or
+sustained full-context speed measurements.
+The earlier [NVIDIA comparison/version audit](../hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
+is a historical snapshot, not the current installed-version table.
+
+AMD llama.cpp now uses a **worker-only systemd scope with `MemorySwapMax=0`**,
+matching Strata's no-swap protection. The original MoE swap/low-RAM/VRAM-spill
+guard remains enabled. This follows an observed guard stop during an unscoped
+MoE load; global swap and unrelated processes are unchanged. An active systemd
+user manager is required for Desktop/SSH launches; preflight rejects its absence
+before stopping another backend. Do not remove the scope or disable the guard
+to work around a model-loading failure. Rollback environments/builds are retained
+under ignored `hardware/generated/runtime-upgrade-2026-10-18/` on Linux NVMe;
+these are not model weights or public repository artifacts.
+
+[Qwen 27B AMD speculative-decoding research](../hardware/QWEN27B-AMD-SPECULATION-2026-10-18.md)
+traces the ~1,000 t/s headline to aggregate concurrency. Experimental ExLlamaV3
+ROCm ports are research candidates, not installed profiles or exceptions to the
+both-GPUs policy. FreeToken remains retired.
 
 Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
 `dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
@@ -395,16 +418,19 @@ native INT8 pipeline. The seven real model files remain on Shared SATA.
 ## Strata and retired setups
 
 Latest local validation: the selected 32 GB profile passed a fresh **30,070-input**
-three-marker retrieval in **39.72 s** (763.1 t/s engine prefill). Short code/prose
-samples measured **59.8 / 47.8 t/s**; the 19-token long reply measured 68.5 t/s,
-not sustained full-context speed. Tools/results, SSE and MTP drafts passed;
-minimum available RAM 8.70 GiB, worker swap and sampled VRAM spill both zero.
+three-marker retrieval in **37.82 s** (801.4 t/s engine prefill) on HIP 0.1.45.
+Short code/prose samples measured **66.7 / 48.5 t/s**; the 19-token long reply
+measured 68.7 t/s, not sustained full-context speed. These are single validation
+samples with a background C++ build, not a controlled version comparison.
+Tools/results, SSE and MTP drafts passed; minimum available RAM 14.2 GiB,
+worker swap and sampled VRAM spill both zero. Whole-card peaks were 22.23 /
+23.77 GiB, including unrelated allocations; the second card was close to full.
 The worker has its own `MemorySwapMax=0` systemd scope; global swap is unchanged.
 Managed relaunch and authenticated gateway generation passed afterward; Strata
 is left running in its visible terminal with exactly one HIP engine.
 
 **Strata Q3 is enabled** as `qwen3.8-flash-next-iq3_xxs`, 32,768 total context,
-through `strata/build-hip/strata` 0.1.44.1 on both RX 7900 XTX cards. It uses
+through `strata/build-hip/strata` 0.1.45 on both RX 7900 XTX cards. It uses
 an automatic layer split, INT8 KV (32K resident), MTP `--spec 3 --spec-min-p 0.7`,
 512-token prefill, six expert workers and 3 GiB VRAM reserve per card. Up to
 8 GiB CPU-resident experts complement the GPU cache, with mapped file fallback;
@@ -416,7 +442,8 @@ for new default sessions. Existing sessions keep their saved model selection.
 Router 30020 and private worker 30021 stay on loopback; the authenticated gateway
 exports the enabled ID. No new weights were downloaded or copied to NVMe.
 
-See [actual local checks and benchmark limits](../hardware/STRATA-DUAL-AMD-2026-10-18.md)
+See [current upgrade checks](../hardware/RUNTIME-UPGRADE-2026-10-18.md),
+[original 0.1.44.1 measurements and limits](../hardware/STRATA-DUAL-AMD-2026-10-18.md)
 and [community sources](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md).
 The old blanket 64 GB gate is replaced by per-profile physical-memory admission:
 29 GiB physical capacity before handover; 14 GiB available after managed

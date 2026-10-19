@@ -311,3 +311,29 @@ remains general supporting discussion. Source-reviewed resident split support
 was used with an 8 GiB bound, fixed GPU cache and a worker-only no-swap scope.
 Near-32K retrieval/tools/streaming passed; a future 64 GB / 128K candidate is
 prepared but inactive. All measured rates and failure limits are in the report.
+
+## October 18: fast Qwen 27B and AMD alternatives
+
+[Focused research](QWEN27B-AMD-SPECULATION-2026-10-18.md) traces the roughly
+1,000 tokens/s headline to aggregate concurrency and separates prompt-copy
+speculation from ordinary single-request generation. Primary benchmark sources
+and exact experimental AMD fork revisions are linked there.
+
+- [lcz.me topic 1640](https://lcz.me/topic/1640), flyer666 / Radeon SGLang fork,
+  September 11 update: dual RX 7900 XTX, Qwen 27B W4A16 target/draft, TP2
+  DFlash2; code roughly 180–250 tokens/s depending on acceptance. Matching
+  hardware, author report rather than a new local measurement.
+- [lcz.me topic 1870](https://lcz.me/topic/1870): NInfer experiment on RTX 5090,
+  a different GPU and quantization route; do not label its result Radeon speed.
+- [Level1Techs dual R9700 discussion, page 2](https://forum.level1techs.com/t/dual-r9700s-amd-vllm-container-woes/250053?page=2):
+  ROCm serving and evolving DFlash support, but RDNA4 rather than this machine's
+  gfx1100. Reviewed as a compatibility lead, not a matching benchmark.
+- [Level1Techs FreeToken discussion](https://forum.level1techs.com/t/freetoken-an-llm-engine-to-max-the-bandwidth-of-all-the-things/254396):
+  context for heterogeneous offload; current [AMD integration roadmap](https://github.com/FlashML-org/FreeToken/issues/541)
+  still distinguishes two-GPU collectives from full model-level TP. FreeToken
+  remains retired locally at the user's request.
+
+The new [RX 7900 XTX ExLlamaV3 ROCm port](https://github.com/phoenixhaxor/exllamav3-rocm)
+is a promising source-backed candidate, with single-card DFlash2 results. It is
+not a locally validated dual-card profile. Keep its new EXL3 format, workload,
+KV precision and context separate from the existing GPTQ/GGUF measurements.

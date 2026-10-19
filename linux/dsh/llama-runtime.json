@@ -7,7 +7,7 @@
     "nemotron-3.5-bolt",
     "empero-qwen3.8-35b-a3b"
   ],
-  "source_commit": "f12aaa344c971556ec35be054d7aac1d901fd510",
+  "source_commit": "31288c9c66e59377f7788d920678a565bb89dd37",
   "runtime_overrides": {
     "qwen3.6-35b-a3b": "hip-amd",
     "nemotron-3.5-bolt": "hip-amd",

@@ -87,10 +87,11 @@ was reviewed without a matched 32 GB / dual-XTX result. Implementation basis:
 [pinned multi-GPU documentation](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/docs/MULTI_GPU.md)
 and [memory/storage behavior](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/docs/DETAILS.md).
 
-## Comparison and update status
+## Comparison and subsequent update
 
-The [subsequent NVIDIA comparison and upstream audit](NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
-records the saved 68.8 / 64.6 t/s NVIDIA medians and the current 59.8 / 47.8 AMD
-samples with their configuration/method differences. This is the AMD HIP build;
-its 0.1.44.1 source was reused, not upgraded. Newer 0.1.45 source was found later;
-no newer build is installed or performance-validated by this report.
+The [NVIDIA comparison and original upstream audit](NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
+records the saved 68.8 / 64.6 t/s NVIDIA medians and the 59.8 / 47.8 AMD samples
+above with their configuration/method differences. These measurements used HIP
+0.1.44.1. See [the subsequent runtime update](RUNTIME-UPGRADE-2026-10-18.md) for
+newly installed versions and separate validation; do not relabel these earlier
+measurements as a newer build's benchmark.

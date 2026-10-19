@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import shutil
 from pathlib import Path
 import subprocess
 import time
@@ -11,6 +12,17 @@ from amd_device import amd_devices
 from moe_memory import validate_profiles
 
 ROOT = Path(__file__).resolve().parent
+
+
+def require_worker_scope():
+    """Verify that the owned AMD worker can be protected from swap before handover."""
+    if not shutil.which('systemd-run'):
+        raise RuntimeError('AMD llama.cpp requires systemd-run for its worker-only no-swap scope.')
+    try:
+        subprocess.run(['systemctl', '--user', 'is-active', 'default.target'],
+                       check=True, capture_output=True, timeout=10)
+    except (OSError, subprocess.SubprocessError) as error:
+        raise RuntimeError('The user service manager is unavailable; cannot enforce llama.cpp-only no-swap. No backend has been stopped.') from error
 
 
 
@@ -46,6 +58,7 @@ def launch_spec(backend=None):
         return ROOT.parent / 'llama.cpp/llama-server', ROOT / 'models.ini', dict(os.environ), None
     if mode not in ('vulkan-amd', 'hip-amd'):
         raise RuntimeError('Unknown llama runtime selection; no backend has been stopped.')
+    require_worker_scope()
     validate_profiles(ROOT)
     hip = mode == 'hip-amd'
     binary = ROOT.parent / ('llama.cpp/build-hip/bin/llama-server' if hip else 'llama.cpp/build-vulkan/bin/llama-server')

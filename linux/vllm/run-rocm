@@ -2,8 +2,9 @@
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 source "$ROOT/hardware/rocm-env.sh"
+VLLM_ENV_PATH=${VLLM_ENV_PATH:-$ROOT/vllm/.venv-rocm}
 if [[ ${1:-} == --check ]]; then
- exec "$ROOT/vllm/.venv-rocm/bin/python" "$ROOT/hardware/rocm-probe.py"
+ exec "$VLLM_ENV_PATH/bin/python" "$ROOT/hardware/rocm-probe.py"
 fi
 # TP2 host transport: Simple improved both saved short workloads locally.
 # LOCAL_LLM_NCCL_PROTO=auto restores automatic selection for comparisons.
@@ -15,4 +16,4 @@ fi
 export VLLM_LOCAL_SHARE_QWEN_MTP=1
 export VLLM_USE_V2_MODEL_RUNNER=1
 export VLLM_LOCAL_RDNA_PREFILL=${VLLM_LOCAL_RDNA_PREFILL:-1}
-exec "$ROOT/vllm/.venv-rocm/bin/python" "$ROOT/vllm/rocm-bootstrap.py" "$@"
+exec "$VLLM_ENV_PATH/bin/python" "$ROOT/vllm/rocm-bootstrap.py" "$@"

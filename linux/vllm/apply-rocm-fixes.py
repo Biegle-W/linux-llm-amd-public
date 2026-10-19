@@ -1,7 +1,10 @@
 """Apply the mixed-vendor detection fix only to the isolated ROCm wheel."""
 from pathlib import Path
+import os
 root = Path(__file__).resolve().parent
-p = root / '.venv-rocm/lib/python3.12/site-packages/vllm/platforms/__init__.py'
+environment = Path(os.environ.get('VLLM_ENV_PATH', root / '.venv-rocm'))
+package = environment / 'lib/python3.12/site-packages/vllm'
+p = package / 'platforms/__init__.py'
 old = 'def cuda_platform_plugin() -> str | None:\n    is_cuda = False'
 new = '''def cuda_platform_plugin() -> str | None:
     import torch
@@ -16,7 +19,7 @@ if new not in s:
 print('ROCm-only platform detection applied.')
 
 # Avoid duplicate BF16 vocabulary allocation before V2 attaches target modules.
-file = root / '.venv-rocm/lib/python3.12/site-packages/vllm/model_executor/models/qwen3_5_mtp.py'
+file = package / 'model_executor/models/qwen3_5_mtp.py'
 old = file.read_text()
 if 'def _local_share_target_weights(' in old:
     print('ROCm PP1/V2 MTP sharing already installed.')

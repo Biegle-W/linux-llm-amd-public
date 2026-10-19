@@ -12,7 +12,8 @@ measurements from proposed settings.
 
 ## Current 32 GB settings
 
-- Source 0.1.44.1, commit `296b59d2f73c8f04a805df29c2fa97655adace78`.
+- Source 0.1.45, commit `477ac13cbe8e582c20484871ce459d20d82df09d`;
+  [development-update validation](RUNTIME-UPGRADE-2026-10-18.md).
 - Separate `strata/build-hip/strata`, gfx1100, private ROCm 7.2.3 SDK.
 - Both GPUs, automatic layer split, one session, no single-card fallback.
 - 32,768 context; INT8 KV fully resident at this length; prefill chunk 512.

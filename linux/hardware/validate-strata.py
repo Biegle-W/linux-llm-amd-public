@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 import sys
+import subprocess
 import threading
 import time
 import urllib.request
@@ -43,7 +44,11 @@ def main():
                              'vram':[int((d/'mem_info_vram_used').read_text()) for d in devices]})
             stop.wait(1)
     watcher = threading.Thread(target=monitor, daemon=True);watcher.start()
-    result = {'model':model,'runtime':'0.1.44.1','context':32768,'tests':[]}
+    runtime_env = dict(__import__('os').environ)
+    runtime_env['LD_LIBRARY_PATH'] = ':'.join(cfg.get('lib_dirs', []))
+    version = subprocess.run([cfg['exe'], '--version'], env=runtime_env,
+                             capture_output=True, text=True, check=True, timeout=15).stdout.strip()
+    result = {'model':model,'runtime':version,'context':32768,'tests':[]}
     def save():
         a.output.parent.mkdir(parents=True, exist_ok=True)
         a.output.write_text(json.dumps(result,indent=2)+'\n')

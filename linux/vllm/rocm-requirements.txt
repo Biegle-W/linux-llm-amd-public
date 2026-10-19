@@ -209,7 +209,7 @@ urllib3==2.8.0
 uvicorn==0.54.0
 uvloop==0.23.0
 vcs-versioning==2.6.0
-vllm==0.32.0rc1.dev190+g3f1bcfd82.rocm723
+vllm==0.32.0rc1.dev329+g39983a5e7.rocm723
 watchfiles==1.3.0
 websockets==17.2
 xgrammar==0.2.8
