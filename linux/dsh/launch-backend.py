@@ -11,6 +11,7 @@ from llama_runtime import launch_spec, require_amd_headroom
 from rocm_runtime import require_rocm, require_rocm_headroom
 from maya_runtime import require_maya, profiles as maya_profiles
 from native_frontend import start_frontend
+from gpu_telemetry import ThermalRecorder
 ROOT = Path(__file__).resolve().parent
 kind = sys.argv[1]
 names = {'llama': 'llama.cpp', 'sglang': 'SGLang', 'vllm': 'vLLM', 'strata': 'Strata', 'maya': 'Project Maya'}
@@ -29,7 +30,7 @@ if kind == 'maya':
     parser.add_argument('--model', choices=list(maya_profiles()))
     parser.add_argument('--no-browser', action='store_true', help='Keep serving without opening the native web frontend.')
     parser.parse_args(sys.argv[2:])
-backend = monitor = log = frontend = None
+backend = monitor = log = frontend = thermal = None
 worker_env = {**os.environ, 'CUDA_DEVICE_ORDER': 'PCI_BUS_ID', 'CUDA_VISIBLE_DEVICES': '0,1'}
 
 def stop(*_):
@@ -98,6 +99,8 @@ try:
         print(f'Loading the selected {names[kind]} model from its configured model volume now. Cold loads may take a few minutes.' if kind in ('strata', 'maya')
               else 'Models load when requested by DSH or another API client.', flush=True)
         log = paths[0].open('a')
+        thermal = ThermalRecorder(f'backend-{kind}').start()
+        print(f'Thermal log: {thermal.raw_path}', flush=True)
         backend = subprocess.Popen(cmd + sys.argv[2:], stdout=log, stderr=subprocess.STDOUT,
                                    env=worker_env,
                                    start_new_session=True)
@@ -125,6 +128,8 @@ finally:
         except ProcessLookupError:
             pass
         backend.wait()
+    if thermal is not None:
+        thermal.stop()
     stop_monitor(monitor)
     if log:
         log.close()

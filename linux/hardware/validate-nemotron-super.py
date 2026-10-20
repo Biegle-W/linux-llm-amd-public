@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT/'dsh'))
 from amd_device import amd_devices
 from backend_switch import processes, is_inference, python_entrypoint
 from moe_memory import host_memory, memory_reason, worker_memory
+from gpu_telemetry import ThermalRecorder
 
 spec = importlib.util.spec_from_file_location('current_benchmark', ROOT/'hardware/benchmark-current-amd.py')
 bench = importlib.util.module_from_spec(spec)
@@ -121,7 +122,13 @@ def run(options):
     done = threading.Event()
     failure = []
     with (OUT/(tag+'.log')).open('w') as log:
-        process = subprocess.Popen(args,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+        thermal = ThermalRecorder(f'nemotron-candidate-{tag}').start()
+        try:
+            process = subprocess.Popen(args,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+        except BaseException:
+            result['thermal'] = thermal.stop()
+            save()
+            raise
         def monitor():
             low = spill_count = 0
             while not done.wait(1) and process.poll() is None:
@@ -211,6 +218,7 @@ def run(options):
             thread.join(timeout=5)
             if failure:
                 result['guard_failure'] = failure[0]
+            result['thermal'] = thermal.stop()
             save()
             print(tag,result['status'],result.get('error',''),flush=True)
 

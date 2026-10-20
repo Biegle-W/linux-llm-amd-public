@@ -24,6 +24,7 @@ from backend_guard import require_worker_ports_free
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, vram_snapshot
 from strata_runtime import check_config
+from gpu_telemetry import ThermalRecorder
 
 
 def stop(worker):
@@ -77,6 +78,7 @@ def main():
     guard = MemoryGuard()
     started = time.monotonic()
     worker = None
+    thermal = ThermalRecorder(f'strata-candidate-{a.tag}').start()
     try:
         with (out/(a.tag+'.server.log')).open('w') as log:
             worker = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
@@ -116,6 +118,7 @@ def main():
         raise
     finally:
         if worker is not None:stop(worker)
+        result['thermal'] = thermal.stop()
         save()
     assert result['status']=='stopped_after_testing'
 

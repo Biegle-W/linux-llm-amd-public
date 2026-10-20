@@ -87,6 +87,8 @@ configured window, not proof of that entire window's quality or speed.
 
 [Forum speed comparison](linux/hardware/FORUM-SPEED-COMPARISON-2026-10-20.md) explains aggregate versus single-request rates and the remaining unmatched prefill/SGLang gaps. No new benchmark was run.
 
+[Automatic temperature logging](linux/hardware/THERMAL-LOGGING.md) now accompanies future managed launches and benchmark trials; earlier missing thermal data remains unmeasured.
+
 | Model / quant | Backend / strategy | Context tokens | Actual prefill input | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,190 | 670.4 | 12.222 | 0.132 / 0.131 | 77.10 / 45.86 |

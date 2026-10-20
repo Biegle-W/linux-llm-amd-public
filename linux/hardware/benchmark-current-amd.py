@@ -23,6 +23,7 @@ from amd_device import amd_devices
 from backend_switch import processes, is_inference
 from moe_memory import host_memory, worker_memory
 from strata_memory import vram_snapshot
+from gpu_telemetry import ThermalRecorder, record_request
 
 PROMPTS = {
     'code': 'Write a Python function that merges two sorted lists. Explain its time and space complexity.',
@@ -48,6 +49,7 @@ def metrics(port):
         return {}
 
 
+@record_request
 def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=None, cache_prompt=False):
     port, native = PORTS[kind]
     body = {'model':model, 'messages':messages if messages is not None else [{'role':'user','content':prompt}],
@@ -178,6 +180,7 @@ def main():
         out['profiles'].append(result);save()
         print('LOAD',args.kind,model,flush=True)
         readings=[];done=threading.Event()
+        thermal=ThermalRecorder(f'benchmark-{args.kind}-{model}').start()
         def monitor():
             while not done.is_set():
                 try:
@@ -231,6 +234,7 @@ def main():
         finally:
             done.set()
             if 'watcher' in locals():watcher.join(timeout=3)
+            result['thermal']=thermal.stop()
             save()
         print('PROFILE',model,result['status'],flush=True)
     if any(p['status'] not in ('passed','measured_with_marker_failure') for p in out['profiles']):raise SystemExit(1)

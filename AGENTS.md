@@ -214,3 +214,14 @@ explicitly uses installed Ptyxis; PATH name llm-strata is unchanged. Native fron
 remains automatic after readiness, DSH separate. Do not alter global compute-device
 variables or restart the session without the user. See `linux/hardware/STRATA-STARTUP5-2026-10-20.md`
 and its numeric record; former6GiB failures stay historical in `linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md`.
+
+## Temperature logging — October20
+
+Standing user instruction: log temperatures from now on. Normal Linux launchers
+and maintained benchmark/candidate helpers record one-second GPU/CPU thermal,
+power/clock/fan and available raw SMU telemetry. Use `linux/dsh/gpu_telemetry.py`
+or `linux/hardware/log-gpu-temps.py` for other tests. Future reports must retain
+actual coverage, sampled peaks, unavailable sensors and flag limitations. Never
+backfill missing history or treat a partial observation as a full-run maximum.
+Keep raw logs and local paths private; inference settings and guards stay intact.
+See `linux/hardware/THERMAL-LOGGING.md`.

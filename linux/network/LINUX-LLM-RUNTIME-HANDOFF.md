@@ -691,6 +691,16 @@ PCIe switch is still pending installation and P2P/RCCL validation.
 
 ## Troubleshooting and maintenance
 
+**Thermal logging.** Future normal backend launches automatically log GPU/CPU
+temperatures, power, clocks, fan speeds/utilization and available raw SMU flags
+under ignored `dsh/logs/thermals/`. Maintained benchmark stream trials and native
+candidate helpers attach sampled summaries. The existing in-flight DeepSeek
+comparison has a read-only partial observer from15:15 October20 Toronto time;
+older trials cannot be reconstructed. One-second samples can miss transients;
+missing sensors/unknown masks stay unavailable. Flags do not prove a measured
+thermal slowdown. No fan, clock, model, reserve, worker guard or runtime setting
+changed. [Coverage, limits and observer commands](../hardware/THERMAL-LOGGING.md).
+
 **Staging upgrades.** Candidate engines and profiles are tested through the normal
 guarded launchers with opt-in switches: `LLAMA_SRC`, `LLAMA_CPP_DIR`, `VLLM_ENV_PATH`
 and `STRATA_PROFILE_CONFIG`. Unset or empty means production. Compare candidates
