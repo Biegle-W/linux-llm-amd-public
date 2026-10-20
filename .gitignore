@@ -48,3 +48,4 @@
 # Local activation/retirement backups may contain machine-specific paths.
 **/.private-backups/
 linux/maya/upstream/
+linux/maya/rocwmma-7.2.3/

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "policy": "Use unchanged official project assets; no generated or custom replacement logos.",
   "assets": [
     {
@@ -118,6 +118,20 @@
       "repository_license": "MIT",
       "license_file": "licenses/strata.LICENSE",
       "extraction": "Official 512x512 PNG extracted unchanged from the existing AMD AppImage using unsquashfs; application was not started.",
+      "official_upstream_verified": true
+    },
+    {
+      "app": "Project Maya",
+      "file": "maya.svg",
+      "repository": "mw00/project-maya",
+      "commit": "8d9a9b5d705049a87da853717cdc59440252de30",
+      "upstream_path": "serve/web/icon.svg",
+      "source_url": "https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/serve/web/icon.svg",
+      "sha256": "27ee250f9d5bcf02bc2f1ebb8aa90efc261c8f195b33ef64c74ab7ccd4a30c29",
+      "bytes": 482,
+      "repository_license": "MIT",
+      "license_file": "licenses/maya.LICENSE",
+      "extraction": "Official repository icon copied byte for byte.",
       "official_upstream_verified": true
     }
   ]

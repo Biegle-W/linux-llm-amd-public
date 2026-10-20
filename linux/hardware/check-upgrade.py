@@ -74,6 +74,8 @@ def inventory():
                          for p in sorted(Path('/dev/dri').glob('renderD*'))],
         'vulkan_server_built': (ROOT / 'llama.cpp/build-vulkan/bin/llama-server').is_file(),
         'hip_server_built': (ROOT / 'llama.cpp/build-hip/bin/llama-server').is_file(),
+        'maya_hip_built': all((ROOT / 'maya/upstream/build-hip' / name).is_file() for name in ('maya','maya-ds4')),
+        'maya_profiles': {k:{'context':v['context'],'enabled':v.get('enabled',False)} for k,v in json.loads((ROOT/'dsh/maya-profiles.json').read_text()).items()} if (ROOT/'dsh/maya-profiles.json').exists() else {},
         'strata_hip_built': (ROOT / 'strata/build-hip/strata').is_file(),
         'strata_mmap_experts_present': strata_experts_present(),
         'active_amd_launcher_configured': (ROOT / 'dsh/llama-runtime.json').exists() and json.loads((ROOT / 'dsh/llama-runtime.json').read_text()).get('backend') in ('vulkan-amd', 'hip-amd'),

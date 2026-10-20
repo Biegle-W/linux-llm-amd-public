@@ -3,8 +3,8 @@
 set -uo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 case "${1:-}" in
-    vllm|sglang|llama|strata) kind=$1 ;;
-    *) echo 'Usage: start-backend-terminal {vllm|sglang|llama|strata}' >&2; exit 2 ;;
+    vllm|sglang|llama|strata|maya) kind=$1 ;;
+    *) echo 'Usage: start-backend-terminal {vllm|sglang|llama|strata|maya}' >&2; exit 2 ;;
 esac
 mkdir -p "$ROOT/logs"
 log="$ROOT/logs/$kind-launcher.log"

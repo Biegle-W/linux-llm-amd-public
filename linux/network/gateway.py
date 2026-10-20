@@ -20,6 +20,7 @@ BACKENDS = {
     'sglang': ('sglang-profiles.json', 30000, 'SGLang'),
     'vllm': ('vllm-profiles.json', 30010, 'vLLM'),
     'strata': ('strata-profiles.json', 30020, 'Strata Q3'),
+    'maya': ('maya-profiles.json', 30030, 'Maya'),
 }
 MAX_BODY = 32 * 1024 * 1024
 config = {}
@@ -36,7 +37,7 @@ def catalog():
         source = json.loads(path.read_text())
         rows = source if isinstance(source, list) else [dict(id=k, **v) for k, v in source.items()]
         for row in rows:
-            if not row.get('enabled', True):
+            if not row.get('enabled', backend != 'maya'):
                 continue
             if row['id'] in models:
                 raise ValueError('Duplicate API model ID')
@@ -141,8 +142,8 @@ class Handler(BaseHTTPRequestHandler):
         backend = model['backend']
         if model['id'] not in backend_models(backend):
             return self.error_json(503, f'Start the {BACKENDS[backend][2]} Desktop backend and wait for readiness.', 'backend_unavailable')
-        if backend == 'strata' and path != '/v1/chat/completions':
-            return self.error_json(400, 'Strata supports chat completions.', 'unsupported_endpoint')
+        if backend in ('strata', 'maya') and path != '/v1/chat/completions':
+            return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions.', 'unsupported_endpoint')
         connection = None
         started = False
         try:

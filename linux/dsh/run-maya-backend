@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+LLM_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "$LLM_ROOT/hardware/rocm-env.sh"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$LLM_ROOT/llm-tools/cuda-build/lib"
+# Native settings come only from the selected reviewed config, not stale caller variables.
+while IFS= read -r name; do
+    case "$name" in MAYA_*|STRATA_*|DS4_*) unset "$name" ;; esac
+done < <(compgen -e)
+cd "$LLM_ROOT/maya/upstream"
+exec .venv/bin/python -B serve/server.py --engine strata --host 127.0.0.1 "$@"

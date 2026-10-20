@@ -32,7 +32,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Eleven profiles are active: seven llama.cpp, two SGLang, one vLLM, one Strata.
+Thirteen profiles are active: seven llama.cpp, two SGLang, one vLLM, one Strata, two Maya.
 Both Super IQ3 and Q4 are selectable at 32K; retain all weights. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
@@ -47,9 +47,28 @@ is claimed for these performance-neutral updates. See
 must retain their original hardware/build/workload. Strata's corrected expert pack
 and shared-NVMe pool measurements are distinct from old SATA-pack results.
 Strata and standalone App share one new shared-NVMe asset set; engine settings
-and watchdogs are independent. Maya downloads are staged there, not an active
-validated runtime. Keep engines/environments Linux ext4 and all model weights
+and watchdogs are independent. Maya selected profiles are validated there, with their guards described below. Keep engines/environments Linux ext4 and all model weights
 excluded from Git.
+
+## Project Maya — October 20
+
+Maya v1.1.17 / 8d9a9b5d is active for GLM-5.3-Flash Maya-S24 and
+DeepSeek-V4.1-Flash-1017 Maya-S, each 32K, both 7900XTX cards through layer groups.
+GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
+GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
+The native 8 GiB/card reserve must leave >=6 GiB actual whole-card free at startup;
+keep continuous latched guards, zero worker swap/spill and 52G worker scope.
+Physical 60 GiB / available 52 GiB before load remains required. The 64 GB Strata 13.5 GiB
+profile and both Super quants are unchanged; DSH default is preserved.
+Maya's source/binary/config and DeepSeek descriptor/index/Engram fingerprints
+must match validation. Its broader DS4 suite retains two mixed Q4_K/IQ4_XS
+bit-exact failures per card; do not enable those or other untested types.
+Maya is a Strata fork: backend switching may stop only its configured native
+binaries/server/router and owned workers, never arbitrary Python or other apps.
+Windows must create separate Maya pack metadata, keeping shared weights intact.
+See `linux/hardware/MAYA-2026-10-20.md` and
+`linux/hardware/results/maya-dual-amd-2026-10-20.json`. No speed claim is inferred
+from forum reports or other hardware; all trials/contexts/methods remain dated.
 
 ## Forum research and source citations
 
@@ -124,24 +143,24 @@ failure. Unload only its owned worker; never reclaim space by killing unrelated
 GPU apps. The current measured profile and rollback limits are maintained in
 `linux/hardware/STRATA-CONTEXT-2026-10-19.md`; overlap is layer splitting, not TP.
 
-Native 256K Strata was previously checked on32 GB; October 20 adds both CPU pools
+Native 256K Strata was previously checked on 32 GB; October 20 adds both CPU pools
 and fresh near-window/follow-up tests on 64 GB with the corrected NVMe pack. Keep
-INT8 KV,32K GPU residency/full host backing, 13.5 GiB expert cap and desktop reserves.
-The 20 GiB candidate is inactive. Beyond256K needs experimental RoPE/quality validation,
+INT8 KV, 32K GPU residency/full host backing, 13.5 GiB expert cap and desktop reserves.
+The 20 GiB candidate is inactive. Beyond 256K needs experimental RoPE/quality validation,
 not successful allocation alone. Overlap is layer splitting, not TP.
 
 ## Current benchmark publication
 
 Use `linux/hardware/results/README.md` and
-`linux/hardware/results/dual-amd-i9-64gb-2026-10-20.json` for eleven current profiles.
-Nine use the shared short-prompt/fresh~8K method; two Super quants use fixed~8K
+`linux/hardware/results/dual-amd-i9-64gb-2026-10-20.json` for the original eleven profiles; `linux/hardware/results/maya-dual-amd-2026-10-20.json` adds the two Maya profiles.
+Nine use the shared short-prompt/fresh ~8K method; two Super quants use fixed ~8K
 input/256-output trials. All trials, actual counts, build attribution, memory and
 both Strata pool cases are retained. `dual-amd-i9-baseline-2026-10-20.json` preserves
 31288c9 same-hardware selection evidence and OLD SATA Strata measurements.
 The October 19 numeric/report records remain i5/32 GB history; never substitute
 older speed into a current-build table. Update README, ledger, current report and
 canonical handoff together. Distinguish native/engine-phase PP, external SSE TTFT/
-decode, input/TTFT proxies and functional-only proofs. An~8K probe is not full-window
+decode, input/TTFT proxies and functional-only proofs. An ~8K probe is not full-window
 validation. Muse marker failures stay visible. Candidate Q4 peak includes a brief
 whole-card reserve dip; passing debounced guards does not mean reserves never
 dipped below their threshold. Host self-access is not a remote-peer test.

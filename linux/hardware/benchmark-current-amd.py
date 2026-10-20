@@ -28,7 +28,7 @@ PROMPTS = {
     'code': 'Write a Python function that merges two sorted lists. Explain its time and space complexity.',
     'prose': 'Write a short story about a lighthouse keeper finding a letter.'}
 PORTS = {'llama': (8080, 8081), 'sglang': (30000, 30001),
-         'vllm': (30010, 30011), 'strata': (30020, 30021)}
+         'vllm': (30010, 30011), 'strata': (30020, 30021), 'maya': (30030, 30031)}
 
 
 def request(port, path, body=None, timeout=900):
@@ -127,7 +127,7 @@ def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=
 def profiles(kind):
     if kind == 'llama':
         return [(m['id'],m['context']) for m in json.loads((ROOT/'dsh/models.json').read_text())]
-    return [(k,v['context']) for k,v in json.loads((ROOT/f'dsh/{kind}-profiles.json').read_text()).items()]
+    return [(k,v['context']) for k,v in json.loads((ROOT/f'dsh/{kind}-profiles.json').read_text()).items() if v.get('enabled', kind != 'maya')]
 
 
 def prefill_prompt(index):

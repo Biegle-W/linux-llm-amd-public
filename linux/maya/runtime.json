@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/mw00/project-maya",
+  "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
+  "version": "1.1.17",
+  "rocwmma_repository": "https://github.com/ROCm/rocWMMA",
+  "rocwmma_commit": "48b7db12a9ade97f0b7ab2ff9321ba0cbb4e5b77",
+  "rocwmma_version": "2.2.0 / ROCm 7.2.3",
+  "llama_dependency": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+  "status": "Selected GLM Maya-S24 RAM40/MTP and DeepSeek Maya-S 24threads/noDSpark passed dual-AMD32K context, benchmarks and normal authenticated API/switchback; other DeepSeek quant formats remain blocked",
+  "rocm_sdk": "7.2.3",
+  "python": "3.12.14",
+  "gpu_architecture": "gfx1100",
+  "scope": "Selected exact quants only; broader DS4 suite retains two mixed Q4_K/IQ4_XS bit-exact failures on each card"
+}

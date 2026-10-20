@@ -5,6 +5,36 @@ the October 19 Strata optimization adds fresh measurements and validation. Dates
 This is the index of measured updates, including older hardware and retired
 profiles; it does not imply that every historical configuration remains installed.
 
+## October 20: Maya on dual AMD, shared NVMe and 32K
+
+Maya v1.1.17 / 8d9a9b5d705049a87da853717cdc59440252de30 adds two profiles on the
+same i9-13900KS / 64 GB / two 7900XTX / motherboard x8/x8 system. The switch remains
+uninstalled. [Full report](MAYA-2026-10-20.md) and [numeric evidence](results/maya-dual-amd-2026-10-20.json)
+retain exact source/binary/settings, every trial, input/output and memory proof.
+
+GLM-5.3-Flash Maya-S24: 32,768 configured, 29,989-input retrieval/history passed;
+MTP and 40 GiB bounded RAM tier. Three-trial medians: native PP 525.9 t/s on
+6,312–6,313 actual input, external prefill TTFT 12.159 s; short code/prose TTFT
+0.074/0.097 s and SSE decode 21.13/16.54 t/s (256-output cap).
+DeepSeek-V4.1-Flash-1017 Maya-S: 32,768 configured, 29,989-input retrieval/history;
+CPU-mapped experts + GPU cache/NVMe, 24 CPU threads, DSpark not loaded after the
+bounded comparison. PP 185.5 on 6,295–6,302 input, prefill TTFT 33.956 s; short TTFT
+0.374/0.550 s and SSE decode 6.24/6.84 t/s. These windows are not general full-window
+quality guarantees. No other engine or older benchmark was rerun for this addition.
+
+Native reserves are 8 GiB/card and actual startup free >= 6 GiB/card; continuous
+latched RAM/VRAM guards, no-swap 52G worker scope and dual-card placement retained.
+GLM RAM 40 improved its declared composite 22.91% over the same-reserve RAM 36
+case, with >=10 GiB available acceptance floor; this is a 3-trial selection with stateful
+caches, not a universal speed guarantee. Both normal authenticated host-self routes,
+JSON/tools/SSE and GLM→DeepSeek→GLM switching passed; remote peer untested.
+
+Both 14-check GLM/kernel suites passed. DeepSeek's broader suite retains two mixed
+Q4_K/IQ4_XS bit-exact failures per card; selected Maya-S contains neither and other
+types are blocked. Both use layer groups, not true TP2; DeepSeek's 256-value blocks
+do not divide its 2,304-wide experts into two parts. GGUF assets are shared; Windows
+needs a separate path-specific index. [Both forums and pinned sources](FORUM-OPTIMIZATION-SOURCES.md#project-maya-october-20).
+
 ## October 20: i9/64 GB, both Super quants, development runtime promotions and shared-NVMe Strata
 
 Hardware: i9-13900KS,64 GB installed,61.51 GiB OS-visible, two RX 7900 XTX 24 GB,
@@ -20,7 +50,7 @@ later production-rebuild functional proofs are distinguished.
 
 [Current eleven-profile record](results/dual-amd-i9-64gb-2026-10-20.json) retains
 EVERY trial, actual token count, method, source/build, memory and output hash:
-nine shared-method short code/prose +fresh~8K prefill profiles and BOTH fixed~8K
+nine shared-method short code/prose +fresh ~8K prefill profiles and BOTH fixed ~8K
 Super quants. Qwen dense64K, Muse32K, three llama MoEs256K, SGLang MTP40,960,
 SGLang DFlash2/vLLM65,536, Super IQ3/Q4 each 32,768, Strata262,144 are allocated
 budgets, not equivalent actual lengths. Muse retained 2/3 marker success.

@@ -1,0 +1,14 @@
+{
+  "glm-5.3-flash-maya": {
+    "name": "GLM-5.3-Flash Maya-S24 (dual AMD HIP, CPU/expert cache, NVMe streaming)",
+    "context": 32768,
+    "config": "maya-glm-profile.json",
+    "enabled": true
+  },
+  "deepseek-v4.1-flash-1017-maya": {
+    "name": "DeepSeek-V4.1-Flash-1017 Maya-S (dual AMD HIP, CPU/expert cache, NVMe streaming)",
+    "context": 32768,
+    "config": "maya-deepseek-profile.json",
+    "enabled": true
+  }
+}

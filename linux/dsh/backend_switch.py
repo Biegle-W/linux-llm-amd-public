@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 from amd_device import graphics_devices
 
 ROOT = Path(__file__).resolve().parent.parent
-KINDS = {'llama', 'sglang', 'vllm', 'strata', 'hyperqwen'}
+KINDS = {'llama', 'sglang', 'vllm', 'strata', 'hyperqwen', 'maya'}
 
 
 def python_entrypoint(args):
@@ -76,19 +76,22 @@ def is_inference(p, root=ROOT):
         return False
     entry = python_entrypoint(p.args)
     routers = {str(root / 'dsh' / name) for name in
-               ('llama-router.py', 'sglang-router.py', 'vllm-router.py', 'strata-router.py')}
+               ('llama-router.py', 'sglang-router.py', 'vllm-router.py', 'strata-router.py', 'maya-router.py')}
     if entry and entry[0] == 'script' and entry[1] in routers:
         return True
     binaries = {str(root / name) for name in
                 ('llama.cpp/llama-server', 'llama.cpp/build/bin/llama-server',
                  'llama.cpp/build-vulkan/bin/llama-server', 'llama.cpp/build-hip/bin/llama-server',
-                 'strata/engine/strata', 'strata/build-hip/strata')}
+                 'strata/engine/strata', 'strata/build-hip/strata',
+                 'maya/upstream/build-hip/maya', 'maya/upstream/build-hip/maya-ds4')}
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':
-        server = str(root / 'strata/serve/server.py')
-        is_strata_server = entry[1] == server or (
-            entry[1] == 'serve/server.py' and p.cwd == str(root / 'strata'))
+        # Maya is the configured Strata fork; match its exact inference entry
+        # point, never every Python process in its environment.
+        projects = (root / 'strata', root / 'maya/upstream')
+        is_strata_server = any(entry[1] == str(project / 'serve/server.py') or (
+            entry[1] == 'serve/server.py' and p.cwd == str(project)) for project in projects)
         if is_strata_server:
             args = entry[2]
             return '--engine=strata' in args or any(

@@ -474,3 +474,25 @@ stayed near 45 native prefill t/s and 8 decode t/s, one timed trial per task.
 They do not establish a benefit from more threads. Placement, microbatch and
 cache changes are complete-profile experiments; keep their actual input lengths,
 quality checks and guard outcomes beside the timings.
+
+<a id="project-maya-october-20"></a>
+
+## Project Maya / GLM and DeepSeek — October 20
+
+Local setup uses two RX 7900 XTX cards, i9-13900KS and 64 GB RAM. The downloaded
+quants and exact measured limits are in [the Maya report](MAYA-2026-10-20.md).
+External results are not local benchmarks.
+
+| Source | Reviewed evidence | Applied scope |
+|---|---|---|
+| [lcz.me topic 2195, post 3](https://lcz.me/topic/2195/3), johnnybegood, test October 8 | Maya 1.0.11; 3080 20 GB + 3090 24 GB; 128 GB RAM; 65K; GLM S24/S/M and differing sampling | S24 is a candidate for limited VRAM; lower-temperature MTP results change sampling and do not establish an equal-quality speed gain here. |
+| [Level1Techs topic 258001](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001), rqzer0, October 8 | Planned 9900X/96 GB/3090; model-memory budgeting, not a Maya dual-gfx1100 measurement | Preserve desktop RAM/VRAM reserves; no matching two-7900-XTX Maya benchmark found in this search. |
+| [Pinned upstream AMD guide](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/docs/AMD_MAYA.md) | Experimental HIP; dual-card layer splitting, version-matched gfx1100 hipBLASLt tables and prefill sub-batches | Isolated build, `MAYA_GLM_PREFILL_SUB=1024`, 4 GiB prompt budget, both GPUs; validate locally before activation. |
+| [GLM RAM budgeting](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/src/core/glm_fast_path.cu#L1429) | RAM budget is divided across the layer groups | Explicit 36 GiB whole-machine ceiling, not 36 GiB per card. |
+| [DeepSeek grouping, mapping and CPU pools](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/src/ds4/ds4_model.cu#L1720) | TP depends on quant block divisibility; mmap/page-cache backing differs from a copied expert tier; `DS4_COPY_GB` is an experimental static copy | Selected GGUF downgrades TP width to 1 while retaining both layer groups. No direct P2P or full expert residency claim. Disk-weight skipping changes answers and stays off. |
+| [Official ROCm 7.2.3 notes](https://rocm.docs.amd.com/en/docs-7.2.3/about/release-notes.html) and [rocWMMA tag](https://github.com/ROCm/rocWMMA/tree/48b7db12a9ade97f0b7ab2ff9321ba0cbb4e5b77) | rocWMMA 2.2.0 | Missing headers supplied only to the isolated Maya build; SDK and other engine builds unchanged. |
+
+The broad DeepSeek GGUF suite still fails two bit-exact mixed Q4_K/IQ4_XS cases
+on each card. Actual selected Maya-S metadata contains neither type. That limit
+is retained and enforced by admission; it is not silently called a full-suite
+pass. Local arithmetic/JSON/tools/marker checks do not establish general quality.

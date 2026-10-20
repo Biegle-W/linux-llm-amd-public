@@ -15,6 +15,7 @@ background and shadow are part of the original upstream artwork.
 | SGLang | [`sglang.png`](https://github.com/sgl-project/sglang/blob/f84475ccf593087df3d1da13c9e675eadee12352/assets/logo_square.png) | [Apache-2.0](licenses/sglang.LICENSE) |
 | vLLM | [`vllm.png`](https://github.com/vllm-project/vllm/blob/83c9a547bf9a3b4f2653fb5766886bdc5dba35be/docs/assets/logos/vllm-logo-only-light.png) | [Apache-2.0](licenses/vllm.LICENSE) |
 | Strata Q3 | [`strata.svg`](https://github.com/Niko1221/Strata/blob/296b59d2f73c8f04a805df29c2fa97655adace78/serve/web/favicon.svg) | [MIT](licenses/strata.LICENSE) |
+| Maya | [`maya.svg`](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/serve/web/icon.svg) | [MIT](licenses/maya.LICENSE) |
 | dsh | [`dsh.png`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/desktop/resources/icon.png) | [MIT](licenses/dsh.LICENSE) |
 | Turnstone | [`turnstone.svg`](https://github.com/turnstonelabs/turnstone/blob/5c82b17700a73ad0ee84421f77549c8a3d46b06b/turnstone/ui/static/index.html) | [Apache-2.0](licenses/turnstone.LICENSE) |
 | ComfyUI | [`comfyui.svg`](https://github.com/Comfy-Org/ComfyUI_frontend/blob/79a53509d11d1d5a065b543c148bd11d0f24b36e/public/assets/images/comfy-logo-single.svg) | [GPL-3.0](licenses/comfyui.LICENSE) |

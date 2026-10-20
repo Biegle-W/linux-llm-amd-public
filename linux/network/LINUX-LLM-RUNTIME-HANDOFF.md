@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 20, 2026 (America/Toronto)**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Eleven enabled profiles include both Super IQ3
+Updated **October 20, 2026**. Current hardware is i9-13900KS,
+64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles include both Super IQ3
 and Q4. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang/Strata pins remain.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
@@ -27,7 +27,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Eleven profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata. Presence in
+- **Thirteen profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 and Q4 are both selectable;
@@ -39,6 +39,76 @@ by the original consolidation; the subsequent MoE offload update is documented b
   This machine is dual-boot: Windows boot stops the Linux service. Model-file sharing
   does not make Linux HIP binaries or absolute paths runnable in Windows.
 
+## Project Maya: GLM and DeepSeek, both active
+
+Maya HIP v1.1.17 / `8d9a9b5d705049a87da853717cdc59440252de30` is a separate
+Strata fork with its own source, Python 3.12.14 environment and pinned llama.cpp
+3cf03257 dependency. ROCm SDK 7.2.3 is unchanged; isolated rocWMMA 2.2.0 headers
+and the retained GCC 14.4/sysroot resolved its build dependencies. Existing engine
+versions and the saved DSH default are preserved.
+
+| API model ID | Total context | Selected quant / strategy |
+|---|---:|---|
+| `glm-5.3-flash-maya` | 32,768 | Maya-S24, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
+| `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads, no DSpark |
+
+Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
+requested TP2 automatically becomes width 1 because its 256-value blocks do not
+divide 2,304-wide experts into two parts; neither GPU is dropped. DeepSeek's RAM
+backing is mapped/page-cached, not a fully resident 150 GB RAM copy. Its DSpark
+weights stay on NVMe, but the tested draft setting did not improve the declared
+composite. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
+its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
+and stateful caches; this is not a universal optimum.
+
+The **Maya** Desktop/menu entry opens a visible terminal; `llm-maya` uses the
+current terminal or SSH TTY. Both load GLM by default. Start `dsh` separately, choose **Local Maya**, then either ID.
+`llm-maya --model deepseek-v4.1-flash-1017-maya` selects DeepSeek initially.
+The router switches models serially and unloads the previous worker. Backend
+handover recognizes only the configured Maya native binaries/server/router as
+part of the configured Strata family. DSH, the gateway, ComfyUI and unrelated
+applications are preserved. `llm-maya --help` /invalid IDs do not hand over a server.
+
+Router/worker are loopback **30030/30031**. Remote clients use the same private
+key and **port 10000 `/v1/chat/completions`** gateway; worker/UI/admin endpoints
+are not exposed remotely. The current thirteen-profile auth/catalog check and
+both models' actual generation, JSON and synthetic tool round trips passed on
+loopback/LAN/Tailscale host-self routes. GLM→DeepSeek→GLM reload passed with one
+native worker. A separate remote peer and image-request accuracy/performance
+were not tested. GLM is text only; DeepSeek's installed vision tower is unvalidated.
+
+Each native reserve is 8 GiB; actual whole-card free must be >=6 GiB/card at startup.
+Continuous latched guards retain 3 GiB available RAM / 3 GiB whole-card free floors,
+zero worker swap/spill and a 52G no-swap worker scope. Loading requires 60 GiB
+physical / 52 GiB available RAM and 16 GiB free on each GPU after handover. Failure
+unloads only the owned worker and requires explicit reload. Never lower these
+limits or use swap as capacity to make a new profile pass.
+
+Both passed fresh 29,989-input retrieval plus cached-history follow-up at 32K.
+Fresh shared-corpus inputs were 6,312–6,313 GLM tokens and 6,295–6,302 DeepSeek tokens.
+Three-trial native PP 525.9/185.5 t/s, external prefill TTFT 12.159/33.956 s;
+short code/prose decode 21.13/16.54 t/s (GLM) and 6.24/6.84 t/s (DeepSeek).
+These measurements use thinking off, temperature 0.6 / top-p 0.95 / seed 42 for short
+prompts; fresh prefill is greedy. Direct API defaults and sampling can differ.
+Allocated context is not proof of general accuracy at every token position.
+[Complete Maya settings/limits](../hardware/MAYA-2026-10-20.md) and
+[all numeric evidence](../hardware/results/maya-dual-amd-2026-10-20.json).
+
+All 14 GLM/kernel checks passed on each card. The broader DeepSeek suite still
+fails two mixed Q4_K/IQ4_XS bit-exact tests per card; those types are absent from
+this selected Maya-S target and other types are blocked. This is not a complete
+DS4-suite pass. No tolerance or quality-changing expert skipping was enabled.
+Binary/source/config fingerprints and the DeepSeek descriptor/index/Engram hash
+must match before loading. Models are at `/mnt/shared-nvme/LLM-Models/Maya` on the new shared NVMe;
+no model weights were left in the Maya engine folder on the Linux primary NVMe.
+
+**Windows:** reuse the GGUF/draft/vision assets, but build/validate Windows engines
+separately. The Linux DeepSeek pack `Maya-S/maya-ds4/ds4.txt` contains a Linux
+absolute `model_dir`; generate a separate `maya-ds4-windows` pack/index and point
+the Windows config to it. Do not let a Windows installer overwrite the Linux
+pack. The new NVMe's Windows drive letter is unknown. The handoff remains on
+original Shared SATA /D:. Models and Linux runtime binaries are different assets.
+
 ## Nemotron Super: both IQ3 and Q4 active
 
 Both use 32,768 total context, both GPUs, HIP layer splitting, Q8 K/V, Flash Attention,
@@ -49,7 +119,7 @@ six decode/prefill threads, batch 512/microbatch 128, checkpoints 0 and MTP off.
 | `nemotron-3.5-super-iq3` |21:19|19.124 GiB|2,048 MiB|
 | `nemotron-3.5-super-q4` |1:1|47.424 GiB|4,096 MiB|
 
-Both passed28,546-input marker retrieval and six fixed~8K-input/256-output timing
+Both passed28,546-input marker retrieval and six fixed ~8K-input/256-output timing
 trials on4c3c5810. IQ3 decode medians15.90/16.95 t/s; Q4 7.86/8.19 t/s, code/prose.
 These are fixed-input workloads, not short-prompt TTFT. Candidate trials overlapped
 model-copy/hash/download IO; do not claim an isolated engine speedup. A separate
@@ -71,7 +141,7 @@ primary NVMe. Start `llm-llama`, start DSH separately, and select either exact I
 
 ## Active model catalog
 
-The current catalog has **11 enabled profiles**: seven llama.cpp, two SGLang, one vLLM and one Strata. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **13 enabled profiles**: seven llama.cpp, two SGLang, one vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -92,6 +162,8 @@ not guarantees of full-window speed or general long-context accuracy.
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 65,536 | GPTQ INT4/group64 | MTP3 |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
+| Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S24, mixed IQ2/3 experts / Q4_K dense | MTP |
+| Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | DSpark not loaded |
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
 microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
@@ -299,7 +371,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all eleven enabled profiles even when their backends are
+`GET /v1/models` lists all thirteen enabled profiles even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -311,6 +383,7 @@ backends**. Internal routers/workers remain loopback-only:
 | SGLang | 30000 / 30001 |
 | vLLM | 30010 / 30011 |
 | Strata / HIP | 30020 / 30021 |
+| Maya / HIP | 30030 / 30031 |
 
 Do not use those internal ports for remote clients or confuse Linux's port 8081
 with the historical Windows Strata API. The gateway exposes chat/completions,
@@ -333,9 +406,11 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
   shortcuts or symlinks. Main GGUF/MTP matched; the generated expert-pack mismatch
   was resolved by a complete source-derived reference SHA-256 check. See
   [verified asset inventory](../hardware/results/streaming-storage-2026-10-20.json).
-- Maya downloads are staged under `Maya/` on that new NVMe: GLM-5.3-Flash Maya-S24
-  and DeepSeek-V4.1-Flash-1017 Maya-S plus DSpark/vision. All13 files/443,117,880,880 bytes
-  match published checksums. **Maya runtime is not yet installed or validated.**
+- Maya is installed/validated under `Maya/` on that new NVMe. Original 13 downloads
+  total 443,117,880,880 bytes and passed published checksums; two raw vision source
+  files were losslessly converted/replaced. Current 35-file model/pack inventory is
+  413.580 GiB, with generated immutable assets hashed. Source/runtime stays Linux
+  ext4; no full expert or Engram duplicate is generated. [Inventory](../hardware/results/streaming-storage-2026-10-20.json).
 - Linux-only GPTQ target `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/` and DFlash2
   draft `models/drafts/Qwen3.8-27B-DFlash2-W4A16/` remain on Linux NVMe, shared by
   SGLang/vLLM. Windows cannot use those Linux absolute paths.
@@ -356,6 +431,7 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 | vLLM |`0.32.1rc1.dev36+ge68efc685.rocm72`, local repairs|
 | ROCm SDK /PyTorch /RCCL |7.2.3 /`2.13.0+git733fca1` /no-hostcall 2.27.7|
 | Strata HIP |0.1.45 /`477ac13cbe8e582c20484871ce459d20d82df09d`|
+| Maya HIP | `1.1.17 / 8d9a9b5d705049a87da853717cdc59440252de30`; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
 
 llama.cpp 4c3c5810 and vLLM dev36 passed their fixed promotion criteria; throughput
 was performance-neutral within noise. The vLLM wheel SHA-256 is
@@ -497,20 +573,22 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-[Current eleven-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md),
+[Current thirteen-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md),
 [numeric evidence](../hardware/results/dual-amd-i9-64gb-2026-10-20.json) and
 [complete dated ledger](../hardware/BENCHMARK-HISTORY.md) distinguish native
 prompt timings, engine-prefill phases, external SSE TTFT/decode and input/TTFT
-proxies. Nine profiles use the shared short-prompt +fresh~8K method; both Super
-profiles use fixed~8K prompts. Muse markers passed2/3; failures remain reported.
+proxies. Eleven profiles use the shared short-prompt + fresh ~8K method; both Super
+profiles use fixed ~8K prompts. Muse markers passed2/3; failures remain reported.
 Every measurement retains its source/build, input/output and method. Current i9
 measurements do not relabel old i5/32 GB, NVIDIA or Windows results.
 
 Normal API proofs cover authenticated host self-access on loopback/LAN/Tailscale,
-not a separate remote peer. Gateway authentication and all eleven catalog IDs
+not a separate remote peer. Gateway authentication and all thirteen catalog IDs
 passed. No fresh full256K test is claimed for the three smaller llama.cpp MoEs;
 they retain older~64K retrieval. No new near-window SGLang test is implied.
-Maya runtime setup/validation is queued after this publication. The purchased
+Maya is now installed and both selected 32K profiles passed normal API/model-switch checks.
+Its separate [numeric record](../hardware/results/maya-dual-amd-2026-10-20.json) preserves
+the new measurements and screening controls. The purchased
 PCIe switch remains pending installation/P2P/RCCL validation. PATH checks passed
 login/noninteractive resolution; local SSH validation was blocked by existing
 host-key verification and trust settings were not bypassed.
@@ -592,7 +670,7 @@ provide authorization to start models, change security settings or message agent
 
 ## October 19 maintenance and launch paths
 
-`llm-llama`, `llm-sglang`, `llm-vllm`, `llm-strata`, `dsh`, `turnstone`,
+`llm-llama`, `llm-sglang`, `llm-vllm`, `llm-strata`, `llm-maya`, `dsh`, `turnstone`,
 `comfyui` and `llm-upgrade-check` remain the supported PATH commands. Inventory
 now targets two 24 GiB Navi31/amdgpu devices without requiring NVIDIA software;
 it reports every PCI path so internal GPU x16 links are not mistaken for slot

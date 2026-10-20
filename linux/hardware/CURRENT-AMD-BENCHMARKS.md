@@ -2,7 +2,7 @@
 
 Measured on **Intel i9-13900KS, 64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB**,
 MSI MPG Z690 CARBON WIFI, CPU PCIe 4.0 x8/x8. Switch not installed; P2P disabled.
-**Eleven active profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata.
+**Thirteen active profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata, two Maya.
 Super IQ3 and Q4 are both selectable at 32K; all their weights are retained.
 Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 [CPU/RAM, storage, pool tests and limits](CPU-RAM-PROFILES-2026-10-20.md).
@@ -15,16 +15,17 @@ Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 | SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | Both retained strategies on i9/64 GB |
 | vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; i9 timings, earlier 64K retrieval and prefix reuse |
 | Strata HIP | [0.1.45 / `477ac13c`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Corrected expert pack on shared NVMe, both CPU pools and actual near 256K probes |
+| Maya HIP | [v1.1.17 / `8d9a9b5d`](https://github.com/mw00/project-maya/commit/8d9a9b5d705049a87da853717cdc59440252de30) | Selected S24/DeepSeek-S, 32K, both cards, near-30K probes and normal API/model switching |
 
 The llama.cpp and vLLM updates were performance-neutral within noise; newer
 source is not presented as a measured speedup. Older builds keep their original
 results. [Profile validation and update report](CPU-RAM-PROFILES-2026-10-20.md).
 
-### Nine profiles using the shared benchmark method
+### Eleven profiles using the shared benchmark method
 
 Three timed requests per workload, median shown. Fresh prefill probes use ~8K
 Qwen tokens; tokenizer counts differ. Short TTFT/decode use separate short
-code/prose prompts and a 256-output cap. Native PP is used for llama.cpp/Strata;
+code/prose prompts and a 256-output cap. Native PP is used for llama.cpp/Strata/Maya;
 SGLang/vLLM use their own measured engine-prefill phases. Context is the total
 configured window, not proof of that entire window's quality or speed.
 
@@ -39,10 +40,15 @@ configured window, not proof of that entire window's quality or speed.
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | 8,186–8,188 | 1471.2 | 5.575 | 0.092 / 0.088 | 205.12 / 73.44 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | 8,184–8,186 | 1496.5 | 5.486 | 0.066 / 0.082 | 132.03 / 71.32 |
 | Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,187 | 914.3 | 8.987 | 0.219 / 0.223 | 76.61 / 53.35 |
+| GLM-5.3-Flash Maya-S24 | Maya HIP, layer split/MTP | 32,768 | 6,312–6,313 | 525.9 | 12.159 | 0.074 / 0.097 | 21.13 / 16.54 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP, layer split/no DSpark | 32,768 | 6,295–6,302 | 185.5 | 33.956 | 0.374 / 0.550 | 6.24 / 6.84 |
 
 Muse retrieved all markers in 2/3 probes with a 1,024-output allowance; the failed
 trial remains in the medians. All original counts, timing fields, hashes and memory
 extrema are retained in the [numeric record](results/dual-amd-i9-64gb-2026-10-20.json).
+
+Maya's two added rows retain every trial and actual tokenizer count in the
+[Maya numeric record](results/maya-dual-amd-2026-10-20.json); [settings, selection and limits](MAYA-2026-10-20.md).
 
 ### Two Super profiles using fixed ~8K-input workloads
 
@@ -73,8 +79,8 @@ retrieval under its original hardware/build attribution.
 
 Strata's managed backend and standalone app share verified weights on the new
 shared NVMe. The generated expert pack was checked against every source expert
-byte before reuse. Maya's two requested model downloads are staged on that NVMe;
-its runtime is not installed or validated yet. Other resident GGUF models stay
+byte before reuse. Maya's validated S24/DeepSeek-S weights and required generated
+assets also use that NVMe. Other resident GGUF models stay
 on Shared SATA; SGLang/vLLM target/draft checkpoints stay on Linux NVMe.
 [Storage inventory](results/streaming-storage-2026-10-20.json).
 

@@ -22,16 +22,17 @@ from moe_memory import worker_memory,host_memory
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('--kind',choices=['llama','strata'],required=True)
+    ap.add_argument('--kind',choices=['llama','strata','maya'],required=True)
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--model',choices=['nemotron-3.5-super-q4','nemotron-3.5-super-iq3',
-                                     'qwen3.8-flash-next-iq3_xxs'])
+                                     'qwen3.8-flash-next-iq3_xxs','glm-5.3-flash-maya',
+                                     'deepseek-v4.1-flash-1017-maya'])
     ap.add_argument('--result',type=Path,help='Require exact measured Q4 placement, CPU/cache parameters and binary')
     a=ap.parse_args()
     ident=a.model or ('nemotron-3.5-super-q4' if a.kind=='llama' else 'qwen3.8-flash-next-iq3_xxs')
-    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and ident=='qwen3.8-flash-next-iq3_xxs')
+    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and ident=='qwen3.8-flash-next-iq3_xxs') or (a.kind=='maya' and ident in ('glm-5.3-flash-maya','deepseek-v4.1-flash-1017-maya'))
     cfg=json.loads((ROOT/'dsh/data/network-access.json').read_text());key=Path(cfg['key_file']).read_text().strip()
-    expected=next(m['context'] for m in json.loads((ROOT/'dsh/models.json').read_text()) if m['id']==ident) if a.kind=='llama' else json.loads((ROOT/'dsh/strata-profiles.json').read_text())[ident]['context']
+    expected=next(m['context'] for m in json.loads((ROOT/'dsh/models.json').read_text()) if m['id']==ident) if a.kind=='llama' else json.loads((ROOT/f'dsh/{a.kind}-profiles.json').read_text())[ident]['context']
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
     def api(path,body=None,address='127.0.0.1',port=None,stream=False):
         headers={'Content-Type':'application/json'}
@@ -70,7 +71,9 @@ def main():
     assert json.loads(call['function']['arguments'])=={'sku':'BOLT-42'}
     reply=chat(history+[message,{'role':'tool','tool_call_id':call['id'],'content':'{"sku":"BOLT-42","stock":137}'}],tools=tools,tool_choice='none')['choices'][0]['message']['content']
     assert '137' in reply
-    tree=processes();binaries={str(ROOT/'llama.cpp/build-hip/bin/llama-server')} if a.kind=='llama' else {str(ROOT/'strata/build-hip/strata')}
+    tree=processes()
+    binaries={'llama':{str(ROOT/'llama.cpp/build-hip/bin/llama-server')},'strata':{str(ROOT/'strata/build-hip/strata')},
+              'maya':{str(ROOT/'maya/upstream/build-hip/maya'),str(ROOT/'maya/upstream/build-hip/maya-ds4')}}[a.kind]
     workers={p.pid for p in tree.values() if p.args and p.args[0] in binaries};assert workers
     runtime_proof = {}
     if a.kind == 'llama':
@@ -97,7 +100,7 @@ def main():
             'production_binary_sha256':hashlib.sha256(Path(command[0]).read_bytes()).hexdigest(),
             'profile_arguments_match':True,'settings':settings,
             'binary_provenance':'Current production rebuild; this functional proof does not assert binary identity with a prior candidate benchmark.'}
-    else:
+    elif a.kind=='strata':
         cfg=json.loads((ROOT/'dsh/strata-iq3-profile.json').read_text())
         assert cfg['gpu']==[0,1] and not cfg['split_skip_if_fits']
         assert len(workers)==1
@@ -112,6 +115,19 @@ def main():
             'profile_arguments_match':True,'both_gpus_configured':True,
             'layer_split':cfg['layer_split'],'expert_budget_gib':float(expected_args[expected_args.index('--resident-budget-gib')+1]),
             'asset_paths_match_active_configuration':True}
+    else:
+        from maya_runtime import profiles, config_fingerprint
+        cfg=json.loads((ROOT/'dsh'/profiles()[ident]['config']).read_text())
+        assert cfg['gpu']==[0,1] and not cfg['split_skip_if_fits'] and len(workers)==1
+        command=tree[next(iter(workers))].args
+        for flag in cfg['args'][::2]:
+            assert flag in command and command[command.index(flag)+1]==cfg['args'][cfg['args'].index(flag)+1],flag
+        binary_sha=hashlib.sha256(Path(command[0]).read_bytes()).hexdigest()
+        assert cfg['local_validation']['binary_sha256']==binary_sha
+        assert cfg['local_validation']['config_sha256']==config_fingerprint(cfg)
+        runtime_proof={'runtime_commit':subprocess.check_output(['git','-C',str(ROOT/'maya/upstream'),'rev-parse','HEAD'],text=True).strip(),
+            'production_binary_sha256':binary_sha,'profile_arguments_match':True,
+            'both_gpus_configured':True,'config_sha256':config_fingerprint(cfg)}
     measured_match = False
     if a.result:
         assert a.kind=='llama'
@@ -150,7 +166,10 @@ def main():
         assert loaded==[ident],loaded
         props=api('/props?model='+ident,port=8080);assert props['default_generation_settings']['n_ctx']==expected
     else:
-        health=api('/health',port=30020);assert health['active_model']==ident and not health.get('memory_fault')
+        health=api('/health',port=30030 if a.kind=='maya' else 30020);assert health['active_model']==ident and not health.get('memory_fault')
+        if a.kind=='maya':
+            free=health['startup_whole_card_free_bytes'];assert len(free)==2 and min(free)>=6*1024**3
+            runtime_proof['startup_whole_card_free_bytes']=free
     result={'status':'passed','model':ident,'context':expected,'routes':addresses,'remote_peer_tested':False,
         'runtime_proof':runtime_proof,
         'json':True,'tool_roundtrip':True,'measured_arguments_and_binary_match':measured_match,

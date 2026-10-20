@@ -5,6 +5,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent
 LOCAL = {'llama-local': 'qwen3.8-27b-q4', 'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm', 'strata-local': 'qwen3.8-flash-next-iq3_xxs',
+         'maya-local': 'glm-5.3-flash-maya',
          'hyperqwen-local': 'qwen3.8-27b-hyperqwen-dflash2'}
 
 def configure(default_provider=None):
@@ -30,13 +31,16 @@ def configure(default_provider=None):
         'vllm-local': ('Local vLLM', 30010, [dict(id=k, **v) for k,v in json.loads((ROOT/'vllm-profiles.json').read_text()).items()]),
         'strata-local': ('Local Strata', 30020, [dict(id=k, **v) for k,v in json.loads((ROOT/'strata-profiles.json').read_text()).items()]),
     }
+    maya_catalog = ROOT / 'maya-profiles.json'
+    if maya_catalog.exists():
+        catalogs['maya-local'] = ('Local Maya', 30030, [dict(id=k, **v) for k,v in json.loads(maya_catalog.read_text()).items()])
     for key, (name, port, models) in catalogs.items():
-        models = [m for m in models if m.get('enabled', True)]
+        models = [m for m in models if m.get('enabled', key != 'maya-local')]
         if not models:
             providers.pop(key, None)
             continue
         compat = {'supportsDeveloperRole': False, 'maxTokensField': 'max_tokens'}
-        if key == 'strata-local':
+        if key in ('strata-local', 'maya-local'):
             compat.update(supportsStore=False, supportsReasoningEffort=False, supportsStrictMode=False,
                           thinkingFormat='chat-template', chatTemplateKwargs={'enable_thinking': False})
         providers[key] = {'displayName': name, 'api': 'openai-completions',

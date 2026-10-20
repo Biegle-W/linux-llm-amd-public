@@ -370,7 +370,7 @@
   },
   "maya": {
     "canonical_example": "/mnt/shared-nvme/LLM-Models/Maya",
-    "status": "download verified; runtime not yet installed",
+    "status": "Installed and validated selected dual-AMD Maya-S24/DeepSeek-Maya-S profiles on sharedNVMe; original download verification remains below",
     "upstream_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
     "quant_selection": "GLM Maya-S24 for 24GB cards; DeepSeek Maya-S native GGUF with Q6_K Engram; upstream checksummed packed DSpark and matching vision source. No original FP8/EXL3 copies.",
     "total_bytes": 443117880880,
@@ -506,7 +506,234 @@
         "status": "verified",
         "verified_utc": "2026-10-20T11:03:10.256537+00:00"
       }
-    ]
+    ],
+    "post_setup_inventory": {
+      "status": "post_setup_inventory_verified",
+      "checked_utc": "2026-10-20T13:20:08.205746+00:00",
+      "canonical_example": "/mnt/shared-nvme/LLM-Models/Maya",
+      "file_count": 35,
+      "total_bytes": 444078471403,
+      "files": [
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
+          "size": 47887697312,
+          "sha256": "1f3437f57042e69f94c141ffbcba0d5610dab63feb07244fb468be4940d6763f",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
+          "size": 47669578400,
+          "sha256": "66501fee8702ffd54e6f065323ab54bb3150d20b10b01922c589e7462c7b5ba6",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
+          "size": 47103347360,
+          "sha256": "3195b23f33337c46a07c48583946d99147c3635412bc4adc6acdc4cf42bf30ad",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
+          "size": 35532532032,
+          "sha256": "d60dba35fac9601cd5c6026439dd980c457a5bb1c009192ea539b220108ea0db",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
+          "size": 80641295472,
+          "sha256": "c98d46f96a25d17c4c54da5a60782c130255c364a22e621ea28d5c98a692ceb2",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00006-of-00006.gguf",
+          "size": 80643503412,
+          "sha256": "98d65ef4f36e0b193935d44c3586241ca09b1b47e90f118e85332cfdb5860263",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/ds4.txt",
+          "size": 1466,
+          "sha256": "8d267cabf9b9240569cf667f02d0a842ed3b74efbba0e7856f9a4809c1d5ee80",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/engram.bin",
+          "size": 517980,
+          "sha256": "08d55d6433f389b14aa115f4ea4eb31d6a2d63df1ae40821f03facf4c2d49142",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/expert-profile.bin",
+          "size": 61440,
+          "verification_basis": "Mutable expert-routing counts; not an immutable model weight or a fixed-hash asset"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/sources.json",
+          "size": 899,
+          "sha256": "1f3bcfcc1ae73c5d979e6f45dd648705ed66afa877e5f4b4620695a16d8e1b02",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tensors.txt",
+          "size": 3719751,
+          "sha256": "cded105d5d187f5c786a2862f63006672079da9e88fbf5b115536265e5f88f75",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer/chat_template.jinja",
+          "size": 5196,
+          "sha256": "2561a5200b62f7816c667ee6f7a3b9483beb62ce27b79acc70e39b60fad33bd0",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer/merges.txt",
+          "size": 1504833,
+          "sha256": "547bace837acea98652eef5669c9b01cee1c73ad1d2a44d6fdce9e6a81c22147",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer/token_type.json",
+          "size": 387840,
+          "sha256": "0a61021438e5ce6041133495f18fc360a6587aea748b17d953f552d2119ba51e",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer/tokenizer.json",
+          "size": 80,
+          "sha256": "5a47981b685b75154e29bfb0299584c9b3a4a28679585e86d524c34c065d037f",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer/vocab.json",
+          "size": 2730577,
+          "sha256": "2f0bf5b31f4aa191d5d0d78291927a4f28c9ceb498a5e345b97e926c4cb99c1a",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark.bin",
+          "size": 7967616768,
+          "sha256": "42df65159f980a9189d80597e42b30012c7b10e0dd385a47051f3b2fd659bb7b",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark.json",
+          "size": 96965,
+          "sha256": "639c3144bca8cfe4db59057047dca40411f0cc732796e2a9321feb98fee2295f",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/.maya-verified.json",
+          "size": 172,
+          "sha256": "6e8198366b103d36ab432b70bf9dd561014f9eb360ab430fae5e835f0426f9da",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",
+          "size": 970536960,
+          "sha256": "685d935986a030ba1965af5c1e06b55614c7778c821daae1917dde5d2152ff68",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.json",
+          "size": 19959,
+          "sha256": "3b682353a9bf572ae2736ec17b946179b24b83319de46c54950f0c442fd13053",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/.maya-verified.json",
+          "size": 360,
+          "sha256": "318ad461ea5bea468e109220520b88a6e61c42a97be98f3b4983f845314c5213",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
+          "size": 46886573024,
+          "sha256": "8ebd5c74bcf65ece2a8699b7b6fd2b8d177f350ed252cee252fdd99b86a0138c",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf",
+          "size": 46982144736,
+          "sha256": "4bd445da3a0128a9c5b32228c924e0a622aa4a132c7a8dc9a2c207a4beea8e34",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf",
+          "size": 832958464,
+          "sha256": "a6fd4e88007ac49b431c7d02be34e43ab7a09224d53a0c52782327613cb41917",
+          "verification_basis": "Published SHA256 verified at original download; original target/draft files remain inputs read in place; size rechecked after setup"
+        },
+        {
+          "file": "Maya-S24/pack/compat-bf16.json",
+          "size": 88140,
+          "sha256": "03ec0a03a7a2a1196275b2cd4df1c0829f4601dbce0e5b67ea0d64208fb95698",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/dense.bin",
+          "size": 943911040,
+          "sha256": "9dcd1dc9ff74bf483cb5d8046634e625f94b36bac6ee1d1b221e7617a6a72fac",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/index.txt",
+          "size": 105596,
+          "sha256": "db4fdc678332ffcbb2425415e178b1afae3912e6a4ddcc95154feac6488ea0ba",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/native_experts.txt",
+          "size": 4067,
+          "sha256": "0fd66942907916d97c78ec9fa6d646426e3ae126ffdcdf1262ef5a03733d2b79",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/sources.json",
+          "size": 420,
+          "sha256": "f38f3b0d2b9cb90efe4ded36e433fe49552ebfd5c1332f223f14389640ce0857",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/tokenizer/chat_template.jinja",
+          "size": 10648,
+          "sha256": "a4fddbbf0b432101a296c17094f8bc5a2b0d30713b5b5cd92f86be78511aa724",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/tokenizer/merges.txt",
+          "size": 3868336,
+          "sha256": "bb93732e5136ac1b2b731f55573988442a91a33c10178ef18e24b4443b593f4a",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/tokenizer/token_type.json",
+          "size": 464640,
+          "sha256": "3d226d66989eaa352fc8093536ece4b9398c85b57ba33860031bef042251ddb9",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/tokenizer/tokenizer.json",
+          "size": 712,
+          "sha256": "60458021da45393b01761d2c49144a02759a52927239bd665136dcf870e64bb5",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        },
+        {
+          "file": "Maya-S24/pack/tokenizer/vocab.json",
+          "size": 3186346,
+          "sha256": "168e8586859e110a73372e50e742258eac5314627fddcd85957c1d6781d38ae2",
+          "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+        }
+      ],
+      "conversion": {
+        "source_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+        "tensor_count": 266,
+        "vision_blocks": 32,
+        "all_tensors_exactly_equal_to_source": true,
+        "marker_source": "30KB HTTP range from shard2 at the same pinned official revision",
+        "raw_source_removed_by_installer_after_conversion": true
+      },
+      "note": "Original13-download record is historical: two raw vision sources were replaced losslessly. Mutable routing counts are settings, not a second model copy. No complete expert/Engram duplicate is generated."
+    }
   },
   "old_strata_sources_deleted": true,
   "observed_free_byte_change": {
