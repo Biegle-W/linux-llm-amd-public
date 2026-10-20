@@ -44,7 +44,7 @@ Do not run bulk transfers/builds during clean timing measurements.
 
 ## Serving and guards
 
-`llm-maya` starts the backend and opens its native Chat/Monitor in a local browser.
+`llm-maya` starts the backend and opens its original Chat/Monitor in a local browser.
 The **Maya** desktop launcher also keeps a visible terminal. DSH is optional;
 start `dsh` separately and select the **Local Maya** provider when wanted.
 The router's OpenAI chat API is loopback port **30030**, with one owned worker
@@ -118,3 +118,6 @@ DSH stays optional and separate; `--no-browser` suppresses browser opening.
 ## GLM S/S24 comparison
 
 Current selected GLM quant: **Maya-S**,32K, same RAM40/MTP/reserves. [Six-trial ABBA results](../hardware/MAYA-S-VS-S24-2026-10-20.md) supersede the earlier GLM speed row; DeepSeek is unchanged.
+
+Maya has no separate native desktop app in this setup. Its browser entry is
+hidden from the application menu; the Desktop launcher and `llm-maya` remain.

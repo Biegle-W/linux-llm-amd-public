@@ -225,3 +225,11 @@ actual coverage, sampled peaks, unavailable sensors and flag limitations. Never
 backfill missing history or treat a partial observation as a full-run maximum.
 Keep raw logs and local paths private; inference settings and guards stay intact.
 See `linux/hardware/THERMAL-LOGGING.md`.
+
+## Application menu policy — October 20
+
+Only native desktop applications belong in the application menu. Maya's original
+Chat/Monitor and ComfyUI are browser interfaces; their application-menu entries
+are hidden with `NoDisplay=true`. Preserve their Desktop launchers and PATH
+commands (`llm-maya`, `comfyui`). The native Strata AppImage remains visible.
+Managed backend launchers still retain visible terminals and existing guards.

@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
+NoDisplay=true
 Name=Maya
-Comment=Maya backend with native Chat and Monitor; live terminal logs
+Comment=Maya backend with browser Chat and Monitor; live terminal logs
 Exec=/usr/bin/ptyxis --standalone --new-window --title=Maya -- /opt/local-llm/dsh/start-maya
 Path=/opt/local-llm/dsh/workspace
 Terminal=false

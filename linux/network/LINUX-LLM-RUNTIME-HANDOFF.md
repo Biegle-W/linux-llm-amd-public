@@ -300,6 +300,10 @@ current active engines/model IDs and connection settings are unchanged.
 
 ## Start, stop and switch
 
+Only native desktop apps belong in the application menu. Maya and ComfyUI
+browser entries are hidden (`NoDisplay=true`); their Desktop launchers and
+`llm-maya` / `comfyui` PATH commands remain. Native Strata App stays visible.
+
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
 AppImage, with its official bundled 512×512 logo. The installed entry is
 `~/.local/share/applications/Strata.desktop`; icon name is `strata-desktop`.
@@ -573,7 +577,7 @@ created. User media, app state, other LLM models and launchers are unchanged.
 On Windows, use the corresponding `D:/Graphics-Models` path.
 
 **ComfyUI is installed and both families passed generation.** Use the ComfyUI
-Desktop/menu launcher or the `comfyui` PATH command; live logs stay in a visible
+Desktop launcher or the `comfyui` PATH command; live logs stay in a visible
 terminal. Web UI: `http://127.0.0.1:8188` (loopback; use SSH forwarding remotely).
 Choose saved workflows **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**.
 The runtime is `runtime/comfyui` in the Linux repository, isolated Python 3.12.14,
