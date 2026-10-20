@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "status": "cpu_validated_gpu_pending",
+  "scope": "Managed Strata only; explicit user instruction after the 6 GiB startup admission failure",
+  "actual_loaded_startup_minimum_gib_each_card": 5,
+  "previous_minimum_gib": 6,
+  "engine_requested_reserve_mib": [
+    7168,
+    8192
+  ],
+  "continuous_guard": {
+    "soft_free_vram_floor_gib": 3,
+    "consecutive_samples": 2,
+    "immediate_free_vram_floor_gib": 1.5,
+    "latched": true,
+    "owned_worker_only": true,
+    "changed": false
+  },
+  "worker_scope": {
+    "memory_max": "52G",
+    "swap_max_bytes": 0
+  },
+  "cpu_tests": {
+    "private_passed": 21,
+    "public_passed": 21,
+    "coverage": "Exact 5 GiB accepted; one byte below on either GPU rejected; missing card rejected; router stops only its owned worker; continuous guards unchanged"
+  },
+  "model": "qwen3.8-flash-next-iq3_xxs",
+  "configured_context": 262144,
+  "expert_ram_gib": 13.5,
+  "gpu_resident_kv_tokens": 32768,
+  "kv": "int8",
+  "gpus": [
+    0,
+    1
+  ],
+  "layer_boundary": 26,
+  "mtp_spec": 3,
+  "production_source_commit": "477ac13cbe8e582c20484871ce459d20d82df09d",
+  "candidate_source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
+  "candidate_version": "0.1.46.1",
+  "candidate_promoted": false,
+  "gpu_validation_status": "waiting_for_existing_benchmark_to_finish_per_user",
+  "generation_checked_on_candidate": false,
+  "new_prefill_tps": null,
+  "new_ttft_seconds": null,
+  "new_decode_tps": null,
+  "limits": "CPU boundary/lifecycle tests are not live inference validation. Former 6 GiB failures remain historical. Maya and other engines are unchanged."
+}

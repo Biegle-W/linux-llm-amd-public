@@ -2,6 +2,18 @@
 from amd_device import amd_devices
 
 GIB = 1024**3
+STARTUP_FREE_VRAM_GIB = 5
+
+
+def startup_vram_blocker(readings):
+    """Check actual loaded headroom, separately from engine reserve targets."""
+    if readings is None or len(readings) != 2:
+        return 'Both AMD cards must have valid startup VRAM telemetry'
+    if min(row['free'] for row in readings) < STARTUP_FREE_VRAM_GIB * GIB:
+        free = '/'.join(f"{row['free']/GIB:.3f}" for row in readings)
+        return (f'Strata startup needs at least {STARTUP_FREE_VRAM_GIB:g} GiB free '
+                f'on each GPU; found {free} GiB')
+    return None
 
 
 def vram_snapshot():

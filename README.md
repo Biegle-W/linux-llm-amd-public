@@ -42,19 +42,17 @@ One managed model runs at a time.
 
 ## Strata Linux app update and verified Intel desktop — October 20
 
-Strata App0.2.1 and its bundled AMD engine0.1.46 are installed and pass the
-packaged twelve-check self-test without a model load. The managed development
-engine0.1.46.1 (`9ae93f7b`) built successfully but is **not promoted**: its
-original Q3/13.5GiB/256K profile did not retain the required actual6GiB/card
-startup reserve. The owned candidate stopped with zero swap/spill; no new speed
-or near-window result is claimed. Current Strata timings remain build0.1.45.
+Strata App0.2.1 and bundled AMD engine0.1.46 are installed; twelve packaged
+checks pass. Managed engine0.1.46.1 (`9ae93f7b`) is built but not yet promoted.
+The former6GiB/card loaded-startup gate failed after Intel desktop verification,
+with5.388/6.269GiB free. The user now explicitly selects **5GiB/card startup**;
+engine7/8GiB targets and continuous3GiB protection remain. Both candidate and
+production router use the same check, with a52G/no-swap owned worker scope.
 
-After the user's logout/login, GNOME explicitly selected Intel UHD770 as primary
-through the installed udev rule; both AMD cards were idle at about27MiB used each.
-The unchanged candidate was retested twice and still failed admission: the exact
-loaded snapshot leaves **5.388/6.269GiB free**, requiring6GiB on **each** card.
-Zero owned swap/spill; only the test worker stopped. Production0.1.45 and its
-profile remain unchanged. No new speed or near-window result is available.
+The new GNOME session uses IntelUHD770/i915 as primary; both AMD cards were idle
+at about27MiB used. Live candidate validation under the new floor awaits the
+other agent's GPU handoff. Current Strata speeds remain the dated0.1.45 results;
+no new speed or near-window claim is made from the threshold change.
 [Update, exact versions and validation limits](linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md).
 
 ## AMD: latest setup and results

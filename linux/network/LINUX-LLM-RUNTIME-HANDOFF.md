@@ -260,6 +260,15 @@ startup admission failed first. Keep0.1.45; candidate memory accounting/reserve
 sizing needs investigation before repeating those gates. Never lower guards to
 promote it. Windows display/engine setup is separate.
 
+**Current user-selected startup policy:** actual loaded free VRAM must now be
+>=5GiB on each card, replacing the former6GiB admission described above.
+The engine's7/8GiB reserve targets, continuous3GiB watchdog,52G/no-swap worker,
+Q3/13.5GiB/256K/MTP3/both-GPU settings remain. Production router and isolated
+candidate share the new startup check. Live validation awaits a clean GPU-lock
+handoff; production engine stays0.1.45 until all candidate and normal gates pass.
+Maya and all other engines' admission rules are unchanged.
+[Startup policy and live status](../hardware/STRATA-STARTUP5-2026-10-20.md).
+
 [Exact versions, source citations and limits](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md) ·
 [Curated evidence](../hardware/results/strata-linux-update-2026-10-20.json).
 

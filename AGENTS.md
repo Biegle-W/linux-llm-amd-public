@@ -195,19 +195,18 @@ The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-lo
 
 ## Strata Linux app / Intel desktop follow-up — October 20
 
-Linux App0.2.1 and packaged RX7900 HIPengine0.1.46 are installed; twelve packaged
-self-tests and asset/engine manifest checks pass without loading a standalone
-model. The standalone inference preset remains inactive. Managed development
-source9ae93f7b/engine0.1.46.1 builds, but is NOT promoted because actual6GiB/card
-startup headroom failed on the unchanged Q3/13.5GiB/256K profile. Production
-477ac13c/0.1.45 and all profile fields remain. No new speed or near-window proof
-is available. After the user's logout/login, the current GNOME session explicitly
-selects IntelUHD770/i915 as primary through the installed preferred-primary rule;
-both AMD cards idle at about27MiB used. Two post-login candidate starts still fail
-unchanged actual6GiB/card admission; the exact loaded confirmation is5.388/6.269GiB
-free. Zero owned swap/spill; only the candidate stops. Production remains unchanged.
-Do not repeat the obsolete pending-login instruction. Investigate candidate memory
-accounting/reserve sizing before repeating all admission/functional/context gates;
-never lower guards or change global compute-device variables to promote it.
-Do not restart the desktop session without the user’s explicit request.
-See `linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md` and its numeric record.
+App0.2.1 and packaged HIP0.1.46 are installed and pass12 packaged checks.
+IntelUHD770/i915 is verified as GNOME primary after the user's logout/login.
+Managed candidate9ae93f7b/0.1.46.1 reached loaded health but failed the former
+actual6GiB/card startup rule twice (exact5.388/6.269GiB free). Production remains
+477ac13c/0.1.45 until candidate functional/performance/context and normal proof pass.
+
+The user's newer explicit instruction **reduces actual loaded startup admission
+to5GiB/card for Strata**, superseding the old6GiB startup threshold. The engine's
+7/8GiB reserve targets, continuous3GiB floor/hard1.5GiB emergency stop,52Gworker,
+noswap/telemetry protections,dualGPU,Q3/13.5GiB/256K profile remain. Maya's6GiB
+actual startup requirement is unchanged. Both candidate and production must use
+the common Strata startup check; a lower threshold alone is not validation.
+Do not change global compute-device variables or restart the session without an
+explicit user request. See `linux/hardware/STRATA-STARTUP5-2026-10-20.md` and
+`linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md`.

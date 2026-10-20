@@ -1,19 +1,62 @@
 """Desktop headroom thresholds and owned-worker-only shutdown behavior."""
 import importlib.util
+import io
+import json
 from pathlib import Path
 import sys
 import signal
 import subprocess
 import threading
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'dsh'))
-from strata_memory import MemoryGuard, GIB
+from strata_memory import MemoryGuard, GIB, startup_vram_blocker
 
 
 class StrataGuardTests(unittest.TestCase):
+    def test_loaded_startup_accepts_five_gib_on_both_cards(self):
+        self.assertIsNone(startup_vram_blocker([{'free':5*GIB}, {'free':5*GIB}]))
+        self.assertIsNone(startup_vram_blocker([{'free':5785194496}, {'free':6730600448}]))
+
+    def test_loaded_startup_refuses_either_card_below_five_gib(self):
+        for free in ([5*GIB-1,6*GIB], [6*GIB,5*GIB-1]):
+            with self.subTest(free=free):
+                self.assertIn('5 GiB',startup_vram_blocker([{'free':v} for v in free]))
+
+    def test_loaded_startup_refuses_missing_card_telemetry(self):
+        for readings in (None, [], [{'free':6*GIB}]):
+            with self.subTest(readings=readings):
+                self.assertIn('Both AMD',startup_vram_blocker(readings))
+
+    def test_router_admits_five_gib_and_stops_owned_worker_below_it(self):
+        for free,accepted in (([5*GIB,5*GIB],True),([5*GIB-1,6*GIB],False),([6*GIB,5*GIB-1],False)):
+            with self.subTest(free=free), tempfile.TemporaryDirectory() as folder:
+                spec=importlib.util.spec_from_file_location('strata_startup',ROOT/'dsh/strata-router.py')
+                router=importlib.util.module_from_spec(spec);spec.loader.exec_module(router)
+                root=Path(folder);(root/'logs').mkdir()
+                proc=Mock();proc.pid=1234;proc.poll.return_value=None
+                health={'loaded':True,'model':router.DEFAULT,'max_context':router.PROFILES[router.DEFAULT]['context']}
+                with patch.object(router,'ROOT',root), \
+                     patch('hardware_guard.require_strata'), \
+                     patch.object(router.subprocess,'Popen',return_value=proc), \
+                     patch.object(router.urllib.request,'urlopen',return_value=io.StringIO(json.dumps(health))), \
+                     patch.object(router,'vram_snapshot',return_value=[{'free':v} for v in free]), \
+                     patch.object(router.os,'killpg') as kill:
+                    if accepted:
+                        router.ensure_worker(router.DEFAULT)
+                        self.assertEqual(router.active,router.DEFAULT)
+                        kill.assert_not_called()
+                        router.stop_worker()
+                    else:
+                        with self.assertRaisesRegex(RuntimeError,'5 GiB'):
+                            router.ensure_worker(router.DEFAULT)
+                        self.assertIsNone(router.worker)
+                        self.assertIsNone(router.active)
+                        kill.assert_called_once_with(proc.pid,signal.SIGTERM)
+
     def sample(self, guard, free=4, **kw):
         return guard.check(kw.get('available', 10)*GIB, kw.get('swap', 0),
                            kw.get('spill', 0), [{'free':free*GIB}, {'free':5*GIB}])

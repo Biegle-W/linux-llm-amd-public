@@ -2,9 +2,10 @@
 
 The official **Strata App 0.2.1** RX7900 AppImage and its bundled **HIP engine
 0.1.46** are installed. The managed DSH backend still runs **0.1.45 / 477ac13c**:
-the latest development engine built successfully, but has not passed its unchanged
-actual 6 GiB/card startup admission, including a fresh retest after Intel desktop
-rendering was verified. No model, context or expert-budget change is promoted.
+the latest development engine built successfully, but failed the former
+6 GiB/card startup admission even after Intel desktop rendering was verified.
+The user now selects5GiB/card; live validation of that policy is pending. No
+model, context or expert-budget change is promoted.
 [Numeric evidence](results/strata-linux-update-2026-10-20.json).
 
 ## Installed app
@@ -79,7 +80,7 @@ vendor is 8086 and driver is i915. Ten idle samples show both AMD cards at
 0% activity and approximately 26.7 MiB VRAM allocated each. This verifies GNOME's
 primary renderer, not a guarantee that every application uses Intel.
 
-## Post-login managed-engine retest
+## Post-login retest under the former 6 GiB requirement
 
 The same pinned engine and Q3/13.5 GiB/256K profile were retested with both cards,
 MTP3, layer boundary 26, INT8 KV /32K residency, original 7/8 GiB reserve targets,
@@ -100,12 +101,13 @@ launcher and profile hashes are unchanged. The first start used the existing
 isolated scratch routing configuration; the confirmation used a fresh scratch
 configuration with identical inference settings and an explicit loaded snapshot.
 
-Intel rendering is now verified, but it did **not** make the candidate eligible
-for promotion. Functional generation, PP/TTFT/decode, near-256K retrieval and
+Under the former6GiB admission rule, Intel rendering did **not** make the
+candidate eligible for promotion. Functional generation, PP/TTFT/decode, near-256K retrieval and
 history checks remain unrun on this build because admission failed first. Keep
-production 0.1.45; no speed or context-quality claim is made for 0.1.46.1. A
-separate candidate investigation of engine memory accounting/reserve sizing is
-needed before repeating the remaining gates. No guard or reserve was lowered.
+production 0.1.45; no speed or context-quality claim is made for 0.1.46.1.
+At that stage no guard or reserve was lowered. The user subsequently requested
+a5GiB actual startup floor; this superseding change and its live-validation status
+are tracked in [the startup-policy report](STRATA-STARTUP5-2026-10-20.md).
 
 Forum context, not a local speed claim:
 [lcz.me topic 2059/7](https://lcz.me/topic/2059/7) describes separating the display

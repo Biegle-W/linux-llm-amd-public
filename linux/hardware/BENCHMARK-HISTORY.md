@@ -1,5 +1,13 @@
 # LLM benchmark and context history
 
+## October 20 — User-selected Strata 5 GiB startup floor
+
+The user explicitly replaces actual6GiB/card startup admission with5GiB/card.
+Engine7/8GiB reserve targets,continuous3GiB floor,52G/noswap,Q3/13.5GiB/256K
+and both GPUs remain. Twenty-one CPU guard/readiness tests pass; live candidate
+validation is pending GPU handoff. No new throughput/context claim.
+[Policy and validation status](STRATA-STARTUP5-2026-10-20.md).
+
 ## October 20 — Strata Linux app update; managed candidate blocked
 
 App0.2.1/bundled HIP0.1.46 passes12 packaged checks, with unchanged shared

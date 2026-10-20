@@ -230,5 +230,13 @@
     "new_ttft_seconds": null,
     "new_decode_tps": null,
     "limits": "Both starts reached loaded health but failed actual>=6GiB/card admission before generation. Confirmation explicitly samples loaded health and whole-card memory. Earlier attempt used existing isolated scratch configuration; confirmation uses fresh scratch paths with identical inference settings. Production remains477ac13c/0.1.45. No guard/reserve lowered; no speed comparison or near-window proof."
+  },
+  "superseding_startup_policy": {
+    "date": "2026-10-20",
+    "actual_loaded_minimum_gib_per_card": 5,
+    "user_authorized": true,
+    "live_validation_pending": true,
+    "record": "strata-startup5-2026-10-20.json",
+    "limits": "Original records above used6GiB and remain unchanged historical failures; production engine not promoted."
   }
 }

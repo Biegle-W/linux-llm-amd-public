@@ -1,5 +1,6 @@
 # Current benchmark results
 
+- [Strata user-selected 5 GiB startup floor](../STRATA-STARTUP5-2026-10-20.md): CPU guards pass; live candidate validation pending GPU handoff. Existing 6 GiB-gate failures remain historical evidence, not the current startup policy.
 Current hardware: i9-13900KS,64 GB RAM, two RX 7900 XTX 24 GB. Ten selectable
 profiles remain after Muse Q4 and Super Q4 retirement: nine shared-method profiles and Super IQ3 with its separate fixed-8K workload. Historical batches keep all original results.
 

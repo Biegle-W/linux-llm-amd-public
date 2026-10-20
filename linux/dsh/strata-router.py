@@ -13,7 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from strata_prefix import add_document_prefix
 from moe_memory import host_memory, worker_memory
-from strata_memory import MemoryGuard, vram_snapshot
+from strata_memory import MemoryGuard, startup_vram_blocker, vram_snapshot
 
 ROOT = Path(__file__).resolve().parent
 PROFILES = json.loads((ROOT / 'strata-profiles.json').read_text())
@@ -87,6 +87,7 @@ def ensure_worker(model):
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
+                                   '--property=MemoryMax=52G',
                                    '--property=MemorySwapMax=0', str(ROOT / 'run-strata-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
@@ -108,6 +109,9 @@ def ensure_worker(model):
                 continue
             if health.get('model') != model or health.get('max_context', 0) < profile['context']:
                 raise RuntimeError('Strata worker has an unexpected model or context capacity')
+            reason = startup_vram_blocker(vram_snapshot())
+            if reason:
+                raise RuntimeError(reason)
             with lifecycle:
                 if stopping.is_set():
                     raise RuntimeError('Strata is shutting down')
