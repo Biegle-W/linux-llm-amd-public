@@ -7,6 +7,21 @@ Super IQ3 remains selectable at 32K. Muse Q4 and Super Q4 are retired at the use
 Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 [CPU/RAM, storage, pool tests and limits](CPU-RAM-PROFILES-2026-10-20.md).
 
+## Strata Linux app update and pending Intel desktop — October 20
+
+Strata App0.2.1 and its bundled AMD engine0.1.46 are installed and pass the
+packaged twelve-check self-test without a model load. The managed development
+engine0.1.46.1 (`9ae93f7b`) built successfully but is **not promoted**: its
+original Q3/13.5GiB/256K profile did not retain the required actual6GiB/card
+startup reserve. The owned candidate stopped with zero swap/spill; no new speed
+or near-window result is claimed. Current Strata timings remain build0.1.45.
+
+The monitor already uses IntelUHD770 DP, but GNOME selected AMD BootVGA for
+rendering. The reviewed Intel-primary rule is installed and its udev tag verified.
+A new GNOME session is required before activation and retesting. No session
+is restarted automatically. Both AMD cards remain assigned to inference.
+[Update, exact versions and validation limits](STRATA-LINUX-UPDATE-2026-10-20.md).
+
 ### Installed and measured builds
 
 | Engine | Retained build | Validation scope |

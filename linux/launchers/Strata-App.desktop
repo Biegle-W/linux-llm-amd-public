@@ -2,8 +2,8 @@
 Type=Application
 Name=Strata App
 Comment=Strata desktop application for AMD RX 7900 GPUs
-Exec=/opt/appimages/Strata-0.2.0-beta-linux-amd-rx7900.AppImage
-TryExec=/opt/appimages/Strata-0.2.0-beta-linux-amd-rx7900.AppImage
+Exec=/opt/appimages/Strata-0.2.1-linux-amd-rx7900.AppImage
+TryExec=/opt/appimages/Strata-0.2.1-linux-amd-rx7900.AppImage
 Icon=strata-desktop
 Terminal=false
 StartupWMClass=strata-desktop

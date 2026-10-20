@@ -1,5 +1,19 @@
 # LLM benchmark and context history
 
+## October 20 — Strata Linux app update; managed candidate blocked
+
+App0.2.1/bundled HIP0.1.46 passes12 packaged checks, with unchanged shared
+weights/menu names. Development source9ae93f7b/engine0.1.46.1 compiles and passes
+small device tests, but the original Q3/13.5GiB/256K candidate fails actual6GiB/card
+startup admission. Both cards allocated; owned swap/spill remain zero and the
+owned worker stopped. No throughput or near-window test completed. Production
+477ac13c/0.1.45 and all its original measurements remain unchanged. Intel desktop
+preference is installed/tag-verified, awaiting new-session validation.
+[Detailed state](STRATA-LINUX-UPDATE-2026-10-20.md) and
+[numeric evidence](results/strata-linux-update-2026-10-20.json).
+
+
+
 ## October 20 — GLM Maya-S versus S24
 
 Maya-S passed the declared speed, functional/memory and normal-launcher checks; it is now selected. The fixed ABBA test uses six samples per workload per quant,32K, both GPUs, RAM40/native8GiB reserves, identical seeds/tokenizers/prompts, functional near30K checks and zero owned swap/spill. DeepSeek and every other engine/profile are unchanged.

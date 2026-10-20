@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-20",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "ram_installed_gib": 64,
+    "gpus": [
+      "RX7900XTX24GB",
+      "RX7900XTX24GB"
+    ],
+    "display_scanout": "Intel UHD770 DisplayPort",
+    "desktop_renderer_before": "AMD BootVGA, per GNOME journal",
+    "gnome_shell": "50.1"
+  },
+  "app": {
+    "version": "0.2.1",
+    "flavor": "linux-amd-rx7900",
+    "sha256": "de55db8822ea8ef53872ad1ba6d910e28890d97bc3f4f6957fb5b39bc54b7859",
+    "installed": true,
+    "menu_target_valid": true,
+    "official_selftest_passed": true,
+    "official_selftest_checks": [
+      {
+        "name": "resources-packaged",
+        "passed": true
+      },
+      {
+        "name": "host-entry-present",
+        "passed": true
+      },
+      {
+        "name": "ui-dist-present",
+        "passed": true
+      },
+      {
+        "name": "private-node-runtime",
+        "passed": true
+      },
+      {
+        "name": "host-spawned",
+        "passed": true
+      },
+      {
+        "name": "host-healthy",
+        "passed": true
+      },
+      {
+        "name": "ui-served",
+        "passed": true
+      },
+      {
+        "name": "api-reachable-on-same-origin",
+        "passed": true
+      },
+      {
+        "name": "control-component-present",
+        "passed": true
+      },
+      {
+        "name": "control-runs-on-bundled-python",
+        "passed": true
+      },
+      {
+        "name": "engine-missing-is-a-notice-not-a-download",
+        "passed": true
+      },
+      {
+        "name": "host-sees-control-and-forbids-acquiring",
+        "passed": true
+      }
+    ],
+    "bundled_engine_version": "0.1.46",
+    "bundled_engine_build_id": "a7bdbfdabc9a+rocm",
+    "bundle_source_destination_manifest_verified": true,
+    "shared_model_settings_unchanged": true,
+    "standalone_inference_benchmarked": false
+  },
+  "managed_production": {
+    "source_commit": "477ac13cbe8e582c20484871ce459d20d82df09d",
+    "version": "0.1.45",
+    "profile_changed": false,
+    "configured_context": 262144,
+    "expert_budget_gib": 13.5,
+    "kv": "INT8",
+    "gpu_resident_kv_tokens": 32768,
+    "gpus": [
+      0,
+      1
+    ],
+    "layer_boundary": 26,
+    "mtp_spec": 3,
+    "startup_reserve_mib": [
+      7168,
+      8192
+    ]
+  },
+  "managed_candidate": {
+    "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
+    "version": "0.1.46.1",
+    "status": "blocked_actual_startup_reserve",
+    "promoted": false,
+    "build_backend": "HIP",
+    "architecture": "gfx1100",
+    "ggml_declared_archive_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+    "ggml_archive_cmake_sha256": "5710c157d361b8e0e483f9833423066f7d52771656e61cba13c0ff3eb49fffc4",
+    "binary_sha256": {
+      "strata": "c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478",
+      "strata-device": "4033650fbaf504e1fad982d58c731543b66030fc82f0429a9a153addc1235f10"
+    },
+    "source_build_passed": true,
+    "small_device_selftests_passed": true,
+    "configured_context": 262144,
+    "expert_budget_gib": 13.5,
+    "dual_gpu_allocations_observed": true,
+    "startup_guard_error": "Actual loaded startup VRAM reserve below6GiB",
+    "minimum_whole_card_free_gib_during_loading": [
+      3.986,
+      6.268
+    ],
+    "minimum_available_ram_gib": 36.383,
+    "maximum_owned_swap_bytes": 0,
+    "maximum_vram_spill_bytes": 0,
+    "owned_worker_stopped": true,
+    "functional_checks_passed": false,
+    "near_window_checked": false,
+    "new_prefill_tps": null,
+    "new_ttft_seconds": null,
+    "new_decode_tps": null,
+    "limits": "Startup admission failed before functional/throughput/near-window testing. Loading minima are not exact loaded-startup snapshots. No new engine speed or context-quality claim."
+  },
+  "intel_desktop": {
+    "rule_vendor": "8086",
+    "rule_device": "a780",
+    "rule_syntax_checked": true,
+    "rule_installed": true,
+    "active_session_changed": false,
+    "requires_new_session": true,
+    "global_compute_environment_changed": false,
+    "no_gpu_driver_unloaded": true,
+    "udev_tag_verified": true
+  },
+  "sources": [
+    "https://github.com/Niko1221/Strata/releases/tag/v0.2.1",
+    "https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
+    "https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md",
+    "https://lcz.me/topic/2059/7",
+    "https://forum.level1techs.com/t/how-to-get-display-output-on-secondary-gpu-non-primary/193307/2"
+  ]
+}

@@ -225,6 +225,38 @@ backend, and the gateway requires an explicit model ID in each generation reques
 Older Strata defaults in historical notes/private network metadata are not active
 catalog entries and must not be copied into a client configuration.
 
+## Strata Linux app update and pending Intel desktop — October 20
+
+**Installed:** `/opt/appimages/Strata-0.2.1-linux-amd-rx7900.AppImage`,
+existing Strata App menu/icon and packaged HIPengine0.1.46 (`a7bdbfdabc9a+rocm`).
+Official SHA256/engine manifest and all12 packaged self-tests pass without a model
+load. SharedNVMe weights, app model settings and managed `llm-strata` name remain.
+Standalone legacy inference settings remain inactive/unbenchmarked.
+
+**Managed source candidate:** engine0.1.46.1/source
+`9ae93f7b1fe989d04a8e404d32cddaeeff10505f` compiles for gfx1100 with isolated
+ROCm7.2.3 and passes small device tests. It is **not promoted**: its original
+Q3/13.5GiB/256K/INT8-KV/MTP3/both-GPU profile fails actual6GiB/card startup
+headroom. The owned candidate is stopped, swap/spill zero. No fresh throughput,
+tools/streaming or near-window result exists for this build. Production still
+uses0.1.45/477ac13c, original7/8GiB reserve targets, measured dated speeds and
+unchanged model ID `qwen3.8-flash-next-iq3_xxs`. Do not label old measurements as
+0.1.46.1 results. Existing continuous watchdog and no-swap policy stay enabled.
+
+**Desktop:** monitor is connected to IntelUHD770 DP (`i915`), but GNOME50.1 picks
+AMD BootVGA for rendering; desktop load sampled23–25%/about1.37GiB AMD VRAM.
+The reviewed `hardware/61-local-llm-intel-primary.rules` matches8086:a780.
+Administrator authentication succeeded; the rule is installed under
+`/etc/udev/rules.d/` and the Intel udev tag is verified. A new desktop session
+and journal/VRAM checks are still required. No automatic
+logout or GPU-driver change is made. Global DRI/Vulkan/HIP device selection is
+untouched; inference continues to require both AMD cards. Retest all original
+Strata admission/functional/~8K/near256K/history gates after the new Intel session
+before activating the development engine. Windows display/engine setup is separate.
+
+[Exact versions, source citations and limits](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md) ·
+[Curated evidence](../hardware/results/strata-linux-update-2026-10-20.json).
+
 ## Start, stop and switch
 
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
@@ -701,7 +733,7 @@ it reports every PCI path so internal GPU x16 links are not mistaken for slot
 bandwidth. A successful inventory is not an inference or P2P validation.
 
 The separate Strata GUI is restored to
-`/opt/appimages/Strata-0.2.0-beta-linux-amd-rx7900.AppImage`; its menu
+`/opt/appimages/Strata-0.2.1-linux-amd-rx7900.AppImage`; its menu
 entry points to the actual file. It was not launched and has its own worker and
 settings. Keep the managed Strata Q3 launcher separate. [Menu details](../launchers/STRATA-APP.md).
 

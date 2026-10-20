@@ -192,3 +192,18 @@ is private (`*.shared-settings.json` ignored). See
 ## GLM quant selection — October 20
 
 The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-loss gate for EACH code/prose decode and native-prefill six-trial median. Current selection is Maya-S,32K, same both-GPU/RAM40/MTP/reserves. Preserve DeepSeek unchanged. See `linux/hardware/MAYA-S-VS-S24-2026-10-20.md` and its numeric record; initial Maya three-trial speeds remain historical.
+
+## Strata Linux app / Intel desktop follow-up — October 20
+
+Linux App0.2.1 and packaged RX7900 HIPengine0.1.46 are installed; twelve packaged
+self-tests and asset/engine manifest checks pass without loading a standalone
+model. The standalone inference preset remains inactive. Managed development
+source9ae93f7b/engine0.1.46.1 builds, but is NOT promoted because actual6GiB/card
+startup headroom failed on the unchanged Q3/13.5GiB/256K profile. Production
+477ac13c/0.1.45 and all profile fields remain. No new speed or near-window proof
+is available. User now requests Intel iGPU desktop rendering: scanout is already
+Intel, but GNOME selects AMD BootVGA. A reviewed preferred-primary udev rule is
+installed and its udev tag verified; new-session verification is pending. Do not restart the session without the user’s request, lower guards or change
+global compute-device variables.
+Retest after the Intel desktop is active before promoting the new managed engine.
+See `linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md` and its numeric record.

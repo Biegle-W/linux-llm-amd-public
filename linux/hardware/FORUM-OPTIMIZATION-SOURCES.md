@@ -526,3 +526,25 @@ Maya-M is absent from the checked publisher revision.
 ## Locally measured GLM S/S24 follow-up — October 20
 
 [Matched comparison](MAYA-S-VS-S24-2026-10-20.md) and [numeric evidence](results/maya-s-vs-s24-2026-10-20.json): Maya-S passed the declared speed, functional/memory and normal-launcher checks; it is now selected. Same hardware/build/32K/guards, ABBA with six trials per workload. Candidate selection is based on local data, not the differently sampled [lcz.me2195/3](https://lcz.me/topic/2195/3) NVIDIA report or [Level1Techs258001](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001) hardware-planning thread. Their original applicability limits remain above.
+
+## October 20 — Strata app update and Intel desktop rendering
+
+Reviewed the [official0.2.1 release](https://github.com/Niko1221/Strata/releases/tag/v0.2.1)
+and [development source9ae93f7b](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f).
+App0.2.1 bundles HIP0.1.46;0.2.1.1 is a Windows Terminal fix. The local
+development HIP0.1.46.1 candidate is built, not promoted: actual6GiB/card startup
+admission failed. No new engine speed, new default tuning or larger context is
+claimed. [Local evidence and pending desktop change](STRATA-LINUX-UPDATE-2026-10-20.md).
+
+- [lcz.me2059/7](https://lcz.me/topic/2059/7), reviewed October20: different X99
+  single7900XTX/Strata setup with a separate R7 display card; desktop/browser
+  VRAM contention motivates separating rendering. Its reported saving/speed is
+  not a local measurement or proof of this GNOME fix.
+- [Level1Techs193307/2](https://forum.level1techs.com/t/how-to-get-display-output-on-secondary-gpu-non-primary/193307/2),
+  DS_DV, January23,2023: links the preferred-primary Mutter rule on a different
+  APU/VFIO setup; no current dual7900XTX inference benchmark.
+- Implementation: [GNOME Mutter multi-GPU documentation](https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md).
+  Local monitor already scans out on IntelUHD770, while GNOME50.1 logs AMD BootVGA
+  rendering. The reviewed8086:a780 rule is installed/tag-verified and needs a new
+  session; no global compute environment, AMD driver or inference-device selection
+  is changed. Real post-login VRAM savings are unmeasured.

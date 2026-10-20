@@ -111,13 +111,13 @@
       "file": "strata-app.png",
       "repository": "Niko1221/Strata",
       "source_url": "https://github.com/Niko1221/Strata#option-a-the-strata-app",
-      "distribution": "Strata-0.2.0-beta-linux-amd-rx7900.AppImage",
+      "distribution": "Strata-0.2.1-linux-amd-rx7900.AppImage",
       "upstream_path": "usr/share/icons/hicolor/512x512/apps/strata-desktop.png",
       "sha256": "3b26050bea645356aa3fad98cc4f42dc35ac09ffbc57b9485639fc031b6b97b1",
       "bytes": 9537,
       "repository_license": "MIT",
       "license_file": "licenses/strata.LICENSE",
-      "extraction": "Official 512x512 PNG extracted unchanged from the existing AMD AppImage using unsquashfs; application was not started.",
+      "extraction": "Official 512x512 PNG extracted unchanged from the checksum-verified RX7900 AppImage; byte-identical to the retained icon. App packaged self-test passed without a model load.",
       "official_upstream_verified": true
     },
     {
