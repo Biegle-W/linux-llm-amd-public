@@ -510,3 +510,14 @@ External reports and locally reviewed implementation are separate from validatio
 - [Level1Techs Crucible discussion](https://forum.level1techs.com/t/crucible-llm-bench-your-llm-and-server-is-it-fast-enough-for-everyone/257531), MadGoat, October 1 with October 12 release details: measure actual token counts, retrieval at different depths and per-request TTFT/decode separately. This is methodology, not a matching gfx1100 configuration or a reason to copy another system's rate. Existing local probes already count tokens and place markers near the beginning/middle/end; no new benchmark package is installed.
 
 Primary implementation references: [pinned SGLang runner](https://github.com/StevenChenSE/sglang/blob/f84475ccf593087df3d1da13c9e675eadee12352/python/sglang/srt/model_executor/model_runner.py), [SGLang HiCache documentation](https://docs.sglang.io/docs/advanced_features/hicache), and [vLLM quantized-KV documentation](https://docs.vllm.ai/en/latest/features/quantization/quantized_kvcache/). The installed Triton attention backend lists `int8_per_token_head`; the local pinned wheel/source and existing Radeon tile fixes remain unchanged. Higher configured context alone is not validation; retain a GPU-resident dense target, both cards, speculation settings and measured headroom.
+
+## Maya higher-quality quant assessment — October 20
+
+[Assessment, precision recipes and proposed A/B criteria](MAYA-QUANT-OPTIONS-2026-10-20.md):
+research only; no new benchmark, download or production change. GLM Maya-S is the
+smallest candidate; M/L increase fidelity and cache/streaming demands. DeepSeek
+Maya-M is absent from the checked publisher revision.
+
+- [lcz.me 2195/3](https://lcz.me/topic/2195/3), johnnybegood, October 8: Maya1.0.11, 3950X/128GB,3080-20GB+3090-24GB,65K,S24/S/M; differing sampling prevents a matched speed/quality comparison or a dual-gfx1100 prediction.
+- [Level1Techs 258001](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001), rqzer0,October8: memory planning only; no matched Maya higher-quant/two-XTX/64GB measurement found.
+- [Publisher GLM recipes/metrics](https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF), [pinned S24 comparison](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/bench/results/MAYA-S24.md), [DeepSeek file listing](https://huggingface.co/api/models/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF) at276e0bad: quant metadata/availability, not local speed claims.

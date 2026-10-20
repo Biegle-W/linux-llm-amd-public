@@ -726,3 +726,7 @@ cover the selected SGLang/vLLM160K profiles, Strata Q3 and both Maya models.
 JSON/tools/SSE, both GPUs, zero owned swap/spill, original UI assets and blocked
 runtime writes passed. Browser-open dispatch is logged; desktop browser rendering
 was not automated. Network checks are host self-access, not a remote client.
+
+Maya quant research: [candidate assessment](../hardware/MAYA-QUANT-OPTIONS-2026-10-20.md).
+Current S24/DeepSeek-S32K profiles remain unchanged; no higher-quant speed test
+or download was performed. Preserve the existing source/format and memory guards.
