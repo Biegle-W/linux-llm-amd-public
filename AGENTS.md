@@ -40,7 +40,7 @@ The 20 GiB candidate is not selected and remains inactive. Do not regenerate the
 obsolete 32K/128K Strata presets or remove IQ3 on the basis of superseded plans.
 
 llama.cpp 4c3c5810 and vLLM 0.32.1rc1.dev36+ge68efc685.rocm72 are promoted after
-validation. SGLang f84475cc and Strata 477ac13c are retained. Current results preserve
+validation. SGLang f84475cc is retained; Strata9ae93f7b/0.1.46.1 is now promoted after all5GiB-startup candidate and normal gates. Current results preserve
 candidate-source timings versus production rebuild functional proofs; no speedup
 is claimed for these performance-neutral updates. See
 `linux/hardware/CPU-RAM-PROFILES-2026-10-20.md`. Earlier i5/32 GB and NVIDIA results
@@ -195,18 +195,22 @@ The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-lo
 
 ## Strata Linux app / Intel desktop follow-up — October 20
 
-App0.2.1 and packaged HIP0.1.46 are installed and pass12 packaged checks.
-IntelUHD770/i915 is verified as GNOME primary after the user's logout/login.
-Managed candidate9ae93f7b/0.1.46.1 reached loaded health but failed the former
-actual6GiB/card startup rule twice (exact5.388/6.269GiB free). Production remains
-477ac13c/0.1.45 until candidate functional/performance/context and normal proof pass.
+App0.2.1/bundled HIP0.1.46 is installed and passes12 packaged checks. Its legacy
+standalone inference preset stays inactive. IntelUHD770/i915 is verified as GNOME
+primary. Managed Strata **9ae93f7b/0.1.46.1 is promoted** after all candidate and
+normal actualDesktop/Ptyxis/nativeUI/authenticatedgateway checks. Deployed engine
+SHA is c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478.
+Source477ac13c/0.1.45/binaries remain inactive verified rollback.
 
-The user's newer explicit instruction **reduces actual loaded startup admission
-to5GiB/card for Strata**, superseding the old6GiB startup threshold. The engine's
-7/8GiB reserve targets, continuous3GiB floor/hard1.5GiB emergency stop,52Gworker,
-noswap/telemetry protections,dualGPU,Q3/13.5GiB/256K profile remain. Maya's6GiB
-actual startup requirement is unchanged. Both candidate and production must use
-the common Strata startup check; a lower threshold alone is not validation.
-Do not change global compute-device variables or restart the session without an
-explicit user request. See `linux/hardware/STRATA-STARTUP5-2026-10-20.md` and
-`linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md`.
+The user explicitly reduced actual loaded startup admission to**5GiB/card**.
+Keep engine7/8GiB targets, continuous3GiB floor/hard1.5GiB stop,52G/no-swap scope,
+telemetry/latching,dualGPU,Q3/13.5GiB/256K/INT8KV32K residency,MTP3,sixworkers.
+Maya's6GiB actual startup rule is unchanged. Startup helper is common to candidate
+and production. New three-trial medians: code75.28/prose50.31/nativePP912.2,
+fresh8K TTFT9.015s. Near257984-input/256-output retrieval/code and258266-input
+full-history follow-up with258239 cached passed; zero owned swap/spill. These are
+new-build results, not a matched A/B speedup claim. The actual Desktop entry now
+explicitly uses installed Ptyxis; PATH name llm-strata is unchanged. Native frontend
+remains automatic after readiness, DSH separate. Do not alter global compute-device
+variables or restart the session without the user. See `linux/hardware/STRATA-STARTUP5-2026-10-20.md`
+and its numeric record; former6GiB failures stay historical in `linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md`.

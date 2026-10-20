@@ -81,6 +81,16 @@
     "STRATA_SPLIT_OVERLAP": "1"
   },
   "minimum_host_ram_gib": 60,
-  "validation_status": "passed: i9/64 GB, corrected shared-NVMe expert pack, both 13.5 GiB CPU pools, 257984-input near-window retrieval/code and cached full-history follow-up; normal launcher proof recorded separately",
-  "worker_swap_max_bytes": 0
+  "validation_status": "passed: engine0.1.46.1/source9ae93f7b, actual5GiB/card startup, i9/64GB, dualAMD six-worker13.5GiB pool,257984-input/256-output retrieval+code and258266-history follow-up, normal actualDesktop/Ptyxis/nativeUI/authenticatedgateway; zero swap/spill",
+  "worker_swap_max_bytes": 0,
+  "runtime_validation": {
+    "status": "validated_reference_requires_local_validation",
+    "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
+    "version": "0.1.46.1",
+    "binary_sha256": "c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478",
+    "actual_startup_minimum_gib": 5,
+    "evidence": "linux/hardware/results/strata-startup5-2026-10-20.json",
+    "normal_integration_status": "passed",
+    "validated_utc": "2026-10-20T18:18:51.059915+00:00"
+  }
 }

@@ -1,5 +1,9 @@
 # i9 / 64 GB validation — October 20, 2026
 
+> Subsequent Strata update: this report retains its original0.1.45 two-pool
+> measurements. Active0.1.46.1/9ae93f7b and the5GiB startup rollout have fresh
+> results in [the later report](STRATA-STARTUP5-2026-10-20.md).
+
 > Subsequent October 20 retirement: Muse Q4 and Super Q4 are removed. This dated
 > validation keeps its original tested catalog and measurements; use the
 > [current report](CURRENT-AMD-BENCHMARKS.md) for active profiles.

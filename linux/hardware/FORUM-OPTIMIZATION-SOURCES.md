@@ -556,3 +556,13 @@ admission (exact loaded5.388/6.269GiB free). This is a local memory-admission
 result, not confirmation of any forum speed claim. The forum/source links above
 remain the implementation trail. [Retest evidence](results/strata-linux-update-2026-10-20.json)
 and [limits](STRATA-LINUX-UPDATE-2026-10-20.md).
+
+Later local validation, October20: the user authorized5GiB actual startup
+admission. Strata9ae93f7b/0.1.46.1 passed all guards, functional/near256K/history
+and normalDesktop/UI/API checks and is promoted. Fresh three-trial medians are
+nativePP912.2, fresh8K TTFT9.015s, code/prose75.28/50.31t/s. This is a local
+rollout result, not a matched A/B or confirmation of forum rates. The existing
+[lcz.me display topic2059/7](https://lcz.me/topic/2059/7),
+[Level1Techs preferred-primary post193307/2](https://forum.level1techs.com/t/how-to-get-display-output-on-secondary-gpu-non-primary/193307/2)
+and [reviewed upstream9ae source](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f)
+remain the trail. [Local method and limits](STRATA-STARTUP5-2026-10-20.md).

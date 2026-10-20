@@ -1,12 +1,11 @@
 # Strata Linux app, engine candidate and Intel desktop — October 20
 
-The official **Strata App 0.2.1** RX7900 AppImage and its bundled **HIP engine
-0.1.46** are installed. The managed DSH backend still runs **0.1.45 / 477ac13c**:
-the latest development engine built successfully, but failed the former
-6 GiB/card startup admission even after Intel desktop rendering was verified.
-The user now selects5GiB/card; live validation of that policy is pending. No
-model, context or expert-budget change is promoted.
-[Numeric evidence](results/strata-linux-update-2026-10-20.json).
+The official Strata App0.2.1/bundled HIP0.1.46 remains installed. Managed
+**0.1.46.1 /9ae93f7b is now promoted** after the user's5GiB/card startup change
+and all candidate/normal gates. [Current rollout and results](STRATA-STARTUP5-2026-10-20.md).
+This report preserves the earlier app/display work and **former6GiB admission
+failures**. Its failure snapshots and old0.1.45 attribution are historical.
+[Original numeric evidence](results/strata-linux-update-2026-10-20.json).
 
 ## Installed app
 
@@ -28,7 +27,7 @@ The [release notes](https://github.com/Niko1221/Strata/releases/tag/v0.2.1) expl
 that **0.2.1.1 fixes Windows Terminal packaging**, with no replacement Linux app
 or packaged engine. Do not label these Linux components 0.2.1.1.
 
-## Managed development engine: built, not activated
+## Earlier managed development attempt under6GiB admission
 
 Source is pinned to
 [`9ae93f7b1fe989d04a8e404d32cddaeeff10505f`](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f),
@@ -53,11 +52,11 @@ The guard stopped only the owned worker. A prior attempt had refused even to
 load because desktop graphics activity exceeded the benchmark's idle threshold.
 Neither event is an inference benchmark or proof of an engine crash.
 
-Functional tools/streaming, fresh short/~8K speed samples, near-256K retrieval and
-full-history follow-up are **not completed on this candidate**. Consequently it is
-not promoted and has no new PP/TTFT/decode numbers. The README's Strata speeds
-remain the dated **0.1.45** measurements; they are not attributed to the app or
-new engine. All production profile fields remain unchanged.
+That former6GiB attempt stopped before functional generation, fresh timing or
+near256K/history checks. It supplied no throughput numbers and did not promote
+the candidate. The README then retained the dated0.1.45 measurements. The later
+5GiB rollout passed separately and now supplies the current rates; see the linked
+current report above. Original profile inference settings were preserved.
 
 ## Intel desktop preference
 
@@ -101,13 +100,12 @@ launcher and profile hashes are unchanged. The first start used the existing
 isolated scratch routing configuration; the confirmation used a fresh scratch
 configuration with identical inference settings and an explicit loaded snapshot.
 
-Under the former6GiB admission rule, Intel rendering did **not** make the
-candidate eligible for promotion. Functional generation, PP/TTFT/decode, near-256K retrieval and
-history checks remain unrun on this build because admission failed first. Keep
-production 0.1.45; no speed or context-quality claim is made for 0.1.46.1.
-At that stage no guard or reserve was lowered. The user subsequently requested
-a5GiB actual startup floor; this superseding change and its live-validation status
-are tracked in [the startup-policy report](STRATA-STARTUP5-2026-10-20.md).
+Under the former6GiB admission rule, Intel rendering did not make those starts
+eligible for promotion. They stopped before generation/throughput/context checks
+and retained0.1.45. No guard or reserve was lowered during those starts. The user
+subsequently selected5GiB actual startup admission; that rollout is now validated
+and promoted in [the current report](STRATA-STARTUP5-2026-10-20.md). These earlier
+failure records are retained rather than relabeled as passed trials.
 
 Forum context, not a local speed claim:
 [lcz.me topic 2059/7](https://lcz.me/topic/2059/7) describes separating the display

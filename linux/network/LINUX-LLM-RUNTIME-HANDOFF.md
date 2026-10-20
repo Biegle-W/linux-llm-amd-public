@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 Updated **October 20, 2026**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang/Strata pins remain.
+64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang stays pinned; Strata9ae93f7b/0.1.46.1 is promoted after full5GiB-startup validation.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
@@ -233,44 +233,43 @@ Official SHA256/engine manifest and all12 packaged self-tests pass without a mod
 load. SharedNVMe weights, app model settings and managed `llm-strata` name remain.
 Standalone legacy inference settings remain inactive/unbenchmarked.
 
-**Managed source candidate:** engine0.1.46.1/source
-`9ae93f7b1fe989d04a8e404d32cddaeeff10505f` compiles for gfx1100 with isolated
-ROCm7.2.3 and passes small device tests. It is **not promoted**: its original
-Q3/13.5GiB/256K/INT8-KV/MTP3/both-GPU profile fails actual6GiB/card startup
-headroom. The owned candidate is stopped, swap/spill zero. No fresh throughput,
-tools/streaming or near-window result exists for this build. Production still
-uses0.1.45/477ac13c, original7/8GiB reserve targets, measured dated speeds and
-unchanged model ID `qwen3.8-flash-next-iq3_xxs`. Do not label old measurements as
-0.1.46.1 results. Existing continuous watchdog and no-swap policy stay enabled.
+**Managed active engine:**0.1.46.1/source
+`9ae93f7b1fe989d04a8e404d32cddaeeff10505f`, HIP/gfx1100 with isolatedROCm7.2.3.
+The exact measured/deployed engine SHA256 is
+`c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478`.
+Source477ac13c/0.1.45 and verified binaries remain inactive rollback.
 
-**Desktop verified after logout/login:** the new GNOME50.1 session at12:50:40
-explicitly selects IntelUHD770/i915 `/dev/dri/card0` as primary given the installed
-udev rule. Both AMD cards are idle at0% and about27MiB used in ten samples.
-This verifies GNOME; individual apps may still choose AMD. No global compute
-variables, drivers or inference-device selection changed.
+**Desktop and admission:** GNOME's post-login journal verifies IntelUHD770/i915
+primary. User-selected actual loaded startup admission is**5GiB/card**, replacing
+the former6GiB gate. Engine7/8GiB reserve targets,continuous3GiB floor/hard1.5GiB
+stop,latched telemetry/owned-memory protection and52G/no-swap worker remain.
+Maya's6GiB startup rule and other engines are unchanged. Both RX7900XTX participate;
+no global compute-device variables or drivers changed. Startup free was
+5.356/6.268GiB for the candidate,5.354/6.268GiB for normal API proof and
+5.356/6.268GiB for actual Desktop-entry proof. Zero owned swap/spill throughout.
 
-**Post-login retest:** both device self-tests pass and two finite candidate starts
-reach loaded health with the unchanged profile. Actual>=6GiB/card admission
-still fails: the confirmation exact loaded free VRAM is5,785,194,496bytes
-(5.388GiB) onGPU0 and6,730,600,448bytes (6.269GiB) onGPU1. Host available RAM
-is35.90GiB; owned swap/spill remain zero. Only the owned candidate stops, and
-both cards return to about27MiB used. Production hashes/profile remain unchanged.
-Functional generation, ~8K throughput and near256K/history tests are unrun because
-startup admission failed first. Keep0.1.45; candidate memory accounting/reserve
-sizing needs investigation before repeating those gates. Never lower guards to
-promote it. Windows display/engine setup is separate.
+**Validation/results:** all candidate functional/tools/SSE/near32K checks,three
+short/fresh8K trials and near-window/history gates pass. NativePP median912.2t/s,
+fresh8K TTFT9.015s,code/prose decode75.28/50.31t/s (short TTFT0.229/0.233s).
+Fresh marker inputs8185–8188/output20–22; short inputs29/25 and256 outputs.
+Actual257984-input/256-output retrieval/code and258266-input/22-output full-history
+follow-up (258239 cached) pass all markers. Configured262144 capacity is separate
+from tested input. Old0.1.45/NVIDIA/SATA records keep their builds/methods; no
+matched upstream A/B or speedup is claimed from threshold/rendering changes.
 
-**Current user-selected startup policy:** actual loaded free VRAM must now be
->=5GiB on each card, replacing the former6GiB admission described above.
-The engine's7/8GiB reserve targets, continuous3GiB watchdog,52G/no-swap worker,
-Q3/13.5GiB/256K/MTP3/both-GPU settings remain. Production router and isolated
-candidate share the new startup check. Live validation awaits a clean GPU-lock
-handoff; production engine stays0.1.45 until all candidate and normal gates pass.
-Maya and all other engines' admission rules are unchanged.
-[Startup policy and live status](../hardware/STRATA-STARTUP5-2026-10-20.md).
+**Normal launch:** visible Ptyxis,exact native Chat/Monitor assets and blocked
+runtime/context/self-update writes pass. Authenticated host-self loopback/LAN/
+Tailscale JSON/tool-roundtrip/SSE pass; no external remote peer was tested.
+The actual Desktop StrataQ3 file now explicitly starts installed Ptyxis because
+GIO Terminal=true did not dispatch here; the corrected actualfile was launched
+with gio and passed readiness/arithmetic. PATH llm-strata is unchanged. Strata
+opens its native frontend after readiness,DSH stays separate. No duplicate engine
+or weights were started. Owned test workers were stopped before GPU handoff.
+Windows keeps separate engine/display configuration; shared weights stay intact.
 
-[Exact versions, source citations and limits](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md) ·
-[Curated evidence](../hardware/results/strata-linux-update-2026-10-20.json).
+[Current rollout and limits](../hardware/STRATA-STARTUP5-2026-10-20.md) ·
+[All fresh trials](../hardware/results/strata-startup5-2026-10-20.json) ·
+[Historical app/display and former6GiB failures](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md).
 
 ## Start, stop and switch
 
@@ -495,7 +494,7 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 | SGLang gfx1100 fork |`f84475ccf593087df3d1da13c9e675eadee12352`, local repairs|
 | vLLM |`0.32.1rc1.dev36+ge68efc685.rocm72`, local repairs|
 | ROCm SDK /PyTorch /RCCL |7.2.3 /`2.13.0+git733fca1` /no-hostcall 2.27.7|
-| Strata HIP |0.1.45 /`477ac13cbe8e582c20484871ce459d20d82df09d`|
+| Strata HIP |0.1.46.1 /`9ae93f7b1fe989d04a8e404d32cddaeeff10505f`|
 | Maya HIP | `1.1.17 / 8d9a9b5d705049a87da853717cdc59440252de30`; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
 
 llama.cpp 4c3c5810 and vLLM dev36 passed their fixed promotion criteria; throughput
@@ -571,10 +570,10 @@ native INT8 pipeline. The seven real model files remain on Shared SATA.
 
 ## Strata and retired setups
 
-Current managed Strata Q3 `qwen3.8-flash-next-iq3_xxs`: HIP 0.1.45/source 477ac13c,
+Current managed Strata Q3 `qwen3.8-flash-next-iq3_xxs`: HIP0.1.46.1/source9ae93f7b,
 both RX 7900 XTX, native 262,144 total context, INT8 KV with 32K GPU residency/full host
 backing, split 26/overlap, MTP3/minimum probability 0.7, prefill 2048,**6 workers /
-all CPUs, 13.5 GiB expert budget**,7/8 GiB startup reserves. Parking/adaptation stay
+all CPUs, 13.5 GiB expert budget**,7/8GiB engine reserve targets,5GiB actual startup minimum. Parking/adaptation stay
 off; no RoPE extension. Physical-RAM admission now requires 60 GiB for this validated
 64 GB setup, plus the streamed-KV/expert/desktop available-RAM budget. Increasing
 expert budget to 20 GiB is not selected; the separate candidate remains inactive.
@@ -583,10 +582,10 @@ The corrected shared-NVMe pack passed both pool comparisons, tools/results, JSON
 and **257,984 actual input / 256 output**, then cached full-history
 follow-up. All markers found; owned swap/spill were zero. Allocated native 256K and
 actual tested input are separate facts. Old SATA-pack results retain their old
-asset attribution. [Current tests and exact timings](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
+asset attribution. [Original pool comparison](../hardware/CPU-RAM-PROFILES-2026-10-20.md) and [current tests/timings](../hardware/STRATA-STARTUP5-2026-10-20.md).
 
-`llm-strata` /Desktop Strata Q3 start only the backend in a visible terminal.
-DSH is separate. Router30020 and worker30021 are loopback; the existing authenticated
+`llm-strata` /Desktop Strata Q3 start the backend in a visible terminal and open
+its native Chat/Monitor after readiness. DSH is separate. Router30020 and worker30021 are loopback; the existing authenticated
 LAN/Tailscale gateway exports the model. The continuous0.5s watchdog and latched
 failure remain: below 3 GiB per card twice or1.5 GiB once unloads only its worker;
 RAM, owned swap/spill and missing telemetry are also checked. Explicit reload or

@@ -2,8 +2,8 @@
 Type=Application
 Name=Strata Q3
 Comment=Strata Q3 backend with native Chat and Monitor; live terminal logs
-Exec=/opt/local-llm/dsh/start-strata-q3
+Exec=/usr/bin/ptyxis --new-window --title="Strata Q3" --working-directory=/opt/local-llm/dsh/workspace -- /opt/local-llm/dsh/start-strata-q3
 Path=/opt/local-llm/dsh/workspace
-Terminal=true
+Terminal=false
 Icon=/opt/local-llm/launchers/icons/strata.svg
 Categories=Development;

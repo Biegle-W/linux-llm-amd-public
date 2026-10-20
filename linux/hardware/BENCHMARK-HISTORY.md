@@ -1,12 +1,17 @@
 # LLM benchmark and context history
 
-## October 20 — User-selected Strata 5 GiB startup floor
+## October 20 — Strata0.1.46.1 promoted with5GiB startup admission
 
-The user explicitly replaces actual6GiB/card startup admission with5GiB/card.
-Engine7/8GiB reserve targets,continuous3GiB floor,52G/noswap,Q3/13.5GiB/256K
-and both GPUs remain. Twenty-one CPU guard/readiness tests pass; live candidate
-validation is pending GPU handoff. No new throughput/context claim.
-[Policy and validation status](STRATA-STARTUP5-2026-10-20.md).
+Exact tested9ae93f7b/c6706bc engine is deployed after candidate and normal
+Desktop/Ptyxis/nativeUI/authenticatedgateway gates. Q3/13.5GiB/sixworkers/256K,
+INT8KV32K residency/MTP3/layer26/bothAMD remain. User-authorized actual startup
+minimum5GiB; engine7/8GiBtargets,continuous3GiB,52G/noswap remain. New three-trial
+code/prose decode75.28/50.31t/s, nativePP912.2t/s, fresh8K TTFT9.015s; input8185–8188,
+output20–22 for fresh markers, short29/25-input and256-output. Near257984/256 and
+full-history258266/22 (cached258239) markers pass; zero swap/spill. No matched A/B
+speedup claim; old0.1.45/NVIDIA/SATA rates retain their original attribution.
+[Full method/results](STRATA-STARTUP5-2026-10-20.md) and
+[all numeric trials](results/strata-startup5-2026-10-20.json).
 
 ## October 20 — Strata Linux app update; managed candidate blocked
 

@@ -69,3 +69,9 @@ The [official release notes](https://github.com/Niko1221/Strata/releases/tag/v0.
 explain that **0.2.1.1 is a Windows Terminal packaging fix**; it does not
 replace the Linux app or packaged engine. The official PNG icon is byte-identical
 to the previous package and remains installed under `strata-desktop`.
+
+Managed Strata Q3 now uses an explicit installed Ptyxis command in its separate
+Desktop entry, preserving a visible terminal on this GNOME desktop. The actual
+entry was dispatched with gio and validated. PATH command llm-strata remains
+headless/SSH-compatible; the AppImage entry above is unchanged.
+[Managed engine validation](../hardware/STRATA-STARTUP5-2026-10-20.md).

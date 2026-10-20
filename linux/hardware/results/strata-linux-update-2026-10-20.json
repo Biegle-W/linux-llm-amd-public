@@ -235,8 +235,12 @@
     "date": "2026-10-20",
     "actual_loaded_minimum_gib_per_card": 5,
     "user_authorized": true,
-    "live_validation_pending": true,
+    "live_validation_pending": false,
     "record": "strata-startup5-2026-10-20.json",
-    "limits": "Original records above used6GiB and remain unchanged historical failures; production engine not promoted."
-  }
+    "limits": "Original6GiB failures are historical; active5GiB rollout passed all gates in the linked new record.",
+    "promoted": true,
+    "version": "0.1.46.1",
+    "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f"
+  },
+  "record_scope": "Original app/display installation and former6GiB admission trials; active rollout is recorded separately."
 }

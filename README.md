@@ -42,18 +42,17 @@ One managed model runs at a time.
 
 ## Strata Linux app update and verified Intel desktop — October 20
 
-Strata App0.2.1 and bundled AMD engine0.1.46 are installed; twelve packaged
-checks pass. Managed engine0.1.46.1 (`9ae93f7b`) is built but not yet promoted.
-The former6GiB/card loaded-startup gate failed after Intel desktop verification,
-with5.388/6.269GiB free. The user now explicitly selects **5GiB/card startup**;
-engine7/8GiB targets and continuous3GiB protection remain. Both candidate and
-production router use the same check, with a52G/no-swap owned worker scope.
+Managed Strata **0.1.46.1 /9ae93f7b is active** after candidate and normal
+Desktop/native-frontend/authenticated-API validation. The user-selected actual
+startup minimum is5GiB/card; engine7/8GiB targets, continuous3GiB protection,
+52G/no-swap worker, Q3/13.5GiB/256K and both cards remain. Intel UHD770/i915
+renders the desktop. The separate App0.2.1/bundled0.1.46 remains installed.
 
-The new GNOME session uses IntelUHD770/i915 as primary; both AMD cards were idle
-at about27MiB used. Live candidate validation under the new floor awaits the
-other agent's GPU handoff. Current Strata speeds remain the dated0.1.45 results;
-no new speed or near-window claim is made from the threshold change.
-[Update, exact versions and validation limits](linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md).
+Fresh three-trial medians: native prefill**912.2t/s**, fresh8K TTFT**9.015s**,
+code/prose decode**75.28/50.31t/s**. Actual257984-input/256-output retrieval/code
+and258266-input cached full-history follow-up passed. Zero owned swap/spill.
+Earlier0.1.45 rates retain their original build; no matched A/B speedup is claimed.
+[Update, exact versions and validation limits](linux/hardware/STRATA-STARTUP5-2026-10-20.md).
 
 ## AMD: latest setup and results
 
@@ -69,7 +68,7 @@ Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 | llama.cpp HIP/Vulkan | [`4c3c5810`](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f) | Four retained shared-method models plus Super IQ3; source-candidate timings and production-rebuild functional proofs. Retired models stay in dated evidence. |
 | SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | DFlash2 at 160K, actual 160,861-input retrieval; separate MTP profile retired |
 | vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; 160K BF16, actual 160,868-input retrieval and full-history follow-up |
-| Strata HIP | [0.1.45 / `477ac13c`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Corrected expert pack on shared NVMe, both CPU pools and actual near 256K probes |
+| Strata HIP | [0.1.46.1 / `9ae93f7b`](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f) | Exact tested binary, 5 GiB/card startup, six-worker13.5GiB pool, near256K/history and actual Desktop/UI/API proof |
 | Maya HIP | [v1.1.17 / `8d9a9b5d`](https://github.com/mw00/project-maya/commit/8d9a9b5d705049a87da853717cdc59440252de30) | Selected Maya-S v2/DeepSeek-S, 32K, both cards, near-30K probes and normal API/model switching |
 
 The llama.cpp and vLLM updates were performance-neutral within noise; newer
@@ -92,7 +91,7 @@ configured window, not proof of that entire window's quality or speed.
 | Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,185–8,188 | 388.4 | 21.083 | 0.057 / 0.057 | 125.85 / 77.07 |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,185–8,191 | 1314.8 | 6.235 | 0.102 / 0.097 | 178.82 / 63.40 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,187–8,188 | 1413.8 | 5.806 | 0.066 / 0.092 | 130.31 / 68.96 |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,187 | 914.3 | 8.987 | 0.219 / 0.223 | 76.61 / 53.35 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,188 | 912.2 | 9.015 | 0.229 / 0.233 | 75.28 / 50.31 |
 | GLM-5.3-Flash Maya-S | Maya HIP, layer split/MTP | 32,768 | 6,310–6,316 | 487.9 | 13.031 | 0.095 / 0.112 | 16.83 / 14.44 |
 | DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP, layer split/no DSpark | 32,768 | 6,295–6,302 | 185.5 | 33.956 | 0.374 / 0.550 | 6.24 / 6.84 |
 
