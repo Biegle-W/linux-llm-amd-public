@@ -1,0 +1,16 @@
+[Unit]
+Description=Mount local LLM model drives (Shared SATA, shared NVMe) at desktop login
+# Unprompted internal-drive mounts are allowed only while the local desktop
+# session is active, so start with the graphical session, not at boot.
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 /opt/local-llm/dsh/shared_storage.py --all --wait 120
+TimeoutStartSec=300
+NoNewPrivileges=true
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,7 +1,14 @@
-"""Verify and mount configured model volumes before any backend handover."""
+"""Verify and mount configured model volumes before any backend handover.
+
+`python3 dsh/shared_storage.py --all` mounts every configured volume at login
+(network/local-llm-mounts.service); launchers still verify their own volume.
+"""
 from pathlib import Path
+import argparse
 import json
 import subprocess
+import sys
+import time
 
 SHARED = Path('/mnt/shared')
 MODELS = SHARED / 'GGUF-Models'
@@ -9,6 +16,16 @@ UUID = 'CONFIGURE_SHARED_DRIVE_UUID'
 STREAM_SHARED = Path('/mnt/shared-nvme')
 STREAM_MODELS = STREAM_SHARED / 'LLM-Models'
 STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
+# An optional spare exFAT volume holds no model configuration;
+# it is mounted for convenience only and never blocks login or a backend.
+SPARE = Path('/mnt/shared-spare')
+SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'
+# (label, UUID, mount point, required model directory or None, required)
+VOLUMES = (
+    ('Shared SATA', UUID, SHARED, MODELS, True),
+    ('Shared NVMe', STREAM_UUID, STREAM_SHARED, STREAM_MODELS, True),
+    ('Spare SATA', SPARE_UUID, SPARE, None, False),
+)
 
 
 def mounted_uuid(mount=None):
@@ -20,6 +37,22 @@ def mounted_uuid(mount=None):
     if result.returncode not in (0, 1):
         raise RuntimeError('Cannot inspect the model drive mount: ' + result.stderr.strip())
     return result.stdout.strip()
+
+
+def mount_by_uuid(device, mount, expected_uuid):
+    """Mount without prompting; return the last udisksctl message.
+
+    Ubuntu's polkit allows unprompted internal-drive mounts only from the active
+    local desktop session. SSH sessions are refused, so retry through the
+    user's systemd manager, which polkit attributes to that desktop session.
+    """
+    command = ['udisksctl', 'mount', '--block-device', str(device), '--no-user-interaction']
+    result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+    if mounted_uuid(mount) == expected_uuid:
+        return ''
+    result = subprocess.run(['systemd-run', '--user', '--quiet', '--wait', '--pipe', '--collect', *command],
+                            capture_output=True, text=True, timeout=60)
+    return (result.stderr or result.stdout).strip()
 
 
 def ensure_model_drive(mount, models, expected_uuid, label):
@@ -34,14 +67,11 @@ def ensure_model_drive(mount, models, expected_uuid, label):
             raise RuntimeError(f'{label} model drive is unavailable (UUID {expected_uuid}). '
                                'Reconnect it before starting a backend.')
         print(f'{label} model drive is not mounted. Mounting it now...', flush=True)
-        result = subprocess.run(
-            ['udisksctl', 'mount', '--block-device', str(device), '--no-user-interaction'],
-            capture_output=True, text=True, timeout=30,
-        )
+        detail = mount_by_uuid(device, mount, expected_uuid)
         if mounted_uuid(mount) != expected_uuid:
-            detail = (result.stderr or result.stdout).strip()
             raise RuntimeError(f'Cannot mount {label} at {mount}. {detail} '
-                               'Open the configured drive in Files, then retry. '
+                               'Log in to the Linux desktop once (unprompted mounts need an active '
+                               'local session), or open the drive in Files, then retry. '
                                'Do not download replacement weights.')
     if not models.is_dir():
         raise RuntimeError(f'{label} is mounted, but {models} is missing. '
@@ -70,5 +100,39 @@ def ensure_strata_models(config=None):
         raise RuntimeError('Strata pack is outside the configured model volumes; review its storage configuration before starting.')
 
 
+def mount_all(wait=120.0, poll=2.0):
+    """Mount every configured volume at login; return the required ones that failed.
+
+    Devices can appear late after boot, so wait for each UUID up to `wait` seconds.
+    A wrongly mounted or missing required volume is reported, never repaired.
+    """
+    failed = []
+    for label, uuid, mount, models, required in VOLUMES:
+        device = Path('/dev/disk/by-uuid') / uuid
+        deadline = time.monotonic() + (wait if required else min(wait, 10))
+        while not device.exists() and time.monotonic() < deadline:
+            time.sleep(poll)
+        try:
+            if models is not None:
+                ensure_model_drive(mount, models, uuid, label)
+            elif not device.exists():
+                print(f'{label} (UUID {uuid}) is not connected; skipped.', flush=True)
+            elif mounted_uuid(mount) != uuid:
+                detail = mount_by_uuid(device, mount, uuid)
+                print(f'{label} ' + ('mounted: ' + str(mount) if mounted_uuid(mount) == uuid
+                                     else f'could not be mounted. {detail}'), flush=True)
+        except RuntimeError as error:
+            print(error, file=sys.stderr, flush=True)
+            if required:
+                failed.append(label)
+    return failed
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--all', action='store_true', help='Mount every configured volume (login service)')
+    parser.add_argument('--wait', type=float, default=120.0, help='Seconds to wait for late devices')
+    options = parser.parse_args()
+    if options.all:
+        raise SystemExit(1 if mount_all(options.wait) else 0)
     ensure_shared_models()

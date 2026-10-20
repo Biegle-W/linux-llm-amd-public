@@ -219,6 +219,12 @@ and GPU PCI addresses, and configure both `CONFIGURE_SHARED_DRIVE_UUID` and
 `CONFIGURE_SHARED_NVME_UUID` before using the storage helpers. Generate private harness/network settings locally and keep
 credentials outside Git. These hardware-specific examples are not a universal installer.
 
+To mount both model drives at desktop login, install the user service
+[`linux/network/local-llm-mounts.service`](linux/network/local-llm-mounts.service)
+with `systemctl --user enable local-llm-mounts.service`. It uses udisks without sudo.
+Ubuntu allows unprompted mounts only for the active local session, so log in to the
+desktop after a reboot before launching over SSH. Launchers still verify their own drive.
+
 [Maya](linux/maya/README.md) adds `llm-maya`, two 32K DSH profiles and loopback API 30030.
 
 Backend launchers start visible terminals; **dsh** is separate. **Strata Q3** /

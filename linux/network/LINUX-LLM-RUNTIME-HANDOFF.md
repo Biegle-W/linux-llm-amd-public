@@ -38,6 +38,8 @@ by the original consolidation; the subsequent MoE offload update is documented b
 - Shared SATA and the new shared NVMe are exFAT; builds/environments stay Linux ext4.
   This machine is dual-boot: Windows boot stops the Linux service. Model-file sharing
   does not make Linux HIP binaries or absolute paths runnable in Windows.
+  Both model drives mount automatically at Linux desktop login (`local-llm-mounts.service`).
+  After a reboot, log in to the desktop before starting backends, including over SSH.
 
 ## Project Maya: GLM and DeepSeek, both active
 
@@ -414,11 +416,29 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 - Linux-only GPTQ target `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/` and DFlash2
   draft `models/drafts/Qwen3.8-27B-DFlash2-W4A16/` remain on Linux NVMe, shared by
   SGLang/vLLM. Windows cannot use those Linux absolute paths.
-- UUID guards mount the model volume selected by Strata's configured pack BEFORE
-  handover/preflight. Wrong/unavailable volumes are rejected without creating an
-  empty replacement model tree. Space-containing paths use quoted shell argv or
-  Python argument lists. Unmounted-volume behavior was mocked; no reboot validation
-  or disruptive real unmount is implied. Other llama profiles keep their SATA guard.
+- **Automatic mounting.** The user service `local-llm-mounts.service` runs
+  `dsh/shared_storage.py --all` at every desktop login. It mounts, by UUID:
+  - the shared SATA (`/mnt/shared`, `CONFIGURE_SHARED_DRIVE_UUID`)
+  - the shared NVMe (`/mnt/shared-nvme`, `CONFIGURE_SHARED_NVME_UUID`)
+  - an optional spare (`/mnt/shared-spare`)
+
+  It waits up to 120 s for late devices. Replace the UUID placeholders, then install:
+  `cp network/local-llm-mounts.service ~/.config/systemd/user/ && systemctl --user enable local-llm-mounts.service`.
+- No sudo or fstab entry is used. Ubuntu polkit allows unprompted internal-drive
+  mounts only for the active local desktop session, so after a reboot someone must
+  log in to the desktop; before that, SSH alone cannot mount the volumes.
+- Launcher preflight still checks each backend's own volume before handover:
+  - llama.cpp checks the shared SATA.
+  - Strata and Maya check the shared NVMe.
+
+  Wrong or unavailable volumes are rejected without creating an empty replacement
+  tree. A refused direct mount (SSH) is retried through the user's systemd manager.
+- Validated on the reference host:
+  - The login service remounted all unmounted volumes.
+  - Launcher preflight remounted unmounted volumes.
+  - The user-manager retry recovered a refused direct mount.
+
+  A real SSH session and a real reboot were not tested.
 - Builds, SDKs, environments, caches, harness data and private settings remain Linux-specific.
   Weights, binaries, credentials, raw logs and private archives stay excluded from Git.
   SSD speed affects cold loads and actual PLE/expert streaming; resident-model
@@ -612,7 +632,7 @@ profile, launcher or client endpoint changed during this documentation task.
 | HTTP 404 / unknown model | Copy an exact enabled ID from `/v1/models`; do not use Q2, HyperQwen or retired IDs. |
 | HTTP 503 | Start the required backend and inspect its terminal; gateway availability is separate from worker readiness. |
 | Refused / timed out | Check Linux session, address, service, client LAN/Tailscale path and TCP 10000 access. |
-| All Shared GGUF models fail after reboot | Confirm Shared is mounted; open it in Files if the mount helper lacks permission. Do not redownload first. |
+| Models fail after reboot / "Cannot mount" | Log in to the Linux desktop; unprompted mounts need an active local session. Check `systemctl --user status local-llm-mounts.service`, then restart it. Do not redownload. |
 | Context error | Input, history, tools and output together must fit the selected context. |
 | Very slow first request | Inspect loading/JIT/host RAM/swap; prefix caching helps repeated prefixes, not every new prompt. |
 

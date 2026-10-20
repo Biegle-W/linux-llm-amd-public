@@ -32,15 +32,65 @@ class ModelVolumeTests(unittest.TestCase):
             root = Path(directory)
             models = root/'LLM-Models'
             models.mkdir()
-            with patch.object(storage, 'mounted_uuid', side_effect=['', 'EXPECTED']) as inspect, \
+            with patch.object(storage, 'mounted_uuid', side_effect=['', 'EXPECTED', 'EXPECTED']) as inspect, \
                     patch.object(storage.Path, 'exists', return_value=True), \
                     patch.object(storage.subprocess, 'run') as run:
                 storage.ensure_model_drive(root, models, 'EXPECTED', 'Test NVMe')
-            self.assertEqual(inspect.call_args_list, [unittest.mock.call(root), unittest.mock.call(root)])
+            self.assertEqual(inspect.call_args_list, [unittest.mock.call(root)] * 3)
+            self.assertEqual(run.call_count, 1)
             self.assertEqual(run.call_args.args[0],
                              ['udisksctl', 'mount', '--block-device',
                               '/dev/disk/by-uuid/EXPECTED', '--no-user-interaction'])
             self.assertNotIn('shell', run.call_args.kwargs)
+
+    def test_refused_session_mount_retries_through_user_manager(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'models').mkdir()
+            # SSH: the direct mount leaves it unmounted; the user-manager retry mounts it.
+            with patch.object(storage, 'mounted_uuid', side_effect=['', '', 'EXPECTED', 'EXPECTED']), \
+                    patch.object(storage.Path, 'exists', return_value=True), \
+                    patch.object(storage.subprocess, 'run') as run:
+                storage.ensure_model_drive(root, root/'models', 'EXPECTED', 'Test')
+            direct, retry = (call.args[0] for call in run.call_args_list)
+            self.assertEqual(direct[:2], ['udisksctl', 'mount'])
+            self.assertEqual(retry[:2], ['systemd-run', '--user'])
+            self.assertEqual(retry[-len(direct):], direct)
+            self.assertIn('--no-user-interaction', retry)
+
+    def test_failed_mount_explains_session_requirement_without_creating_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(storage, 'mounted_uuid', return_value=''), \
+                    patch.object(storage.Path, 'exists', return_value=True), \
+                    patch.object(storage.subprocess, 'run'), \
+                    self.assertRaisesRegex(RuntimeError, 'active local session'):
+                storage.ensure_model_drive(root, root/'models', 'EXPECTED', 'Test')
+            self.assertFalse((root/'models').exists())
+
+    def test_login_mount_reports_required_failures_and_skips_absent_spare(self):
+        volumes = (('Required', 'REQ', Path('/r'), Path('/r/models'), True),
+                   ('Spare', 'SPARE', Path('/s'), None, False))
+        def ensure(mount, models, uuid, label):
+            raise RuntimeError(label + ' unavailable')
+        with patch.object(storage, 'VOLUMES', volumes), \
+                patch.object(storage.Path, 'exists', return_value=False), \
+                patch.object(storage.time, 'sleep'), \
+                patch.object(storage, 'ensure_model_drive', side_effect=ensure), \
+                patch.object(storage, 'mount_by_uuid') as mount:
+            self.assertEqual(storage.mount_all(wait=0), ['Required'])
+        mount.assert_not_called()
+
+    def test_login_mount_waits_for_a_late_device(self):
+        volumes = (('Required', 'REQ', Path('/r'), Path('/r/models'), True),)
+        appearances = iter([False, False, True])
+        with patch.object(storage, 'VOLUMES', volumes), \
+                patch.object(storage.Path, 'exists', side_effect=lambda: next(appearances, True)), \
+                patch.object(storage.time, 'sleep') as sleep, \
+                patch.object(storage, 'ensure_model_drive') as ensure:
+            self.assertEqual(storage.mount_all(wait=60), [])
+        self.assertEqual(sleep.call_count, 2)
+        ensure.assert_called_once_with(Path('/r'), Path('/r/models'), 'REQ', 'Required')
 
     def test_strata_uses_only_its_configured_volume(self):
         with tempfile.TemporaryDirectory() as directory:
