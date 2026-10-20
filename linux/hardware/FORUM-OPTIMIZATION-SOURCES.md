@@ -566,3 +566,20 @@ rollout result, not a matched A/B or confirmation of forum rates. The existing
 [Level1Techs preferred-primary post193307/2](https://forum.level1techs.com/t/how-to-get-display-output-on-secondary-gpu-non-primary/193307/2)
 and [reviewed upstream9ae source](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f)
 remain the trail. [Local method and limits](STRATA-STARTUP5-2026-10-20.md).
+
+## October20 — DeepInfer compatibility review, no deployment
+
+Reviewed official source774ce244b87cc0eb8d4b94ab9f5de2ab22049f01:
+[platform/model scope](https://github.com/deepseek-ai/DeepInfer/blob/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/README.md),
+[build selector](https://github.com/deepseek-ai/DeepInfer/blob/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/build.sh),
+[device discovery](https://github.com/deepseek-ai/DeepInfer/blob/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/device.py),
+[checkpoint loader guide](https://github.com/deepseek-ai/DeepInfer/blob/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/examples/README.md).
+No ROCm/gfx1100 path is present in the reviewed selection code. No installation,
+model download, engine change or local speed claim follows.
+
+Consulted lcz.me and Level1Techs with exact-name site searches and public front
+pages. No relevant indexed DeepInfer/gfx1100 local result was returned; lcz.me's
+JavaScript-only content limits coverage. No specific forum post is cited as a
+successful local deployment because none was verified. This is not a claim of
+exhaustive forum/fork coverage, and no forum-derived tuning is imported.
+[Assessment, queries, source fingerprints and limits](DEEPINFER-ASSESSMENT-2026-10-20.md).

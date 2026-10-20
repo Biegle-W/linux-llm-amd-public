@@ -54,6 +54,8 @@ and258266-input cached full-history follow-up passed. Zero owned swap/spill.
 Earlier0.1.45 rates retain their original build; no matched A/B speedup is claimed.
 [Update, exact versions and validation limits](linux/hardware/STRATA-STARTUP5-2026-10-20.md).
 
+[DeepInfer compatibility assessment — October20](linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
+
 ## AMD: latest setup and results
 
 **Ten active profiles:** five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.

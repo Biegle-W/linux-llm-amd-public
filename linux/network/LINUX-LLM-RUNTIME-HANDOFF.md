@@ -285,6 +285,16 @@ Windows keeps separate engine/display configuration; shared weights stay intact.
 [All fresh trials](../hardware/results/strata-startup5-2026-10-20.json) ·
 [Historical app/display and former6GiB failures](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md).
 
+## DeepInfer assessment — research only, October20
+
+Upstream774ce244b87cc0eb8d4b94ab9f5de2ab22049f01 documents NVIDIA SM100 and
+Ascend950, and its reviewed build/device selector has no ROCm/gfx1100 backend.
+The examples expect a Hugging Face config/safetensors checkpoint, not the existing
+Maya-S GGUF pack. No DeepInfer installation, weight download, launcher, model
+profile or local benchmark was created. Keep the validated Maya DeepSeek profile;
+current active engines/model IDs and connection settings are unchanged.
+[Assessment and pinned primary sources](../hardware/DEEPINFER-ASSESSMENT-2026-10-20.md).
+
 ## Start, stop and switch
 
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900

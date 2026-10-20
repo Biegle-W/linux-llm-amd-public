@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-20",
+  "kind": "source_and_documentation_review",
+  "status": "unsupported_on_current_hardware_no_install",
+  "reviewed_commit": "774ce244b87cc0eb8d4b94ab9f5de2ab22049f01",
+  "hardware": {
+    "cpu": "i9-13900KS",
+    "installed_ram_gb": 64,
+    "gpu": [
+      "RX7900XTX24GB",
+      "RX7900XTX24GB"
+    ],
+    "architecture": "gfx1100"
+  },
+  "documented_upstream_accelerators": [
+    "NVIDIA SM100",
+    "Huawei Ascend950"
+  ],
+  "accepted_build_accelerators": [
+    "nvidia",
+    "ascend"
+  ],
+  "documented_model": "DeepSeek-V4.1-Flash",
+  "documented_checkpoint_format": "Hugging Face config.json plus safetensors",
+  "rocm_gfx1100_backend_found_in_reviewed_platform_selection": false,
+  "local_runtime_built": false,
+  "local_inference_run": false,
+  "weights_downloaded": false,
+  "existing_runtime_configuration_changed": false,
+  "local_throughput_tps": null,
+  "community_search": {
+    "sites": [
+      "https://lcz.me/",
+      "https://forum.level1techs.com/"
+    ],
+    "queries": [
+      "site:lcz.me \"DeepInfer\"",
+      "site:forum.level1techs.com \"DeepInfer\"",
+      "\"DeepInfer\" \"7900\" ROCm"
+    ],
+    "matching_indexed_local_gfx1100_results_found": false,
+    "limits": "Search-index coverage and public front-page access only; lcz.me requires JavaScript. No claim of exhaustive forum/fork coverage and no forum-derived optimization deployed."
+  },
+  "sources": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/README.md",
+      "sha256": "b55624158ada4dc21b882d24ded06bf82f65350b44d170877b68395712cd670d"
+    },
+    {
+      "path": "build.sh",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/build.sh",
+      "sha256": "840283a6559bf99f38dbb153f168ddd3157a11669f9f10a38d90809a12175c7d"
+    },
+    {
+      "path": "setup.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/setup.py",
+      "sha256": "c9e99ee64a51fe57a97bbf81729be711b403c49e5fbb856f388e3e5dbe696ec4"
+    },
+    {
+      "path": "examples/README.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/examples/README.md",
+      "sha256": "fde052a91323c18565148398b47281a2183cfb008cd3c0d0f24ec25956ae62d9"
+    },
+    {
+      "path": "doc/inference_deployment_qa.md",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/doc/inference_deployment_qa.md",
+      "sha256": "55d428d9958aa35ac863d7f5a2eb21528e683226784b1ac334e8068e21f2326f"
+    },
+    {
+      "path": "deep_cluster/hardware/__init__.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/__init__.py",
+      "sha256": "eb971d3dbf2f545efb51d002f0961cf78c9e51a94c3685cd21d4bb50220966d5"
+    },
+    {
+      "path": "deep_cluster/hardware/ascend.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/ascend.py",
+      "sha256": "f0fb8df71efba56541bb07ed6fb7d75237bd2689be668d861f3b8c4ad032da26"
+    },
+    {
+      "path": "deep_cluster/hardware/cpu.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/cpu.py",
+      "sha256": "592307221827b4116e31ca605bbe19ddb58a976f3033f5fa23d4e69364db8965"
+    },
+    {
+      "path": "deep_cluster/hardware/device.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/device.py",
+      "sha256": "d305c2e5994a5c8a3d59cae22aa3ed8db0941c0279577888d02e188c7cb4b591"
+    },
+    {
+      "path": "deep_cluster/hardware/nvidia.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepInfer/774ce244b87cc0eb8d4b94ab9f5de2ab22049f01/deep_cluster/hardware/nvidia.py",
+      "sha256": "27820f621da5318fc972725b2f3702accfc294b160ce25812edeb427007e4eb3"
+    }
+  ],
+  "conclusion": "Do not replace Maya or install DeepInfer on this hardware on the strength of its current upstream release. An AMD port and suitable checkpoint/offload implementation would need separate validation."
+}
