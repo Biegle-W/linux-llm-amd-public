@@ -43,6 +43,7 @@ def main():
     ap.add_argument('--config', type=Path, required=True)
     ap.add_argument('--port', type=int, default=18195)
     ap.add_argument('--tag', required=True)
+    ap.add_argument('--output-dir', type=Path, default=ROOT/'hardware/generated/maya-setup-2026-10-20')
     ap.add_argument('--startup-free-gib', type=float, default=0, help='Final activation candidates must retain at least 6 GiB whole-card startup headroom')
     a = ap.parse_args()
     assert 1024 <= a.port <= 65535
@@ -57,7 +58,7 @@ def main():
     cfg = json.loads(a.config.read_text())
     check_config(cfg, require_validated=False)
     assert Path(cfg['exe']).resolve() in {(ROOT/'maya/upstream/build-hip/maya').resolve(),(ROOT/'maya/upstream/build-hip/maya-ds4').resolve()}
-    out = ROOT/'hardware/generated/maya-setup-2026-10-20'
+    out = a.output_dir
     out.mkdir(exist_ok=True, parents=True)
     result_path = out/(a.tag+'.server.json')
     assert not result_path.exists(), 'Do not overwrite an experiment'
@@ -118,6 +119,7 @@ def main():
         if result['status']!='guard_failed':result['status']='failed'
         raise
     finally:
+        for sig in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP):signal.signal(sig,signal.SIG_IGN)
         if worker is not None:stop(worker)
         save()
     assert result['status']=='stopped_after_testing'

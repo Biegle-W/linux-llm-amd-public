@@ -51,7 +51,7 @@ versions and the saved DSH default are preserved.
 
 | API model ID | Total context | Selected quant / strategy |
 |---|---:|---|
-| `glm-5.3-flash-maya` | 32,768 | Maya-S24, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
+| `glm-5.3-flash-maya` | 32,768 | Maya-S, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
 | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads, no DSpark |
 
 Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
@@ -86,17 +86,23 @@ physical / 52 GiB available RAM and 16 GiB free on each GPU after handover. Fail
 unloads only the owned worker and requires explicit reload. Never lower these
 limits or use swap as capacity to make a new profile pass.
 
-Both passed fresh 29,989-input retrieval plus cached-history follow-up at 32K.
-Fresh shared-corpus inputs were 6,312–6,313 GLM tokens and 6,295–6,302 DeepSeek tokens.
-Three-trial native PP 525.9/185.5 t/s, external prefill TTFT 12.159/33.956 s;
-short code/prose decode 21.13/16.54 t/s (GLM) and 6.24/6.84 t/s (DeepSeek).
-These measurements use thinking off, temperature 0.6 / top-p 0.95 / seed 42 for short
-prompts; fresh prefill is greedy. Direct API defaults and sampling can differ.
-Allocated context is not proof of general accuracy at every token position.
-[Complete Maya settings/limits](../hardware/MAYA-2026-10-20.md) and
-[all numeric evidence](../hardware/results/maya-dual-amd-2026-10-20.json).
+Current GLM selection is **Maya-S**, 32K. Six timed samples per workload across
+two starts: native PP 487.9 t/s, fresh-input external TTFT 13.031 s,
+short code/prose decode 16.83/14.44 t/s. All four quant/control starts
+passed 29,977-input retrieval/history,JSON/tools/SSE, both GPUs and zero owned
+swap/spill with existing guards. Strict >0.90 ratios apply to EACH code,prose
+and native-prefill median. [Matched GLM result](../hardware/MAYA-S-VS-S24-2026-10-20.md).
 
-All 14 GLM/kernel checks passed on each card. The broader DeepSeek suite still
+DeepSeek remains unchanged: original 29,989-input retrieval/history; native PP 185.5 t/s,
+fresh-input TTFT 33.956 s, short code/prose 6.24/6.84 t/s. Its original three-trial
+measurements and initial GLM S24 evidence remain in the [Maya batch](../hardware/results/maya-dual-amd-2026-10-20.json).
+Current GLM uses the later six-trial [numeric record](../hardware/results/maya-s-vs-s24-2026-10-20.json).
+Thinking is off, short sampling 0.6/top-p0.95/seed42/256-output cap; fresh prefill
+is greedy with actual input counts retained. Allocation is not a full-window
+quality guarantee. No new engine build or other profile change.
+
+Earlier 14 GLM/kernel checks passed on each card with this same binary; this quant
+trial did not rerun that suite. The broader DeepSeek suite still
 fails two mixed Q4_K/IQ4_XS bit-exact tests per card; those types are absent from
 this selected Maya-S target and other types are blocked. This is not a complete
 DS4-suite pass. No tolerance or quality-changing expert skipping was enabled.
@@ -155,7 +161,7 @@ not guarantees of full-window speed or general long-context accuracy.
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 163,840 | GPTQ INT4/group64 | DFlash2, 8 draft tokens; BF16 KV |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
-| Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S24, mixed IQ2/3 experts / Q4_K dense | MTP |
+| Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S v2, mixed IQ2/3 experts / Q6_K attention/shared | MTP |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | DSpark not loaded |
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
@@ -728,5 +734,4 @@ runtime writes passed. Browser-open dispatch is logged; desktop browser renderin
 was not automated. Network checks are host self-access, not a remote client.
 
 Maya quant research: [candidate assessment](../hardware/MAYA-QUANT-OPTIONS-2026-10-20.md).
-Current S24/DeepSeek-S32K profiles remain unchanged; no higher-quant speed test
-or download was performed. Preserve the existing source/format and memory guards.
+The later [S/S24 A/B](../hardware/MAYA-S-VS-S24-2026-10-20.md) selected Maya-S. DeepSeek-S32K is unchanged; preserve source/format/memory guards.

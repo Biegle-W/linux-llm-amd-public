@@ -17,8 +17,8 @@ other engines are patched. Maya uses its own Python 3.12.14 environment and
 
 Model files live beneath the **Maya directory on the new shared NVMe**:
 `/mnt/shared-nvme/LLM-Models/Maya`. The [pinned download manifest](models.json)
-records every original asset's revision, byte size and published SHA-256.
-GLM is **Maya-S24**, three GGUF shards. DeepSeek is **Maya-S**, six GGUF shards
+records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) records the retained control files; it is not another active model.
+GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-S**, six GGUF shards
 including Q6_K Engram, plus the matching DSpark draft and vision assets.
 No original FP8 checkpoint, EXL3 copy or second full expert pack was downloaded.
 The engine reads experts from GGUF in place; the generated indexes/dense packs
@@ -113,3 +113,8 @@ preparation outputs; use the guarded managed profiles for serving.
 Strata Q3 and Maya now also open their own local Chat/Monitor page when ready.
 DSH stays optional and separate; `--no-browser` suppresses browser opening.
 [Native frontend behavior and controls](../hardware/NATIVE-FRONTENDS-2026-10-20.md).
+
+
+## GLM S/S24 comparison
+
+Current selected GLM quant: **Maya-S**,32K, same RAM40/MTP/reserves. [Six-trial ABBA results](../hardware/MAYA-S-VS-S24-2026-10-20.md) supersede the earlier GLM speed row; DeepSeek is unchanged.

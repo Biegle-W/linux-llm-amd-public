@@ -21,9 +21,11 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--root',type=Path,required=True)
     ap.add_argument('--family',choices=('glm','deepseek','all'),default='all')
-    a=ap.parse_args();manifest=json.loads(Path(__file__).with_name('models.json').read_text())
+    ap.add_argument('--manifest',type=Path,default=Path(__file__).with_name('models.json'),
+                    help='Explicit pinned asset manifest; defaults to the installed model set.')
+    a=ap.parse_args();manifest=json.loads(a.manifest.read_text())
     for row in manifest['files']:
-        family='glm' if row['file'].startswith('Maya-S24/') else 'deepseek'
+        family=row.get('family') or ('glm' if Path(row['remote']).name.startswith('GLM-') else 'deepseek')
         if a.family not in (family,'all'):continue
         dst=a.root/row['file'];dst.parent.mkdir(parents=True,exist_ok=True)
         if dst.exists():

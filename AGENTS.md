@@ -52,7 +52,7 @@ excluded from Git.
 
 ## Project Maya — October 20
 
-Maya v1.1.17 / 8d9a9b5d is active for GLM-5.3-Flash Maya-S24 and
+Maya v1.1.17 / 8d9a9b5d is active for GLM-5.3-Flash Maya-S v2 and
 DeepSeek-V4.1-Flash-1017 Maya-S, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
 GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
@@ -187,3 +187,8 @@ context/config/runtime self-updates out of the native UI; retain existing admiss
 source pins, dual-GPU placement and latched watchdogs. Frontend sampling state
 is private (`*.shared-settings.json` ignored). See
 `hardware/NATIVE-FRONTENDS-2026-10-20.md`.
+
+
+## GLM quant selection — October 20
+
+The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-loss gate for EACH code/prose decode and native-prefill six-trial median. Current selection is Maya-S,32K, same both-GPU/RAM40/MTP/reserves. Preserve DeepSeek unchanged. See `linux/hardware/MAYA-S-VS-S24-2026-10-20.md` and its numeric record; initial Maya three-trial speeds remain historical.

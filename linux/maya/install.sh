@@ -25,7 +25,9 @@ MAYA_SETUP_PYTHON=${MAYA_SETUP_PYTHON:-"$MAYA_SETUP_ROOT/llm-tools/python/cpytho
 maya/upstream/.venv/bin/python -m pip install -r maya/requirements-lock.txt
 common=(--backend hip --gpus 0,1 --context 8192 --models-dir "$MAYA_MODELS_ROOT" --vram-reserve-mib 8192 --port 30031 --host 127.0.0.1 --plain --yes --no-start --no-speed-calibration)
 if [[ $family == glm ]]; then
-    selected=(--model Maya-S24 --gguf-dir "$MAYA_MODELS_ROOT/Maya-S24" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192)
+    glm_quant=${MAYA_GLM_QUANT:-$(python3 -c 'import json; print(json.load(open("dsh/maya-glm-profile.json"))["installer"]["quant"])')}
+    case "$glm_quant" in Maya-S24|Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; validate it first.' >&2; exit 2 ;; esac
+    selected=(--model "$glm_quant" --gguf-dir "$MAYA_MODELS_ROOT/$glm_quant" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192)
 else
     selected=(--model DeepSeek-V4.1-Flash-1017 --ds4-quant maya-s --model-dir "$MAYA_MODELS_ROOT/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S")
 fi

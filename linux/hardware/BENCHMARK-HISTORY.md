@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## October 20 — GLM Maya-S versus S24
+
+Maya-S passed the declared speed, functional/memory and normal-launcher checks; it is now selected. The fixed ABBA test uses six samples per workload per quant,32K, both GPUs, RAM40/native8GiB reserves, identical seeds/tokenizers/prompts, functional near30K checks and zero owned swap/spill. DeepSeek and every other engine/profile are unchanged.
+
+| Quant | Native prefill t/s | Fresh prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
+|---|---:|---:|---:|---:|
+| Maya-S24 | 501.1 | 12.676 | 0.082 / 0.112 | 18.38 / 15.18 |
+| Maya-S | 487.9 | 13.031 | 0.095 / 0.112 | 16.83 / 14.44 |
+
+[Full comparison](MAYA-S-VS-S24-2026-10-20.md) and [numeric evidence](results/maya-s-vs-s24-2026-10-20.json). Maya-S is the selected GLM quant; the S24 files are retained as rollback evidence, without adding another active profile. DeepSeek is unchanged.
+
+
 ## October 20 — Qwen INT4 contexts and requested retirements
 
 Ten active profiles remain. Muse Q4, Super Q4_K_XL and SGLang MTP are retired;

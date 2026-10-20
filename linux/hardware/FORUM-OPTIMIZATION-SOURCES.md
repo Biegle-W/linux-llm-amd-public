@@ -514,10 +514,15 @@ Primary implementation references: [pinned SGLang runner](https://github.com/Ste
 ## Maya higher-quality quant assessment — October 20
 
 [Assessment, precision recipes and proposed A/B criteria](MAYA-QUANT-OPTIONS-2026-10-20.md):
-research only; no new benchmark, download or production change. GLM Maya-S is the
+initial research only, followed by the measured A/B below. GLM Maya-S was the
 smallest candidate; M/L increase fidelity and cache/streaming demands. DeepSeek
 Maya-M is absent from the checked publisher revision.
 
 - [lcz.me 2195/3](https://lcz.me/topic/2195/3), johnnybegood, October 8: Maya1.0.11, 3950X/128GB,3080-20GB+3090-24GB,65K,S24/S/M; differing sampling prevents a matched speed/quality comparison or a dual-gfx1100 prediction.
 - [Level1Techs 258001](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001), rqzer0,October8: memory planning only; no matched Maya higher-quant/two-XTX/64GB measurement found.
 - [Publisher GLM recipes/metrics](https://huggingface.co/peasantsmith/GLM-5.3-Flash-Maya-GGUF), [pinned S24 comparison](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/bench/results/MAYA-S24.md), [DeepSeek file listing](https://huggingface.co/api/models/peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF) at276e0bad: quant metadata/availability, not local speed claims.
+
+
+## Locally measured GLM S/S24 follow-up — October 20
+
+[Matched comparison](MAYA-S-VS-S24-2026-10-20.md) and [numeric evidence](results/maya-s-vs-s24-2026-10-20.json): Maya-S passed the declared speed, functional/memory and normal-launcher checks; it is now selected. Same hardware/build/32K/guards, ABBA with six trials per workload. Candidate selection is based on local data, not the differently sampled [lcz.me2195/3](https://lcz.me/topic/2195/3) NVIDIA report or [Level1Techs258001](https://forum.level1techs.com/t/advice-on-a-local-ai-server-before-buying/258001) hardware-planning thread. Their original applicability limits remain above.

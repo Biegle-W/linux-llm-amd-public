@@ -2,7 +2,7 @@
   "exe": "/opt/local-llm/maya/upstream/build-hip/maya",
   "args": [
     "--glm-pack",
-    "/mnt/shared-nvme/LLM-Models/Maya/Maya-S24/pack",
+    "/mnt/shared-nvme/LLM-Models/Maya/Maya-S-v2-IQ2_XXS/pack",
     "--max-context",
     "32768",
     "--expert-cache",
@@ -19,7 +19,7 @@
     "8192"
   ],
   "cwd": "/opt/local-llm/maya/upstream",
-  "tokenizer": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S24/pack/tokenizer",
+  "tokenizer": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer",
   "model_name": "glm-5.3-flash-maya",
   "gpu": [
     0,
@@ -48,30 +48,30 @@
   "log": "/opt/local-llm/dsh/logs/maya-glm-native.log",
   "installer": {
     "models_dir": "/mnt/shared-nvme/LLM-Models/Maya",
-    "quant": "Maya-S24",
-    "gguf": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
-    "gguf_dir": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S24",
+    "quant": "Maya-S-v2-IQ2_XXS",
+    "gguf": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00001-of-00003.gguf",
+    "gguf_dir": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S-v2-IQ2_XXS",
     "draft": "mtp",
-    "written": "2026-10-20 08:00"
+    "written": "2026-10-20T12:17:09.925593-04:00"
   },
   "parallel": 1,
   "split_skip_if_fits": false,
   "layer_split": "auto",
   "mcp_servers": {},
   "idle_unload_s": 0,
+  "expert_profile_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7",
   "local_validation": {
     "status": "requires-local-validation",
     "native_validation": "passed",
     "normal_integration_status": "passed",
-    "validated_utc": "2026-10-20T13:08:40.316687+00:00",
+    "validated_utc": "2026-10-20T16:17:09.989857+00:00",
     "binary_sha256": "44c6744584cf49253d607cb095c0646382c643bc14a80ebd454c0f08fdf2fa67",
     "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
-    "evidence": "hardware/results/maya-dual-amd-2026-10-20.json",
-    "candidate_tag": "glm-32k-ram40",
-    "scope": "Selected exact quant/32K context/both GPUs; shared-method speed, near30K retrieval, JSON/tools/SSE; relocated log/routing-profile paths with unchanged native settings. Normal production proof passed on the recorded workstation.",
-    "normal_validated_utc": "2026-10-20T13:19:17.651370+00:00",
-    "reference_config_sha256": "e6636b60b08f37b115c9a5c5209e87d6f4b75ad4fc69bd63c86b4aac65511997",
-    "note": "Sanitized paths differ from the validated workstation; revalidate your installed binary/profile before activation."
-  },
-  "expert_profile_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
+    "evidence": "hardware/results/maya-s-vs-s24-2026-10-20.json",
+    "candidate_tag": "Maya-S ABBA six samples/task",
+    "scope": "Selected Maya-S v2: matched ABBA six samples per workload, each speed ratio >0.90;32K near30K/history/tools/JSON/SSE/bothGPU/zero swap-spill/current guards. Normal visible-terminal/gateway/native-frontend proof passed on this workstation.",
+    "normal_validated_utc": "2026-10-20T16:19:31.014082+00:00",
+    "reference_config_sha256": "e3a246c343f9b132e9d4ac6c63450382c61d776e5288bf104cb36c1d265ac808",
+    "note": "Sanitized paths differ from the validated workstation; revalidate the installed binary/profile before activation."
+  }
 }

@@ -15,7 +15,7 @@ Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 | SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | DFlash2 at 160K, actual 160,861-input retrieval; separate MTP profile retired |
 | vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; 160K BF16, actual 160,868-input retrieval and full-history follow-up |
 | Strata HIP | [0.1.45 / `477ac13c`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Corrected expert pack on shared NVMe, both CPU pools and actual near 256K probes |
-| Maya HIP | [v1.1.17 / `8d9a9b5d`](https://github.com/mw00/project-maya/commit/8d9a9b5d705049a87da853717cdc59440252de30) | Selected S24/DeepSeek-S, 32K, both cards, near-30K probes and normal API/model switching |
+| Maya HIP | [v1.1.17 / `8d9a9b5d`](https://github.com/mw00/project-maya/commit/8d9a9b5d705049a87da853717cdc59440252de30) | Selected Maya-S v2/DeepSeek-S, 32K, both cards, near-30K probes and normal API/model switching |
 
 The llama.cpp and vLLM updates were performance-neutral within noise; newer
 source is not presented as a measured speedup. Older builds keep their original
@@ -23,7 +23,7 @@ results. [Profile validation and update report](CPU-RAM-PROFILES-2026-10-20.md).
 
 ### Nine profiles using the shared benchmark method
 
-Three timed requests per workload, median shown. Fresh prefill probes use ~8K
+Medians shown: six timed requests per workload across two GLM starts; three for the other shared-method rows. Fresh prefill probes use ~8K
 Qwen tokens; tokenizer counts differ. Short TTFT/decode use separate short
 code/prose prompts and a 256-output cap. Native PP is used for llama.cpp/Strata/Maya;
 SGLang/vLLM use their own measured engine-prefill phases. Context is the total
@@ -38,8 +38,10 @@ configured window, not proof of that entire window's quality or speed.
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,185–8,191 | 1314.8 | 6.235 | 0.102 / 0.097 | 178.82 / 63.40 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,187–8,188 | 1413.8 | 5.806 | 0.066 / 0.092 | 130.31 / 68.96 |
 | Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,187 | 914.3 | 8.987 | 0.219 / 0.223 | 76.61 / 53.35 |
-| GLM-5.3-Flash Maya-S24 | Maya HIP, layer split/MTP | 32,768 | 6,312–6,313 | 525.9 | 12.159 | 0.074 / 0.097 | 21.13 / 16.54 |
+| GLM-5.3-Flash Maya-S | Maya HIP, layer split/MTP | 32,768 | 6,310–6,316 | 487.9 | 13.031 | 0.095 / 0.112 | 16.83 / 14.44 |
 | DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP, layer split/no DSpark | 32,768 | 6,295–6,302 | 185.5 | 33.956 | 0.374 / 0.550 | 6.24 / 6.84 |
+
+GLM now uses six matched ABBA trials per workload; other shared-method rows retain their original three-trial method. [GLM S/S24 selection](MAYA-S-VS-S24-2026-10-20.md).
 
 The retired Muse/Q4 Super measurements remain in the [original numeric batch](results/dual-amd-i9-64gb-2026-10-20.json). They are historical, not active profiles.
 

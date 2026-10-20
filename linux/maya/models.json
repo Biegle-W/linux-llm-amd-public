@@ -3,28 +3,31 @@
   "upstream_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
   "files": [
     {
+      "family": "glm",
       "repo": "peasantsmith/GLM-5.3-Flash-Maya-GGUF",
       "revision": "f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da",
-      "remote": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
-      "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00001-of-00003.gguf",
-      "size": 46886573024,
-      "sha256": "8ebd5c74bcf65ece2a8699b7b6fd2b8d177f350ed252cee252fdd99b86a0138c"
+      "remote": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00001-of-00003.gguf",
+      "file": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00001-of-00003.gguf",
+      "size": 47835993056,
+      "sha256": "e56ef50efd71d81ddf6249e08bd2ef5af96ed348c2b7a004491d46168d0ecaa7"
     },
     {
+      "family": "glm",
       "repo": "peasantsmith/GLM-5.3-Flash-Maya-GGUF",
       "revision": "f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da",
-      "remote": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf",
-      "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00002-of-00003.gguf",
-      "size": 46982144736,
-      "sha256": "4bd445da3a0128a9c5b32228c924e0a622aa4a132c7a8dc9a2c207a4beea8e34"
+      "remote": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00002-of-00003.gguf",
+      "file": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00002-of-00003.gguf",
+      "size": 47797478080,
+      "sha256": "2d65d88a69f8dc124c8d24bd33b33161ddab218918b4253ad4f500aeede84df5"
     },
     {
+      "family": "glm",
       "repo": "peasantsmith/GLM-5.3-Flash-Maya-GGUF",
       "revision": "f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da",
-      "remote": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf",
-      "file": "Maya-S24/GLM-5.3-Flash-Maya-S24-IQ2_XXS_S-00003-of-00003.gguf",
-      "size": 832958464,
-      "sha256": "a6fd4e88007ac49b431c7d02be34e43ab7a09224d53a0c52782327613cb41917"
+      "remote": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00003-of-00003.gguf",
+      "file": "Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00003-of-00003.gguf",
+      "size": 835121120,
+      "sha256": "a6a981c4fee7a53d78bdbd97d8f465d48ddf439cf938ff90617f395e0351b5a6"
     },
     {
       "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",

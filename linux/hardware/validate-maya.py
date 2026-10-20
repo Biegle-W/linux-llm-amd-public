@@ -6,7 +6,7 @@ import urllib.request
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'dsh'))
 from amd_device import amd_devices
-ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,required=True);ap.add_argument('--model',required=True);ap.add_argument('--context',type=int,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--long-tokens',type=int)
+ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,required=True);ap.add_argument('--model',required=True);ap.add_argument('--context',type=int,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--long-tokens',type=int);ap.add_argument('--prompt-seed',help='Fixed synthetic record salt for matched comparisons; default is fresh random salt')
 a=ap.parse_args();assert not a.output.exists(),'Preserve the previous validation record'
 spec=importlib.util.spec_from_file_location('benchmark',ROOT/'hardware/benchmark-current-amd.py');b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b);b.PORTS['maya']=(a.port,a.port)
 record={'model':a.model,'context':a.context,'status':'running','tests':{},'method':'Functional checks with thinking off and greedy sampling; synthetic tool results only; not a throughput benchmark'}
@@ -24,7 +24,7 @@ try:
  response=chat(history+[message,{'role':'tool','tool_call_id':call['id'],'content':'{"sku":"BOLT-42","stock":137}'}],tools=tools,tool_choice='none');text=response['choices'][0]['message']['content'];assert '137' in text;record['tests']['tool_roundtrip']={'passed':True,'usage':response['usage'],'answer_sha256':hashlib.sha256(text.encode()).hexdigest()};save()
  if a.long_tokens:
   assert a.long_tokens<a.context-256
-  salt=uuid.uuid4().hex
+  salt=a.prompt_seed or uuid.uuid4().hex
   def prompt(n):
    rows=[f'Record {i:05d}: bay {i%97}, blue bolts {i%31+1}, washers {i%43+2}, sets {i%19+1}.' for i in range(n)]
    for i,marker in zip((5,n//2,n-5),('ALPHA-734','BRAVO-915','CHARLIE-268')):rows[i]+=' Secret marker: '+marker

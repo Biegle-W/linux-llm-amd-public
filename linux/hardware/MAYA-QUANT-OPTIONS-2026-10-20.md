@@ -1,15 +1,13 @@
 # Higher-quality Maya quant options — October 20, 2026
 
-Research only, on i9-13900KS / 64 GB RAM / two RX 7900 XTX 24 GB. No weights
-were downloaded, model switched, benchmark rerun or runtime/profile changed.
-The current 32K profiles and [measured results](MAYA-2026-10-20.md) remain active.
+Originally a research-only assessment on i9-13900KS /64GB/two RX7900XTX. The later [matched S/S24 test](MAYA-S-VS-S24-2026-10-20.md) is now complete: **keep Maya-S**. The original candidate discussion below is superseded by those local measurements for S versus S24; M/L remain untested. DeepSeek is unchanged.
 
 ## Assessment
 
 | Model / option | Published file size, decimal GB | Precision change | Assessment for this hardware |
 |---|---:|---|---|
-| GLM Maya-S24, current | 94.7 | IQ2_XXS/IQ2_S/IQ3_XXS routed experts; Q4_K attention/shared experts | Retain current speed baseline: code/prose 21.13/16.54 t/s. |
-| GLM Maya-S | 96.5 | Same routed experts as S24; Q6_K attention/shared experts | Smallest plausible quality upgrade. Extra GPU-resident dense weights reduce expert-cache capacity; a small speed loss is plausible, not locally measured. |
+| GLM Maya-S24, control / rollback | 94.7 | IQ2_XXS/IQ2_S/IQ3_XXS routed experts; Q4_K attention/shared experts | Fresh six-sample control: code/prose 18.38/15.18 t/s; old three-trial results remain historical. |
+| GLM Maya-S, selected | 96.5 | Same routed experts as S24; Q6_K attention/shared experts | Selected after matched tests: code/prose 16.83/14.44 t/s; losses 8.42%/4.87%, native prefill loss 2.62%. Normal launcher passed. |
 | GLM Maya-M | 116.0 | IQ2_S gate/up, IQ3_XXS/IQ3_S down, Q6_K attention/shared experts, higher-bit MTP block | Stronger token-distribution fidelity candidate, but more streaming/cache pressure. Cannot promise a small speed penalty. |
 | GLM Maya-L | 156.3 | IQ3_S gate/up, IQ4_XS/Q5_K down | Largest quality-oriented option; poor first choice when maintaining current speed is the priority. |
 | DeepSeek Maya-S, current | about 340, including Q6_K Engram | Mixed 2–3-bit routed experts and higher-precision sensitive tensors | Retain current code/prose 6.24/6.84 t/s baseline. |
@@ -30,14 +28,7 @@ versions; published multiple-choice accuracy does not clearly separate S and M.
 The S24-vs-S speed check uses one V100 restricted to 24 GB: 13.5 versus 11.8 t/s,
 S24 about 14% faster. This is not a dual-Radeon prediction.
 
-Recommendation: S is the smallest trial for a modest quality change. M is the
-more meaningful fidelity trial if a potentially noticeable slowdown is acceptable.
-Keep S24 for speed and DeepSeek Maya-S until another exact quant passes validation.
-Neither higher-quality choice has a locally measured speed here. An optional
-future A/B can define “not much slower” as at most 10% loss in EACH short code,
-short prose and fresh-input prefill median at matching context/sampling, plus
-near-30K retrieval, JSON/tools, both GPUs, current reserve guards and zero owned
-swap/spill. That is a proposed acceptance criterion, not a completed test.
+Maya-S passed the declared speed, functional/memory and normal-launcher checks; it is now selected. [Local measured results](MAYA-S-VS-S24-2026-10-20.md). M/L remain untested. The completed S/S24 test applied the proposed strict >0.90 gate to each six-trial code/prose/native-prefill median, with the current guards retained.
 
 ## Sources and applicability
 

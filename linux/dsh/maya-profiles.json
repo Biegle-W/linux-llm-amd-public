@@ -1,6 +1,6 @@
 {
   "glm-5.3-flash-maya": {
-    "name": "GLM-5.3-Flash Maya-S24 (dual AMD HIP, CPU/expert cache, NVMe streaming)",
+    "name": "GLM-5.3-Flash Maya-S (v2) (dual AMD HIP, CPU/expert cache, NVMe streaming)",
     "context": 32768,
     "config": "maya-glm-profile.json",
     "enabled": true
