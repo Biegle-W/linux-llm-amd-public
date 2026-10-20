@@ -225,7 +225,7 @@ backend, and the gateway requires an explicit model ID in each generation reques
 Older Strata defaults in historical notes/private network metadata are not active
 catalog entries and must not be copied into a client configuration.
 
-## Strata Linux app update and pending Intel desktop — October 20
+## Strata Linux app update and verified Intel desktop — October 20
 
 **Installed:** `/opt/appimages/Strata-0.2.1-linux-amd-rx7900.AppImage`,
 existing Strata App menu/icon and packaged HIPengine0.1.46 (`a7bdbfdabc9a+rocm`).
@@ -243,16 +243,22 @@ uses0.1.45/477ac13c, original7/8GiB reserve targets, measured dated speeds and
 unchanged model ID `qwen3.8-flash-next-iq3_xxs`. Do not label old measurements as
 0.1.46.1 results. Existing continuous watchdog and no-swap policy stay enabled.
 
-**Desktop:** monitor is connected to IntelUHD770 DP (`i915`), but GNOME50.1 picks
-AMD BootVGA for rendering; desktop load sampled23–25%/about1.37GiB AMD VRAM.
-The reviewed `hardware/61-local-llm-intel-primary.rules` matches8086:a780.
-Administrator authentication succeeded; the rule is installed under
-`/etc/udev/rules.d/` and the Intel udev tag is verified. A new desktop session
-and journal/VRAM checks are still required. No automatic
-logout or GPU-driver change is made. Global DRI/Vulkan/HIP device selection is
-untouched; inference continues to require both AMD cards. Retest all original
-Strata admission/functional/~8K/near256K/history gates after the new Intel session
-before activating the development engine. Windows display/engine setup is separate.
+**Desktop verified after logout/login:** the new GNOME50.1 session at12:50:40
+explicitly selects IntelUHD770/i915 `/dev/dri/card0` as primary given the installed
+udev rule. Both AMD cards are idle at0% and about27MiB used in ten samples.
+This verifies GNOME; individual apps may still choose AMD. No global compute
+variables, drivers or inference-device selection changed.
+
+**Post-login retest:** both device self-tests pass and two finite candidate starts
+reach loaded health with the unchanged profile. Actual>=6GiB/card admission
+still fails: the confirmation exact loaded free VRAM is5,785,194,496bytes
+(5.388GiB) onGPU0 and6,730,600,448bytes (6.269GiB) onGPU1. Host available RAM
+is35.90GiB; owned swap/spill remain zero. Only the owned candidate stops, and
+both cards return to about27MiB used. Production hashes/profile remain unchanged.
+Functional generation, ~8K throughput and near256K/history tests are unrun because
+startup admission failed first. Keep0.1.45; candidate memory accounting/reserve
+sizing needs investigation before repeating those gates. Never lower guards to
+promote it. Windows display/engine setup is separate.
 
 [Exact versions, source citations and limits](../hardware/STRATA-LINUX-UPDATE-2026-10-20.md) ·
 [Curated evidence](../hardware/results/strata-linux-update-2026-10-20.json).

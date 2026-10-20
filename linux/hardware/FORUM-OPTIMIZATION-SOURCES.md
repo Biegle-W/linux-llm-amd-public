@@ -548,3 +548,11 @@ claimed. [Local evidence and pending desktop change](STRATA-LINUX-UPDATE-2026-10
   rendering. The reviewed8086:a780 rule is installed/tag-verified and needs a new
   session; no global compute environment, AMD driver or inference-device selection
   is changed. Real post-login VRAM savings are unmeasured.
+
+Local follow-up, October20 after user logout/login: GNOME's new-session journal
+explicitly selects Intel as primary via the reviewed rule. Both AMD cards idle at
+about27MiB, but two unchanged Strata9ae93f7b starts still fail actual6GiB/card
+admission (exact loaded5.388/6.269GiB free). This is a local memory-admission
+result, not confirmation of any forum speed claim. The forum/source links above
+remain the implementation trail. [Retest evidence](results/strata-linux-update-2026-10-20.json)
+and [limits](STRATA-LINUX-UPDATE-2026-10-20.md).

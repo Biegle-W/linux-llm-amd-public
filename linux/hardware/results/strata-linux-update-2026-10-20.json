@@ -9,7 +9,8 @@
     ],
     "display_scanout": "Intel UHD770 DisplayPort",
     "desktop_renderer_before": "AMD BootVGA, per GNOME journal",
-    "gnome_shell": "50.1"
+    "gnome_shell": "50.1",
+    "desktop_renderer_after": "Intel UHD770 i915, verified current-session GNOME journal after user logout/login"
   },
   "app": {
     "version": "0.2.1",
@@ -125,18 +126,34 @@
     "new_prefill_tps": null,
     "new_ttft_seconds": null,
     "new_decode_tps": null,
-    "limits": "Startup admission failed before functional/throughput/near-window testing. Loading minima are not exact loaded-startup snapshots. No new engine speed or context-quality claim."
+    "limits": "Original AMD-desktop startup failed; Intel desktop is now verified, but two new starts still fail actual startup reserve. The confirmation exact loaded snapshot is under post_login_retest. No new speed or context-quality claim; production unchanged."
   },
   "intel_desktop": {
     "rule_vendor": "8086",
     "rule_device": "a780",
     "rule_syntax_checked": true,
     "rule_installed": true,
-    "active_session_changed": false,
-    "requires_new_session": true,
+    "active_session_changed": true,
+    "requires_new_session": false,
     "global_compute_environment_changed": false,
     "no_gpu_driver_unloaded": true,
-    "udev_tag_verified": true
+    "udev_tag_verified": true,
+    "current_session_primary_verified": true,
+    "session_started_local": "2026-10-20T12:50:40-04:00",
+    "primary_device": "/dev/dri/card0",
+    "primary_vendor": "8086",
+    "primary_driver": "i915",
+    "primary_journal_message": "GPU /dev/dri/card0 selected primary given udev rule",
+    "idle_sample_count": 10,
+    "idle_amd_vram_used_bytes": [
+      27983872,
+      28012544
+    ],
+    "idle_amd_gpu_busy_percent": [
+      0,
+      0
+    ],
+    "limits": "GNOME primary verified; other applications may explicitly offload. Idle samples are not a throughput benchmark."
   },
   "sources": [
     "https://github.com/Niko1221/Strata/releases/tag/v0.2.1",
@@ -144,5 +161,74 @@
     "https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md",
     "https://lcz.me/topic/2059/7",
     "https://forum.level1techs.com/t/how-to-get-display-output-on-secondary-gpu-non-primary/193307/2"
-  ]
+  ],
+  "post_login_retest": {
+    "date": "2026-10-20",
+    "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
+    "version": "0.1.46.1",
+    "binary_sha256": "c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478",
+    "status": "blocked_actual_startup_reserve",
+    "promoted": false,
+    "configuration": "Unchanged Q3/13.5GiB/262144context,INT8KV/32768resident,MTP3,layer26,bothGPUs,7/8GiBtargets,52Gworker,no-swap,continuousguards",
+    "small_device_selftests_passed_both_cards": true,
+    "attempts": [
+      {
+        "name": "first_post_login_start",
+        "status": "failed",
+        "error": "Actual loaded startup VRAM reserve below6GiB",
+        "configured_context": 262144,
+        "minimum_whole_card_free_bytes_during_loading": [
+          5784702976,
+          6729908224
+        ],
+        "minimum_available_ram_bytes": 38486409216,
+        "maximum_owned_swap_bytes": 0,
+        "maximum_vram_spill_bytes": 0
+      },
+      {
+        "name": "confirmation_exact_loaded_snapshot",
+        "status": "failed",
+        "error": "Actual loaded startup VRAM reserve below6GiB",
+        "configured_context": 262144,
+        "minimum_whole_card_free_bytes_during_loading": [
+          5785194496,
+          6730600448
+        ],
+        "minimum_available_ram_bytes": 38543323136,
+        "maximum_owned_swap_bytes": 0,
+        "maximum_vram_spill_bytes": 0,
+        "loaded_startup_snapshot": {
+          "model_loaded": true,
+          "model_id": "qwen3.8-flash-next-iq3_xxs",
+          "allocated_context": 262144,
+          "free_vram_bytes": [
+            5785194496,
+            6730600448
+          ],
+          "used_vram_bytes": [
+            19967832064,
+            19022426112
+          ],
+          "total_vram_bytes": [
+            25753026560,
+            25753026560
+          ],
+          "available_ram_bytes": 38543323136,
+          "minimum_required_free_bytes_each_card": 6442450944
+        }
+      }
+    ],
+    "production_hashes_unchanged": true,
+    "owned_processes_remaining_after_cleanup": 0,
+    "after_stop_amd_vram_used_bytes": [
+      27996160,
+      28024832
+    ],
+    "functional_generation_checked": false,
+    "near_window_checked": false,
+    "new_prefill_tps": null,
+    "new_ttft_seconds": null,
+    "new_decode_tps": null,
+    "limits": "Both starts reached loaded health but failed actual>=6GiB/card admission before generation. Confirmation explicitly samples loaded health and whole-card memory. Earlier attempt used existing isolated scratch configuration; confirmation uses fresh scratch paths with identical inference settings. Production remains477ac13c/0.1.45. No guard/reserve lowered; no speed comparison or near-window proof."
+  }
 }

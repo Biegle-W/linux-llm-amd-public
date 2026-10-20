@@ -201,9 +201,13 @@ model. The standalone inference preset remains inactive. Managed development
 source9ae93f7b/engine0.1.46.1 builds, but is NOT promoted because actual6GiB/card
 startup headroom failed on the unchanged Q3/13.5GiB/256K profile. Production
 477ac13c/0.1.45 and all profile fields remain. No new speed or near-window proof
-is available. User now requests Intel iGPU desktop rendering: scanout is already
-Intel, but GNOME selects AMD BootVGA. A reviewed preferred-primary udev rule is
-installed and its udev tag verified; new-session verification is pending. Do not restart the session without the user’s request, lower guards or change
-global compute-device variables.
-Retest after the Intel desktop is active before promoting the new managed engine.
+is available. After the user's logout/login, the current GNOME session explicitly
+selects IntelUHD770/i915 as primary through the installed preferred-primary rule;
+both AMD cards idle at about27MiB used. Two post-login candidate starts still fail
+unchanged actual6GiB/card admission; the exact loaded confirmation is5.388/6.269GiB
+free. Zero owned swap/spill; only the candidate stops. Production remains unchanged.
+Do not repeat the obsolete pending-login instruction. Investigate candidate memory
+accounting/reserve sizing before repeating all admission/functional/context gates;
+never lower guards or change global compute-device variables to promote it.
+Do not restart the desktop session without the user’s explicit request.
 See `linux/hardware/STRATA-LINUX-UPDATE-2026-10-20.md` and its numeric record.

@@ -3,8 +3,9 @@
 The official **Strata App 0.2.1** RX7900 AppImage and its bundled **HIP engine
 0.1.46** are installed. The managed DSH backend still runs **0.1.45 / 477ac13c**:
 the latest development engine built successfully, but has not passed its unchanged
-actual 6 GiB/card startup admission. No model, context or expert-budget change is
-promoted. [Numeric evidence](results/strata-linux-update-2026-10-20.json).
+actual 6 GiB/card startup admission, including a fresh retest after Intel desktop
+rendering was verified. No model, context or expert-budget change is promoted.
+[Numeric evidence](results/strata-linux-update-2026-10-20.json).
 
 ## Installed app
 
@@ -59,9 +60,9 @@ new engine. All production profile fields remain unchanged.
 
 ## Intel desktop preference
 
-The monitor is already on the motherboard's Intel UHD770 DisplayPort output,
-but GNOME 50.1's journal selects AMD **Boot VGA** as the primary renderer.
-The AMD display card had about 1.37 GiB allocated and 23–25% baseline activity.
+Before the logout/login, the monitor was on the motherboard's Intel UHD770
+DisplayPort output, but GNOME 50.1 selected AMD **Boot VGA** as the primary
+renderer. That AMD card had about 1.37 GiB allocated and 23–25% baseline activity.
 Mutter composites on its selected primary GPU even when scan-out uses another
 card, according to its [multi-GPU documentation](https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md).
 
@@ -70,15 +71,41 @@ The installed and udev-tag-verified [Intel udev rule](61-local-llm-intel-primary
 [installer](install-intel-desktop-primary.sh) used successful administrator authentication,
 reloads rules and targets the Intel DRM device only. It does not restart the
 session, unload AMD drivers, change global DRI/Vulkan/HIP variables or change
-inference-device selection. A new GNOME session is required before measuring the
-result. Installation and activation status are kept in the numeric record and
-current handoff; do not infer activation merely from a prepared rule.
+inference-device selection.
 
-After a new desktop session, verify the GNOME primary-renderer journal and actual
-per-process/whole-card AMD allocations. Some applications may still explicitly
-offload to AMD; zero VRAM usage is not promised. Retest the original Strata
-candidate and all its guard/quality/context gates before promotion. No reserve
-was lowered to bypass this failure.
+After the user's logout/login, the new session's 12:50:40 journal explicitly
+reports **Intel `/dev/dri/card0` selected primary given udev rule**; its sysfs
+vendor is 8086 and driver is i915. Ten idle samples show both AMD cards at
+0% activity and approximately 26.7 MiB VRAM allocated each. This verifies GNOME's
+primary renderer, not a guarantee that every application uses Intel.
+
+## Post-login managed-engine retest
+
+The same pinned engine and Q3/13.5 GiB/256K profile were retested with both cards,
+MTP3, layer boundary 26, INT8 KV /32K residency, original 7/8 GiB reserve targets,
+52G worker scope, disabled worker swap and continuous latched guards. Both device
+self-tests pass. Two finite starts reached loaded health, but **both failed the
+unchanged actual 6 GiB/card startup gate**. The confirmation records an exact
+loaded snapshot rather than inferring it from a loading minimum:
+
+| PCI-order card | Loaded free VRAM | Required free VRAM |
+|---|---:|---:|
+| GPU0 | 5.388 GiB (5,785,194,496 bytes) | 6 GiB |
+| GPU1 | 6.269 GiB (6,730,600,448 bytes) | 6 GiB |
+
+Available host RAM at that snapshot was 35.90 GiB. Both attempts recorded zero
+owned swap and VRAM spill. Only the owned candidate worker was stopped; after
+cleanup both AMD cards returned to about 27 MiB used. Production source/binary,
+launcher and profile hashes are unchanged. The first start used the existing
+isolated scratch routing configuration; the confirmation used a fresh scratch
+configuration with identical inference settings and an explicit loaded snapshot.
+
+Intel rendering is now verified, but it did **not** make the candidate eligible
+for promotion. Functional generation, PP/TTFT/decode, near-256K retrieval and
+history checks remain unrun on this build because admission failed first. Keep
+production 0.1.45; no speed or context-quality claim is made for 0.1.46.1. A
+separate candidate investigation of engine memory accounting/reserve sizing is
+needed before repeating the remaining gates. No guard or reserve was lowered.
 
 Forum context, not a local speed claim:
 [lcz.me topic 2059/7](https://lcz.me/topic/2059/7) describes separating the display

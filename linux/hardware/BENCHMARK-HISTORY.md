@@ -8,7 +8,10 @@ small device tests, but the original Q3/13.5GiB/256K candidate fails actual6GiB/
 startup admission. Both cards allocated; owned swap/spill remain zero and the
 owned worker stopped. No throughput or near-window test completed. Production
 477ac13c/0.1.45 and all its original measurements remain unchanged. Intel desktop
-preference is installed/tag-verified, awaiting new-session validation.
+preference is active: after user logout/login GNOME explicitly selects Intel.
+Two post-login starts still fail the same gate; the confirmation exact loaded
+free VRAM is5.388/6.269GiB, requiring6GiB on each card. Zero owned swap/spill;
+only the candidate stops. No new generation or throughput measurement is added.
 [Detailed state](STRATA-LINUX-UPDATE-2026-10-20.md) and
 [numeric evidence](results/strata-linux-update-2026-10-20.json).
 
