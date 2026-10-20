@@ -1,5 +1,10 @@
 # Strata native 256K context on dual AMD / 32 GB RAM — October 19, 2026
 
+> **October 20 current state:** i9-13900KS / 64 GB validation is complete; both Super
+> IQ3/Q4 are selectable and Strata retains 13.5 GiB / native 256K on shared NVMe.
+> This dated report preserves its original evidence. Use the
+> [current profile report](CPU-RAM-PROFILES-2026-10-20.md) for active settings and results.
+
 The retained IQ3_XXS profile now has **262,144 total tokens**, the model's
 native trained window, on both RX 7900 XTX cards with 32 GB system RAM.
 The previous 32K setting was a conservative validated choice, not a demonstrated

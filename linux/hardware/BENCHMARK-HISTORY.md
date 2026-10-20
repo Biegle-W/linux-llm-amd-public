@@ -1,9 +1,60 @@
 # LLM benchmark and context history
 
-Maintained October 19, 2026. The original compilation used saved results;
+Maintained October 20, 2026. The original compilation used saved results;
 the October 19 Strata optimization adds fresh measurements and validation. Dates below are local dates in 2026.
 This is the index of measured updates, including older hardware and retired
 profiles; it does not imply that every historical configuration remains installed.
+
+## October 20: i9/64 GB, both Super quants, development runtime promotions and shared-NVMe Strata
+
+Hardware: i9-13900KS,64 GB installed,61.51 GiB OS-visible, two RX 7900 XTX 24 GB,
+MSI MPG Z690 CARBON WIFI, CPU PCIe 4.0 x8/x8. Purchased switch remains uninstalled;
+P2P disabled. Historical i5/32 GB and NVIDIA measurements retain their hardware.
+
+Current source revisions: llama.cpp HIP/Vulkan 4c3c5810f87efe177949f1b85ae509d38a2a311f;
+SGLang f84475ccf593087df3d1da13c9e675eadee12352; vLLM 0.32.1rc1.dev36+ge68efc685.rocm72;
+Strata 0.1.45/477ac13cbe8e582c20484871ce459d20d82df09d. Both engine updates were
+performance-neutral within noise, with exact promotion/rollback provenance in
+[the profile report](CPU-RAM-PROFILES-2026-10-20.md). Source-candidate timings and
+later production-rebuild functional proofs are distinguished.
+
+[Current eleven-profile record](results/dual-amd-i9-64gb-2026-10-20.json) retains
+EVERY trial, actual token count, method, source/build, memory and output hash:
+nine shared-method short code/prose +fresh~8K prefill profiles and BOTH fixed~8K
+Super quants. Qwen dense64K, Muse32K, three llama MoEs256K, SGLang MTP40,960,
+SGLang DFlash2/vLLM65,536, Super IQ3/Q4 each 32,768, Strata262,144 are allocated
+budgets, not equivalent actual lengths. Muse retained 2/3 marker success.
+[README overview](../../README.md) and [current report](CURRENT-AMD-BENCHMARKS.md)
+show each model's PP, TTFT and decode with matching methods.
+
+Super Q4: fixed 8,108/8,111 inputs with 256 output; native PP 43.26/44.17,
+external TTFT 187.432/183.653s, decode 7.86/8.19 t/s. IQ3: same inputs/cap,
+PP 98.21/97.84, TTFT 82.566/82.911s, decode 15.90/16.95 t/s. Both separate marker
+probes passed 28,546 input/22 output. Their candidate batch overlapped copy/hash/
+download IO ending 2026-10-20T11:03:39Z; no isolated engine effect is claimed.
+Candidate Q4 had a brief whole-card reserve dip under 3 GiB without triggering the
+unchanged sample-debounced guard. Both normal production rebuild proofs passed
+actual settings, both GPUs, JSON, tools, SSE and zero owned swap/spill. Both quants
+are selectable; all weights remain. Rejected64K Q4 trials are not active capacity.
+[Earlier 31288c9 selection/baseline evidence](results/dual-amd-i9-baseline-2026-10-20.json)
+is preserved separately, including OLD SATA-pack Strata results.
+
+Corrected-NVMe Strata compares six all-CPU versus seven P-core workers at the
+retained 13.5 GiB expert cap, INT8 KV/32K GPU residency, split 26/overlap, MTP3, prefill 2048,
+7/8 GiB startup reserves. Both passed functional/30K tools/streaming and fresh
+**257,984 input/256 output** near-window checks, all markers,
+then full cached-history follow-up. Selected **6 workers/all CPUs**
+under the predeclared5% aggregate-decode gain and prefill eligibility rule.
+All timings, including both pool cases, remain saved. No RoPE extension or20 GiB
+budget activation. Normal launcher and three authenticated host-self routes passed;
+no separate remote-peer or reboot test is implied.
+
+Strata's standalone App and managed backend now share one verified NVMe asset
+set. GGUF/MTP matched; a generated expert-pack mismatch was resolved with a full
+48-layer source-reference hash. Unique app assets were retained. Maya's 13 files/
+443,117,880,880 bytes are downloaded/checksummed on that NVMe; its runtime is staged,
+not yet installed/validated. [Storage inventory](results/streaming-storage-2026-10-20.json).
+No private model files, binaries, credentials or raw logs are published.
 
 ## October 19 publication: two hardware result sets
 
@@ -456,7 +507,7 @@ Q4 is prepared but inactive, with no local performance result.
 
 ## October 19 documentation reconciliation
 
-No performance run or engine update was performed. The [current report](CURRENT-AMD-BENCHMARKS.md)
-now covers ten enabled profiles, retaining the original nine-profile record and
+At that maintenance,no performance run or engine update was performed. The [dated report](AMD-BENCHMARKS-2026-10-19.md)
+covered ten enabled profiles, retaining the original nine-profile record and
 the separate approximately-8K Nemotron Super timing batch. Previous results and
 measured builds remain unchanged. See [maintenance](WORKSPACE-MAINTENANCE-2026-10-19.md).

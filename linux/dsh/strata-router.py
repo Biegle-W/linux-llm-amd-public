@@ -85,7 +85,7 @@ def ensure_worker(model):
         profile = PROFILES[model]
         config = ROOT / profile['config']
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
-        print('Loading', model, 'from Shared SATA; other Strata weights are unloaded.', flush=True)
+        print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemorySwapMax=0', str(ROOT / 'run-strata-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],

@@ -61,6 +61,25 @@ class NemotronCandidates(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Physical RAM'):
             activation.check_result({'model':profile['id'],'status':'passed'},profile,30*GIB)
 
+    def test_cpu_tuning_requires_matching_measured_command(self):
+        profile = self.profiles['nemotron-3.5-super-q4']
+        result = dict(model=profile['id'], status='passed', context=32768,
+                      host_expert_bytes=profile['host_expert_bytes'], cache_mib=profile['gpu_expert_cache_mib'],
+                      functional=dict(arithmetic=True,json=True,tool_roundtrip=True,streaming=True),
+                      long_context=dict(markers_passed=True),
+                      trials=[dict(task=task,usage=dict(completion_tokens=256)) for task in ('code','prose') for _ in range(3)],
+                      expert_cache_log=['native expert cache initialized'],
+                      memory=dict(max_worker_swap_bytes=0,max_worker_spill_bytes=0),
+                      threads=8,threads_batch=8,effective_args=['--threads','8','--threads-batch','8'])
+        activation.check_result(result,profile,64*GIB)
+        result['cpu_expert_layers'] = profile['cpu_expert_layers'] + [88]
+        with self.assertRaisesRegex(ValueError,'expert placement'):
+            activation.check_result(result,profile,64*GIB)
+        result.pop('cpu_expert_layers')
+        result['threads'] = 6
+        with self.assertRaisesRegex(ValueError,'measured arguments'):
+            activation.check_result(result,profile,64*GIB)
+
 
 if __name__ == '__main__':
     unittest.main()

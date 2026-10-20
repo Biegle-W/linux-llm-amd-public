@@ -23,9 +23,11 @@ def main():
     ap.add_argument('--checkpoints', action='store_true', help='Use normal production checkpoint defaults')
     ap.add_argument('--follow-up', action='store_true', help='Check a subsequent turn with the full conversation')
     ap.add_argument('--output', type=Path, required=True)
+    ap.add_argument('--port', type=int, default=30020)
+    ap.add_argument('--config', type=Path, default=ROOT/'dsh/strata-iq3-profile.json')
     a = ap.parse_args()
     assert not a.follow_up or a.checkpoints, 'Follow-up testing requires production checkpoints'
-    cfg = json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text())
+    cfg = json.loads(a.config.read_text())
     args = cfg['args']
     context = int(args[args.index('--max-context') + 1])
     assert 1000 <= a.tokens <= context - 1024
@@ -89,7 +91,7 @@ def main():
                 'chat_template_kwargs': {'enable_thinking': False}}
         if not a.checkpoints:
             body['strata_checkpoint'] = False
-        request = urllib.request.Request('http://127.0.0.1:30020/v1/chat/completions',
+        request = urllib.request.Request(f'http://127.0.0.1:{a.port}/v1/chat/completions',
                                          json.dumps(body).encode(), {'Content-Type': 'application/json'})
         with urllib.request.urlopen(request, timeout=2400) as response:
             data = json.load(response)
@@ -106,7 +108,7 @@ def main():
             body['messages'] += [data['choices'][0]['message'],
                                  {'role': 'user', 'content': 'Repeat the three access codes, in order. Nothing else.'}]
             body['max_tokens'] = 96
-            request = urllib.request.Request('http://127.0.0.1:30020/v1/chat/completions',
+            request = urllib.request.Request(f'http://127.0.0.1:{a.port}/v1/chat/completions',
                                              json.dumps(body).encode(), {'Content-Type': 'application/json'})
             next_start = time.monotonic()
             with urllib.request.urlopen(request, timeout=2400) as response:

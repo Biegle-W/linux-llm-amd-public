@@ -10,7 +10,7 @@ Model weights, installed runtimes, credentials and personal app data are exclude
 - [Install, launch and connect](#install-launch-and-connect)
 - [Complete benchmark history and experiments](linux/hardware/BENCHMARK-HISTORY.md)
 
-Saved **October 19, 2026 AMD benchmarks** cover all ten profiles in two distinct batches.
+Saved **October 20, 2026 i9/64 GB AMD benchmarks** cover all eleven profiles with their distinct methods; older i5/32 GB results remain dated.
 The archived NVIDIA measurements retain their original dates and builds.
 [Full fresh AMD method, token counts and numeric evidence](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
@@ -34,123 +34,92 @@ These are saved complete-profile results, not a controlled AMD-versus-NVIDIA ran
 
 ## Current hardware inventory
 
-**i9-13900KS, 64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB.**
-The GPUs remain on motherboard PCIe4 x8/x8. The purchased switch is not in their
-paths. The 64 GB Strata candidate passes preflight but is not activated.
-[Read-only inventory and validation limits](linux/hardware/CPU-RAM-UPGRADE-2026-10-19.md).
-
-The benchmark tables below remain **i5-13600KF / 32 GB** measurements.
-There are no new i9/64 GB speed results in this update.
+**i9-13900KS,64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB**, MSI MPG Z690
+CARBON WIFI, CPU PCIe 4.0 x8/x8. The PEX88096 switch is purchased but not installed
+or validated. Both GPUs participate in every active profile. llama.cpp/Strata
+split layers; SGLang/vLLM use TP2 through host transport with direct P2P disabled.
+One managed model runs at a time.
 
 ## AMD: latest setup and results
 
-**Two RX 7900 XTX 24 GB (48 GB total VRAM), i5-13600KF, MSI MPG Z690 CARBON
-WIFI, 32 GB RAM, CPU PCIe 4.0 x8/x8.** This is the last measured CPU/RAM
-configuration. The new 64 GB candidates remain inactive pending live validation. Every active profile uses both GPUs. llama.cpp and
-Strata split layers; SGLang/vLLM use TP2 through host transport because direct
-ROCm peer access is unavailable. Only one managed model/backend runs at a time.
+**Eleven active profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata.
+Super IQ3 and Q4 are both selectable at 32K; all their weights are retained.
+Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
+[CPU/RAM, storage, pool tests and limits](linux/hardware/CPU-RAM-PROFILES-2026-10-20.md).
 
-### Latest installed runtime pins
+### Installed and measured builds
 
-“Latest” here means the latest locally installed and validated builds in the
-October 18–19 records, not a live claim about today's upstream head.
-
-| Engine | Installed build | Validation after this update |
+| Engine | Retained build | Validation scope |
 |---|---|---|
-| llama.cpp HIP / Vulkan | [`31288c9c66e5`](https://github.com/ggml-org/llama.cpp/commit/31288c9c66e59377f7788d920678a565bb89dd37) | Original five profiles plus the separate Nemotron Super IQ3 validation |
-| SGLang ROCm | [gfx1100 fork `f84475ccf593`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local repairs | Fresh prefill, TTFT and code/prose decode on both profiles |
-| vLLM ROCm | `0.32.0rc1.dev329+g39983a5e7.rocm723` | Fresh prefill, TTFT and code/prose decode; earlier 64K retrieval retained |
-| Strata HIP | [0.1.45 / `477ac13cbe8e`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Fresh prefill, TTFT and code/prose decode; earlier native 256K check retained |
+| llama.cpp HIP/Vulkan | [`4c3c5810`](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f) | Five shared-method benchmarks plus both Super quants; candidate-source measurements, then production rebuild and functional proofs |
+| SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | Both retained strategies on i9/64 GB |
+| vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; i9 timings, earlier 64K retrieval and prefix reuse |
+| Strata HIP | [0.1.45 / `477ac13c`](https://github.com/Niko1221/Strata/commit/477ac13cbe8e582c20484871ce459d20d82df09d) | Corrected expert pack on shared NVMe, both CPU pools and actual near 256K probes |
 
-[Build dependencies, fixes, validation and rollback](linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
-SGLang uses its Radeon-specific fork; official main was not an unchanged compatible replacement.
+The llama.cpp and vLLM updates were performance-neutral within noise; newer
+source is not presented as a measured speedup. Older builds keep their original
+results. [Current full report](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
-### Nemotron Super IQ3: 32 GB RAM profile
+### Nine profiles using the shared benchmark method
 
-The additional `nemotron-3.5-super-iq3` profile uses **32,768 total context**, both
-AMD GPUs with HIP layer split **21:19**, **19.124 GiB CPU expert backing** and a
-**2 GiB total GPU expert-cache ceiling**, with MTP off. It passed tools, JSON,
-streaming and three-marker retrieval at **28,546 actual input tokens**.
+Three timed requests per workload, median shown. Fresh prefill probes use ~8K
+Qwen tokens; tokenizer counts differ. Short TTFT/decode use separate short
+code/prose prompts and a 256-output cap. Native PP is used for llama.cpp/Strata;
+SGLang/vLLM use their own measured engine-prefill phases. Context is the total
+configured window, not proof of that entire window's quality or speed.
 
-| Workload, median of 3 | Actual input / output | Native prefill t/s | External TTFT s | External decode t/s |
-|---|---:|---:|---:|---:|
-| Code | 8,108 / 256 | 95.75 | 84.699 | 14.16 |
-| Prose | 8,111 / 256 | 97.13 | 83.521 | 16.32 |
-
-These TTFT values include approximately 8K input processing; the original
-nine-profile batch below uses separate short prompts for short TTFT/decode.
-Q4_K_XL remains an inactive **64 GB RAM candidate**, without measured speed.
-[Settings, memory peaks, rejected splits and activation gates](linux/hardware/NEMOTRON-SUPER-2026-10-19.md)
-· [Every numeric trial](linux/hardware/results/nemotron-super-2026-10-19.json).
-
-### Original nine-profile benchmark batch
-
-All rows below were timed on the installed builds above, with production
-contexts retained. Medians of three timed requests/workload; one excluded short
-warm-up per task. New prefill probes use a shared synthetic corpus sized around 8K Qwen tokens,
-not a filled window. Actual per-model token counts are shown; Muse tokenizes
-this corpus to about 6.35K, Nemotron to about 7.92K.
-
-| Model / quant | Backend / strategy | Context tokens | Actual prefill input tokens | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
+| Model / quant | Backend / strategy | Context tokens | Actual prefill input | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,189 | 695.1 | 11.788 | 0.132 / 0.129 | 75.80 / 45.58 |
-| Muse-Glimmer-30B UD-Q4_K_XL | llama.cpp Vulkan | 32,768 | 6,346–6,349 | 1375.5 | 4.725 | 0.258 / 0.259 | 37.85 / 37.92 |
-| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,191 | 379.3 | 21.603 | 0.061 / 0.060 | 123.70 / 76.34 |
-| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, expert cache | 262,144 | 7,920–7,926 | 222.8 | 35.549 | 0.387 / 0.249 | 36.49 / 36.29 |
-| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,190 | 399.2 | 20.515 | 0.058 / 0.058 | 120.48 / 76.46 |
-| Qwen3.8-27B GPTQ INT4 | SGLang TP2, MTP3 | 40,960 | 8,186–8,190 | 1397.7 | 5.871 | 0.084 / 0.080 | 115.22 / 68.85 |
-| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | 8,186–8,188 | 1491.5 | 5.510 | 0.086 / 0.083 | 210.42 / 70.88 |
-| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | 8,184–8,189 | 1488.2 | 5.513 | 0.067 / 0.081 | 131.05 / 73.31 |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,186–8,189 | 900.9 | 9.126 | 0.238 / 0.245 | 71.50 / 48.46 |
+| Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,190 | 670.4 | 12.222 | 0.132 / 0.131 | 77.10 / 45.86 |
+| Muse-Glimmer-30B UD-Q4_K_XL | llama.cpp Vulkan | 32,768 | 6,348–6,353 | 1329.2 | 4.879 | 0.262 / 0.258 | 37.37 / 37.50 |
+| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,189 | 373.5 | 21.933 | 0.059 / 0.059 | 126.73 / 78.36 |
+| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, expert cache | 262,144 | 7,923–7,926 | 220.3 | 35.989 | 0.400 / 0.243 | 37.21 / 36.87 |
+| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,185–8,188 | 388.4 | 21.083 | 0.057 / 0.057 | 125.85 / 77.07 |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, MTP3 | 40,960 | 8,185–8,189 | 1402.8 | 5.851 | 0.088 / 0.083 | 115.76 / 64.90 |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 65,536 | 8,186–8,188 | 1471.2 | 5.575 | 0.092 / 0.088 | 205.12 / 73.44 |
+| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 65,536 | 8,184–8,186 | 1496.5 | 5.486 | 0.066 / 0.082 | 132.03 / 71.32 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,187 | 914.3 | 8.987 | 0.219 / 0.223 | 76.61 / 53.35 |
 
-Short code/prose uses the saved 29/25-token prompts, temperature 0.6, top-p 0.95,
-seed 42 and 256 output-token cap. Actual counts are retained. Native prompt PP
-is used for llama.cpp/Strata; SGLang/vLLM use their measured engine prefill phases.
-TTFT/decode use external SSE timing. Phase definitions differ; this is not a
-kernel-only comparison. Muse may spend its short cap in reasoning; its final
-marker probes use a 1,024-output allowance and passed 2/3 checks.
-Retrieval failures remain in the reported medians. Other marker probes use 64.
+Muse retrieved all markers in 2/3 probes with a 1,024-output allowance; the failed
+trial remains in the medians. All original counts, timing fields, hashes and memory
+extrema are retained in the [numeric record](linux/hardware/results/dual-amd-i9-64gb-2026-10-20.json).
 
-[Complete method, all trials, input lengths, memory and reproduction](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
-All accepted marker probes reported zero cached input; experts were warmed by
-preceding requests. Older-build and single-AMD speeds remain in the history.
+### Two Super profiles using fixed ~8K-input workloads
 
-### Long input, cache behavior and capacity
+| Super quant / workload | Context | Actual input / output | Native PP t/s | External TTFT s | External decode t/s |
+|---|---:|---:|---:|---:|---:|
+| IQ3_XXS / code | 32,768 | 8,108 / 256 | 98.21 | 82.566 | 15.90 |
+| IQ3_XXS / prose | 32,768 | 8,111 / 256 | 97.84 | 82.911 | 16.95 |
+| Q4_K_XL / code | 32,768 | 8,108 / 256 | 43.26 | 187.432 | 7.86 |
+| Q4_K_XL / prose | 32,768 | 8,111 / 256 | 44.17 | 183.653 | 8.19 |
 
-| Model / backend | Configured context | Actual input / output tokens | Native prefill t/s | TTFT s | Decode t/s / limit | Evidence |
-|---|---:|---:|---:|---|---|---|
-| Qwen27B / SGLang MTP3 | 40,960 | 39,440 / 22 | — | 35.54 | 85.29; short retrieval only | Oct 17 [C17] |
-| Qwen27B / SGLang DFlash2 | 65,536 | 64,033 / 22 | — | 64.02 | 102.43; short retrieval only | Oct 17 [C17] |
-| Qwen27B / vLLM dev329 MTP3 | 65,536 | 64,033 / 22 | — | 54.56 | Not used as sustained decode | Oct 18 [U18] |
-| Qwen35B / llama.cpp HIP `f12aaa3` | 262,144 | 63,911 / 19 | 417.9 | — | Short retrieval only | Oct 18 [MOE] |
-| Empero35B / llama.cpp HIP `f12aaa3` | 262,144 | 63,911 / 19 | 457.8 | — | Short retrieval only | Oct 18 [MOE] |
-| Nemotron Bolt Q4 / llama.cpp HIP `f12aaa3` | 262,144 | 63,911 / 19 | 424.0 | — | Short retrieval only | Oct 18 [Q4] |
-| Flash-Next / Strata 0.1.45 | 262,144 | 258,044 / 256 | 775.1 | — | 39.9; one retrieval + code sample | Oct 19 [CTX19] |
+These TTFT values include ~8K input processing and are **not short-prompt TTFT**.
+MTP is off. IQ3 uses HIP 21:19, 19.124 GiB CPU experts and 2 GiB cache; Q4 uses HIP 1:1,
+47.424 GiB CPU experts and 4 GiB cache. Both use six CPU threads and 32K total context.
+Both retrieved markers at 28,546 input / 22 output. Candidate runs overlapped
+user-authorized copy/hash/download IO ending 2026-10-20T11:03:39Z; timings and RAM
+minima are not an isolated engine A/B. The actual production rebuild passed
+separate normal-launcher tools/JSON/streaming/placement checks for both profiles.
 
-The three llama.cpp MoEs allocated 256K but were tested only around **64K actual
-input**, on the older build. Latest-build near-limit retrieval was not repeated.
-Qwen27B/Muse dense near-window evidence is from an earlier single-AMD profile,
-not fresh capacity validation of the latest dual-card build. Those measurements
-remain in the [dated history](linux/hardware/BENCHMARK-HISTORY.md).
+### Long context and model storage
 
-Strata's separate production conversation used 258,025 fresh input tokens at
-956.9 native PP; prompt processing took **269.64 s**. A subsequent full-history
-follow-up reused 258,048 tokens and took **0.84 s total**. Neither duration is a
-measured TTFT. The uncached 258,044-token code probe took 332.93 s of prefill.
-vLLM's separate 8K prefix test reduced TTFT **5.73 → 0.55 s** on reuse. Cache hits
-change the workload and cannot be compared with fresh-prompt timing.
+Strata's corrected-NVMe selected profile passed **257,984 actual input /
+256 output**, then a cached full-history follow-up, at native 256K.
+The selected fresh probe measured 1,000.1 native PP t/s and 67.1 native decode t/s; external TTFT was not measured. The full-history follow-up took 1.732s total, which is not TTFT. Both pool trials retained zero owned swap/spill. No RoPE extension is enabled.
+The three smaller llama.cpp MoEs retain 256K allocation with ~64K retrieval on
+older builds; their latest 8K probes do not prove full-window operation.
+SGLang MTP/DFlash2 and vLLM retain 40K/64K/64K contexts, with earlier near-limit
+retrieval under its original hardware/build attribution.
 
-The selected Strata profile uses INT8 KV, 32K GPU KV residency, full host KV
-backing, 13.5 GiB CPU expert budget, split 26, 2,048-token prefill and 7/8 GiB
-startup VRAM reserves. Its 64 GB candidate stays at native 256K and requires
-separate validation; no experimental 512K/RoPE result is claimed. [CTX19]
+Strata's managed backend and standalone app share verified weights on the new
+shared NVMe. The generated expert pack was checked against every source expert
+byte before reuse. Maya's two requested model downloads are staged on that NVMe;
+its runtime is not installed or validated yet. Other resident GGUF models stay
+on Shared SATA; SGLang/vLLM target/draft checkpoints stay on Linux NVMe.
+[Storage inventory](linux/hardware/results/streaming-storage-2026-10-20.json).
 
-
-Maintenance reconciled saved results without rerunning timings or changing profiles.
-The purchased PEX88096 switch is pending installation/P2P validation.
-[Maintenance record](linux/hardware/WORKSPACE-MAINTENANCE-2026-10-19.md).
-
-<a id="previous-rtx-4070-12-gb--rtx-3060-12-gb"></a>
+[Current results index](linux/hardware/results/README.md) · [Dated benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md)
+· [Historical i5/32 GB AMD report](linux/hardware/AMD-BENCHMARKS-2026-10-19.md).
 
 ## NVIDIA: archived setup and results
 
@@ -236,11 +205,12 @@ No Windows throughput is inferred from Linux results.
 | [Full dated benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md) | Single-AMD, earlier motherboards, tuning controls, retired engines and update stages |
 | [Previous README archive](linux/hardware/README-ARCHIVE-2026-10-19.md) | All previous publication tables and chronological notes |
 
-The Linux tree assumes `/opt/local-llm`; shared GGUFs/Strata assets use example
-path `/mnt/llm-models`. HF GPTQ weights and the DFlash2 drafter use Linux NVMe
-under `models/`. Obtain binaries/dependencies separately, adapt paths and GPU
-PCI addresses, and replace `CONFIGURE_SHARED_DRIVE_UUID` before using shared
-storage helpers. Generate private harness/network settings locally and keep
+The Linux tree assumes `/opt/local-llm`. Active resident GGUF examples use
+`/mnt/shared/GGUF-Models`; Strata/Maya streaming assets use
+`/mnt/shared-nvme/LLM-Models`. HF GPTQ weights and the DFlash2 drafter remain
+under Linux NVMe `models/`. Obtain binaries/dependencies separately, adapt paths
+and GPU PCI addresses, and configure both `CONFIGURE_SHARED_DRIVE_UUID` and
+`CONFIGURE_SHARED_NVME_UUID` before using the storage helpers. Generate private harness/network settings locally and keep
 credentials outside Git. These hardware-specific examples are not a universal installer.
 
 Backend launchers start visible terminals; **dsh** is separate. **Strata Q3** /

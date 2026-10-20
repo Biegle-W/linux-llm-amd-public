@@ -19,10 +19,11 @@ from moe_memory import host_memory, worker_memory
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=30020)
+    parser.add_argument('--config', type=Path, default=ROOT/'dsh/strata-iq3-profile.json')
     parser.add_argument('--long', action='store_true')
     parser.add_argument('--output', type=Path, default=ROOT/'hardware/generated/strata-live-validation.json')
     a = parser.parse_args()
-    cfg = json.loads((ROOT/'dsh/strata-iq3-profile.json').read_text())
+    cfg = json.loads(a.config.read_text())
     model = cfg['model_name']
     base = f'http://127.0.0.1:{a.port}'
     def api(path, body=None):
@@ -31,7 +32,14 @@ def main():
         return urllib.request.urlopen(request, timeout=600)
     with api('/v1/models') as response:
         models = json.load(response)['data']
-    assert any(m['id'] == model and m['context_length'] >= 32768 for m in models)
+    row = next(m for m in models if m['id'] == model)
+    reported_context = row.get('context_length')
+    if reported_context is None:  # Direct native API uses /health; managed router adds model metadata.
+        with api('/health') as response:
+            health = json.load(response)
+        assert health['loaded'] and health['model'] == model
+        reported_context = health['max_context']
+    assert reported_context == int(cfg['args'][cfg['args'].index('--max-context')+1]) >= 32768
     engine = [p.pid for p in processes().values() if p.args and p.args[0] == cfg['exe']]
     assert len(engine) == 1, 'Expected exactly one owned Strata HIP engine'
     devices = amd_devices()

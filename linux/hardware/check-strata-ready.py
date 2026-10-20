@@ -12,10 +12,13 @@ sys.path.insert(0, str(ROOT / "dsh"))
 from strata_runtime import memory_blockers, kv_backing_gib
 
 
-def inspect(ram=32):
+def inspect(ram=None, profile=None):
     mem = {line.split(':')[0]: int(line.split()[1]) * 1024
            for line in Path('/proc/meminfo').read_text().splitlines()}
-    source_path = ROOT / ('dsh/strata-iq3-profile.json' if ram == 32 else 'dsh/strata-iq3-64gb-candidate.json')
+    # Retain the old --ram 64 candidate alias, but default to the actual active
+    # profile after RAM restoration. Readiness never activates either profile.
+    selected = profile or ('larger-cache' if ram == 64 else 'active')
+    source_path = ROOT / ('dsh/strata-iq3-profile.json' if selected == 'active' else 'dsh/strata-iq3-64gb-candidate.json')
     source = json.loads(source_path.read_text())
     args = source['args']
     budget = float(args[args.index('--resident-budget-gib')+1])
@@ -55,13 +58,20 @@ def inspect(ram=32):
             'assets_present': assets_ok, 'tokenizer_present': tokenizer_ok,
             'hip_engine_present': engine_ok, 'amd_pci_candidates': amd,
             'kfd_access': kfd_ok, 'blockers': problems,
-            'profile_ram_gb': ram, 'expert_budget_gib': budget,
+            'profile': selected, 'requested_ram_alias': ram,
+            'minimum_physical_ram_gib': source['minimum_host_ram_gib'],
+            'expert_budget_gib': budget,
             'note': 'Read-only readiness, not a benchmark or proof of maximum context. No inference was started.'}
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--ram', type=int, choices=(32, 64), default=32)
-    result = inspect(parser.parse_args().ram)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--profile', choices=('active', 'larger-cache'), default=None,
+                       help='Inspect active profile (default) or the inactive 20 GiB cache candidate')
+    group.add_argument('--ram', type=int, choices=(32, 64), default=None,
+                       help='Legacy alias: 32 inspects active; 64 inspects the inactive larger-cache candidate')
+    args = parser.parse_args()
+    result = inspect(args.ram, args.profile)
     print(json.dumps(result, indent=2))
     raise SystemExit(0 if result['eligible_for_manual_testing'] else 2)

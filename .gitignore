@@ -44,3 +44,7 @@
 
 # Desktop app distributions are installed locally, never uploaded
 *.AppImage
+
+# Local activation/retirement backups may contain machine-specific paths.
+**/.private-backups/
+linux/maya/upstream/

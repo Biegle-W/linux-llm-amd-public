@@ -1,5 +1,10 @@
 # Strata: current 32 GB profile and 64 GB preparation
 
+> **October 20 current state:** i9-13900KS / 64 GB validation is complete; both Super
+> IQ3/Q4 are selectable and Strata retains 13.5 GiB / native 256K on shared NVMe.
+> This dated report preserves its original evidence. Use the
+> [current profile report](CPU-RAM-PROFILES-2026-10-20.md) for active settings and results.
+
 The existing IQ3_XXS model now runs at **262,144 native context** on both AMD
 cards with 32 GB RAM. The old 32K cap was a validated conservative choice, not a
 hardware maximum. See [the current settings and measured limits](STRATA-CONTEXT-2026-10-19.md).

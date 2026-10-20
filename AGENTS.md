@@ -25,19 +25,31 @@ Preserve historical NVIDIA/Windows snapshots. See
 `linux/hardware/UPGRADE-DUAL-7900XTX.md` for validation status.
 
 October 17 hardware: MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8. SGLang MTP
-passed and is enabled again; another 32 GB RAM is pending (32 GB installed).
+passed and is enabled again; 64 GB RAM is installed; current validation is described below.
 See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident; follow the newer MoE policy below.
 
-## Current CPU/RAM — October 19
+## Current CPU/RAM and profiles — October 20
 
-Intel i9-13900KS and 64 GB RAM are now installed (61.51 GiB OS-visible).
-This supersedes earlier pending-RAM/current-32-GB inventory statements below.
-Both RX 7900 XTX cards remain on CPU PCIe4 x8 paths; the purchased switch has
-not appeared in their topology. Read-only 64 GB Strata readiness passed, but
-production profiles and CPU thread counts were not changed. Candidate activation
-still requires live validation; preserve guards. Existing AMD benchmark numbers
-belong to the former i5-13600KF / 32 GB system and must retain that attribution.
-See `linux/hardware/CPU-RAM-UPGRADE-2026-10-19.md`.
+Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
+remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
+Eleven profiles are active: seven llama.cpp, two SGLang, one vLLM, one Strata.
+Both Super IQ3 and Q4 are selectable at 32K; retain all weights. The user's saved
+DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
+native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
+The 20 GiB candidate is not selected and remains inactive. Do not regenerate the
+obsolete 32K/128K Strata presets or remove IQ3 on the basis of superseded plans.
+
+llama.cpp 4c3c5810 and vLLM 0.32.1rc1.dev36+ge68efc685.rocm72 are promoted after
+validation. SGLang f84475cc and Strata 477ac13c are retained. Current results preserve
+candidate-source timings versus production rebuild functional proofs; no speedup
+is claimed for these performance-neutral updates. See
+`linux/hardware/CPU-RAM-PROFILES-2026-10-20.md`. Earlier i5/32 GB and NVIDIA results
+must retain their original hardware/build/workload. Strata's corrected expert pack
+and shared-NVMe pool measurements are distinct from old SATA-pack results.
+Strata and standalone App share one new shared-NVMe asset set; engine settings
+and watchdogs are independent. Maya downloads are staged there, not an active
+validated runtime. Keep engines/environments Linux ext4 and all model weights
+excluded from Git.
 
 ## Forum research and source citations
 
@@ -69,19 +81,14 @@ snapshots; historical evidence is not a current validated profile.
 
 ## MoE expert offload and caching — October 18
 
-The user explicitly requests CPU expert offload plus GPU hot-expert caching for
-all MoE models, and plans another 32 GB RAM. This supersedes the earlier
-GPU-resident-only MoE policy. Keep both RX 7900 XTX cards active. Size current
-profiles for the actual 32 GB installation with bounded RAM/VRAM, swap and
-residency checks; prepare separately gated 64 GB candidates. Preserve dense
-Qwen 27B and Muse GPU placement. Use actual expert-count metadata to identify
-MoE models. Expert caching is distinct from KV/prompt caching; do not label
-`cache-ram` or static CPU placement as a hot-expert cache. Validate the installed
-backend's real cache implementation and MTP behavior before activation. Use the validated bounded 32 GB Strata profile on both AMD
-GPUs. Keep its
-separate 64 GB candidate inactive until physical-memory and live
-long-context checks pass; more installed RAM does not activate it automatically.
-Do not silently re-enable full-GPU-only MoE defaults during later updates.
+The user requests CPU expert offload plus GPU hot-expert caching for all MoE
+models, with both RX 7900 XTX cards active. Size profiles for the actual64 GB using
+bounded RAM/VRAM, swap and residency checks. Preserve dense Qwen27B/Muse GPU
+placement. Identify MoEs by expert metadata; KV/prompt caching and static CPU
+placement are not hot-expert caching. Validate each backend's implementation and
+MTP behavior before activation. Preserve the validated13.5 GiB Strata expert cap,
+streamed host KV admission, desktop headroom and continuous latched watchdog.
+More installed RAM does not automatically select20 GiB or extend native context.
 
 ## FreeToken retired — October 18
 
@@ -111,26 +118,30 @@ only; preserve earlier speeds with their original dates/builds. Distinguish
 native prefill, benchmark estimates and TTFT. Do not imply that an allocated
 window was fully tested or invent throughput for an unmeasured update.
 
-Strata desktop protection (October19): preserve at least a 6 GiB per-card startup
+Strata desktop protection (October 19): preserve at least a 6 GiB per-card startup
 reserve, continuous whole-card VRAM/owned-memory watchdog and latched guard
 failure. Unload only its owned worker; never reclaim space by killing unrelated
 GPU apps. The current measured profile and rollback limits are maintained in
 `linux/hardware/STRATA-CONTEXT-2026-10-19.md`; overlap is layer splitting, not TP.
 
-Native 256K Strata is now validated on 32 GB RAM with INT8 KV / 32K GPU residency
-and full host backing. Preserve the streamed-KV admission budget beside expert
-RAM and desktop headroom. The 64 GB candidate retains native 256K and remains
-inactive; do not regenerate the obsolete 32K/128K context presets. Beyond 256K
-requires experimental RoPE/quality validation, not just successful allocation.
+Native 256K Strata was previously checked on32 GB; October 20 adds both CPU pools
+and fresh near-window/follow-up tests on 64 GB with the corrected NVMe pack. Keep
+INT8 KV,32K GPU residency/full host backing, 13.5 GiB expert cap and desktop reserves.
+The 20 GiB candidate is inactive. Beyond256K needs experimental RoPE/quality validation,
+not successful allocation alone. Overlap is layer splitting, not TP.
 
 ## Current benchmark publication
 
-Use `linux/hardware/results/README.md` as the current-results entry point and
-`linux/hardware/results/current-amd-2026-10-19.json` for the fresh nine-profile
-AMD measurements; `hardware/results/nemotron-super-2026-10-19.json`
-(under `linux/` publicly) adds the tenth active profile with a different timing workload.
-Keep dated historical records; do not promote an older build's
-speed into a current table. Update current README tables, dated benchmark ledger
-and canonical handoff together. Distinguish native prompt timing, engine prefill
-phase timing, external SSE TTFT/decode and input/TTFT proxies. New ~8K probes are
-not full-window context validation. The historical NVIDIA setup remains separate.
+Use `linux/hardware/results/README.md` and
+`linux/hardware/results/dual-amd-i9-64gb-2026-10-20.json` for eleven current profiles.
+Nine use the shared short-prompt/fresh~8K method; two Super quants use fixed~8K
+input/256-output trials. All trials, actual counts, build attribution, memory and
+both Strata pool cases are retained. `dual-amd-i9-baseline-2026-10-20.json` preserves
+31288c9 same-hardware selection evidence and OLD SATA Strata measurements.
+The October 19 numeric/report records remain i5/32 GB history; never substitute
+older speed into a current-build table. Update README, ledger, current report and
+canonical handoff together. Distinguish native/engine-phase PP, external SSE TTFT/
+decode, input/TTFT proxies and functional-only proofs. An~8K probe is not full-window
+validation. Muse marker failures stay visible. Candidate Q4 peak includes a brief
+whole-card reserve dip; passing debounced guards does not mean reserves never
+dipped below their threshold. Host self-access is not a remote-peer test.

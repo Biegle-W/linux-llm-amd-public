@@ -48,16 +48,16 @@ def metrics(port):
         return {}
 
 
-def stream(kind, model, prompt, limit=256, sampled=True):
+def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=None, cache_prompt=False):
     port, native = PORTS[kind]
-    body = {'model':model, 'messages':[{'role':'user','content':prompt}],
+    body = {'model':model, 'messages':messages if messages is not None else [{'role':'user','content':prompt}],
             'temperature':.6 if sampled else 0, 'max_tokens':limit,
             'stream':True, 'stream_options':{'include_usage':True},
             'chat_template_kwargs':{'enable_thinking':False}}
     if sampled:
         body.update(top_p=.95, seed=42)
     if kind == 'llama':
-        body['cache_prompt'] = False
+        body['cache_prompt'] = cache_prompt
     if kind == 'strata':
         body['strata_checkpoint'] = False
     before = metrics(native)
@@ -66,7 +66,7 @@ def stream(kind, model, prompt, limit=256, sampled=True):
     first = last_content = usage = timing = None
     text = reasoning = ''
     started = time.monotonic()
-    with urllib.request.urlopen(req, timeout=1200) as res:
+    with urllib.request.urlopen(req, timeout=timeout) as res:
         for line in res:
             line = line.decode().strip()
             if not line.startswith('data: ') or line == 'data: [DONE]':

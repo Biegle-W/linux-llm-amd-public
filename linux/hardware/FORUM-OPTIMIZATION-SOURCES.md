@@ -455,3 +455,22 @@ benchmarks still use the motherboard x8/x8 layout and host transport.
   routing, signal integrity or RX 7900 XTX compatibility.
 
 No PCI register, BIOS, kernel or runtime-transport changes were applied for this purchase.
+
+## i9 / 64 GB CPU and expert-cache validation — October 20
+
+These sources motivated bounded candidates, not promised local speeds. Local
+measurements and selected settings are in [the validation report](CPU-RAM-PROFILES-2026-10-20.md).
+
+| Source | Relevant setup / implementation | Applicability here |
+|---|---|---|
+| [lcz.me topic 2027, post 13](https://lcz.me/topic/2027/13) | Single RX 7900 XTX / 64 GB; resident CPU experts and available RAM | Verify actual available RAM and worker residency; another Strata version is not a speed target. |
+| [lcz.me topic 2032, post 19](https://lcz.me/topic/2032/19) | Older Strata 0.1.27 / HIP library tuning | Tables depend on architecture and library build; no external tuning table was installed for this task. |
+| [Level1Techs mixed-offload thread](https://forum.level1techs.com/t/9950x3d-reviewed-and-benchmarked-tokens/227386) | March 2025 discussion, including tk11/ubergarm; another CPU/platform/model | Memory movement can limit mixed offload; it supplies no 13900KS/Super-Q4 result. |
+| [Pinned llama.cpp expert-cache source](https://github.com/ggml-org/llama.cpp/blob/4c3c5810f87efe177949f1b85ae509d38a2a311f/src/llama-moe-cache.cpp) | 50/50 SLRU replaces LRU in 4c3c5810; large batches reuse cached expert copies and upload misses | Compare microbatches with exact placement/cache settings and guards; CPU-backed weights are still computed on GPUs in this path. |
+| [Pinned Strata CPU-affinity source](https://github.com/Niko1221/Strata/blob/477ac13cbe8e582c20484871ce459d20d82df09d/src/program/generate.cpp) | `--pool-workers` and `--pool-affinity p-cores` | Compare six unpinned workers and seven P-core workers on the detected 8P+16E CPU; core count alone does not establish the fastest pool. |
+
+The same-placement Q4 thread controls (6/6 versus 8/24 physical-core settings)
+stayed near 45 native prefill t/s and 8 decode t/s, one timed trial per task.
+They do not establish a benefit from more threads. Placement, microbatch and
+cache changes are complete-profile experiments; keep their actual input lengths,
+quality checks and guard outcomes beside the timings.

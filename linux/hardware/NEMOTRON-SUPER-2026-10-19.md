@@ -1,5 +1,10 @@
 # Nemotron 3.5 Super VL: bounded dual-AMD setup
 
+> **October 20 current state:** i9-13900KS / 64 GB validation is complete; both Super
+> IQ3/Q4 are selectable and Strata retains 13.5 GiB / native 256K on shared NVMe.
+> This dated report preserves its original evidence. Use the
+> [current profile report](CPU-RAM-PROFILES-2026-10-20.md) for active settings and results.
+
 Prepared October 19, 2026 for two RX 7900 XTX 24 GB cards and 32 GB host RAM.
 This is a new 120B-total/12B-active model, distinct from the retained 74B Bolt.
 Initial operation is text and tools only; no vision projector was downloaded.

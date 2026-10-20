@@ -1,5 +1,10 @@
 # CPU and RAM inventory — October 19, 2026
 
+> **October 20 current state:** i9-13900KS / 64 GB validation is complete; both Super
+> IQ3/Q4 are selectable and Strata retains 13.5 GiB / native 256K on shared NVMe.
+> This dated report preserves its original evidence. Use the
+> [current profile report](CPU-RAM-PROFILES-2026-10-20.md) for active settings and results.
+
 Read-only checks after the hardware change confirm:
 
 | Component | Detected configuration |

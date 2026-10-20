@@ -9,6 +9,15 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def strata_experts_present():
+    """Follow the configured pack rather than an obsolete drive location."""
+    try:
+        args = json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text())['args']
+        return (Path(args[args.index('--pack') + 1]) / 'experts.bin').is_file()
+    except (OSError, ValueError, KeyError, IndexError):
+        return False
+
+
 def is_target_pair(cards):
     """Require two actual 24 GiB Navi31 GPUs bound to amdgpu."""
     return sum(c['vendor'] == '0x1002' and c['device_id'] == '0x744c'
@@ -66,7 +75,7 @@ def inventory():
         'vulkan_server_built': (ROOT / 'llama.cpp/build-vulkan/bin/llama-server').is_file(),
         'hip_server_built': (ROOT / 'llama.cpp/build-hip/bin/llama-server').is_file(),
         'strata_hip_built': (ROOT / 'strata/build-hip/strata').is_file(),
-        'strata_mmap_experts_present': Path('/mnt/llm-models/Strata/packs/iq3_xxs/experts.bin').is_file(),
+        'strata_mmap_experts_present': strata_experts_present(),
         'active_amd_launcher_configured': (ROOT / 'dsh/llama-runtime.json').exists() and json.loads((ROOT / 'dsh/llama-runtime.json').read_text()).get('backend') in ('vulkan-amd', 'hip-amd'),
         'inference_validation_report': 'hardware/UPGRADE-DUAL-7900XTX.md',
         'rocm_profiles': {kind: {key: {'runtime': value.get('runtime', 'cuda'),

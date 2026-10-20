@@ -1,10 +1,10 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 19, 2026 (America/Toronto)**. Most runtime checks remain dated October 18; October 19 adds measured Strata
-overlap/prefill tuning, desktop headroom protection, validated native256K RAM-backed KV,
-and the separately validated Nemotron Super IQ3 32K profile. Maintenance reconciles
-all ten enabled profiles from saved evidence, validates launch paths and archives
-unused working files; no timing rerun or runtime update is part of maintenance.
+Updated **October 20, 2026 (America/Toronto)**. Current hardware is i9-13900KS,
+64 GB RAM and two RX 7900 XTX 24 GB. Eleven enabled profiles include both Super IQ3
+and Q4. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang/Strata pins remain.
+Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
+comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
@@ -19,95 +19,59 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 ## Current status and hardware
 
-- Intel **i9-13900KS (24 cores / 32 threads)**, **MSI MPG Z690 CARBON WIFI**, two **RX 7900 XTX 24 GB** cards.
-  Both GPUs have CPU-connected PCIe 4.0 x8 links; the earlier chipset x4 layout
-  is obsolete. RTX 4070 and RTX 3060 are retired from this Linux setup.
-- **64 GB system RAM** is installed; Linux reports **61.51 GiB usable** and
-  approximately 56 GiB available, with zero swap used at the read-only check.
-  RAM slot/speed/channel mode and sustained stability were not independently
-  validated. The prepared 64 GB Strata candidate passes readiness but remains
-  inactive pending live validation; Nemotron Super Q4 is still inactive.
-  Saved benchmark tables retain the former **i5-13600KF / 32 GB** hardware.
-  [CPU/RAM inventory and limits](../hardware/CPU-RAM-UPGRADE-2026-10-19.md).
-  Dense models keep GPU-resident weights; all active MoEs use CPU expert
-  backing and GPU hot-expert caches.
-- Use **both AMD cards for every production model**. llama.cpp uses validated model-specific layer splits (1:1 or 21:19);
-  SGLang/vLLM use TP2. FreeToken and its former single-card exception are retired.
-- ROCm peer access is unavailable; TP2 works through host transport. Retain the
-  isolated no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
-  and disabled custom all-reduce. The owner purchased the PEX88096 four-slot GPU kit (listing title uses
-  “plx8096”). It remains pending installation and local P2P/Gen4/RCCL validation.
-  Keep current transport settings until validation passes; external forum results
-  are not local measurements. [Source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md#pcie-switch-purchase-october-19).
-- October 19 maintenance: authenticated gateway health and enabled-catalog checks
-  cover **10 profiles**. No managed inference backend was available at the initial
-  audit; catalog presence does not mean a model is loaded. This maintenance does
-  not start models, repeat generation/timings or change the saved DSH default.
-  FreeToken and HyperQwen remain retired from the current AMD setup.
+- Intel **i9-13900KS (24 cores /32 threads)**, **64 GB installed RAM (61.51 GiB OS-visible)**,
+  MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**. Both GPUs use CPU PCIe 4.0 x8 links.
+  The PEX88096 switch remains purchased but not installed or P2P-validated.
+- Every active profile uses both cards. Dense llama.cpp weights remain on GPU;
+  HIP MoEs use CPU expert backing plus GPU hot-expert caches. Strata streams PLE
+  and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
+  host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
+  and custom all-reduce disabled. No direct P2P claim is made.
+- **Eleven profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata. Presence in
+  the authenticated catalog does not mean weights are loaded. Only one managed
+  model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
+- The saved DSH default/provider is preserved. Super IQ3 and Q4 are both selectable;
+  neither model's weights were deleted. FreeToken/HyperQwen remain retired.
+- Kernel observed 7.0.0-38-generic; ROCm SDK 7.2.3. Exact build, token counts and
+  benchmark methods are in [the post-upgrade report](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
+  Historical i5/32 GB and NVIDIA measurements retain their own hardware attribution.
+- Shared SATA and the new shared NVMe are exFAT; builds/environments stay Linux ext4.
+  This machine is dual-boot: Windows boot stops the Linux service. Model-file sharing
+  does not make Linux HIP binaries or absolute paths runnable in Windows.
 
-Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
-binaries, Python environments and build caches are Linux-specific. The machine
-is dual-boot: booting this same PC into Windows stops the Linux inference server.
+## Nemotron Super: both IQ3 and Q4 active
 
-The Shared model drive was mounted using the existing UUID-based helper after
-this boot; the retained Strata assets are present. No model was loaded during
-the CPU/RAM check. GPU uplinks still use separate CPU x8 paths; the purchased
-switch is not in their topology. Existing no-P2P transport settings are retained.
+Both use 32,768 total context, both GPUs, HIP layer splitting, Q8 K/V, Flash Attention,
+six decode/prefill threads, batch 512/microbatch 128, checkpoints 0 and MTP off.
 
-## Nemotron Super: 32 GB active profile / 64 GB candidate
+| API model ID | Split | CPU expert backing | Total GPU expert-cache ceiling |
+|---|---|---:|---:|
+| `nemotron-3.5-super-iq3` |21:19|19.124 GiB|2,048 MiB|
+| `nemotron-3.5-super-q4` |1:1|47.424 GiB|4,096 MiB|
 
-`nemotron-3.5-super-iq3` is added to the existing llama.cpp launcher, DSH and
-this authenticated gateway, with **32,768 total context**, both AMD cards,
-HIP layer split **21:19**, Q8 K/V, Flash Attention, CPU expert backing
-**20,533,739,520 bytes (19.124 GiB)** and a **2,048 MiB total GPU cache ceiling**.
-Text and tools are validated; vision is disabled and no projector is installed.
-The saved default model and connection settings are unchanged.
-The normal launcher/gateway passed authenticated generation, tools/JSON/streaming,
-zero-swap native scopes and IQ3/HIP -> Qwen/Vulkan -> IQ3/HIP switching. The
-gateway lists 10 enabled profiles, with Q4 hidden. Validation workers were
-stopped afterward; no inference backend was left running by this task.
+Both passed28,546-input marker retrieval and six fixed~8K-input/256-output timing
+trials on4c3c5810. IQ3 decode medians15.90/16.95 t/s; Q4 7.86/8.19 t/s, code/prose.
+These are fixed-input workloads, not short-prompt TTFT. Candidate trials overlapped
+model-copy/hash/download IO; do not claim an isolated engine speedup. A separate
+normal visible-terminal production rebuild passed tools/results, JSON, SSE, both-GPU
+placement and zero worker swap/spill for EACH profile. Actual binary fingerprints
+and settings are in [the numeric record](../hardware/results/dual-amd-i9-64gb-2026-10-20.json).
 
-All six Unsloth IQ3/Q4 shards are on Shared SATA beneath
-`/mnt/llm-models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/`,
-pinned to `75a5829055f69a0359085ae6bbd0a81b60bc05c6`, with size/SHA-256 verification
-in `download-manifest.json`. llama.cpp remains at `31288c9c66e59377f7788d920678a565bb89dd37`.
-There is no new model-weight copy or cache on the primary NVMe.
+Q4 requires 60 GiB OS-visible total and 51.424 GiB available RAM before loading.
+Owned guards retain 3 GiB available RAM /3 GiB per-card headroom with their existing
+sample debounce; they unload only the owned worker. The 64K Q4 experiments failed
+memory guards and are not active. IQ3 requires23.124 GiB available RAM. MTP remains
+off for both. The current user decision is BOTH active, not replacement/deletion.
 
-IQ3 passed arithmetic, JSON, streaming, a tool-call/result round trip and
-three-marker retrieval at **28,546 uncached input tokens**. Three approximately
-8K-input/256-output trials each measured code/prose medians of **95.75 / 97.13
-native prefill t/s**, **84.699 / 83.521 s external TTFT**, and **14.16 / 16.32
-external decode t/s**. These are not the earlier batch's short-prompt timings.
-Peak whole-card VRAM was **20.00 / 20.94 GiB**, available host RAM stayed above
-**5.84 GiB**, and worker swap/nonresident VRAM were zero. The 1:1 and 19:21 split
-trials were stopped for insufficient per-card reserve, without swap or spill.
-
-New loads need **23.124 GiB available RAM** and **21 GiB free VRAM per card**.
-The owned-worker monitor retains **3 GiB available RAM / 3 GiB free per GPU**;
-it does not terminate DSH or unrelated applications. MTP stays off: its expert
-head alone adds 2.789 GiB, exceeding spare VRAM beyond the combined reserve.
-No MTP speed comparison was run because that memory admission failed.
-
-`nemotron-3.5-super-q4` is a prepared candidate only and is absent from active
-API/DSH catalogs. It requires **60 GiB OS-visible total / 51.424 GiB available
-RAM**, uses **47.424 GiB CPU expert backing**, a **4 GiB cache ceiling** and a
-32K target. Installing RAM does not activate it. Its context and speed are not
-locally validated. The inactive metadata and physical-memory gates are in
-`dsh/candidates/nemotron-super.json`; validate after the upgrade before activation.
-
-Start `llm-llama` or the existing llama.cpp Desktop launcher, then start DSH
-separately and select the IQ3 model under Local llama.cpp. Remote clients use
-the existing authenticated base URL and model ID `nemotron-3.5-super-iq3`.
-Windows remains a client of the Linux HIP service; its historical NVIDIA
-runtime configuration is not an AMD profile. [Settings and evidence](../hardware/NEMOTRON-SUPER-2026-10-19.md).
+All six original verified Super shards remain on Shared SATA beneath
+`/mnt/shared/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/`,
+pinned75a5829055f69a0359085ae6bbd0a81b60bc05c6. No Super weights were moved to
+primary NVMe. Start `llm-llama`, start DSH separately, and select either exact ID.
+[Post-upgrade selection and limits](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
 
 ## Active model catalog
 
-The current catalog has **10 enabled profiles**: six llama.cpp, two SGLang,
-one vLLM and one Strata. The original nine-profile benchmark batch and later
-Nemotron Super IQ3 measurements remain separate because input lengths and timing
-methods differ. All were measured on the stated builds; no maintenance rerun was
-performed. [Current results and limits](../hardware/CURRENT-AMD-BENCHMARKS.md).
+The current catalog has **11 enabled profiles**: seven llama.cpp, two SGLang, one vLLM and one Strata. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -122,6 +86,7 @@ not guarantees of full-window speed or general long-context accuracy.
 | llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | Q4_K_M, two GGUF shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
+| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-q4` | 32,768 | UD-Q4_K_XL, three shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
@@ -152,7 +117,7 @@ Bolt Q4 source: `darioooooo0o/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-GGUF`,
 revision `b739f8c7c5484413ae3e55e6da8383f0f2570cee`. The two verified shards
 are in `GGUF-Models/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-GGUF/Q4_K_M/`
 on Shared/D:. Pass `NVIDIA-Nemotron-3.5-Bolt-74B-A9B-Q4_K_M-00001-of-00002.gguf`
-to the runtime; keep shard 2 beside it. The old 24GB IQ2 model was removed after
+to the runtime; keep shard 2 beside it. The old 24 GB IQ2 model was removed after
 Q4 validation. API ID stays `nemotron-3.5-bolt`; clients need no model-ID change.
 Q4 passed arithmetic/JSON/tools and 63,911-token retrieval. Short code decode:
 **35.7 t/s**; long prefill: **424.0 t/s**. Single probes, not matched
@@ -334,7 +299,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all ten enabled profiles even when their backends are
+`GET /v1/models` lists all eleven enabled profiles even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -355,72 +320,54 @@ server-side connector. Tool-calling clients must execute tools and return result
 
 ## Storage and runtime pins
 
-The Shared SATA drive was found unmounted after the latest reboot and restored
-with the existing UUID-checking storage helper. Model files were not moved or
-re-downloaded, and no inference backend was started.
-
 Linux runtime/repository root: `/opt/local-llm` on ext4 NVMe.
-Shared model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
+Shared SATA model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.
+New shared NVMe root: `/mnt/shared-nvme/LLM-Models` (UUIDCONFIGURE_SHARED_NVME_UUID).
+**Its Windows drive letter is not established; do not assume D:.** The canonical
+Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 
-- The five active GGUF models and retained Strata Q3 GGUF/pack/MTP files are
-  actual files on Shared SATA, usable by a separately configured compatible
-  Windows runtime. Shared exFAT does not support hardlink deduplication.
-- Linux-only target checkpoint:
-  `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/` on Linux NVMe, reused by both
-  vLLM and SGLang. DFlash2 drafter:
-  `models/drafts/Qwen3.8-27B-DFlash2-W4A16/`, also on Linux NVMe.
-  Windows must not refer to these Linux-only absolute paths.
-- Builds, SDKs, environments, compiler/JIT caches and harness data remain on
-  Linux NVMe. Weights, binaries, caches, private settings, credentials and raw
-  logs are excluded from both repositories. Public history is a separately
-  sanitized distribution, never a copy of private Git history.
-- SATA affects cold load time. SSD paging/PLE/expert reads can also affect a
-  runtime that uses them; do not generalize resident-model decode measurements
-  into a claim that disk speed can never affect Strata.
+- Resident GGUF models, including both Super quants, remain on Shared SATA.
+- Managed Strata and standalone App share `Strata/models/IQ3_XXS`,
+  `Strata/packs/iq3_xxs`, tokenizer, MTP and retained unique app assets under the NEW
+  shared NVMe root. Both app and backend point directly at the same files; no new
+  shortcuts or symlinks. Main GGUF/MTP matched; the generated expert-pack mismatch
+  was resolved by a complete source-derived reference SHA-256 check. See
+  [verified asset inventory](../hardware/results/streaming-storage-2026-10-20.json).
+- Maya downloads are staged under `Maya/` on that new NVMe: GLM-5.3-Flash Maya-S24
+  and DeepSeek-V4.1-Flash-1017 Maya-S plus DSpark/vision. All13 files/443,117,880,880 bytes
+  match published checksums. **Maya runtime is not yet installed or validated.**
+- Linux-only GPTQ target `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/` and DFlash2
+  draft `models/drafts/Qwen3.8-27B-DFlash2-W4A16/` remain on Linux NVMe, shared by
+  SGLang/vLLM. Windows cannot use those Linux absolute paths.
+- UUID guards mount the model volume selected by Strata's configured pack BEFORE
+  handover/preflight. Wrong/unavailable volumes are rejected without creating an
+  empty replacement model tree. Space-containing paths use quoted shell argv or
+  Python argument lists. Unmounted-volume behavior was mocked; no reboot validation
+  or disruptive real unmount is implied. Other llama profiles keep their SATA guard.
+- Builds, SDKs, environments, caches, harness data and private settings remain Linux-specific.
+  Weights, binaries, credentials, raw logs and private archives stay excluded from Git.
+  SSD speed affects cold loads and actual PLE/expert streaming; resident-model
+  decode results cannot establish that storage speed never matters.
 
-| Component | Selected source / version |
+| Component | Selected source /version |
 |---|---|
-| llama.cpp Vulkan (dense), HIP (MoE) | `31288c9c66e59377f7788d920678a565bb89dd37` |
-| SGLang Radeon fork (`gfx1100-support`) | `f84475ccf593087df3d1da13c9e675eadee12352`, locally repaired |
-| vLLM | `0.32.0rc1.dev329+g39983a5e7.rocm723`, locally patched |
-| ROCm SDK / PyTorch / RCCL | 7.2.3 / `2.13.0+git733fca1` / no-hostcall 2.27.7 |
-| Strata HIP source | `477ac13cbe8e582c20484871ce459d20d82df09d`, 0.1.45 |
+| llama.cpp Vulkan/HIP |`4c3c5810f87efe177949f1b85ae509d38a2a311f`|
+| SGLang gfx1100 fork |`f84475ccf593087df3d1da13c9e675eadee12352`, local repairs|
+| vLLM |`0.32.1rc1.dev36+ge68efc685.rocm72`, local repairs|
+| ROCm SDK /PyTorch /RCCL |7.2.3 /`2.13.0+git733fca1` /no-hostcall 2.27.7|
+| Strata HIP |0.1.45 /`477ac13cbe8e582c20484871ce459d20d82df09d`|
 
-**October 18 authorized development update:** llama.cpp HIP/Vulkan, Strata HIP
-and the official ROCm723 vLLM nightly were rebuilt/replaced at the pins above.
-The existing SGLang gfx1100 branch has no newer commits. Official main was checked
-at `fea48754de4b73276cad1062d6b5ae013288204d`, but cannot use the retained Radeon
-GPTQ path unchanged; the tested fork and local verifier/MTP fixes remain.
-[Exact upgrade and validation](../hardware/RUNTIME-UPGRADE-2026-10-18.md).
-The promoted vLLM dev329 measured 130.61 / 72.69 t/s code/prose medians in
-three warm short samples per task. These are not a controlled version A/B or
-sustained full-context speed measurements.
-The earlier [NVIDIA comparison/version audit](../hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
-is a historical snapshot, not the current installed-version table.
-
-AMD llama.cpp now uses a **worker-only systemd scope with `MemorySwapMax=0`**,
-matching Strata's no-swap protection. The original MoE swap/low-RAM/VRAM-spill
-guard remains enabled. This follows an observed guard stop during an unscoped
-MoE load; global swap and unrelated processes are unchanged. An active systemd
-user manager is required for Desktop/SSH launches; preflight rejects its absence
-before stopping another backend. Do not remove the scope or disable the guard
-to work around a model-loading failure. Obsolete rollback environments/builds are archived during October 19 maintenance
-under `D:\LLM-ARCHIVE\MAINTENANCE\2026-10-19\obsolete-working-files.tar.zst`.
-Restore the original relative paths from that private archive before following
-older rollback instructions. The archive manifest and SHA-256 are kept beside it;
-active runtime environments and selected compiled caches stay on Linux NVMe.
-
-[Qwen 27B AMD speculative-decoding research](../hardware/QWEN27B-AMD-SPECULATION-2026-10-18.md)
-traces the ~1,000 t/s headline to aggregate concurrency. Experimental ExLlamaV3
-ROCm ports are research candidates, not installed profiles or exceptions to the
-both-GPUs policy. FreeToken remains retired.
-
-Source/configuration authorities: `dsh/models-amd.ini`, `dsh/llama-runtime.json`,
-`dsh/sglang-profiles.json`, `dsh/vllm-profiles.json`, `dsh/strata-profiles.json`,
-and private `dsh/data/network-access.json`. The installed SGLang wheel's generic
-version string is not a substitute for its pinned fork revision. User preference
-is latest capable upstream development/nightly candidates, with exact pins and
-local validation before activation; this handoff is not permission to auto-upgrade.
+llama.cpp 4c3c5810 and vLLM dev36 passed their fixed promotion criteria; throughput
+was performance-neutral within noise. The vLLM wheel SHA-256 is
+`68cb33f115094f816077c193f8b51eac0ea01052254653b9b336e534d7a71f79`.
+SGLang's Radeon-specific fork remains; official main is not a tested drop-in
+replacement. [Upgrade mechanisms, sources and evidence](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
+Worker-only `MemorySwapMax=0` scopes and RAM/VRAM/spill guards remain mandatory;
+the systemd user manager is required. A failure is not permission to weaken guards,
+use global swap changes or kill other applications. Source authorities are the
+`dsh/*profiles.json`, llama INIs,`llama-runtime.json`,`moe-offload.json` and private
+network configuration. Latest development/nightly preference still requires
+pinned candidates and local validation; this guide does not schedule upgrades.
 
 ## FreeToken removed — October 18
 
@@ -483,51 +430,33 @@ native INT8 pipeline. The seven real model files remain on Shared SATA.
 
 ## Strata and retired setups
 
-Latest October 19 validation: **Strata Q3** `qwen3.8-flash-next-iq3_xxs`,
-HIP 0.1.45/source `477ac13cbe8e`, both RX 7900 XTX, **262,144 native context**.
-INT8 KV uses 32K GPU residency with full RAM backing; split 26, stage trimming,
-overlap, MTP3/minimum probability 0.7,2048 prefill, six workers,13.5 GiB CPU expert
-budget and 7/8 GiB reserve on GPU0/display GPU1. Same SATA assets; no RoPE scaling,
-new quant or runtime update. Parking/adaptive swaps remain off.
+Current managed Strata Q3 `qwen3.8-flash-next-iq3_xxs`: HIP 0.1.45/source 477ac13c,
+both RX 7900 XTX, native 262,144 total context, INT8 KV with 32K GPU residency/full host
+backing, split 26/overlap, MTP3/minimum probability 0.7, prefill 2048,**6 workers /
+all CPUs, 13.5 GiB expert budget**,7/8 GiB startup reserves. Parking/adaptation stay
+off; no RoPE extension. Physical-RAM admission now requires 60 GiB for this validated
+64 GB setup, plus the streamed-KV/expert/desktop available-RAM budget. Increasing
+expert budget to 20 GiB is not selected; the separate candidate remains inactive.
 
-Fresh **258,044 input / 256 output** retrieved all three markers and generated
-code at native PP **775.1**, decode **39.9 t/s** (one sample). Short code/prose
-medians: **72.2/48.0**, three warm runs/task. Tools/results and SSE passed;
-worker swap/spill remained zero. [Results, methods and limits](../hardware/STRATA-CONTEXT-2026-10-19.md).
-This restores the native window; it does not validate experimental contexts above 256K.
+The corrected shared-NVMe pack passed both pool comparisons, tools/results, JSON, SSE,
+and **257,984 actual input / 256 output**, then cached full-history
+follow-up. All markers found; owned swap/spill were zero. Allocated native 256K and
+actual tested input are separate facts. Old SATA-pack results retain their old
+asset attribution. [Current tests and exact timings](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
 
-The worker retains its own `MemorySwapMax=0` scope. Every 0.5 seconds the router checks
-both cards: below 3 GiB free twice or below 1.5 GiB once unloads only Strata.
-It also checks host RAM, owned swap/spill and missing GPU telemetry. Guard
-failures latch: chat requests return an error until explicit `/models/load` or
-restart after freeing resources. The independent frontend/gateway and other
-apps are preserved. This is sampled protection, not a guarantee against bursts.
+`llm-strata` /Desktop Strata Q3 start only the backend in a visible terminal.
+DSH is separate. Router30020 and worker30021 are loopback; the existing authenticated
+LAN/Tailscale gateway exports the model. The continuous0.5s watchdog and latched
+failure remain: below 3 GiB per card twice or1.5 GiB once unloads only its worker;
+RAM, owned swap/spill and missing telemetry are also checked. Explicit reload or
+restart is required after failure. It never kills frontends or unrelated apps.
 
-The Desktop **Strata Q3** launcher and `llm-strata` start only the backend in a
-visible terminal. DSH remains separate; **Local Strata** advertises native 256K.
-Existing default and conversation model selections are preserved.
-Router 30020 and private worker 30021 stay on loopback; the authenticated gateway
-exports the enabled ID. No new weights were downloaded or copied to NVMe.
+The separate Strata App shares these weights but retains its own legacy inactive
+preset; its generation has not been validated here and it does not inherit the
+managed profile/watchdog. Do not start competing copies. [Menu/assets](../launchers/STRATA-APP.md).
 
-See [current upgrade checks](../hardware/RUNTIME-UPGRADE-2026-10-18.md),
-[original 0.1.44.1 measurements and limits](../hardware/STRATA-DUAL-AMD-2026-10-18.md)
-and [community sources](../hardware/STRATA-LOW-RAM-COMMUNITY-2026-10-18.md).
-Admission now counts the complete streamed host KV copy:29 GiB physical,
-22.852 GiB available before loading (13.5 GiB expert budget +3.352 GiB host KV +6 GiB
-headroom). Swap does not count. Startup failure preserves unrelated applications.
-The scoped watchdog and managed worker-only shutdown remain unchanged.
-
-The additional 32 GB RAM candidate is inactive, retaining native 256K with 20 GiB
-expert budget, both GPUs and the same KV/placement. Its 60 GiB physical /
-29.352 GiB available gate and live validation still apply; adding RAM does not
-activate it. `python3 hardware/check-strata-ready.py --ram 64` checks readiness.
-[Procedure](../hardware/STRATA-AFTER-RAM.md).
-
-Keep `GGUF-Models/Strata/models/IQ3_XXS`, `packs/iq3_xxs`, tokenizer and `mtp/rt`.
-Q2's model/pack is removed; do not follow archived Q2 instructions. HyperQwen,
-old CUDA environments/builds, GPT-OSS-20B/120B, Qwen 27B Q5, Bonsai 2 and old
-Nemotron Lightning setups remain retired. Historical NVIDIA/Windows reference
-snapshots remain in the public repo.
+Q2, HyperQwen, old CUDA setups, GPT-OSS, Qwen27BQ5, Bonsai and old Lightning remain
+retired. Historical NVIDIA/Windows configurations are reference snapshots only.
 
 ### Workspace archive and completed cleanup — October 18
 
@@ -553,9 +482,8 @@ including the public NVIDIA/Windows reference trees. Private binary archives and
 cleanup logs are excluded from Git. Future package installations may redownload
 packages; repeating removed experiments requires rebuilding their caches.
 
-For the future 64 GB Strata candidate, validate both GPUs, residency, tools,
-streaming and progressively larger actual prompts before enabling its larger
-context. Preserve the Shared Windows-compatible packs. The old single-AMD
+For future Strata changes, repeat both-GPU, residency, tools, streaming and actual
+long-input checks before changing the validated profile. Native 256K is now tested on 64 GB;20 GiB expert backing is not selected. Preserve the Shared Windows-compatible packs. The old single-AMD
 candidate and 4070/3060 CUDA layer splits are historical references.
 
 The Windows handoffs were last validated on the **old NVIDIA hardware**. Their
@@ -569,82 +497,23 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-October 19 original AMD benchmark refresh: the then-nine production profiles
-were remeasured on llama.cpp `31288c9c`, repaired SGLang `f84475c`, vLLM dev329
-and Strata HIP 0.1.45. Prefill and TTFT use three fresh ~8K marker requests;
-code/prose decode and short TTFT use three warm timed requests/task. Production
-contexts and placement are unchanged; these are not full-window tests. See
-[the canonical current report](../hardware/CURRENT-AMD-BENCHMARKS.md) and
-[results index](../hardware/results/README.md). Native/engine-phase prefill is
-kept separate from API TTFT; previous speed tables are historical. The private
-operational README was consolidated; its old dated notes remain in a private
-archive. NVIDIA/Windows setup and benchmark history are preserved.
-Muse returned all markers in 2/3 final probes within a 1,024-output-token
-allowance; its failed trial remains in the medians. SGLang MTP/DFlash2 showed
-about 5.29/8.32 GiB aggregate managed VmSwap; timed swap I/O was not recorded.
-Do not claim universal retrieval success or zero paging. Actual corpus token
-counts differ by tokenizer (Muse ~6.35K, Nemotron ~7.92K, others ~8.19K).
-[Public benchmark report](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/CURRENT-AMD-BENCHMARKS.md).
+[Current eleven-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md),
+[numeric evidence](../hardware/results/dual-amd-i9-64gb-2026-10-20.json) and
+[complete dated ledger](../hardware/BENCHMARK-HISTORY.md) distinguish native
+prompt timings, engine-prefill phases, external SSE TTFT/decode and input/TTFT
+proxies. Nine profiles use the shared short-prompt +fresh~8K method; both Super
+profiles use fixed~8K prompts. Muse markers passed2/3; failures remain reported.
+Every measurement retains its source/build, input/output and method. Current i9
+measurements do not relabel old i5/32 GB, NVIDIA or Windows results.
 
-The [benchmark/context history](../hardware/BENCHMARK-HISTORY.md) is the
-current ten-profile index and dated update ledger. It records allocated context
-separately from actual input tested, PP separately from TTFT, exact measured
-builds and validation-only updates. The three llama.cpp 256K MoE allocations have
-63,911-token retrieval evidence on the older build; full 256K is untested.
-The current nine-profile batch measured vLLM dev329 code/prose at 131.05/73.31
-t/s and Strata 0.1.45 at 71.50/48.46, using 256-token caps. Earlier tuning batches
-on those builds recorded 130.61/72.69 and 72.2/48.0 respectively with their own
-workloads; Strata used a 512-token cap. Do not merge those samples.
-Nemotron Super IQ3's separate ~8K-input trials measured 14.16/16.32 t/s at 32K
-context, with 95.75/97.13 native PP and 84.699/83.521 s TTFT. These are not
-short-prompt TTFT/decode tests. All maintenance documentation uses saved results.
-The [published history](https://github.com/Biegle-W/local-llm-public/blob/main/linux/hardware/BENCHMARK-HISTORY.md)
-is also accessible to clients reading this handoff directly from Shared.
-
-The original consolidation did not rerun benchmarks. The later Q4 replacement
-measurements are in the report above. The maintained README contains
-all model results with dates/hardware/methods. Selected earlier Qwen tuning measurements (historical, not the current batch):
-
-| Profile | Code / prose decode t/s | Evidence |
-|---|---:|---|
-| vLLM MTP3, BF16 KV | 133.06 / 78.50 | October 17–18 Level1 candidate control |
-| llama.cpp Vulkan Q8 KV/MTP3 | 79.38 / 45.53 | Same candidate comparison batch |
-| SGLang DFlash2, repaired verifier | 205.59 / 71.84 | October 17 clean retry |
-| SGLang MTP3, repaired verifier | 114.57 / 66.05 | October 17 clean retry |
-
-Short code/prose numbers are medians of three timed 256-token-limit runs after
-warm-up. They depend on speculative acceptance/text and are not sustained 64K
-speeds or a perfectly controlled cross-engine ranking. The vLLM control's seeded
-book estimates were 1,556.04 PP / 92.62 decode t/s at depth 0 and
-1,457.42 / 67.54 at depth 16K plus prompt/template. A 22-token marker answer
-validates retrieval but is too short for a sustained decode benchmark.
-
-The restored rocWMMA candidate passed 84 CPU-reference cases but reduced matched
-HIP 16K prefill from 1,001.78 to 465.65 t/s; Radiance and queue-cap-1 trials did
-not justify replacing current defaults. Cooling fan A/B remains pending admin
-access. No direct P2P collective was benchmarked because its prerequisite failed.
-Do not activate kernel allowlist/ACS/IOMMU bypasses as a documented fix.
-
-Repository evidence (also published in the sanitized public distribution):
-
-- `hardware/VLLM-STARTUP-2026-10-18.md`: terminal/admission correction and 64K recovery.
-- `hardware/LEVEL1-TESTS-2026-10-17.md`: candidate speeds, pins and resource limits.
-- `hardware/VLLM-TUNING-2026-10-17.md`: selected vLLM kernels/cache/graphs.
-- `hardware/CLEAN-TUNING-2026-10-17.md`: selected SGLang MTP3/DFlash2 verifier repair.
-- `hardware/SGLANG-DUAL-CONTEXT-2026-10-17.md`: prior prefix/context probes; its
-  earlier MTP2/verifier-off choice was superseded by the clean retry.
-- `hardware/PCIE-P2P-2026-10-17.md`: platform routing diagnosis and switch requirements.
-- `hardware/STRATA-AFTER-RAM.md`: inactive preparation, superseded single-card candidate caveat.
-- `hardware/RETIRED-SETUPS-2026-10-16.md`: removal scope; no retired runtime should be selected.
-
-Forum-derived claims must cite direct **both lcz.me and Level1Techs** sources in
-both repositories, alongside primary implementation references and local tests.
-Relevant source trail: `hardware/FORUM-OPTIMIZATION-SOURCES.md`, including
-[lcz.me dual-XTX setup](https://lcz.me/topic/1252),
-[lcz.me measured comparison](https://lcz.me/topic/1814),
-[Level1Techs dual-R9700 report](https://forum.level1techs.com/t/dual-r9700-llama-cpp-rocm-tensor-split-working-p2p-on-proxmox-qwen3-8-27b/254183),
-and [Linux P2PDMA routing documentation](https://docs.kernel.org/driver-api/pci/p2pdma.html).
-Different platforms' headline speeds are not local measurements.
+Normal API proofs cover authenticated host self-access on loopback/LAN/Tailscale,
+not a separate remote peer. Gateway authentication and all eleven catalog IDs
+passed. No fresh full256K test is claimed for the three smaller llama.cpp MoEs;
+they retain older~64K retrieval. No new near-window SGLang test is implied.
+Maya runtime setup/validation is queued after this publication. The purchased
+PCIe switch remains pending installation/P2P/RCCL validation. PATH checks passed
+login/noninteractive resolution; local SSH validation was blocked by existing
+host-key verification and trust settings were not bypassed.
 
 ## Troubleshooting and maintenance
 
@@ -735,5 +604,5 @@ entry points to the actual file. It was not launched and has its own worker and
 settings. Keep the managed Strata Q3 launcher separate. [Menu details](../launchers/STRATA-APP.md).
 
 [Maintenance record and documentation index](../hardware/WORKSPACE-MAINTENANCE-2026-10-19.md)
-describes the archive and checks. Active models, candidates, profiles, credentials,
-frontend data and source pins remain unchanged. The private client guide is preserved.
+describes the archive and checks. At that October 19 maintenance, active models, candidates, profiles, credentials,
+frontend data and source pins remained unchanged; October 20 changes are described above. The private client guide is preserved.

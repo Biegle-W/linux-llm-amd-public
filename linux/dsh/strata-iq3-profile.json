@@ -2,11 +2,11 @@
   "exe": "/opt/local-llm/strata/build-hip/strata",
   "args": [
     "--pack",
-    "/mnt/llm-models/Strata/packs/iq3_xxs",
+    "/mnt/shared-nvme/LLM-Models/Strata/packs/iq3_xxs",
     "--native",
-    "/mnt/llm-models/Strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
+    "/mnt/shared-nvme/LLM-Models/Strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00001-of-00002.gguf",
     "--ple-gguf",
-    "/mnt/llm-models/Strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+    "/mnt/shared-nvme/LLM-Models/Strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
     "--expert-profile",
     "/opt/local-llm/strata/data/expert-profile.bin",
     "--expert-cache",
@@ -18,7 +18,7 @@
     "--spec-min-p",
     "0.7",
     "--mtp",
-    "/mnt/llm-models/Strata/mtp/rt",
+    "/mnt/shared-nvme/LLM-Models/Strata/mtp/rt",
     "--max-context",
     "262144",
     "--kv",
@@ -52,7 +52,7 @@
     "8192"
   ],
   "cwd": "/opt/local-llm/strata",
-  "tokenizer": "/mnt/llm-models/Strata/packs/iq3_xxs/tokenizer",
+  "tokenizer": "/mnt/shared-nvme/LLM-Models/Strata/packs/iq3_xxs/tokenizer",
   "model_name": "qwen3.8-flash-next-iq3_xxs",
   "log": "/opt/local-llm/dsh/logs/strata-amd-iq3_xxs.log",
   "lib_dirs": [
@@ -80,7 +80,7 @@
     "STRATA_IO_STATS": "1",
     "STRATA_SPLIT_OVERLAP": "1"
   },
-  "minimum_host_ram_gib": 29,
-  "validation_status": "passed: dual AMD native 256K, 258044-input/256-output retrieval+code; production follow-up reused 258048 tokens; tools/SSE/authenticated gateway passed; zero worker swap/spill",
+  "minimum_host_ram_gib": 60,
+  "validation_status": "passed: i9/64 GB, corrected shared-NVMe expert pack, both 13.5 GiB CPU pools, 257984-input near-window retrieval/code and cached full-history follow-up; normal launcher proof recorded separately",
   "worker_swap_max_bytes": 0
 }

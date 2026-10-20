@@ -4,7 +4,7 @@ import json, os, signal, subprocess, sys
 from pathlib import Path
 from backend_guard import require_worker_ports_free
 from backend_switch import startup_handover, clear_owner
-from shared_storage import ensure_shared_models
+from shared_storage import ensure_shared_models, ensure_strata_models
 from terminal_logs import start_monitor, stop_monitor
 from hardware_guard import require_current_cuda_pair, require_strata
 from llama_runtime import launch_spec, require_amd_headroom
@@ -35,11 +35,13 @@ try:
         require_rocm(kind)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
+        profile_config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or 'strata-iq3-profile.json')
+        ensure_strata_models(profile_config)
         require_strata(before_handover=True)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind != 'llama':
         require_current_cuda_pair()
-    if kind in ('llama', 'strata'):
+    if kind == 'llama':
         ensure_shared_models()
     if kind == 'llama':
         cmd = [sys.executable, str(ROOT / 'llama-router.py')]
@@ -70,7 +72,7 @@ try:
             require_rocm_headroom(16)
         monitor = start_monitor(paths)
         print(f'{names[kind]} backend only. Launch dsh separately. Ctrl+C stops this backend.', flush=True)
-        print('Loading the selected Strata model now. Shared SATA cold loads may take a few minutes.' if kind == 'strata'
+        print('Loading the selected Strata model from its configured model volume now. Cold loads may take a few minutes.' if kind == 'strata'
               else 'Models load when requested by DSH or another API client.', flush=True)
         log = paths[0].open('a')
         backend = subprocess.Popen(cmd + sys.argv[2:], stdout=log, stderr=subprocess.STDOUT,
