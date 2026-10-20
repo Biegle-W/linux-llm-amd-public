@@ -10,6 +10,7 @@ from hardware_guard import require_current_cuda_pair, require_strata
 from llama_runtime import launch_spec, require_amd_headroom
 from rocm_runtime import require_rocm, require_rocm_headroom
 from maya_runtime import require_maya, profiles as maya_profiles
+from native_frontend import start_frontend
 ROOT = Path(__file__).resolve().parent
 kind = sys.argv[1]
 names = {'llama': 'llama.cpp', 'sglang': 'SGLang', 'vllm': 'vLLM', 'strata': 'Strata', 'maya': 'Project Maya'}
@@ -19,12 +20,16 @@ if kind not in names:
 ports = [(8080, 'llama.cpp'), (8081, 'llama.cpp'),
          (30000, 'SGLang'), (30001, 'SGLang'), (30010, 'vLLM'), (30011, 'vLLM'),
          (30020, 'Strata'), (30021, 'Strata'), (30030, 'Maya'), (30031, 'Maya')]
+open_frontend = kind in ('strata', 'maya') and '--no-browser' not in sys.argv[2:]
+if kind in ('strata', 'maya'):
+    sys.argv = sys.argv[:2] + [arg for arg in sys.argv[2:] if arg != '--no-browser']
 if kind == 'maya':
     # Invalid selections and --help must not hand over a working backend.
-    parser = argparse.ArgumentParser(description='Start the guarded dual-AMD Maya backend; launch DSH separately.')
+    parser = argparse.ArgumentParser(description='Start guarded dual-AMD Maya with its native Chat/Monitor; DSH is optional.')
     parser.add_argument('--model', choices=list(maya_profiles()))
+    parser.add_argument('--no-browser', action='store_true', help='Keep serving without opening the native web frontend.')
     parser.parse_args(sys.argv[2:])
-backend = monitor = log = None
+backend = monitor = log = frontend = None
 worker_env = {**os.environ, 'CUDA_DEVICE_ORDER': 'PCI_BUS_ID', 'CUDA_VISIBLE_DEVICES': '0,1'}
 
 def stop(*_):
@@ -89,7 +94,7 @@ try:
         if kind == 'maya':
             require_maya()
         monitor = start_monitor(paths)
-        print(f'{names[kind]} backend only. Launch dsh separately. Ctrl+C stops this backend.', flush=True)
+        print(f'{names[kind]} backend' + (' with native Chat/Monitor.' if kind in ('strata','maya') else ' only.') + ' Launch dsh separately if wanted. Ctrl+C stops this backend.', flush=True)
         print(f'Loading the selected {names[kind]} model from its configured model volume now. Cold loads may take a few minutes.' if kind in ('strata', 'maya')
               else 'Models load when requested by DSH or another API client.', flush=True)
         log = paths[0].open('a')
@@ -97,6 +102,7 @@ try:
                                    env=worker_env,
                                    start_new_session=True)
         startup.register()
+        frontend = start_frontend(kind, backend, enabled=open_frontend)
     raise SystemExit(backend.wait())
 except KeyboardInterrupt:
     pass
@@ -104,6 +110,8 @@ except Exception as error:
     print(f'{names[kind]} startup failed: {error}', file=sys.stderr)
     raise SystemExit(1)
 finally:
+    if frontend is not None:
+        frontend.set()
     if backend is not None:
         try:
             os.killpg(backend.pid, signal.SIGTERM)

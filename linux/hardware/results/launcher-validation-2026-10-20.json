@@ -1,0 +1,446 @@
+{
+  "date": "2026-10-20",
+  "method": "Normal visible Desktop/PATH launchers and existing APIs; functional validation only. No throughput claims from these checks.",
+  "contexts": {
+    "sglang": 163840,
+    "vllm": 163840,
+    "strata": 262144,
+    "maya": 32768
+  },
+  "cases": {
+    "sglang-normal": {
+      "kind": "sglang",
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "context": 163840,
+      "status": "passed",
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "streaming": true,
+      "selected_environment_flags": {
+        "SGLANG_RDNA_VLLM_VERIFY": "1",
+        "SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX": "1"
+      },
+      "cache_capacities": [
+        163840
+      ],
+      "worker_args": [
+        "/opt/local-llm/sglang/.venv-rocm/bin/python",
+        "/opt/local-llm/sglang/rocm-bootstrap.py",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-rocm-worker",
+        "--tp-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--quantization",
+        "gptq",
+        "--dtype",
+        "bfloat16",
+        "--language-only",
+        "--json-model-override-args",
+        "{\"language_model_only\":true}",
+        "--mamba-ssm-dtype",
+        "bfloat16",
+        "--mamba-radix-cache-strategy",
+        "extra_buffer_lazy",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "triton",
+        "--context-length",
+        "163840",
+        "--max-total-tokens",
+        "163840",
+        "--mem-fraction-static",
+        "0.85",
+        "--max-running-requests",
+        "1",
+        "--max-mamba-cache-size",
+        "8",
+        "--speculative-draft-model-quantization",
+        "gptq",
+        "--cuda-graph-bs-decode",
+        "1",
+        "--cuda-graph-backend-prefill",
+        "disabled",
+        "--chunked-prefill-size",
+        "2048",
+        "--max-prefill-tokens",
+        "2048",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--enable-metrics",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-sglang-dflash2",
+        "--context-length",
+        "163840",
+        "--max-total-tokens",
+        "163840",
+        "--mem-fraction-static",
+        "0.85",
+        "--speculative-algorithm",
+        "DFLASH",
+        "--speculative-draft-model-path",
+        "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+        "--speculative-draft-model-quantization",
+        "compressed-tensors",
+        "--speculative-num-draft-tokens",
+        "8",
+        "--speculative-draft-window-size",
+        "2048",
+        "--max-mamba-cache-size",
+        "8",
+        "--chunked-prefill-size",
+        "2048",
+        "--max-prefill-tokens",
+        "2048",
+        "--enable-cache-report"
+      ],
+      "owned_memory": {
+        "swap": 0,
+        "spill": 0
+      },
+      "vram": [
+        {
+          "device": "0000:03:00.0",
+          "total": 25753026560,
+          "used": 21581512704,
+          "free": 4171513856
+        },
+        {
+          "device": "0000:06:00.0",
+          "total": 25753026560,
+          "used": 20400943104,
+          "free": 5352083456
+        }
+      ],
+      "gateway": {
+        "authenticated_generation": true,
+        "missing_key_401": true,
+        "catalog_count": 10,
+        "retired_ids_absent": true
+      }
+    },
+    "vllm-normal": {
+      "kind": "vllm",
+      "model": "qwen3.8-27b-vllm",
+      "context": 163840,
+      "status": "passed",
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "streaming": true,
+      "selected_environment_flags": {
+        "VLLM_LOCAL_RDNA_PREFILL": "1"
+      },
+      "worker_args": [
+        "/opt/local-llm/vllm/.venv-rocm/bin/python",
+        "/opt/local-llm/vllm/rocm-bootstrap.py",
+        "serve",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "163840",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "6442450944",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--mamba-cache-dtype",
+        "bfloat16",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--compilation-config",
+        "{\"mode\":3,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+        "--cudagraph-capture-sizes",
+        "1",
+        "4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--max-model-len",
+        "163840",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "6442450944",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3}"
+      ],
+      "owned_memory": {
+        "swap": 0,
+        "spill": 0
+      },
+      "vram": [
+        {
+          "device": "0000:03:00.0",
+          "total": 25753026560,
+          "used": 20616888320,
+          "free": 5136138240
+        },
+        {
+          "device": "0000:06:00.0",
+          "total": 25753026560,
+          "used": 17836449792,
+          "free": 7916576768
+        }
+      ],
+      "gateway": {
+        "authenticated_generation": true,
+        "missing_key_401": true,
+        "catalog_count": 10,
+        "retired_ids_absent": true
+      }
+    },
+    "strata-front-normal": {
+      "status": "passed",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "context": 262144,
+      "routes": {
+        "loopback": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "lan": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "tailscale": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        }
+      },
+      "remote_peer_tested": false,
+      "runtime_proof": {
+        "runtime_commit": "477ac13cbe8e582c20484871ce459d20d82df09d",
+        "production_binary_sha256": "53ff96cc8da09f8c4bf2afbb00625873ffc60b57ba4609ce6879c85e7efff187",
+        "profile_arguments_match": true,
+        "both_gpus_configured": true,
+        "layer_split": "26",
+        "expert_budget_gib": 13.5,
+        "asset_paths_match_active_configuration": true
+      },
+      "json": true,
+      "tool_roundtrip": true,
+      "owned_scope_swap_max_bytes": 0,
+      "worker_swap_bytes": 0,
+      "worker_vram_spill_bytes": 0,
+      "gpu_used_bytes": [
+        21518585856,
+        19070304256
+      ],
+      "available_host_bytes": 38540402688,
+      "initial_model_check_and_functional_wall_seconds": 4.325,
+      "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+    },
+    "strata-ui": {
+      "status": "passed",
+      "kind": "strata",
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "context": 262144,
+      "original_html_sha256": "2dfc00ca62e9da0bf5e2615e141e6cfeed8d2964393d08bc4c19ab72fe7fc762",
+      "original_asset_count": 6,
+      "metrics_status_settings": true,
+      "runtime_mutations_blocked": [
+        "/api/context",
+        "/api/update",
+        "/config",
+        "/load",
+        "/unload"
+      ],
+      "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+    },
+    "maya-front-normal": {
+      "status": "passed",
+      "model": "glm-5.3-flash-maya",
+      "context": 32768,
+      "routes": {
+        "loopback": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "lan": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "tailscale": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        }
+      },
+      "remote_peer_tested": false,
+      "runtime_proof": {
+        "runtime_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
+        "production_binary_sha256": "44c6744584cf49253d607cb095c0646382c643bc14a80ebd454c0f08fdf2fa67",
+        "profile_arguments_match": true,
+        "both_gpus_configured": true,
+        "config_sha256": "e6636b60b08f37b115c9a5c5209e87d6f4b75ad4fc69bd63c86b4aac65511997",
+        "startup_whole_card_free_bytes": [
+          6909292544,
+          8413491200
+        ]
+      },
+      "json": true,
+      "tool_roundtrip": true,
+      "owned_scope_swap_max_bytes": 0,
+      "worker_swap_bytes": 0,
+      "worker_vram_spill_bytes": 0,
+      "gpu_used_bytes": [
+        19179417600,
+        17526075392
+      ],
+      "available_host_bytes": 12000092160,
+      "initial_model_check_and_functional_wall_seconds": 16.959,
+      "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+    },
+    "maya-ui": {
+      "status": "passed",
+      "kind": "maya",
+      "model": "glm-5.3-flash-maya",
+      "context": 32768,
+      "original_html_sha256": "f8807ce006017f6f47cc4f0a6b9da0cd45b52344c60efaa8c2997e3e6878ba73",
+      "original_asset_count": 7,
+      "metrics_status_settings": true,
+      "runtime_mutations_blocked": [
+        "/api/context",
+        "/api/update",
+        "/config",
+        "/load",
+        "/unload"
+      ],
+      "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+    },
+    "maya-deepseek-front-normal": {
+      "status": "passed",
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "context": 32768,
+      "routes": {
+        "loopback": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "lan": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        },
+        "tailscale": {
+          "authenticated_streaming": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+        }
+      },
+      "remote_peer_tested": false,
+      "runtime_proof": {
+        "runtime_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
+        "production_binary_sha256": "829a8c831f6f052c84bf02994cdeea920a9be5ae80a907ba179197b30e0b5607",
+        "profile_arguments_match": true,
+        "both_gpus_configured": true,
+        "config_sha256": "a5440568e0470384d6fe541989c22033f7a409ecda79a8fec7b4b2149bb957ad",
+        "startup_whole_card_free_bytes": [
+          7067615232,
+          8355266560
+        ]
+      },
+      "json": true,
+      "tool_roundtrip": true,
+      "owned_scope_swap_max_bytes": 0,
+      "worker_swap_bytes": 0,
+      "worker_vram_spill_bytes": 0,
+      "gpu_used_bytes": [
+        18943303680,
+        17520312320
+      ],
+      "available_host_bytes": 52433387520,
+      "initial_model_check_and_functional_wall_seconds": 71.98,
+      "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+    },
+    "maya-deepseek-ui": {
+      "status": "passed",
+      "kind": "maya",
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "context": 32768,
+      "original_html_sha256": "f8807ce006017f6f47cc4f0a6b9da0cd45b52344c60efaa8c2997e3e6878ba73",
+      "original_asset_count": 7,
+      "metrics_status_settings": true,
+      "runtime_mutations_blocked": [
+        "/api/context",
+        "/api/update",
+        "/config",
+        "/load",
+        "/unload"
+      ],
+      "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+    }
+  },
+  "browser_dispatch": {
+    "strata": {
+      "ready_browser_open_dispatched": true,
+      "browser_process_not_owned_or_terminated": true,
+      "default_browser_render_observed": false
+    },
+    "maya": {
+      "ready_browser_open_dispatched": true,
+      "browser_process_not_owned_or_terminated": true,
+      "default_browser_render_observed": false
+    }
+  },
+  "limits": [
+    "LAN/Tailscale checks are authenticated host self-access, not a remote peer.",
+    "Default browser xdg-open dispatch was recorded; desktop browser automation is unavailable. Native HTML and all referenced static assets were checked byte-for-byte against pinned upstream files.",
+    "Headless/no-browser behavior and exact browser URL dispatch have separate CPU tests.",
+    "Native frontend wiring changes no engine source, binary or inference budget."
+  ],
+  "retired_ids": [
+    "muse-glimmer-30b",
+    "nemotron-3.5-super-q4",
+    "qwen3.8-27b-sglang"
+  ],
+  "active_catalog_count": 10,
+  "browser_validation": {
+    "maya_in_app_browser": "Native Chat visibly rendered DeepSeek model,32K and Maya v1.1.17; read-only page validation.",
+    "default_browser": "Ready xdg-open dispatch logged; default desktop browser rendering not automated."
+  }
+}

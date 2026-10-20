@@ -2,19 +2,16 @@
   "backend": "vulkan-amd",
   "models": [
     "qwen3.8-27b-q4",
-    "muse-glimmer-30b",
     "qwen3.6-35b-a3b",
     "nemotron-3.5-bolt",
     "empero-qwen3.8-35b-a3b",
-    "nemotron-3.5-super-iq3",
-    "nemotron-3.5-super-q4"
+    "nemotron-3.5-super-iq3"
   ],
   "source_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
   "runtime_overrides": {
     "qwen3.6-35b-a3b": "hip-amd",
     "nemotron-3.5-bolt": "hip-amd",
     "empero-qwen3.8-35b-a3b": "hip-amd",
-    "nemotron-3.5-super-q4": "hip-amd",
     "nemotron-3.5-super-iq3": "hip-amd"
   }
 }

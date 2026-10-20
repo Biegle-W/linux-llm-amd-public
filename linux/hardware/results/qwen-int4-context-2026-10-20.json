@@ -1,0 +1,2218 @@
+{
+  "date": "2026-10-20",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "ram_gib_installed": 64,
+    "ram_gib_os_visible": 61.51,
+    "gpus": [
+      "RX7900XTX24GB",
+      "RX7900XTX24GB"
+    ],
+    "links": "CPU PCIe4x8/x8",
+    "direct_p2p": false,
+    "switch_installed": false
+  },
+  "versions": {
+    "llama_cpp": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+    "sglang": "f84475ccf593087df3d1da13c9e675eadee12352",
+    "vllm": "0.32.1rc1.dev36+ge68efc685.rocm72",
+    "strata": "477ac13cbe8e582c20484871ce459d20d82df09d",
+    "vllm_wheel_sha256": "68cb33f115094f816077c193f8b51eac0ea01052254653b9b336e534d7a71f79"
+  },
+  "engines_upgraded": false,
+  "retired_ids": [
+    "muse-glimmer-30b",
+    "nemotron-3.5-super-q4",
+    "qwen3.8-27b-sglang"
+  ],
+  "active_catalog_count": 10,
+  "selection": {
+    "vllm_bf16_160_vs_128_composite_ratio": 0.9902783784132192,
+    "final_fallback_rule": "Prefer160K BF16 if eligible and composite(code/prose/fresh8K engine PP)>=95% of128K BF16; otherwise keep128K. This is the final fallback, not an unbounded sweep.",
+    "sglang": "sglang-dflash160",
+    "vllm": "vllm-bf16-160",
+    "vllm_int8_vs_bf16_composite_ratio": 0.869693221728529,
+    "declared_rule": "Prefer INT8 192K if eligible and geometric mean of code/prose short decode plus fresh8K engine PP is at least 90% of the eligible BF16 128K control; otherwise retain BF16 128K. If a larger candidate fails, do not activate it.",
+    "same192_bf16_control": "Not admitted: 128K baseline minimum whole-card free was below the predeclared6GiB trigger"
+  },
+  "selected_summaries": {
+    "sglang": {
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "context": 163840,
+      "kv": "bfloat16",
+      "actual_prefill_input": [
+        8185,
+        8191
+      ],
+      "prefill_phase_tps_median": 1314.79628786279,
+      "prefill_external_ttft_seconds_median": 6.235439076001057,
+      "short": {
+        "code": {
+          "median_decode_tps": 178.81655576564862,
+          "median_ttft_seconds": 0.10181078599998727
+        },
+        "prose": {
+          "median_decode_tps": 63.39967493634218,
+          "median_ttft_seconds": 0.09668546000102651
+        }
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 160861,
+          "total_tokens": 160883,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 283.11267432899695,
+        "total_seconds": 283.4286339809987,
+        "decode_tps_sse": 66.4641825845619,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 282.9780078799995,
+        "prefill_phase_observations_per_rank": [
+          1.0,
+          1.0
+        ],
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "effective_input_per_ttft": 568.1872080833376,
+        "cached_tokens": 0,
+        "prefill_phase_tps": 568.4576027838008,
+        "markers_passed": true
+      },
+      "cached_history_followup": {
+        "usage": {
+          "prompt_tokens": 160908,
+          "total_tokens": 160930,
+          "completion_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 160832
+          },
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 0.7952929700004461,
+        "total_seconds": 1.0320423979974294,
+        "decode_tps_sse": 88.7013758709803,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 0.6811497700000473,
+        "prefill_phase_observations_per_rank": [
+          1.0,
+          1.0
+        ],
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "effective_input_per_ttft": 202325.4398940679,
+        "cached_tokens": 160832,
+        "markers_passed": true
+      },
+      "memory": {
+        "minimum_available_gib": 43.945091247558594,
+        "minimum_free_vram_gib": [
+          3.48492431640625,
+          4.470523834228516
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      }
+    },
+    "vllm": {
+      "model": "qwen3.8-27b-vllm",
+      "context": 163840,
+      "kv": "bfloat16",
+      "actual_prefill_input": [
+        8187,
+        8188
+      ],
+      "prefill_phase_tps_median": 1413.798625861066,
+      "prefill_external_ttft_seconds_median": 5.806279886000993,
+      "short": {
+        "code": {
+          "median_decode_tps": 130.30780528433743,
+          "median_ttft_seconds": 0.06615067000166164
+        },
+        "prose": {
+          "median_decode_tps": 68.9580868513183,
+          "median_ttft_seconds": 0.09159386700048344
+        }
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 160868,
+          "total_tokens": 160890,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 183.5906290560015,
+        "total_seconds": 184.21435232699878,
+        "decode_tps_sse": 33.66877744744478,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 183.41282944799968,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 876.2320867201217,
+        "cached_tokens": null,
+        "prefill_phase_tps": 877.0815023362829,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      },
+      "cached_history_followup": {
+        "usage": {
+          "prompt_tokens": 160915,
+          "total_tokens": 160937,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 1.46735493199958,
+        "total_seconds": 2.1005678809997335,
+        "decode_tps_sse": 33.16419860515978,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 1.2380446470015158,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 109663.31082604495,
+        "cached_tokens": null,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      },
+      "memory": {
+        "minimum_available_gib": 46.632835388183594,
+        "minimum_free_vram_gib": [
+          5.915199279785156,
+          7.318096160888672
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      }
+    }
+  },
+  "cases": {
+    "sglang-dflash192": {
+      "date": "2026-10-20T10:19:13.265585-04:00",
+      "kind": "sglang",
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "context": 196608,
+      "profile": {
+        "name": "Qwen3.8-27B SGLang dual AMD (64K, DFlash2, prefix cache)",
+        "context": 196608,
+        "mtp": false,
+        "memory_fraction": 0.85,
+        "runtime": "rocm",
+        "model_path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "launcher": "/opt/local-llm/sglang/start-qwen-rocm",
+        "min_free_vram_gib": 21.0,
+        "extra_args": [
+          "--speculative-algorithm",
+          "DFLASH",
+          "--speculative-draft-model-path",
+          "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+          "--speculative-draft-model-quantization",
+          "compressed-tensors",
+          "--speculative-num-draft-tokens",
+          "8",
+          "--speculative-draft-window-size",
+          "2048",
+          "--max-mamba-cache-size",
+          "8",
+          "--chunked-prefill-size",
+          "2048",
+          "--max-prefill-tokens",
+          "2048",
+          "--enable-cache-report",
+          "--kv-cache-dtype",
+          "bfloat16"
+        ],
+        "rdna_verify": true,
+        "rdna_verify_walk_fix": true
+      },
+      "kv": "bfloat16",
+      "status": "failed",
+      "short": {},
+      "prefill": [],
+      "memory": {
+        "minimum_available_gib": 44.73957443237305,
+        "minimum_free_vram_gib": [
+          2.7136917114257812,
+          3.6481552124023438
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 69.04720937400089,
+      "worker_args": [
+        "/opt/local-llm/sglang/.venv-rocm/bin/python",
+        "/opt/local-llm/sglang/rocm-bootstrap.py",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-sglang",
+        "--tp-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--quantization",
+        "gptq",
+        "--dtype",
+        "bfloat16",
+        "--language-only",
+        "--json-model-override-args",
+        "{\"language_model_only\":true}",
+        "--mamba-ssm-dtype",
+        "bfloat16",
+        "--mamba-radix-cache-strategy",
+        "extra_buffer_lazy",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "triton",
+        "--context-length",
+        "40960",
+        "--max-total-tokens",
+        "40960",
+        "--mem-fraction-static",
+        "0.85",
+        "--max-running-requests",
+        "1",
+        "--max-mamba-cache-size",
+        "4",
+        "--speculative-draft-model-quantization",
+        "gptq",
+        "--cuda-graph-bs-decode",
+        "1",
+        "--cuda-graph-backend-prefill",
+        "disabled",
+        "--chunked-prefill-size",
+        "512",
+        "--max-prefill-tokens",
+        "1024",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--enable-metrics",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-sglang-dflash2",
+        "--context-length",
+        "196608",
+        "--max-total-tokens",
+        "196608",
+        "--mem-fraction-static",
+        "0.85",
+        "--speculative-algorithm",
+        "DFLASH",
+        "--speculative-draft-model-path",
+        "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+        "--speculative-draft-model-quantization",
+        "compressed-tensors",
+        "--speculative-num-draft-tokens",
+        "8",
+        "--speculative-draft-window-size",
+        "2048",
+        "--max-mamba-cache-size",
+        "8",
+        "--chunked-prefill-size",
+        "2048",
+        "--max-prefill-tokens",
+        "2048",
+        "--enable-cache-report",
+        "--kv-cache-dtype",
+        "bfloat16"
+      ],
+      "cache_capacities": [
+        196608
+      ],
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "error": "RemoteDisconnected: Remote end closed connection without response",
+      "guard_faults": [
+        "Owned swap/spill or sustained whole-card/RAM headroom below 3 GiB"
+      ]
+    },
+    "sglang-dflash160": {
+      "date": "2026-10-20T10:20:50.552042-04:00",
+      "kind": "sglang",
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "context": 163840,
+      "profile": {
+        "name": "Qwen3.8-27B SGLang dual AMD (64K, DFlash2, prefix cache)",
+        "context": 163840,
+        "mtp": false,
+        "memory_fraction": 0.85,
+        "runtime": "rocm",
+        "model_path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "launcher": "/opt/local-llm/sglang/start-qwen-rocm",
+        "min_free_vram_gib": 21.0,
+        "extra_args": [
+          "--speculative-algorithm",
+          "DFLASH",
+          "--speculative-draft-model-path",
+          "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+          "--speculative-draft-model-quantization",
+          "compressed-tensors",
+          "--speculative-num-draft-tokens",
+          "8",
+          "--speculative-draft-window-size",
+          "2048",
+          "--max-mamba-cache-size",
+          "8",
+          "--chunked-prefill-size",
+          "2048",
+          "--max-prefill-tokens",
+          "2048",
+          "--enable-cache-report",
+          "--kv-cache-dtype",
+          "bfloat16"
+        ],
+        "rdna_verify": true,
+        "rdna_verify_walk_fix": true
+      },
+      "kv": "bfloat16",
+      "status": "passed",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.10127050200026133,
+              "total_seconds": 1.4178377220014227,
+              "decode_tps_sse": 193.68551497110423,
+              "content_sha256": "101c2a0b66b64b6c76fd6a638652bbc5ea796eb0cbda76968510a4ed30515c23",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07210581899926183,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 286.36176800945617,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 402.186680665771
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.10181078599998727,
+              "total_seconds": 1.5278532400006952,
+              "decode_tps_sse": 178.81655576564862,
+              "content_sha256": "d4de9afda642a2bc9368ed459697c5b9af2aac22be20883c63ee3b6ed8fff30a",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07502025800204137,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 284.84211879086786,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 386.5622536143622
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.10438007400080096,
+              "total_seconds": 1.5789990679986659,
+              "decode_tps_sse": 172.92602430724503,
+              "content_sha256": "c4a1f2f187abf500aeaf13d0ccac1da698e0a88d09583c652636f04835c0f70d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07463705199916149,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 277.83080513793726,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 388.5469645870499
+            }
+          ],
+          "median_decode_tps": 178.81655576564862,
+          "median_ttft_seconds": 0.10181078599998727
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.09501464299682993,
+              "total_seconds": 4.117117283996777,
+              "decode_tps_sse": 63.39967493634218,
+              "content_sha256": "a3172facb5bf2293449af0165420794e92c121b33a594ad008bcebe222330f29",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0716420239987201,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 263.1173386699364,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 348.9571986470766
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.09668546000102651,
+              "total_seconds": 4.02860730500106,
+              "decode_tps_sse": 64.85378144641068,
+              "content_sha256": "e105620693cd2817b030a84867ea8d16c5929b7edb2509eed571d7d0a5b7b3b9",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07378953700026614,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 258.5704199962908,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 338.80142112708785
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "prompt_tokens_details": null,
+                "reasoning_tokens": 0
+              },
+              "ttft_seconds": 0.10020917499787174,
+              "total_seconds": 4.465430371998082,
+              "decode_tps_sse": 58.416283732709026,
+              "content_sha256": "2d58e93c576059e7696e507a2e745a563ad4d9602badea4fd9f327e7b8d4f6fb",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0712136490001285,
+              "prefill_phase_observations_per_rank": [
+                1.0,
+                1.0
+              ],
+              "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+              "effective_input_per_ttft": 249.47815407651998,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 351.05629820984024
+            }
+          ],
+          "median_decode_tps": 63.39967493634218,
+          "median_ttft_seconds": 0.09668546000102651
+        }
+      },
+      "prefill": [
+        {
+          "usage": {
+            "prompt_tokens": 8191,
+            "total_tokens": 8213,
+            "completion_tokens": 22,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 6.256604713002162,
+          "total_seconds": 6.420962347001478,
+          "decode_tps_sse": 127.7701527395277,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 6.248133986999164,
+          "prefill_phase_observations_per_rank": [
+            1.0,
+            1.0
+          ],
+          "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+          "effective_input_per_ttft": 1309.1765223680945,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1310.9514003770507,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8185,
+            "total_tokens": 8207,
+            "completion_tokens": 22,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 6.196505943000375,
+          "total_seconds": 6.359090064997872,
+          "decode_tps_sse": 129.16390445755374,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 6.187801481999486,
+          "prefill_phase_observations_per_rank": [
+            1.0,
+            1.0
+          ],
+          "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+          "effective_input_per_ttft": 1320.9056967412166,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1322.763832002437,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8187,
+            "total_tokens": 8209,
+            "completion_tokens": 22,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "ttft_seconds": 6.235439076001057,
+          "total_seconds": 6.398353946002317,
+          "decode_tps_sse": 128.90167729831956,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 6.226820135998423,
+          "prefill_phase_observations_per_rank": [
+            1.0,
+            1.0
+          ],
+          "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+          "effective_input_per_ttft": 1312.9789097788005,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1314.79628786279,
+          "markers_passed": true
+        }
+      ],
+      "memory": {
+        "minimum_available_gib": 43.945091247558594,
+        "minimum_free_vram_gib": [
+          3.48492431640625,
+          4.470523834228516
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 25.019589327002905,
+      "worker_args": [
+        "/opt/local-llm/sglang/.venv-rocm/bin/python",
+        "/opt/local-llm/sglang/rocm-bootstrap.py",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-sglang",
+        "--tp-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--quantization",
+        "gptq",
+        "--dtype",
+        "bfloat16",
+        "--language-only",
+        "--json-model-override-args",
+        "{\"language_model_only\":true}",
+        "--mamba-ssm-dtype",
+        "bfloat16",
+        "--mamba-radix-cache-strategy",
+        "extra_buffer_lazy",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "triton",
+        "--context-length",
+        "40960",
+        "--max-total-tokens",
+        "40960",
+        "--mem-fraction-static",
+        "0.85",
+        "--max-running-requests",
+        "1",
+        "--max-mamba-cache-size",
+        "4",
+        "--speculative-draft-model-quantization",
+        "gptq",
+        "--cuda-graph-bs-decode",
+        "1",
+        "--cuda-graph-backend-prefill",
+        "disabled",
+        "--chunked-prefill-size",
+        "512",
+        "--max-prefill-tokens",
+        "1024",
+        "--reasoning-parser",
+        "qwen3",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--enable-metrics",
+        "--model-path",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--port",
+        "30001",
+        "--served-model-name",
+        "qwen3.8-27b-sglang-dflash2",
+        "--context-length",
+        "163840",
+        "--max-total-tokens",
+        "163840",
+        "--mem-fraction-static",
+        "0.85",
+        "--speculative-algorithm",
+        "DFLASH",
+        "--speculative-draft-model-path",
+        "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+        "--speculative-draft-model-quantization",
+        "compressed-tensors",
+        "--speculative-num-draft-tokens",
+        "8",
+        "--speculative-draft-window-size",
+        "2048",
+        "--max-mamba-cache-size",
+        "8",
+        "--chunked-prefill-size",
+        "2048",
+        "--max-prefill-tokens",
+        "2048",
+        "--enable-cache-report",
+        "--kv-cache-dtype",
+        "bfloat16"
+      ],
+      "cache_capacities": [
+        163840
+      ],
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 160861,
+          "total_tokens": 160883,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 283.11267432899695,
+        "total_seconds": 283.4286339809987,
+        "decode_tps_sse": 66.4641825845619,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 282.9780078799995,
+        "prefill_phase_observations_per_rank": [
+          1.0,
+          1.0
+        ],
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "effective_input_per_ttft": 568.1872080833376,
+        "cached_tokens": 0,
+        "prefill_phase_tps": 568.4576027838008,
+        "markers_passed": true
+      },
+      "cached_history_followup": {
+        "usage": {
+          "prompt_tokens": 160908,
+          "total_tokens": 160930,
+          "completion_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 160832
+          },
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 0.7952929700004461,
+        "total_seconds": 1.0320423979974294,
+        "decode_tps_sse": 88.7013758709803,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 0.6811497700000473,
+        "prefill_phase_observations_per_rank": [
+          1.0,
+          1.0
+        ],
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "effective_input_per_ttft": 202325.4398940679,
+        "cached_tokens": 160832,
+        "markers_passed": true
+      }
+    },
+    "vllm-bf16-128": {
+      "date": "2026-10-20T10:26:57.947376-04:00",
+      "kind": "vllm",
+      "model": "qwen3.8-27b-vllm",
+      "context": 131072,
+      "profile": {
+        "name": "Qwen3.8-27B vLLM dual AMD (64K, compiled MTP3, BF16 KV)",
+        "context": 131072,
+        "mtp": true,
+        "mtp_steps": 3,
+        "memory_fraction": 0.82,
+        "kv_cache_bytes": 5368709120,
+        "runtime": "rocm",
+        "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
+        "min_free_vram_gib": 20.0,
+        "extra_args": [
+          "--kv-cache-dtype",
+          "bfloat16"
+        ]
+      },
+      "kv": "bfloat16",
+      "status": "passed",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06448237799850176,
+              "total_seconds": 1.978474097999424,
+              "decode_tps_sse": 133.2294164782892,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06058801299877814,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 449.73527497192816,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 478.64253281560553
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06483650099835359,
+              "total_seconds": 1.9787832889996935,
+              "decode_tps_sse": 133.23254418493346,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06032125799902133,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 447.27891779256265,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 480.7592043334127
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07961883000098169,
+              "total_seconds": 2.021452347999002,
+              "decode_tps_sse": 131.3191875804566,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07626867599901743,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 364.23544530411255,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 380.2347375267614
+            }
+          ],
+          "median_decode_tps": 133.2294164782892,
+          "median_ttft_seconds": 0.06483650099835359
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08706132499719388,
+              "total_seconds": 3.718925114997546,
+              "decode_tps_sse": 70.21188424028844,
+              "content_sha256": "521e37de56fcc4e1f1304e3818a9b5c100fc132b5f663e47e4a3b86979070147",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06571613100095419,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 287.15391134703947,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 380.4241001290384
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08162358199842856,
+              "total_seconds": 3.6506984299994656,
+              "decode_tps_sse": 71.44708667088338,
+              "content_sha256": "521e37de56fcc4e1f1304e3818a9b5c100fc132b5f663e47e4a3b86979070147",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06265571699987049,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 306.2840344409451,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 399.0058880030321
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08197696699789958,
+              "total_seconds": 3.6498003489978146,
+              "decode_tps_sse": 71.47214777685038,
+              "content_sha256": "521e37de56fcc4e1f1304e3818a9b5c100fc132b5f663e47e4a3b86979070147",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0627799399990181,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 304.9637101192162,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 398.2163729431887
+            }
+          ],
+          "median_decode_tps": 71.44708667088338,
+          "median_ttft_seconds": 0.08197696699789958
+        }
+      },
+      "prefill": [
+        {
+          "usage": {
+            "prompt_tokens": 8185,
+            "total_tokens": 8207,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 6.679149963998498,
+          "total_seconds": 6.883528566999303,
+          "decode_tps_sse": 102.75048215256312,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 6.667318526000599,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1225.4553414907934,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1227.6299636924327,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8191,
+            "total_tokens": 8213,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 5.589746866000496,
+          "total_seconds": 5.79372327099918,
+          "decode_tps_sse": 102.95308420665349,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 5.580344647001766,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1465.3615264443486,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1467.8304868501086,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8188,
+            "total_tokens": 8210,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 5.970556541000406,
+          "total_seconds": 6.191119497001637,
+          "decode_tps_sse": 95.21091111910367,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 5.957872232000227,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1371.3964424877631,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1374.316145287838,
+          "markers_passed": true
+        }
+      ],
+      "memory": {
+        "minimum_available_gib": 44.793853759765625,
+        "minimum_free_vram_gib": [
+          5.676090240478516,
+          7.200874328613281
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 173.06705599199995,
+      "worker_args": [
+        "/opt/local-llm/vllm/.venv-rocm/bin/python",
+        "/opt/local-llm/vllm/rocm-bootstrap.py",
+        "serve",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "65536",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "3758096384",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--mamba-cache-dtype",
+        "bfloat16",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--compilation-config",
+        "{\"mode\":3,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+        "--cudagraph-capture-sizes",
+        "1",
+        "4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--max-model-len",
+        "131072",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "5368709120",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3}"
+      ],
+      "model_info": {
+        "object": "list",
+        "data": [
+          {
+            "id": "qwen3.8-27b-vllm",
+            "object": "model",
+            "created": 1792506591,
+            "owned_by": "vllm",
+            "root": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+            "parent": null,
+            "max_model_len": 131072,
+            "permission": [
+              {
+                "id": "modelperm-925c721d83480fa3",
+                "object": "model_permission",
+                "created": 1792506591,
+                "allow_create_engine": false,
+                "allow_sampling": true,
+                "allow_logprobs": true,
+                "allow_search_indices": false,
+                "allow_view": true,
+                "allow_fine_tuning": false,
+                "organization": "*",
+                "group": null,
+                "is_blocking": false
+              }
+            ]
+          }
+        ]
+      },
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 128112,
+          "total_tokens": 128134,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 132.09594271199967,
+        "total_seconds": 132.63001042900214,
+        "decode_tps_sse": 39.320856384777144,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 131.95563480300189,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 969.8405368839707,
+        "cached_tokens": null,
+        "prefill_phase_tps": 970.8717645234317,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      },
+      "cached_history_followup": {
+        "usage": {
+          "prompt_tokens": 128159,
+          "total_tokens": 128181,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 1.663728434999939,
+        "total_seconds": 2.196905076998519,
+        "decode_tps_sse": 39.3865716271493,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 1.5367630340006144,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 77031.20130900732,
+        "cached_tokens": null,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      }
+    },
+    "vllm-int8-192": {
+      "date": "2026-10-20T10:33:05.975675-04:00",
+      "kind": "vllm",
+      "model": "qwen3.8-27b-vllm",
+      "context": 196608,
+      "profile": {
+        "name": "Qwen3.8-27B vLLM dual AMD (64K, compiled MTP3, BF16 KV)",
+        "context": 196608,
+        "mtp": true,
+        "mtp_steps": 3,
+        "memory_fraction": 0.82,
+        "kv_cache_bytes": 4831838208,
+        "runtime": "rocm",
+        "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
+        "min_free_vram_gib": 20.0,
+        "extra_args": [
+          "--kv-cache-dtype",
+          "int8_per_token_head"
+        ]
+      },
+      "kv": "int8_per_token_head",
+      "status": "rejected_performance",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07456280600308673,
+              "total_seconds": 2.1729836500016972,
+              "decode_tps_sse": 121.51995188633803,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06972465999933775,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 388.933860654325,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 415.92171263761554
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07275112199931755,
+              "total_seconds": 2.233564023998042,
+              "decode_tps_sse": 118.01114282690936,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06932580400098232,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 398.6192817792149,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 418.3146581262741
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07282258499981253,
+              "total_seconds": 2.168037716000981,
+              "decode_tps_sse": 121.70587937580991,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06932610999865574,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 398.2281046474065,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 418.3128117322943
+            }
+          ],
+          "median_decode_tps": 121.51995188633803,
+          "median_ttft_seconds": 0.07282258499981253
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.09724697900310275,
+              "total_seconds": 4.022684556002787,
+              "decode_tps_sse": 64.96091072600962,
+              "content_sha256": "09c136fb5111d4e68342478f7bce33df48fc2bca4cacda6615c3eb8e5c3a8600",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0708951690030517,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 257.0773946530756,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 352.63333667945506
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.09718900199732161,
+              "total_seconds": 4.026754430000437,
+              "decode_tps_sse": 64.89267189262279,
+              "content_sha256": "09c136fb5111d4e68342478f7bce33df48fc2bca4cacda6615c3eb8e5c3a8600",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0713769809990481,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 257.23075128077727,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 350.25297582050166
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.0940910259996599,
+              "total_seconds": 4.016692924000381,
+              "decode_tps_sse": 65.00787146663261,
+              "content_sha256": "09c136fb5111d4e68342478f7bce33df48fc2bca4cacda6615c3eb8e5c3a8600",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07137654200050747,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 265.70015295709885,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 350.2551300372923
+            }
+          ],
+          "median_decode_tps": 64.96091072600962,
+          "median_ttft_seconds": 0.09718900199732161
+        }
+      },
+      "prefill": [
+        {
+          "usage": {
+            "prompt_tokens": 8188,
+            "total_tokens": 8210,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 9.150200559997756,
+          "total_seconds": 9.403202746998431,
+          "decode_tps_sse": 83.00323506667546,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 9.134545703000185,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 894.8437737852172,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 896.3773641540489,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8187,
+            "total_tokens": 8209,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 7.498475558000791,
+          "total_seconds": 7.7507212909986265,
+          "decode_tps_sse": 83.25215158418648,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 7.4852769969984365,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1091.821922559254,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1093.7470989093592,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8184,
+            "total_tokens": 8206,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 7.520562334000715,
+          "total_seconds": 7.773969712998223,
+          "decode_tps_sse": 82.87051499083023,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 7.507507240999985,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1088.2164971892942,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1090.1088386975578,
+          "markers_passed": true
+        }
+      ],
+      "memory": {
+        "minimum_available_gib": 47.4074592590332,
+        "minimum_free_vram_gib": [
+          6.714504241943359,
+          7.704601287841797
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 158.05358580900065,
+      "worker_args": [
+        "/opt/local-llm/vllm/.venv-rocm/bin/python",
+        "/opt/local-llm/vllm/rocm-bootstrap.py",
+        "serve",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "65536",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "3758096384",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--mamba-cache-dtype",
+        "bfloat16",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--compilation-config",
+        "{\"mode\":3,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+        "--cudagraph-capture-sizes",
+        "1",
+        "4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--max-model-len",
+        "196608",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "4831838208",
+        "--kv-cache-dtype",
+        "int8_per_token_head",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3}"
+      ],
+      "model_info": {
+        "object": "list",
+        "data": [
+          {
+            "id": "qwen3.8-27b-vllm",
+            "object": "model",
+            "created": 1792506944,
+            "owned_by": "vllm",
+            "root": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+            "parent": null,
+            "max_model_len": 196608,
+            "permission": [
+              {
+                "id": "modelperm-80310d333ac913cf",
+                "object": "model_permission",
+                "created": 1792506944,
+                "allow_create_engine": false,
+                "allow_sampling": true,
+                "allow_logprobs": true,
+                "allow_search_indices": false,
+                "allow_view": true,
+                "allow_fine_tuning": false,
+                "organization": "*",
+                "group": null,
+                "is_blocking": false
+              }
+            ]
+          }
+        ]
+      },
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "screening_rejection": "Completed code/prose/fresh8K composite0.8697 < declared0.90. Stopped only owned unit during unfinished long probe; not an engine crash or retrieval failure.",
+      "long_probe_status": "interrupted after performance rejection; not validated",
+      "memory_scope": "Saved extrema through last completed8K probe; unfinished long extrema were not saved after repeated stop signals."
+    },
+    "vllm-bf16-160": {
+      "date": "2026-10-20T10:46:34.176102-04:00",
+      "kind": "vllm",
+      "model": "qwen3.8-27b-vllm",
+      "context": 163840,
+      "profile": {
+        "name": "Qwen3.8-27B vLLM dual AMD (64K, compiled MTP3, BF16 KV)",
+        "context": 163840,
+        "mtp": true,
+        "mtp_steps": 3,
+        "memory_fraction": 0.82,
+        "kv_cache_bytes": 6442450944,
+        "runtime": "rocm",
+        "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
+        "min_free_vram_gib": 20.0,
+        "extra_args": [
+          "--kv-cache-dtype",
+          "bfloat16"
+        ]
+      },
+      "kv": "bfloat16",
+      "status": "passed",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06899982200047816,
+              "total_seconds": 2.0367451060010353,
+              "decode_tps_sse": 129.58994341054552,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06546300799891469,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 420.29093929835113,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 442.9982808073957
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06447543000103906,
+              "total_seconds": 2.0213804630002414,
+              "decode_tps_sse": 130.30780528433743,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06053692800196586,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 449.7837393179487,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 479.04644251287846
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06615067000166164,
+              "total_seconds": 2.0179853119989275,
+              "decode_tps_sse": 130.64631322408778,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06087495900283102,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 438.39314098060606,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 476.3863577904232
+            }
+          ],
+          "median_decode_tps": 130.30780528433743,
+          "median_ttft_seconds": 0.06615067000166164
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08574598400082323,
+              "total_seconds": 3.783644398001343,
+              "decode_tps_sse": 68.9580868513183,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06406769799650647,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 291.5588443157872,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 390.21224082943047
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.09585827000046265,
+              "total_seconds": 3.7843064490007237,
+              "decode_tps_sse": 69.13476552329297,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0742258150021371,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 260.8017023453411,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 336.81004377358744
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.09159386700048344,
+              "total_seconds": 3.815414040000178,
+              "decode_tps_sse": 68.47806503894272,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0729673410023679,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 272.94403892640594,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 342.6190355379499
+            }
+          ],
+          "median_decode_tps": 68.9580868513183,
+          "median_ttft_seconds": 0.09159386700048344
+        }
+      },
+      "prefill": [
+        {
+          "usage": {
+            "prompt_tokens": 8188,
+            "total_tokens": 8210,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 6.7261721289978595,
+          "total_seconds": 6.935541286999069,
+          "decode_tps_sse": 100.30130607813173,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 6.710000772000058,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1217.3342940035552,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1220.268115939336,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8188,
+            "total_tokens": 8210,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 5.806279886000993,
+          "total_seconds": 6.010452489001182,
+          "decode_tps_sse": 102.85415227811264,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 5.791489573002764,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1410.1972624057205,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1413.798625861066,
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 8187,
+            "total_tokens": 8209,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 5.801550920998125,
+          "total_seconds": 6.006006963998516,
+          "decode_tps_sse": 102.71156426498882,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 5.787389765999251,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 1411.1743758669745,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 1414.6273762479918,
+          "markers_passed": true
+        }
+      ],
+      "memory": {
+        "minimum_available_gib": 46.632835388183594,
+        "minimum_free_vram_gib": [
+          5.915199279785156,
+          7.318096160888672
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 62.03533010699903,
+      "worker_args": [
+        "/opt/local-llm/vllm/.venv-rocm/bin/python",
+        "/opt/local-llm/vllm/rocm-bootstrap.py",
+        "serve",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "65536",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "3758096384",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--mamba-cache-dtype",
+        "bfloat16",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--compilation-config",
+        "{\"mode\":3,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+        "--cudagraph-capture-sizes",
+        "1",
+        "4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--max-model-len",
+        "163840",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "6442450944",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3}"
+      ],
+      "model_info": {
+        "object": "list",
+        "data": [
+          {
+            "id": "qwen3.8-27b-vllm",
+            "object": "model",
+            "created": 1792507656,
+            "owned_by": "vllm",
+            "root": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+            "parent": null,
+            "max_model_len": 163840,
+            "permission": [
+              {
+                "id": "modelperm-bd73013a615bb5ae",
+                "object": "model_permission",
+                "created": 1792507656,
+                "allow_create_engine": false,
+                "allow_sampling": true,
+                "allow_logprobs": true,
+                "allow_search_indices": false,
+                "allow_view": true,
+                "allow_fine_tuning": false,
+                "organization": "*",
+                "group": null,
+                "is_blocking": false
+              }
+            ]
+          }
+        ]
+      },
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "long_retrieval": {
+        "usage": {
+          "prompt_tokens": 160868,
+          "total_tokens": 160890,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 183.5906290560015,
+        "total_seconds": 184.21435232699878,
+        "decode_tps_sse": 33.66877744744478,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 183.41282944799968,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 876.2320867201217,
+        "cached_tokens": null,
+        "prefill_phase_tps": 877.0815023362829,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      },
+      "cached_history_followup": {
+        "usage": {
+          "prompt_tokens": 160915,
+          "total_tokens": 160937,
+          "completion_tokens": 22,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "ttft_seconds": 1.46735493199958,
+        "total_seconds": 2.1005678809997335,
+        "decode_tps_sse": 33.16419860515978,
+        "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+        "reasoning_tokens_present": false,
+        "native_timings": null,
+        "prefill_phase_seconds": 1.2380446470015158,
+        "prefill_phase_observations": 1.0,
+        "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+        "effective_input_per_ttft": 109663.31082604495,
+        "cached_tokens": null,
+        "markers_passed": true,
+        "cache_token_reporting": "unreported by API; full-history markers are a functional check"
+      }
+    },
+    "vllm-bf16-160-interrupted": {
+      "date": "2026-10-20T10:40:39.991686-04:00",
+      "kind": "vllm",
+      "model": "qwen3.8-27b-vllm",
+      "context": 163840,
+      "profile": {
+        "name": "Qwen3.8-27B vLLM dual AMD (64K, compiled MTP3, BF16 KV)",
+        "context": 163840,
+        "mtp": true,
+        "mtp_steps": 3,
+        "memory_fraction": 0.82,
+        "kv_cache_bytes": 6442450944,
+        "runtime": "rocm",
+        "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
+        "min_free_vram_gib": 20.0,
+        "extra_args": [
+          "--kv-cache-dtype",
+          "bfloat16"
+        ]
+      },
+      "kv": "bfloat16",
+      "status": "interrupted",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.06997246600076323,
+              "total_seconds": 2.0705716960001155,
+              "decode_tps_sse": 127.46181052967943,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06643079100103932,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 414.4487347306536,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 436.54455355719443
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08277639800144243,
+              "total_seconds": 2.1481481270020595,
+              "decode_tps_sse": 123.46445747245136,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0789429040014511,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 350.34141011420496,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 367.3541069564268
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08134057600182132,
+              "total_seconds": 2.1923420170023746,
+              "decode_tps_sse": 120.7957489025386,
+              "content_sha256": "4b1c6c307498a019f38a1831ac2b01d559baeee0bf82ed6f0139484e392e2e00",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07653307999862591,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 356.5256287261926,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 378.9211149024797
+            }
+          ],
+          "median_decode_tps": 123.46445747245136,
+          "median_ttft_seconds": 0.08134057600182132
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.0931851999994251,
+              "total_seconds": 3.804566826001974,
+              "decode_tps_sse": 68.7075665335594,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06806918000074802,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 268.28294622058263,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 367.2734121334394
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08250355999916792,
+              "total_seconds": 3.691361233999487,
+              "decode_tps_sse": 70.65947816039515,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06421152199982316,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 303.01722738088074,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 389.33822500062917
+            },
+            {
+              "usage": {
+                "prompt_tokens": 25,
+                "total_tokens": 281,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.08084530400083167,
+              "total_seconds": 3.700638638998498,
+              "decode_tps_sse": 70.44601069750419,
+              "content_sha256": "54d4c169242c6385e187e6dec6221bdb58bf1f8d45db3c176f88d4db3b523e3d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.062476232000335585,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 309.2325560399008,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 400.1521730674429
+            }
+          ],
+          "median_decode_tps": 70.44601069750419,
+          "median_ttft_seconds": 0.08250355999916792
+        }
+      },
+      "prefill": [],
+      "memory": {
+        "minimum_available_gib": 47.152259826660156,
+        "minimum_free_vram_gib": [
+          5.3213653564453125,
+          6.202789306640625
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "method": "Existing shared-method prompts; one excluded warmup then three 256-cap trials per short task, three salted fresh ~8K probes. Long greedy marker/history probes are separate; caches not globally flushed.",
+      "startup_seconds": 157.05874311099979,
+      "worker_args": [
+        "/opt/local-llm/vllm/.venv-rocm/bin/python",
+        "/opt/local-llm/vllm/rocm-bootstrap.py",
+        "serve",
+        "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--language-model-only",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "65536",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "2048",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "3758096384",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--mamba-cache-dtype",
+        "bfloat16",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--compilation-config",
+        "{\"mode\":3,\"cudagraph_mode\":\"FULL_DECODE_ONLY\"}",
+        "--cudagraph-capture-sizes",
+        "1",
+        "4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder",
+        "--reasoning-parser",
+        "qwen3",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--port",
+        "30011",
+        "--served-model-name",
+        "qwen3.8-27b-vllm",
+        "--max-model-len",
+        "163840",
+        "--gpu-memory-utilization",
+        "0.82",
+        "--kv-cache-memory-bytes",
+        "6442450944",
+        "--kv-cache-dtype",
+        "bfloat16",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3}"
+      ],
+      "model_info": {
+        "object": "list",
+        "data": [
+          {
+            "id": "qwen3.8-27b-vllm",
+            "object": "model",
+            "created": 1792507397,
+            "owned_by": "vllm",
+            "root": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+            "parent": null,
+            "max_model_len": 163840,
+            "permission": [
+              {
+                "id": "modelperm-9024f39352e9dd6e",
+                "object": "model_permission",
+                "created": 1792507397,
+                "allow_create_engine": false,
+                "allow_sampling": true,
+                "allow_logprobs": true,
+                "allow_search_indices": false,
+                "allow_view": true,
+                "allow_fine_tuning": false,
+                "organization": "*",
+                "group": null,
+                "is_blocking": false
+              }
+            ]
+          }
+        ]
+      },
+      "quality": {
+        "arithmetic": true,
+        "ordered_json": true,
+        "tool_roundtrip": true
+      },
+      "error": "HTTPError: HTTP Error 500: Internal Server Error",
+      "guard_faults": [],
+      "observed_status": "failed",
+      "interruption": "Normal Maya launcher took backend ownership and sent SIGTERM at10:43:44; renderer shutdown returnedHTTP500. Not a demonstrated context/memory failure. User authorized interrupting Maya and retrying the same candidate."
+    }
+  },
+  "validation_limits": [
+    "Actual long marker/history probes, not a general quality evaluation at every token position",
+    "Short three-trial medians and stateful caches; no statistical significance or zero-regression claim",
+    "Per-rank maximum SGLang prefill phase differs from vLLM scheduled-to-first-engine-token phase; external TTFT is separate",
+    "3GiB whole-card/RAM debounced guard and zero owned swap/spill enforced during candidates; production ROCm startup admission strengthened to22.75GiB/card for SGLang160K and21GiB/card for vLLM160K; guards never close unrelated apps",
+    "No HiCache, FP8 KV, CPU dense-weight offload, RoPE extension, engine upgrade or new model download"
+  ]
+}

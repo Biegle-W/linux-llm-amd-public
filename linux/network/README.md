@@ -9,7 +9,7 @@ the original nine files are preserved in the dated Shared archive described ther
 The authenticated gateway uses TCP **10000** and OpenAI-compatible Chat
 Completions. Start the chosen GPU backend separately with its Desktop launcher
 or `llm-*` PATH command; starting the gateway alone does not load a model.
-Thirteen profiles are enabled, including the validated managed Strata Q3 backend.
+Ten profiles are enabled, including the validated managed Strata Q3 backend.
 HyperQwen and old CUDA setups are retired locally.
 
 Credentials and live addresses stay in ignored `dsh/data/` configuration.
@@ -23,7 +23,7 @@ catalog from local configuration; `--output PATH` optionally saves a report.
 `--generate` is the additional Strata Q3 SDK streaming/tool test and requires
 that backend. Maya's separate normal-launcher proofs cover both selected models.
 
-October 20 authentication/catalog checks passed for thirteen profiles on
+Earlier October 20 authentication/catalog checks passed for the then-thirteen profiles on
 loopback/LAN/Tailscale host-self routes. Maya generation, JSON, tool round trips
 and model switching passed there too; a separate remote client was not tested.
 The Maya addition refreshed only the gateway; credentials and access controls

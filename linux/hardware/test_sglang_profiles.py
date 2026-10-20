@@ -54,7 +54,7 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(status, 200)
         ids = {row['id'] for row in payload['data']}
         self.assertNotIn('test-blocked', ids)
-        self.assertIn('qwen3.8-27b-sglang', ids)
+        self.assertNotIn('qwen3.8-27b-sglang', ids)  # Retired; keep only DFlash2.
         self.assertIn(router.DEFAULT, ids)
         self.assertTrue(router.PROFILES[router.DEFAULT].get('enabled', True))
 

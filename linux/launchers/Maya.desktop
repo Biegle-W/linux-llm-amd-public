@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Maya
-Comment=GLM-5.3-Flash and DeepSeek-V4.1-Flash-1017; validated dual-AMD profiles, shared NVMe streaming
+Comment=Maya backend with native Chat and Monitor; live terminal logs
 Exec=/usr/bin/ptyxis --standalone --new-window --title=Maya -- /opt/local-llm/dsh/start-maya
 Path=/opt/local-llm/dsh/workspace
 Terminal=false

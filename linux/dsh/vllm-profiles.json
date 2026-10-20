@@ -1,13 +1,15 @@
 {
   "qwen3.8-27b-vllm": {
-    "name": "Qwen3.8-27B vLLM dual AMD (64K, compiled MTP3, BF16 KV)",
-    "context": 65536,
+    "name": "Qwen3.8-27B vLLM dual AMD (160K, compiled MTP3, BF16 KV)",
+    "context": 163840,
     "mtp": true,
     "mtp_steps": 3,
     "memory_fraction": 0.82,
-    "kv_cache_bytes": 3758096384,
+    "kv_cache_bytes": 6442450944,
     "runtime": "rocm",
     "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
-    "min_free_vram_gib": 20.0
+    "min_free_vram_gib": 21.0,
+    "kv_cache_dtype": "bfloat16",
+    "context_validation": "Fresh160868 input/22 output plus full-history follow-up; arithmetic/JSON/tools/SSE; both cards, zero owned swap/spill"
   }
 }

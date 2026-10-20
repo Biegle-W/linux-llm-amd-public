@@ -32,8 +32,8 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Thirteen profiles are active: seven llama.cpp, two SGLang, one vLLM, one Strata, two Maya.
-Both Super IQ3 and Q4 are selectable at 32K; retain all weights. The user's saved
+Ten profiles are active: five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.
+Super IQ3 remains selectable at 32K. Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
 The 20 GiB candidate is not selected and remains inactive. Do not regenerate the
@@ -59,7 +59,7 @@ GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
 The native 8 GiB/card reserve must leave >=6 GiB actual whole-card free at startup;
 keep continuous latched guards, zero worker swap/spill and 52G worker scope.
 Physical 60 GiB / available 52 GiB before load remains required. The 64 GB Strata 13.5 GiB
-profile and both Super quants are unchanged; DSH default is preserved.
+profile and Super IQ3 are retained; DSH default is preserved.
 Maya's source/binary/config and DeepSeek descriptor/index/Engram fingerprints
 must match validation. Its broader DS4 suite retains two mixed Q4_K/IQ4_XS
 bit-exact failures per card; do not enable those or other untested types.
@@ -102,7 +102,7 @@ snapshots; historical evidence is not a current validated profile.
 
 The user requests CPU expert offload plus GPU hot-expert caching for all MoE
 models, with both RX 7900 XTX cards active. Size profiles for the actual64 GB using
-bounded RAM/VRAM, swap and residency checks. Preserve dense Qwen27B/Muse GPU
+bounded RAM/VRAM, swap and residency checks. Preserve dense Qwen27B GPU
 placement. Identify MoEs by expert metadata; KV/prompt caching and static CPU
 placement are not hot-expert caching. Validate each backend's implementation and
 MTP behavior before activation. Preserve the validated13.5 GiB Strata expert cap,
@@ -164,3 +164,26 @@ decode, input/TTFT proxies and functional-only proofs. An ~8K probe is not full-
 validation. Muse marker failures stay visible. Candidate Q4 peak includes a brief
 whole-card reserve dip; passing debounced guards does not mean reserves never
 dipped below their threshold. Host self-access is not a remote-peer test.
+
+## Qwen INT4 context follow-up — October 20
+
+SGLang retains only TP2 DFlash2 at **163,840 tokens**, BF16 KV. vLLM
+retains compiled MTP3 at **163,840 tokens**, `bfloat16` KV.
+The separate SGLang MTP profile is retired. Both new profiles passed fresh
+near-window markers and full-history follow-ups, with zero owned swap/spill.
+[Context selection, actual counts and limits](linux/hardware/QWEN-INT4-CONTEXT-2026-10-20.md).
+Keep the existing RDNA verification repair, both GPUs and startup admission.
+No HiCache/FP8/CPU dense-weight offload is enabled. Current measurements live in
+`hardware/results/qwen-int4-context-2026-10-20.json`; earlier contexts/rates remain historical.
+
+## Native frontends — October 20
+
+The user's newer request makes managed Strata Q3 and Maya open their original
+local Chat/Monitor frontend after readiness, alongside the same worker and visible
+terminal. Do not start a second AppImage/engine or duplicate weights. Keep DSH
+separate; other backend launchers remain backend-only. Headless SSH and
+`--no-browser` suppress automatic browser opening. The local HTTP adapter keeps
+context/config/runtime self-updates out of the native UI; retain existing admission,
+source pins, dual-GPU placement and latched watchdogs. Frontend sampling state
+is private (`*.shared-settings.json` ignored). See
+`hardware/NATIVE-FRONTENDS-2026-10-20.md`.

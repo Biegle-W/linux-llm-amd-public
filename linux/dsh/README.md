@@ -13,13 +13,13 @@ preserved by [configure_local.py](configure_local.py).
 
 | Command | DSH provider | Models |
 |---|---|---|
-| `llm-llama` | Local llama.cpp | Seven profiles, including both Super IQ3 and Q4 |
-| `llm-sglang` | Local SGLang | Qwen 27B MTP and DFlash2 |
+| `llm-llama` | Local llama.cpp | Five profiles, including Super IQ3 |
+| `llm-sglang` | Local SGLang | Qwen 27B TP2 DFlash2 only |
 | `llm-vllm` | Local vLLM | Qwen 27B compiled MTP |
 | `llm-strata` | Local Strata | Flash-Next Q3, 13.5 GiB expert cap, native 256K |
 | `llm-maya` | Local Maya | GLM-5.3-Flash and DeepSeek-V4.1-Flash-1017, each 32K |
 
-The current catalog has thirteen active profiles. Maya passed context, memory,
+The current catalog has ten active profiles. Maya passed context, memory,
 normal API and model-switch checks on both cards. See [Maya setup](../maya/README.md)
 and [its validation report](../hardware/MAYA-2026-10-20.md).
 
@@ -32,3 +32,7 @@ Older CUDA/single-card/pending-RAM instructions are historical. Their original
 text is preserved in the [pre-Maya committed record](https://github.com/Biegle-W/local-llm-public/blob/95a052ad560b25d3559891d9b49c9779079ed504/linux/dsh/README.md)
 and dated hardware reports. They do not override the current catalog or
 [dual-AMD offload policy](../hardware/MOE-OFFLOAD-2026-10-18.md).
+
+Strata Q3 and Maya now also open their own local Chat/Monitor page when ready.
+DSH stays optional and separate; `--no-browser` suppresses browser opening.
+[Native frontend behavior and controls](../hardware/NATIVE-FRONTENDS-2026-10-20.md).

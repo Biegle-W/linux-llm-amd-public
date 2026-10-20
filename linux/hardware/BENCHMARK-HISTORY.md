@@ -1,9 +1,37 @@
 # LLM benchmark and context history
 
+## October 20 — Qwen INT4 contexts and requested retirements
+
+Ten active profiles remain. Muse Q4, Super Q4_K_XL and SGLang MTP are retired;
+four GGUF files (95.726 GiB) were removed, shared GPTQ/DFLASH and Super IQ3 kept.
+The original dated benchmark batches remain unchanged. No engine update.
+
+SGLang retains only TP2 DFlash2 at **163,840 tokens**, BF16 KV. vLLM
+retains compiled MTP3 at **163,840 tokens**, `bfloat16` KV.
+The separate SGLang MTP profile is retired. Both new profiles passed fresh
+near-window markers and full-history follow-ups, with zero owned swap/spill.
+[Context selection, actual counts and limits](QWEN-INT4-CONTEXT-2026-10-20.md).
+
+| Model / quant | Backend / strategy | Context tokens | Actual prefill input | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,185–8,191 | 1314.8 | 6.235 | 0.102 / 0.097 | 178.82 / 63.40 |
+| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,187–8,188 | 1413.8 | 5.806 | 0.066 / 0.092 | 130.31 / 68.96 |
+
+Rows use the same column order as the current report: model, engine, total window,
+actual fresh input, engine-phase PP, external fresh TTFT, short code/prose TTFT
+and short code/prose SSE decode. Three timed trials per task; all raw numerical
+trials and actual long counts are in the [new numeric record](results/qwen-int4-context-2026-10-20.json).
+Larger SGLang 192K failed desktop headroom and stayed inactive. The selected
+vLLM cache follows the declared threshold, not an assumed compression speedup.
+Earlier rates remain attached to their original 64K/40K contexts and workloads.
+
+
 Maintained October 20, 2026. The original compilation used saved results;
 the October 19 Strata optimization adds fresh measurements and validation. Dates below are local dates in 2026.
 This is the index of measured updates, including older hardware and retired
 profiles; it does not imply that every historical configuration remains installed.
+
+
 
 ## October 20: Maya on dual AMD, shared NVMe and 32K
 

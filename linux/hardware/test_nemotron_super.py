@@ -20,6 +20,8 @@ class NemotronCandidates(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.profiles = json.loads((ROOT/'dsh/candidates/nemotron-super.json').read_text())
+        # Preserve historical Q4 admission regression cases without an active candidate.
+        cls.profiles.update(json.loads((ROOT/'hardware/fixtures/nemotron-super-retired-q4.json').read_text()))
 
     def test_q4_remains_inactive_and_refuses_32gb_before_any_unload(self):
         profile = self.profiles['nemotron-3.5-super-q4']

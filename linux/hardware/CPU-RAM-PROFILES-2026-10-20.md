@@ -1,5 +1,9 @@
 # i9 / 64 GB validation — October 20, 2026
 
+> Subsequent October 20 retirement: Muse Q4 and Super Q4 are removed. This dated
+> validation keeps its original tested catalog and measurements; use the
+> [current report](CURRENT-AMD-BENCHMARKS.md) for active profiles.
+
 Current hardware is Intel i9-13900KS (8P+16E, 24 cores/32 logical CPUs),
 64 GB installed (61.51 GiB OS-visible), two RX 7900 XTX 24 GB, MSI MPG Z690
 CARBON WIFI. Both GPUs use motherboard CPU PCIe4 x8/x8; the purchased PEX88096

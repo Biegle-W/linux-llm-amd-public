@@ -8,4 +8,4 @@ while IFS= read -r name; do
     case "$name" in MAYA_*|STRATA_*|DS4_*) unset "$name" ;; esac
 done < <(compgen -e)
 cd "$LLM_ROOT/maya/upstream"
-exec .venv/bin/python -B serve/server.py --engine strata --host 127.0.0.1 "$@"
+exec .venv/bin/python -B "$LLM_ROOT/dsh/native-ui-server.py" --project maya --engine strata --host 127.0.0.1 "$@"

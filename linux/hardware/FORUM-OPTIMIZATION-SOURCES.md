@@ -28,7 +28,7 @@ remain in the [vLLM tuning report](VLLM-TUNING-2026-10-17.md) and
 1. **Already applied:** native RDNA3 W4A16, compiled MTP3 and gated adaptive
    attention tiles in vLLM. The tile port follows [JartX's design](https://github.com/JartX/vllm/blob/perf/rdna3_full_stack/docs/design/rdna3_full_stack.md),
    reviewed revision `822d27588a69de52abe7a0f624f8b8bf71e5f6c4`.
-   Our selected cache is BF16 at 64K. The complete fork and its native quantized
+   At that earlier selection our cache was BF16 at 64K; the [October 20 context update](#qwen-int4-context-october-20) supersedes it. The complete fork and its native quantized
    attention kernels were not built or benchmarked here.
 2. **C++ build basics already present:** Release, `GGML_HIP=ON`, explicit
    `gfx1100`, HIP clang++, isolated ROCm and limited build parallelism. See
@@ -496,3 +496,17 @@ The broad DeepSeek GGUF suite still fails two bit-exact mixed Q4_K/IQ4_XS cases
 on each card. Actual selected Maya-S metadata contains neither type. That limit
 is retained and enforced by admission; it is not silently called a full-suite
 pass. Local arithmetic/JSON/tools/marker checks do not establish general quality.
+
+<a id="qwen-int4-context-october-20"></a>
+
+## Qwen INT4 context expansion — October 20
+
+External reports and locally reviewed implementation are separate from validation.
+
+- [lcz.me topic 1921, original report](https://lcz.me/topic/1921/5), 懒人烘培 (date not exposed in the fetched page; reviewed October 20): Ryzen 7500F, 96 GB, dual 7900 XTX TP2, same AutoRound GPTQ target, SGLang f84475cc, BF16 KV/DFLASH/196608 configured context, HiCache. This supplies a compatible candidate, not a speed prediction. Its initial vLLM “cold” table contains prefix hits, acknowledged later; it must not be imported as cold prefill performance.
+- [lcz.me topic 1921 follow-up](https://lcz.me/topic/1921/11), 张光璞 (reviewed October 20): GPU-evicted-prefix tests distinguish write-through host reuse from a GPU hit. `hicache-size` is per rank, so TP2 doubles that allocation. HiCache is prefix retention, not a substitute for enough live GPU KV capacity. No host-cache allocation is added merely to enlarge a context flag.
+- [lcz.me dual-XTX discussion](https://lcz.me/topic/1674), flyer666/community (reviewed October 20): SGLang BF16 KV and vLLM INT8 KV have different capacities. Reported gfx1100 FP8 execution is slower in the discussed implementation. Preserve the previously faster BF16 SGLang path and evaluate vLLM per-token/head INT8 only with actual long-prefill/retrieval checks.
+- [lcz.me RDNA3 vLLM implementation discussion](https://lcz.me/topic/1252/14), iamvirus/community (reviewed October 20), links [JartX RDNA3 source branch](https://github.com/JartX/vllm/tree/perf/rdna3_full_stack). Its INT8 prefill/decode kernels are candidates for that branch; no fork/kernel upgrade is installed by this task. Our retained wheel already exposes per-token/head INT8 KV, but performance and support must be validated on the exact installed build.
+- [Level1Techs Crucible discussion](https://forum.level1techs.com/t/crucible-llm-bench-your-llm-and-server-is-it-fast-enough-for-everyone/257531), MadGoat, October 1 with October 12 release details: measure actual token counts, retrieval at different depths and per-request TTFT/decode separately. This is methodology, not a matching gfx1100 configuration or a reason to copy another system's rate. Existing local probes already count tokens and place markers near the beginning/middle/end; no new benchmark package is installed.
+
+Primary implementation references: [pinned SGLang runner](https://github.com/StevenChenSE/sglang/blob/f84475ccf593087df3d1da13c9e675eadee12352/python/sglang/srt/model_executor/model_runner.py), [SGLang HiCache documentation](https://docs.sglang.io/docs/advanced_features/hicache), and [vLLM quantized-KV documentation](https://docs.vllm.ai/en/latest/features/quantization/quantized_kvcache/). The installed Triton attention backend lists `int8_per_token_head`; the local pinned wheel/source and existing Radeon tile fixes remain unchanged. Higher configured context alone is not validation; retain a GPU-resident dense target, both cards, speculation settings and measured headroom.

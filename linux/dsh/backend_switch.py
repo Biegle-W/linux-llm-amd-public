@@ -87,6 +87,10 @@ def is_inference(p, root=ROOT):
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':
+        if entry[1] == str(root / 'dsh/native-ui-server.py'):
+            args = entry[2]
+            return any(arg == '--project' and i + 1 < len(args) and args[i + 1] in ('strata', 'maya')
+                       for i, arg in enumerate(args))
         # Maya is the configured Strata fork; match its exact inference entry
         # point, never every Python process in its environment.
         projects = (root / 'strata', root / 'maya/upstream')

@@ -44,8 +44,9 @@ Do not run bulk transfers/builds during clean timing measurements.
 
 ## Serving and guards
 
-`llm-maya` is the backend-only PATH command; the **Maya** desktop launcher opens
-a visible terminal. Start `dsh` separately and select the **Local Maya** provider.
+`llm-maya` starts the backend and opens its native Chat/Monitor in a local browser.
+The **Maya** desktop launcher also keeps a visible terminal. DSH is optional;
+start `dsh` separately and select the **Local Maya** provider when wanted.
 The router's OpenAI chat API is loopback port **30030**, with one owned worker
 on **30031**. Remote clients use the existing authenticated LAN/Tailscale gateway
 on port **10000**, with the exact model IDs in the current report. Switching
@@ -108,3 +109,7 @@ absolute paths cannot be used unchanged in Windows. The canonical
 The Maya desktop entry explicitly opens Ptyxis on this Ubuntu installation.
 Adapt that terminal command on another desktop. Upstream installer configs are
 preparation outputs; use the guarded managed profiles for serving.
+
+Strata Q3 and Maya now also open their own local Chat/Monitor page when ready.
+DSH stays optional and separate; `--no-browser` suppresses browser opening.
+[Native frontend behavior and controls](../hardware/NATIVE-FRONTENDS-2026-10-20.md).

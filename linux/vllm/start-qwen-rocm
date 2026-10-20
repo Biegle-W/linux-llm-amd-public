@@ -6,8 +6,8 @@ export VLLM_ENGINE_READY_TIMEOUT_S=1800
 exec "$ROOT/vllm/run-rocm" serve /opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
  --host 127.0.0.1 --port 30011 --served-model-name qwen3.8-27b-vllm \
  --tensor-parallel-size 2 --disable-custom-all-reduce --language-model-only --dtype bfloat16 \
- --max-model-len 65536 --max-num-seqs 1 --max-num-batched-tokens 2048 \
- --gpu-memory-utilization 0.82 --kv-cache-memory-bytes 3758096384 \
+ --max-model-len 163840 --max-num-seqs 1 --max-num-batched-tokens 2048 \
+ --gpu-memory-utilization 0.82 --kv-cache-memory-bytes 6442450944 \
  --kv-cache-dtype bfloat16 --attention-backend TRITON_ATTN \
  --mamba-cache-dtype bfloat16 --mamba-ssm-cache-dtype bfloat16 \
  --compilation-config '{"mode":3,"cudagraph_mode":"FULL_DECODE_ONLY"}' \

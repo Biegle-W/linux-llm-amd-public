@@ -1,8 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 Updated **October 20, 2026**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles include both Super IQ3
-and Q4. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang/Strata pins remain.
+64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang/Strata pins remain.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
@@ -27,11 +26,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Thirteen profiles:** seven llama.cpp, two SGLang, one vLLM, one Strata, two Maya. Presence in
+- **Ten profiles:** five llama.cpp, one SGLang, one vLLM, one Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
-- The saved DSH default/provider is preserved. Super IQ3 and Q4 are both selectable;
-  neither model's weights were deleted. FreeToken/HyperQwen remain retired.
+- The saved DSH default/provider is preserved. Super IQ3 remains selectable;
+  Muse Q4 and Super Q4 weights/setup are retired; shared target/draft weights stay. FreeToken/HyperQwen remain retired.
 - Kernel observed 7.0.0-38-generic; ROCm SDK 7.2.3. Exact build, token counts and
   benchmark methods are in [the post-upgrade report](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
   Historical i5/32 GB and NVIDIA measurements retain their own hardware attribution.
@@ -40,6 +39,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
   does not make Linux HIP binaries or absolute paths runnable in Windows.
   Both model drives mount automatically at Linux desktop login (`local-llm-mounts.service`).
   After a reboot, log in to the desktop before starting backends, including over SSH.
+  [Details](#storage-and-runtime-pins).
 
 ## Project Maya: GLM and DeepSeek, both active
 
@@ -73,7 +73,7 @@ applications are preserved. `llm-maya --help` /invalid IDs do not hand over a se
 
 Router/worker are loopback **30030/30031**. Remote clients use the same private
 key and **port 10000 `/v1/chat/completions`** gateway; worker/UI/admin endpoints
-are not exposed remotely. The current thirteen-profile auth/catalog check and
+are not exposed remotely. The earlier thirteen-profile auth/catalog check and
 both models' actual generation, JSON and synthetic tool round trips passed on
 loopback/LAN/Tailscale host-self routes. GLM→DeepSeek→GLM reload passed with one
 native worker. A separate remote peer and image-request accuracy/performance
@@ -111,39 +111,33 @@ the Windows config to it. Do not let a Windows installer overwrite the Linux
 pack. The new NVMe's Windows drive letter is unknown. The handoff remains on
 original Shared SATA /D:. Models and Linux runtime binaries are different assets.
 
-## Nemotron Super: both IQ3 and Q4 active
+## Nemotron Super: IQ3 active, Q4 retired
 
-Both use 32,768 total context, both GPUs, HIP layer splitting, Q8 K/V, Flash Attention,
-six decode/prefill threads, batch 512/microbatch 128, checkpoints 0 and MTP off.
+`nemotron-3.5-super-iq3` retains 32,768 total context, both GPUs, HIP layer split
+21:19, Q8 K/V, Flash Attention, six CPU threads, batch 512/microbatch 128,
+checkpoints 0 and MTP off. CPU experts occupy 19.124 GiB with a 2,048 MiB GPU
+hot-expert cache ceiling. Available host RAM before load must be at least
+23.124 GiB. Owned continuous guards retain 3 GiB RAM/per-card VRAM floors with
+the existing sample debounce; only the owned worker may be unloaded.
 
-| API model ID | Split | CPU expert backing | Total GPU expert-cache ceiling |
-|---|---|---:|---:|
-| `nemotron-3.5-super-iq3` |21:19|19.124 GiB|2,048 MiB|
-| `nemotron-3.5-super-q4` |1:1|47.424 GiB|4,096 MiB|
+It passed 28,546-input retrieval and six fixed ~8K-input/256-output trials on
+4c3c5810: 15.90/16.95 t/s code/prose. A separate production rebuild passed the
+normal launcher, tools/JSON/SSE, both-card placement and zero owned swap/spill.
+These are fixed-input timing workloads, not short-prompt TTFT; concurrent IO
+caveats remain in the [original record](../hardware/results/dual-amd-i9-64gb-2026-10-20.json).
 
-Both passed28,546-input marker retrieval and six fixed ~8K-input/256-output timing
-trials on4c3c5810. IQ3 decode medians15.90/16.95 t/s; Q4 7.86/8.19 t/s, code/prose.
-These are fixed-input workloads, not short-prompt TTFT. Candidate trials overlapped
-model-copy/hash/download IO; do not claim an isolated engine speedup. A separate
-normal visible-terminal production rebuild passed tools/results, JSON, SSE, both-GPU
-placement and zero worker swap/spill for EACH profile. Actual binary fingerprints
-and settings are in [the numeric record](../hardware/results/dual-amd-i9-64gb-2026-10-20.json).
-
-Q4 requires 60 GiB OS-visible total and 51.424 GiB available RAM before loading.
-Owned guards retain 3 GiB available RAM /3 GiB per-card headroom with their existing
-sample debounce; they unload only the owned worker. The 64K Q4 experiments failed
-memory guards and are not active. IQ3 requires23.124 GiB available RAM. MTP remains
-off for both. The current user decision is BOTH active, not replacement/deletion.
-
-All six original verified Super shards remain on Shared SATA beneath
-`/mnt/shared/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/`,
-pinned75a5829055f69a0359085ae6bbd0a81b60bc05c6. No Super weights were moved to
-primary NVMe. Start `llm-llama`, start DSH separately, and select either exact ID.
-[Post-upgrade selection and limits](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
+The user's later October 20 decision removes Muse Glimmer Q4 and Super Q4_K_XL,
+superseding the earlier both-quants-retained decision. Their active model,
+placement, preset and candidate entries are removed; exactly four GGUF files
+(95.726 GiB) were deleted. Super IQ3's three shards and shared family metadata
+are retained on Shared SATA. Q4 admission test fixtures and historical speeds
+remain evidence, not an installable active profile. Windows setup snapshots
+are historical and do not automatically follow this Linux retirement.
+[Deletion manifest and checks](../hardware/results/model-retirement-2026-10-20.json).
 
 ## Active model catalog
 
-The current catalog has **13 enabled profiles**: seven llama.cpp, two SGLang, one vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **10 enabled profiles**: five llama.cpp, one SGLang, one vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -154,15 +148,12 @@ not guarantees of full-window speed or general long-context accuracy.
 | Backend / placement | Exact API model ID | Total context | Target quantization | Speculation |
 |---|---|---:|---|---|
 | llama.cpp / Vulkan | `qwen3.8-27b-q4` | 65,536 | Q4_K_M | MTP3 |
-| llama.cpp / Vulkan | `muse-glimmer-30b` | 32,768 | UD-Q4_K_XL | Off |
 | llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | Q4_K_M, two GGUF shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
-| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-q4` | 32,768 | UD-Q4_K_XL, three shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
-| SGLang / ROCm TP2 | `qwen3.8-27b-sglang` | 40,960 | GPTQ INT4/group64 | MTP3 |
-| SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 65,536 | GPTQ INT4/group64 | DFlash2, 8 draft tokens |
-| vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 65,536 | GPTQ INT4/group64 | MTP3 |
+| SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 163,840 | GPTQ INT4/group64 | DFlash2, 8 draft tokens; BF16 KV |
+| vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
 | Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S24, mixed IQ2/3 experts / Q4_K dense | MTP |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | DSpark not loaded |
@@ -197,23 +188,24 @@ Q4 passed arithmetic/JSON/tools and 63,911-token retrieval. Short code decode:
 **35.7 t/s**; long prefill: **424.0 t/s**. Single probes, not matched
 IQ2/Q4 speed rankings or full 256K validation. See [replacement details](../hardware/NEMOTRON-Q4-2026-10-18.md).
 
-SGLang uses BF16 activations/KV/Mamba, Triton attention, memory fraction 0.85,
-one simultaneous request, graphs, GPU prefix caching and eight Mamba cache
-slots. MTP uses chunk/max-prefill 512/1,024; DFlash2 uses 2,048/2,048 and draft
-window 2,048. Both require 21 GiB free per GPU before loading. The selected
-optimized verifier requires **both** `SGLANG_RDNA_VLLM_VERIFY=1` and
-`SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX=1`; do not enable the unmodified verifier.
-Host/disk HiCache and CPU weight offload are not enabled.
+SGLang retains only TP2 DFlash2 at 163,840 total tokens; the separate MTP
+profile is retired. BF16 activation/KV/Mamba, Triton attention, fraction 0.85,
+one request, GPU prefix caching, eight Mamba state slots, chunks/max-prefill
+2048/2048, draft window 2048 and eight draft tokens remain. The optimized verifier
+requires both `SGLANG_RDNA_VLLM_VERIFY=1` and
+`SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX=1`; never enable an unrepaired verifier.
+Before loading, retain 22.75 GiB free per card. No CPU weight offload or HiCache is added.
 
-vLLM uses BF16 activations/KV/Mamba, compiled MTP3, full decode graphs at sizes
-1/4, 2,048-token chunks, tuned RDNA3 prefill, RCCL Simple and a **fixed 3.5 GiB
-KV allocation per GPU**. The October 18 startup fix uses utilization **0.82**
-and requires **20 GiB free per GPU**. The previous 21 GiB guard rejected about
-20.78 GiB free on the display card and closed the terminal before loading.
-The corrected profile passed 64,033-token retrieval, tools/JSON, prefix caching
-and authenticated API generation. It preserves 65,536 context and MTP3.
-Startup host-page swapping was observed with 32 GB RAM; GPU weights stayed
-resident. This is not a promise of swap-free startup or a new throughput claim.
+vLLM retains compiled MTP3/TP2, full-decode graphs 1/4, chunks 2048, BF16 activations
+and Mamba, Radeon prefill tiles, RCCL Simple, utilization 0.82 and 21 GiB/card
+startup admission. Its selected context is 163,840, KV dtype `bfloat16`,
+fixed KV budget 6 GiB per rank.
+The old64K/3.5GiB BF16 setup remains historical. Fresh near-window/history,
+small functional/tool/SSE checks and no-swap/spill candidate guards passed.
+See [larger-context selection and exact measurements](../hardware/QWEN-INT4-CONTEXT-2026-10-20.md)
+and [numeric evidence](../hardware/results/qwen-int4-context-2026-10-20.json).
+Allocated context is input plus output; long requests are naturally slower than
+short prompts. Do not present warm-history latency as cold prefill speed.
 
 The catalog refresh preserves the user's saved DSH provider/model, including a
 non-local provider; it does not force a default. The original consolidation
@@ -319,7 +311,7 @@ a harness/client function, not an ability granted by the inference API alone.
 | Tailscale base URL | `http://<LINUX_TAILSCALE_IP>:10000/v1` |
 | Linux MagicDNS alternative | `http://<LINUX_TAILSCALE_DNS>:10000/v1` |
 | Authentication | Actual private bearer API key |
-| Current vLLM model | `qwen3.8-27b-vllm` |
+| vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | Streaming / timeout | On / 600 seconds; allow for cold model loading |
 | Initial client output limit | 2,048 tokens, within the total context budget |
 
@@ -373,7 +365,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all thirteen enabled profiles even when their backends are
+`GET /v1/models` lists all ten enabled profiles even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -401,7 +393,7 @@ New shared NVMe root: `/mnt/shared-nvme/LLM-Models` (UUIDCONFIGURE_SHARED_NVME_U
 **Its Windows drive letter is not established; do not assume D:.** The canonical
 Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 
-- Resident GGUF models, including both Super quants, remain on Shared SATA.
+- Resident GGUF models, including Super IQ3, remain on Shared SATA.
 - Managed Strata and standalone App share `Strata/models/IQ3_XXS`,
   `Strata/packs/iq3_xxs`, tokenizer, MTP and retained unique app assets under the NEW
   shared NVMe root. Both app and backend point directly at the same files; no new
@@ -593,25 +585,31 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-[Current thirteen-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md),
-[numeric evidence](../hardware/results/dual-amd-i9-64gb-2026-10-20.json) and
-[complete dated ledger](../hardware/BENCHMARK-HISTORY.md) distinguish native
-prompt timings, engine-prefill phases, external SSE TTFT/decode and input/TTFT
-proxies. Eleven profiles use the shared short-prompt + fresh ~8K method; both Super
-profiles use fixed ~8K prompts. Muse markers passed2/3; failures remain reported.
-Every measurement retains its source/build, input/output and method. Current i9
-measurements do not relabel old i5/32 GB, NVIDIA or Windows results.
+The [current ten-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md) and
+[dated ledger](../hardware/BENCHMARK-HISTORY.md) preserve engine/native prompt
+phase timing separately from external SSE TTFT/decode and input/TTFT proxies.
+Nine active profiles use short prompts plus fresh ~8K probes; Super IQ3 uses
+fixed ~8K-input workloads. The original thirteen-profile data, retired Muse's
+2/3 marker result, retired Super Q4 and SGLang MTP remain historical evidence.
+No old speed is promoted into a new context or build.
 
-Normal API proofs cover authenticated host self-access on loopback/LAN/Tailscale,
-not a separate remote peer. Gateway authentication and all thirteen catalog IDs
-passed. No fresh full256K test is claimed for the three smaller llama.cpp MoEs;
-they retain older~64K retrieval. No new near-window SGLang test is implied.
-Maya is now installed and both selected 32K profiles passed normal API/model-switch checks.
-Its separate [numeric record](../hardware/results/maya-dual-amd-2026-10-20.json) preserves
-the new measurements and screening controls. The purchased
-PCIe switch remains pending installation/P2P/RCCL validation. PATH checks passed
-login/noninteractive resolution; local SSH validation was blocked by existing
-host-key verification and trust settings were not bypassed.
+The [new Qwen context record](../hardware/results/qwen-int4-context-2026-10-20.json)
+adds actual 160,861-input SGLang DFlash2 and 160,868-input vLLM BF16 retrieval plus
+full-history follow-ups. Both selected contexts are 163,840 total tokens, both
+GPUs and zero observed owned swap/spill. The first vLLM 160K attempt was stopped
+by another configured Maya launch; the user-authorized identical retry passed.
+192K DFlash failed the desktop reserve; 192K INT8 vLLM was stopped after its
+speed screen failed. Neither is active. No general full-window quality guarantee
+or sustained long-context decode result is inferred from short marker outputs.
+
+Earlier normal API proofs covered authenticated host self-access on
+loopback/LAN/Tailscale, not a remote peer. Current catalog has ten IDs; the
+retired IDs must be removed from client selectors. The three smaller llama.cpp
+MoEs retain older ~64K retrieval evidence, not fresh full 256K quality claims.
+Maya's [numeric record](../hardware/results/maya-dual-amd-2026-10-20.json)
+preserves its two 32K measurements and screening controls unchanged. The purchased
+PCIe switch is still pending installation and P2P/RCCL validation.
+
 
 ## Troubleshooting and maintenance
 
@@ -704,3 +702,27 @@ settings. Keep the managed Strata Q3 launcher separate. [Menu details](../launch
 [Maintenance record and documentation index](../hardware/WORKSPACE-MAINTENANCE-2026-10-19.md)
 describes the archive and checks. At that October 19 maintenance, active models, candidates, profiles, credentials,
 frontend data and source pins remained unchanged; October 20 changes are described above. The private client guide is preserved.
+
+Current retirement/context follow-up: ten active IDs. Refresh client model lists;
+`qwen3.8-27b-sglang`, `muse-glimmer-30b` and `nemotron-3.5-super-q4` are retired.
+Shared GPTQ/DFlash weights and Super IQ3 are retained. No credentials, gateway
+ACLs, remote addresses or saved DSH default were changed.
+
+## Native Chat/Monitor launch behavior — October 20
+
+Strata Q3 and Maya launch their native browser frontend after readiness while
+retaining the visible backend terminal. The same owned worker serves it: local
+`http://127.0.0.1:30021/` for Strata or `http://127.0.0.1:30031/` for Maya.
+DSH remains separate and optional; managed API router IDs/ports and gateway
+authentication remain unchanged. Use `--no-browser` to suppress automatic opening;
+headless SSH prints the URL. Native chat/monitor/sampling remain; runtime/context
+changes and self-updates stay in the validated managed-profile workflow. Browser
+chat/settings are private and excluded from Git. The separate standalone Strata
+AppImage is preserved and is not started by this managed launcher.
+[Frontend setup and validation limits](../hardware/NATIVE-FRONTENDS-2026-10-20.md).
+
+[Normal launcher/frontend proofs](../hardware/results/launcher-validation-2026-10-20.json)
+cover the selected SGLang/vLLM160K profiles, Strata Q3 and both Maya models.
+JSON/tools/SSE, both GPUs, zero owned swap/spill, original UI assets and blocked
+runtime writes passed. Browser-open dispatch is logged; desktop browser rendering
+was not automated. Network checks are host self-access, not a remote client.
