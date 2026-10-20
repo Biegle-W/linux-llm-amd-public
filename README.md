@@ -32,11 +32,21 @@ prompt-processing duration and total request time are not substituted for TTFT
 or native PP. Different rows can use different workloads and output lengths.
 These are saved complete-profile results, not a controlled AMD-versus-NVIDIA ranking.
 
+## Current hardware inventory
+
+**i9-13900KS, 64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB.**
+The GPUs remain on motherboard PCIe4 x8/x8. The purchased switch is not in their
+paths. The 64 GB Strata candidate passes preflight but is not activated.
+[Read-only inventory and validation limits](linux/hardware/CPU-RAM-UPGRADE-2026-10-19.md).
+
+The benchmark tables below remain **i5-13600KF / 32 GB** measurements.
+There are no new i9/64 GB speed results in this update.
+
 ## AMD: latest setup and results
 
 **Two RX 7900 XTX 24 GB (48 GB total VRAM), i5-13600KF, MSI MPG Z690 CARBON
-WIFI, 32 GB RAM, CPU PCIe 4.0 x8/x8.** Another 32 GB RAM is planned; its
-candidates remain inactive. Every active profile uses both GPUs. llama.cpp and
+WIFI, 32 GB RAM, CPU PCIe 4.0 x8/x8.** This is the last measured CPU/RAM
+configuration. The new 64 GB candidates remain inactive pending live validation. Every active profile uses both GPUs. llama.cpp and
 Strata split layers; SGLang/vLLM use TP2 through host transport because direct
 ROCm peer access is unavailable. Only one managed model/backend runs at a time.
 

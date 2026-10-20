@@ -1,5 +1,7 @@
 # Documentation index
 
+[Current CPU/RAM inventory: i9-13900KS / 64 GB](CPU-RAM-UPGRADE-2026-10-19.md).
+
 - [Current setup and launch commands](../../README.md)
 - [Single Linux/Windows client handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
 - [All ten current AMD profiles and measured results](CURRENT-AMD-BENCHMARKS.md)

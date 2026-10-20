@@ -28,6 +28,17 @@ October 17 hardware: MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8. SGLang MTP
 passed and is enabled again; another 32 GB RAM is pending (32 GB installed).
 See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident; follow the newer MoE policy below.
 
+## Current CPU/RAM — October 19
+
+Intel i9-13900KS and 64 GB RAM are now installed (61.51 GiB OS-visible).
+This supersedes earlier pending-RAM/current-32-GB inventory statements below.
+Both RX 7900 XTX cards remain on CPU PCIe4 x8 paths; the purchased switch has
+not appeared in their topology. Read-only 64 GB Strata readiness passed, but
+production profiles and CPU thread counts were not changed. Candidate activation
+still requires live validation; preserve guards. Existing AMD benchmark numbers
+belong to the former i5-13600KF / 32 GB system and must retain that attribution.
+See `linux/hardware/CPU-RAM-UPGRADE-2026-10-19.md`.
+
 ## Forum research and source citations
 
 Standing user instruction: consult both [lcz.me](https://lcz.me/) and

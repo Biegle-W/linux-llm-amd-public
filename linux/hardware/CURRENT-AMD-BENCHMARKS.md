@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 19, 2026
 
+**Hardware has since changed to i9-13900KS / 64 GB RAM.** All measurements
+below retain their original i5-13600KF / 32 GB configuration; no post-upgrade
+performance result is implied. [New hardware inventory](CPU-RAM-UPGRADE-2026-10-19.md).
+
 Saved measurements of all ten active production profiles on **two RX 7900 XTX
 24 GB cards**, i5-13600KF, MSI MPG Z690 CARBON WIFI, CPU PCIe4 x8/x8 and
 **32 GB installed RAM**. Both GPUs participate in every row. Production contexts,

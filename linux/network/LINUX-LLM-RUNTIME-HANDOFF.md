@@ -19,11 +19,16 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 ## Current status and hardware
 
-- Intel i5-13600KF, **MSI MPG Z690 CARBON WIFI**, two **RX 7900 XTX 24 GB** cards.
+- Intel **i9-13900KS (24 cores / 32 threads)**, **MSI MPG Z690 CARBON WIFI**, two **RX 7900 XTX 24 GB** cards.
   Both GPUs have CPU-connected PCIe 4.0 x8 links; the earlier chipset x4 layout
   is obsolete. RTX 4070 and RTX 3060 are retired from this Linux setup.
-- **32 GB system RAM** is installed, about 30.6 GiB usable; a 64 GB
-  configuration is planned. Benchmarks must state the memory capacity used.
+- **64 GB system RAM** is installed; Linux reports **61.51 GiB usable** and
+  approximately 56 GiB available, with zero swap used at the read-only check.
+  RAM slot/speed/channel mode and sustained stability were not independently
+  validated. The prepared 64 GB Strata candidate passes readiness but remains
+  inactive pending live validation; Nemotron Super Q4 is still inactive.
+  Saved benchmark tables retain the former **i5-13600KF / 32 GB** hardware.
+  [CPU/RAM inventory and limits](../hardware/CPU-RAM-UPGRADE-2026-10-19.md).
   Dense models keep GPU-resident weights; all active MoEs use CPU expert
   backing and GPU hot-expert caches.
 - Use **both AMD cards for every production model**. llama.cpp uses validated model-specific layer splits (1:1 or 21:19);
@@ -43,6 +48,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Ubuntu kernel observed: `7.0.0-38-generic`; Shared is mounted as exFAT. Runtime
 binaries, Python environments and build caches are Linux-specific. The machine
 is dual-boot: booting this same PC into Windows stops the Linux inference server.
+
+The Shared model drive was mounted using the existing UUID-based helper after
+this boot; the retained Strata assets are present. No model was loaded during
+the CPU/RAM check. GPU uplinks still use separate CPU x8 paths; the purchased
+switch is not in their topology. Existing no-P2P transport settings are retained.
 
 ## Nemotron Super: 32 GB active profile / 64 GB candidate
 

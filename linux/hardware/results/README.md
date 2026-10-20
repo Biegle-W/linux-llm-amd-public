@@ -1,5 +1,9 @@
 # Current benchmark results
 
+The CPU/RAM have since changed to i9-13900KS / 64 GB. These saved results
+remain from i5-13600KF / 32 GB; [post-upgrade inventory](../CPU-RAM-UPGRADE-2026-10-19.md)
+is readiness evidence only.
+
 Start with [the current AMD benchmark report](../CURRENT-AMD-BENCHMARKS.md),
 covering ten enabled profiles across two saved measurement batches.
 Maintenance reconciled documentation only; no benchmark was rerun.
