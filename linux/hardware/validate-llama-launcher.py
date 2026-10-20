@@ -2,6 +2,7 @@
 """Validate an already-started llama launcher through the authenticated gateway."""
 import json
 import argparse
+import os
 import sys
 from pathlib import Path
 import urllib.request
@@ -70,9 +71,11 @@ def main():
         props = request('/props?model=' + ident, native=True)
         assert props['default_generation_settings']['n_ctx'] == model['context']
         tree = processes()
+        # Match the launcher's LLAMA_CPP_DIR candidate override when one is set.
+        source = Path(os.environ.get('LLAMA_CPP_DIR') or ROOT/'llama.cpp')
         workers = {p.pid for p in tree.values() if p.args and p.args[0] in {
-            str(ROOT/'llama.cpp/build-hip/bin/llama-server'),
-            str(ROOT/'llama.cpp/build-vulkan/bin/llama-server')}}
+            str(source/'build-hip/bin/llama-server'),
+            str(source/'build-vulkan/bin/llama-server')}}
         assert workers, 'Expected an owned llama.cpp worker'
         for pid in workers:
             group = next(line.split(':',2)[2] for line in Path(f'/proc/{pid}/cgroup').read_text().splitlines() if line.startswith('0::'))

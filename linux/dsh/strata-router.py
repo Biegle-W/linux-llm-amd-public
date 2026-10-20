@@ -83,7 +83,7 @@ def ensure_worker(model):
         from hardware_guard import require_strata
         require_strata()
         profile = PROFILES[model]
-        config = ROOT / profile['config']
+        config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',

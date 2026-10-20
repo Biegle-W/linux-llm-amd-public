@@ -27,7 +27,7 @@ bench.PORTS['llama'] = (PORT, PORT)
 OUT = ROOT/'hardware/generated/nemotron-super'
 
 
-def idle():
+def idle(max_busy=10):
     for process in processes().values():
         if is_inference(process):
             raise RuntimeError(f'Inference PID {process.pid} is already running; no process was stopped')
@@ -35,7 +35,7 @@ def idle():
         if entry and entry[0] == 'script' and any(name in Path(entry[1]).name for name in ('benchmark-current-amd', 'bench-dual', 'bench-strata')):
             raise RuntimeError('Another benchmark is running; no process was stopped')
     for device in amd_devices():
-        if int((device/'gpu_busy_percent').read_text()) > 10:
+        if int((device/'gpu_busy_percent').read_text()) > max_busy:
             raise RuntimeError('A GPU is busy; no process was stopped')
 
 
@@ -92,7 +92,7 @@ def functional(profile, context):
 
 
 def run(options):
-    idle()
+    idle(options.max_gpu_busy)
     profile = json.loads((ROOT/'dsh/candidates/nemotron-super.json').read_text())[options.model]
     reason = memory_reason(profile,*host_memory())
     if reason:
@@ -102,8 +102,9 @@ def run(options):
             raise RuntimeError('Need at least 21 GiB free VRAM per card before isolated testing')
     OUT.mkdir(parents=True,exist_ok=True)
     tag = options.tag
-    result = {'model':profile['id'],'runtime_commit':subprocess.check_output(['git','-C',str(ROOT/'llama.cpp'),'rev-parse','HEAD'],text=True).strip(),
+    result = {'model':profile['id'],'runtime_commit':subprocess.check_output(['git','-C',os.environ.get('LLAMA_CPP_DIR') or str(ROOT/'llama.cpp'),'rev-parse','HEAD'],text=True).strip(),
               'context':options.context,'split':options.split,'mtp':options.mtp,'phase':options.phase,
+              'gpu_busy_precheck_max_percent':options.max_gpu_busy,
               'model_path':str(options.model_path or profile['path']),'load_mode':options.load_mode,
               'host_expert_bytes':profile['host_expert_bytes'],'cache_mib':profile['gpu_expert_cache_mib'],
               'trials':[],'status':'running','memory':{'min_available_bytes':host_memory()[1],
@@ -224,4 +225,6 @@ if __name__ == '__main__':
     parser.add_argument('--tag',required=True)
     parser.add_argument('--model-path',type=Path,help='Candidate copy of the profile GGUF (first shard); default: profile path')
     parser.add_argument('--load-mode',default='none',choices=['none','mmap'],help='mmap streams CPU experts from the file via the page cache')
+    parser.add_argument('--max-gpu-busy',type=int,default=10,
+                        help='Idle precheck limit; raise only to record a known desktop load')
     run(parser.parse_args())

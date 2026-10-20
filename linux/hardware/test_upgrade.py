@@ -52,6 +52,24 @@ class UpgradeTests(unittest.TestCase):
             self.assertEqual(preset, root / 'models-amd.ini')
             self.assertEqual(models, {'bolt'})
 
+    def test_candidate_llama_dir_selects_isolated_binary(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            root, amd, candidate = base / 'dsh', base / 'amd', base / 'candidate'
+            root.mkdir(); amd.mkdir()
+            (root / 'llama-runtime.json').write_text(json.dumps({'backend':'vulkan-amd', 'models':['bolt']}))
+            (root / 'models-amd.ini').touch()
+            binary = candidate / 'build-vulkan/bin/llama-server'
+            binary.parent.mkdir(parents=True); binary.touch()
+            inventory = 'Vulkan0: AMD Radeon RX 7900 XTX (RADV NAVI31)\nVulkan1: AMD Radeon RX 7900 XTX (RADV NAVI31)\n'
+            with patch.dict(llama_runtime.os.environ, {'LLAMA_CPP_DIR': str(candidate)}), \
+                 patch.object(llama_runtime, 'ROOT', root), patch.object(llama_runtime, 'amd_devices', return_value=[amd, amd]), \
+                 patch.object(llama_runtime, 'require_worker_scope'), \
+                 patch.object(llama_runtime.subprocess, 'run', side_effect=[
+                     subprocess.CompletedProcess([], 0, inventory, '')] * 2):
+                selected, _, _, _ = llama_runtime.launch_spec()
+            self.assertEqual(selected, binary)
+
     def test_rocm_profile_headroom_can_be_stricter_than_default(self):
         with tempfile.TemporaryDirectory() as directory:
             amd = Path(directory)

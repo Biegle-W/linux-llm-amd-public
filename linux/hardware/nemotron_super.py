@@ -1,5 +1,6 @@
 """Inspect downloaded Nemotron shards and prepare bounded, inactive profiles."""
 import json
+import os
 import struct
 from collections import defaultdict
 from pathlib import Path
@@ -113,7 +114,9 @@ def overrides(profile):
 
 
 def server_args(profile, context=32768, split='1,1', mtp=False, port=18183, model_path=None, load_mode='none'):
-    return [str(ROOT/'llama.cpp/build-hip/bin/llama-server'),
+    # LLAMA_CPP_DIR selects an isolated candidate build, matching dsh/llama_runtime.py.
+    source = Path(os.environ.get('LLAMA_CPP_DIR') or ROOT/'llama.cpp')
+    return [str(source/'build-hip/bin/llama-server'),
             '--model',str(model_path or profile['path']), '--alias',profile['id'], '--host','127.0.0.1', '--port',str(port), '--verbosity','4',
             '--ctx-size',str(context), '--parallel','1', '--device','ROCm0,ROCm1',
             '--split-mode','layer', '--tensor-split',split, '--n-gpu-layers','99', '--fit','off',

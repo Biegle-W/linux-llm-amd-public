@@ -8,7 +8,9 @@ export PATH="$TOOLCHAIN/bin:$SDK/usr/bin:$PATH"
 export LD_LIBRARY_PATH="$SDK/usr/lib/x86_64-linux-gnu:$TOOLCHAIN/lib:${LD_LIBRARY_PATH:-}"
 export CC="$TOOLCHAIN/bin/x86_64-conda-linux-gnu-cc"
 export CXX="$TOOLCHAIN/bin/x86_64-conda-linux-gnu-c++"
-cmake -S "$ROOT/llama.cpp" -B "$ROOT/llama.cpp/build-vulkan" -G Ninja \
+# LLAMA_SRC builds an isolated candidate checkout; production is the default.
+LLAMA_SRC=${LLAMA_SRC:-$ROOT/llama.cpp}
+cmake -S "$LLAMA_SRC" -B "$LLAMA_SRC/build-vulkan" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF -DGGML_VULKAN=ON \
   -DLLAMA_BUILD_IS_DEV=ON -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF \
   -DLLAMA_BUILD_SERVER=ON -DLLAMA_OPENSSL=OFF \
@@ -16,4 +18,4 @@ cmake -S "$ROOT/llama.cpp" -B "$ROOT/llama.cpp/build-vulkan" -G Ninja \
   -DVulkan_LIBRARY="$SDK/usr/lib/x86_64-linux-gnu/libvulkan.so" \
   -DVulkan_GLSLC_EXECUTABLE="$SDK/usr/bin/glslc" \
   -DSPIRV-Headers_DIR="$SDK/usr/share/cmake/SPIRV-Headers"
-cmake --build "$ROOT/llama.cpp/build-vulkan" --target llama-server -j "${BUILD_JOBS:-2}"
+cmake --build "$LLAMA_SRC/build-vulkan" --target llama-server -j "${BUILD_JOBS:-2}"

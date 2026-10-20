@@ -61,7 +61,9 @@ def launch_spec(backend=None):
     require_worker_scope()
     validate_profiles(ROOT)
     hip = mode == 'hip-amd'
-    binary = ROOT.parent / ('llama.cpp/build-hip/bin/llama-server' if hip else 'llama.cpp/build-vulkan/bin/llama-server')
+    # LLAMA_CPP_DIR permits isolated candidate checks before promotion, like VLLM_ENV_PATH.
+    source = Path(os.environ.get('LLAMA_CPP_DIR') or ROOT.parent / 'llama.cpp')
+    binary = source / ('build-hip/bin/llama-server' if hip else 'build-vulkan/bin/llama-server')
     env = dict(os.environ)
     for name in ('GGML_VK_PREFER_HOST_MEMORY', 'GGML_VK_ALLOW_SYSMEM_FALLBACK',
                  'GGML_VK_DISABLE_HOST_VISIBLE_VIDMEM', 'GGML_VK_VISIBLE_DEVICES'):

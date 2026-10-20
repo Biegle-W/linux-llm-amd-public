@@ -70,7 +70,9 @@ def require_strata(before_handover=False):
     enabled = [p for p in profiles.values() if p.get('enabled', True)]
     if len(enabled) != 1:
         raise RuntimeError('Exactly one validated Strata profile must be enabled. No backend has been stopped.')
-    cfg = json.loads((ROOT / 'dsh' / enabled[0]['config']).read_text())
+    # STRATA_PROFILE_CONFIG permits an isolated candidate check before promotion,
+    # like LLAMA_CPP_DIR/VLLM_ENV_PATH; its own RAM gate and guards still apply.
+    cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or enabled[0]['config'])).read_text())
     # Old managed weights may occupy the available RAM; check it strictly only
     # after handover, while always rejecting insufficient physical capacity first.
     check_config(cfg, *host_memory(), check_available=not before_handover)

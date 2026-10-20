@@ -691,6 +691,12 @@ PCIe switch is still pending installation and P2P/RCCL validation.
 
 ## Troubleshooting and maintenance
 
+**Staging upgrades.** Candidate engines and profiles are tested through the normal
+guarded launchers with opt-in switches: `LLAMA_SRC`, `LLAMA_CPP_DIR`, `VLLM_ENV_PATH`
+and `STRATA_PROFILE_CONFIG`. Unset or empty means production. Compare candidates
+against a same-hardware baseline with `hardware/compare-runtime-candidate.py --baseline`.
+[Staging guide](../hardware/CANDIDATE-STAGING.md).
+
 Earlier October 19 public documentation cleanup (before the fresh benchmark batch): the
 [public README](https://github.com/Biegle-W/local-llm-public#amd-latest-setup-and-results)
 now presents two hardware result sets: latest dual-AMD setup and archived dual-NVIDIA.
