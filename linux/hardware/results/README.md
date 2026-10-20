@@ -9,6 +9,8 @@ profiles remain after Muse Q4 and Super Q4 retirement: nine shared-method profil
 
 - [Normal launchers and native frontend checks](launcher-validation-2026-10-20.json): functional-only proofs for SGLang/vLLM160K, Strata Q3 and both Maya models, original UI assets and managed runtime controls.
 - [GLM Maya-S/S24 ABBA results](maya-s-vs-s24-2026-10-20.json), [decision and method](../MAYA-S-VS-S24-2026-10-20.md): six samples/task/quant at32K; selected Maya-S. DeepSeek measurements are unchanged.
+- [DeepSeek DSpark production retest](deepseek-dspark-production-2026-10-20.json), [decision](../DEEPSEEK-DSPARK-2026-10-20.md):
+  32K, 24 threads; DSpark −20.4% geometric mean (code −33%, prose −22%) despite 85% draft acceptance. Rejected.
 - [Super IQ3 NVMe load and SSD-streaming trial](super-nvme-load-2026-10-20.json), [decision](../SUPER-NVME-LOAD-2026-10-20.md):
   NVMe load 42.2 s vs 112.1 s, with identical inference (−0.12% geometric mean); mmap streaming rejected (forced tool-call failure).
 - [Requested model retirement](model-retirement-2026-10-20.json): four exact GGUF files, 95.726 GiB, retained dependency checks.

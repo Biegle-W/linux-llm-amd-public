@@ -561,6 +561,19 @@ Moving the files to the NVMe changes only load time (inference −0.12%). The us
 mmap streaming failed forced tool calls (llama.cpp grammar exception) and was rejected.
 [Report](SUPER-NVME-LOAD-2026-10-20.md) · [numbers](results/super-nvme-load-2026-10-20.json).
 
+## October 20: DeepSeek DSpark production retest
+
+Maya 8d9a9b5d, 32K, 24 threads, 8 GiB reserve, 3 timed 128-output runs per task.
+
+| Arm | Code / prose decode | ~7K PP |
+|---|---:|---:|
+| A1 DSpark off | 11.73 / 6.94 | 155.2 |
+| B DSpark on | 6.66 / 5.66 | 149.3 |
+| A2 DSpark off | 8.23 / 7.65 | 150.9 |
+
+DSpark was −20.4% overall and is rejected; production stays `--dspark none`.
+[Report](DEEPSEEK-DSPARK-2026-10-20.md) · [numbers](results/deepseek-dspark-production-2026-10-20.json).
+
 ## Recording future updates
 
 After a runtime, hardware, quantization, context or placement change, append a

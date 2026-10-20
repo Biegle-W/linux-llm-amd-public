@@ -58,8 +58,11 @@ Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
 requested TP2 automatically becomes width 1 because its 256-value blocks do not
 divide 2,304-wide experts into two parts; neither GPU is dropped. DeepSeek's RAM
 backing is mapped/page-cached, not a fully resident 150 GB RAM copy. Its DSpark
-weights stay on NVMe, but the tested draft setting did not improve the declared
-composite. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
+weights stay on NVMe. DSpark was retested at the retained production settings (32K,
+24 threads, 8 GiB reserve) and was **−20% overall**: code decode −33%, prose −22%,
+despite 85% draft acceptance. It stays off. [DSpark retest](../hardware/DEEPSEEK-DSPARK-2026-10-20.md).
+**DeepSeek needs 52 GiB available RAM before loading.** Heavy desktop apps can keep
+it from starting; close them and retry. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
 its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
 and stateful caches; this is not a universal optimum.
 
