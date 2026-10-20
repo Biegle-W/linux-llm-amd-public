@@ -583,3 +583,29 @@ JavaScript-only content limits coverage. No specific forum post is cited as a
 successful local deployment because none was verified. This is not a claim of
 exhaustive forum/fork coverage, and no forum-derived tuning is imported.
 [Assessment, queries, source fingerprints and limits](DEEPINFER-ASSESSMENT-2026-10-20.md).
+
+## October20: reconciling forum headlines with local speed
+
+[Focused comparison](FORUM-SPEED-COMPARISON-2026-10-20.md) uses saved local
+measurements only; no runtime setting or benchmark changed.
+
+- [lcz.me2317](https://lcz.me/topic/2317), farmer node, reviewed October20
+  (post date unavailable): EPYC7452/about125GiB/twoXTX/IQ3_S/Strata0.1.43;
+ 70–80t/s per independent single-card replica,160t/s aggregate. This corrects
+  the TP wording in [the secondary summary2318](https://lcz.me/topic/2318):
+  the original author explicitly says replicas, not TP2 or layer splitting.
+- [lcz.me1640](https://lcz.me/topic/1640), flyer666, September11 refresh:
+  distinguish short code180–250t/s from standardized depth0/16K128.3/108.8.
+  Current local code178.82/prose63.40 uses different sampled prompts.
+- [lcz.me2062/5](https://lcz.me/topic/2062/5), J I, reviewed October20
+  (post date unavailable): Ultra7265K/64GB/x8+x4/noP2P/IQ3_XXS/Strata0.1.38;
+  fixed32K/128K prefill1838/2129t/s. Local8K912.2/near258K992.7 is lower
+  but is not a matched workload or causal2x regression measurement.
+- [Level1Techs250869](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869),
+  ivgranite, May31: singleXTX/96GB/Qwen3.6MoE/Gemma4, differing output lengths;
+  report answer latency as well as t/s, not a matching TP2/Strata speed target.
+
+Primary [pinned Strata multi-GPU implementation guide](https://github.com/Niko1221/Strata/blob/9ae93f7b1fe989d04a8e404d32cddaeeff10505f/docs/MULTI_GPU.md)
+separates layer handoff from tensor-parallel collectives. The remaining gap
+requires matched telemetry/workloads; no promise is made that the pending
+switch, smaller context, reduced reserves or a newer build will remove it.

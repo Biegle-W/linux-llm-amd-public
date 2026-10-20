@@ -85,6 +85,8 @@ code/prose prompts and a 256-output cap. Native PP is used for llama.cpp/Strata/
 SGLang/vLLM use their own measured engine-prefill phases. Context is the total
 configured window, not proof of that entire window's quality or speed.
 
+[Forum speed comparison](linux/hardware/FORUM-SPEED-COMPARISON-2026-10-20.md) explains aggregate versus single-request rates and the remaining unmatched prefill/SGLang gaps. No new benchmark was run.
+
 | Model / quant | Backend / strategy | Context tokens | Actual prefill input | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,190 | 670.4 | 12.222 | 0.132 / 0.131 | 77.10 / 45.86 |
