@@ -87,6 +87,32 @@ def ensure_streaming_models():
     ensure_model_drive(STREAM_SHARED, STREAM_MODELS, STREAM_UUID, 'Shared NVMe')
 
 
+def ensure_model_paths(paths):
+    """Mount exactly the model volumes these files live on; refuse unknown locations."""
+    needed = set()
+    for path in map(Path, paths):
+        for label, uuid, mount, models, required in VOLUMES:
+            if models is not None and path.is_relative_to(models):
+                needed.add((label, uuid, mount, models))
+                break
+        else:
+            raise RuntimeError(f'{path} is outside the configured model volumes; '
+                               'review its storage configuration before starting.')
+    for label, uuid, mount, models in sorted(needed):
+        ensure_model_drive(mount, models, uuid, label)
+
+
+def ensure_llama_models(presets=None):
+    """llama.cpp presets may mix volumes (Super IQ3 loads from the shared NVMe)."""
+    root = Path(__file__).resolve().parent
+    presets = presets or [root/'models-amd.ini', root/'models-hip.ini']
+    paths = [line.split('=', 1)[1].strip() for preset in presets if Path(preset).is_file()
+             for line in Path(preset).read_text().splitlines() if line.strip().startswith('model =')]
+    if not paths:
+        raise RuntimeError('No llama.cpp model paths found in the presets.')
+    ensure_model_paths(paths)
+
+
 def ensure_strata_models(config=None):
     config = Path(config) if config is not None else Path(__file__).resolve().parent / 'strata-iq3-profile.json'
     cfg = json.loads(config.read_text())

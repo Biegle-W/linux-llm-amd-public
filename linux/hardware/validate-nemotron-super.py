@@ -104,6 +104,7 @@ def run(options):
     tag = options.tag
     result = {'model':profile['id'],'runtime_commit':subprocess.check_output(['git','-C',str(ROOT/'llama.cpp'),'rev-parse','HEAD'],text=True).strip(),
               'context':options.context,'split':options.split,'mtp':options.mtp,'phase':options.phase,
+              'model_path':str(options.model_path or profile['path']),'load_mode':options.load_mode,
               'host_expert_bytes':profile['host_expert_bytes'],'cache_mib':profile['gpu_expert_cache_mib'],
               'trials':[],'status':'running','memory':{'min_available_bytes':host_memory()[1],
                 'max_gpu_used_bytes':[0,0],'max_worker_swap_bytes':0,'max_worker_spill_bytes':0}}
@@ -115,7 +116,7 @@ def run(options):
     env.pop('GGML_CUDA_ENABLE_UNIFIED_MEMORY',None)
     args = ['systemd-run','--user','--scope','--quiet','--property=MemorySwapMax=0',
             f'--property=MemoryMax={math.ceil(profile["host_expert_bytes"]/GIB+4)}G',
-            *server_args(profile,options.context,options.split,options.mtp,PORT)]
+            *server_args(profile,options.context,options.split,options.mtp,PORT,options.model_path,options.load_mode)]
     done = threading.Event()
     failure = []
     with (OUT/(tag+'.log')).open('w') as log:
@@ -221,4 +222,6 @@ if __name__ == '__main__':
     parser.add_argument('--mtp',action='store_true')
     parser.add_argument('--phase',choices=['smoke','split','bench','long'],default='smoke')
     parser.add_argument('--tag',required=True)
+    parser.add_argument('--model-path',type=Path,help='Candidate copy of the profile GGUF (first shard); default: profile path')
+    parser.add_argument('--load-mode',default='none',choices=['none','mmap'],help='mmap streams CPU experts from the file via the page cache')
     run(parser.parse_args())

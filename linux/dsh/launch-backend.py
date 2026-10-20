@@ -4,7 +4,7 @@ import argparse, json, os, signal, subprocess, sys
 from pathlib import Path
 from backend_guard import require_worker_ports_free
 from backend_switch import startup_handover, clear_owner
-from shared_storage import ensure_shared_models, ensure_strata_models
+from shared_storage import ensure_llama_models, ensure_strata_models
 from terminal_logs import start_monitor, stop_monitor
 from hardware_guard import require_current_cuda_pair, require_strata
 from llama_runtime import launch_spec, require_amd_headroom
@@ -56,7 +56,7 @@ try:
     elif kind != 'llama':
         require_current_cuda_pair()
     if kind == 'llama':
-        ensure_shared_models()
+        ensure_llama_models()
     if kind == 'llama':
         cmd = [sys.executable, str(ROOT / 'llama-router.py')]
         paths = [ROOT / 'logs/llama.cpp.log']

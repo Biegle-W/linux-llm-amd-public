@@ -117,6 +117,11 @@ they are not an isolated engine A/B. A separate production rebuild passed normal
 launcher tools/JSON/streaming/placement checks. The retired Q4 profile's results
 remain in the dated ledger and original numeric batch.
 
+Super IQ3 now loads from a verified copy on the shared NVMe: **42 s instead of 112 s**,
+with identical inference speed (−0.12%). The SATA original is kept as a backup.
+SSD streaming (`load-mode mmap`) was rejected: it reproducibly broke forced tool calls
+and saved no RAM. [Trial and decision](linux/hardware/SUPER-NVME-LOAD-2026-10-20.md).
+
 ### Long context and model storage
 
 Strata's corrected-NVMe selected profile passed **257,984 actual input /

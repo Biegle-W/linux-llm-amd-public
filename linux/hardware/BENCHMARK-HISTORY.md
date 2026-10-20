@@ -547,6 +547,20 @@ visible terminal; DSH stays separate and API IDs/endpoints/context are unchanged
 Guard/admission/ownership regression tests passed in both repositories. Tests use
 synthetic memory pressure; no GPU-exhaustion or deliberate desktop-crash test was run.
 
+## October 20: Super IQ3 NVMe load and SSD-streaming trial
+
+i9-13900KS / 64 GB, llama.cpp `4c3c5810`, 32K, HIP 21:19, three ~8.1K-input / 256-output trials per task.
+
+| Arm | Load s | PP code / prose | Decode code / prose |
+|---|---:|---:|---:|
+| SATA, normal load (A1) | 112.1 | 98.58 / 98.06 | 15.90 / 16.94 |
+| NVMe, normal load (C) | 42.2 | 98.42 / 97.96 | 15.87 / 16.93 |
+| SATA, normal load (A2) | 112.1 | 98.66 / 98.09 | 15.90 / 16.92 |
+
+Moving the files to the NVMe changes only load time (inference −0.12%). The user chose NVMe for faster loading.
+mmap streaming failed forced tool calls (llama.cpp grammar exception) and was rejected.
+[Report](SUPER-NVME-LOAD-2026-10-20.md) · [numbers](results/super-nvme-load-2026-10-20.json).
+
 ## Recording future updates
 
 After a runtime, hardware, quantization, context or placement change, append a

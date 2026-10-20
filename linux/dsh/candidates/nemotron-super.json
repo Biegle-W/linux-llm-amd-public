@@ -5,7 +5,7 @@
     "backend": "hip-amd",
     "name": "Nemotron 3.5 Super VL 120B UD-IQ3_XXS (32K, dual AMD HIP, CPU experts + GPU cache, text/tools)",
     "quantization": "UD-IQ3_XXS",
-    "path": "/mnt/shared/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/UD-IQ3_XXS/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-IQ3_XXS-00001-of-00003.gguf",
+    "path": "/mnt/shared-nvme/LLM-Models/Nemotron-Super/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/UD-IQ3_XXS/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-IQ3_XXS-00001-of-00003.gguf",
     "context": 32768,
     "minimum_host_ram_gib": 28,
     "expert_count": 512,

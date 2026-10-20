@@ -1,0 +1,181 @@
+{
+  "schema": "super-nvme-load-2026-10-20",
+  "date": "2026-10-20",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "ram_installed_gb": 64,
+    "gpus": [
+      "RX 7900 XTX 24 GB",
+      "RX 7900 XTX 24 GB"
+    ],
+    "desktop_renderer": "Intel UHD 770 (no desktop VRAM on either XTX)"
+  },
+  "runtime": {
+    "llama_cpp": "4c3c5810f87efe177949f1b85ae509d38a2a311f"
+  },
+  "model": {
+    "id": "nemotron-3.5-super-iq3",
+    "quant": "UD-IQ3_XXS",
+    "revision": "75a5829055f69a0359085ae6bbd0a81b60bc05c6",
+    "context": 32768,
+    "split": "21,19",
+    "cpu_expert_gib": 19.124,
+    "gpu_expert_cache_mib": 2048
+  },
+  "copy_verification": "3 shards SHA-256 match download-manifest revision 75a5829055f69a0359085ae6bbd0a81b60bc05c6, re-verified from disk after page-cache eviction",
+  "criteria": "# Super IQ3 SSD-streaming trial: decision rule, fixed before measurement (2026-10-20)\n\nUser request: copy Nemotron Super IQ3 to the shared NVMe, try a separate SSD-streaming profile,\nand keep it only if performance increases.\n\nArms. All use llama.cpp 4c3c5810, 32K, split 21:19, the same CPU expert layers, a 2 GiB cache,\nQ8 KV, MTP off, and the same validator (`validate-nemotron-super.py --phase long`):\n- A, current production: SATA path, `--load-mode none`. Run twice, first and last, to measure drift.\n- B, streaming candidate: NVMe copy, `--load-mode mmap`.\n- C, control: NVMe copy, `--load-mode none`. This separates the drive from mmap.\n\nEach arm must pass functional checks, 28,546-token marker retrieval, zero worker swap/spill, no guard stop, and both GPUs.\n\nKeep B (or C) as a separate profile ONLY IF, against the mean of the two A runs:\n- the geometric mean of {code PP, prose PP, code decode, prose decode} improves by at least 5%, and\n- no single one of those metrics is more than 5% worse.\n\nLoad time and minimum RAM are reported but do not decide by themselves. If only load time improves,\nreport it and ask the user.\nIf neither candidate qualifies, delete the NVMe copy and leave production unchanged. The SATA original is never modified.\n",
+  "arms": {
+    "A1-sata-none-a1": {
+      "label": "A1 SATA load-mode none",
+      "status": "passed",
+      "error": null,
+      "load_mode": "none",
+      "load_seconds": 112.06353432000003,
+      "medians": {
+        "code": {
+          "prefill_native_tps": 98.57855390975762,
+          "ttft_seconds": 82.25819406100004,
+          "decode_tps_sse": 15.898296418683278
+        },
+        "prose": {
+          "prefill_native_tps": 98.06247719890234,
+          "ttft_seconds": 82.72134998299998,
+          "decode_tps_sse": 16.938450779632753
+        }
+      },
+      "long_ttft_seconds": 273.9190890729999,
+      "min_available_gib": 30.477,
+      "max_gpu_used_gib": [
+        19.965,
+        18.734
+      ],
+      "worker_swap_bytes": 0,
+      "runtime_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+      "volume": "Shared SATA"
+    },
+    "B-nvme-mmap-a1": {
+      "label": "B NVMe mmap streaming",
+      "status": "failed",
+      "error": "HTTP Error 500: Internal Server Error",
+      "load_mode": "mmap",
+      "load_seconds": 135.81926353099993,
+      "medians": null,
+      "long_ttft_seconds": null,
+      "min_available_gib": 49.483,
+      "max_gpu_used_gib": [
+        19.981,
+        18.745
+      ],
+      "worker_swap_bytes": 0,
+      "runtime_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+      "volume": "shared NVMe"
+    },
+    "C-nvme-none-a1": {
+      "label": "C NVMe load-mode none",
+      "status": "passed",
+      "error": null,
+      "load_mode": "none",
+      "load_seconds": 42.22496179099994,
+      "medians": {
+        "code": {
+          "prefill_native_tps": 98.41942147782224,
+          "ttft_seconds": 82.39158367900018,
+          "decode_tps_sse": 15.871245692176144
+        },
+        "prose": {
+          "prefill_native_tps": 97.9576299132723,
+          "ttft_seconds": 82.80944147199989,
+          "decode_tps_sse": 16.93148941904411
+        }
+      },
+      "long_ttft_seconds": 274.81717764200016,
+      "min_available_gib": 27.375,
+      "max_gpu_used_gib": [
+        19.965,
+        18.734
+      ],
+      "worker_swap_bytes": 0,
+      "runtime_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+      "volume": "shared NVMe"
+    },
+    "A2-sata-none-a1": {
+      "label": "A2 SATA load-mode none",
+      "status": "passed",
+      "error": null,
+      "load_mode": "none",
+      "load_seconds": 112.08474318900016,
+      "medians": {
+        "code": {
+          "prefill_native_tps": 98.65573890094342,
+          "ttft_seconds": 82.19347400900006,
+          "decode_tps_sse": 15.902043124003352
+        },
+        "prose": {
+          "prefill_native_tps": 98.09402973684652,
+          "ttft_seconds": 82.69426287600027,
+          "decode_tps_sse": 16.919126329127614
+        }
+      },
+      "long_ttft_seconds": 274.3161521269999,
+      "min_available_gib": 29.689,
+      "max_gpu_used_gib": [
+        19.965,
+        18.734
+      ],
+      "worker_swap_bytes": 0,
+      "runtime_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+      "volume": "Shared SATA"
+    },
+    "B-nvme-mmap-diag": {
+      "label": "B diagnostic rerun (smoke)",
+      "status": "failed",
+      "error": "HTTP Error 500: Internal Server Error",
+      "load_mode": "mmap",
+      "load_seconds": 125.0340070039997,
+      "medians": null,
+      "long_ttft_seconds": null,
+      "min_available_gib": 49.76,
+      "max_gpu_used_gib": [
+        19.981,
+        18.746
+      ],
+      "worker_swap_bytes": 0,
+      "runtime_commit": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+      "volume": "shared NVMe"
+    }
+  },
+  "decision": {
+    "B_mmap_streaming": "REJECTED: failed required forced tool-call check (llama.cpp grammar sampler: \"Unexpected empty grammar stack after accepting piece\" at token 81918), reproduced identically in a diagnostic rerun; host model RAM unchanged at 19.58 GiB",
+    "C_nvme_none_inference_change_pct": [
+      -0.2,
+      -0.12,
+      -0.18,
+      0.02
+    ],
+    "C_geomean_pct": -0.12,
+    "C_meets_5pct_rule": false,
+    "C_load_seconds": 42.22496179099994,
+    "A_mean_load_seconds": 112.0741387545001,
+    "C_status": "Inference-neutral; only load time improves (2.7x). Per criteria: report and ask the user.",
+    "user_choice": "Use NVMe for faster load (production preset points at the NVMe copy; SATA original retained as backup)"
+  },
+  "normal_launcher_proof": {
+    "profiles": [
+      "qwen3.8-27b-q4",
+      "qwen3.6-35b-a3b",
+      "nemotron-3.5-bolt",
+      "empero-qwen3.8-35b-a3b",
+      "nemotron-3.5-super-iq3"
+    ],
+    "all_passed": true,
+    "functional_only": true,
+    "super_loaded_from": "shared NVMe (space-containing path)",
+    "worker_swap_bytes": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

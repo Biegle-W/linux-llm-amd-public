@@ -141,6 +141,20 @@ remain evidence, not an installable active profile. Windows setup snapshots
 are historical and do not automatically follow this Linux retirement.
 [Deletion manifest and checks](../hardware/results/model-retirement-2026-10-20.json).
 
+**Super IQ3 loads from the shared NVMe (October 20).** The production preset now points at a
+copy under `/mnt/shared-nvme/LLM-Models/Nemotron-Super/`; all three shards match the
+download-manifest SHA-256.
+
+On the reference host:
+- **Load time:** 42.2 s, versus 112.1 s from SATA.
+- **Inference:** identical, −0.12% geometric mean.
+
+The SATA original is kept as a backup.
+
+SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forced tool call
+(llama.cpp grammar-sampler exception) and kept the same host model memory.
+[Trial and decision](../hardware/SUPER-NVME-LOAD-2026-10-20.md).
+
 ## Active model catalog
 
 The current catalog has **10 enabled profiles**: five llama.cpp, one SGLang, one vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
@@ -445,7 +459,8 @@ New shared NVMe root: `/mnt/shared-nvme/LLM-Models` (UUIDCONFIGURE_SHARED_NVME_U
 **Its Windows drive letter is not established; do not assume D:.** The canonical
 Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 
-- Resident GGUF models, including Super IQ3, remain on Shared SATA.
+- Resident GGUF models remain on the shared SATA, except Super IQ3. Super IQ3 loads from its
+  verified shared-NVMe copy; the SATA original is kept as a backup.
 - Managed Strata and standalone App share `Strata/models/IQ3_XXS`,
   `Strata/packs/iq3_xxs`, tokenizer, MTP and retained unique app assets under the NEW
   shared NVMe root. Both app and backend point directly at the same files; no new
@@ -472,7 +487,7 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
   mounts only for the active local desktop session, so after a reboot someone must
   log in to the desktop; before that, SSH alone cannot mount the volumes.
 - Launcher preflight still checks each backend's own volume before handover:
-  - llama.cpp checks the shared SATA.
+  - llama.cpp checks every volume its presets reference: the shared SATA, plus the shared NVMe for Super IQ3.
   - Strata and Maya check the shared NVMe.
 
   Wrong or unavailable volumes are rejected without creating an empty replacement
@@ -482,7 +497,8 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
   - Launcher preflight remounted unmounted volumes.
   - The user-manager retry recovered a refused direct mount.
 
-  A real SSH session and a real reboot were not tested.
+  A real reboot was later validated: all volumes mounted by UUID after login, despite an NVMe
+  device rename. llama-server also loaded a space-containing NVMe model path. A real SSH session was not tested.
 - Builds, SDKs, environments, caches, harness data and private settings remain Linux-specific.
   Weights, binaries, credentials, raw logs and private archives stay excluded from Git.
   SSD speed affects cold loads and actual PLE/expert streaming; resident-model

@@ -33,7 +33,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
 Ten profiles are active: five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.
-Super IQ3 remains selectable at 32K. Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
+Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; keep the SATA original as a backup. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
 The 20 GiB candidate is not selected and remains inactive. Do not regenerate the

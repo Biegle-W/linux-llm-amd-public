@@ -68,6 +68,21 @@ class ModelVolumeTests(unittest.TestCase):
                 storage.ensure_model_drive(root, root/'models', 'EXPECTED', 'Test')
             self.assertFalse((root/'models').exists())
 
+    def test_llama_presets_mount_every_referenced_volume_once(self):
+        with tempfile.TemporaryDirectory() as directory:
+            preset = Path(directory)/'models.ini'
+            preset.write_text('[a]\nmodel = ' + str(storage.MODELS/'A/a.gguf') + '\n'
+                              '[b]\nmodel = ' + str(storage.MODELS/'B/b.gguf') + '\n'
+                              '[super]\nmodel = ' + str(storage.STREAM_MODELS/'Nemotron-Super/x.gguf') + '\n')
+            with patch.object(storage, 'ensure_model_drive') as ensure:
+                storage.ensure_llama_models([preset])
+            self.assertEqual(sorted(call.args[3] for call in ensure.call_args_list), ['Shared NVMe', 'Shared SATA'])
+
+    def test_model_outside_configured_volumes_is_refused_before_mounting(self):
+        with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaisesRegex(RuntimeError, 'outside'):
+            storage.ensure_model_paths([storage.MODELS/'ok.gguf', Path('/tmp/elsewhere/model.gguf')])
+        ensure.assert_not_called()
+
     def test_login_mount_reports_required_failures_and_skips_absent_spare(self):
         volumes = (('Required', 'REQ', Path('/r'), Path('/r/models'), True),
                    ('Spare', 'SPARE', Path('/s'), None, False))

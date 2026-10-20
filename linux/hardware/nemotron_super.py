@@ -6,6 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = Path('/mnt/llm-models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF')
+# Verified runtime copy on the shared NVMe (load 42 s vs 112 s from SATA, identical inference;
+# hardware/SUPER-NVME-LOAD-2026-10-20.md). The SATA tree keeps the manifest and backup.
+RUNTIME_MODELS = Path('/mnt/shared-nvme/LLM-Models/Nemotron-Super/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF')
 GIB = 1024**3
 IQ3_LAYERS = [3, 12, 17, 21, 26, 30, 34, 39, 43, 48, 52, 59, 65, 74, 81, 85]
 
@@ -89,7 +92,7 @@ def prepare():
         profile = {
             'id':ident, 'enabled':False, 'backend':'hip-amd',
             'name':f'Nemotron 3.5 Super VL 120B {quant} (32K, dual AMD HIP, CPU experts + GPU cache, text/tools)',
-            'quantization':quant, 'path':str(MODELS/sorted(files,key=lambda item:item['path'])[0]['path']),
+            'quantization':quant, 'path':str(RUNTIME_MODELS/sorted(files,key=lambda item:item['path'])[0]['path']),
             'context':32768, 'minimum_host_ram_gib':28 if ident.endswith('iq3') else 60,
             'expert_count':int(metadata['nemotron_h_moe.expert_count']),
             'cpu_expert_layers':selected, 'host_expert_bytes':sum(layers[layer] for layer in selected),
@@ -109,13 +112,13 @@ def overrides(profile):
     return 'token_embd.*=ROCm0,^blk\\.(?:' + layers + ')\\.ffn_.*_exps\\.weight$=CPU'
 
 
-def server_args(profile, context=32768, split='1,1', mtp=False, port=18183):
+def server_args(profile, context=32768, split='1,1', mtp=False, port=18183, model_path=None, load_mode='none'):
     return [str(ROOT/'llama.cpp/build-hip/bin/llama-server'),
-            '--model',profile['path'], '--alias',profile['id'], '--host','127.0.0.1', '--port',str(port), '--verbosity','4',
+            '--model',str(model_path or profile['path']), '--alias',profile['id'], '--host','127.0.0.1', '--port',str(port), '--verbosity','4',
             '--ctx-size',str(context), '--parallel','1', '--device','ROCm0,ROCm1',
             '--split-mode','layer', '--tensor-split',split, '--n-gpu-layers','99', '--fit','off',
             '--override-tensor',overrides(profile), '--n-cpu-moe','0',
-            '--moe-cache-mib',str(profile['gpu_expert_cache_mib']), '--load-mode','none',
+            '--moe-cache-mib',str(profile['gpu_expert_cache_mib']), '--load-mode',load_mode,
             '--batch-size','512', '--ubatch-size','128', '--threads','6', '--threads-batch','6',
             '--flash-attn','on', '--cache-type-k','q8_0', '--cache-type-v','q8_0',
             '--cache-ram','0', '--ctx-checkpoints','0', '--jinja', '--reasoning','off',
