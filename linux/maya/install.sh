@@ -29,7 +29,7 @@ if [[ $family == glm ]]; then
     case "$glm_quant" in Maya-S24|Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; validate it first.' >&2; exit 2 ;; esac
     selected=(--model "$glm_quant" --gguf-dir "$MAYA_MODELS_ROOT/$glm_quant" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192)
 else
-    selected=(--model DeepSeek-V4.1-Flash-1017 --ds4-quant maya-s --model-dir "$MAYA_MODELS_ROOT/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S")
+    selected=(--model DeepSeek-V4.1-Flash-1017 --ds4-quant maya-s --model-dir "$MAYA_MODELS_ROOT/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S" --env DS4_IQ_Q8K=0 --env DS4_STREAM=0)
 fi
 cd maya/upstream
 exec .venv/bin/python -B -u maya.py "${common[@]}" "${selected[@]}"

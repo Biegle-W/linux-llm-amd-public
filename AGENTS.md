@@ -52,7 +52,7 @@ excluded from Git.
 
 ## Project Maya — October 20
 
-Maya v1.1.17 / 8d9a9b5d is active for GLM-5.3-Flash Maya-S v2 and
+Maya v1.1.19 / 3384b5e is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
 DeepSeek-V4.1-Flash-1017 Maya-S, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
 GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
@@ -191,7 +191,7 @@ is private (`*.shared-settings.json` ignored). See
 
 ## GLM quant selection — October 20
 
-The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-loss gate for EACH code/prose decode and native-prefill six-trial median. Current selection is Maya-S,32K, same both-GPU/RAM40/MTP/reserves. Preserve DeepSeek unchanged. See `linux/hardware/MAYA-S-VS-S24-2026-10-20.md` and its numeric record; initial Maya three-trial speeds remain historical.
+The user requested a matched Maya-S/S24 trial and a strict less-than10% speed-loss gate for EACH code/prose decode and native-prefill six-trial median. Current selection is Maya-S,32K, same both-GPU/RAM40/MTP/reserves. Preserve DeepSeek quant/context/guards; the later source/stream policy below applies. See `linux/hardware/MAYA-S-VS-S24-2026-10-20.md` and its numeric record; initial Maya three-trial speeds remain historical.
 
 ## Strata Linux app / Intel desktop follow-up — October 20
 
@@ -233,3 +233,7 @@ Chat/Monitor and ComfyUI are browser interfaces; their application-menu entries
 are hidden with `NoDisplay=true`. Preserve their Desktop launchers and PATH
 commands (`llm-maya`, `comfyui`). The native Strata AppImage remains visible.
 Managed backend launchers still retain visible terminals and existing guards.
+
+## Maya source/SDK validation — October 20
+
+3384b5e9366e696e5f23f51772fb94a8a7948e41/v1.1.19 is promoted with exact tested SDK7 binaries. ROCm10 failed both performance gates; DeepSeek10nostream stalled with no completed timed sample. Keep ROCm7.2.3/rocWMMA2.2.0. Selected DeepSeek requires `DS4_IQ_Q8K=0` (prior rounding; default1 reversedIQ3_S/IQ2_S parity fails) and `DS4_STREAM=0` (optional PCIe lane only; CPU experts/GPU hotcache retained). GLM-S40GiB/MTP and DeepSeek-S24threads/noDSpark remain32K/bothGPUs/native8GiB/actual6GiB startup/52G no-swap. Near31.5K/history and actualDesktop/Ptyxis/nativeUI/authenticated gateway/switchback pass; host-self routes are not a remote-peer test. GLM source19 six-sample rates18.44/16.10/518.0PP,12.363s freshTTFT; DeepSeek selectedthree6.89/7.08/188.6,33.418s. No universal source speedup; failed SDK10/old17 evidence retained. Other production engines remain unchanged pending isolated SDK comparisons. See linux/hardware/MAYA-ROCM10-2026-10-20.md and numeric record. Never enable approximate prompt skipping or failed/untested formats.

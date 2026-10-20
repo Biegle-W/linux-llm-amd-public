@@ -1,8 +1,8 @@
 # Project Maya on two RX 7900 XTX cards
 
-The isolated HIP build uses [Project Maya v1.1.17, commit `8d9a9b5d`](https://github.com/mw00/project-maya/tree/8d9a9b5d705049a87da853717cdc59440252de30).
+The isolated HIP build uses [Project Maya v1.1.19, commit `3384b5e`](https://github.com/mw00/project-maya/tree/3384b5e9366e696e5f23f51772fb94a8a7948e41).
 Both models are active at **32,768 tokens**. Current local validation is in
-[the Maya report](../hardware/MAYA-2026-10-20.md). All profiles use both cards;
+[the v1.1.19/ROCm comparison](../hardware/MAYA-ROCM10-2026-10-20.md). All profiles use both cards;
 this is experimental upstream AMD support. Existing llama.cpp, Strata,
 vLLM/SGLang environments and the saved DSH default are preserved.
 
@@ -10,7 +10,7 @@ vLLM/SGLang environments and the saved DSH default are preserved.
 
 [Runtime pins](runtime.json) include the isolated llama.cpp dependency `3cf03257`
 and [official rocWMMA 2.2.0 headers for ROCm 7.2.3](https://github.com/ROCm/rocWMMA/tree/48b7db12a9ade97f0b7ab2ff9321ba0cbb4e5b77).
-The SDK itself stays 7.2.3. [build-env.sh](build-env.sh) selects the existing
+The SDK stays7.2.3: matched10.0.0 tuning lost the performance gate and its DeepSeek no-stream fallback stalled. No global driver change was made. [build-env.sh](build-env.sh) selects the existing
 GCC 14.4 cross-toolchain, sysroot and library search paths; no system packages or
 other engines are patched. Maya uses its own Python 3.12.14 environment and
 [locked Python package versions](requirements-lock.txt).
@@ -69,7 +69,7 @@ GLM uses an explicit **40 GiB whole-machine expert RAM ceiling**, divided betwee
 the two layer partitions, plus GPU hot-expert caches and cold NVMe reads.
 This is not 40 GiB per GPU. Its MTP block runs on the second card. The upstream
 hipBLASLt tables are selected only for the matching gfx1100/library version.
-DeepSeek's native GGUF expert placement and exact speculation selection are
+DeepSeek explicitly uses `DS4_IQ_Q8K=0` (prior rounding) and `DS4_STREAM=0` (optional PCIe lane disabled). CPU expert backing and GPU hot caching remain active. Its native GGUF expert placement and exact speculation selection are
 recorded in the test report. OS page caching is not an explicit pinned expert tier.
 
 Both use layer splitting with host transfers. DeepSeek is requested with
@@ -117,7 +117,7 @@ DSH stays optional and separate; `--no-browser` suppresses browser opening.
 
 ## GLM S/S24 comparison
 
-Current selected GLM quant: **Maya-S**,32K, same RAM40/MTP/reserves. [Six-trial ABBA results](../hardware/MAYA-S-VS-S24-2026-10-20.md) supersede the earlier GLM speed row; DeepSeek is unchanged.
+Selected GLM quant stays **Maya-S**,32K/RAM40/MTP. The [S/S24 ABBA selection](../hardware/MAYA-S-VS-S24-2026-10-20.md) remains historical; [v1.1.19 source/SDK results](../hardware/MAYA-ROCM10-2026-10-20.md) now provide current speeds for both models.
 
 Maya has no separate native desktop app in this setup. Its browser entry is
 hidden from the application menu; the Desktop launcher and `llm-maya` remain.

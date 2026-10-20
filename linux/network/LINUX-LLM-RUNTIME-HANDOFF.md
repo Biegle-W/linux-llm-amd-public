@@ -43,7 +43,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 ## Project Maya: GLM and DeepSeek, both active
 
-Maya HIP v1.1.17 / `8d9a9b5d705049a87da853717cdc59440252de30` is a separate
+Maya HIP v1.1.19 / `3384b5e9366e696e5f23f51772fb94a8a7948e41` is a separate
 Strata fork with its own source, Python 3.12.14 environment and pinned llama.cpp
 3cf03257 dependency. ROCm SDK 7.2.3 is unchanged; isolated rocWMMA 2.2.0 headers
 and the retained GCC 14.4/sysroot resolved its build dependencies. Existing engine
@@ -66,7 +66,7 @@ it from starting; close them and retry. GLM's 40 GiB RAM tier passed >=10 GiB av
 its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
 and stateful caches; this is not a universal optimum.
 
-The **Maya** Desktop/menu entry opens a visible terminal; `llm-maya` uses the
+The **Maya** Desktop entry (application-menu entry hidden because it is a browser frontend) opens a visible terminal; `llm-maya` uses the
 current terminal or SSH TTY. Both load GLM by default. Start `dsh` separately, choose **Local Maya**, then either ID.
 `llm-maya --model deepseek-v4.1-flash-1017-maya` selects DeepSeek initially.
 The router switches models serially and unloads the previous worker. Backend
@@ -89,26 +89,25 @@ physical / 52 GiB available RAM and 16 GiB free on each GPU after handover. Fail
 unloads only the owned worker and requires explicit reload. Never lower these
 limits or use swap as capacity to make a new profile pass.
 
-Current GLM selection is **Maya-S**, 32K. Six timed samples per workload across
-two starts: native PP 487.9 t/s, fresh-input external TTFT 13.031 s,
-short code/prose decode 16.83/14.44 t/s. All four quant/control starts
-passed 29,977-input retrieval/history,JSON/tools/SSE, both GPUs and zero owned
-swap/spill with existing guards. Strict >0.90 ratios apply to EACH code,prose
-and native-prefill median. [Matched GLM result](../hardware/MAYA-S-VS-S24-2026-10-20.md).
+Current Maya source19/SDK7 rates: GLM-S six samples/workload across two starts,
+code/prose18.44/16.10t/s, nativePP518.0, freshTTFT12.363s; actual fresh6308–6314.
+DeepSeek-S selected `DS4_IQ_Q8K=0`/`DS4_STREAM=0`, three samples/workload,
+6.89/7.08t/s,188.6PP,33.418s, actual6295–6299. Both use32K, retained native8GiB
+and actual6GiB startup/52Gnoswap guards. GLM near31496 and DeepSeek31482 plus
+full-history passed. Normal actualDesktop/Ptyxis/originalUI/authgateway and
+GLM→DeepSeek→GLM passed; host-self routes only, no remote peer or vision test.
 
-DeepSeek remains unchanged: original 29,989-input retrieval/history; native PP 185.5 t/s,
-fresh-input TTFT 33.956 s, short code/prose 6.24/6.84 t/s. Its original three-trial
-measurements and initial GLM S24 evidence remain in the [Maya batch](../hardware/results/maya-dual-amd-2026-10-20.json).
-Current GLM uses the later six-trial [numeric record](../hardware/results/maya-s-vs-s24-2026-10-20.json).
-Thinking is off, short sampling 0.6/top-p0.95/seed42/256-output cap; fresh prefill
-is greedy with actual input counts retained. Allocation is not a full-window
-quality guarantee. No new engine build or other profile change.
+ROCm10 is not promoted: same-source GLM speed gate failed; DeepSeek automatic
+lane lost roughly35–37% decode, and explicitnostream10 stalled the first timed
+request after one token. No completed timed result is reported for that arm.
+Source17 remains verified rollback; original17/quant ABBA evidence stays historical.
+Selected DeepSeek disables only the extra per-token PCIe lane; CPUexpert backing
+and GPUhotcache stay active. No quality-changing expert skipping or approximate
+prompt skipping is enabled. Both SDKs pass fourteen GLM/core checks percard.
+New default rounding1 fails reversedIQ3_S/IQ2_S numerical parity, so prior0 is
+explicit. SDK7 retains only two known excluded mixedQ4_K/IQ4_XS bitexact failures;
+those types remain blocked. [Current report/trials/thermals](../hardware/MAYA-ROCM10-2026-10-20.md).
 
-Earlier 14 GLM/kernel checks passed on each card with this same binary; this quant
-trial did not rerun that suite. The broader DeepSeek suite still
-fails two mixed Q4_K/IQ4_XS bit-exact tests per card; those types are absent from
-this selected Maya-S target and other types are blocked. This is not a complete
-DS4-suite pass. No tolerance or quality-changing expert skipping was enabled.
 Binary/source/config fingerprints and the DeepSeek descriptor/index/Engram hash
 must match before loading. Models are at `/mnt/shared-nvme/LLM-Models/Maya` on the new shared NVMe;
 no model weights were left in the Maya engine folder on the Linux primary NVMe.
@@ -528,7 +527,7 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 | vLLM |`0.32.1rc1.dev36+ge68efc685.rocm72`, local repairs|
 | ROCm SDK /PyTorch /RCCL |7.2.3 /`2.13.0+git733fca1` /no-hostcall 2.27.7|
 | Strata HIP |0.1.46.1 /`9ae93f7b1fe989d04a8e404d32cddaeeff10505f`|
-| Maya HIP | `1.1.17 / 8d9a9b5d705049a87da853717cdc59440252de30`; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
+| Maya HIP | `1.1.19 / 3384b5e9366e696e5f23f51772fb94a8a7948e41` on retained ROCm7.2.3; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
 
 llama.cpp 4c3c5810 and vLLM dev36 passed their fixed promotion criteria; throughput
 was performance-neutral within noise. The vLLM wheel SHA-256 is
@@ -691,8 +690,8 @@ Earlier normal API proofs covered authenticated host self-access on
 loopback/LAN/Tailscale, not a remote peer. Current catalog has ten IDs; the
 retired IDs must be removed from client selectors. The three smaller llama.cpp
 MoEs retain older ~64K retrieval evidence, not fresh full 256K quality claims.
-Maya's [numeric record](../hardware/results/maya-dual-amd-2026-10-20.json)
-preserves its two 32K measurements and screening controls unchanged. The purchased
+Maya's [initial numeric record](../hardware/results/maya-dual-amd-2026-10-20.json)
+preserves original17 controls; [current19/SDK tests](../hardware/results/maya-rocm10-2026-10-20.json) retain new trials, thermals and failed10 arms. The purchased
 PCIe switch is still pending installation and P2P/RCCL validation.
 
 

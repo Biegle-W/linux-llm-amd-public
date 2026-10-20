@@ -1,14 +1,14 @@
 {
   "repository": "https://github.com/mw00/project-maya",
-  "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
-  "version": "1.1.17",
+  "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
+  "version": "1.1.19",
   "rocwmma_repository": "https://github.com/ROCm/rocWMMA",
   "rocwmma_commit": "48b7db12a9ade97f0b7ab2ff9321ba0cbb4e5b77",
   "rocwmma_version": "2.2.0 / ROCm 7.2.3",
   "llama_dependency": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
-  "status": "Selected GLM Maya-S RAM40/MTP and DeepSeek Maya-S 24threads/noDSpark passed dual-AMD32K context, benchmarks and normal authenticated API/switchback; other DeepSeek quant formats remain blocked",
+  "status": "Promoted exact tested SDK7 binaries after both Maya-S32K native/near31.5K/history and normal Desktop/Ptyxis/nativeUI/authenticated gateway/switchback checks",
   "rocm_sdk": "7.2.3",
   "python": "3.12.14",
   "gpu_architecture": "gfx1100",
-  "scope": "Selected exact quants only; broader DS4 suite retains two mixed Q4_K/IQ4_XS bit-exact failures on each card"
+  "scope": "Selected Maya-S quants only; DS4_IQ_Q8K=0 preserves prior rounding; DS4_STREAM=0 disables optional PCIe expert lane, CPU experts/GPU hot cache retained. Mixed Q4_K/IQ4_XS remain blocked. ROCm10 rejected on measured speed and decode stall."
 }

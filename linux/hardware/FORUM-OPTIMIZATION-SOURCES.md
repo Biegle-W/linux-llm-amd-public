@@ -497,6 +497,7 @@ on each card. Actual selected Maya-S metadata contains neither type. That limit
 is retained and enforced by admission; it is not silently called a full-suite
 pass. Local arithmetic/JSON/tools/marker checks do not establish general quality.
 
+
 <a id="qwen-int4-context-october-20"></a>
 
 ## Qwen INT4 context expansion — October 20
@@ -609,3 +610,47 @@ Primary [pinned Strata multi-GPU implementation guide](https://github.com/Niko12
 separates layer handoff from tensor-parallel collectives. The remaining gap
 requires matched telemetry/workloads; no promise is made that the pending
 switch, smaller context, reduced reserves or a newer build will remove it.
+
+## Maya v1.1.19 and ROCm10 review — October20
+
+[Local controlled evaluation](MAYA-ROCM10-2026-10-20.md) distinguishes reviewed
+source3384b5e/v1.1.19, same-sourceSDK7.2.3/10.0.0 and a no-table10 arm.
+GLM Maya-S remains the quant, on shared NVMe; community S24 is a different arm.
+
+- [Maya PR292](https://github.com/mw00/project-maya/pull/292), Cass67,October20:
+  **four7900XT/80GB**, GLM-S24,32K,ROCm10/hipBLASLt100401; native greedy
+  benchmark. Table-only8K prefill382→602t/s; decode51.6→50.4. Reviewed source
+  [f8c33e50](https://github.com/mw00/project-maya/commit/f8c33e50b1b2b24a8dd45a3676b329c9dd241a8e)
+  contains the matching table. Our existing7.2.3 GLM control already has a
+  working60-row100202 table. Table benefit is not a whole-SDK speedup.
+- [lcz.me1532/95](https://lcz.me/topic/1532/95), BenLee,accessedOctober20
+  (exact post date unavailable in fetched view): two7900XTX,TP2/MTP3/BF16KV,
+  PR34058/N=1,~64K. Reported7.2.3→10 single-query decode62.2→74.1t/s,
+  but prefill1338→1146 and C2TTFT49.78→57.35s. Current local DFlash2 differs.
+  [Upstream scheduling PR34058](https://github.com/sgl-project/sglang/pull/34058)
+  concerns prefill/decode fairness; no scheduler change follows from this review.
+- [lcz.me2032/3](https://lcz.me/topic/2032/3),naniandemeng,accessedOctober20
+  (exact post date unavailable): one7900XTX,E5-2678v3/64GBDDR3,Strata0.1.27,
+  Swift1.5IQ3_XXS,ROCm10/256K. Tuning743→1179PPt/s;8K1453PP/82.7decode.
+  Model derivative, MTP4, batch8192 and source differ from the retained local arm.
+- [Level1Techs official-source index](https://forum.level1techs.com/t/the-twisted-links-of-amd-ai-collection-of-useful-links-for-amd-ai-dev-and-deployment/244053),
+  ajc9988,January7,2026 thread: useful official AMD/TheRock locations. Its
+  gfx1151 examples are not gfx1100 results or matched dual-XTX speed claims.
+- [AMD vLLM installation matrix](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html),
+  [CLI compatibility](https://rocm.docs.amd.com/projects/rocm-cli/en/latest/engines/vllm.html)
+  and [TheRock packaging](https://github.com/ROCm/TheRock/blob/main/RELEASES.md):
+  an aligned Torch/Triton/engine stack is needed. Documented10.0 prebuilt vLLM
+  uses Python3.14 and an older vLLM minor; it does not replace the retained
+  Python3.12/0.32/RDNA-patched stack by changing a library path.
+
+Locally, GLM10 tuned PP479.2 beats same10 untuned355.5 but trails new-source7
+PP500.4; code/prose17.77/14.56 versus18.18/15.92t/s fails the declaredSDK gate.
+Both GLM candidates passed near32K/tools/JSON/SSE and memory gates. DeepSeek
+new-source7 passed fresh31,488 and follow-up31,520 inputs; itsSDK10 automatic
+expert-streaming arm emitted a pull-completion timeout warning. The matched
+`DS4_STREAM=0` SDK7 arm passed near32K/tools/JSON/SSE and measured6.89/7.08decode,
+188.6PP; SDK10 stalled at one output token in its first timed request and was
+stopped with verified owned cleanup. No completed timed SDK10-fallback rate is
+published. CPU experts/GPU hot caching and all guards remain enabled. These
+observations alone do not diagnose a hardware or coherence fault. [Pinned lane policy](https://github.com/mw00/project-maya/blob/3384b5e9366e696e5f23f51772fb94a8a7948e41/src/ds4/ds4_model.cu#L5914-L6070).
+No community rate is substituted for a local measurement. Maya source19/SDK7 was subsequently promoted after normal proof; SDK10 remains rejected. Other production engines remain unchanged. Final decisions and normal proof are maintained in the local evaluation report.

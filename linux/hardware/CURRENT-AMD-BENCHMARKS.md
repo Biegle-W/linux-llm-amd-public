@@ -7,6 +7,7 @@ Super IQ3 remains selectable at 32K. Muse Q4 and Super Q4 are retired at the use
 Strata keeps Q3 and the 13.5 GiB budget, with 6 workers / all CPUs selected.
 [CPU/RAM, storage, pool tests and limits](CPU-RAM-PROFILES-2026-10-20.md).
 
+
 ## Strata Linux app update and verified Intel desktop — October 20
 
 Managed Strata **0.1.46.1 /9ae93f7b is active** after candidate and normal
@@ -29,7 +30,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 | SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | DFlash2 at 160K, actual 160,861-input retrieval; separate MTP profile retired |
 | vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; 160K BF16, actual 160,868-input retrieval and full-history follow-up |
 | Strata HIP | [0.1.46.1 / `9ae93f7b`](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f) | Exact tested binary, 5 GiB/card startup, six-worker13.5GiB pool, near256K/history and actual Desktop/UI/API proof |
-| Maya HIP | [v1.1.17 / `8d9a9b5d`](https://github.com/mw00/project-maya/commit/8d9a9b5d705049a87da853717cdc59440252de30) | Selected Maya-S v2/DeepSeek-S, 32K, both cards, near-30K probes and normal API/model switching |
+| Maya HIP | [v1.1.19 / `3384b5e`](https://github.com/mw00/project-maya/commit/3384b5e9366e696e5f23f51772fb94a8a7948e41) | ROCm7.2.3 retained; exact tested binaries, Maya-S32K/both GPUs, near31.5K/history and actual Desktop/UI/API/switchback |
 
 The llama.cpp and vLLM updates were performance-neutral within noise; newer
 source is not presented as a measured speedup. Older builds keep their original
@@ -52,15 +53,14 @@ configured window, not proof of that entire window's quality or speed.
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,185–8,191 | 1314.8 | 6.235 | 0.102 / 0.097 | 178.82 / 63.40 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,187–8,188 | 1413.8 | 5.806 | 0.066 / 0.092 | 130.31 / 68.96 |
 | Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,188 | 912.2 | 9.015 | 0.229 / 0.233 | 75.28 / 50.31 |
-| GLM-5.3-Flash Maya-S | Maya HIP, layer split/MTP | 32,768 | 6,310–6,316 | 487.9 | 13.031 | 0.095 / 0.112 | 16.83 / 14.44 |
-| DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP, layer split/no DSpark | 32,768 | 6,295–6,302 | 185.5 | 33.956 | 0.374 / 0.550 | 6.24 / 6.84 |
+| GLM-5.3-Flash Maya-S | Maya v1.1.19 HIP, layer split/MTP | 32,768 | 6,308–6,314 | 518.0 | 12.363 | 0.087 / 0.102 | 18.44 / 16.10 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | Maya v1.1.19 HIP, layer split/no DSpark | 32,768 | 6,295–6,299 | 188.6 | 33.418 | 0.429 / 0.525 | 6.89 / 7.08 |
 
-GLM now uses six matched ABBA trials per workload; other shared-method rows retain their original three-trial method. [GLM S/S24 selection](MAYA-S-VS-S24-2026-10-20.md).
+GLM now uses six source19/SDK7 trials across two starts; DeepSeek uses three selected `DS4_STREAM=0` trials. Earlier quant ABBA remains historical. [Maya update, SDK decision and complete trials](MAYA-ROCM10-2026-10-20.md).
 
 The retired Muse/Q4 Super measurements remain in the [original numeric batch](results/dual-amd-i9-64gb-2026-10-20.json). They are historical, not active profiles.
 
-Maya's two added rows retain every trial and actual tokenizer count in the
-[Maya numeric record](results/maya-dual-amd-2026-10-20.json); [settings, selection and limits](MAYA-2026-10-20.md).
+Maya's current rows use the [v1.1.19 numeric record](results/maya-rocm10-2026-10-20.json). Initial17 and quant-selection trials remain historical with their exact builds.
 
 ### Super IQ3 using fixed ~8K-input workloads
 
@@ -92,7 +92,7 @@ near-window markers and full-history follow-ups, with zero owned swap/spill.
 
 Strata's managed backend and standalone app share verified weights on the new
 shared NVMe. The generated expert pack was checked against every source expert
-byte before reuse. Maya's validated S24/DeepSeek-S weights and required generated
+byte before reuse. Maya's validated Maya-S/DeepSeek-S weights and required generated
 assets also use that NVMe. Other resident GGUF models stay
 on Shared SATA; SGLang/vLLM target/draft checkpoints stay on Linux NVMe.
 [Storage inventory](results/streaming-storage-2026-10-20.json).

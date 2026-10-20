@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Maya v1.1.19/ROCm comparison](maya-rocm10-2026-10-20.json), [decision](../MAYA-ROCM10-2026-10-20.md): SDK7 retained, both NVMe Maya-S packs tested; six GLM /three DeepSeek trials, near32K and normal UI/API/switchback pass. SDK10 negative/stalled arms retained.
+
 - [Strata user-selected 5 GiB startup floor](../STRATA-STARTUP5-2026-10-20.md): 0.1.46.1 promoted; all candidate/near256K and actualDesktop/nativeUI/API gates pass. Fresh912.2PP,9.015s freshTTFT,75.28/50.31decode; [all trials](strata-startup5-2026-10-20.json). Former6GiB failures remain historical.
 
 Current hardware: i9-13900KS,64 GB RAM, two RX 7900 XTX 24 GB. Ten selectable

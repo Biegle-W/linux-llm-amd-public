@@ -1,5 +1,12 @@
 # LLM benchmark and context history
 
+## October 20 — Maya v1.1.19, retained SDK7 and NVMe Maya-S
+
+Exact tested3384b5e binaries and matching source are promoted after normal Desktop/Ptyxis/nativeUI/authenticated gateway/switchback proof. ROCm10 is rejected: GLM code/prose/PP−2.3/−8.5/−4.2% vs same-source7; automatic-stream DeepSeek decode−34.9/−36.6%;10nostream stalled first timed request (no timed throughput). Selected DeepSeek0/0 retains CPUexperts/GPUhotcache,32K/24threads/noDSpark/reserves. GLM uses40GiB/MTP/32K. Both packs stay on shared NVMe. GLM six-sample19 medians18.44/16.10decode,518.0PP,12.363s freshTTFT; DeepSeek three-sample6.89/7.08,188.6,33.418s. Actual fresh inputs6308–6314/6295–6299; near31496/31482 plus full-history passed. Zero owned swap/spill; temperatures have full per-start coverage, not invented historical peaks. Other engines remain unchanged.
+[Report, failed arms and limitations](MAYA-ROCM10-2026-10-20.md), [full numeric trials](results/maya-rocm10-2026-10-20.json).
+
+
+
 ## October 20 — Strata0.1.46.1 promoted with5GiB startup admission
 
 Exact tested9ae93f7b/c6706bc engine is deployed after candidate and normal

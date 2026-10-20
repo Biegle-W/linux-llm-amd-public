@@ -51,17 +51,21 @@
   "local_validation": {
     "status": "requires-local-validation",
     "native_validation": "passed",
-    "normal_integration_status": "passed",
-    "validated_utc": "2026-10-20T13:08:40.363608+00:00",
-    "binary_sha256": "829a8c831f6f052c84bf02994cdeea920a9be5ae80a907ba179197b30e0b5607",
-    "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
-    "evidence": "hardware/results/maya-dual-amd-2026-10-20.json",
-    "candidate_tag": "deepseek-32k-desktop",
-    "scope": "Selected exact quant/32K context/both GPUs; shared-method speed, near30K retrieval, JSON/tools/SSE; relocated log/routing-profile paths with unchanged native settings. Normal production proof passed on the recorded workstation.",
+    "normal_integration_status": "requires-local-validation",
+    "validated_utc": "2026-10-20T23:28:38.161636+00:00",
+    "binary_sha256": "6fdb42ee024e1020a975e3715b3956269f695e64ce812dbc2eea6294465a2698",
+    "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
+    "evidence": "hardware/results/maya-rocm10-2026-10-20.json",
+    "candidate_tag": "deepseek-candidate7-nostream",
+    "scope": "Exact tested source/SDK7 binary; retained Maya-S32K/bothGPUs/CPUexpert cache/8GiB targets/6GiB actualstartup/52G no-swap. Near31.5K/history/tools/JSON/SSE passed. Actual Desktop/Ptyxis/original nativeUI/authenticated gateway and GLM\u2192DeepSeek\u2192GLM normal proof passed; host-self access only.",
     "pack_metadata_sha256": "c4d4a5851e6c6c13391e91b181bd9c1b5b6592ca0ce8605cd57fbe7bd421e025",
-    "normal_validated_utc": "2026-10-20T13:19:17.653552+00:00",
-    "reference_config_sha256": "a5440568e0470384d6fe541989c22033f7a409ecda79a8fec7b4b2149bb957ad",
-    "note": "Sanitized paths differ from the validated workstation; revalidate your installed binary/profile before activation."
+    "normal_validated_utc": "2026-10-20T23:34:35.219519+00:00",
+    "reference_config_sha256": "185528f41547161b0c09cedeaf7d8f25698fbbf33fe008db3af5b3cd4b737bbc",
+    "note": "Sanitized paths differ from the measured workstation. Revalidate the installed source/binary/profile locally; reference results are not validation for another installation."
   },
-  "expert_profile_seed_sha256": "5effd94f74a2cbb91f7dc95677bcfbc01460e7abf756b0c9905c1e77d3bcb1e5"
+  "expert_profile_seed_sha256": "5effd94f74a2cbb91f7dc95677bcfbc01460e7abf756b0c9905c1e77d3bcb1e5",
+  "env": {
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0"
+  }
 }
