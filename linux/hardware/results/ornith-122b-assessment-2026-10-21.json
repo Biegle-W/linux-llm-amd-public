@@ -1,0 +1,767 @@
+{
+  "schema": 1,
+  "date": "2026-10-21",
+  "status": "research-only-not-benchmarked",
+  "hardware": {
+    "cpu": "i9-13900KS",
+    "installed_ram_gb": 64,
+    "os_visible_ram_gib": 61.51,
+    "gpus": [
+      "RX7900XTX24GB",
+      "RX7900XTX24GB"
+    ],
+    "links": "CPU PCIe4x8/x8"
+  },
+  "catalog_or_runtime_changes": false,
+  "full_checkpoint_downloaded": false,
+  "bounded_prefix_bytes_inspected": 25165824,
+  "prefix_note": "Bounded file prefixes include metadata/tensor directories and may include the start of tensor payload; not complete model files and no inference.",
+  "source_commit_reviewed": "4c3c5810f87efe177949f1b85ae509d38a2a311f",
+  "base_revision": "7681ef608624e7532d8164128bcffdbdbaf1b1af",
+  "quant_inventories": [
+    {
+      "repo": "ornith-ai/Ornith-1.5-122B-GGUF",
+      "revision": "8d5893d767c449a4f18dd08f4bb6d0d6d4426175",
+      "files": [
+        {
+          "rfilename": "Ornith-1.5-122B-BF16.gguf",
+          "size": 249362980832,
+          "lfs": {
+            "sha256": "160244966db882d25f87f12d021c581785a18079e46ee5d477d3f28672164a82",
+            "size": 249362980832,
+            "pointerSize": 137
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-Q4_K_M.gguf",
+          "size": 75843911648,
+          "lfs": {
+            "sha256": "729fe18c2491aaa446074a923e12f184f9f2239ffd5ce3dae47b0ce9cf8df40c",
+            "size": 75843911648,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-Q5_K_M.gguf",
+          "size": 88710135776,
+          "lfs": {
+            "sha256": "fc47386f1da5855df6e391e3c154aad4363f2d4f34cdb9c26b067d85cb54f428",
+            "size": 88710135776,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-Q6_K.gguf",
+          "size": 102380498912,
+          "lfs": {
+            "sha256": "93335cdb8ddf658ad1891a41b13e7b0d91c4590e1a9a3d5b8d4f2fce1eff1f5c",
+            "size": 102380498912,
+            "pointerSize": 137
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-Q8_0.gguf",
+          "size": 132555710048,
+          "lfs": {
+            "sha256": "48b49bf23d618c08480fd3d9c1b2ce8124dd1973090aa29fb54fbd8b6b9e7fb8",
+            "size": 132555710048,
+            "pointerSize": 137
+          }
+        },
+        {
+          "rfilename": "mmproj-Ornith-1.5-122B-BF16.gguf",
+          "size": 912263200,
+          "lfs": {
+            "sha256": "dba9e757964f42ed362e94bede671d9dd4639e832913dd83588527ba281734a7",
+            "size": 912263200,
+            "pointerSize": 134
+          }
+        }
+      ]
+    },
+    {
+      "repo": "unsloth/Ornith-1.5-122B-GGUF",
+      "revision": "3842d003341507c216295c6f28dfcd30349925c6",
+      "files": [
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00001-of-00007.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "17947a2c2ae365cd9bc644c73f5c7a4450f7ee4906dfb2a2e8c0b8aa088f5708",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00002-of-00007.gguf",
+          "size": 48628603808,
+          "lfs": {
+            "sha256": "99c36b008b0a0038c83dd5fd24454617b94dd3fdc761abed46188f83832abd7b",
+            "size": 48628603808,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00003-of-00007.gguf",
+          "size": 48407443296,
+          "lfs": {
+            "sha256": "7b45959f9e06df8c54ae7033035dd1c04b9dc6d44c79c7fc0349f408494786d7",
+            "size": 48407443296,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00004-of-00007.gguf",
+          "size": 48640204960,
+          "lfs": {
+            "sha256": "729c89c1f2011e0c965b6a898b534b0c7707a5ff628777811cc8b9666c8226d3",
+            "size": 48640204960,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00005-of-00007.gguf",
+          "size": 48638053472,
+          "lfs": {
+            "sha256": "2930d2ee5c2385b820640e3037c9d65836305c3391bd7716a862e2847d9e22ea",
+            "size": 48638053472,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00006-of-00007.gguf",
+          "size": 48642405824,
+          "lfs": {
+            "sha256": "b27d6631a6a2ac162475d938518c1c2d1b2bb0bbce3714a13e410d4448c5b71c",
+            "size": 48642405824,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "BF16/Ornith-1.5-122B-BF16-00007-of-00007.gguf",
+          "size": 6395327232,
+          "lfs": {
+            "sha256": "1921823fba149da186dc3d1e504d1650c8d7cb9fb872dbd0e2f94ef64928b2df",
+            "size": 6395327232,
+            "pointerSize": 135
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-UD-IQ1_M.gguf",
+          "size": 40356745472,
+          "lfs": {
+            "sha256": "4715a8d5b5030a9c80ba53792a905f2d356bfcaaec67127ca995932f48c3fd00",
+            "size": 40356745472,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-UD-IQ2_XXS.gguf",
+          "size": 41967395072,
+          "lfs": {
+            "sha256": "0497778d4f7f5008dec2d4b102183a699faf8433d0102dd143e86f9db13a3adc",
+            "size": 41967395072,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-UD-IQ3_XXS.gguf",
+          "size": 49515667712,
+          "lfs": {
+            "sha256": "027a9a480e8bcc6079fcf834e368467a169953561fb4b98dc9528d6185c8a438",
+            "size": 49515667712,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Ornith-1.5-122B-UD-Q2_K_XL.gguf",
+          "size": 44533952768,
+          "lfs": {
+            "sha256": "93fb32cfb1c31b34df426b4a41d961bdaffcddbbd217d850262136cf3689ba66",
+            "size": 44533952768,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Q8_0/Ornith-1.5-122B-Q8_0-00001-of-00004.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "e9dbc5401757506c6bbb04dba3bf65decc6435aaf0733f1e95cc58a9332166fc",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "Q8_0/Ornith-1.5-122B-Q8_0-00002-of-00004.gguf",
+          "size": 49855668288,
+          "lfs": {
+            "sha256": "c1ea340f63c932895417f7c2e7c4967b4b56f3e5a3f981242d0482c662aae2b8",
+            "size": 49855668288,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Q8_0/Ornith-1.5-122B-Q8_0-00003-of-00004.gguf",
+          "size": 49903347168,
+          "lfs": {
+            "sha256": "644c26a3d8cab405186ef545e4071b433a23c2a359e45434c822d9c48884eb4c",
+            "size": 49903347168,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "Q8_0/Ornith-1.5-122B-Q8_0-00004-of-00004.gguf",
+          "size": 32785752352,
+          "lfs": {
+            "sha256": "43bdc1b0cb764b5531d320816fb6004245256a414bfd55f1fdb69e3db42eaa57",
+            "size": 32785752352,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q3_K_XL/Ornith-1.5-122B-UD-Q3_K_XL-00001-of-00003.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "d8a23c487741fdac7026e10013fa8e320502cf01048a2333b2db8ba2a9f74fe5",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "UD-Q3_K_XL/Ornith-1.5-122B-UD-Q3_K_XL-00002-of-00003.gguf",
+          "size": 49791670080,
+          "lfs": {
+            "sha256": "95f76e67ffc49e2b0b4a4dfe5c42269b4b275ecf9e3696f599f3eeac92180323",
+            "size": 49791670080,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q3_K_XL/Ornith-1.5-122B-UD-Q3_K_XL-00003-of-00003.gguf",
+          "size": 9958641536,
+          "lfs": {
+            "sha256": "1c4b52bbb1d45a21b5b7927429a5c80f264c688f2d14ed50ba0b6da0260d4028",
+            "size": 9958641536,
+            "pointerSize": 135
+          }
+        },
+        {
+          "rfilename": "UD-Q4_K_XL/Ornith-1.5-122B-UD-Q4_K_XL-00001-of-00003.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "7159d31a6a6ce5528500b490880383844c3c9b21fcdaad94e66c9e65233ff359",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "UD-Q4_K_XL/Ornith-1.5-122B-UD-Q4_K_XL-00002-of-00003.gguf",
+          "size": 49971099680,
+          "lfs": {
+            "sha256": "e66952128394bb4c75554c7e10a12a8b63dd1c7f049d876a02885a946e30c1c3",
+            "size": 49971099680,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q4_K_XL/Ornith-1.5-122B-UD-Q4_K_XL-00003-of-00003.gguf",
+          "size": 29731729056,
+          "lfs": {
+            "sha256": "21325ec18a9e3210eeffada0fc327a25a79171918f1d04f8f0a06b61866ac9ba",
+            "size": 29731729056,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q5_K_XL/Ornith-1.5-122B-UD-Q5_K_XL-00001-of-00003.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "8ef82af5830f24e93f1e18b58ec8281f77e6c35542f0965c4de1aa674419a06f",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "UD-Q5_K_XL/Ornith-1.5-122B-UD-Q5_K_XL-00002-of-00003.gguf",
+          "size": 49598966816,
+          "lfs": {
+            "sha256": "7c8cd3439a301802d9888fe61b4c5206f7ff71d322e8060274b8d8e2839152d1",
+            "size": 49598966816,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q5_K_XL/Ornith-1.5-122B-UD-Q5_K_XL-00003-of-00003.gguf",
+          "size": 45002029760,
+          "lfs": {
+            "sha256": "4399a9fce998b7f3d57cea70eb0dfbc475e2776d73973b8b7dfd985fa421ba1e",
+            "size": 45002029760,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q6_K_XL/Ornith-1.5-122B-UD-Q6_K_XL-00001-of-00004.gguf",
+          "size": 10942929,
+          "lfs": {
+            "sha256": "45195675714ff99b0b0044e23c0bb2a7b6ab8f3e027baf48b5c995be2e5928c5",
+            "size": 10942929,
+            "pointerSize": 133
+          }
+        },
+        {
+          "rfilename": "UD-Q6_K_XL/Ornith-1.5-122B-UD-Q6_K_XL-00002-of-00004.gguf",
+          "size": 49676529056,
+          "lfs": {
+            "sha256": "5a967c2810f1ed1d8ebe6b4803d99b4e31b700a38253b78726b57551df4d5886",
+            "size": 49676529056,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q6_K_XL/Ornith-1.5-122B-UD-Q6_K_XL-00003-of-00004.gguf",
+          "size": 49911179808,
+          "lfs": {
+            "sha256": "d178535a1f0bb49fe15570a9768152df1e7ada5f851ca71a3f8845cda89d9f44",
+            "size": 49911179808,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "UD-Q6_K_XL/Ornith-1.5-122B-UD-Q6_K_XL-00004-of-00004.gguf",
+          "size": 14623756160,
+          "lfs": {
+            "sha256": "4c11e6227b6554352c82dbaa31a5c7f12dfabe58d232eadfacea40653c9b2bf2",
+            "size": 14623756160,
+            "pointerSize": 136
+          }
+        },
+        {
+          "rfilename": "mmproj-BF16.gguf",
+          "size": 912263488,
+          "lfs": {
+            "sha256": "a5ff159216cd31b8f0c034cae37fb875b6480bd96c62433b6a4109f6ed273904",
+            "size": 912263488,
+            "pointerSize": 134
+          }
+        },
+        {
+          "rfilename": "mmproj-F16.gguf",
+          "size": 908724544,
+          "lfs": {
+            "sha256": "39db176176a904b101f5173a4f03e785990f9279f94ab373c4fd629ae7011817",
+            "size": 908724544,
+            "pointerSize": 134
+          }
+        }
+      ]
+    }
+  ],
+  "headers": [
+    {
+      "tag": "official-q4",
+      "repository": "ornith-ai/Ornith-1.5-122B-GGUF",
+      "revision": "8d5893d767c449a4f18dd08f4bb6d0d6d4426175",
+      "filename": "Ornith-1.5-122B-Q4_K_M.gguf",
+      "header_bytes": 12582912,
+      "header_sha256": "fd56cc7e63e9c433a42b00d713c46f05054b88c05a0471d83f73393cdbc77e3d",
+      "metadata": {
+        "general.architecture": "qwen35moe",
+        "qwen35moe.block_count": 49,
+        "qwen35moe.context_length": 262144,
+        "qwen35moe.expert_count": 256,
+        "qwen35moe.expert_used_count": 8,
+        "qwen35moe.nextn_predict_layers": 1
+      },
+      "tensor_fields": []
+    },
+    {
+      "tag": "unsloth-iq3",
+      "repository": "unsloth/Ornith-1.5-122B-GGUF",
+      "revision": "3842d003341507c216295c6f28dfcd30349925c6",
+      "filename": "Ornith-1.5-122B-UD-IQ3_XXS.gguf",
+      "header_bytes": 12582912,
+      "header_sha256": "df2a2cfcf4ad806ab2297206d685e9b4c98598abdaaafb15d849aa3ac99acac4",
+      "metadata": {
+        "general.architecture": "qwen35moe",
+        "qwen35moe.block_count": 49,
+        "qwen35moe.context_length": 262144,
+        "qwen35moe.expert_count": 256,
+        "qwen35moe.expert_used_count": 8,
+        "qwen35moe.nextn_predict_layers": 1
+      },
+      "tensor_fields": []
+    }
+  ],
+  "tensor_directory_inspection": {
+    "official-q4": {
+      "metadata": {
+        "general.architecture": "qwen35moe",
+        "qwen35moe.block_count": 49,
+        "qwen35moe.context_length": 262144,
+        "qwen35moe.expert_count": 256,
+        "qwen35moe.expert_used_count": 8,
+        "qwen35moe.nextn_predict_layers": 1
+      },
+      "tensor_count": 899,
+      "tensor_bytes": 75832911872,
+      "routed_expert_bytes": 70212648960,
+      "mtp_bytes": 1631172608,
+      "mtp_tensor_names": [
+        "blk.48.attn_k.weight",
+        "blk.48.attn_k_norm.weight",
+        "blk.48.attn_norm.weight",
+        "blk.48.attn_output.weight",
+        "blk.48.attn_q.weight",
+        "blk.48.attn_q_norm.weight",
+        "blk.48.attn_v.weight",
+        "blk.48.ffn_down_exps.weight",
+        "blk.48.ffn_down_shexp.weight",
+        "blk.48.ffn_gate_exps.weight",
+        "blk.48.ffn_gate_inp.weight",
+        "blk.48.ffn_gate_inp_shexp.weight",
+        "blk.48.ffn_gate_shexp.weight",
+        "blk.48.ffn_up_exps.weight",
+        "blk.48.ffn_up_shexp.weight",
+        "blk.48.nextn.eh_proj.weight",
+        "blk.48.nextn.enorm.weight",
+        "blk.48.nextn.hnorm.weight",
+        "blk.48.nextn.shared_head_norm.weight",
+        "blk.48.post_attention_norm.weight"
+      ],
+      "per_layer_expert_bytes": {
+        "0": 1566572544,
+        "1": 1566572544,
+        "2": 1566572544,
+        "3": 1566572544,
+        "4": 1566572544,
+        "5": 1566572544,
+        "6": 1358954496,
+        "7": 1358954496,
+        "8": 1566572544,
+        "9": 1358954496,
+        "10": 1358954496,
+        "11": 1566572544,
+        "12": 1358954496,
+        "13": 1358954496,
+        "14": 1566572544,
+        "15": 1358954496,
+        "16": 1358954496,
+        "17": 1566572544,
+        "18": 1358954496,
+        "19": 1358954496,
+        "20": 1566572544,
+        "21": 1358954496,
+        "22": 1358954496,
+        "23": 1566572544,
+        "24": 1358954496,
+        "25": 1358954496,
+        "26": 1566572544,
+        "27": 1358954496,
+        "28": 1358954496,
+        "29": 1566572544,
+        "30": 1358954496,
+        "31": 1358954496,
+        "32": 1566572544,
+        "33": 1358954496,
+        "34": 1358954496,
+        "35": 1566572544,
+        "36": 1358954496,
+        "37": 1358954496,
+        "38": 1566572544,
+        "39": 1358954496,
+        "40": 1358954496,
+        "41": 1566572544,
+        "42": 1566572544,
+        "43": 1566572544,
+        "44": 1566572544,
+        "45": 1566572544,
+        "46": 1566572544,
+        "47": 1566572544
+      },
+      "header_data_offset": 10999776,
+      "candidate_cpu_placements": [
+        {
+          "layers": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
+            34,
+            36,
+            38,
+            40,
+            42,
+            44,
+            46
+          ],
+          "host_expert_bytes": 35106324480,
+          "remaining_gpu_weight_bytes": 40726587392,
+          "candidate_only_not_runtime_tested": true
+        },
+        {
+          "layers": [
+            0,
+            1,
+            3,
+            5,
+            6,
+            8,
+            10,
+            12,
+            13,
+            15,
+            17,
+            18,
+            20,
+            22,
+            24,
+            25,
+            27,
+            29,
+            30,
+            32,
+            34,
+            36,
+            37,
+            39,
+            41,
+            42,
+            44,
+            46
+          ],
+          "host_expert_bytes": 40749760512,
+          "remaining_gpu_weight_bytes": 35083151360,
+          "candidate_only_not_runtime_tested": true
+        },
+        {
+          "layers": [
+            0,
+            1,
+            3,
+            4,
+            6,
+            8,
+            9,
+            11,
+            12,
+            14,
+            16,
+            17,
+            19,
+            20,
+            22,
+            24,
+            25,
+            27,
+            28,
+            30,
+            32,
+            33,
+            35,
+            36,
+            38,
+            40,
+            41,
+            43,
+            44,
+            46
+          ],
+          "host_expert_bytes": 44090523648,
+          "remaining_gpu_weight_bytes": 31742388224,
+          "candidate_only_not_runtime_tested": true
+        }
+      ]
+    },
+    "unsloth-iq3": {
+      "metadata": {
+        "general.architecture": "qwen35moe",
+        "qwen35moe.block_count": 49,
+        "qwen35moe.context_length": 262144,
+        "qwen35moe.expert_count": 256,
+        "qwen35moe.expert_used_count": 8,
+        "qwen35moe.nextn_predict_layers": 1
+      },
+      "tensor_count": 899,
+      "tensor_bytes": 49504667648,
+      "routed_expert_bytes": 41630564352,
+      "mtp_bytes": 2683774976,
+      "mtp_tensor_names": [
+        "blk.48.attn_norm.weight",
+        "blk.48.ffn_gate_inp.weight",
+        "blk.48.ffn_down_shexp.weight",
+        "blk.48.ffn_gate_shexp.weight",
+        "blk.48.ffn_up_shexp.weight",
+        "blk.48.ffn_gate_inp_shexp.weight",
+        "blk.48.attn_k_norm.weight",
+        "blk.48.attn_k.weight",
+        "blk.48.attn_output.weight",
+        "blk.48.attn_q_norm.weight",
+        "blk.48.attn_q.weight",
+        "blk.48.attn_v.weight",
+        "blk.48.nextn.eh_proj.weight",
+        "blk.48.ffn_down_exps.weight",
+        "blk.48.ffn_gate_exps.weight",
+        "blk.48.ffn_up_exps.weight",
+        "blk.48.post_attention_norm.weight",
+        "blk.48.nextn.shared_head_norm.weight",
+        "blk.48.nextn.enorm.weight",
+        "blk.48.nextn.hnorm.weight"
+      ],
+      "per_layer_expert_bytes": {
+        "0": 572522496,
+        "1": 572522496,
+        "2": 679477248,
+        "3": 578813952,
+        "4": 723517440,
+        "5": 723517440,
+        "6": 673185792,
+        "7": 673185792,
+        "8": 679477248,
+        "9": 723517440,
+        "10": 824180736,
+        "11": 773849088,
+        "12": 723517440,
+        "13": 824180736,
+        "14": 874512384,
+        "15": 824180736,
+        "16": 824180736,
+        "17": 824180736,
+        "18": 824180736,
+        "19": 924844032,
+        "20": 824180736,
+        "21": 924844032,
+        "22": 924844032,
+        "23": 924844032,
+        "24": 924844032,
+        "25": 962592768,
+        "26": 1044381696,
+        "27": 1044381696,
+        "28": 1119879168,
+        "29": 1044381696,
+        "30": 1044381696,
+        "31": 962592768,
+        "32": 1044381696,
+        "33": 1044381696,
+        "34": 1044381696,
+        "35": 924844032,
+        "36": 924844032,
+        "37": 924844032,
+        "38": 824180736,
+        "39": 874512384,
+        "40": 924844032,
+        "41": 924844032,
+        "42": 924844032,
+        "43": 924844032,
+        "44": 924844032,
+        "45": 924844032,
+        "46": 962592768,
+        "47": 924844032
+      },
+      "header_data_offset": 11000064,
+      "candidate_cpu_placements": [
+        {
+          "layers": [
+            0,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            27,
+            30,
+            33,
+            36,
+            39,
+            42,
+            45
+          ],
+          "host_expert_bytes": 13551796224,
+          "remaining_gpu_weight_bytes": 35952871424,
+          "candidate_only_not_runtime_tested": true
+        },
+        {
+          "layers": [
+            0,
+            2,
+            4,
+            7,
+            9,
+            12,
+            14,
+            16,
+            19,
+            21,
+            24,
+            26,
+            28,
+            31,
+            33,
+            36,
+            38,
+            40,
+            43,
+            45
+          ],
+          "host_expert_bytes": 17263755264,
+          "remaining_gpu_weight_bytes": 32240912384,
+          "candidate_only_not_runtime_tested": true
+        },
+        {
+          "layers": [
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
+            34,
+            36,
+            38,
+            40,
+            42,
+            44,
+            46
+          ],
+          "host_expert_bytes": 20856176640,
+          "remaining_gpu_weight_bytes": 28648491008,
+          "candidate_only_not_runtime_tested": true
+        }
+      ]
+    }
+  },
+  "throughput": null,
+  "tested_context": null,
+  "limits": [
+    "Memory planning only; tensor byte sums are not actual RAM/VRAM allocations.",
+    "Header SHA256 is not a verified full weight-file checksum.",
+    "Model card scores and quantizer reports are not local benchmark results.",
+    "Both GPUs, expert caching/offload, reserves and zero worker swap/spill require actual runtime validation."
+  ]
+}

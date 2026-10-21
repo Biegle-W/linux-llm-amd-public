@@ -699,3 +699,21 @@ Primary references: [official Sage Q4](https://huggingface.co/InternScience/Sage
 Retain current production versions unless matching local validation and speed
 gates pass. Global driver replacement and untested framework-wheel migration
 are not justified by a newer version number.
+
+## Ornith-1.5-122B investigation — October21
+
+No matched122B/dual7900XTX/64GB benchmark found in either forum search.
+[lcz1382](https://lcz.me/topic/1382/12), accessed October21 (exact date not exposed):
+西域草影 reports35B/dual6800XT/llama.cpp-turboquant-hip, while others describe
+quant-dependent agent reliability; incomplete quant/context/workload, not122B.
+[Level1Techs post7](https://forum.level1techs.com/t/one-week-of-local-ai-on-strix-halo/254086/7),
+lhl,August23,2026: gfx1100/gfx1151 projects and35B evaluations in a Strix-Halo
+thread, not matched dual-XTX122B measurements. Neither supports a local speed claim.
+Primary evidence: [pinned publisher config/card](https://huggingface.co/ornith-ai/Ornith-1.5-122B/tree/7681ef608624e7532d8164128bcffdbdbaf1b1af),
+[officialQ4](https://huggingface.co/ornith-ai/Ornith-1.5-122B-GGUF/tree/8d5893d767c449a4f18dd08f4bb6d0d6d4426175),
+[UnslothIQ3](https://huggingface.co/unsloth/Ornith-1.5-122B-GGUF/tree/3842d003341507c216295c6f28dfcd30349925c6),
+[retained llama class/MTP implementation](https://github.com/ggml-org/llama.cpp/blob/4c3c5810f87efe177949f1b85ae509d38a2a311f/src/models/qwen35moe.cpp).
+[Assessment](ORNITH-122B-ASSESSMENT-2026-10-21.md) separates bounded header/tensor
+inspection and memory candidates from publisher scores and unperformed runtime
+validation. Q4 CPU backing/cache and IQ3 alternatives are proposals, not selected
+profiles. No full checkpoint download, inference, benchmark or runtime change.

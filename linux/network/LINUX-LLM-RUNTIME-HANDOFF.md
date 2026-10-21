@@ -41,6 +41,17 @@ by the original consolidation; the subsequent MoE offload update is documented b
   After a reboot, log in to the desktop before starting backends, including over SSH.
   [Details](#storage-and-runtime-pins).
 
+## Ornith-1.5-122B candidate — research only, October21
+
+Architecture/config and bounded GGUF-prefix inspection only; no full checkpoint,
+load, benchmark or active profile. OfficialQ4_K_M70.64GiB and UnslothUD-IQ3_XXS
+46.11GiB include MTP. Retained llama.cpp4c3 recognizes this48-layer qwen35moe
+class, but exact-weight/dual-GPU/cache/tool/context validation is pending.
+Q4 CPU expert backing around41GiB/4GiB aggregate hot cache/32K is a **planning
+candidate**, not an admitted allocation. No Strata/Maya pack replacement or ROCm
+upgrade. [Assessment and sources](../hardware/ORNITH-122B-ASSESSMENT-2026-10-21.md).
+Ten existing profiles, DSH default and Sage test status remain unchanged.
+
 ## Sage-A1.5 downloaded test model and ROCm selection — October21
 
 Official Sage-A1.5 Q4_K_M and its separate mmproj are checksum-verified under

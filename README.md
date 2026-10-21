@@ -176,6 +176,14 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
+### Ornith-1.5-122B — research only
+
+[Architecture, quants and hardware assessment](linux/hardware/ORNITH-122B-ASSESSMENT-2026-10-21.md):
+Q4_K_M70.64GiB and UD-IQ3_XXS46.11GiB both contain MTP. A dual-GPU/CPU-expert-cache
+Q4 profile is plausible on64GB RAM, but no complete checkpoint was downloaded,
+loaded or benchmarked. Publisher256K is not local context validation. Current
+profiles and measured speed tables remain unchanged.
+
 ## NVIDIA: archived setup and results
 
 **RTX 4070 12 GB + RTX 3060 12 GB (24 GB total VRAM), i5-13600KF, 64 GB RAM.**
