@@ -59,7 +59,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
   admitted router, then opens llama.cpp's built-in Chat with Sage preselected.
 - The router now passes gzip through, keeps `/models/sse` out of its lock, and forces
   `autoload=false` on model GETs.
-- Harness and accounts not installed. DSH default unchanged.
+- Harness and accounts not installed.
+
+**DSH default (user instruction):** Strata Q3 (`strata-local` /
+`qwen3.8-flash-next-iq3_xxs`) for new agents. A running DSH applies it after restart.
 - [Details](../hardware/SAGE-A15-2026-10-21.md#activation-and-desktop-web-shortcut--october-21).
 
 ### Earlier Ornith research note

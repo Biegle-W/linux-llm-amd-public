@@ -161,7 +161,7 @@ recorded and did not recur under normal RAM. [Full comparison](linux/hardware/RO
 Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
 Shared SATA. **Now active** as the eleventh llama.cpp profile `sage-a1.5`
 (64K/MTP3 + projector), with a **Sage** Desktop shortcut that loads it and opens
-llama.cpp's built-in Chat. The Agents-A1 harness is not installed; DSH default unchanged. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+llama.cpp's built-in Chat. The Agents-A1 harness is not installed. DSH default is Strata Q3 (user, October21). llama.cpp4c3c5810/HIP7.2.3, both GPUs with
 CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
 near61,999-input retrieval/full history and a separate vision smoke.
 

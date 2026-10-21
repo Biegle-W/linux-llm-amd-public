@@ -227,6 +227,13 @@ backfill missing history or treat a partial observation as a full-run maximum.
 Keep raw logs and local paths private; inference settings and guards stay intact.
 See `linux/hardware/THERMAL-LOGGING.md`.
 
+## DSH default model — October 21
+
+Standing user instruction: the DSH default for new agents is **Strata Q3**
+(`strata-local` / `qwen3.8-flash-next-iq3_xxs`). It had drifted to Maya GLM through
+a saved UI selection. Set it with `configure_local.configure('strata-local')`. Other
+`configure()` refreshes, called without a provider argument, preserve it. Do not change it unless asked.
+
 ## Application launcher placement — October 21
 
 Standing user instruction: Desktop UI shortcuts open browser/web interfaces;
@@ -274,7 +281,7 @@ Shared SATA under GGUF-Models/Sage-A1.5-GGUF. At the user's request ("profile on
 Sage is now the eleventh active llama.cpp profile `sage-a1.5` (64K/MTP3 + projector),
 with a Desktop **Sage** web shortcut (`dsh/start-sage`). The shortcut loads Sage through
 the admitted router, then opens llama.cpp's built-in Chat. Do not install the Agents-A1
-harness or its external accounts unless asked. The DSH default is unchanged. Validated test:
+harness or its external accounts unless asked. DSH default: Strata (see below). Validated test:
 llama.cpp4c3c5810/HIP7.2.3, both GPUs/layer split, 64K/q8_0/MTP3, alternate-layer
 CPU expert backing9.08GiB with12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61999
 input/history/vision smoke pass, zero owned swap/spill. SDK10.1 effectively tied,
