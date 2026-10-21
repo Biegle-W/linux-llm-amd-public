@@ -303,12 +303,14 @@ current active engines/model IDs and connection settings are unchanged.
 
 ## Start, stop and switch
 
-Only native desktop apps belong in the application menu. Maya's browser entry
-stays hidden. **Comfy Desktop 1.1.7** integration/menu is prepared, but its
-official Debian package is waiting for system administrator authentication;
-normal startup is blocked by the missing Ubuntu sandbox profile. After install,
-`comfy-desktop` opens it; `comfyui` retains the working terminal/browser server.
-Both Comfy launchers share an exclusive server lock. Native Strata App stays visible.
+October21 standing placement rule: Desktop UI shortcuts open browser/web
+interfaces; application-menu entries open native desktop apps. Desktop **ComfyUI**
+opens the browser server; menu **Comfy Desktop1.1.7** opens the official app.
+DSH, Turnstone, managed Strata Q3 and Maya web interfaces remain on Desktop with
+menu templates hidden. Native Strata App and Unsloth stay in the menu. Backend
+terminal launchers and hardware-control shortcuts are preserved. `comfy-desktop`
+uses the official Debian package/sandbox, validated October21; `comfyui` retains
+the separate browser server. Both Comfy launchers share an exclusive server lock.
 
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
 AppImage, with its official bundled 512×512 logo. The installed entry is
@@ -583,10 +585,11 @@ created. User media, app state, other LLM models and launchers are unchanged.
 On Windows, use the corresponding `D:/Graphics-Models` path.
 
 **ComfyUI is installed and both families passed generation on October 18.**
-The October 20 official **Comfy Desktop 1.1.7** import passed installer-session
-UI/API checks against the existing Git install and ROCm environment. Its official
-Debian install waits for Linux authentication; normal menu/PATH startup is not
-yet validated. Do not mark this complete or disable the Electron sandbox.
+Official **Comfy Desktop 1.1.7** / Debian1.1.7-261013p26tnl6re is installed;
+October21 normal managed startup, repeated PATH launch, package AppArmor and
+filtered child processes passed, with no sandbox-disabling flags or debug port.
+The visible native menu app imports the existing Git/ROCm environment; the
+Desktop ComfyUI shortcut opens the browser interface.
 Models remain on Shared SATA; both saved workflows/user state and outputs are
 reused without copies. `comfyui` remains the separate visible-terminal/browser
 launcher; quit either interface before switching. Native app startup, both GPU

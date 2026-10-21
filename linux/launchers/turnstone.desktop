@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+NoDisplay=true
 Name=Turnstone
 Comment=Local agent harness; start an inference backend separately
 Exec=/opt/local-llm/bin/turnstone

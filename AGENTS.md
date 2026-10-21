@@ -226,17 +226,20 @@ backfill missing history or treat a partial observation as a full-run maximum.
 Keep raw logs and local paths private; inference settings and guards stay intact.
 See `linux/hardware/THERMAL-LOGGING.md`.
 
-## Application menu policy — October 20
+## Application launcher placement — October 21
 
-Only native desktop applications belong in the application menu. Maya's browser
-entry remains hidden. Official Comfy Desktop 1.1.7 integration is prepared but
-Debian installation awaits system authentication for Ubuntu sandbox setup;
-normal menu startup is not validated. It imports the
-existing ROCm environment/models/workflows without duplicate weights. Keep
-`comfy-desktop` for the native app and `comfyui` for its separate terminal server;
-they share an exclusive server lock. Native Strata App remains visible. See
-`linux/graphics/DESKTOP-2026-10-20.md`.
-Managed backend launchers still retain visible terminals and existing guards.
+Standing user instruction: Desktop UI shortcuts open browser/web interfaces;
+application-menu entries open native desktop apps. Apply this to all maintained
+apps. Backend terminal launchers and hardware-control shortcuts remain separate.
+ComfyUI on Desktop opens the existing browser server; **Comfy Desktop** in the
+menu opens the official native app. DSH, Turnstone, managed Strata Q3 and Maya
+browser interfaces stay on Desktop with menu templates hidden (`NoDisplay=true`).
+Native Strata App and Unsloth remain in the menu. Official Comfy Desktop1.1.7 is
+installed through its Debian package; normal managed startup with its Ubuntu
+sandbox passed October21. It imports the existing ROCm environment/models/workflows
+without duplicate weights. Preserve `comfyui` (browser server), `comfy-desktop`
+(native app), all backend PATH commands and the shared Comfy server lock.
+See `linux/graphics/DESKTOP-2026-10-20.md`.
 
 ## Maya source/SDK validation — October 20
 

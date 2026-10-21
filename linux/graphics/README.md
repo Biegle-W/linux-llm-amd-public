@@ -4,8 +4,9 @@ One quality-oriented precision per image/video model, with one required encoder
 and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
 both families passed two-GPU generation. See [measured results](VALIDATION-2026-10-18.md)
 and [start/install instructions](INSTALL.md). The official **Comfy Desktop**
-integration imports the existing runtime, models and workflows; native menu
-startup awaits administrator authentication for the official package/sandbox;
+application-menu app imports the existing runtime, models and workflows;
+the Desktop ComfyUI shortcut opens its browser interface;
+normal startup with the official Ubuntu sandbox passed October21;
 [Desktop validation](DESKTOP-2026-10-20.md).
 
 | Role | Retained file | Origin |

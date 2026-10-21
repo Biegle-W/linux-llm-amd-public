@@ -268,7 +268,8 @@ The authenticated OpenAI-compatible LAN/Tailscale gateway uses
 
 Graphics generation is separate from the LLM benchmark tables:
 [Official Comfy Desktop setup/validation](linux/graphics/DESKTOP-2026-10-20.md)
-(`comfy-desktop` integration prepared, package authentication pending; terminal server remains `comfyui`),
+(`comfy-desktop`, reuses existing models/workflows; normal startup passed October21;
+terminal server remains `comfyui`),
 [ComfyUI setup](linux/graphics/INSTALL.md), [retained Qwen-Image/H3 models](linux/graphics/README.md)
 and [saved generation results](linux/graphics/VALIDATION-2026-10-18.md).
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+NoDisplay=true
 Name=dsh
 Comment=DeepSeek Harness; start an inference backend separately
 Exec=/opt/local-llm/dsh/start-dsh

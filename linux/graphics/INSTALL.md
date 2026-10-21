@@ -7,15 +7,13 @@ independent of this installation.
 
 ## Start and use
 
-**Pending system authentication:** the official Debian package must finish
-installing its Ubuntu sandbox before normal Desktop startup. Existing terminal
-ComfyUI remains usable. After that installation, open **Comfy Desktop** from
-the application menu or Desktop icon, or run
+Open **Comfy Desktop** from the application menu, or run
 `comfy-desktop`. The official native app imports this existing environment and
 opens the workflow editor in its own window. See the [Desktop installation and
 validation record](DESKTOP-2026-10-20.md). Models and saved workflows stay in place.
 
-For the separate terminal/browser server, run `comfyui`
+The **ComfyUI** shortcut on Desktop opens the browser interface. For that
+separate terminal/browser server, run `comfyui`
 from a terminal or SSH; use SSH port forwarding for a remote browser:
 
 ```bash

@@ -32,7 +32,77 @@
   },
   "original_models_and_workflows_unchanged": true,
   "validation_scope": "Native window rendered and API discovery; no generation benchmark rerun",
-  "installation_status": "awaiting_system_administrator_authentication",
-  "normal_desktop_startup": "blocked: official Ubuntu sandbox package not installed",
-  "generation_rerun": false
+  "installation_status": "installed",
+  "normal_desktop_startup": "PASS: official package, managed launcher, imported backend, no sandbox-disabling flags",
+  "generation_rerun": false,
+  "normal_validation_on": "2026-10-21",
+  "debian_package_version": "1.1.7-261013p26tnl6re",
+  "sandbox": {
+    "official_apparmor_profile_loaded": true,
+    "seccomp_filtered_app_children": 4,
+    "no_new_privs_on_filtered_children": true,
+    "debug_port_enabled": false
+  },
+  "normal_api_discovery": "PASS: both GPU devices, both saved workflows, all node classes and model filenames",
+  "path_login_and_noninteractive": "PASS: comfy-desktop and comfyui",
+  "repeated_launch": "PASS: existing Desktop instance reused",
+  "thermal_observation": {
+    "scope": "startup/idle only; snapshot of an ongoing recorder, not generation or full-app-lifetime peaks",
+    "started_utc": "2026-10-21T04:04:46.260770+00:00",
+    "last_sample_utc": "2026-10-21T04:04:54.270141+00:00",
+    "interval_seconds": 1.0,
+    "samples": 9,
+    "sample_errors": 0,
+    "gpus": [
+      {
+        "gpu_index": 0,
+        "peak_temperature_c": {
+          "mem": 30.0,
+          "edge": 30.0,
+          "junction": 36.0
+        },
+        "busy_samples": 0,
+        "sensor_samples": {
+          "mem": 9,
+          "edge": 9,
+          "junction": 9
+        },
+        "smu_status": "available"
+      },
+      {
+        "gpu_index": 1,
+        "peak_temperature_c": {
+          "mem": 46.0,
+          "edge": 25.0,
+          "junction": 35.0
+        },
+        "busy_samples": 0,
+        "sensor_samples": {
+          "mem": 9,
+          "edge": 9,
+          "junction": 9
+        },
+        "smu_status": "available"
+      }
+    ],
+    "cpu_peak_package_c": {
+      "Package id 0": 67.0
+    },
+    "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+  },
+  "launcher_placement": {
+    "desktop": "ComfyUI browser server",
+    "application_menu": "Official native Comfy Desktop",
+    "other_web_app_menu_templates_hidden": [
+      "dsh",
+      "turnstone",
+      "Strata Q3",
+      "Maya"
+    ],
+    "native_menu_apps_preserved": [
+      "Strata App",
+      "Unsloth"
+    ]
+  },
+  "normal_app_exit": "clean exit observed; no generation submitted"
 }
