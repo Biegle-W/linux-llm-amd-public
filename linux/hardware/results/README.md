@@ -2,6 +2,7 @@
 
 - [Ornith122B metadata/tensor inspection](ornith-122b-assessment-2026-10-21.json), [assessment](../ORNITH-122B-ASSESSMENT-2026-10-21.md): research-only memory/quant candidates, **no inference or throughput measurements**.
 
+- [Ornith122B Q4 test](ornith-122b-test-2026-10-21.json), [report](../ORNITH-122B-TEST-2026-10-21.md): test-only, both GPUs/32K; MTP off 11.43/13.34/52.68, MTP3 rejected (−27.3%); 31K retrieval/history/vision pass.
 - [Sage-A1.5 three-arm tests](sage-a15-2026-10-21.json), [report](../SAGE-A15-2026-10-21.md): test-only Q4/MTP/SDK7-vs-10.1, 64K retrieval/history, vision and full thermal coverage; ten production profiles unchanged.
 
 - [ROCm10.1 six-engine trials](rocm101-2026-10-21.json), [decision and methods](../ROCM101-2026-10-21.md): fresh exact-stack controls, reverse-order/seed confirmation, normal graphics and all failed/partial arms.

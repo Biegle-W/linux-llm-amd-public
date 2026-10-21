@@ -106,11 +106,19 @@ class Handler(BaseHTTPRequestHandler):
             return self.respond(200 if native.poll() is None else 503, {'status': 'ok' if native.poll() is None else 'error'})
         if path.path == '/v1/models':
             current = {item['id']: item for item in call(native_port, '/v1/models')['data']}
+            # Profiles of the inactive runtime are loadable on request; the built-in Chat needs a status.
             data = [{**current.get(model['id'], {'id': model['id'], 'object': 'model',
-                                               'owned_by': 'local-llm'}),
+                                               'owned_by': 'local-llm',
+                                               'status': {'value': 'unloaded'}}),
                      'context_length': model['context'],
                      'runtime': backend_for_model(model['id'])} for model in CATALOG]
             return self.respond(200, {'object': 'list', 'data': data})
+        if 'model' in urllib.parse.parse_qs(path.query) and 'autoload' not in path.query:
+            # The built-in Chat must load models through the admitted POST path.
+            self.path += '&autoload=false'
+        if path.path == '/models/sse':
+            # A long-lived status stream must not hold the request lock.
+            return self.proxy(native_port, 'GET')
         with lock:
             self.proxy(native_port, 'GET')
 
@@ -120,6 +128,9 @@ class Handler(BaseHTTPRequestHandler):
             body = self.rfile.read(int(self.headers.get('Content-Length', 0)))
             data = json.loads(body or b'{}')
             model = data.get('model')
+            if model is None and urllib.parse.urlsplit(self.path).path == '/v1/streams/lookup':
+                # The built-in Chat's resumable-stream lookup loads nothing.
+                return self.proxy(native_port, 'POST', body)
             if model not in {m['id'] for m in CATALOG}:
                 return self.respond(400, {'error': {'message': 'Select an activated model from /v1/models; other hardware profiles are still deferred.'}})
             with lock:
@@ -136,10 +147,18 @@ class Handler(BaseHTTPRequestHandler):
         connection = http.client.HTTPConnection('127.0.0.1', port, timeout=86400)
         started = False
         try:
-            connection.request(method, self.path, body, {'Content-Type': 'application/json'})
+            # The built-in Chat is served gzip-only, so its encoding headers must pass through.
+            headers = {'Content-Type': 'application/json'}
+            if self.headers.get('Accept-Encoding'):
+                headers['Accept-Encoding'] = self.headers['Accept-Encoding']
+            connection.request(method, self.path, body, headers)
             response = connection.getresponse()
             self.send_response(response.status)
             self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
+            for name in ('Content-Encoding', 'Cache-Control', 'ETag',
+                         'Cross-Origin-Embedder-Policy', 'Cross-Origin-Opener-Policy'):
+                if response.getheader(name):
+                    self.send_header(name, response.getheader(name))
             self.send_header('Connection', 'close')
             self.end_headers()
             started = True

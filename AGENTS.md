@@ -32,7 +32,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Ten profiles are active: five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.
+Eleven profiles are active: six llama.cpp (incl. Sage-A1.5), one SGLang, one vLLM, one Strata, two Maya.
 Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; keep the SATA original as a backup. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
@@ -181,7 +181,8 @@ No HiCache/FP8/CPU dense-weight offload is enabled. Current measurements live in
 The user's newer request makes managed Strata Q3 and Maya open their original
 local Chat/Monitor frontend after readiness, alongside the same worker and visible
 terminal. Do not start a second AppImage/engine or duplicate weights. Keep DSH
-separate; other backend launchers remain backend-only. Headless SSH and
+separate; other backend launchers remain backend-only, except per-model llama.cpp
+web shortcuts such as Sage, which use `--chat-model`. Headless SSH and
 `--no-browser` suppress automatic browser opening. The local HTTP adapter keeps
 context/config/runtime self-updates out of the native UI; retain existing admission,
 source pins, dual-GPU placement and latched watchdogs. Frontend sampling state
@@ -232,7 +233,7 @@ Standing user instruction: Desktop UI shortcuts open browser/web interfaces;
 application-menu entries open native desktop apps. Apply this to all maintained
 apps. Backend terminal launchers and hardware-control shortcuts remain separate.
 ComfyUI on Desktop opens the existing browser server; **Comfy Desktop** in the
-menu opens the official native app. DSH, Turnstone, managed Strata Q3 and Maya
+menu opens the official native app. DSH, Turnstone, managed Strata Q3, Maya and Sage (llama.cpp built-in Chat)
 browser interfaces stay on Desktop with menu templates hidden (`NoDisplay=true`).
 Native Strata App and Unsloth remain in the menu. Official Comfy Desktop1.1.7 is
 installed through its Debian package; normal managed startup with its Ubuntu
@@ -269,8 +270,11 @@ privately; publish only curated numeric records. [Exact outcomes and limits](lin
 ## Sage-A1.5 test model — October 21
 
 Official Q4_K_M and vision projector are intentionally retained, hash-verified on
-Shared SATA under GGUF-Models/Sage-A1.5-GGUF. Sage is test-only, outside the ten
-active profiles; no DSH default or production settings changed. Validated test:
+Shared SATA under GGUF-Models/Sage-A1.5-GGUF. At the user's request ("profile only"),
+Sage is now the eleventh active llama.cpp profile `sage-a1.5` (64K/MTP3 + projector),
+with a Desktop **Sage** web shortcut (`dsh/start-sage`). The shortcut loads Sage through
+the admitted router, then opens llama.cpp's built-in Chat. Do not install the Agents-A1
+harness or its external accounts unless asked. The DSH default is unchanged. Validated test:
 llama.cpp4c3c5810/HIP7.2.3, both GPUs/layer split, 64K/q8_0/MTP3, alternate-layer
 CPU expert backing9.08GiB with12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61999
 input/history/vision smoke pass, zero owned swap/spill. SDK10.1 effectively tied,

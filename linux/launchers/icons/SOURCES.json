@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-20",
+  "updated": "2026-10-21",
   "policy": "Use unchanged official project assets; no generated or custom replacement logos.",
   "assets": [
     {
@@ -132,6 +132,21 @@
       "repository_license": "MIT",
       "license_file": "licenses/maya.LICENSE",
       "extraction": "Official repository icon copied byte for byte.",
+      "official_upstream_verified": true
+    },
+    {
+      "app": "Sage",
+      "file": "sage.png",
+      "repository": "InternScience/Agents-A1",
+      "commit": "ff57c5f2d2819c918a20281a3da76990cd82b554",
+      "upstream_path": "docs/assets/InternScience_logo.png",
+      "source_url": "https://github.com/InternScience/Agents-A1/blob/ff57c5f2d2819c918a20281a3da76990cd82b554/docs/assets/InternScience_logo.png",
+      "raw_url": "https://raw.githubusercontent.com/InternScience/Agents-A1/ff57c5f2d2819c918a20281a3da76990cd82b554/docs/assets/InternScience_logo.png",
+      "sha256": "ea0806b98fad6360038e8aed4a4a837aab03186a3d52486831caa80f5494d412",
+      "bytes": 9057,
+      "repository_license": "Apache-2.0",
+      "license_file": "licenses/sage.LICENSE",
+      "extraction": "Official InternScience logo, copied byte-for-byte. Sage-A1.5 has no separate model logo; its official project page (alpha-innovator.github.io/Sage-A1.5) uses this identical file (same SHA-256) as its favicon.",
       "official_upstream_verified": true
     }
   ]

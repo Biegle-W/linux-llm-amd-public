@@ -127,6 +127,39 @@
       "validation": "Passed arithmetic, JSON, tool round trip, streaming, residency and fixed ~8K timing trials; near-28K input marker retrieval passed",
       "tensor_split": "21,19",
       "mtp_draft_experts_on_gpu": false
+    },
+    "sage-a1.5": {
+      "backend": "hip-amd",
+      "context": 65536,
+      "minimum_host_ram_gib": 28,
+      "cpu_expert_layers": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16,
+        18,
+        20,
+        22,
+        24,
+        26,
+        28,
+        30,
+        32,
+        34,
+        36,
+        38
+      ],
+      "host_expert_bytes": 9751756800,
+      "gpu_expert_cache_mib": 12288,
+      "kv_cache": "q8_0",
+      "load_mode": "none",
+      "mtp_draft_experts_on_gpu": true,
+      "validation": "64K allocated; 61,999-input three-marker retrieval and 62,047-input full-history follow-up passed; tools/JSON/arithmetic/SSE; MTP3 selected (code/prose +55.7%/+25.6% vs MTP off). Text/tools profile; vision projector not loaded."
     }
   }
 }

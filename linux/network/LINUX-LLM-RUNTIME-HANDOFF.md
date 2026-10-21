@@ -41,7 +41,28 @@ by the original consolidation; the subsequent MoE offload update is documented b
   After a reboot, log in to the desktop before starting backends, including over SSH.
   [Details](#storage-and-runtime-pins).
 
-## Ornith-1.5-122B candidate — research only, October21
+## Ornith-1.5-122B Q4 test and Sage activation — October21
+
+**Ornith (test only).**
+- Official Q4_K_M and projector are verified on Shared SATA.
+- Tested stack: llama.cpp 4c3c5810 / HIP 7.2.3, both GPUs, 30 CPU expert layers,
+  4 GiB GPU cache, 32K context.
+- MTP off: code/prose 11.43 / 13.34 t/s, native prefill 52.68.
+- MTP3 was rejected by the predeclared gate (−27.3%). 12 batch threads made no difference.
+- 30,988-token retrieval, history follow-up, vision and tools passed, with no swap or spill.
+- Not in the catalog or launchers.
+- [Test](../hardware/ORNITH-122B-TEST-2026-10-21.md).
+
+**Sage (active).**
+- `sage-a1.5` is the eleventh llama.cpp profile: 64K, MTP3, with projector.
+- The **Sage** Desktop shortcut runs `dsh/start-sage`. That loads Sage through the
+  admitted router, then opens llama.cpp's built-in Chat with Sage preselected.
+- The router now passes gzip through, keeps `/models/sse` out of its lock, and forces
+  `autoload=false` on model GETs.
+- Harness and accounts not installed. DSH default unchanged.
+- [Details](../hardware/SAGE-A15-2026-10-21.md#activation-and-desktop-web-shortcut--october-21).
+
+### Earlier Ornith research note
 
 Architecture/config and bounded GGUF-prefix inspection only; no full checkpoint,
 load, benchmark or active profile. OfficialQ4_K_M70.64GiB and UnslothUD-IQ3_XXS
@@ -50,14 +71,14 @@ class, but exact-weight/dual-GPU/cache/tool/context validation is pending.
 Q4 CPU expert backing around41GiB/4GiB aggregate hot cache/32K is a **planning
 candidate**, not an admitted allocation. No Strata/Maya pack replacement or ROCm
 upgrade. [Assessment and sources](../hardware/ORNITH-122B-ASSESSMENT-2026-10-21.md).
-Ten existing profiles, DSH default and Sage test status remain unchanged.
+At that research stage, ten profiles, the DSH default and Sage's test-only status were unchanged.
 
 ## Sage-A1.5 downloaded test model and ROCm selection — October21
 
 Official Sage-A1.5 Q4_K_M and its separate mmproj are checksum-verified under
-`GGUF-Models/Sage-A1.5-GGUF` on Shared SATA (Windows D:). They are an intentionally
-retained **test model**, not an eleventh active profile; the ten existing profiles,
-DSH default, runtime versions and all guards remain unchanged. Text test selection:
+`GGUF-Models/Sage-A1.5-GGUF` on Shared SATA (Windows D:). Sage was later activated
+as the eleventh profile with a Desktop Chat shortcut (see above). The DSH default,
+runtime versions and all guards remain unchanged. Text test selection:
 llama.cpp4c3c5810/HIP7.2.3, bothAMD layers1:1,64K,q8_0KV,MTP3, CPU expert backing
 9.08GiB/12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61,999-input
 retrieval/full-history and separate image smoke passed. Native256K is not locally

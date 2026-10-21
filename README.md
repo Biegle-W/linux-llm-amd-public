@@ -64,7 +64,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 ## AMD: latest setup and results
 
-**Ten active profiles:** five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.
+**Eleven active profiles:** six llama.cpp (Sage-A1.5 added October21), one SGLang, one vLLM, one Strata, two Maya.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -78,7 +78,7 @@ No driver/kernel update or global SDK replacement was performed.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); dense Vulkan, MoE HIP | Dense Vulkan; four MoEs on HIP7.2.3, both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); dense Vulkan, MoE HIP | Dense Vulkan; five MoEs (incl. Sage) on HIP7.2.3, both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | TP2/compiled MTP3/BF16 KV/163840 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
@@ -159,8 +159,9 @@ recorded and did not recur under normal RAM. [Full comparison](linux/hardware/RO
 ## Sage-A1.5 test and ROCm selection — October21
 
 Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
-Shared SATA. This is an additional **test model**, outside the ten active profiles;
-existing defaults/settings remain. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+Shared SATA. **Now active** as the eleventh llama.cpp profile `sage-a1.5`
+(64K/MTP3 + projector), with a **Sage** Desktop shortcut that loads it and opens
+llama.cpp's built-in Chat. The Agents-A1 harness is not installed; DSH default unchanged. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
 CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
 near61,999-input retrieval/full history and a separate vision smoke.
 
@@ -176,12 +177,17 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
-### Ornith-1.5-122B — research only
+### Ornith-1.5-122B — Q4 test
+
+[Measured test](linux/hardware/ORNITH-122B-TEST-2026-10-21.md): test-only, not an active profile.
+Q4_K_M runs on both GPUs with 30 CPU expert layers, a 4 GiB GPU cache and 32K context.
+MTP off: **11.43 / 13.34** code/prose decode t/s and **52.68** native prefill.
+MTP3 was rejected (−27.3% geomean). A 30,988-token retrieval, the cached follow-up
+and vision passed. Fresh 31K TTFT is 594 s.
 
 [Architecture, quants and hardware assessment](linux/hardware/ORNITH-122B-ASSESSMENT-2026-10-21.md):
 Q4_K_M70.64GiB and UD-IQ3_XXS46.11GiB both contain MTP. A dual-GPU/CPU-expert-cache
-Q4 profile is plausible on64GB RAM, but no complete checkpoint was downloaded,
-loaded or benchmarked. Publisher256K is not local context validation. Current
+Q4 profile is plausible on64GB RAM (the assessment predates the test above). Publisher256K is not local context validation. Current
 profiles and measured speed tables remain unchanged.
 
 ## NVIDIA: archived setup and results
