@@ -3,7 +3,10 @@
 One quality-oriented precision per image/video model, with one required encoder
 and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
 both families passed two-GPU generation. See [measured results](VALIDATION-2026-10-18.md)
-and [start/install instructions](INSTALL.md).
+and [start/install instructions](INSTALL.md). The official **Comfy Desktop**
+integration imports the existing runtime, models and workflows; native menu
+startup awaits administrator authentication for the official package/sandbox;
+[Desktop validation](DESKTOP-2026-10-20.md).
 
 | Role | Retained file | Origin |
 |---|---|---|
@@ -38,7 +41,9 @@ future choices, not duplicate model quants to retain now.
 
 ## Hardware placement and limits
 
-Current hardware is two 24 GB gfx1100 GPUs and 32 GB system RAM. The validated
+Current hardware is two 24 GB gfx1100 GPUs and 64 GB installed RAM
+(61.51 GiB OS-visible). Generation timings below retain their October 18
+32 GB hardware attribution. The validated
 workflows use the denoiser on GPU 0 and encoder/VAEs on GPU 1. Direct loaders set
 the target at construction to avoid native retargeting's second encoder copy.
 This is staged component placement, not TP or a combined 48 GB allocation.

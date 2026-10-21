@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-20",
+  "app_version": "1.1.7",
+  "backend_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+  "backend_version": "0.42.0",
+  "torch": "2.15.0.dev20260827+rocm7.2",
+  "gpu_count": 2,
+  "saved_workflows": [
+    "Qwen-Image 2.1 BF16.json",
+    "MiniMax H3 INT8.json"
+  ],
+  "workflows": {
+    "qwen-image-2.1-base-api.json": {
+      "all_node_types_available": true,
+      "all_model_choices_available": true,
+      "models": [
+        "qwen_image_2.1_bf16.safetensors",
+        "qwen3vl_8b_bf16.safetensors",
+        "qwen_image_2.1_vae_fp32.safetensors"
+      ]
+    },
+    "minimax-h3-base-api.json": {
+      "all_node_types_available": true,
+      "all_model_choices_available": true,
+      "models": [
+        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax_h3_video_vae_fp16.safetensors",
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ]
+    }
+  },
+  "original_models_and_workflows_unchanged": true,
+  "validation_scope": "Native window rendered and API discovery; no generation benchmark rerun",
+  "installation_status": "awaiting_system_administrator_authentication",
+  "normal_desktop_startup": "blocked: official Ubuntu sandbox package not installed",
+  "generation_rerun": false
+}

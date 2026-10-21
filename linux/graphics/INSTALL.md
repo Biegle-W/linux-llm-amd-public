@@ -7,8 +7,15 @@ independent of this installation.
 
 ## Start and use
 
-Open the **ComfyUI** desktop/menu launcher. It opens a visible terminal and the
-local web interface at **http://127.0.0.1:8188**. Alternatively, run `comfyui`
+**Pending system authentication:** the official Debian package must finish
+installing its Ubuntu sandbox before normal Desktop startup. Existing terminal
+ComfyUI remains usable. After that installation, open **Comfy Desktop** from
+the application menu or Desktop icon, or run
+`comfy-desktop`. The official native app imports this existing environment and
+opens the workflow editor in its own window. See the [Desktop installation and
+validation record](DESKTOP-2026-10-20.md). Models and saved workflows stay in place.
+
+For the separate terminal/browser server, run `comfyui`
 from a terminal or SSH; use SSH port forwarding for a remote browser:
 
 ```bash
@@ -27,8 +34,11 @@ device-loader extension is installed by the launcher.
 `graphics/workflows/*.json` contains the editor workflows; `*-api.json` contains
 the matching API graphs. Outputs go into `graphics/outputs/validation/`, and
 the server log is visible in the terminal and saved under `graphics/generated/`.
-Both directories are ignored by Git. Close the server with Ctrl+C in its terminal.
-Launching again opens the existing server rather than starting a second copy.
+Both directories are ignored by Git. Desktop logs are available inside the app;
+its launcher also saves private logs and thermal samples under `graphics/generated/`.
+Quit Desktop to stop its owned backend. Close a terminal-launched server with
+Ctrl+C. A shared lock prevents the Desktop and terminal launchers from creating
+two servers; quit one before switching interfaces.
 
 The denoiser uses GPU 0; the encoder and VAEs use GPU 1. This is staged component
 placement, not tensor parallelism or a promise that both cards compute at once.

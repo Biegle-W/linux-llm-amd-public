@@ -303,9 +303,12 @@ current active engines/model IDs and connection settings are unchanged.
 
 ## Start, stop and switch
 
-Only native desktop apps belong in the application menu. Maya and ComfyUI
-browser entries are hidden (`NoDisplay=true`); their Desktop launchers and
-`llm-maya` / `comfyui` PATH commands remain. Native Strata App stays visible.
+Only native desktop apps belong in the application menu. Maya's browser entry
+stays hidden. **Comfy Desktop 1.1.7** integration/menu is prepared, but its
+official Debian package is waiting for system administrator authentication;
+normal startup is blocked by the missing Ubuntu sandbox profile. After install,
+`comfy-desktop` opens it; `comfyui` retains the working terminal/browser server.
+Both Comfy launchers share an exclusive server lock. Native Strata App stays visible.
 
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
 AppImage, with its official bundled 512×512 logo. The installed entry is
@@ -579,9 +582,16 @@ created. User media, app state, other LLM models and launchers are unchanged.
 [collection and Comfy path configuration](../graphics/README.md).
 On Windows, use the corresponding `D:/Graphics-Models` path.
 
-**ComfyUI is installed and both families passed generation.** Use the ComfyUI
-Desktop launcher or the `comfyui` PATH command; live logs stay in a visible
-terminal. Web UI: `http://127.0.0.1:8188` (loopback; use SSH forwarding remotely).
+**ComfyUI is installed and both families passed generation on October 18.**
+The October 20 official **Comfy Desktop 1.1.7** import passed installer-session
+UI/API checks against the existing Git install and ROCm environment. Its official
+Debian install waits for Linux authentication; normal menu/PATH startup is not
+yet validated. Do not mark this complete or disable the Electron sandbox.
+Models remain on Shared SATA; both saved workflows/user state and outputs are
+reused without copies. `comfyui` remains the separate visible-terminal/browser
+launcher; quit either interface before switching. Native app startup, both GPU
+discovery, workflow/model availability and unchanged inventories passed; no new
+generation or speed benchmark was run. [Desktop setup and package hash](../graphics/DESKTOP-2026-10-20.md). Web UI: `http://127.0.0.1:8188` (loopback; use SSH forwarding remotely).
 Choose saved workflows **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**.
 The runtime is `runtime/comfyui` in the Linux repository, isolated Python 3.12.14,
 ComfyUI 0.42.0 at `8f04fd6ecf4a548937971e840af2a985529fab76`, Torch

@@ -52,3 +52,6 @@ linux/maya/rocwmma-7.2.3/
 
 # Native frontend sampling preferences remain private.
 *.shared-settings.json
+
+# Official desktop packages and extracted runtimes
+**/runtime/comfy-desktop/

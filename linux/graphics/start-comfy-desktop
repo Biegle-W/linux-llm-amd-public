@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+app="/opt/Comfy Desktop/comfyui-desktop-2"
+state="$repo/graphics/generated"
+mkdir -p "$state"
+[[ -x "$app" ]] || { printf 'Official Comfy Desktop package missing: %s\n' "$app" >&2; exit 1; }
+exec 9>"$state/server.lock"
+if ! flock -n 9; then
+    if [[ -s "$state/desktop.pid" ]] && [[ "$(readlink -f "/proc/$(cat "$state/desktop.pid")/exe" 2>/dev/null || true)" == "$app" ]]; then
+        exec "$app" "$@"
+    fi
+    printf 'The terminal ComfyUI server is already running. Close its terminal with Ctrl+C before opening Desktop.\n' >&2
+    command -v zenity >/dev/null && zenity --info --text='ComfyUI is already running in a terminal. Close that server with Ctrl+C, then open Comfy Desktop.' || true
+    exit 1
+fi
+unset PYTORCH_ALLOC_CONF PYTORCH_CUDA_ALLOC_CONF HIP_VISIBLE_DEVICES CUDA_VISIBLE_DEVICES HSA_OVERRIDE_GFX_VERSION
+export ROCR_VISIBLE_DEVICES=0,1 OMP_NUM_THREADS=8 PYTHONUNBUFFERED=1
+install -D -m 644 "$repo/graphics/comfyui-device-loaders/__init__.py" "$repo/runtime/comfyui/custom_nodes/local_graphics_devices/__init__.py"
+"$repo/runtime/comfyui/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
+ulimit -c 0
+stamp=$(date +%Y%m%d-%H%M%S)
+"$app" "$@" >>"$state/desktop-$stamp.log" 2>&1 &
+app_pid=$!
+printf '%s\n' "$app_pid" >"$state/desktop.pid"
+python3 "$repo/hardware/log-gpu-temps.py" --label comfy-desktop --pid "$app_pid" --directory "$state/thermals" >>"$state/desktop-$stamp.thermals.log" 2>&1 &
+observer=$!
+status=0
+wait "$app_pid" || status=$?
+wait "$observer" || true
+rm -f "$state/desktop.pid"
+exit "$status"

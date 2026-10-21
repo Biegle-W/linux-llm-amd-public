@@ -228,10 +228,14 @@ See `linux/hardware/THERMAL-LOGGING.md`.
 
 ## Application menu policy — October 20
 
-Only native desktop applications belong in the application menu. Maya's original
-Chat/Monitor and ComfyUI are browser interfaces; their application-menu entries
-are hidden with `NoDisplay=true`. Preserve their Desktop launchers and PATH
-commands (`llm-maya`, `comfyui`). The native Strata AppImage remains visible.
+Only native desktop applications belong in the application menu. Maya's browser
+entry remains hidden. Official Comfy Desktop 1.1.7 integration is prepared but
+Debian installation awaits system authentication for Ubuntu sandbox setup;
+normal menu startup is not validated. It imports the
+existing ROCm environment/models/workflows without duplicate weights. Keep
+`comfy-desktop` for the native app and `comfyui` for its separate terminal server;
+they share an exclusive server lock. Native Strata App remains visible. See
+`linux/graphics/DESKTOP-2026-10-20.md`.
 Managed backend launchers still retain visible terminals and existing guards.
 
 ## Maya source/SDK validation — October 20
