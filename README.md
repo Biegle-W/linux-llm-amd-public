@@ -177,6 +177,13 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
+### Bolt on vLLM — isolated test
+
+[Bolt vLLM vs llama.cpp](linux/hardware/BOLT-VLLM-2026-10-21.md): the 4-bit AutoRound build on vLLM TP2
+decodes at the same speed (38.0/37.9 vs 36.8/36.7 t/s). It reads prompts about **13× faster**
+(2,910 vs 224 t/s; ~8K TTFT 2.7 s vs 35.4 s) and passed a 255K-token retrieval at 262K context.
+It is not an active profile yet; tool calling and JSON are untested.
+
 ### vLLM alternatives for slow llama.cpp models — research only
 
 [Bolt/Sage research](linux/hardware/VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md): a 43.6 GB AutoRound

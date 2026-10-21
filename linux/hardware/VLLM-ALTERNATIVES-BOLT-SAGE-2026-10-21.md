@@ -75,6 +75,12 @@ today, so one may appear. Sage is not slow now (83/67 decode t/s), but its llama
   [lcz.me 7900 XTX Qwen3.6-27B ROCm/Vulkan notes](https://lcz.me/topic/353) both use
   llama.cpp on a single card. Neither tests vLLM MoE.
 
+## Follow-up
+
+The Bolt test ran the same day ([results](BOLT-VLLM-2026-10-21.md)). Decode was unchanged
+(38 vs 37 t/s), prefill was about 13× faster, and the 262K window held. The earlier decode
+estimate was too optimistic, because the MoE ran on the generic Triton kernel.
+
 ## Recommendation
 
 1. **Bolt AutoRound W4A16 on vLLM** is the one candidate worth testing. It needs a
