@@ -145,3 +145,7 @@ on Shared SATA; SGLang/vLLM target/draft checkpoints stay on Linux NVMe.
 
 
 [Full post-upgrade report](CPU-RAM-PROFILES-2026-10-20.md).
+
+October21 [Maya browser switching/DSH reuse validation](MAYA-WEB-SWITCHING-2026-10-21.md)
+changes frontend control only. All rates and their measured builds above remain unchanged;
+no new throughput benchmark or context extension was run.

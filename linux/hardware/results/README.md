@@ -1,5 +1,6 @@
 # Current benchmark results
 
+- [Maya web switching and DSH reuse](maya-web-switching-2026-10-21.json), [report](../MAYA-WEB-SWITCHING-2026-10-21.md): functional-only UI/SSE/reload/security checks; no new throughput rates.
 - [Other-engine ROCm10/table comparison](rocm10-other-engines-2026-10-20.json), [method and decision](../ROCM10-OTHER-ENGINES-2026-10-20.md): fresh exact-production SDK7 controls plus isolated SDK10/Strata-table candidates, all trials/temperatures; production unchanged.
 
 - [Maya v1.1.19/ROCm comparison](maya-rocm10-2026-10-20.json), [decision](../MAYA-ROCM10-2026-10-20.md): SDK7 retained, both NVMe Maya-S packs tested; six GLM /three DeepSeek trials, near32K and normal UI/API/switchback pass. SDK10 negative/stalled arms retained.

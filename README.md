@@ -15,6 +15,12 @@ The archived NVIDIA measurements retain their original dates and builds.
 [Full fresh AMD method, token counts and numeric evidence](linux/hardware/CURRENT-AMD-BENCHMARKS.md).
 
 <a id="saved-benchmark-results"></a>
+
+Maya’s web sidebar now offers **Maya model → GLM or DeepSeek → Switch model**.
+The page stays open during guarded reload; both GPUs, 32K contexts and memory
+guards are retained. Reopening `dsh` reuses its verified existing frontend and
+leaves inference untouched. [Functional validation](linux/hardware/MAYA-WEB-SWITCHING-2026-10-21.md).
+
 ## Reading the measurements
 
 **Context** is the configured total token budget: instructions, tools, history,

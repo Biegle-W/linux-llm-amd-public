@@ -1,6 +1,6 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 20, 2026**. Current hardware is i9-13900KS,
+Updated **October 21, 2026**. Current hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang stays pinned; Strata9ae93f7b/0.1.46.1 is promoted after full5GiB-startup validation.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
@@ -73,12 +73,19 @@ and stateful caches; this is not a universal optimum.
 The **Maya** Desktop entry (application-menu entry hidden because it is a browser frontend) opens a visible terminal; `llm-maya` uses the
 current terminal or SSH TTY. Both load GLM by default. Start `dsh` separately, choose **Local Maya**, then either ID.
 `llm-maya --model deepseek-v4.1-flash-1017-maya` selects DeepSeek initially.
+In the Maya web sidebar, choose **Maya model → Switch model**. The same page
+stays open during the guarded GLM/DeepSeek reload and displays progress/errors;
+finish or cancel an active reply before switching. Model-specific sampling/context
+refresh after readiness; chats and all GPU/memory settings are preserved.
+Reopening `dsh` reuses the existing verified frontend without touching inference.
+[Web switching and DSH fix](../hardware/MAYA-WEB-SWITCHING-2026-10-21.md).
 The router switches models serially and unloads the previous worker. Backend
 handover recognizes only the configured Maya native binaries/server/router as
 part of the configured Strata family. DSH, the gateway, ComfyUI and unrelated
 applications are preserved. `llm-maya --help` /invalid IDs do not hand over a server.
 
-Router/worker are loopback **30030/30031**. Remote clients use the same private
+Router/private worker are loopback **30030/30032**; persistent web UI/proxy
+remains on **30031**. Remote clients use the same private
 key and **port 10000 `/v1/chat/completions`** gateway; worker/UI/admin endpoints
 are not exposed remotely. The earlier thirteen-profile auth/catalog check and
 both models' actual generation, JSON and synthetic tool round trips passed on

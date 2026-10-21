@@ -20,7 +20,7 @@ if kind not in names:
     raise SystemExit(1)
 ports = [(8080, 'llama.cpp'), (8081, 'llama.cpp'),
          (30000, 'SGLang'), (30001, 'SGLang'), (30010, 'vLLM'), (30011, 'vLLM'),
-         (30020, 'Strata'), (30021, 'Strata'), (30030, 'Maya'), (30031, 'Maya')]
+         (30020, 'Strata'), (30021, 'Strata'), (30030, 'Maya'), (30031, 'Maya'), (30032, 'Maya')]
 open_frontend = kind in ('strata', 'maya') and '--no-browser' not in sys.argv[2:]
 if kind in ('strata', 'maya'):
     sys.argv = sys.argv[:2] + [arg for arg in sys.argv[2:] if arg != '--no-browser']

@@ -1,0 +1,263 @@
+{
+  "schema": 1,
+  "date": "2026-10-21",
+  "status": "passed",
+  "method": "Functional-only normal managed launcher --no-browser, native SSE plus browser selector GLM > DeepSeek > GLM; no new throughput/context benchmark. Browser assets/selector stay on same origin; full final worker lifecycle thermals.",
+  "hardware": {
+    "cpu": "i9-13900KS",
+    "installed_ram_gb": 64,
+    "os_visible_ram_gib": 61.51,
+    "gpus": [
+      "RX 7900 XTX 24GB",
+      "RX 7900 XTX 24GB"
+    ]
+  },
+  "runtime": {
+    "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
+    "version": "1.1.19",
+    "rocm": "7.2.3",
+    "profile_catalog_runtime_fingerprints_unchanged": true,
+    "binary_sha256": {
+      "glm-5.3-flash-maya": "42307468763498c26093331b1c1e166918cc7a27cc251378d66be352e81c2bd4",
+      "deepseek-v4.1-flash-1017-maya": "6fdb42ee024e1020a975e3715b3956269f695e64ce812dbc2eea6294465a2698"
+    }
+  },
+  "ports": {
+    "openai_router": 30030,
+    "persistent_local_web": 30031,
+    "private_native_worker": 30032,
+    "remote_gateway_unchanged": 10000
+  },
+  "cpu_http_regressions": {
+    "private": 108,
+    "public": 108,
+    "passed": true
+  },
+  "native_functional_phases": [
+    {
+      "phase": "glm-final-adapter",
+      "model": "glm-5.3-flash-maya",
+      "context": 32768,
+      "startup_free_vram_bytes": [
+        8409759744,
+        8411807744
+      ],
+      "memory_fault": null,
+      "sse": {
+        "events": 22,
+        "done": true,
+        "content_chars": 71,
+        "content_sha256": "1ca5c2ef9e46d9f2c38ba27b679437af733807632a6fb4143636503daaa06ec7"
+      },
+      "busy_switch_http": 409
+    },
+    {
+      "phase": "deepseek-final-adapter",
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "context": 32768,
+      "startup_free_vram_bytes": [
+        8353906688,
+        8355291136
+      ],
+      "memory_fault": null,
+      "sse": {
+        "events": 14,
+        "done": true,
+        "content_chars": 44,
+        "content_sha256": "db6316e0601ca2fa951a1a7594dab971c622bc52487fc06afa441832d0b0d8d9"
+      },
+      "busy_switch_http": 409
+    },
+    {
+      "phase": "glm-return-final",
+      "model": "glm-5.3-flash-maya",
+      "context": 32768,
+      "startup_free_vram_bytes": [
+        8409808896,
+        8411799552
+      ],
+      "memory_fault": null,
+      "sse": {
+        "events": 22,
+        "done": true,
+        "content_chars": 71,
+        "content_sha256": "77b8ae56cc6e7ddb0acc49873c57b46a0455ba1887658a2e2bb3b986e5acfd8f"
+      },
+      "busy_switch_http": 409
+    }
+  ],
+  "browser": {
+    "both_switches_via_selector": true,
+    "same_controller_preserved": true,
+    "page_and_assets_during_load": true,
+    "progress_and_model_specific_state": true,
+    "unsent_draft_retained": true,
+    "test_draft_cleared": true,
+    "arbitrary_config_context_runtime_controls_blocked": true
+  },
+  "memory_observation": {
+    "samples": 183,
+    "errors": 0,
+    "coverage": "Begins during DeepSeek load and covers switchback; phase snapshots additionally cover initial final-adapter GLM. Thermal collector covers whole final sequence.",
+    "minimum_host_available_bytes": 13848342528,
+    "minimum_free_vram_bytes": [
+      8231268352,
+      8232583168
+    ],
+    "native_worker_swap_bytes_max": 0,
+    "native_worker_spill_bytes_max": 0,
+    "worker_memory_max_bytes": 55834574848,
+    "worker_memory_swap_max": 0,
+    "controller_process_swap_bytes_max": 25251840,
+    "controller_swap_note": "Small control-plane Python pages swapped; native model workers and 52G no-swap scopes remained at zero. Controller is outside the model-worker scope."
+  },
+  "gateway": {
+    "date": "2026-10-21T01:39:00.520809-04:00",
+    "auth_and_catalog": {
+      "loopback": {
+        "unauthenticated_401": true,
+        "wrong_key_401": true,
+        "catalog_count": 10,
+        "q2_rejected": true,
+        "health_ok": true,
+        "available_models": [
+          "deepseek-v4.1-flash-1017-maya",
+          "glm-5.3-flash-maya"
+        ]
+      },
+      "lan": {
+        "unauthenticated_401": true,
+        "wrong_key_401": true,
+        "catalog_count": 10,
+        "q2_rejected": true,
+        "health_ok": true,
+        "available_models": [
+          "deepseek-v4.1-flash-1017-maya",
+          "glm-5.3-flash-maya"
+        ]
+      },
+      "tailscale": {
+        "unauthenticated_401": true,
+        "wrong_key_401": true,
+        "catalog_count": 10,
+        "q2_rejected": true,
+        "health_ok": true,
+        "available_models": [
+          "deepseek-v4.1-flash-1017-maya",
+          "glm-5.3-flash-maya"
+        ]
+      }
+    },
+    "generation": {},
+    "remote_peer_tested": false,
+    "no_performance_benchmark": true
+  },
+  "authenticated_gateway_generation": {
+    "model": "glm-5.3-flash-maya",
+    "loopback_authenticated_SSE": true,
+    "done": true,
+    "content_chars": 6,
+    "content_sha256": "334d016f755cd6dc58c53a86e183882f8ec14f52fb05345887c8a5edd42c87b7",
+    "events": 5
+  },
+  "dsh": {
+    "exact_existing_listener_reused": true,
+    "existing_process_preserved": true,
+    "backends_unchanged_by_reuse": true,
+    "login_and_noninteractive_PATH": true,
+    "installed_wrappers_match": true
+  },
+  "startup_partials": "Earlier insufficient-RAM startup refusals retained privately; no guard lowered. Pre-final asset-path issues corrected before final adapter pair-switch proof.",
+  "cleanup": {
+    "owned_model_worker_stopped": true,
+    "test_service_inactive": true,
+    "maya_ports_free": true,
+    "DSH_and_gateway_preserved": true
+  },
+  "thermal": {
+    "schema": 1,
+    "label": "backend-maya",
+    "status": "complete",
+    "interval_seconds": 1.0,
+    "samples": 300,
+    "sample_errors": 0,
+    "raw_samples_dropped": 0,
+    "raw_limit_bytes": 67108864,
+    "cards": {
+      "gpu0": {
+        "gpu_index": 0,
+        "samples": 300,
+        "busy_samples": 40,
+        "sensor_samples": {
+          "mem": 300,
+          "edge": 300,
+          "junction": 300
+        },
+        "peak_temperature_c": {
+          "mem": 48.0,
+          "edge": 42.0,
+          "junction": 52.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 46.0,
+          "edge": 42.0,
+          "junction": 52.0
+        },
+        "throttle_samples_available": 300,
+        "thermal_limit_samples": 167,
+        "hotspot_limit_samples": 167,
+        "power_limit_samples": 0,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 0.0,
+        "peak_power_average_w": 175.0,
+        "peak_gfx_clock_mhz": 3082.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      },
+      "gpu1": {
+        "gpu_index": 1,
+        "samples": 300,
+        "busy_samples": 34,
+        "sensor_samples": {
+          "mem": 300,
+          "edge": 300,
+          "junction": 300
+        },
+        "peak_temperature_c": {
+          "mem": 58.0,
+          "edge": 38.0,
+          "junction": 50.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 56.0,
+          "edge": 38.0,
+          "junction": 50.0
+        },
+        "throttle_samples_available": 300,
+        "thermal_limit_samples": 146,
+        "hotspot_limit_samples": 146,
+        "power_limit_samples": 6,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 0.0,
+        "peak_power_average_w": 193.0,
+        "peak_gfx_clock_mhz": 3104.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      }
+    },
+    "cpu_peak_package_c": {
+      "Package id 0": 81.0
+    },
+    "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+    "started_utc": "2026-10-21T05:36:10.579767+00:00",
+    "last_sample_utc": "2026-10-21T05:41:10.537550+00:00"
+  },
+  "limits": [
+    "Functional bounded generation uses a 32-output cap; this is not a new speed measurement or full-window retest.",
+    "LAN/Tailscale routes are host-self catalog/auth tests, not a separate remote peer.",
+    "Native vision quality and remote web UI exposure not tested/enabled.",
+    "One-second sampled peaks may miss transients. SMU flags are not measured speed penalties."
+  ]
+}

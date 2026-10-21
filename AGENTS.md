@@ -244,3 +244,16 @@ See `linux/graphics/DESKTOP-2026-10-20.md`.
 ## Maya source/SDK validation — October 20
 
 3384b5e9366e696e5f23f51772fb94a8a7948e41/v1.1.19 is promoted with exact tested SDK7 binaries. ROCm10 failed both performance gates; DeepSeek10nostream stalled with no completed timed sample. Keep ROCm7.2.3/rocWMMA2.2.0. Selected DeepSeek requires `DS4_IQ_Q8K=0` (prior rounding; default1 reversedIQ3_S/IQ2_S parity fails) and `DS4_STREAM=0` (optional PCIe lane only; CPU experts/GPU hotcache retained). GLM-S40GiB/MTP and DeepSeek-S24threads/noDSpark remain32K/bothGPUs/native8GiB/actual6GiB startup/52G no-swap. Near31.5K/history and actualDesktop/Ptyxis/nativeUI/authenticated gateway/switchback pass; host-self routes are not a remote-peer test. GLM source19 six-sample rates18.44/16.10/518.0PP,12.363s freshTTFT; DeepSeek selectedthree6.89/7.08/188.6,33.418s. No universal source speedup; failed SDK10/old17 evidence retained. Other production engines remain unchanged; isolated comparisons are complete in linux/hardware/ROCM10-OTHER-ENGINES-2026-10-20.md. Fresh exact-production SDK7 controls update the benchmark overview; candidate SDK10 is not activated. See linux/hardware/MAYA-ROCM10-2026-10-20.md and numeric record. Never enable approximate prompt skipping or failed/untested formats.
+
+## Maya web switching and DSH reuse — October 21
+
+Maya now keeps its original browser page/assets on persistent loopback30031,
+proxying the single native worker on30032; OpenAI router30030 is unchanged.
+The sidebar selector accepts only an enabled model ID through existing guarded
+`ensure_worker`, serializes with chat and preserves all profile/source/binary/
+RAM/VRAM/no-swap/watchdog settings. Keep arbitrary native runtime/config/context/
+load/update controls blocked. Preserve chats and refresh native model-specific
+state after readiness. DSH is a separate frontend: repeated startup must reuse
+its exact owned3080 listener, never call backend handover or label it an inference
+worker. Unrelated port occupants remain an error and are never killed.
+See `linux/hardware/MAYA-WEB-SWITCHING-2026-10-21.md`.

@@ -6,9 +6,11 @@ import json
 import os
 import signal
 import subprocess
+import sys
 import threading
 import time
 import urllib.request
+import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from moe_memory import host_memory, worker_memory
@@ -20,13 +22,81 @@ PROFILES = profiles()
 if not PROFILES:
     raise SystemExit("No validated Maya profile is enabled; complete setup/validation first.")
 DEFAULT = next(iter(PROFILES))
-WORKER_PORT = 30031
+WORKER_PORT = 30032
 requests = threading.Lock()
 lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
 memory_fault = None
 startup_whole_card_free_bytes = None
+switch_state_lock = threading.Lock()
+switch_operation = None
+
+
+def worker_ready():
+    return active is not None and worker is not None and worker.poll() is None
+
+
+def web_status():
+    with switch_state_lock:
+        operation = dict(switch_operation) if switch_operation else None
+    return {'active_model': active if worker_ready() else None,
+            'memory_fault': memory_fault, 'busy': requests.locked(), 'operation': operation,
+            'models': [{'id': key, 'name': cfg['name'], 'context': cfg['context']} for key, cfg in PROFILES.items()]}
+
+
+def web_api_keys():
+    # Match the native server's configured key list, never expose it to the UI.
+    model = active or (switch_operation or {}).get('model') or DEFAULT
+    value = json.loads((ROOT / PROFILES[model]['config']).read_text()).get('api_key', '')
+    if not value:
+        return []
+    if isinstance(value, (list, tuple)):
+        return [str(key) for key in value if str(key)]
+    return [key.strip() for key in str(value).split(',') if key.strip()]
+
+
+def queue_model_switch(model):
+    global switch_operation
+    if model not in PROFILES:
+        raise ValueError('Unknown or disabled Maya model. Choose an enabled profile.')
+    if stopping.is_set():
+        raise RuntimeError('Maya is shutting down.')
+    if not requests.acquire(blocking=False):
+        raise BlockingIOError('Maya is loading or answering. Finish or cancel the current request first.')
+    # Background native jobs may outlive their HTTP response. Check them too.
+    try:
+        if worker_ready():
+            with urllib.request.urlopen(f'http://127.0.0.1:{WORKER_PORT}/status', timeout=3) as response:
+                status = json.load(response)
+                if status.get('busy') or status.get('queued') or status.get('active'):
+                    raise BlockingIOError('Maya is answering. Finish or cancel the current request first.')
+    except Exception as error:
+        requests.release()
+        if isinstance(error, BlockingIOError):
+            raise
+        raise RuntimeError('Cannot verify that the Maya worker is idle; try again after it is ready.') from error
+    with switch_state_lock:
+        switch_operation = {'id': uuid.uuid4().hex, 'model': model, 'state': 'loading', 'error': None}
+    def load():
+        global memory_fault
+        try:
+            with lifecycle:
+                memory_fault = None  # Explicit, validated load only, same as /models/load.
+            ensure_worker(model)
+            with switch_state_lock:
+                switch_operation['state'] = 'ready'
+        except Exception as error:
+            with switch_state_lock:
+                switch_operation.update(state='error', error=str(error))
+        finally:
+            requests.release()
+    try:
+        threading.Thread(target=load, daemon=True).start()
+    except Exception:
+        requests.release()
+        raise
+    return web_status()
 
 
 def watch_memory():
@@ -228,9 +298,14 @@ if __name__ == '__main__':
     for sig in (signal.SIGTERM, signal.SIGHUP):
         signal.signal(sig, interrupted)
     server = ThreadingHTTPServer(('127.0.0.1', 30030), Handler)
+    from maya_web import make_web_handler
+    web = ThreadingHTTPServer(('127.0.0.1', 30031), make_web_handler(
+        sys.modules[__name__], ROOT.parent / 'maya/upstream/serve/web', WORKER_PORT))
+    threading.Thread(target=web.serve_forever, daemon=True).start()
     threading.Thread(target=watch_memory, daemon=True).start()
     try:
-        ensure_worker(DEFAULT)
+        with requests:
+            ensure_worker(DEFAULT)
         print('Maya ready on 30030:', DEFAULT, '(close this terminal before switching backends).', flush=True)
         server.serve_forever()
     except KeyboardInterrupt:
@@ -238,5 +313,7 @@ if __name__ == '__main__':
     finally:
         stopping.set()
         server.server_close()
+        web.shutdown()
+        web.server_close()
         with lifecycle:
             stop_worker()

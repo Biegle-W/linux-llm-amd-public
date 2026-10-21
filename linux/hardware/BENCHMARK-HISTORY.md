@@ -1,5 +1,13 @@
 # LLM benchmark and context history
 
+## October 21 — Maya web switching and DSH frontend reuse
+
+[Functional validation](MAYA-WEB-SWITCHING-2026-10-21.md) adds guarded GLM/DeepSeek
+selection to the persistent local web page and fixes duplicate DSH startup.
+No throughput benchmark, context extension, engine update or memory-setting
+change was made; October20 rates retain their original methods/builds.
+
+
 ## October 20 — isolated ROCm10 native-engine comparison
 
 Strata source9ae and four HIP llama.cpp4c3 profiles compared SDK7/10 on the same i9/64GB/dualXTX. Production remains SDK7. Strata also has a matching-table7 arm; its prefill gain trades against prose decode. All Strata arms pass30070-input retrieval/tools/SSE; this is not SDK10 full256K/normal-launcher proof. Three llama MoEs retain shared short/fresh8K; Super IQ3 retains fixed~8K/256 output. Fresh SDK7 controls replace those active overview rows, with no claimed source speedup. Earlier rates stay dated. Full server/per-request thermal coverage, actual tokens, binary/library hashes and memory checks are retained. Failed tokenizer-harness partials remain separate.

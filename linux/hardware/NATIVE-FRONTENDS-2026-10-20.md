@@ -2,8 +2,9 @@
 
 The managed **Strata Q3** and **Maya** launchers now open each engine's original
 Chat/Monitor page in the default browser after its worker is ready. Terminal
-logs remain visible. The frontend is served by that same worker: no second
-engine, environment or model-weight copy is created. DSH remains optional and
+logs remain visible. Strata serves its frontend from its worker; Maya now keeps a small persistent
+local web adapter in front of the one worker. No second engine, environment
+or model-weight copy is created. DSH remains optional and
 separate. SGLang, vLLM and llama.cpp launch behavior remains backend-only.
 
 | Launcher / PATH command | Native frontend | Managed OpenAI router |
@@ -20,6 +21,13 @@ worker; closing its terminal or switching managed backends stops owned inference
 
 Maya loads GLM by default. `llm-maya --model deepseek-v4.1-flash-1017-maya` selects
 DeepSeek initially; DSH/API model selection can still switch the one worker.
+Maya’s sidebar now offers **Maya model → Switch model** for these two validated
+IDs. Its page/assets stay available during load and show progress/errors; native
+model-specific sampling/context refresh after readiness without discarding chats.
+UI/proxy stays on 30031, its private native worker uses 30032 and the OpenAI router
+stays on 30030. Switches serialize with chat; finish or cancel a reply first.
+[October21 switching and DSH reuse](MAYA-WEB-SWITCHING-2026-10-21.md).
+
 The web page follows the currently loaded model. Existing browser chat state and
 private frontend sampling preferences are preserved; `*.shared-settings.json`
 is ignored by Git. Images on DeepSeek remain outside the validated quality scope.
@@ -32,8 +40,9 @@ The upstream source trees remain at their pinned clean commits. A small local
 [HTTP adapter](../dsh/native-ui-server.py) imports the original server and serves
 its original HTML/CSS/JS/fonts. Native chat, monitoring, cancellation, token
 counts, shared sampling and existing authentication/origin checks are retained.
-Context/config writes, load/unload controls and self-updates return a managed-
-profile error; Maya's context slider is restricted to its configured value.
+Context/config writes, arbitrary native load/unload controls and self-updates
+return a managed-profile error. Maya’s only new load control selects an enabled
+profile ID through the existing guarded router, with no runtime/config overrides; Maya's context slider is restricted to its configured value.
 Model/context/runtime changes must keep the existing admission and validation
 workflow. This prevents a frontend action from silently bypassing the measured
 budgets, source pins, both-GPU placement and memory watchdogs.

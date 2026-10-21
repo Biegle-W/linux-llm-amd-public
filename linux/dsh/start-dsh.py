@@ -2,7 +2,7 @@
 """Launch only DSH; inference backends have independent terminals."""
 import os, signal, subprocess, sys
 from pathlib import Path
-from backend_guard import require_worker_ports_free
+from dsh_frontend import reuse_existing
 from configure_local import configure
 ROOT = Path(__file__).resolve().parent
 app = None
@@ -13,7 +13,8 @@ def stop(*_):
 for sig in (signal.SIGTERM, signal.SIGHUP):
     signal.signal(sig, stop)
 try:
-    require_worker_ports_free([(3080, 'DSH')])
+    if reuse_existing():
+        raise SystemExit(0)
     configure()
     print('DSH only. Start an inference backend separately, then select its provider/model in DSH.', flush=True)
     print('Closing this terminal stops DSH; the backend stays running in its own terminal.', flush=True)
