@@ -232,6 +232,7 @@ See `linux/hardware/THERMAL-LOGGING.md`.
 At the user's request the shared SATA model drive is labelled `sharedSATA1` (exFAT limit
 11 characters). Mount it by UUID through `dsh/shared_storage.py`; never create model
 folders on an unmounted path. Public examples keep `/mnt/shared`.
+The empty spare SATA drive is labelled `sharedSATA2` and holds no models.
 
 ## DSH default model — October 21
 

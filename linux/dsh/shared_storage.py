@@ -16,7 +16,7 @@ UUID = 'CONFIGURE_SHARED_DRIVE_UUID'
 STREAM_SHARED = Path('/mnt/shared-nvme')
 STREAM_MODELS = STREAM_SHARED / 'LLM-Models'
 STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
-# An optional spare exFAT volume holds no model configuration;
+# An optional spare exFAT volume (labelled "sharedSATA2") holds no model configuration;
 # it is mounted for convenience only and never blocks login or a backend.
 SPARE = Path('/mnt/shared-spare')
 SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'

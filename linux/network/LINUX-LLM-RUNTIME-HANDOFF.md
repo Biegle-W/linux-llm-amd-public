@@ -64,6 +64,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
 **Drive rename (user request):** the shared SATA model drive is now labelled
 **sharedSATA1**. exFAT allows at most 11 characters. The mount script, model presets,
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
+The empty spare SATA drive is labelled **sharedSATA2**.
 
 **DSH default (user instruction):** Strata Q3 (`strata-local` /
 `qwen3.8-flash-next-iq3_xxs`) for new agents. A running DSH applies it after restart.
