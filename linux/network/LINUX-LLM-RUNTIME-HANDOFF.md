@@ -61,6 +61,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
   `autoload=false` on model GETs.
 - Harness and accounts not installed.
 
+**Drive rename (user request):** the shared SATA model drive is now labelled
+**sharedSATA1**. exFAT allows at most 11 characters. The mount script, model presets,
+Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
+
 **DSH default (user instruction):** Strata Q3 (`strata-local` /
 `qwen3.8-flash-next-iq3_xxs`) for new agents. A running DSH applies it after restart.
 - [Details](../hardware/SAGE-A15-2026-10-21.md#activation-and-desktop-web-shortcut--october-21).

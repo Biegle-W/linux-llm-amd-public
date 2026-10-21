@@ -22,7 +22,7 @@ def clean(value):
         return [clean(v) for v in value]
     if isinstance(value, str):
         return value.replace(str(ROOT), '/opt/local-llm').replace(
-            '/mnt/shared-nvme', '/mnt/shared-nvme').replace('/mnt/shared', '/mnt/shared')
+            '/mnt/shared-nvme', '/mnt/shared-nvme').replace('/mnt/shared', '/mnt/shared').replace('/mnt/shared', '/mnt/shared')
     return value
 
 

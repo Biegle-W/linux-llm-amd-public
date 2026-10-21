@@ -76,7 +76,7 @@ class ModelVolumeTests(unittest.TestCase):
                               '[super]\nmodel = ' + str(storage.STREAM_MODELS/'Nemotron-Super/x.gguf') + '\n')
             with patch.object(storage, 'ensure_model_drive') as ensure:
                 storage.ensure_llama_models([preset])
-            self.assertEqual(sorted(call.args[3] for call in ensure.call_args_list), ['Shared NVMe', 'Shared SATA'])
+            self.assertEqual(sorted(call.args[3] for call in ensure.call_args_list), ['Shared NVMe', 'sharedSATA1'])
 
     def test_model_outside_configured_volumes_is_refused_before_mounting(self):
         with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaisesRegex(RuntimeError, 'outside'):

@@ -22,7 +22,7 @@ SPARE = Path('/mnt/shared-spare')
 SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
-    ('Shared SATA', UUID, SHARED, MODELS, True),
+    ('sharedSATA1', UUID, SHARED, MODELS, True),
     ('Shared NVMe', STREAM_UUID, STREAM_SHARED, STREAM_MODELS, True),
     ('Spare SATA', SPARE_UUID, SPARE, None, False),
 )
@@ -80,7 +80,7 @@ def ensure_model_drive(mount, models, expected_uuid, label):
 
 
 def ensure_shared_models():
-    ensure_model_drive(SHARED, MODELS, UUID, 'Shared SATA')
+    ensure_model_drive(SHARED, MODELS, UUID, 'sharedSATA1')
 
 
 def ensure_streaming_models():

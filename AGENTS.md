@@ -227,6 +227,12 @@ backfill missing history or treat a partial observation as a full-run maximum.
 Keep raw logs and local paths private; inference settings and guards stay intact.
 See `linux/hardware/THERMAL-LOGGING.md`.
 
+## Model drive label — October 21
+
+At the user's request the shared SATA model drive is labelled `sharedSATA1` (exFAT limit
+11 characters). Mount it by UUID through `dsh/shared_storage.py`; never create model
+folders on an unmounted path. Public examples keep `/mnt/shared`.
+
 ## DSH default model — October 21
 
 Standing user instruction: the DSH default for new agents is **Strata Q3**

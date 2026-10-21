@@ -1,5 +1,5 @@
 [Unit]
-Description=Mount local LLM model drives (Shared SATA, shared NVMe) at desktop login
+Description=Mount local LLM model drives (sharedSATA1, shared NVMe) at desktop login
 # Unprompted internal-drive mounts are allowed only while the local desktop
 # session is active, so start with the graphical session, not at boot.
 After=graphical-session.target
