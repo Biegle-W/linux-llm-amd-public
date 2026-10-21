@@ -63,7 +63,7 @@
     "reference_config_sha256": "185528f41547161b0c09cedeaf7d8f25698fbbf33fe008db3af5b3cd4b737bbc",
     "note": "Sanitized paths differ from the measured workstation. Revalidate the installed source/binary/profile locally; reference results are not validation for another installation."
   },
-  "expert_profile_seed_sha256": "5effd94f74a2cbb91f7dc95677bcfbc01460e7abf756b0c9905c1e77d3bcb1e5",
+  "expert_profile_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5",
   "env": {
     "DS4_IQ_Q8K": "0",
     "DS4_STREAM": "0"

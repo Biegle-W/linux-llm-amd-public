@@ -654,3 +654,5 @@ stopped with verified owned cleanup. No completed timed SDK10-fallback rate is
 published. CPU experts/GPU hot caching and all guards remain enabled. These
 observations alone do not diagnose a hardware or coherence fault. [Pinned lane policy](https://github.com/mw00/project-maya/blob/3384b5e9366e696e5f23f51772fb94a8a7948e41/src/ds4/ds4_model.cu#L5914-L6070).
 No community rate is substituted for a local measurement. Maya source19/SDK7 was subsequently promoted after normal proof; SDK10 remains rejected. Other production engines remain unchanged. Final decisions and normal proof are maintained in the local evaluation report.
+
+Local other-engine comparisons are now complete: [Strata/llama SDK results and limitations](ROCM10-OTHER-ENGINES-2026-10-20.md). Retained-SDK7 controls and isolated table/SDK10 candidates use matching sources/profiles. These do not promote a new runtime or convert external forum rates into local ones.

@@ -1,5 +1,12 @@
 # LLM benchmark and context history
 
+## October 20 — isolated ROCm10 native-engine comparison
+
+Strata source9ae and four HIP llama.cpp4c3 profiles compared SDK7/10 on the same i9/64GB/dualXTX. Production remains SDK7. Strata also has a matching-table7 arm; its prefill gain trades against prose decode. All Strata arms pass30070-input retrieval/tools/SSE; this is not SDK10 full256K/normal-launcher proof. Three llama MoEs retain shared short/fresh8K; Super IQ3 retains fixed~8K/256 output. Fresh SDK7 controls replace those active overview rows, with no claimed source speedup. Earlier rates stay dated. Full server/per-request thermal coverage, actual tokens, binary/library hashes and memory checks are retained. Failed tokenizer-harness partials remain separate.
+[Comparison, sources and limits](ROCM10-OTHER-ENGINES-2026-10-20.md), [all trials](results/rocm10-other-engines-2026-10-20.json).
+
+
+
 ## October 20 — Maya v1.1.19, retained SDK7 and NVMe Maya-S
 
 Exact tested3384b5e binaries and matching source are promoted after normal Desktop/Ptyxis/nativeUI/authenticated gateway/switchback proof. ROCm10 is rejected: GLM code/prose/PP−2.3/−8.5/−4.2% vs same-source7; automatic-stream DeepSeek decode−34.9/−36.6%;10nostream stalled first timed request (no timed throughput). Selected DeepSeek0/0 retains CPUexperts/GPUhotcache,32K/24threads/noDSpark/reserves. GLM uses40GiB/MTP/32K. Both packs stay on shared NVMe. GLM six-sample19 medians18.44/16.10decode,518.0PP,12.363s freshTTFT; DeepSeek three-sample6.89/7.08,188.6,33.418s. Actual fresh inputs6308–6314/6295–6299; near31496/31482 plus full-history passed. Zero owned swap/spill; temperatures have full per-start coverage, not invented historical peaks. Other engines remain unchanged.

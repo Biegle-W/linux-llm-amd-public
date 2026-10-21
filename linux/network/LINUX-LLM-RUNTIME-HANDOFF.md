@@ -41,6 +41,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
   After a reboot, log in to the desktop before starting backends, including over SSH.
   [Details](#storage-and-runtime-pins).
 
+## Other-engine ROCm10/table comparison
+
+[Controlled native-engine report](../hardware/ROCM10-OTHER-ENGINES-2026-10-20.md) now records same-source Strata and four HIP llama profiles on retained7 versus isolated10. Strata also tests the matching7 tuning table. Production Strata/llama/SGLang/vLLM stacks are unchanged. Fresh SDK7 controls update benchmark overview rows; exact trials, configured/actual contexts, failed harness partials and thermals remain in the numeric record. No SDK10 full-window/normal-launcher proof or framework measurement is inferred. Maya alone was source-updated, retaining7.2.3.
+
 ## Project Maya: GLM and DeepSeek, both active
 
 Maya HIP v1.1.19 / `3384b5e9366e696e5f23f51772fb94a8a7948e41` is a separate

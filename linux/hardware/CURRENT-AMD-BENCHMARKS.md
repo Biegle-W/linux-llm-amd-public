@@ -16,7 +16,7 @@ startup minimum is5GiB/card; engine7/8GiB targets, continuous3GiB protection,
 52G/no-swap worker, Q3/13.5GiB/256K and both cards remain. Intel UHD770/i915
 renders the desktop. The separate App0.2.1/bundled0.1.46 remains installed.
 
-Fresh three-trial medians: native prefill**912.2t/s**, fresh8K TTFT**9.015s**,
+Promotion-batch three-trial medians: native prefill**912.2t/s**, fresh8K TTFT**9.015s**,
 code/prose decode**75.28/50.31t/s**. Actual257984-input/256-output retrieval/code
 and258266-input cached full-history follow-up passed. Zero owned swap/spill.
 Earlier0.1.45 rates retain their original build; no matched A/B speedup is claimed.
@@ -26,7 +26,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 | Engine | Retained build | Validation scope |
 |---|---|---|
-| llama.cpp HIP/Vulkan | [`4c3c5810`](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f) | Four retained shared-method models plus Super IQ3; source-candidate timings and production-rebuild functional proofs. Retired models stay in dated evidence. |
+| llama.cpp HIP/Vulkan | [`4c3c5810`](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f) | Four retained shared-method models plus Super IQ3; exact production HIP control timings; dense Vulkan retains its earlier candidate/rebuild proof. Retired models stay historical. |
 | SGLang ROCm | [gfx1100 fork `f84475cc`](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352) + local fixes | DFlash2 at 160K, actual 160,861-input retrieval; separate MTP profile retired |
 | vLLM ROCm | `0.32.1rc1.dev36+ge68efc685.rocm72` | Retained local fixes; 160K BF16, actual 160,868-input retrieval and full-history follow-up |
 | Strata HIP | [0.1.46.1 / `9ae93f7b`](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f) | Exact tested binary, 5 GiB/card startup, six-worker13.5GiB pool, near256K/history and actual Desktop/UI/API proof |
@@ -35,6 +35,8 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 The llama.cpp and vLLM updates were performance-neutral within noise; newer
 source is not presented as a measured speedup. Older builds keep their original
 results. [Profile validation and update report](CPU-RAM-PROFILES-2026-10-20.md).
+
+Fresh retained-SDK7 controls for Strata and four HIP llama models now use the exact production binaries, measured after this task’s compilation and bulk transfers completed. [SDK/table comparison, candidate rates, full trials and thermal coverage](ROCM10-OTHER-ENGINES-2026-10-20.md). Other engines remain on their retained stacks; candidate SDK10 is not promoted.
 
 ### Nine profiles using the shared benchmark method
 
@@ -47,12 +49,12 @@ configured window, not proof of that entire window's quality or speed.
 | Model / quant | Backend / strategy | Context tokens | Actual prefill input | Prefill t/s | Prefill TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,187–8,190 | 670.4 | 12.222 | 0.132 / 0.131 | 77.10 / 45.86 |
-| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,187–8,189 | 373.5 | 21.933 | 0.059 / 0.059 | 126.73 / 78.36 |
-| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, expert cache | 262,144 | 7,923–7,926 | 220.3 | 35.989 | 0.400 / 0.243 | 37.21 / 36.87 |
-| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,185–8,188 | 388.4 | 21.083 | 0.057 / 0.057 | 125.85 / 77.07 |
+| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,186–8,191 | 380.1 | 21.552 | 0.059 / 0.058 | 124.36 / 77.11 |
+| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP, expert cache | 262,144 | 7,923–7,927 | 224.8 | 35.246 | 0.388 / 0.249 | 37.01 / 36.79 |
+| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP, expert cache, MTP3 | 262,144 | 8,186–8,191 | 395.2 | 20.722 | 0.058 / 0.057 | 119.23 / 73.35 |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,185–8,191 | 1314.8 | 6.235 | 0.102 / 0.097 | 178.82 / 63.40 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,187–8,188 | 1413.8 | 5.806 | 0.066 / 0.092 | 130.31 / 68.96 |
-| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,185–8,188 | 912.2 | 9.015 | 0.229 / 0.233 | 75.28 / 50.31 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP, overlap/MTP3 | 262,144 | 8,186–8,190 | 918.0 | 8.956 | 0.226 / 0.225 | 75.81 / 54.21 |
 | GLM-5.3-Flash Maya-S | Maya v1.1.19 HIP, layer split/MTP | 32,768 | 6,308–6,314 | 518.0 | 12.363 | 0.087 / 0.102 | 18.44 / 16.10 |
 | DeepSeek-V4.1-Flash-1017 Maya-S | Maya v1.1.19 HIP, layer split/no DSpark | 32,768 | 6,295–6,299 | 188.6 | 33.418 | 0.429 / 0.525 | 6.89 / 7.08 |
 
@@ -66,15 +68,17 @@ Maya's current rows use the [v1.1.19 numeric record](results/maya-rocm10-2026-10
 
 | Super quant / workload | Context | Actual input / output | Native PP t/s | External TTFT s | External decode t/s |
 |---|---:|---:|---:|---:|---:|
-| IQ3_XXS / code | 32,768 | 8,108 / 256 | 98.21 | 82.566 | 15.90 |
-| IQ3_XXS / prose | 32,768 | 8,111 / 256 | 97.84 | 82.911 | 16.95 |
+| IQ3_XXS / code | 32,768 | 8,108 / 256 | 98.55 | 82.287 | 15.92 |
+| IQ3_XXS / prose | 32,768 | 8,111 / 256 | 98.12 | 82.672 | 16.90 |
 
 These TTFT values include ~8K input processing and are **not short-prompt TTFT**.
 MTP is off. IQ3 uses HIP 21:19, 19.124 GiB CPU experts and a 2 GiB cache,
-six CPU threads and 32K total context. It retrieved all markers at 28,546 input /
-22 output. Those candidate trials overlapped authorized copy/hash/download IO;
-they are not an isolated engine A/B. A separate production rebuild passed normal
-launcher tools/JSON/streaming/placement checks. The retired Q4 profile's results
+six CPU threads and 32K total context. The earlier 28,546-input/22-output marker
+proof remains historical; these fixed-8K controls do not repeat near-window validation.
+Current rows use fresh SDK7 production controls after the task’s builds completed.
+Earlier transfer-overlapped candidate timings remain historical. Normal launcher
+checks were previously passed; this comparison adds functional tools/JSON/streaming.
+The retired Q4 profile's results
 remain in the dated ledger and original numeric batch.
 
 ### Long context and model storage

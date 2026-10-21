@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "date": "2026-10-20",
-  "status": "Maya SDK7 promoted after normal proof; isolated other-engine comparisons pending",
+  "status": "Maya v1.1.19 SDK7 promoted; separate other-engine candidate comparison complete",
   "initial_maya_sequence_status": "finished_waiting_for_review",
-  "followup_sequence_status": "running_glm-baseline17-repeat",
+  "followup_sequence_status": "finished_waiting_for_review",
   "hardware": "i9-13900KS;64GB installed/61.51GiB OS-visible;two RX7900XTX24GB;CPU PCIe4x8/x8;Intel desktop;switch not installed",
   "candidate_source": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
   "release_tag": "v1.1.19",
@@ -671,7 +671,8 @@
           "--dspark": "none"
         },
         "env": {},
-        "tuning_tables": []
+        "tuning_tables": [],
+        "expert_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5"
       },
       "lifecycle": {
         "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
@@ -1974,7 +1975,8 @@
         "env": {
           "DS4_IQ_Q8K": "0"
         },
-        "tuning_tables": []
+        "tuning_tables": [],
+        "expert_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -3656,7 +3658,8 @@
         "env": {
           "DS4_IQ_Q8K": "0"
         },
-        "tuning_tables": []
+        "tuning_tables": [],
+        "expert_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -5339,7 +5342,8 @@
           "DS4_IQ_Q8K": "0",
           "DS4_STREAM": "0"
         },
-        "tuning_tables": []
+        "tuning_tables": [],
+        "expert_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -7030,7 +7034,8 @@
         "tuning_tables": [
           "gfx1100-glm-hipblaslt-100202.txt",
           "gfx1100-glm-hipblaslt-100500.txt"
-        ]
+        ],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
@@ -8481,7 +8486,8 @@
         "tuning_tables": [
           "gfx1100-glm-hipblaslt-100202.txt",
           "gfx1100-glm-hipblaslt-100500.txt"
-        ]
+        ],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
@@ -10003,7 +10009,8 @@
         },
         "tuning_tables": [
           "gfx1100-glm-hipblaslt-100401.txt"
-        ]
+        ],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -11830,7 +11837,8 @@
           "MAYA_GLM_RAM_GB": "40",
           "MAYA_GLM_RESERVE_LATER_MB": "8192"
         },
-        "tuning_tables": []
+        "tuning_tables": [],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -13281,7 +13289,8 @@
         "tuning_tables": [
           "gfx1100-glm-hipblaslt-100202.txt",
           "gfx1100-glm-hipblaslt-100500.txt"
-        ]
+        ],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -15111,7 +15120,8 @@
         "tuning_tables": [
           "gfx1100-glm-hipblaslt-100202.txt",
           "gfx1100-glm-hipblaslt-100500.txt"
-        ]
+        ],
+        "expert_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7"
       },
       "lifecycle": {
         "source_commit": "3384b5e9366e696e5f23f51772fb94a8a7948e41",
@@ -17099,5 +17109,6 @@
     },
     "sdk10": "rejected; negative timings and failed nostream arm retained",
     "old_source_verified_rollback": "8d9a9b5d705049a87da853717cdc59440252de30"
-  }
+  },
+  "other_engine_evidence": "rocm10-other-engines-2026-10-20.json"
 }
