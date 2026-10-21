@@ -265,3 +265,15 @@ Keep all model IDs/contexts/guards/offload/cache/dual-GPU settings and existing 
 No system driver/global SDK replacement occurred. Framework/AOT compatibility tests
 are not an all-extension rebuild. Preserve raw/failed/untuned/diverse-seed evidence
 privately; publish only curated numeric records. [Exact outcomes and limits](linux/hardware/ROCM101-2026-10-21.md).
+
+## Sage-A1.5 test model — October 21
+
+Official Q4_K_M and vision projector are intentionally retained, hash-verified on
+Shared SATA under GGUF-Models/Sage-A1.5-GGUF. Sage is test-only, outside the ten
+active profiles; no DSH default or production settings changed. Validated test:
+llama.cpp4c3c5810/HIP7.2.3, both GPUs/layer split, 64K/q8_0/MTP3, alternate-layer
+CPU expert backing9.08GiB with12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61999
+input/history/vision smoke pass, zero owned swap/spill. SDK10.1 effectively tied,
+not selected;7.14.1 is researched but untested locally. Native256K metadata is
+not near-window quality validation. See hardware/SAGE-A15-2026-10-21.md and
+hardware/ROCM-SELECTION-2026-10-21.md (under linux/ in the public repository).

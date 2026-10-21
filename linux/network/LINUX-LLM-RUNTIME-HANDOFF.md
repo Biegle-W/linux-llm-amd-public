@@ -41,6 +41,21 @@ by the original consolidation; the subsequent MoE offload update is documented b
   After a reboot, log in to the desktop before starting backends, including over SSH.
   [Details](#storage-and-runtime-pins).
 
+## Sage-A1.5 downloaded test model and ROCm selection — October21
+
+Official Sage-A1.5 Q4_K_M and its separate mmproj are checksum-verified under
+`GGUF-Models/Sage-A1.5-GGUF` on Shared SATA (Windows D:). They are an intentionally
+retained **test model**, not an eleventh active profile; the ten existing profiles,
+DSH default, runtime versions and all guards remain unchanged. Text test selection:
+llama.cpp4c3c5810/HIP7.2.3, bothAMD layers1:1,64K,q8_0KV,MTP3, CPU expert backing
+9.08GiB/12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61,999-input
+retrieval/full-history and separate image smoke passed. Native256K is not locally
+quality-validated. Code/prose83.42/66.75t/s,nativePP387.02,freshTTFT21.160s;
+SDK10.1 is effectively tied and not selected. No driver/global SDK change.
+[Exact tests/limits](../hardware/SAGE-A15-2026-10-21.md),
+[ROCm recommendation/sources](../hardware/ROCM-SELECTION-2026-10-21.md).
+7.14.1 is untested; do not silently migrate existing engines.
+
 ## ROCm10.1 six-engine validation — October21
 
 All production runtimes are retained; no ROCm10.1 candidate passed every promotion gate. Empero’s matched seeds 42/43/44 improved aggregate speed by only 0.30%, below the >3% gate; keep HIP 7.2.3. The candidate's near-256K functional tests passed.

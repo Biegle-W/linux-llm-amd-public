@@ -142,7 +142,7 @@ history proof, while this batch adds fresh controls rather than new context size
 [Historical i5/32GB AMD](linux/hardware/AMD-BENCHMARKS-2026-10-19.md).
 
 All previous storage/guards/DSH default/PATH/frontend policies are retained.
-No weights were downloaded or moved. Streaming Strata/Maya/Super assets stay on
+No weights were downloaded or moved during that ROCm comparison; the separate Sage test below adds its own verified assets. Streaming Strata/Maya/Super assets stay on
 shared NVMe; resident GGUFs on Shared SATA, SGLang/vLLM checkpoints on Linux NVMe.
 [Storage evidence](linux/hardware/results/streaming-storage-2026-10-20.json).
 
@@ -155,6 +155,26 @@ not TP. Server medians: retained/new image23.686/18.331s, video83.831/85.279s.
 Video regressed, so retain current ComfyUI. All16 normal outputs pass technical
 checks plus sampled visual review; the separate52GiB pilot's HIP fault remains
 recorded and did not recur under normal RAM. [Full comparison](linux/hardware/ROCM101-2026-10-21.md).
+
+## Sage-A1.5 test and ROCm selection — October21
+
+Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
+Shared SATA. This is an additional **test model**, outside the ten active profiles;
+existing defaults/settings remain. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
+near61,999-input retrieval/full history and a separate vision smoke.
+
+| Sage64K test arm | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| ROCm7.2.3 noMTP | 53.58 | 53.16 | 393.18 | 20.832 |
+| ROCm7.2.3 MTP3 | 83.42 | 66.75 | 387.02 | 21.160 |
+| ROCm10.1.0 MTP3 | 84.03 | 66.33 | 386.65 | 21.182 |
+
+10.1 is effectively tied for Sage; retain7.2.3. Latest official is10.1;
+7.14.1 is a plausible next isolated candidate, **not locally validated**.
+[Detailed test/limits](linux/hardware/SAGE-A15-2026-10-21.md) ·
+[all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
+[ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
 ## NVIDIA: archived setup and results
 

@@ -1,5 +1,19 @@
 # LLM benchmark and context history
 
+## October 21 — Sage-A1.5 download, MTP and ROCm comparison
+
+Official Q4_K_M plus projector verified on Shared SATA; test-only, outside the ten
+active profiles. Both GPUs, CPU expert backing and hot cache, 64K, same llama.cpp
+4c3 source. Three trials/task/arm: SDK7 noMTP53.58/53.16 decode/393.18 nativePP;
+MTP3 83.42/66.75/387.02; SDK10.1 MTP3 84.03/66.33/386.65. Fresh8K TTFT
+20.832/21.160/21.182s respectively. SDK10.1 effectively tied; retain7.2.3.
+Actual61999-input/22-output retrieval and62047-input history/cached62020 pass;
+separate vision smoke passes. All owned swap/spill zero;609 outer-lifecycle
+thermal samples, hotspot84/60C,VRAM80/70C,CPU74C. Native256K not quality-tested.
+Existing active profiles/defaults/versions unchanged. [Report](SAGE-A15-2026-10-21.md),
+[all trials](results/sage-a15-2026-10-21.json),
+[ROCm/driver and forum research](ROCM-SELECTION-2026-10-21.md).
+
 ## October21 — six-engine ROCm10.1 comparison
 
 All selected stacks remain unchanged; no ROCm10.1 candidate passed every performance and validation gate. Empero: Matched seeds 42/43/44 improved aggregate speed by only 0.30%, below the >3% gate; keep HIP 7.2.3. The candidate's near-256K functional tests passed. Fresh controls update all ten profile rows,

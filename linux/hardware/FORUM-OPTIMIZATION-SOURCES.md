@@ -675,3 +675,27 @@ examples are not gfx1100 results. Keep forum claims, new candidates and locally
 validated results separate. No production migration follows from the sources alone.
 
 Local10.1 outcome: all selected stacks retained. SGLang/Maya lose; Strata prose loses8.38%; vLLM/Empero diverse-seed gains1.63%/0.30% miss the3% gate; Comfy H3 regresses despite faster images. New results are local measurements, not forum estimates.
+
+## Sage-A1.5 and ROCm branch selection — October 21
+
+[Selection report](ROCM-SELECTION-2026-10-21.md) separates local results from
+community reports. [Ben Lee, direct ROCm comparison](https://lcz.me/topic/1532/95)
+(accessed October21; retrieved view has no exact date) uses dual7900XTX,
+SGLangTP2/MTP3/BF16KV/~64K and [PR34058](https://github.com/sgl-project/sglang/pull/34058).
+Reported 7.14 improves decode6.8% over7.2.3;10 improves19% but loses cold-prefill
+13–14%/TTFT14–15%. These are not our DFlash2/160K or Sage measurements.
+[Later 7.14 setup](https://lcz.me/topic/1674/8): Ryzen9600X/X870E/64GB,
+not a matching local A/B.
+
+[Level1Techs official-source collection](https://forum.level1techs.com/t/the-twisted-links-of-amd-ai-collection-of-useful-links-for-amd-ai-dev-and-deployment/244053)
+(ajc9988,January7,2026) provides AMD/TheRock links; no matched dual-XTX Sage
+7.14.1 result was found. [ivgranite,May31](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869):
+oneXTX/Ryzen9600X/96GB/7.2.3/llama9425,32K uncapped reasoning; faster decode
+does not guarantee faster completed answers when output lengths differ.
+Primary references: [official Sage Q4](https://huggingface.co/InternScience/Sage-A1.5-Q4_K_M-GGUF/tree/48ffaf2d61da137314074fc6a46dc73136ff111e),
+[AMD7.14.1 caveats](https://rocm.docs.amd.com/en/docs-7.14.1/about/release-notes.html),
+[AMD10.1](https://rocm.docs.amd.com/en/latest/about/release-notes.html),
+[pinned llama source](https://github.com/ggml-org/llama.cpp/tree/4c3c5810f87efe177949f1b85ae509d38a2a311f).
+Retain current production versions unless matching local validation and speed
+gates pass. Global driver replacement and untested framework-wheel migration
+are not justified by a newer version number.
