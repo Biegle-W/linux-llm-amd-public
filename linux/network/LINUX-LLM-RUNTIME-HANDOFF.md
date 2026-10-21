@@ -66,6 +66,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**vLLM alternatives (research only):** Bolt AutoRound W4A16 (43.6 GB) is the one
+vLLM test candidate. Sage has no ready 4-bit vLLM build, and its FP8 build is not for RDNA3. No downloads.
+[Note](../hardware/VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md).
+
 **DSH default (user instruction):** Strata Q3 (`strata-local` /
 `qwen3.8-flash-next-iq3_xxs`) for new agents. A running DSH applies it after restart.
 - [Details](../hardware/SAGE-A15-2026-10-21.md#activation-and-desktop-web-shortcut--october-21).

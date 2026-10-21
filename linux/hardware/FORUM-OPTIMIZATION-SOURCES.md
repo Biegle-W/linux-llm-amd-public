@@ -717,3 +717,16 @@ Primary evidence: [pinned publisher config/card](https://huggingface.co/ornith-a
 inspection and memory candidates from publisher scores and unperformed runtime
 validation. Q4 CPU backing/cache and IQ3 alternatives are proposals, not selected
 profiles. No full checkpoint download, inference, benchmark or runtime change.
+
+## vLLM alternatives for Bolt and Sage — October 21
+
+No lcz.me or Level1Techs report covers Nemotron-3.5-Bolt or Sage-A1.5 on vLLM/ROCm.
+- [Level1Techs: R9700 TP2/TP4 guide](https://forum.level1techs.com/t/amd-radeon-r9700-linux-tp2-and-tp4-the-definitive-guide/250504)
+  covers Qwen3.5-122B GPTQ-Int4 with AITER MoE on RDNA4, not gfx1100.
+- [Level1Techs: vLLM/ROCm 7.14 on 4× R9700](https://forum.level1techs.com/t/vllm-0-23-x-rocm-7-14-upgrade-on-4x-radeon-ai-pro-r9700-50-regression-on-one-model-unaffected-on-another-but-a-free-9-via-kernel-tuning/253460)
+  reports about a 50% FP8 MoE regression (RDNA4).
+- [Level1Techs: "I need help with ROCm"](https://forum.level1techs.com/t/i-need-help-with-rocm/242075)
+  (Froz04, December 6, 2025) describes failed dual-7900 XTX vLLM setup.
+- [lcz.me topic 353](https://lcz.me/topic/353) covers single-card 7900 XTX llama.cpp.
+
+None supports a local speed claim. See [the research note](VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md).

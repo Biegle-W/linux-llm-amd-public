@@ -177,6 +177,14 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
+### vLLM alternatives for slow llama.cpp models — research only
+
+[Bolt/Sage research](linux/hardware/VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md): a 43.6 GB AutoRound
+W4A16 build of Bolt targets vLLM. The local vLLM has its architecture and a gfx1100 int4 MoE
+kernel, so it is the one candidate worth testing; memory will be tight. Sage has no ready
+4-bit vLLM build, and its official FP8 build needs FP8 hardware that RDNA3 lacks. Super-VL
+cannot fit in 48 GiB of VRAM. Nothing was downloaded.
+
 ### Ornith-1.5-122B — Q4 test
 
 [Measured test](linux/hardware/ORNITH-122B-TEST-2026-10-21.md): test-only, not an active profile.
