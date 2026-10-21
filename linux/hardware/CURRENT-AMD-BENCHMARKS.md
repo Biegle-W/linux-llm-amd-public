@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks — October 21,2026
 
-**Ten active profiles:** five llama.cpp, one SGLang, one vLLM, one Strata, two Maya.
+**Eleven active profiles:** six llama.cpp (Sage-A1.5 added October21), one SGLang, one vLLM, one Strata, two Maya.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -10,15 +10,16 @@ All selected stacks remain unchanged; no ROCm 10.1 candidate passed every perfor
 [all trials/thermals](results/rocm101-2026-10-21.json).
 No driver/kernel update or global SDK replacement was performed.
 
-## Sage-A1.5 test and ROCm selection — October21
+## Sage-A1.5 — active since October21
 
 Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
-Shared SATA. This is an additional **test model**, outside the ten active profiles;
-existing defaults/settings remain. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+sharedSATA1. **Active** as the eleventh llama.cpp profile `sage-a1.5` (64K/MTP3 +
+projector), with a **Sage** Desktop shortcut that opens llama.cpp's built-in Chat.
+DSH default is Strata Q3. llama.cpp4c3c5810/HIP7.2.3, both GPUs with
 CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
 near61,999-input retrieval/full history and a separate vision smoke.
 
-| Sage64K test arm | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+| Sage 64K arm (selected: ROCm7.2.3 MTP3) | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
 |---|---:|---:|---:|---:|
 | ROCm7.2.3 noMTP | 53.58 | 53.16 | 393.18 | 20.832 |
 | ROCm7.2.3 MTP3 | 83.42 | 66.75 | 387.02 | 21.160 |
@@ -36,7 +37,7 @@ near61,999-input retrieval/full history and a separate vision smoke.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); dense Vulkan, MoE HIP | Dense Vulkan; four MoEs on HIP 7.2.3, both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); dense Vulkan, MoE HIP | Dense Vulkan; five MoEs (incl. Sage) on HIP 7.2.3, both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm 7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm 7.2.3 stack | TP2/compiled MTP3/BF16 KV/163840 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm 7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
