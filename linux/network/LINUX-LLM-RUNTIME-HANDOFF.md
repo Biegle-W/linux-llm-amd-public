@@ -66,6 +66,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**Bolt vLLM test:** the AutoRound W4A16 build on vLLM TP2 matches llama.cpp decode (38 vs 37 t/s)
+and is about 13× faster at prefill (2,910 vs 224 t/s). It passed a 255K retrieval at 262K context.
+Not active; tools/JSON untested. [Report](../hardware/BOLT-VLLM-2026-10-21.md).
+
 **vLLM alternatives (research only):** Bolt AutoRound W4A16 (43.6 GB) is the one
 vLLM test candidate. Sage has no ready 4-bit vLLM build, and its FP8 build is not for RDNA3. No downloads.
 [Note](../hardware/VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md).
