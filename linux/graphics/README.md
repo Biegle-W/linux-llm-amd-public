@@ -102,3 +102,14 @@ python3 graphics/repack-safetensors.py \
   --key-map graphics/qwen-image-2.1-vae-map.json \
   --output "$GRAPHICS_MODELS/vae/qwen_image_2.1_vae_fp32.safetensors"
 ```
+
+## October21 ROCm10.1 comparison
+
+Retain the existing shared browser/native-Desktop Torch2.15nightly/packagedROCm7.2.1
+stack. Normal61.51GiB RAM, one excluded full warmup and three timed full graphs
+per workflow/stack: server medians image23.686/18.331s, H3 83.831/85.279s
+(retained/new). Both workflows must improve; H3 regressed. All16 normal outputs
+pass technical dimensions/frames/audio checks and sampled visual review. The
+separate52GiB pilot's third timed H3 HIP fault stays recorded; not reproduced
+under normalRAM, cause unproven. Models/workflows/component placement/reserves
+are unchanged. [Methods, exact builds, thermal coverage and failed arms](../hardware/ROCM101-2026-10-21.md).

@@ -656,3 +656,22 @@ observations alone do not diagnose a hardware or coherence fault. [Pinned lane p
 No community rate is substituted for a local measurement. Maya source19/SDK7 was subsequently promoted after normal proof; SDK10 remains rejected. Other production engines remain unchanged. Final decisions and normal proof are maintained in the local evaluation report.
 
 Local other-engine comparisons are now complete: [Strata/llama SDK results and limitations](ROCM10-OTHER-ENGINES-2026-10-20.md). Retained-SDK7 controls and isolated table/SDK10 candidates use matching sources/profiles. These do not promote a new runtime or convert external forum rates into local ones.
+
+## ROCm10.1 six-engine comparison — October21
+
+The user requested isolated10.1 comparisons across ComfyUI, Strata, Maya,
+llama.cpp, SGLang and vLLM. [Method and decisions](ROCM101-2026-10-21.md).
+[AMD10.1 release notes](https://rocm.docs.amd.com/en/latest/about/release-notes.html)
+are datedOctober5; [official framework packages](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html)
+provide gfx1100 Torch2.13/2.14 and matching10.1 libraries. These are primary
+implementation sources, not measured local gains.
+
+Rechecked [BenLee, lcz.me1532/95](https://lcz.me/topic/1532/95), accessedOctober21
+(exact post date not visible): dual7900XTX/SGLangTP2/MTP3/BF16KV/~64K; ROCm10
+decode improvement accompanied slower prefill/TTFT. It does not measure10.1
+or our DFlash2/160K profile. [ajc9988, Level1Techs January7 source index](https://forum.level1techs.com/t/the-twisted-links-of-amd-ai-collection-of-useful-links-for-amd-ai-dev-and-deployment/244053)
+was recheckedOctober21; its official download links are useful, while gfx1151
+examples are not gfx1100 results. Keep forum claims, new candidates and locally
+validated results separate. No production migration follows from the sources alone.
+
+Local10.1 outcome: all selected stacks retained. SGLang/Maya lose; Strata prose loses8.38%; vLLM/Empero diverse-seed gains1.63%/0.30% miss the3% gate; Comfy H3 regresses despite faster images. New results are local measurements, not forum estimates.

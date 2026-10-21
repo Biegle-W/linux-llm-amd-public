@@ -31,7 +31,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
   Muse Q4 and Super Q4 weights/setup are retired; shared target/draft weights stay. FreeToken/HyperQwen remain retired.
-- Kernel observed 7.0.0-38-generic; ROCm SDK 7.2.3. Exact build, token counts and
+- Kernel observed7.0.0-38-generic; retained native SDK7.2.3. Exact build, token counts and
   benchmark methods are in [the post-upgrade report](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
   Historical i5/32 GB and NVIDIA measurements retain their own hardware attribution.
 - Shared SATA and the new shared NVMe are exFAT; builds/environments stay Linux ext4.
@@ -41,9 +41,25 @@ by the original consolidation; the subsequent MoE offload update is documented b
   After a reboot, log in to the desktop before starting backends, including over SSH.
   [Details](#storage-and-runtime-pins).
 
-## Other-engine ROCm10/table comparison
+## ROCm10.1 six-engine validation — October21
 
-[Controlled native-engine report](../hardware/ROCM10-OTHER-ENGINES-2026-10-20.md) now records same-source Strata and four HIP llama profiles on retained7 versus isolated10. Strata also tests the matching7 tuning table. Production Strata/llama/SGLang/vLLM stacks are unchanged. Fresh SDK7 controls update benchmark overview rows; exact trials, configured/actual contexts, failed harness partials and thermals remain in the numeric record. No SDK10 full-window/normal-launcher proof or framework measurement is inferred. Maya alone was source-updated, retaining7.2.3.
+All production runtimes are retained; no ROCm10.1 candidate passed every promotion gate. Empero’s matched seeds 42/43/44 improved aggregate speed by only 0.30%, below the >3% gate; keep HIP 7.2.3. The candidate's near-256K functional tests passed.
+SGLang DFlash2/163840 and vLLM MTP3/163840 retain their existing Torch/RCCL/ROCm7.2.3
+stacks. Strata Q3/13.5GiB/six workers/256K and Maya-S32K models retain7.2.3;
+Comfy retains Torch2.15nightly/packaged7.2.1 for browser and native Desktop.
+No kernel/driver/global SDK/weight move or guard change was made. Both GPUs,
+CPU expert backing/hot caches, model IDs, contexts, API addresses/authentication,
+DSH default, PATH names and frontend placement remain unchanged.
+
+Fresh controls/candidate/reverse-order/diverse-seed/normal graphics results and
+exact source/library hashes/thermals are in [ROCm10.1 report](../hardware/ROCM101-2026-10-21.md)
+and [numeric evidence](../hardware/results/rocm101-2026-10-21.json). vLLM fixedseed
+improvement fails diverse-seed gate; Strata faster prefill trades against slower
+prose. Normal Comfy image23.686→18.331s/H3 83.831→85.279s: video regression rejects
+migration. The separate52GiB pilot HIP fault is retained, not attributed to a proven
+cause. Latest LLM rates are in the [ten-profile overview](../hardware/CURRENT-AMD-BENCHMARKS.md).
+Earlier10.0 trials remain [historical](../hardware/ROCM10-OTHER-ENGINES-2026-10-20.md).
+Forum claims remain separate from local measurements; [source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md).
 
 ## Project Maya: GLM and DeepSeek, both active
 
@@ -356,7 +372,7 @@ OpenAI-compatible clients do not need either one.
 | PATH command | Purpose |
 |---|---|
 | `llm-llama` | llama.cpp model router |
-| `llm-sglang` | SGLang router; DFlash2 default, MTP selectable in client |
+| `llm-sglang` | SGLang router; DFlash2 only, retired MTP unavailable |
 | `llm-vllm` | vLLM router, Qwen 27B |
 | `llm-strata` | Retained but blocked until the planned RAM expansion and dual-AMD validation |
 | `dsh` | DSH frontend only |
@@ -614,11 +630,11 @@ ComfyUI 0.42.0 at `8f04fd6ecf4a548937971e840af2a985529fab76`, Torch
 
 Denoiser runs on GPU 0; encoder/VAEs on GPU 1. Both-card activity was confirmed.
 Direct component loaders use core APIs without the duplicate-encoder retarget
-copy. This is staged placement, not TP. Qwen passed 512x512/40 base steps in
+copy. This is staged placement, not TP. Historical October18/i5/32GB proof: Qwen passed512x512/40 base steps in
 100.9 s total (~13 s denoising); H3 passed 608x352/39 frames/20 base steps in
 232.4 s total (~29 s denoising), with coherent motion and finite 32 kHz stereo
 audio. H3 used swap during loading on the 32 GB host. Models were unloaded after
-the test and the server was left running. The existing LLM kill guard does not
+that dated test. October21 full normal-RAM controls complete with zero owned swap/spill; current server state is independent of that historical session. The existing LLM kill guard does not
 terminate ComfyUI; run large graphics and LLM workloads separately.
 
 [Validation details](../graphics/VALIDATION-2026-10-18.md),

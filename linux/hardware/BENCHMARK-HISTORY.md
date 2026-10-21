@@ -1,5 +1,14 @@
 # LLM benchmark and context history
 
+## October21 — six-engine ROCm10.1 comparison
+
+All selected stacks remain unchanged; no ROCm10.1 candidate passed every performance and validation gate. Empero: Matched seeds 42/43/44 improved aggregate speed by only 0.30%, below the >3% gate; keep HIP 7.2.3. The candidate's near-256K functional tests passed. Fresh controls update all ten profile rows,
+with six fixed-seed vLLM controls and separate three-seed confirmation; Super
+retains its fixed8K method. All trials/counts/native-vs-phase timing/thermal coverage
+and failed pilot/preparation evidence are preserved. No NVIDIA/Windows history,
+weights, contexts or memory guards changed. [Report](ROCM101-2026-10-21.md),
+[full numeric record](results/rocm101-2026-10-21.json).
+
 ## October 21 — Maya web switching and DSH frontend reuse
 
 [Functional validation](MAYA-WEB-SWITCHING-2026-10-21.md) adds guarded GLM/DeepSeek

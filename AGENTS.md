@@ -257,3 +257,11 @@ state after readiness. DSH is a separate frontend: repeated startup must reuse
 its exact owned3080 listener, never call backend handover or label it an inference
 worker. Unrelated port occupants remain an error and are never killed.
 See `linux/hardware/MAYA-WEB-SWITCHING-2026-10-21.md`.
+
+## ROCm10.1 selection — October21
+
+All production runtimes are retained; no ROCm10.1 candidate passed every promotion gate. Empero’s matched seeds 42/43/44 improved aggregate speed by only 0.30%, below the >3% gate; keep HIP 7.2.3. The candidate's near-256K functional tests passed.
+Keep all model IDs/contexts/guards/offload/cache/dual-GPU settings and existing PATH/frontend policy.
+No system driver/global SDK replacement occurred. Framework/AOT compatibility tests
+are not an all-extension rebuild. Preserve raw/failed/untuned/diverse-seed evidence
+privately; publish only curated numeric records. [Exact outcomes and limits](linux/hardware/ROCM101-2026-10-21.md).
