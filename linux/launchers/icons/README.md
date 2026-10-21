@@ -43,3 +43,9 @@ and the retained [Strata license](licenses/strata.LICENSE). Its checksum is in
 `SOURCES.json`; this asset comes from the binary distribution rather than a
 claimed source commit. Install it as `strata-desktop.png` in the user hicolor
 icon directory, as described in [the app-menu setup](../STRATA-APP.md).
+
+Official Comfy Desktop uses the package-installed `comfyui-desktop-2` hicolor
+icon, with `StartupWMClass=Comfy Desktop` matching its observed Wayland ID.
+The Desktop browser shortcut retains `comfyui.svg`. See the
+[package/icon matching record](../../graphics/DESKTOP-2026-10-20.md#dockwindow-identity-correction--october-21);
+the native package's PNG is not duplicated in this source tree.

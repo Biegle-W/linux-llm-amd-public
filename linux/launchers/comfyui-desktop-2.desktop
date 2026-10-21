@@ -5,5 +5,6 @@ Comment=Official Comfy Desktop with existing dual-AMD models and workflows
 Exec=/opt/local-llm/graphics/start-comfy-desktop
 Path=/opt/local-llm
 Terminal=false
-Icon=/opt/local-llm/launchers/icons/comfyui.svg
+Icon=comfyui-desktop-2
+StartupWMClass=Comfy Desktop
 Categories=Graphics;

@@ -104,5 +104,17 @@
       "Unsloth"
     ]
   },
-  "normal_app_exit": "clean exit observed; no generation submitted"
+  "normal_app_exit": "clean exit observed; no generation submitted",
+  "dock_identity": {
+    "validated_on": "2026-10-21",
+    "observed_wayland_app_id": "Comfy Desktop",
+    "desktop_id": "comfyui-desktop-2.desktop",
+    "startup_wm_class": "Comfy Desktop",
+    "icon_theme_name": "comfyui-desktop-2",
+    "packaged_512px_png_sha256": "9fd848dccce0c50f2acc597e734cf3ef71cfd538540379aa3c6ac283b7101d8e",
+    "protocol_metadata_icon_resolution": "PASS",
+    "automated_visual_dock_inspection": false,
+    "normal_reopen_both_gpus_workflows": "PASS",
+    "wayland_debug_removed": true
+  }
 }

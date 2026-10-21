@@ -311,6 +311,11 @@ menu templates hidden. Native Strata App and Unsloth stay in the menu. Backend
 terminal launchers and hardware-control shortcuts are preserved. `comfy-desktop`
 uses the official Debian package/sandbox, validated October21; `comfyui` retains
 the separate browser server. Both Comfy launchers share an exclusive server lock.
+The native menu now restores official `StartupWMClass=Comfy Desktop`, matching
+its observed Wayland app ID, and uses the packaged `comfyui-desktop-2` icon.
+This fixes the missing identity hint in our override; model/runtime settings stay
+unchanged. Protocol/metadata/icon resolution and normal reopen passed; direct
+visual dock inspection is not automated.
 
 October 19 app-menu integration: **Strata App** opens the existing AMD RX7900
 AppImage, with its official bundled 512×512 logo. The installed entry is
