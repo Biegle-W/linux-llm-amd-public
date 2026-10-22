@@ -234,6 +234,14 @@ At the user's request the shared SATA model drive is labelled `sharedSATA1` (exF
 folders on an unmounted path. Public examples keep `/mnt/shared`.
 The empty spare SATA drive is labelled `sharedSATA2` and holds no models.
 
+## Model hub — October 22
+
+`local-llm-hub.service` (`dsh/model_hub.py`, 127.0.0.1:30100) lists every enabled model and
+starts or switches backends on demand through `dsh/start-backend-terminal`. The gateway forwards
+to it, and DSH provider baseURLs point to it. Agents must hold `hardware/generated/GPU-LOCK` for
+GPU tests; the hub refuses to start or switch while it exists. See
+`linux/hardware/MODEL-HUB-2026-10-22.md`.
+
 ## ROCm version — October 22
 
 Retain ROCm 7.2.3 for every engine. The 7.2.4 runtime and a 7.14.1 llama.cpp rebuild gave no

@@ -1,0 +1,5 @@
+# Never let GNOME Mutter render or display on the two RX 7900 XTX inference cards.
+# Mutter's mutter-device-ignore tag only affects the compositor; ROCm/HIP, Vulkan
+# compute and the inference engines do not read it. A monitor plugged into an AMD
+# card will stay dark while this rule is installed.
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*|/dev/dri/renderD[0-9]*", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x744c", TAG+="mutter-device-ignore"

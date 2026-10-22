@@ -66,6 +66,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**Model hub (October 22):** `local-llm-hub.service` runs `dsh/model_hub.py` on 127.0.0.1:30100.
+Any catalog model requested there, or through the gateway (which now forwards to the hub),
+starts or switches its backend via the normal guarded launcher. Nothing starts while
+`hardware/generated/GPU-LOCK` exists. [Details](../hardware/MODEL-HUB-2026-10-22.md).
+
 **ROCm update test (October 22):** the 7.2.4 runtime and 7.14.1 llama.cpp builds gave no gain over
 fresh 7.2.3 controls (vLLM Qwen, llama Qwen3.6/Sage, Ornith also on 10.1); 7.2.3 is retained. The
 opt-in `LOCAL_ROCM_RUNTIME_OVERLAY` hook is for isolated tests only.

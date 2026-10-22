@@ -3,6 +3,7 @@ import json, os
 from pathlib import Path
 import yaml
 ROOT = Path(__file__).resolve().parent
+HUB_PORT = 30100
 LOCAL = {'llama-local': 'qwen3.6-35b-a3b', 'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm', 'strata-local': 'qwen3.8-flash-next-iq3_xxs',
          'maya-local': 'glm-5.3-flash-maya',
@@ -44,7 +45,8 @@ def configure(default_provider=None):
             compat.update(supportsStore=False, supportsReasoningEffort=False, supportsStrictMode=False,
                           thinkingFormat='chat-template', chatTemplateKwargs={'enable_thinking': False})
         providers[key] = {'displayName': name, 'api': 'openai-completions',
-                          'baseURL': f'http://127.0.0.1:{port}/v1', 'apiKeyEnv': 'LOCAL_LLAMA_API_KEY',
+                          # The loopback model hub starts or switches this backend on demand.
+                          'baseURL': f'http://127.0.0.1:{HUB_PORT}/v1', 'apiKeyEnv': 'LOCAL_LLAMA_API_KEY',
                           'timeoutMs': 86400000, 'streamIdleTimeoutMs': 86400000, 'compat': compat,
                           'models': [{'id': m['id'], 'name': m['name'], 'contextWindow': m['context'],
                                       'maxTokens': 4096, 'input': ['text'], 'reasoningEfforts': False} for m in models]}

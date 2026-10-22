@@ -1,0 +1,17 @@
+[Unit]
+Description=Local LLM model hub: OpenAI API on 127.0.0.1:30100 that starts backends on demand
+After=local-llm-mounts.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/local-llm/dsh/model_hub.py
+WorkingDirectory=/opt/local-llm/dsh/workspace
+Environment=PYTHONUNBUFFERED=1
+# Backends started by the hub belong to their own launchers; keep them on hub restart.
+KillMode=process
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

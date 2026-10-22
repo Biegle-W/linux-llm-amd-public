@@ -176,6 +176,14 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
+### Any model on demand — local model hub
+
+[Model hub](linux/hardware/MODEL-HUB-2026-10-22.md): `http://127.0.0.1:30100/v1` (and the
+authenticated network gateway) lists every model on this PC and starts or switches its backend
+when a request names it. No manual backend launch is needed. Switches wait for in-flight replies,
+streaming clients get keep-alives while a model loads, and the hub never touches the GPUs while an
+agent holds `GPU-LOCK`. DSH providers point at it.
+
 ### ROCm 7.2.4 / 7.14.1 — no gain
 
 [ROCm update test](linux/hardware/ROCM-724-7141-2026-10-22.md): neither the 7.2.4 runtime nor a

@@ -1,3 +1,4 @@
 # Intel UHD 770 for the GNOME desktop; keep both AMD cards for inference.
 # GNOME Mutter: https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md
-SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x8086", ATTRS{device}=="0xa780", TAG+="mutter-device-preferred-primary"
+# Headless (remote-desktop) sessions select among render nodes, so tag both nodes.
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*|/dev/dri/renderD[0-9]*", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x8086", ATTRS{device}=="0xa780", TAG+="mutter-device-preferred-primary"

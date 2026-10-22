@@ -2,6 +2,7 @@
 
 - [Ornith122B metadata/tensor inspection](ornith-122b-assessment-2026-10-21.json), [assessment](../ORNITH-122B-ASSESSMENT-2026-10-21.md): research-only memory/quant candidates, **no inference or throughput measurements**.
 
+- [Model hub live validation](model-hub-2026-10-22.json), [report](../MODEL-HUB-2026-10-22.md): any model via 127.0.0.1:30100 or the gateway starts/switches its backend on demand; waits for in-flight replies; refuses under GPU-LOCK.
 - [ROCm 7.2.4 / 7.14.1 vs 7.2.3](rocm-724-7141-2026-10-22.json), [report](../ROCM-724-7141-2026-10-22.md): vLLM Qwen, llama Qwen3.6/Sage, Ornith; all within ±3% (Sage 7.14.1 seed-confirmation −0.05%); retain 7.2.3.
 - [Bolt vLLM vs llama.cpp](bolt-vllm-2026-10-21.json), [report](../BOLT-VLLM-2026-10-21.md): AutoRound W4A16 on vLLM TP2 38.0/37.9 decode (+3%), 2,910 t/s prefill vs 224 (13×), 262K window with 255K retrieval pass; **promoted** as `nemotron-3.5-bolt-vllm` (router checks and production benchmark 37.32/37.21, 2,959 PP).
 - [vLLM alternatives for Bolt/Sage](../VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md): research only; Bolt AutoRound W4A16 is the one test candidate, Sage has no ready 4-bit vLLM build, FP8 not recommended on RDNA3.

@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "date": "2026-10-22",
+  "component": "dsh/model_hub.py (127.0.0.1:30100) + gateway forwarding",
+  "status": "passed",
+  "models_listed": [
+    [
+      "qwen3.6-35b-a3b",
+      "llama"
+    ],
+    [
+      "empero-qwen3.8-35b-a3b",
+      "llama"
+    ],
+    [
+      "nemotron-3.5-super-iq3",
+      "llama"
+    ],
+    [
+      "sage-a1.5",
+      "llama"
+    ],
+    [
+      "qwen3.8-27b-sglang-dflash2",
+      "sglang"
+    ],
+    [
+      "qwen3.8-27b-vllm",
+      "vllm"
+    ],
+    [
+      "nemotron-3.5-bolt-vllm",
+      "vllm"
+    ],
+    [
+      "qwen3.8-flash-next-iq3_xxs",
+      "strata"
+    ],
+    [
+      "glm-5.3-flash-maya",
+      "maya"
+    ],
+    [
+      "deepseek-v4.1-flash-1017-maya",
+      "maya"
+    ]
+  ],
+  "steps": [
+    {
+      "seconds": 16.165758100003586,
+      "first_content_s": 16.034118324998417,
+      "keepalives": 1,
+      "error": null,
+      "step": "sage-llama-stream",
+      "answer_correct": true
+    },
+    {
+      "http_status": 503,
+      "error": {
+        "message": "Strata Q3 could not start: RuntimeError: Strata startup needs at least 5 GiB free on each GPU; found 4.340/6.248 GiB",
+        "code": "backend_start_failed",
+        "type": "backend_error"
+      },
+      "step": "strata-switch-nonstream"
+    },
+    {
+      "seconds": 94.17608073000156,
+      "first_content_s": 94.1472611509962,
+      "keepalives": 9,
+      "error": null,
+      "step": "vllm-qwen-switch-stream",
+      "answer_correct": true
+    },
+    {
+      "seconds": 48.95207609299541,
+      "first_content_s": 48.83803699800046,
+      "keepalives": 4,
+      "error": null,
+      "step": "gateway-qwen36-switch",
+      "answer_correct": true
+    }
+  ],
+  "concurrency": {
+    "same_backend_during_reply": {
+      "seconds": 43.47640366399719,
+      "first_content_s": 43.39240004099702,
+      "keepalives": 4,
+      "error": null
+    },
+    "cross_backend_waited_for_reply": true,
+    "long_reply_chars": 1784,
+    "switch_request_seconds": 77.90180447500461,
+    "switch_text": "OK"
+  },
+  "notes": [
+    "Strata refused by its own 5 GiB/card post-load guard because GNOME held ~2.2 GiB on GPU0; the hub returned the reason as HTTP 503 and recovered.",
+    "Load times include backend start, compile/load and handover from the previous backend.",
+    "Request/response text is not published; only numeric answers were checked."
+  ],
+  "unit_tests": "hardware/test_model_hub.py (9) plus 110 existing CPU tests pass"
+}
