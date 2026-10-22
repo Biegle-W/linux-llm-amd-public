@@ -32,7 +32,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Ten profiles are active: four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
+Eleven profiles are active: five llama.cpp (incl. Sage-A1.5 and Ornith-1.5-122B), one SGLang, two vLLM, one Strata, two Maya. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
 Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; keep the SATA original as a backup. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
@@ -181,8 +181,7 @@ No HiCache/FP8/CPU dense-weight offload is enabled. Current measurements live in
 The user's newer request makes managed Strata Q3 and Maya open their original
 local Chat/Monitor frontend after readiness, alongside the same worker and visible
 terminal. Do not start a second AppImage/engine or duplicate weights. Keep DSH
-separate; other backend launchers remain backend-only, except per-model llama.cpp
-web shortcuts such as Sage, which use `--chat-model`. Headless SSH and
+separate; other backend launchers remain backend-only. Headless SSH and
 `--no-browser` suppress automatic browser opening. The local HTTP adapter keeps
 context/config/runtime self-updates out of the native UI; retain existing admission,
 source pins, dual-GPU placement and latched watchdogs. Frontend sampling state
@@ -234,6 +233,18 @@ At the user's request the shared SATA model drive is labelled `sharedSATA1` (exF
 folders on an unmounted path. Public examples keep `/mnt/shared`.
 The empty spare SATA drive is labelled `sharedSATA2` and holds no models.
 
+## Engine preference — standing user instruction (October 22)
+
+Before adding or keeping a model on llama.cpp GGUF, always look for a faster vLLM or SGLang build
+that fits 2×24 GiB and runs on gfx1100. Test it in isolation and switch over when faster, as was
+done for Bolt. Use llama.cpp only when no such build fits or works (e.g. Ornith-1.5-122B, Nemotron Super).
+
+## Ornith-1.5-122B — active October 22
+
+`ornith-1.5-122b` is an active llama.cpp HIP profile (Q4_K_M + projector, 32K, MTP off, 30 CPU
+expert layers, 4 GiB GPU cache). No vLLM/SGLang build fits. See
+`linux/hardware/ORNITH-122B-TEST-2026-10-21.md`.
+
 ## Model hub — October 22
 
 `local-llm-hub.service` (`dsh/model_hub.py`, 127.0.0.1:30100) lists every enabled model and
@@ -262,7 +273,7 @@ Standing user instruction: Desktop UI shortcuts open browser/web interfaces;
 application-menu entries open native desktop apps. Apply this to all maintained
 apps. Backend terminal launchers and hardware-control shortcuts remain separate.
 ComfyUI on Desktop opens the existing browser server; **Comfy Desktop** in the
-menu opens the official native app. DSH, Turnstone, managed Strata Q3, Maya and Sage (llama.cpp built-in Chat)
+menu opens the official native app. DSH, Turnstone, managed Strata Q3 and Maya
 browser interfaces stay on Desktop with menu templates hidden (`NoDisplay=true`).
 Native Strata App and Unsloth remain in the menu. Official Comfy Desktop1.1.7 is
 installed through its Debian package; normal managed startup with its Ubuntu
@@ -301,8 +312,7 @@ privately; publish only curated numeric records. [Exact outcomes and limits](lin
 Official Q4_K_M and vision projector are intentionally retained, hash-verified on
 Shared SATA under GGUF-Models/Sage-A1.5-GGUF. At the user's request ("profile only"),
 Sage is now an active llama.cpp profile `sage-a1.5` (64K/MTP3 + projector),
-with a Desktop **Sage** web shortcut (`dsh/start-sage`). The shortcut loads Sage through
-the admitted router, then opens llama.cpp's built-in Chat. Do not install the Agents-A1
+(its Desktop Chat shortcut was removed October 22: model only). Do not install the Agents-A1
 harness or its external accounts unless asked. DSH default: Strata (see below). Validated test:
 llama.cpp4c3c5810/HIP7.2.3, both GPUs/layer split, 64K/q8_0/MTP3, alternate-layer
 CPU expert backing9.08GiB with12GiB GPU cache. Tools/JSON/SSE/fresh8K/near61999

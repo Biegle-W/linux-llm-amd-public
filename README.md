@@ -64,7 +64,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 ## AMD: latest setup and results
 
-**Ten active profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+**Eleven active profiles:** five llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -78,7 +78,7 @@ No driver/kernel update or global SDK replacement was performed.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (incl. Sage) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Five MoE profiles (incl. Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
@@ -159,8 +159,7 @@ recorded and did not recur under normal RAM. [Full comparison](linux/hardware/RO
 
 Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
 Shared SATA. **Now active** as the llama.cpp profile `sage-a1.5`
-(64K/MTP3 + projector), with a **Sage** Desktop shortcut that loads it and opens
-llama.cpp's built-in Chat. The Agents-A1 harness is not installed. DSH default is Strata Q3 (user, October21). llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+(64K/MTP3 + projector), usable through DSH, the model hub and the API (its Desktop Chat shortcut was removed October22). The Agents-A1 harness is not installed. DSH default is Strata Q3 (user, October21). llama.cpp4c3c5810/HIP7.2.3, both GPUs with
 CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
 near61,999-input retrieval/full history and a separate vision smoke.
 

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-exec /opt/local-llm/dsh/start-backend-terminal llama --chat-model sage-a1.5 "$@"

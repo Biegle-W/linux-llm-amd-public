@@ -24,16 +24,6 @@ ports = [(8080, 'llama.cpp'), (8081, 'llama.cpp'),
 open_frontend = kind in ('strata', 'maya') and '--no-browser' not in sys.argv[2:]
 if kind in ('strata', 'maya'):
     sys.argv = sys.argv[:2] + [arg for arg in sys.argv[2:] if arg != '--no-browser']
-chat_model = None
-if kind == 'llama' and '--chat-model' in sys.argv[2:]:
-    # Desktop web shortcuts load one profile, then open llama.cpp's built-in Chat.
-    parser = argparse.ArgumentParser(description='Start llama.cpp, load one model and open its built-in Chat; DSH is optional.')
-    parser.add_argument('--chat-model', required=True,
-                        choices=json.loads((ROOT / 'llama-runtime.json').read_text())['models'])
-    parser.add_argument('--no-browser', action='store_true', help='Load and serve without opening the browser.')
-    options = parser.parse_args(sys.argv[2:])
-    chat_model, open_frontend = options.chat_model, not options.no_browser
-    sys.argv = sys.argv[:2]
 if kind == 'maya':
     # Invalid selections and --help must not hand over a working backend.
     parser = argparse.ArgumentParser(description='Start guarded dual-AMD Maya with its native Chat/Monitor; DSH is optional.')
@@ -106,8 +96,8 @@ try:
         if kind == 'maya':
             require_maya()
         monitor = start_monitor(paths)
-        print(f'{names[kind]} backend' + (' with native Chat/Monitor.' if kind in ('strata','maya') else ' with built-in Chat.' if chat_model else ' only.') + ' Launch dsh separately if wanted. Ctrl+C stops this backend.', flush=True)
-        print(f'Loading the selected {names[kind]} model from its configured model volume now. Cold loads may take a few minutes.' if kind in ('strata', 'maya') or chat_model
+        print(f'{names[kind]} backend' + (' with native Chat/Monitor.' if kind in ('strata','maya') else ' only.') + ' Launch dsh separately if wanted. Ctrl+C stops this backend.', flush=True)
+        print(f'Loading the selected {names[kind]} model from its configured model volume now. Cold loads may take a few minutes.' if kind in ('strata', 'maya')
               else 'Models load when requested by DSH or another API client.', flush=True)
         log = paths[0].open('a')
         thermal = ThermalRecorder(f'backend-{kind}').start()
@@ -116,7 +106,7 @@ try:
                                    env=worker_env,
                                    start_new_session=True)
         startup.register()
-        frontend = start_frontend(kind, backend, enabled=open_frontend, model=chat_model)
+        frontend = start_frontend(kind, backend, enabled=open_frontend)
     raise SystemExit(backend.wait())
 except KeyboardInterrupt:
     pass

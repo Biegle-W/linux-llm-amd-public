@@ -61,33 +61,6 @@ class FrontendTests(unittest.TestCase):
                 patch.object(ui.subprocess,'Popen') as launch:
             ui.start_frontend('strata',backend);launch.assert_not_called()
 
-    def llama_chat(self,*responses):
-        backend=Mock();backend.poll.return_value=None
-        opener=Mock();opener.open.side_effect=list(responses)
-        def thread(*,target,**_):return SimpleNamespace(start=target)
-        with patch.dict(ui.os.environ,{'DISPLAY':':0'},clear=True), \
-                patch.object(ui.urllib.request,'build_opener',return_value=opener), \
-                patch.object(ui.threading,'Thread',side_effect=thread), \
-                patch.object(ui.subprocess,'Popen') as launch:
-            ui.start_frontend('llama',backend,model='sage-a1.5')
-        return opener,launch
-
-    def test_llama_chat_loads_through_router_then_opens_selected_model_once(self):
-        def reply(body):return io.BytesIO(json.dumps(body).encode())
-        models=lambda value:reply({'data':[{'id':'sage-a1.5','status':{'value':value}}]})
-        opener,launch=self.llama_chat(reply({'status':'ok'}),reply({'success':True}),models('loading'),models('loaded'))
-        load=opener.open.call_args_list[1].args[0]
-        self.assertEqual((load.full_url,json.loads(load.data)),('http://127.0.0.1:8080/models/load',{'model':'sage-a1.5'}))
-        self.assertEqual(launch.call_count,1)
-        self.assertEqual(launch.call_args.args[0],['xdg-open','http://127.0.0.1:8080/#/?model=sage-a1.5'])
-
-    def test_llama_chat_never_opens_after_admission_or_load_failure(self):
-        def reply(body):return io.BytesIO(json.dumps(body).encode())
-        refused=ui.urllib.error.HTTPError('http://127.0.0.1:8080/models/load',503,'',{},io.BytesIO(b'insufficient memory'))
-        _,launch=self.llama_chat(reply({'status':'ok'}),refused);launch.assert_not_called()
-        failed=reply({'data':[{'id':'sage-a1.5','status':{'value':'unloaded','failed':True}}]})
-        _,launch=self.llama_chat(reply({'status':'ok'}),reply({'success':True}),failed);launch.assert_not_called()
-
     def test_wrapped_worker_ownership_is_exact(self):
         root=Path('/test-llm')
         def process(args):return backend_switch.Process(10,1,'1',tuple(args),'','S')

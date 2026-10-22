@@ -55,7 +55,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 **Sage (active).**
 - `sage-a1.5` is the eleventh llama.cpp profile: 64K, MTP3, with projector.
-- The **Sage** Desktop shortcut runs `dsh/start-sage`. That loads Sage through the
+- (Removed October 22.) The **Sage** Desktop shortcut ran `dsh/start-sage`. That loads Sage through the
   admitted router, then opens llama.cpp's built-in Chat with Sage preselected.
 - The router now passes gzip through, keeps `/models/sse` out of its lock, and forces
   `autoload=false` on model GETs.
@@ -65,6 +65,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
 **sharedSATA1**. exFAT allows at most 11 characters. The mount script, model presets,
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
+
+**Sage front end removed, Ornith active, engine rule (October 22):** the Sage Desktop shortcut and
+launcher were removed (`sage-a1.5` stays active). `ornith-1.5-122b` is an active llama.cpp profile
+(32K, MTP off, vision). Standing rule: always look for a faster vLLM/SGLang build before llama.cpp
+GGUF. Eleven active profiles.
 
 **Model hub (October 22):** `local-llm-hub.service` runs `dsh/model_hub.py` on 127.0.0.1:30100.
 Any catalog model requested there, or through the gateway (which now forwards to the hub),

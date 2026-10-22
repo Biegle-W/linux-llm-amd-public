@@ -18,7 +18,6 @@ background and shadow are part of the original upstream artwork.
 | Maya | [`maya.svg`](https://github.com/mw00/project-maya/blob/8d9a9b5d705049a87da853717cdc59440252de30/serve/web/icon.svg) | [MIT](licenses/maya.LICENSE) |
 | dsh | [`dsh.png`](https://github.com/deepseek-ai/deepseek-harness/blob/687f282e8625c6b8d11ff58211a90524be2e4317/apps/desktop/resources/icon.png) | [MIT](licenses/dsh.LICENSE) |
 | Turnstone | [`turnstone.svg`](https://github.com/turnstonelabs/turnstone/blob/5c82b17700a73ad0ee84421f77549c8a3d46b06b/turnstone/ui/static/index.html) | [Apache-2.0](licenses/turnstone.LICENSE) |
-| Sage | [`sage.png`](https://github.com/InternScience/Agents-A1/blob/ff57c5f2d2819c918a20281a3da76990cd82b554/docs/assets/InternScience_logo.png) (publisher logo; same file as the Sage-A1.5 project-page favicon) | [Apache-2.0](licenses/sage.LICENSE) |
 | ComfyUI | [`comfyui.svg`](https://github.com/Comfy-Org/ComfyUI_frontend/blob/79a53509d11d1d5a065b543c148bd11d0f24b36e/public/assets/images/comfy-logo-single.svg) | [GPL-3.0](licenses/comfyui.LICENSE) |
 
 [SOURCES.json](SOURCES.json) records complete commits, original paths, exact byte
