@@ -70,6 +70,16 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 [Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
 
+**llama.cpp batch sweep (October 22):** `ornith-1.5-122b` now sets `batch-size = ubatch-size = 4096`:
+native ~8K prefill 52.7 → 714.9 tok/s (fresh TTFT 155 → 11.5 s), decode unchanged (11.4/13.3).
+8192 was faster but left <3 GiB free on card 0, so the production VRAM guard stopped it. Super
+IQ3 stays at 512/128 (2048 and 4096 break its 3 GiB/card guard). Qwen3.6/Empero/Sage untested.
+[Report](../hardware/LLAMA-BATCH-SWEEP-2026-10-22.md).
+
+**GPU access without a desktop:** add the inference user to the `render` and `video` groups.
+Otherwise ROCm access comes only from the logind seat ACL, and ending the desktop session leaves
+user-service backends with no ROCm devices. Restart the user's systemd manager afterwards.
+
 **Sage front end removed, Ornith active, engine rule (October 22):** the Sage Desktop shortcut and
 launcher were removed (`sage-a1.5` stays active). `ornith-1.5-122b` is an active llama.cpp profile
 (32K, MTP off, vision). Standing rule: always look for a faster vLLM/SGLang build before llama.cpp

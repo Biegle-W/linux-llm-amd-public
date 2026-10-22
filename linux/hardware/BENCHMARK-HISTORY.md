@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## October 22 — llama.cpp prompt batch sweep (Ornith, Super)
+
+llama.cpp 4c3c5810/HIP 7.2.3, i9-13900KS/64 GB, both 7900 XTX, production 32K presets with only
+batch/ubatch/threads changed; shared method (three short code/prose runs, three fresh ~8K prompts:
+actual 8,185–8,189 Ornith / 7,922–7,927 Super input tokens). Ornith native prefill 52.7 → 714.9
+tok/s at 4096/4096 (TTFT 155.2 → 11.5 s), decode 11.44/13.36 → 11.44/13.34; **activated**. 8192
+reached 986.9 but left 2.31 GiB on card 0, below the 3 GiB guard. Super 93.9 → 847.0 at 4096
+but ≤2.93 GiB free; not activated. Threads 6/8/16 within ±1%. Controls repeated within 0.3%; zero
+swap/spill; GPU0 junction peak 98 °C (Super 2048), CPU ≤89 °C. Production hub proof: 11,129-token
+prompt at 673.1 tok/s, 4.05/5.03 GiB free (validation only).
+[Report](LLAMA-BATCH-SWEEP-2026-10-22.md), [all runs](results/llama-batch-sweep-2026-10-22.json).
+
 ## October 21 — Sage-A1.5 download, MTP and ROCm comparison
 
 Official Q4_K_M plus projector verified on Shared SATA; test-only, outside the ten

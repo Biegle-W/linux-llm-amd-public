@@ -183,6 +183,14 @@ when a request names it. No manual backend launch is needed. Switches wait for i
 streaming clients get keep-alives while a model loads, and the hub never touches the GPUs while an
 agent holds `GPU-LOCK`. DSH providers point at it.
 
+### llama.cpp prompt batch — Ornith 13.6× faster prefill
+
+[Batch sweep](linux/hardware/LLAMA-BATCH-SWEEP-2026-10-22.md) (October 22): `ornith-1.5-122b` now uses
+`batch-size = ubatch-size = 4096` instead of the inherited 512/128. Native fresh ~8K prefill rose
+52.7 → 714.9 tok/s (TTFT 155 → 11.5 s), with decode unchanged at 11.4/13.3 tok/s. Larger sizes and
+every faster Super IQ3 size left under 3 GiB free on a card, below the production VRAM guard, so
+they are not active. CPU thread count made no difference.
+
 ### ROCm 7.2.4 / 7.14.1 — no gain
 
 [ROCm update test](linux/hardware/ROCM-724-7141-2026-10-22.md): neither the 7.2.4 runtime nor a

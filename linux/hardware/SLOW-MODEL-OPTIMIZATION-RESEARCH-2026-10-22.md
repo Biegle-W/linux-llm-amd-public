@@ -1,7 +1,8 @@
 # Optimizing the large, slow models — community research, October 22, 2026
 
 The user asked for optimizations for the large, slower models from forums, Reddit, X and
-YouTube. **Research only:** nothing was changed or measured locally. The models in scope:
+YouTube. **Research only:** nothing was changed or measured locally. *Update: the batch-size lead
+was measured the same day; see [LLAMA-BATCH-SWEEP-2026-10-22.md](LLAMA-BATCH-SWEEP-2026-10-22.md).* The models in scope:
 
 | Model (engine) | Decode t/s code/prose | Fresh ~8K prefill t/s | Where the time goes |
 |---|---:|---:|---|
