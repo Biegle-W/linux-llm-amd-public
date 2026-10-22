@@ -70,10 +70,10 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 [Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
 
-**llama.cpp batch sweep (October 22):** `ornith-1.5-122b` now sets `batch-size = ubatch-size = 4096`:
-native ~8K prefill 52.7 → 714.9 tok/s (fresh TTFT 155 → 11.5 s), decode unchanged (11.4/13.3).
-8192 was faster but left <3 GiB free on card 0, so the production VRAM guard stopped it. Super
-IQ3 stays at 512/128 (2048 and 4096 break its 3 GiB/card guard). Qwen3.6/Empero/Sage untested.
+**llama.cpp batch sweep (October 22):** every llama.cpp profile now overrides the inherited 512/128
+batch. Native ~8K prefill, decode within 2%: Ornith 4096/4096 52.7 → 714.9 tok/s; Super 2048/1024
+93.9 → 431.4; Qwen3.6, Empero and Sage 4096/4096 ~380–400 → 2,794–2,945 (fresh TTFT ~21 → ~2.8 s).
+Ornith 8192 and Super ubatch ≥2048 break the 3 GiB/card guard (Super 1024 leaves 3.6 GiB).
 [Report](../hardware/LLAMA-BATCH-SWEEP-2026-10-22.md).
 
 **GPU access without a desktop:** add the inference user to the `render` and `video` groups.

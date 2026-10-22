@@ -1,5 +1,15 @@
 # LLM benchmark and context history
 
+## October 22 — llama.cpp prompt batch sweep 2 (Super, Qwen3.6, Empero, Sage)
+
+Same build/method, production contexts (256K Qwen3.6/Empero, 64K Sage, 32K Super). Native ~8K
+prefill at 4096/4096: Qwen3.6 381.7 → 2,881.8, Empero 397.2 → 2,944.7, Sage 385.1 → 2,793.7 tok/s
+(TTFT ~21 → 2.8–2.9 s); decode within 2% (Qwen3.6 122.33/75.34 → 121.33/73.88). Super 2048/1024:
+93.9 → 431.4, 3.61/4.68 GiB free; 2048/512 261.6. All **activated**; actual inputs 8,185–8,191
+(7,922–7,927 Super); zero swap/spill; GPU0 junction ≤88 °C, CPU ≤82 °C. Hub proofs: 11,129-token
+prompts at 2,043–2,138 tok/s (Super 439), guard clear (validation only).
+[Report](LLAMA-BATCH-SWEEP-2026-10-22.md).
+
 ## October 22 — llama.cpp prompt batch sweep (Ornith, Super)
 
 llama.cpp 4c3c5810/HIP 7.2.3, i9-13900KS/64 GB, both 7900 XTX, production 32K presets with only

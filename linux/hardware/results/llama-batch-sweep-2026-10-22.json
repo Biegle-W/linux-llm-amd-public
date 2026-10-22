@@ -1,7 +1,7 @@
 {
   "date": "2026-10-22",
   "hardware": "i9-13900KS, 64 GB RAM (61.51 GiB visible), 2x RX 7900 XTX (23.98 GiB each), PCIe 4.0 x8/x8",
-  "build": "llama.cpp 4c3c5810, HIP/ROCm 7.2.3, production presets with only batch/ubatch/threads changed, isolated port, no-swap 56G scope",
+  "build": "llama.cpp 4c3c5810, HIP/ROCm 7.2.3, production presets with only batch/ubatch/threads changed, isolated port, no-swap 56G scope; sweep 2 run the same day with the same method",
   "method": {
     "short_prompts": {
       "code": "Write a Python function that merges two sorted lists. Explain its time and space complexity.",
@@ -23,21 +23,74 @@
   },
   "guard": "Ornith and Super production profiles require >=3 GiB free VRAM per card (moe-offload.json min_free_vram_gib); the isolated sweep did not enforce it, so arms below 3 GiB are recorded but not deployable",
   "selection": {
-    "ornith-1.5-122b": "batch/ubatch 4096 activated (8192 broke the guard in production: 2.33-2.88 GiB free)",
-    "nemotron-3.5-super-iq3": "unchanged at 512/128; 2048 and 4096 break the guard; 512/1024 untested"
+    "ornith-1.5-122b": "4096/4096 (8192 broke the 3 GiB/card guard in production)",
+    "nemotron-3.5-super-iq3": "2048/1024 (2048+ ubatch breaks the 3 GiB/card guard; 1024 leaves 3.61/4.68 GiB)",
+    "qwen3.6-35b-a3b": "4096/4096",
+    "empero-qwen3.8-35b-a3b": "4096/4096",
+    "sage-a1.5": "4096/4096"
   },
-  "production_check": {
-    "model": "ornith-1.5-122b",
-    "via": "model hub 127.0.0.1:30100",
-    "prompt_tokens": 11129,
-    "native_prefill_tps": 673.1,
-    "prompt_ms": 16534.8,
-    "answer_correct": true,
-    "free_vram_gib_after_60s": [
-      4.05,
-      5.03
-    ]
-  },
+  "production_check": [
+    {
+      "model": "ornith-1.5-122b",
+      "via": "model hub 127.0.0.1:30100",
+      "prompt_tokens": 11129,
+      "native_prefill_tps": 673.1,
+      "prompt_ms": 16534.8,
+      "answer_correct": true,
+      "free_vram_gib_after_60s": [
+        4.05,
+        5.03
+      ]
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "via": "model hub 127.0.0.1:30100",
+      "prompt_tokens": 11129,
+      "prompt_ms": 5448.4,
+      "native_prefill_tps": 2042.6,
+      "answer_correct": true,
+      "free_vram_gib_after_45s": [
+        8.27,
+        5.32
+      ]
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "via": "model hub 127.0.0.1:30100",
+      "prompt_tokens": 11129,
+      "prompt_ms": 5206.3,
+      "native_prefill_tps": 2137.6,
+      "answer_correct": true,
+      "free_vram_gib_after_45s": [
+        9.7,
+        6.3
+      ]
+    },
+    {
+      "model": "sage-a1.5",
+      "via": "model hub 127.0.0.1:30100",
+      "prompt_tokens": 11129,
+      "prompt_ms": 5280.0,
+      "native_prefill_tps": 2107.8,
+      "answer_correct": true,
+      "free_vram_gib_after_45s": [
+        9.93,
+        10.11
+      ]
+    },
+    {
+      "model": "nemotron-3.5-super-iq3",
+      "via": "model hub 127.0.0.1:30100",
+      "prompt_tokens": 11132,
+      "prompt_ms": 25350.5,
+      "native_prefill_tps": 439.1,
+      "answer_correct": true,
+      "free_vram_gib_after_45s": [
+        3.63,
+        4.7
+      ]
+    }
+  ],
   "runs": [
     {
       "model": "ornith-1.5-122b",
@@ -85,7 +138,8 @@
         "cpu_package": 77.0,
         "samples": 789,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -133,7 +187,8 @@
         "cpu_package": 81.0,
         "samples": 475,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -181,7 +236,8 @@
         "cpu_package": 76.0,
         "samples": 376,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -229,7 +285,8 @@
         "cpu_package": 73.0,
         "samples": 359,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -277,7 +334,8 @@
         "cpu_package": 77.0,
         "samples": 349,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -325,7 +383,8 @@
         "cpu_package": 76.0,
         "samples": 351,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -373,7 +432,8 @@
         "cpu_package": 76.0,
         "samples": 348,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "ornith-1.5-122b",
@@ -421,7 +481,8 @@
         "cpu_package": 79.0,
         "samples": 790,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -469,7 +530,8 @@
         "cpu_package": 83.0,
         "samples": 432,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -517,7 +579,8 @@
         "cpu_package": 82.0,
         "samples": 215,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -565,7 +628,8 @@
         "cpu_package": 89.0,
         "samples": 204,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -613,7 +677,8 @@
         "cpu_package": 83.0,
         "samples": 196,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -661,7 +726,8 @@
         "cpu_package": 84.0,
         "samples": 201,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
-      }
+      },
+      "sweep": 1
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -708,6 +774,693 @@
         ],
         "cpu_package": 82.0,
         "samples": 432,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      },
+      "sweep": 1
+    },
+    {
+      "sweep": 2,
+      "model": "nemotron-3.5-super-iq3",
+      "run": "nemotron-3.5-super-iq3-ub512-t6",
+      "context": 32768,
+      "batch": 2048,
+      "ubatch": 512,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 261.6,
+      "fresh_ttft_s_median": 30.31,
+      "prefill_input_tokens": [
+        7923,
+        7927,
+        7924
+      ],
+      "decode_tps_median": {
+        "code": 15.66,
+        "prose": 17.25
+      },
+      "peak_vram_gib": [
+        20.199,
+        19.051
+      ],
+      "min_free_vram_gib": [
+        3.78,
+        4.93
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 38.009,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          80.0,
+          55.0
+        ],
+        "gpu_mem": [
+          72.0,
+          66.0
+        ],
+        "cpu_package": 75.0,
+        "samples": 270,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "nemotron-3.5-super-iq3",
+      "run": "nemotron-3.5-super-iq3-ub1024-t6",
+      "context": 32768,
+      "batch": 2048,
+      "ubatch": 1024,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 431.4,
+      "fresh_ttft_s_median": 18.39,
+      "prefill_input_tokens": [
+        7924,
+        7926,
+        7925
+      ],
+      "decode_tps_median": {
+        "code": 15.65,
+        "prose": 17.23
+      },
+      "peak_vram_gib": [
+        20.367,
+        19.298
+      ],
+      "min_free_vram_gib": [
+        3.61,
+        4.68
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 37.967,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          88.0,
+          60.0
+        ],
+        "gpu_mem": [
+          79.0,
+          70.0
+        ],
+        "cpu_package": 82.0,
+        "samples": 234,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "qwen3.6-35b-a3b",
+      "run": "qwen3.6-35b-a3b-ub128-t6-control",
+      "context": 262144,
+      "batch": 512,
+      "ubatch": 128,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 381.7,
+      "fresh_ttft_s_median": 21.46,
+      "prefill_input_tokens": [
+        8188,
+        8188,
+        8188
+      ],
+      "decode_tps_median": {
+        "code": 122.33,
+        "prose": 75.34
+      },
+      "peak_vram_gib": [
+        13.343,
+        13.878
+      ],
+      "min_free_vram_gib": [
+        10.64,
+        10.1
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 48.222,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          82.0,
+          60.0
+        ],
+        "gpu_mem": [
+          76.0,
+          70.0
+        ],
+        "cpu_package": 67.0,
+        "samples": 134,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "qwen3.6-35b-a3b",
+      "run": "qwen3.6-35b-a3b-ub512-t6",
+      "context": 262144,
+      "batch": 2048,
+      "ubatch": 512,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 992.6,
+      "fresh_ttft_s_median": 8.26,
+      "prefill_input_tokens": [
+        8187,
+        8191,
+        8187
+      ],
+      "decode_tps_median": {
+        "code": 123.4,
+        "prose": 75.79
+      },
+      "peak_vram_gib": [
+        13.544,
+        14.322
+      ],
+      "min_free_vram_gib": [
+        10.44,
+        9.66
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 47.757,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          79.0,
+          58.0
+        ],
+        "gpu_mem": [
+          76.0,
+          70.0
+        ],
+        "cpu_package": 70.0,
+        "samples": 60,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "qwen3.6-35b-a3b",
+      "run": "qwen3.6-35b-a3b-ub2048-t6",
+      "context": 262144,
+      "batch": 2048,
+      "ubatch": 2048,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2240.5,
+      "fresh_ttft_s_median": 3.66,
+      "prefill_input_tokens": [
+        8189,
+        8187,
+        8189
+      ],
+      "decode_tps_median": {
+        "code": 122.8,
+        "prose": 74.56
+      },
+      "peak_vram_gib": [
+        14.437,
+        16.193
+      ],
+      "min_free_vram_gib": [
+        9.54,
+        7.79
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 46.073,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          87.0,
+          56.0
+        ],
+        "gpu_mem": [
+          74.0,
+          68.0
+        ],
+        "cpu_package": 73.0,
+        "samples": 43,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "qwen3.6-35b-a3b",
+      "run": "qwen3.6-35b-a3b-ub4096-t6",
+      "context": 262144,
+      "batch": 4096,
+      "ubatch": 4096,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2881.8,
+      "fresh_ttft_s_median": 2.85,
+      "prefill_input_tokens": [
+        8189,
+        8187,
+        8186
+      ],
+      "decode_tps_median": {
+        "code": 121.33,
+        "prose": 73.88
+      },
+      "peak_vram_gib": [
+        15.741,
+        18.689
+      ],
+      "min_free_vram_gib": [
+        8.24,
+        5.29
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 43.718,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          81.0,
+          59.0
+        ],
+        "gpu_mem": [
+          74.0,
+          68.0
+        ],
+        "cpu_package": 67.0,
+        "samples": 44,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "empero-qwen3.8-35b-a3b",
+      "run": "empero-qwen3.8-35b-a3b-ub128-t6-control",
+      "context": 262144,
+      "batch": 512,
+      "ubatch": 128,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 397.2,
+      "fresh_ttft_s_median": 20.61,
+      "prefill_input_tokens": [
+        8187,
+        8186,
+        8185
+      ],
+      "decode_tps_median": {
+        "code": 121.99,
+        "prose": 74.14
+      },
+      "peak_vram_gib": [
+        11.907,
+        12.909
+      ],
+      "min_free_vram_gib": [
+        12.07,
+        11.07
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 49.096,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          80.0,
+          60.0
+        ],
+        "gpu_mem": [
+          74.0,
+          70.0
+        ],
+        "cpu_package": 69.0,
+        "samples": 134,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "empero-qwen3.8-35b-a3b",
+      "run": "empero-qwen3.8-35b-a3b-ub512-t6",
+      "context": 262144,
+      "batch": 2048,
+      "ubatch": 512,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 1033.6,
+      "fresh_ttft_s_median": 7.93,
+      "prefill_input_tokens": [
+        8189,
+        8188,
+        8189
+      ],
+      "decode_tps_median": {
+        "code": 122.34,
+        "prose": 74.58
+      },
+      "peak_vram_gib": [
+        12.104,
+        13.354
+      ],
+      "min_free_vram_gib": [
+        11.88,
+        10.63
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 48.651,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          78.0,
+          59.0
+        ],
+        "gpu_mem": [
+          74.0,
+          70.0
+        ],
+        "cpu_package": 71.0,
+        "samples": 54,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "empero-qwen3.8-35b-a3b",
+      "run": "empero-qwen3.8-35b-a3b-ub2048-t6",
+      "context": 262144,
+      "batch": 2048,
+      "ubatch": 2048,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2321.4,
+      "fresh_ttft_s_median": 3.53,
+      "prefill_input_tokens": [
+        8187,
+        8189,
+        8187
+      ],
+      "decode_tps_median": {
+        "code": 121.18,
+        "prose": 73.36
+      },
+      "peak_vram_gib": [
+        12.999,
+        15.231
+      ],
+      "min_free_vram_gib": [
+        10.98,
+        8.75
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 46.936,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          85.0,
+          56.0
+        ],
+        "gpu_mem": [
+          74.0,
+          68.0
+        ],
+        "cpu_package": 71.0,
+        "samples": 42,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "empero-qwen3.8-35b-a3b",
+      "run": "empero-qwen3.8-35b-a3b-ub4096-t6",
+      "context": 262144,
+      "batch": 4096,
+      "ubatch": 4096,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2944.7,
+      "fresh_ttft_s_median": 2.79,
+      "prefill_input_tokens": [
+        8188,
+        8188,
+        8186
+      ],
+      "decode_tps_median": {
+        "code": 121.45,
+        "prose": 73.52
+      },
+      "peak_vram_gib": [
+        14.327,
+        17.736
+      ],
+      "min_free_vram_gib": [
+        9.65,
+        6.24
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 44.499,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          84.0,
+          58.0
+        ],
+        "gpu_mem": [
+          73.0,
+          68.0
+        ],
+        "cpu_package": 78.0,
+        "samples": 42,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "sage-a1.5",
+      "run": "sage-a1.5-ub128-t6-control",
+      "context": 65536,
+      "batch": 512,
+      "ubatch": 128,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 385.1,
+      "fresh_ttft_s_median": 21.27,
+      "prefill_input_tokens": [
+        8188,
+        8187,
+        8187
+      ],
+      "decode_tps_median": {
+        "code": 81.19,
+        "prose": 65.04
+      },
+      "peak_vram_gib": [
+        12.864,
+        11.619
+      ],
+      "min_free_vram_gib": [
+        11.12,
+        12.36
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 48.044,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          83.0,
+          60.0
+        ],
+        "gpu_mem": [
+          76.0,
+          70.0
+        ],
+        "cpu_package": 71.0,
+        "samples": 143,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "sage-a1.5",
+      "run": "sage-a1.5-ub512-t6",
+      "context": 65536,
+      "batch": 2048,
+      "ubatch": 512,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 980.4,
+      "fresh_ttft_s_median": 8.36,
+      "prefill_input_tokens": [
+        8187,
+        8187,
+        8187
+      ],
+      "decode_tps_median": {
+        "code": 81.32,
+        "prose": 64.76
+      },
+      "peak_vram_gib": [
+        12.966,
+        11.824
+      ],
+      "min_free_vram_gib": [
+        11.01,
+        12.16
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 47.822,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          81.0,
+          56.0
+        ],
+        "gpu_mem": [
+          76.0,
+          68.0
+        ],
+        "cpu_package": 73.0,
+        "samples": 72,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "sage-a1.5",
+      "run": "sage-a1.5-ub2048-t6",
+      "context": 65536,
+      "batch": 2048,
+      "ubatch": 2048,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2194.3,
+      "fresh_ttft_s_median": 3.74,
+      "prefill_input_tokens": [
+        8189,
+        8187,
+        8185
+      ],
+      "decode_tps_median": {
+        "code": 80.59,
+        "prose": 65.04
+      },
+      "peak_vram_gib": [
+        13.3,
+        12.643
+      ],
+      "min_free_vram_gib": [
+        10.68,
+        11.34
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 47.211,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          83.0,
+          59.0
+        ],
+        "gpu_mem": [
+          74.0,
+          70.0
+        ],
+        "cpu_package": 67.0,
+        "samples": 49,
+        "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "sweep": 2,
+      "model": "sage-a1.5",
+      "run": "sage-a1.5-ub4096-t6",
+      "context": 65536,
+      "batch": 4096,
+      "ubatch": 4096,
+      "threads": 6,
+      "cpus": null,
+      "status": "passed",
+      "marker_checks_passed": 3,
+      "arithmetic": true,
+      "native_prefill_tps_median": 2793.7,
+      "fresh_ttft_s_median": 2.94,
+      "prefill_input_tokens": [
+        8187,
+        8187,
+        8185
+      ],
+      "decode_tps_median": {
+        "code": 80.81,
+        "prose": 65.16
+      },
+      "peak_vram_gib": [
+        14.072,
+        13.87
+      ],
+      "min_free_vram_gib": [
+        9.91,
+        10.11
+      ],
+      "meets_3gib_card_guard": true,
+      "minimum_available_ram_gib": 46.375,
+      "worker_swap_bytes": 0,
+      "nonresident_vram_bytes": 0,
+      "thermal_peaks_c": {
+        "gpu_junction": [
+          86.0,
+          58.0
+        ],
+        "gpu_mem": [
+          76.0,
+          70.0
+        ],
+        "cpu_package": 70.0,
+        "samples": 47,
         "note": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
       }
     }
