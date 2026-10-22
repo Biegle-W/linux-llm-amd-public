@@ -81,3 +81,8 @@ A candidate should win matched prefill, code/prose decode and TTFT without
 quality, residency, full-context, thermal or normal-launcher regressions. Keep
 rollback environments and both-card/CPU-expert-cache protections. **7.14.1 has
 not been tested locally in this task; do not present it as selected.**
+
+## Follow-up — October 22
+
+7.14.1 (llama.cpp rebuild) and the 7.2.4 runtime were tested and rejected; see
+[ROCM-724-7141-2026-10-22.md](ROCM-724-7141-2026-10-22.md). 10.1.0 remains AMD's latest release.

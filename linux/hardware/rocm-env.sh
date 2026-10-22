@@ -25,3 +25,9 @@ export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"
 export SGLANG_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
 export VLLM_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
 export HSA_ENABLE_SDMA=0
+
+# Opt-in isolated runtime comparison only (unset in production): put candidate
+# HIP/HSA/COMgr libraries first without rebuilding engines.
+if [[ -n ${LOCAL_ROCM_RUNTIME_OVERLAY:-} ]]; then
+ export LD_LIBRARY_PATH="$LOCAL_ROCM_RUNTIME_OVERLAY:$LD_LIBRARY_PATH"
+fi

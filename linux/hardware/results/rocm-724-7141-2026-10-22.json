@@ -1,0 +1,504 @@
+{
+  "schema": 1,
+  "date": "2026-10-22",
+  "status": "complete",
+  "decision": "Retain ROCm 7.2.3 everywhere; no candidate passed the gate.",
+  "gate": "Candidate must beat a fresh matched control by >3% geometric mean of code decode, prose decode and fresh prefill, with no phase >5% worse; borderline single-seed passes need diverse-seed confirmation.",
+  "candidates": {
+    "7.2.4_runtime": {
+      "method": "HIP/HSA/COMgr runtime drop-in via LOCAL_ROCM_RUNTIME_OVERLAY; same engine binaries and libraries otherwise",
+      "packages": [
+        {
+          "package": "comgr",
+          "version": "3.0.0.70204-93~24.04",
+          "sha256": "02951341120d23ebf34b066a84ab172e4813cba4a601f910545c6658989bee87",
+          "url": "https://repo.radeon.com/rocm/apt/7.2.4/pool/main/c/comgr/comgr_3.0.0.70204-93~24.04_amd64.deb"
+        },
+        {
+          "package": "hip-runtime-amd",
+          "version": "7.2.53211.70204-93~24.04",
+          "sha256": "70961d0f79708148a54f23bdde2ebab5c389d5ab4373170d8df94f3e54d87a0b",
+          "url": "https://repo.radeon.com/rocm/apt/7.2.4/pool/main/h/hip-runtime-amd/hip-runtime-amd_7.2.53211.70204-93~24.04_amd64.deb"
+        },
+        {
+          "package": "hsa-rocr",
+          "version": "1.18.0.70204-93~24.04",
+          "sha256": "6af02a99d15efbf21ba0e20a333aac32e2d712aa4b325dd0617842f4cde64ab4",
+          "url": "https://repo.radeon.com/rocm/apt/7.2.4/pool/main/h/hsa-rocr/hsa-rocr_1.18.0.70204-93~24.04_amd64.deb"
+        },
+        {
+          "package": "rocm-core",
+          "version": "7.2.4.70204-93~24.04",
+          "sha256": "dfe0d173da998a669921faf08351a01add377cd4d1b471865f921a03484974b6",
+          "url": "https://repo.radeon.com/rocm/apt/7.2.4/pool/main/r/rocm-core/rocm-core_7.2.4.70204-93~24.04_amd64.deb"
+        },
+        {
+          "package": "rocprofiler-register",
+          "version": "0.6.0.70204-93~24.04",
+          "sha256": "3b13874e567fa40b6eaf9f8d572d5c9a4ac780eb37496b31565755463a378295",
+          "url": "https://repo.radeon.com/rocm/apt/7.2.4/pool/main/r/rocprofiler-register/rocprofiler-register_0.6.0.70204-93~24.04_amd64.deb"
+        }
+      ]
+    },
+    "7.14.1_native": {
+      "method": "llama.cpp 4c3c5810 rebuilt against the official TheRock gfx110X 7.14.1 tarball with the production CMake flags; all HIP/BLAS libraries from that SDK",
+      "tarball": "https://repo.amd.com/rocm/tarball-multi-arch/therock-dist-linux-gfx110X-all-7.14.1.tar.gz",
+      "sha256": "f426372c0d63518604974b43c2a68560062c03872cd0de88396e28ddd96ab678",
+      "bytes": 2313128759
+    },
+    "10.1_native": "Existing October 21 llama.cpp 10.1 build (Ornith only; other profiles were tested on October 21)"
+  },
+  "arms": {
+    "vllm-7.2.3:qwen3.8-27b-vllm": {
+      "status": "passed",
+      "code_decode_tps": 134.89258033269948,
+      "prose_decode_tps": 71.65842383181493,
+      "fresh_prefill_tps": 1513.2893709389175,
+      "fresh_ttft_s": 5.425261371994566,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 46.808,
+        "peak_vram_gib": [
+          18.318,
+          16.716
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 92.0,
+        "0000:06:00.0": 75.0
+      }
+    },
+    "vllm-7.2.4:qwen3.8-27b-vllm": {
+      "status": "passed",
+      "code_decode_tps": 134.22998768608815,
+      "prose_decode_tps": 71.21344795001976,
+      "fresh_prefill_tps": 1512.35177875483,
+      "fresh_ttft_s": 5.429919254995184,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 45.887,
+        "peak_vram_gib": [
+          18.288,
+          16.716
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 94.0,
+        "0000:06:00.0": 81.0
+      }
+    },
+    "llama2-7.2.3:qwen3.6-35b-a3b": {
+      "status": "passed",
+      "code_decode_tps": 123.31300262530081,
+      "prose_decode_tps": 75.48529996665278,
+      "fresh_prefill_tps": 381.5811977146708,
+      "fresh_ttft_s": 21.460744858995895,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.284,
+        "peak_vram_gib": [
+          14.574,
+          13.888
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 66.0,
+        "0000:06:00.0": 52.0
+      }
+    },
+    "llama2-7.2.3:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 81.69963543742934,
+      "prose_decode_tps": 65.24922082539956,
+      "fresh_prefill_tps": 384.9559949234692,
+      "fresh_ttft_s": 21.282415884998045,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.237,
+        "peak_vram_gib": [
+          14.08,
+          11.629
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 75.0,
+        "0000:06:00.0": 59.0
+      }
+    },
+    "llama2-7.14.1:qwen3.6-35b-a3b": {
+      "status": "passed",
+      "code_decode_tps": 121.54882268879268,
+      "prose_decode_tps": 76.99811187348267,
+      "fresh_prefill_tps": 380.5861919463762,
+      "fresh_ttft_s": 21.531206186002237,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.441,
+        "peak_vram_gib": [
+          14.534,
+          13.837
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 80.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.14.1:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 83.64787306366725,
+      "prose_decode_tps": 70.09071901127544,
+      "fresh_prefill_tps": 383.9015742167372,
+      "fresh_ttft_s": 21.345413614006247,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.113,
+        "peak_vram_gib": [
+          14.312,
+          11.579
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 81.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.2.4:qwen3.6-35b-a3b": {
+      "status": "passed",
+      "code_decode_tps": 121.28166398871306,
+      "prose_decode_tps": 75.56623847232854,
+      "fresh_prefill_tps": 381.0300447075253,
+      "fresh_ttft_s": 21.501847794999776,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.762,
+        "peak_vram_gib": [
+          14.559,
+          13.887
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 83.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.2.4:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 81.53084644912722,
+      "prose_decode_tps": 65.42174393536003,
+      "fresh_prefill_tps": 383.7134040368618,
+      "fresh_ttft_s": 21.352672679000534,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 44.22,
+        "peak_vram_gib": [
+          14.091,
+          11.628
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 81.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.14.1-seed43:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 83.5841147133611,
+      "prose_decode_tps": 69.03991680309582,
+      "fresh_prefill_tps": 357.2208696418779,
+      "fresh_ttft_s": 22.922029526998813,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 45.196,
+        "peak_vram_gib": [
+          14.181,
+          11.58
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 84.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.14.1-seed44:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 86.48087527366465,
+      "prose_decode_tps": 68.20938551571226,
+      "fresh_prefill_tps": 356.9627961806552,
+      "fresh_ttft_s": 22.935402950002754,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 45.199,
+        "peak_vram_gib": [
+          14.191,
+          11.58
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 85.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "llama2-7.2.3-seed43:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 81.3785621615426,
+      "prose_decode_tps": 67.74152057673362,
+      "fresh_prefill_tps": 384.528829142589,
+      "fresh_ttft_s": 21.3020862340054,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 45.16,
+        "peak_vram_gib": [
+          13.951,
+          11.629
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 86.0,
+        "0000:06:00.0": 56.0
+      }
+    },
+    "llama2-7.2.3-seed44:sage-a1.5": {
+      "status": "passed",
+      "code_decode_tps": 84.5496267411594,
+      "prose_decode_tps": 69.21961707348044,
+      "fresh_prefill_tps": 385.9824852491468,
+      "fresh_ttft_s": 21.21934845299984,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 45.171,
+        "peak_vram_gib": [
+          13.95,
+          11.629
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 84.0,
+        "0000:06:00.0": 59.0
+      }
+    },
+    "ornith-rocm-7-mtp0-32k:ornith-1.5-122b": {
+      "status": "passed",
+      "code_decode_tps": 11.448380863291431,
+      "prose_decode_tps": 13.323744692337433,
+      "fresh_prefill_tps": 52.66023248836641,
+      "fresh_ttft_s": 155.4939815530015,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 13.32,
+        "peak_vram_gib": [
+          18.548,
+          17.234
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 88.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "ornith-rocm-724-mtp0-32k:ornith-1.5-122b": {
+      "status": "passed",
+      "code_decode_tps": 11.434416128131353,
+      "prose_decode_tps": 13.310968506443057,
+      "fresh_prefill_tps": 52.6758617132715,
+      "fresh_ttft_s": 155.4303683639955,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 13.216,
+        "peak_vram_gib": [
+          18.516,
+          17.234
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 89.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "ornith-rocm-7141-mtp0-32k:ornith-1.5-122b": {
+      "status": "passed",
+      "code_decode_tps": 11.326248479489099,
+      "prose_decode_tps": 13.54183758872451,
+      "fresh_prefill_tps": 52.175449903653835,
+      "fresh_ttft_s": 156.9397855349962,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 13.061,
+        "peak_vram_gib": [
+          18.444,
+          17.252
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 89.0,
+        "0000:06:00.0": 60.0
+      }
+    },
+    "ornith-rocm-10-mtp0-32k:ornith-1.5-122b": {
+      "status": "passed",
+      "code_decode_tps": 11.307882393952607,
+      "prose_decode_tps": 13.499166330557523,
+      "fresh_prefill_tps": 52.199259414400686,
+      "fresh_ttft_s": 156.83631407099892,
+      "marker_checks_passed": 3,
+      "memory": {
+        "minimum_available_gib": 13.019,
+        "peak_vram_gib": [
+          18.476,
+          17.279
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "thermal_junction_peaks_c": {
+        "0000:03:00.0": 90.0,
+        "0000:06:00.0": 60.0
+      }
+    }
+  },
+  "comparisons": [
+    {
+      "control": "vllm-7.2.3:qwen3.8-27b-vllm",
+      "candidate": "vllm-7.2.4:qwen3.8-27b-vllm",
+      "ratios_code_prose_prefill": [
+        0.9950879978351878,
+        0.9937903199930891,
+        0.9993804276947338
+      ],
+      "geomean_change_percent": -0.3916613409586156,
+      "passes_gate": false
+    },
+    {
+      "control": "llama2-7.2.3:qwen3.6-35b-a3b",
+      "candidate": "llama2-7.2.4:qwen3.6-35b-a3b",
+      "ratios_code_prose_prefill": [
+        0.9835269712573605,
+        1.001072241955871,
+        0.9985556075340022
+      ],
+      "geomean_change_percent": -0.5645333833047661,
+      "passes_gate": false
+    },
+    {
+      "control": "llama2-7.2.3:qwen3.6-35b-a3b",
+      "candidate": "llama2-7.14.1:qwen3.6-35b-a3b",
+      "ratios_code_prose_prefill": [
+        0.9856934800146845,
+        1.020041145858839,
+        0.997392414054325
+      ],
+      "geomean_change_percent": 0.09411522841087372,
+      "passes_gate": false
+    },
+    {
+      "control": "llama2-7.2.3:sage-a1.5",
+      "candidate": "llama2-7.2.4:sage-a1.5",
+      "ratios_code_prose_prefill": [
+        0.9979340300920757,
+        1.0026440639103127,
+        0.996772122260742
+      ],
+      "geomean_change_percent": -0.08864838472759651,
+      "passes_gate": false
+    },
+    {
+      "control": "llama2-7.2.3:sage-a1.5",
+      "candidate": "llama2-7.14.1:sage-a1.5",
+      "ratios_code_prose_prefill": [
+        1.0238463441826493,
+        1.0742000919647952,
+        0.9972609318451019
+      ],
+      "geomean_change_percent": 3.127919946102664,
+      "passes_gate": true
+    },
+    {
+      "control": "ornith-rocm-7-mtp0-32k:ornith-1.5-122b",
+      "candidate": "ornith-rocm-724-mtp0-32k:ornith-1.5-122b",
+      "ratios_code_prose_prefill": [
+        0.9987801999840121,
+        0.9990410964642903,
+        1.0002967936935816
+      ],
+      "geomean_change_percent": -0.06275225241124671,
+      "passes_gate": false
+    },
+    {
+      "control": "ornith-rocm-7-mtp0-32k:ornith-1.5-122b",
+      "candidate": "ornith-rocm-7141-mtp0-32k:ornith-1.5-122b",
+      "ratios_code_prose_prefill": [
+        0.9893319076941314,
+        1.0163687387760068,
+        0.9907941427182329
+      ],
+      "geomean_change_percent": -0.12451182791631821,
+      "passes_gate": false
+    },
+    {
+      "control": "ornith-rocm-7-mtp0-32k:ornith-1.5-122b",
+      "candidate": "ornith-rocm-10-mtp0-32k:ornith-1.5-122b",
+      "ratios_code_prose_prefill": [
+        0.987727655900292,
+        1.0131660912356701,
+        0.9912462772725593
+      ],
+      "geomean_change_percent": -0.268318088456021,
+      "passes_gate": false
+    }
+  ],
+  "sage_7141_seed_confirmation": {
+    "model": "sage-a1.5",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "ratios_code_prose_prefill": [
+      1.024573323804693,
+      1.0253679529235813,
+      0.9503386475642114
+    ],
+    "geomean_change_percent": -0.053622407567499586,
+    "passes_gate": false
+  },
+  "not_tested": {
+    "SGLang 7.2.4": "Backend refused to start: GNOME Shell held ~2.2 GiB on GPU0, leaving 22.37 GiB < 22.75 GiB required.",
+    "Bolt vLLM": "Needs ~22.6 GiB per card; same GPU0 desktop allocation.",
+    "vLLM/SGLang on 7.14.1": "Only PyTorch 2.10+rocm7.14.1 wheels exist, older than the installed engines are built against.",
+    "Strata/Maya on 7.2.4/7.14.1": "Their launchers do not use rocm-env.sh; tested on 10.1 on October 21 (rejected)."
+  },
+  "limits": [
+    "Three timed trials per task per arm; screening, not statistical proof.",
+    "GPU0 also served the GNOME desktop during these runs."
+  ]
+}

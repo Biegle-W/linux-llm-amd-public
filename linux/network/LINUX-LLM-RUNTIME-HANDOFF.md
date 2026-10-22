@@ -66,6 +66,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**ROCm update test (October 22):** the 7.2.4 runtime and 7.14.1 llama.cpp builds gave no gain over
+fresh 7.2.3 controls (vLLM Qwen, llama Qwen3.6/Sage, Ornith also on 10.1); 7.2.3 is retained. The
+opt-in `LOCAL_ROCM_RUNTIME_OVERLAY` hook is for isolated tests only.
+[Report](../hardware/ROCM-724-7141-2026-10-22.md).
+
 **Switch-over (user instruction):** Bolt now runs on vLLM as `nemotron-3.5-bolt-vllm`
 (`vllm/start-bolt-rocm`, 262K, sharedSATA2 a required model volume). Router checks passed
 (arithmetic/JSON/tools); 37.32/37.21 t/s decode, 2,959 t/s prefill. The llama.cpp `nemotron-3.5-bolt`

@@ -234,6 +234,13 @@ At the user's request the shared SATA model drive is labelled `sharedSATA1` (exF
 folders on an unmounted path. Public examples keep `/mnt/shared`.
 The empty spare SATA drive is labelled `sharedSATA2` and holds no models.
 
+## ROCm version — October 22
+
+Retain ROCm 7.2.3 for every engine. The 7.2.4 runtime and a 7.14.1 llama.cpp rebuild gave no
+gain on vLLM Qwen, llama Qwen3.6/Sage or Ornith; 10.1 was rejected on October 21. See
+`linux/hardware/ROCM-724-7141-2026-10-22.md`. `LOCAL_ROCM_RUNTIME_OVERLAY` in `hardware/rocm-env.sh`
+is for isolated tests only.
+
 ## DSH default model — October 21
 
 Standing user instruction: the DSH default for new agents is **Strata Q3**

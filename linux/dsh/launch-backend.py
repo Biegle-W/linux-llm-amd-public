@@ -97,7 +97,8 @@ try:
         if llama_spec and llama_spec[3] is not None:
             require_amd_headroom()
         if rocm:
-            require_rocm_headroom(max(profile.get('min_free_vram_gib', 21.0)
+            # The router enforces each profile's own requirement before it loads.
+            require_rocm_headroom(min(profile.get('min_free_vram_gib', 21.0)
                                       for profile in profiles.values()))
         if kind == 'strata':
             require_strata()

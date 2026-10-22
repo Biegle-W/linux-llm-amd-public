@@ -176,6 +176,13 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [all trials](linux/hardware/results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](linux/hardware/ROCM-SELECTION-2026-10-21.md).
 
+### ROCm 7.2.4 / 7.14.1 — no gain
+
+[ROCm update test](linux/hardware/ROCM-724-7141-2026-10-22.md): neither the 7.2.4 runtime nor a
+7.14.1 llama.cpp rebuild beat fresh 7.2.3 controls. That covers vLLM Qwen, llama.cpp
+Qwen3.6/Sage and Ornith (also on 10.1). All were within ±3%. Sage's +3.1% on 7.14.1 vanished
+across seeds (−0.05%). 10.1.0 is still AMD's latest and was rejected on October 21. Retain 7.2.3.
+
 ### Bolt on vLLM — isolated test
 
 [Bolt vLLM vs llama.cpp](linux/hardware/BOLT-VLLM-2026-10-21.md): the 4-bit AutoRound build on vLLM TP2
