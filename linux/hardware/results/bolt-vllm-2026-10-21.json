@@ -3307,6 +3307,6 @@
       "nemotron-3.5-bolt",
       "qwen3.8-27b-q4"
     ],
-    "weights": "Retired GGUF files retained on sharedSATA1 pending user decision."
+    "weights": "Retired llama.cpp GGUF files (Bolt Q4_K_M, 48.3 GB; Qwen3.8-27B Q4_K_M, 16.5 GB) deleted from sharedSATA1 on 2026-10-22 at the user's request."
   }
 }

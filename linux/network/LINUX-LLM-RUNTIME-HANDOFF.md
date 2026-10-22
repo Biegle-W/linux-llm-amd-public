@@ -69,7 +69,7 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 **Switch-over (user instruction):** Bolt now runs on vLLM as `nemotron-3.5-bolt-vllm`
 (`vllm/start-bolt-rocm`, 262K, sharedSATA2 a required model volume). Router checks passed
 (arithmetic/JSON/tools); 37.32/37.21 t/s decode, 2,959 t/s prefill. The llama.cpp `nemotron-3.5-bolt`
-and `qwen3.8-27b-q4` profiles are retired; llama.cpp defaults to HIP. Ten active profiles.
+and `qwen3.8-27b-q4` profiles are retired; llama.cpp defaults to HIP. Their GGUF files were deleted at the user's request (October 22). Ten active profiles.
 
 **Bolt vLLM test:** the AutoRound W4A16 build on vLLM TP2 matches llama.cpp decode (38 vs 37 t/s)
 and is about 13× faster at prefill (2,910 vs 224 t/s). It passed a 255K retrieval at 262K context.
