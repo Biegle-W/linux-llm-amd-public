@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Nemotron-3.5-Bolt AutoRound W4A16 (validated October 21): TP2, text only, BF16 KV.
+# NVIDIA's tool parser and its byte-identical ultra_v3 reasoning-parser plugin.
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+MODEL=/mnt/shared-spare/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+export VLLM_ENGINE_READY_TIMEOUT_S=1800
+exec "$ROOT/vllm/run-rocm" serve "$MODEL" \
+ --host 127.0.0.1 --port 30011 --served-model-name nemotron-3.5-bolt-vllm --trust-remote-code \
+ --generation-config "$ROOT/vllm/bolt-generation-config" \
+ --tensor-parallel-size 2 --disable-custom-all-reduce --language-model-only --dtype bfloat16 \
+ --max-model-len 262144 --max-num-seqs 1 --max-num-batched-tokens 4096 \
+ --gpu-memory-utilization 0.94 --kv-cache-memory-bytes 1879048192 \
+ --kv-cache-dtype bfloat16 --attention-backend TRITON_ATTN --enable-prefix-caching \
+ --compilation-config '{"mode":3,"cudagraph_mode":"FULL_DECODE_ONLY"}' \
+ --cudagraph-capture-sizes 1 4 \
+ --enable-auto-tool-choice --tool-call-parser qwen3_coder \
+ --reasoning-parser-plugin "$MODEL/ultra_v3_reasoning_parser.py" --reasoning-parser ultra_v3 \
+ --default-chat-template-kwargs '{"enable_thinking":false}' "$@"

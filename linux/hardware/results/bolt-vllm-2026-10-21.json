@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-21",
-  "status": "complete",
+  "status": "promoted",
   "question": "Can a vLLM 4-bit build of Nemotron-3.5-Bolt beat the llama.cpp Bolt profile on two RX 7900 XTX?",
   "candidate": {
     "repository": "SergiioB/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16-G128-sym",
@@ -2248,9 +2248,1065 @@
   },
   "limits": [
     "Three timed trials per task; screening, not statistical proof.",
-    "Tool calling and constrained JSON were not tested on vLLM (no tool parser configured).",
     "Vision/audio towers were not loaded (--language-model-only); the llama.cpp profile is also text-only.",
     "vLLM prefill uses the engine prefill phase; llama.cpp uses native timings, as in the shared method.",
-    "Single uploader quantization; quality beyond marker retrieval and arithmetic was not evaluated."
-  ]
+    "Single uploader quantization; quality beyond marker retrieval and arithmetic was not evaluated.",
+    "Tool round trip and JSON checks are smoke tests, not an agent benchmark."
+  ],
+  "promotion": {
+    "profile": "nemotron-3.5-bolt-vllm",
+    "launcher": "vllm/start-bolt-rocm",
+    "router": "dsh/vllm-router.py (production vLLM launcher)",
+    "context": 262144,
+    "tool_parser": "qwen3_coder",
+    "reasoning_parser": "ultra_v3 plugin (byte-identical to NVIDIA)",
+    "default_thinking": false,
+    "router_quality": {
+      "arithmetic": true,
+      "ordered_json": true,
+      "ordered_json_answer": "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]",
+      "tool_roundtrip": true,
+      "ordered_100": true
+    },
+    "first_request_including_load_seconds": 262.38959242800047,
+    "nonresident_vram_bytes": 0,
+    "production_benchmark": {
+      "model": "nemotron-3.5-bolt-vllm",
+      "context": 262144,
+      "status": "passed",
+      "short": {
+        "code": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 34,
+                "total_tokens": 290,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07712465599979623,
+              "total_seconds": 6.903770684999472,
+              "decode_tps_sse": 37.353628548595736,
+              "content_sha256": "691db88c7eb8d3d70be45a95403236af9ccc83bdc36af1dbb5109f40375d1719",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07266571799846133,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 440.84475397971084,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 467.89601667074885,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 8,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 64.0,
+                      "edge": 62.0,
+                      "junction": 74.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 64.0,
+                      "edge": 62.0,
+                      "junction": 74.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 7,
+                    "hotspot_limit_samples": 7,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 970.0,
+                    "peak_power_average_w": 232.0,
+                    "peak_gfx_clock_mhz": 3024.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 64.0,
+                      "edge": 47.0,
+                      "junction": 61.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 64.0,
+                      "edge": 47.0,
+                      "junction": 61.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 7,
+                    "hotspot_limit_samples": 7,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1129.0,
+                    "peak_power_average_w": 224.0,
+                    "peak_gfx_clock_mhz": 3119.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:04.153245+00:00",
+                "last_sample_utc": "2026-10-22T03:15:11.067239+00:00"
+              }
+            },
+            {
+              "usage": {
+                "prompt_tokens": 34,
+                "total_tokens": 290,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07656209799824865,
+              "total_seconds": 6.910080777000985,
+              "decode_tps_sse": 37.31606101897916,
+              "content_sha256": "691db88c7eb8d3d70be45a95403236af9ccc83bdc36af1dbb5109f40375d1719",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07205699899714091,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 444.0839643759207,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 471.8486819212254,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 8,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 8,
+                    "busy_samples": 8,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 64.0,
+                      "junction": 76.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 64.0,
+                      "junction": 76.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 6,
+                    "hotspot_limit_samples": 6,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1060.0,
+                    "peak_power_average_w": 236.0,
+                    "peak_gfx_clock_mhz": 3021.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 48.0,
+                      "junction": 62.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 48.0,
+                      "junction": 62.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 7,
+                    "hotspot_limit_samples": 7,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1205.0,
+                    "peak_power_average_w": 225.0,
+                    "peak_gfx_clock_mhz": 3118.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:11.070514+00:00",
+                "last_sample_utc": "2026-10-22T03:15:17.990482+00:00"
+              }
+            },
+            {
+              "usage": {
+                "prompt_tokens": 34,
+                "total_tokens": 290,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07918809599868837,
+              "total_seconds": 7.05301070600035,
+              "decode_tps_sse": 36.56531206203698,
+              "content_sha256": "6993d2a4fd0a6c8c12f82599873528ed3a60632906cb8503048298305222a336",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.07460045100015122,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 429.3574630278162,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 455.76131972621823,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 9,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 9,
+                    "busy_samples": 8,
+                    "sensor_samples": {
+                      "mem": 9,
+                      "edge": 9,
+                      "junction": 9
+                    },
+                    "peak_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 66.0,
+                      "junction": 78.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 66.0,
+                      "junction": 78.0
+                    },
+                    "throttle_samples_available": 9,
+                    "thermal_limit_samples": 6,
+                    "hotspot_limit_samples": 6,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1215.0,
+                    "peak_power_average_w": 241.0,
+                    "peak_gfx_clock_mhz": 3022.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 9,
+                    "busy_samples": 8,
+                    "sensor_samples": {
+                      "mem": 9,
+                      "edge": 9,
+                      "junction": 9
+                    },
+                    "peak_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 49.0,
+                      "junction": 63.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 66.0,
+                      "edge": 49.0,
+                      "junction": 63.0
+                    },
+                    "throttle_samples_available": 9,
+                    "thermal_limit_samples": 8,
+                    "hotspot_limit_samples": 8,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1203.0,
+                    "peak_power_average_w": 226.0,
+                    "peak_gfx_clock_mhz": 3122.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:17.995966+00:00",
+                "last_sample_utc": "2026-10-22T03:15:25.061437+00:00"
+              }
+            }
+          ],
+          "median_decode_tps": 37.31606101897916,
+          "median_ttft_seconds": 0.07712465599979623
+        },
+        "prose": {
+          "trials": [
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.0690948160008702,
+              "total_seconds": 6.921433928000624,
+              "decode_tps_sse": 37.213569823689305,
+              "content_sha256": "6b4bf19764955715411aee09881e21a4788e7357ea8b7a0552ef42cb3eaf367b",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06462463699790533,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 419.71310842820344,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 448.74526724134597,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 8,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 8,
+                    "busy_samples": 8,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 71.0,
+                      "edge": 69.0,
+                      "junction": 81.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 71.0,
+                      "edge": 69.0,
+                      "junction": 81.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 6,
+                    "hotspot_limit_samples": 6,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1644.0,
+                    "peak_power_average_w": 260.0,
+                    "peak_gfx_clock_mhz": 3014.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 51.0,
+                      "junction": 65.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 51.0,
+                      "junction": 65.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 7,
+                    "hotspot_limit_samples": 7,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1206.0,
+                    "peak_power_average_w": 229.0,
+                    "peak_gfx_clock_mhz": 3123.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:31.988772+00:00",
+                "last_sample_utc": "2026-10-22T03:15:38.919167+00:00"
+              }
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07112300700100604,
+              "total_seconds": 6.9203668129994185,
+              "decode_tps_sse": 37.230387357021336,
+              "content_sha256": "109a433a626a26a8fea86ed9d722e7e75b3f2080ad9c9dcc37f56dbcb95abf5b",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.06611956999768154,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 407.7442901084004,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 438.5993435985273,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 8,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 8,
+                    "busy_samples": 8,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 72.0,
+                      "edge": 70.0,
+                      "junction": 82.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 72.0,
+                      "edge": 70.0,
+                      "junction": 82.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 6,
+                    "hotspot_limit_samples": 6,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1841.0,
+                    "peak_power_average_w": 248.0,
+                    "peak_gfx_clock_mhz": 3015.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 51.0,
+                      "junction": 65.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 68.0,
+                      "edge": 51.0,
+                      "junction": 65.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 8,
+                    "hotspot_limit_samples": 8,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1208.0,
+                    "peak_power_average_w": 227.0,
+                    "peak_gfx_clock_mhz": 3114.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:38.925022+00:00",
+                "last_sample_utc": "2026-10-22T03:15:45.856809+00:00"
+              }
+            },
+            {
+              "usage": {
+                "prompt_tokens": 29,
+                "total_tokens": 285,
+                "completion_tokens": 256,
+                "completion_tokens_details": {
+                  "reasoning_tokens": 0
+                }
+              },
+              "ttft_seconds": 0.07072075299947755,
+              "total_seconds": 6.923803941997903,
+              "decode_tps_sse": 37.20952934138658,
+              "content_sha256": "1535f234f39a4d40f5411d4965a01cd6c820578ca6c5184717dcfc0fb48d629d",
+              "reasoning_tokens_present": false,
+              "native_timings": null,
+              "prefill_phase_seconds": 0.0660607110003184,
+              "prefill_phase_observations": 1.0,
+              "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+              "effective_input_per_ttft": 410.0635071039789,
+              "cached_tokens": 0,
+              "prefill_phase_tps": 438.99012833604263,
+              "thermal": {
+                "schema": 1,
+                "label": "vllm-nemotron-3.5-bolt-vllm-request",
+                "status": "complete",
+                "interval_seconds": 1.0,
+                "samples": 8,
+                "sample_errors": 0,
+                "raw_samples_dropped": 0,
+                "raw_limit_bytes": 67108864,
+                "cards": {
+                  "0000:03:00.0": {
+                    "gpu_index": 0,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 74.0,
+                      "edge": 71.0,
+                      "junction": 83.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 74.0,
+                      "edge": 71.0,
+                      "junction": 83.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 3,
+                    "hotspot_limit_samples": 3,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1843.0,
+                    "peak_power_average_w": 250.0,
+                    "peak_gfx_clock_mhz": 3012.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  },
+                  "0000:06:00.0": {
+                    "gpu_index": 1,
+                    "samples": 8,
+                    "busy_samples": 7,
+                    "sensor_samples": {
+                      "mem": 8,
+                      "edge": 8,
+                      "junction": 8
+                    },
+                    "peak_temperature_c": {
+                      "mem": 70.0,
+                      "edge": 52.0,
+                      "junction": 66.0
+                    },
+                    "peak_busy_temperature_c": {
+                      "mem": 70.0,
+                      "edge": 52.0,
+                      "junction": 66.0
+                    },
+                    "throttle_samples_available": 8,
+                    "thermal_limit_samples": 7,
+                    "hotspot_limit_samples": 7,
+                    "power_limit_samples": 0,
+                    "current_limit_samples": 0,
+                    "peak_fan_rpm": 1205.0,
+                    "peak_power_average_w": 227.0,
+                    "peak_gfx_clock_mhz": 3112.0,
+                    "peak_memory_clock_mhz": 1249.0,
+                    "peak_busy_percent": 100.0,
+                    "last_throttle_status": "available"
+                  }
+                },
+                "cpu_peak_package_c": {
+                  "Package id 0": 100.0
+                },
+                "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+                "started_utc": "2026-10-22T03:15:45.862800+00:00",
+                "last_sample_utc": "2026-10-22T03:15:52.800414+00:00"
+              }
+            }
+          ],
+          "median_decode_tps": 37.213569823689305,
+          "median_ttft_seconds": 0.07072075299947755
+        }
+      },
+      "prefill": [
+        {
+          "usage": {
+            "prompt_tokens": 7925,
+            "total_tokens": 7947,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 2.813970983999752,
+          "total_seconds": 3.380129166002007,
+          "decode_tps_sse": 37.09210723711905,
+          "content_sha256": "0524dad23045a175c1e94f383a670245969b1d3afc380fba98de1dab59b8c436",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 2.798322132002795,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 2816.304803802731,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 2832.0542189787047,
+          "thermal": {
+            "schema": 1,
+            "label": "vllm-nemotron-3.5-bolt-vllm-request",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 5,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 74.0,
+                  "edge": 73.0,
+                  "junction": 90.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 74.0,
+                  "edge": 73.0,
+                  "junction": 90.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1839.0,
+                "peak_power_average_w": 250.0,
+                "peak_gfx_clock_mhz": 3007.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 70.0,
+                  "edge": 54.0,
+                  "junction": 74.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 70.0,
+                  "edge": 54.0,
+                  "junction": 74.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1204.0,
+                "peak_power_average_w": 264.0,
+                "peak_gfx_clock_mhz": 3109.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 100.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-22T03:15:53.474833+00:00",
+            "last_sample_utc": "2026-10-22T03:15:56.871197+00:00"
+          },
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 7922,
+            "total_tokens": 7944,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 2.692149492999306,
+          "total_seconds": 3.262977721002244,
+          "decode_tps_sse": 36.78865019249174,
+          "content_sha256": "886883734a0051cf7b7b111bbff1ba39089d81fc549a134da7e8ec646309a02f",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 2.677533542002493,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 2942.6300510430247,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 2958.6930941209566,
+          "thermal": {
+            "schema": 1,
+            "label": "vllm-nemotron-3.5-bolt-vllm-request",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 5,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 75.0,
+                  "edge": 73.0,
+                  "junction": 92.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 75.0,
+                  "edge": 73.0,
+                  "junction": 92.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1953.0,
+                "peak_power_average_w": 304.0,
+                "peak_gfx_clock_mhz": 3007.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 70.0,
+                  "edge": 55.0,
+                  "junction": 77.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 70.0,
+                  "edge": 55.0,
+                  "junction": 77.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1201.0,
+                "peak_power_average_w": 303.0,
+                "peak_gfx_clock_mhz": 3117.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 100.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-22T03:15:57.400621+00:00",
+            "last_sample_utc": "2026-10-22T03:16:00.692920+00:00"
+          },
+          "markers_passed": true
+        },
+        {
+          "usage": {
+            "prompt_tokens": 7924,
+            "total_tokens": 7946,
+            "completion_tokens": 22,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "ttft_seconds": 2.686684312997386,
+          "total_seconds": 3.2548366939990956,
+          "decode_tps_sse": 36.96191497600501,
+          "content_sha256": "0524dad23045a175c1e94f383a670245969b1d3afc380fba98de1dab59b8c436",
+          "reasoning_tokens_present": false,
+          "native_timings": null,
+          "prefill_phase_seconds": 2.6717324439996446,
+          "prefill_phase_observations": 1.0,
+          "prefill_phase_source": "vllm:request_prefill_time_seconds_sum (scheduled to first engine token)",
+          "effective_input_per_ttft": 2949.3602808733526,
+          "cached_tokens": 0,
+          "prefill_phase_tps": 2965.8658440130293,
+          "thermal": {
+            "schema": 1,
+            "label": "vllm-nemotron-3.5-bolt-vllm-request",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 5,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 76.0,
+                  "edge": 74.0,
+                  "junction": 94.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 76.0,
+                  "edge": 74.0,
+                  "junction": 94.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 2028.0,
+                "peak_power_average_w": 305.0,
+                "peak_gfx_clock_mhz": 3007.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 5,
+                "busy_samples": 4,
+                "sensor_samples": {
+                  "mem": 5,
+                  "edge": 5,
+                  "junction": 5
+                },
+                "peak_temperature_c": {
+                  "mem": 72.0,
+                  "edge": 56.0,
+                  "junction": 79.0
+                },
+                "peak_busy_temperature_c": {
+                  "mem": 72.0,
+                  "edge": 56.0,
+                  "junction": 79.0
+                },
+                "throttle_samples_available": 5,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 2,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1205.0,
+                "peak_power_average_w": 306.0,
+                "peak_gfx_clock_mhz": 3109.0,
+                "peak_memory_clock_mhz": 1249.0,
+                "peak_busy_percent": 100.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 100.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-22T03:16:01.177690+00:00",
+            "last_sample_utc": "2026-10-22T03:16:04.449623+00:00"
+          },
+          "markers_passed": true
+        }
+      ],
+      "arithmetic": true,
+      "memory": {
+        "minimum_available_gib": 45.081,
+        "peak_vram_gib": [
+          23.813,
+          22.86
+        ],
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "marker_checks_passed": 3,
+      "thermal": {
+        "schema": 1,
+        "label": "benchmark-vllm-nemotron-3.5-bolt-vllm",
+        "status": "complete",
+        "interval_seconds": 1.0,
+        "samples": 68,
+        "sample_errors": 0,
+        "raw_samples_dropped": 0,
+        "raw_limit_bytes": 67108864,
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 68,
+            "busy_samples": 66,
+            "sensor_samples": {
+              "mem": 68,
+              "edge": 68,
+              "junction": 68
+            },
+            "peak_temperature_c": {
+              "mem": 76.0,
+              "edge": 74.0,
+              "junction": 94.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 76.0,
+              "edge": 74.0,
+              "junction": 94.0
+            },
+            "throttle_samples_available": 68,
+            "thermal_limit_samples": 56,
+            "hotspot_limit_samples": 56,
+            "power_limit_samples": 10,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2030.0,
+            "peak_power_average_w": 303.0,
+            "peak_gfx_clock_mhz": 3030.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 68,
+            "busy_samples": 66,
+            "sensor_samples": {
+              "mem": 68,
+              "edge": 68,
+              "junction": 68
+            },
+            "peak_temperature_c": {
+              "mem": 72.0,
+              "edge": 56.0,
+              "junction": 79.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 72.0,
+              "edge": 56.0,
+              "junction": 79.0
+            },
+            "throttle_samples_available": 68,
+            "thermal_limit_samples": 65,
+            "hotspot_limit_samples": 65,
+            "power_limit_samples": 12,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1206.0,
+            "peak_power_average_w": 303.0,
+            "peak_gfx_clock_mhz": 3122.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          }
+        },
+        "cpu_peak_package_c": {
+          "Package id 0": 100.0
+        },
+        "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+        "started_utc": "2026-10-22T03:14:57.056246+00:00",
+        "last_sample_utc": "2026-10-22T03:16:04.458230+00:00"
+      }
+    },
+    "retired_llama_profiles": [
+      "nemotron-3.5-bolt",
+      "qwen3.8-27b-q4"
+    ],
+    "weights": "Retired GGUF files retained on sharedSATA1 pending user decision."
+  }
 }

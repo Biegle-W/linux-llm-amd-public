@@ -36,33 +36,6 @@
       "mtp_draft_experts_on_gpu": true,
       "validation": "256K allocated; approximately 64K actual retrieval plus tools/JSON/arithmetic; full-window quality/speed not established"
     },
-    "nemotron-3.5-bolt": {
-      "backend": "hip-amd",
-      "context": 262144,
-      "minimum_host_ram_gib": 28,
-      "cpu_expert_layers": [
-        1,
-        10,
-        19,
-        28,
-        37,
-        45,
-        50,
-        59,
-        67,
-        76,
-        81,
-        85
-      ],
-      "host_expert_bytes": 13673005056,
-      "gpu_expert_cache_mib": 7168,
-      "kv_cache": "q8_0",
-      "load_mode": "none",
-      "mtp_draft_experts_on_gpu": false,
-      "validation": "Q4 256K allocated; approximately 64K actual retrieval plus tools/JSON/arithmetic; full-window quality/speed not established",
-      "tensor_split": "21,19",
-      "quantization": "Q4_K_M"
-    },
     "empero-qwen3.8-35b-a3b": {
       "backend": "hip-amd",
       "context": 262144,

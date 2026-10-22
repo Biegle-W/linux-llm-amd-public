@@ -64,7 +64,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 ## AMD: latest setup and results
 
-**Eleven active profiles:** six llama.cpp (Sage-A1.5 added October21), one SGLang, one vLLM, one Strata, two Maya.
+**Ten active profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -78,14 +78,14 @@ No driver/kernel update or global SDK replacement was performed.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); dense Vulkan, MoE HIP | Dense Vulkan; five MoEs (incl. Sage) on HIP7.2.3, both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (incl. Sage) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
-| vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | TP2/compiled MTP3/BF16 KV/163840 |
+| vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
 | Maya | [3384b5e/v1.1.19](https://github.com/mw00/project-maya/commit/3384b5e9366e696e5f23f51772fb94a8a7948e41), ROCm7.2.3 | Both32K Maya-S profiles; original guards/source/quantization retained |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
-### Nine profiles using the shared benchmark method
+### Eight profiles using the shared benchmark method
 
 Fresh October21 controls: three timed requests/task and three fresh prefills,
 except vLLM's six fixed-seed controls across two starts. Empero's row uses
@@ -97,9 +97,8 @@ External SSE TTFT/decode are separate; model cold-start is excluded.
 
 | Model / quant | Backend / strategy | Context tokens | Actual fresh input | PP t/s | Fresh TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Qwen3.8-27B Q4_K_M | llama.cpp Vulkan, MTP3 | 65,536 | 8,185–8,188 | 702.1 | 11.670 | 0.124 / 0.123 | 80.28 / 47.73 |
 | Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
-| Nemotron-3.5-Bolt-74B-A9B Q4_K_M | llama.cpp HIP7, expert cache | 262,144 | 7,923–7,925 | 223.9 | 35.398 | 0.392 / 0.252 | 36.85 / 36.62 |
+| Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | vLLM TP2, Triton int4 MoE | 262,144 | 7,922–7,925 | 2,958.7 | 2.692 | 0.077 / 0.071 | 37.32 / 37.21 |
 | Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,185–8,190 | 395.1 | 20.727 | 0.058 / 0.057 | 122.11 / 74.32 |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,188–8,190 | 1449.7 | 5.657 | 0.086 / 0.083 | 211.58 / 72.57 |
 | Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,186–8,189 | 1475.2 | 5.562 | 0.068 / 0.075 | 133.92 / 70.91 |
@@ -159,7 +158,7 @@ recorded and did not recur under normal RAM. [Full comparison](linux/hardware/RO
 ## Sage-A1.5 test and ROCm selection — October21
 
 Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
-Shared SATA. **Now active** as the eleventh llama.cpp profile `sage-a1.5`
+Shared SATA. **Now active** as the llama.cpp profile `sage-a1.5`
 (64K/MTP3 + projector), with a **Sage** Desktop shortcut that loads it and opens
 llama.cpp's built-in Chat. The Agents-A1 harness is not installed. DSH default is Strata Q3 (user, October21). llama.cpp4c3c5810/HIP7.2.3, both GPUs with
 CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
@@ -182,7 +181,7 @@ near61,999-input retrieval/full history and a separate vision smoke.
 [Bolt vLLM vs llama.cpp](linux/hardware/BOLT-VLLM-2026-10-21.md): the 4-bit AutoRound build on vLLM TP2
 decodes at the same speed (38.0/37.9 vs 36.8/36.7 t/s). It reads prompts about **13× faster**
 (2,910 vs 224 t/s; ~8K TTFT 2.7 s vs 35.4 s) and passed a 255K-token retrieval at 262K context.
-It is not an active profile yet; tool calling and JSON are untested.
+**Now active** as `nemotron-3.5-bolt-vllm`; the llama.cpp Bolt and Qwen3.8-27B Q4 profiles are retired.
 
 ### vLLM alternatives for slow llama.cpp models — research only
 

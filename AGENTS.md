@@ -32,7 +32,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Eleven profiles are active: six llama.cpp (incl. Sage-A1.5), one SGLang, one vLLM, one Strata, two Maya.
+Ten profiles are active: four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile.
 Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; keep the SATA original as a backup. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
@@ -285,7 +285,7 @@ privately; publish only curated numeric records. [Exact outcomes and limits](lin
 
 Official Q4_K_M and vision projector are intentionally retained, hash-verified on
 Shared SATA under GGUF-Models/Sage-A1.5-GGUF. At the user's request ("profile only"),
-Sage is now the eleventh active llama.cpp profile `sage-a1.5` (64K/MTP3 + projector),
+Sage is now an active llama.cpp profile `sage-a1.5` (64K/MTP3 + projector),
 with a Desktop **Sage** web shortcut (`dsh/start-sage`). The shortcut loads Sage through
 the admitted router, then opens llama.cpp's built-in Chat. Do not install the Agents-A1
 harness or its external accounts unless asked. DSH default: Strata (see below). Validated test:

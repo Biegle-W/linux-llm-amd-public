@@ -16,15 +16,15 @@ UUID = 'CONFIGURE_SHARED_DRIVE_UUID'
 STREAM_SHARED = Path('/mnt/shared-nvme')
 STREAM_MODELS = STREAM_SHARED / 'LLM-Models'
 STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
-# An optional spare exFAT volume (labelled "sharedSATA2") holds no model configuration;
-# it is mounted for convenience only and never blocks login or a backend.
+# sharedSATA2 holds vLLM checkpoints (Nemotron Bolt AutoRound W4A16, October 21).
 SPARE = Path('/mnt/shared-spare')
+SPARE_MODELS = SPARE / 'vLLM-Models'
 SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
     ('sharedSATA1', UUID, SHARED, MODELS, True),
     ('Shared NVMe', STREAM_UUID, STREAM_SHARED, STREAM_MODELS, True),
-    ('Spare SATA', SPARE_UUID, SPARE, None, False),
+    ('sharedSATA2', SPARE_UUID, SPARE, SPARE_MODELS, True),
 )
 
 
@@ -111,6 +111,12 @@ def ensure_llama_models(presets=None):
     if not paths:
         raise RuntimeError('No llama.cpp model paths found in the presets.')
     ensure_model_paths(paths)
+
+
+def ensure_vllm_models(profiles):
+    """Mount the volumes of vLLM profiles kept on model drives; internal-disk models need none."""
+    ensure_model_paths([p['model_path'] for p in profiles.values()
+                        if str(p.get('model_path', '')).startswith('/mnt/')])
 
 
 def ensure_strata_models(config=None):

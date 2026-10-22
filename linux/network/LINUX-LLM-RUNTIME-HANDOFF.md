@@ -66,6 +66,11 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**Switch-over (user instruction):** Bolt now runs on vLLM as `nemotron-3.5-bolt-vllm`
+(`vllm/start-bolt-rocm`, 262K, sharedSATA2 a required model volume). Router checks passed
+(arithmetic/JSON/tools); 37.32/37.21 t/s decode, 2,959 t/s prefill. The llama.cpp `nemotron-3.5-bolt`
+and `qwen3.8-27b-q4` profiles are retired; llama.cpp defaults to HIP. Ten active profiles.
+
 **Bolt vLLM test:** the AutoRound W4A16 build on vLLM TP2 matches llama.cpp decode (38 vs 37 t/s)
 and is about 13× faster at prefill (2,910 vs 224 t/s). It passed a 255K retrieval at 262K context.
 Not active; tools/JSON untested. [Report](../hardware/BOLT-VLLM-2026-10-21.md).
@@ -259,13 +264,12 @@ not guarantees of full-window speed or general long-context accuracy.
 
 | Backend / placement | Exact API model ID | Total context | Target quantization | Speculation |
 |---|---|---:|---|---|
-| llama.cpp / Vulkan | `qwen3.8-27b-q4` | 65,536 | Q4_K_M | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
-| llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-bolt` | 262,144* | Q4_K_M, two GGUF shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 163,840 | GPTQ INT4/group64 | DFlash2, 8 draft tokens; BF16 KV |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
+| vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
 | Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S v2, mixed IQ2/3 experts / Q6_K attention/shared | MTP |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | DSpark not loaded |

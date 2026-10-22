@@ -12,6 +12,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from rocm_runtime import require_rocm_headroom
+from shared_storage import ensure_vllm_models
 
 ROOT = Path('/opt/local-llm/dsh')
 BACKEND = os.environ.get('LOCAL_VLLM_BACKEND', 'vllm')
@@ -64,6 +65,8 @@ def ensure_worker(model):
         return
     stop_worker()
     cfg = PROFILES[model]
+    # Mount only this profile's model drive; internal-disk profiles need none.
+    ensure_vllm_models({model: cfg})
     if cfg.get('runtime') == 'rocm':
         require_rocm_headroom(cfg.get('min_free_vram_gib', 21.0))
     with socket.socket() as probe:
