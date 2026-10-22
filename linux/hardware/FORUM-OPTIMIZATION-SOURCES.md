@@ -730,3 +730,16 @@ No lcz.me or Level1Techs report covers Nemotron-3.5-Bolt or Sage-A1.5 on vLLM/RO
 - [lcz.me topic 353](https://lcz.me/topic/353) covers single-card 7900 XTX llama.cpp.
 
 None supports a local speed claim. See [the research note](VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md).
+
+## Slow-model optimization research — October 22
+
+- [r/LocalLLaMA, u/coder543 (mirror)](https://reddit.sentinel-team.org/posts/1tany5t/snapshots/2026-05-15T23%3A40%3A01.25497Z):
+  `-ub 512 → 4096` raised gpt-oss-120b CPU-offload prefill 380 → 1,682 tok/s.
+- [lcz.me #1929](https://lcz.me/topic/1929) (johnnybegood, September 25): GLM-5.3-Flash dual 3090:
+  DFlash2 n=2 +21–25% decode; UBATCH 4096 raised prefill but lowered decode; decode is CPU-bound.
+- [lcz.me #2357](https://lcz.me/topic/2357) (johnnybegood, October 16): Strata-DSV4.1 DeepSeek ~26 tok/s on a 4090 (custom quant, ~600 GB SSD).
+- [Level1Techs: Optimal local AI on 12 GB VRAM](https://forum.level1techs.com/t/optimal-local-ai-on-12-gb-vram/251461)
+  and [DeepSeek R1 at home](https://forum.level1techs.com/t/deepseek-deep-dive-r1-at-home/225826): thread count about equal to physical cores; hybrid-core defaults hurt.
+- [Doctor-Shotgun MoE offload guide](https://huggingface.co/blog/Doctor-Shotgun/llamacpp-moe-offload-guide): `-b/-ub 4096`, op-offload threshold.
+
+None supports a local speed claim. See [the research note](SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).

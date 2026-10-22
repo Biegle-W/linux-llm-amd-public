@@ -66,6 +66,10 @@ by the original consolidation; the subsequent MoE offload update is documented b
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
 The empty spare SATA drive is labelled **sharedSATA2**.
 
+**Slow-model research (October 22):** the top community lead is llama.cpp `ubatch` (128 in every
+profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
+[Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
+
 **Sage front end removed, Ornith active, engine rule (October 22):** the Sage Desktop shortcut and
 launcher were removed (`sage-a1.5` stays active). `ornith-1.5-122b` is an active llama.cpp profile
 (32K, MTP off, vision). Standing rule: always look for a faster vLLM/SGLang build before llama.cpp
