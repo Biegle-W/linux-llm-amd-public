@@ -3,7 +3,11 @@
 
 RDNA3 (RX 7000) rejects the legacy pwm1 manual mode with EINVAL. Its fans are set through
 OverDrive: gpu_od/fan_ctrl/fan_minimum_pwm takes a minimum percentage, 'c' commits and 'r'
-resets to the firmware default. OverDrive needs bit 0x4000 in amdgpu.ppfeaturemask.
+resets to the firmware default. Zero-RPM mode parks the fans below its stop temperature
+regardless of that minimum, so fan_zero_rpm_enable is also set to 0 for the test. The 7900 XTX
+firmware ignored both at idle (0 RPM), so the custom fan_curve is also set to at least the
+requested percentage at every point, which switches the firmware to manual-curve mode.
+OverDrive needs bit 0x4000 in amdgpu.ppfeaturemask.
 """
 import argparse
 import os
@@ -30,10 +34,11 @@ def main():
         parser.error('Fan percentage must be 60..100 and duration 30..1800 seconds')
     if os.geteuid() != 0:
         parser.error('Administrator access is required for the kernel fan controls; run with sudo.')
-    controls = [(name, device/'gpu_od/fan_ctrl/fan_minimum_pwm') for name, device in amd_cards()]
-    if len(controls) != 2:
+    cards = list(amd_cards())
+    if len(cards) != 2:
         raise SystemExit('Expected exactly two AMD GPUs')
-    missing = [name for name, path in controls if not path.exists()]
+    fan_ctrl = {name: device/'gpu_od/fan_ctrl' for name, device in cards}
+    missing = [name for name, path in fan_ctrl.items() if not (path/'fan_minimum_pwm').exists()]
     if missing:
         mask = Path('/sys/module/amdgpu/parameters/ppfeaturemask').read_text().strip()
         raise SystemExit(f'No OverDrive fan control on {", ".join(missing)}: amdgpu.ppfeaturemask is {mask}. '
@@ -45,13 +50,23 @@ def main():
     signal.signal(signal.SIGINT, stop)
     changed = []
     try:
-        for name, path in controls:
-            changed.append(path)
-            path.write_text(f'{args.percent}\n')
-            path.write_text('c\n')
-            print(name, 'minimum fan', args.percent, 'percent:', ' '.join(path.read_text().split()), flush=True)
+        for name, ctrl in fan_ctrl.items():
+            curve = [f'{point} {temp} {max(args.percent, speed)}'
+                     for point, (temp, speed) in enumerate(((25, 0), (45, 0), (65, 0), (80, 90), (95, 100)))]
+            for setting, values in (('fan_zero_rpm_enable', ['0']), ('fan_minimum_pwm', [str(args.percent)]),
+                                    ('fan_curve', curve)):
+                path = ctrl/setting
+                changed.append(path)
+                for value in values:
+                    path.write_text(f'{value}\n')
+                path.write_text('c\n')
+                print(name, setting, ':', ' '.join(path.read_text().split()), flush=True)
         print('Cooling test active; Ctrl-C or timeout restores automatic control.', flush=True)
-        time.sleep(args.seconds)
+        time.sleep(min(10, args.seconds))
+        for name, device in cards:
+            rpm = [fan.read_text().strip() for fan in device.glob('hwmon/hwmon*/fan1_input')]
+            print(name, 'fan speed after 10 s:', ', '.join(rpm) or 'unknown', 'RPM', flush=True)
+        time.sleep(max(0, args.seconds - 10))
     finally:
         errors = []
         for path in reversed(changed):

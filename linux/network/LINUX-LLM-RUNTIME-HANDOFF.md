@@ -143,7 +143,8 @@ profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 instead of desktop-session udisks mounts, and user services run through lingering, so models serve
 after a reboot with nobody logged in. Secure Boot is disabled so the DKMS motherboard fan driver
 loads. The unused NVIDIA driver was purged. `amdgpu.ppfeaturemask=0xfff7ffff` enables RDNA3
-OverDrive fan control. Monitors go on the motherboard outputs; the 7900 XTX outputs stay dark by design.
+OverDrive fan control; CoolerControl runs max-cooling curves on every motherboard
+and GPU fan, and BIOS OS-controlled ASPM is on. Monitors go on the motherboard outputs; the 7900 XTX outputs stay dark by design.
 
 **FLUX 3 Image Klein (October 23, user):** the official BFL ComfyUI BF16 release (distilled
 transformer, Qwen3-VL-4B encoder, int8 prompt upsampler, FLUX.2 VAE; 28 GiB) is in
@@ -910,6 +911,12 @@ Nine active profiles use short prompts plus fresh ~8K probes; Super IQ3 uses
 fixed ~8K-input workloads. The original thirteen-profile data, retired Muse's
 2/3 marker result, retired Super Q4 and SGLang MTP remain historical evidence.
 No old speed is promoted into a new context or build.
+
+**All eleven re-measured — October23:** every active profile passed again with its production
+launcher and the shared method after the fan-control changes; nine are within ±5.5% of their previous
+rates, Strata prose is −10.6% (different generated text) and DeepSeek-XS decode −11% versus its isolated
+test harness. GPU hotspots peaked at 84 / 73 °C with GPU fans at 3,600 / 3,100 RPM. See
+[report](../hardware/ALL-MODELS-2026-10-23.md) and [numeric record](../hardware/results/all-models-2026-10-23.json).
 
 The [new Qwen context record](../hardware/results/qwen-int4-context-2026-10-20.json)
 adds actual 160,861-input SGLang DFlash2 and 160,868-input vLLM BF16 retrieval plus

@@ -1,5 +1,38 @@
 # LLM benchmark and context history
 
+## All eleven profiles re-measured — October23 (current rates)
+
+Every active profile was re-run with its production launcher and unchanged settings, using the shared
+method (three 256-output code/prose runs, three fresh ~8K marker prompts, medians), one backend at a time,
+after enabling GPU fan control (OverDrive `amdgpu.ppfeaturemask=0xfff7ffff`, CoolerControl max-cooling
+curves on every fan) and BIOS OS-controlled ASPM. **All eleven passed** (all markers, no cache reuse, both
+GPUs, zero VRAM spill).
+
+| Model · engine | Context | Code / prose decode t/s | Fresh PP t/s | Fresh TTFT s | Actual fresh input | vs previous: code / prose / PP |
+|---|---:|---:|---:|---:|---:|---|
+| Empero Qwen3.8-35B-A3B IQ4_XS · llama.cpp | 262,144 | 119.89 / 72.61 | 2,988.5 | 2.748 | 8,185–8,188 | -1.3% / -1.2% / +1.5% |
+| Sage-A1.5 Q4_K_M · llama.cpp MTP3 | 65,536 | 80.42 / 64.93 | 2,839.2 | 2.892 | 8,186–8,188 | -0.5% / -0.4% / +1.6% |
+| Nemotron Super IQ3_XXS · llama.cpp | 32,768 | 15.63 / 17.14 | 433.4 | 18.300 | 7,924–7,925 | -0.1% / -0.5% / +0.5% |
+| Ornith-1.5-122B Q4_K_M · llama.cpp | 32,768 | 11.43 / 13.32 | 717.2 | 11.425 | 8,187–8,189 | -0.1% / -0.1% / +0.3% |
+| Qwen3.8-27B INT4 · SGLang TP2 DFlash2 | 163,840 | 206.18 / 71.08 | 1,468.8ᵉ | 5.585 | 8,187–8,189 | -2.6% / -2.1% / +1.3% |
+| Qwen3.8-27B INT4 · vLLM TP2 MTP3 | 163,840 | 134.82 / 71.73 | 1,511.0ᵉ | 5.435 | 8,186–8,191 | +0.7% / +1.2% / +2.4% |
+| Nemotron Bolt W4A16 · vLLM TP2 | 262,144 | 38.12 / 38.08 | 2,950.4ᵉ | 2.699 | 7,923–7,927 | +2.1% / +2.3% / -0.3% |
+| Qwen3.8-Flash-Next IQ3_XXS · Strata | 262,144 | 78.05 / 47.63 | 916.0 | 8.974 | 8,185–8,187 | +0.9% / -10.6% / +0.8% |
+| GLM-5.3-Flash Maya-S · Maya | 32,768 | 18.64 / 16.28 | 539.1 | 13.289 | 6,310–6,312 | -5.5% / +3.8% / +0.7% |
+| DeepSeek-V4.1 Maya-XS + DSpark · Maya | 32,768 | 27.60 / 13.67 | 448.1 | 14.074 | 6,299–6,300 | -11.8% / -11.0% / +0.6% |
+| DeepSeek-V4.1 Maya-S · Maya | 32,768 | 6.73 / 6.78 | 301.2 | 20.919 | 6,296–6,300 | +4.8% / +0.0% / +0.7% |
+
+ᵉ engine-phase prefill (SGLang/vLLM); others native. Previous values: llama.cpp from the October22 batch sweep; SGLang/vLLM Qwen and Strata from the October21 shared baseline; Bolt from its October21 production benchmark; GLM and DeepSeek-S from the October23 Maya1.1.24 update; DeepSeek-XS from the October23 isolated XS+DSpark test.
+
+Nine profiles are within ±5.5% of their previous rates. **Strata prose −10.6%** (consistent 47.5–47.7 t/s;
+different generated text than every earlier run, so not an isolated cause) and **DeepSeek-XS −11.8% / −11.0%**
+decode against its earlier isolated test harness (first production-launcher XS rate; prefill unchanged).
+Under load both GPUs' fans now reach 3,600 / 3,100 RPM; sampled GPU hotspot peaks were 84 / 73 °C,
+CPU package 100 °C. GLM recorded 25.8 MiB swap across its process tree at 12.45 GiB available RAM; the
+other ten recorded zero. [Report, thermals and fan setup](ALL-MODELS-2026-10-23.md) ·
+[numeric record](results/all-models-2026-10-23.json).
+
+
 ## Maya-S DSpark retest — October23
 
 **Current S selection: DSpark off.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
