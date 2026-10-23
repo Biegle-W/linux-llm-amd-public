@@ -1,10 +1,11 @@
 # Local LLM hardware, engines and benchmarks
 
-Two reference builds: **current dual AMD** and **archived dual NVIDIA**.
+Separate current builds: **Linux dual AMD** and **Windows RTX 3060**, plus **archived dual NVIDIA** results.
 This repository contains sanitized launchers, configuration, build/patch helpers
-and saved measurements for Linux, plus historical Windows setup files.
+and saved measurements, with independent Windows and Linux configurations.
 Model weights, installed runtimes, credentials and personal app data are excluded.
 
+- [Windows RTX 3060: setup and results](windows/README.md)
 - [AMD: latest setup and results](#amd-latest-setup-and-results)
 - [NVIDIA: archived setup and results](#nvidia-archived-setup-and-results)
 - [Install, launch and connect](#install-launch-and-connect)
@@ -38,7 +39,7 @@ prompt-processing duration and total request time are not substituted for TTFT
 or native PP. Different rows can use different workloads and output lengths.
 These are saved complete-profile results, not a controlled AMD-versus-NVIDIA ranking.
 
-## Current hardware inventory
+## Current Linux hardware inventory
 
 **i9-13900KS,64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB**, MSI MPG Z690
 CARBON WIFI, CPU PCIe 4.0 x8/x8. The PEX88096 switch is purchased but not installed
@@ -306,7 +307,7 @@ No Windows throughput is inferred from Linux results.
 |---|---|
 | [`linux/`](linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |
 | [`linux-nvidia/`](linux-nvidia/README.md) | Historical dual-NVIDIA configuration; use as an alternative installation |
-| [`windows/`](windows/) | Historical NVIDIA Windows helpers; not migrated/validated for the current dual-AMD machine |
+| [`windows/`](windows/) | Separate RTX 3060 / 16 GB Windows build; CUDA, Qwen3.5 9B Q4 at 32K, [validation and limits](windows/README.md) |
 | [Consolidated handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) | Model IDs, storage, API/SSH use and validation limits |
 | [Full dated benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md) | Single-AMD, earlier motherboards, tuning controls, retired engines and update stages |
 | [Previous README archive](linux/hardware/README-ARCHIVE-2026-10-19.md) | All previous publication tables and chronological notes |

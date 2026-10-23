@@ -1,4 +1,4 @@
-param(
+﻿param(
     [ValidateSet('Launch','Backend','Stop')][string]$Mode = 'Launch',
     [switch]$NoBrowser
 )
@@ -70,6 +70,9 @@ function Assert-PortFree([int]$port) {
     try { $probe.Start() } catch { throw "Port $port is occupied. Close the other service first." } finally { $probe.Stop() }
 }
 if ($Mode -eq 'Launch') {
+    if (Test-Service 'router') { Write-Host 'The llama.cpp backend is already running in Local-LLM.'; return }
+    $preflightJson = & "$root\runtimes\python\cpython-3.11.15-windows-x86_64-none\python.exe" "$PSScriptRoot\hardware_guard.py"
+    if ($LASTEXITCODE -ne 0) { throw 'NVIDIA/model preflight failed; existing services were left running.' }
     if (Test-Path -LiteralPath "$PSScriptRoot\Start-Strata.ps1") {
         & "$PSScriptRoot\Start-Strata.ps1" -Mode Stop
     }
@@ -113,7 +116,11 @@ Write-Host ("=== " + $host.UI.RawUI.WindowTitle + " ===") -ForegroundColor Cyan
 Write-Host 'Close this tab to stop the backend and any loaded model.'
 if (Get-OwnedProcess (Read-State $name)) { throw "The $name service is already running." }
 if ($Mode -eq 'Backend') {
-    Get-ChildItem Env: | Where-Object { $_.Name -like 'LLAMA_ARG_*' -or $_.Name -eq 'CUDA_VISIBLE_DEVICES' } | ForEach-Object { Remove-Item "Env:$($_.Name)" }
+    $preflightJson = & "$root\runtimes\python\cpython-3.11.15-windows-x86_64-none\python.exe" "$PSScriptRoot\hardware_guard.py"
+    if ($LASTEXITCODE -ne 0) { throw 'NVIDIA/model preflight failed.' }
+    $hardware = $preflightJson | ConvertFrom-Json
+    Get-ChildItem Env: | Where-Object { $_.Name -like 'LLAMA_ARG_*' -or $_.Name -like 'GGML_VK_*' -or $_.Name -in @('CUDA_VISIBLE_DEVICES','HIP_VISIBLE_DEVICES','ROCR_VISIBLE_DEVICES') } | ForEach-Object { Remove-Item "Env:$($_.Name)" }
+    $env:CUDA_VISIBLE_DEVICES = $hardware.cudaVisibleDevices
     $env:LLAMA_CACHE = "$root\data\cache\router"
     New-Item -ItemType Directory -Force $env:LLAMA_CACHE | Out-Null
     $executable = $runtime

@@ -6,6 +6,9 @@ const {isDeepStrictEqual} = require('node:util');
 
 (async () => {
   const root = path.resolve(__dirname, '..');
+  if (JSON.parse(fs.readFileSync(path.join(root, 'config/strata.json'), 'utf8')).enabled === false) {
+    throw new Error('Strata is disabled on this Windows build; check config/strata.json');
+  }
   const modules = path.join(process.env.LOCALAPPDATA, 'Programs/DeepSeek Harness/resources/app.asar/dsh/node_modules');
   const load = name => import(pathToFileURL(path.join(modules, name)).href);
   const {parseDocument} = await load('yaml/dist/index.js');

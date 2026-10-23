@@ -3,17 +3,15 @@
   "source": "https://github.com/Niko1221/Strata",
   "sourceCommit": "296b59d2f73c8f04a805df29c2fa97655adace78",
   "directory": "runtimes/Strata",
-  "dataDirectory": "D:\\GGUF-Models\\Strata",
+  "dataDirectory": "models/Strata",
   "engineConfig": "strata-iq3_xxs.json",
   "family": "qwen",
   "quantization": "IQ3_XXS",
   "context": 131072,
   "kv": "int8",
   "gpus": [
-    0,
-    1
+    0
   ],
-  "layerSplit": "40",
   "vramReserveMiB": 1536,
   "vision": false,
   "experimentalSpeedProjection": false,
@@ -29,5 +27,7 @@
   "kvStreaming": "on",
   "engineEnvironment": {
     "STRATA_STAGE_TRIM": "1"
-  }
+  },
+  "enabled": false,
+  "disabledReason": "Not configured on this single RTX 3060 / 16 GB Windows build; local Strata assets are absent. Linux AMD is a separate machine."
 }

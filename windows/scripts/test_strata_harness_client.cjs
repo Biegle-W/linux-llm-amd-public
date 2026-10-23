@@ -6,6 +6,7 @@ const {pathToFileURL} = require('node:url');
 
 (async () => {
   const root = path.resolve(__dirname, '..');
+  if (JSON.parse(fs.readFileSync(path.join(root,'config/strata.json'),'utf8')).enabled === false) throw new Error('Strata is disabled on this Windows build');
   const catalog = process.argv[2] || 'strata-harness-provider.json';
   if (catalog !== 'strata-harness-provider.json') throw new Error('Unknown catalog');
   const modules = path.join(process.env.LOCALAPPDATA, 'Programs/DeepSeek Harness/resources/app.asar/dsh/node_modules');

@@ -11,6 +11,8 @@ $blockName = 'LocalLLM-LAN-BlockOutside-v1'
 $group = 'Local LLM LAN'
 $proxyKey = 'HKLM:\SYSTEM\CurrentControlSet\Services\PortProxy\v4tov4\tcp'
 $ports = @(10000,8081)
+$strataSettings = Get-Content -LiteralPath (Join-Path $root 'config/strata.json') -Raw | ConvertFrom-Json
+if ($strataSettings.enabled -eq $false) { $ports = @(10000) }
 function Read-State {
     if (Test-Path -LiteralPath $stateFile) { Get-Content -LiteralPath $stateFile -Raw | ConvertFrom-Json }
 }

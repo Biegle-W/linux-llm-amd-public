@@ -10,6 +10,8 @@ $ts = Join-Path $env:ProgramFiles 'Tailscale/tailscale.exe'
 $managedPorts = @(10000,8080,8081)
 $ports = @(8081)
 if ($IncludeLlamaCpp) { $ports = @(10000,8081) }
+$strataSettings = Get-Content -LiteralPath (Join-Path $root 'config/strata.json') -Raw | ConvertFrom-Json
+if ($strataSettings.enabled -eq $false) { $ports = @(10000) }
 if ($Mode -ne 'Enable') { $ports = $managedPorts } # Recognize legacy ownership for cleanup.
 function Read-Serve {
     $json = & $ts serve status --json
@@ -46,7 +48,7 @@ try {
             }
         }
     }
-    if ($Mode -eq 'Enable' -and $IncludeLlamaCpp) {
+    if ($Mode -eq 'Enable' -and $ports -contains 10000) {
         $stack = Get-Content -LiteralPath (Join-Path $root 'config/stack.json') -Raw | ConvertFrom-Json
         $runtime = [IO.Path]::GetFullPath((Join-Path $root $stack.runtime))
         $routerStateFile = Join-Path $root 'data/state/router-process.json'
@@ -58,9 +60,11 @@ try {
             throw 'The recorded workspace llama.cpp backend is not running. Port 10000 was not enabled.'
         }
         # Some Windows environments return State=0 even for a live server socket.
-        # Match the local port and process owner, then prove readiness via the API.
+        # A listener has no remote peer. Exclude closed/TIME_WAIT connections,
+        # whose owner may be PID 0, then prove ownership and API readiness.
         $listeners = @(Get-NetTCPConnection -LocalPort 10000 -ErrorAction Stop | Where-Object {
-            $_.LocalAddress -in @('127.0.0.1','0.0.0.0','::','::1')
+            $_.LocalAddress -in @('127.0.0.1','0.0.0.0','::','::1') -and
+            $_.RemotePort -eq 0 -and $_.RemoteAddress -in @('0.0.0.0','::')
         })
         if (-not $listeners.Count) { throw 'The llama.cpp listener is not ready on port 10000.' }
         foreach ($listener in $listeners) {

@@ -1,8 +1,13 @@
 {
   "runtime": "runtimes/llama.cpp-b11630-cuda-13.4/llama-server.exe",
-  "defaultModel": "Qwen3.8-27B-UD-Q4_K_M",
-  "preferredFastModel": "Qwen3.8-27B-UD-Q4_K_M",
+  "defaultModel": "Qwen3.5-9B-UD-Q4_K_XL",
+  "preferredFastModel": "Qwen3.5-9B-UD-Q4_K_XL",
   "backendVersion": "b11630",
   "cudaRuntime": "13.4",
-  "terminalWindow": "Local-LLM"
+  "terminalWindow": "Local-LLM",
+  "backend": "cuda",
+  "devices": [
+    "CUDA0"
+  ],
+  "targetGpu": "NVIDIA GeForce RTX 3060"
 }

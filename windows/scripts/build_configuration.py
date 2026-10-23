@@ -6,10 +6,12 @@ ROOT=Path(__file__).resolve().parent.parent
 def build():
     selected=json.loads((ROOT/'config'/'selected-profiles.json').read_text())
     common={
-        'device':'CUDA0,CUDA1','split-mode':'layer','fit':'on','fit-target':'1024,768',
+        'device':'CUDA0','split-mode':'none','main-gpu':0,'fit':'on','fit-target':1536,
+        'gpu-layers':'auto',
         'parallel':1,'flash-attn':'on','cache-type-k':'q8_0','cache-type-v':'q8_0',
-        'threads':6,'threads-batch':14,'batch-size':1024,'ubatch-size':256,
-        'load-mode':'none','cache-ram':0,'ctx-checkpoints':4,'jinja':'true',
+        'threads':6,'threads-batch':14,'batch-size':512,'ubatch-size':128,
+        'load-mode':'none','cache-ram':0,'ctx-checkpoints':0,'jinja':'true',
+        'chat-template-kwargs':'{"enable_thinking":false}',
         'reasoning-format':'deepseek','no-warmup':'true','temp':0.6,'top-p':0.95,
         'min-p':0.0,'repeat-penalty':1.0,'load-on-startup':'false'}
     ini=['version = 1','','; Generated from selected-profiles.json by build_configuration.py','[*]']
@@ -22,7 +24,7 @@ def build():
         catalog.append({'id':p['id'],'name':p['label'],'contextWindow':p['context'],
                         'maxTokens':p.get('maxTokens',8192),'input':['text'],'reasoningEfforts':False})
     (ROOT/'config'/'models.ini').write_text('\n'.join(ini)+'\n')
-    provider={'displayName':'Local llama.cpp (RTX 4070 + RTX 3060)',
+    provider={'displayName':'Local llama.cpp (RTX 3060 12 GB)',
               'api':'openai-completions','baseURL':'http://127.0.0.1:10000/v1',
               'apiKeyEnv':'LLAMA_CPP_API_KEY','timeoutMs':600000,'streamIdleTimeoutMs':600000,
               'compat':{'supportsDeveloperRole':False,'supportsStore':False,'supportsReasoningEffort':False,

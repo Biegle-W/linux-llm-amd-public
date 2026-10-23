@@ -3,6 +3,9 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 KEY=(ROOT/'data'/'credentials'/'.local-api-key').read_text().strip()
 MODEL=sys.argv[1] if len(sys.argv)>1 else json.loads((ROOT/'config'/'stack.json').read_text())['defaultModel']
+profiles=json.loads((ROOT/'config'/'selected-profiles.json').read_text())
+profile=next((p for p in profiles if p['id']==MODEL),None)
+if not profile: raise SystemExit('Register an existing Windows model before running inference verification.')
 def req(path,data=None,timeout=300):
     r=urllib.request.Request('http://127.0.0.1:10000'+path,None if data is None else json.dumps(data).encode(),{'Authorization':'Bearer '+KEY,'Content-Type':'application/json'})
     with urllib.request.urlopen(r,timeout=timeout) as f:return json.load(f)
@@ -28,11 +31,14 @@ try:
     assert 'LOCAL_TOOL_OK' in follow['choices'][0]['message'].get('content','')
     print('Tool-call round trip passed',flush=True)
     secret='LOCAL-CONTEXT-OK-7429'
-    prompt=f'The verification passphrase is {secret}.\n'+('This is filler text used to verify that the attention cache remains stable.\n'*1500)+'\nReturn only the verification passphrase from the beginning of this message.'
+    target=min(16384,profile['context']-2048)
+    filler='This is filler text used to verify that the attention cache remains stable.\n'
+    per_line=len(req('/tokenize',{'model':MODEL,'content':filler*100})['tokens'])/100
+    prompt=f'The verification passphrase is {secret}.\n'+filler*max(1,int((target-150)/per_line))+'\nReturn only the verification passphrase from the beginning of this message.'
     response=chat([{'role':'user','content':prompt}],cache_prompt=False)
     result['long_prompt']=response
     assert secret in response['choices'][0]['message'].get('content','')
-    assert response['usage']['prompt_tokens']>16000
+    assert response['usage']['prompt_tokens']>=target-512
     print('Long prompt passed: '+str(response['usage']['prompt_tokens'])+' tokens',flush=True)
     result['success']=True
 except Exception as exc:

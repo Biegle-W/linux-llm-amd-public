@@ -4,6 +4,7 @@ $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
 $python = Join-Path $root 'runtimes\Strata\.venv\Scripts\python.exe'
 $settings = Get-Content -LiteralPath "$root\config\strata.json" -Raw | ConvertFrom-Json
+if ($settings.enabled -eq $false) { throw ('Strata is disabled: ' + $settings.disabledReason) }
 $port = $settings.port
 & "$PSScriptRoot\Start-Strata.ps1" -Mode Launch -Profile $Profile
 & $python -u -c "import sys; sys.path.insert(0, 'scripts'); import benchmark_strata_drives as b; b.BASE='http://127.0.0.1:$port'; print(b.wait_ready(), flush=True)"

@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $settingsFile = 'strata.json' # Retain -Profile Q3 as a compatibility alias.
 $settings = Get-Content -LiteralPath (Join-Path "$root\config" $settingsFile) -Raw | ConvertFrom-Json
+if ($settings.enabled -eq $false) { throw ('Strata is deferred: ' + $settings.disabledReason) }
 $strata = Join-Path $root $settings.directory
 $sourceCommit = (& git -C $strata rev-parse HEAD).Trim()
 if ($LASTEXITCODE -ne 0 -or $sourceCommit -ne $settings.sourceCommit) {

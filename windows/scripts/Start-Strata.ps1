@@ -32,6 +32,9 @@ if ($Mode -eq 'Stop') {
     Write-Host 'Strata stopped. Model files are retained.'
     return
 }
+if ($settings.enabled -eq $false) {
+    throw ('Strata is deferred: ' + $settings.disabledReason)
+}
 if ($owner -and $Mode -eq 'Launch' -and $state.engineConfig -ne $engineConfig) {
     & $PSCommandPath -Mode Stop
     $state = Read-State

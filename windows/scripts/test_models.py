@@ -9,6 +9,7 @@ import ctypes
 import datetime
 import json
 import os
+import re
 from pathlib import Path
 import socket
 import subprocess
@@ -21,6 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PORT = 10001
 REQUEST_TIMEOUT = 600
 SPEED_TEMPERATURE = 0.0
+GPU_PID = None
 
 class MemoryStatus(ctypes.Structure):
     _fields_ = [('length', ctypes.c_ulong), ('load', ctypes.c_ulong)] + [
@@ -54,12 +56,9 @@ def gpu():
 
 def monitor_gpu(stop, samples):
     while not stop.is_set():
-        snapshot = subprocess.run(['nvidia-smi', '--query-gpu=index,memory.used,utilization.gpu,clocks.gr,clocks.mem,power.draw,pcie.link.gen.current,pcie.link.width.current',
-            '--format=csv,noheader'], capture_output=True, text=True,
-            creationflags=subprocess.CREATE_NO_WINDOW)
         samples.append({'time': datetime.datetime.now().astimezone().isoformat(),
-                        'gpu': snapshot.stdout.strip().splitlines(), 'memory': memory()})
-        stop.wait(1)
+                        'gpu': gpu(), 'memory': memory()})
+        stop.wait(3)
 
 def chat(model, messages, **kwargs):
     return api('/v1/chat/completions', {'model': model, 'messages': messages,
@@ -72,6 +71,7 @@ def checked_response(response, expected):
         raise AssertionError(f'Expected {expected!r}; received {content[:300]!r}')
 
 def run(profile, common, runtime, output, long_tokens, speed_only=False, latency_tokens=None):
+    global GPU_PID
     model = profile['id']
     options = dict(common)
     options.pop('load-on-startup', None)
@@ -93,20 +93,35 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
     log_path = output / (model + '.log')
     result['log'] = str(log_path)
     process = None
+    guard_stop = threading.Event()
+    guard_errors = []
+    guard_thread = None
     print(f'{model}: loading {profile["context"]:,} context', flush=True)
     try:
-        if result['memory_before']['commit_available_gib'] < 25:
+        if result['memory_before']['commit_available_gib'] < 8 or result['memory_before']['physical_available_gib'] < 2:
             raise RuntimeError('Insufficient system commit headroom for a meaningful load test.')
         with socket.socket() as probe:
             probe.bind(('127.0.0.1', PORT))
-        env = {k: v for k, v in os.environ.items()
-               if not k.startswith('LLAMA_ARG_') and k not in ('CUDA_VISIBLE_DEVICES', 'LLAMA_API_KEY')}
+        from hardware_guard import clean_environment, preflight
+        result['hardware_preflight'] = preflight()
+        env = clean_environment()
         env['LLAMA_CACHE'] = str(ROOT / 'data' / 'cache' / 'router')
         with log_path.open('w', encoding='utf-8') as log:
             start = time.monotonic()
             process = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=log,
                 creationflags=subprocess.CREATE_NO_WINDOW)
             result['pid'] = process.pid
+            GPU_PID = process.pid
+            def memory_guard():
+                low = 0
+                while not guard_stop.wait(1):
+                    low = low + 1 if memory()['physical_available_gib'] < 0.75 else 0
+                    if low >= 5:
+                        guard_errors.append('Available system RAM stayed below 0.75 GiB for five seconds.')
+                        process.terminate()
+                        return
+            guard_thread = threading.Thread(target=memory_guard, daemon=True)
+            guard_thread.start()
             while True:
                 if process.poll() is not None:
                     raise RuntimeError(f'Server exited during loading: {process.returncode}')
@@ -125,6 +140,17 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                 raise AssertionError(f'Expected context {profile["context"]}, got {actual_context}')
             result['memory_loaded'] = memory()
             result['gpu_loaded'] = gpu()
+            loaded_log = log_path.read_text(encoding='utf-8', errors='replace')
+            buffers = {name: float(size) for name, size in re.findall(r'(CUDA\d+) model buffer size\s*=\s*([\d.]+) MiB', loaded_log)}
+            cpu_buffers = [float(x) for x in re.findall(r'CPU(?:_Mapped)? model buffer size\s*=\s*([\d.]+) MiB', loaded_log)]
+            offload = re.search(r'offloaded (\d+)/(\d+) layers to GPU', loaded_log)
+            assert set(buffers) == {'CUDA0'} and buffers['CUDA0'] > 100, 'The selected RTX 3060 must hold model layers'
+            assert offload and int(offload[1]) > 0, 'No model layers were offloaded to CUDA'
+            if profile.get('requireFullGpu'):
+                assert offload[1] == offload[2] and sum(cpu_buffers) < 1, 'This profile requires every model weight on the RTX 3060'
+            result['gpu_placement'] = {'passed': True, 'model_buffers_mib': buffers,
+                'cpu_model_buffers_mib': cpu_buffers, 'offloaded_layers': offload[0],
+                'full_gpu_weights': offload[1] == offload[2] and sum(cpu_buffers) < 1}
             print(f'{model}: loaded in {result["load_seconds"]}s; checking chat', flush=True)
 
             def check(name, action):
@@ -142,9 +168,30 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
 
             def initial():
                 response = chat(model, [{'role': 'user', 'content': 'Reply with exactly LOCAL_BACKEND_OK.'}])
+                result['chat_response'] = response
                 checked_response(response, 'LOCAL_BACKEND_OK')
                 return response
             check('chat', initial)
+
+            def streaming():
+                body = {'model': model, 'messages': [{'role': 'user', 'content': 'Reply with exactly WINDOWS_NVIDIA_CONNECTED.'}],
+                        'temperature': 0, 'max_tokens': 64, 'stream': True,
+                        'stream_options': {'include_usage': True}, 'chat_template_kwargs': {'enable_thinking': False}}
+                request = urllib.request.Request(f'http://127.0.0.1:{PORT}/v1/chat/completions',
+                    data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
+                content = ''
+                with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
+                    for line in response:
+                        if not line.startswith(b'data: '): continue
+                        data = line[6:].strip()
+                        if data == b'[DONE]': break
+                        event = json.loads(data)
+                        if event.get('error'): raise RuntimeError(str(event['error']))
+                        for choice in event.get('choices', []):
+                            content += choice.get('delta', {}).get('content') or ''
+                assert 'WINDOWS_NVIDIA_CONNECTED' in content, 'Streaming exact-reply check failed'
+                return {'content': content, 'max_tokens': 64}
+            check('streaming', streaming)
 
             def speed():
                 samples = []
@@ -255,6 +302,12 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
         result['error'] = str(error)
         print(f'{model}: FAILED: {error}', flush=True)
     finally:
+        guard_stop.set()
+        if guard_thread:
+            guard_thread.join(timeout=3)
+        if guard_errors:
+            result['success'] = False
+            result['memory_guard_errors'] = guard_errors
         if process is not None and process.poll() is None:
             process.terminate()
             try:
@@ -263,6 +316,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                 process.kill()
                 process.wait(timeout=10)
         result['memory_after_unload'] = memory()
+        GPU_PID = None
         (output / (model + '.json')).write_text(json.dumps(result, indent=2))
     return result
 
@@ -273,6 +327,7 @@ def main():
     parser.add_argument('models', nargs='*')
     parser.add_argument('--long-tokens', type=int, default=21000)
     parser.add_argument('--context', type=int, help='Test an alternate context without changing saved presets')
+    parser.add_argument('--runtime', help='Test an alternate local llama-server without changing saved presets')
     parser.add_argument('--speed-only', action='store_true', help='Only check basic chat and two generation samples')
     parser.add_argument('--request-timeout', type=int, default=600)
     parser.add_argument('--speed-temperature', type=float, default=0.0)
@@ -284,6 +339,8 @@ def main():
     SPEED_TEMPERATURE = args.speed_temperature
     stack = json.loads((ROOT / 'config' / 'stack.json').read_text())
     profiles = json.loads((ROOT / 'config' / 'selected-profiles.json').read_text())
+    if not profiles:
+        raise SystemExit('No registered Windows models. Run scripts/register_model.py with a local GGUF first.')
     by_id = {p['id']: p for p in profiles}
     order = args.models or list(by_id)
     config = configparser.ConfigParser(interpolation=None)
@@ -301,7 +358,7 @@ def main():
         for override in args.option:
             key, value = override.split('=', 1)
             profile['options'][key] = value
-        results.append(run(profile, dict(config['*']), ROOT / stack['runtime'], output, args.long_tokens, args.speed_only, args.latency_tokens))
+        results.append(run(profile, dict(config['*']), ROOT / (args.runtime or stack['runtime']), output, args.long_tokens, args.speed_only, args.latency_tokens))
         (output / 'summary.json').write_text(json.dumps([{
             'model': r['model'], 'success': r['success'], 'checks': {
                 k: v['passed'] for k, v in r['checks'].items()}, 'error': r.get('error')

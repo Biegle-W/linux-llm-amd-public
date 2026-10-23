@@ -14,11 +14,22 @@ handoff Markdown. Commit and push validated changes to each `origin/main`
 without another reminder. Synchronize only reviewed, sanitized changes here;
 never copy private history, settings or personal details. Preserve historical
 NVIDIA and Windows snapshots unless their setups change or the user requests it.
-The private repository's AGENTS.md identifies its workspace and exact handoff
-locations. Keep the repository handoff and its Shared-drive copy identical.
+The private Linux repository's AGENTS.md identifies its workspace and exact handoff
+locations; Windows instructions are in its README. Keep the Linux repository handoff and its Shared-drive copy identical.
 Report any blocked commit, push or handoff synchronization explicitly.
 
-Current hardware policy: use BOTH RX 7900 XTX cards for every active model.
+## Separate Windows build — October 23
+
+Windows is a separate RTX 3060 12 GB / i5-13600KF / 16 GB machine.
+Keep CUDA Windows profiles under `windows/`; do not apply Linux AMD devices,
+guards, context budgets, model paths or engine preferences to Windows.
+Its current profile is Qwen3.5 9B UD-Q4_K_XL, 32K, full GPU; Strata is disabled.
+See `windows/README.md`. The Windows machine has no attached Shared D: drive;
+its current handoff stays in the Windows repository, without overwriting Linux's.
+Private Windows instructions are consolidated in its README, not AGENTS.md.
+All remaining AMD hardware/engine/default-model policies below apply to Linux.
+
+Current Linux hardware policy: use BOTH RX 7900 XTX cards for every active model.
 This supersedes the previous single-card preference. Validate per-engine dual-card
 settings and report unsupported profiles rather than silently using one card.
 Preserve historical NVIDIA/Windows snapshots. See
