@@ -743,3 +743,9 @@ None supports a local speed claim. See [the research note](VLLM-ALTERNATIVES-BOL
 - [Doctor-Shotgun MoE offload guide](https://huggingface.co/blog/Doctor-Shotgun/llamacpp-moe-offload-guide): `-b/-ub 4096`, op-offload threshold.
 
 None supports a local speed claim. See [the research note](SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
+
+## October23 — Maya1.1.24 update
+
+Reviewed [upstream25deec5](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), [AMD DS4 changes3453271](https://github.com/mw00/project-maya/commit/3453271) and [gfx1100 fused enablement18bc575](https://github.com/mw00/project-maya/commit/18bc575). Locally selected Maya-S/32K/bothXTX on7.2.3: GLM failed fused path disabled; DS4 prefill185.1→299.0t/s, decode similar. These are local measurements, not community speeds. [All gates and limits](MAYA-UPDATE-2026-10-23.md).
+
+Forum context: [LCZ GLM test dated2026-10-08](https://lcz.me/topic/2195/9) used Maya1.0.11/3080+3090/64K and changed sampling (author unavailable in fetched excerpt). [Level1Techs JWNoctis,October15,post60](https://forum.level1techs.com/t/ultimate-2x-r9700-guide-for-qwen-3-8-27b-mxfp4-200t-s-c-1-500t-s-at-c-8/257789?page=3) discusses Radiance/RDNA4 timing/token-accounting differences, not matched Maya/gfx1100. Neither justifies a local70t/s claim or deploying its settings. User-supplied NVIDIA Maya-XS screenshots differ in quant/drafter/hardware; no image/account/private message exported.

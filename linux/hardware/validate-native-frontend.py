@@ -29,7 +29,14 @@ def main():
     assert health['status'] == 'ok'
     assert health.get('loaded', True) and not health.get('unloaded', False)
     html = get('/')
-    assert html == (project / 'serve/web/index.html').read_bytes()
+    expected_html = (project / 'serve/web/index.html').read_bytes()
+    if args.kind == 'maya':
+        expected_html = expected_html.replace(
+            b'</body>', b'<script src="/managed/model-switch.js" defer></script></body>')
+        assert get('/managed/model-switch.js') == (ROOT / 'dsh/maya-model-switch.js').read_bytes()
+        managed = json.loads(get('/managed/models'))
+        assert isinstance(managed, dict)
+    assert html == expected_html
     assets = sorted({asset.split('#', 1)[0].split('?', 1)[0] for asset in re.findall(r'(?:src|href)=["\']((?:/)?web/[^"\']+)', html.decode())})
     assert assets
     for asset in assets:
@@ -37,14 +44,18 @@ def main():
         assert body == (project / 'serve' / asset.lstrip('/')).read_bytes()
     for path in ('/metrics', '/status', '/settings'):
         assert isinstance(json.loads(get(path)), dict)
-    blocked = ['/api/context', '/api/update', '/config', '/load', '/unload']
+    blocked = ['/api/context', '/api/update', '/api/port', '/config', '/load', '/unload']
     for path in blocked:
         request = urllib.request.Request(base + path, b'{}', {'Content-Type': 'application/json'})
         try:
             opener.open(request, timeout=30)
         except urllib.error.HTTPError as error:
             assert error.code == 409
-            assert json.load(error)['error']['type'] == 'managed_profile'
+            detail = json.load(error)['error']
+            if args.kind == 'maya':
+                assert isinstance(detail, str) and 'Managed profiles' in detail
+            else:
+                assert detail['type'] == 'managed_profile'
         else:
             raise AssertionError('Runtime mutation was accepted: ' + path)
     if args.kind == 'maya':

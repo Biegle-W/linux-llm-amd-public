@@ -1,8 +1,8 @@
 # Project Maya on two RX 7900 XTX cards
 
-The isolated HIP build uses [Project Maya v1.1.19, commit `3384b5e`](https://github.com/mw00/project-maya/tree/3384b5e9366e696e5f23f51772fb94a8a7948e41).
+The isolated HIP build uses [Project Maya v1.1.24, commit `25deec5`](https://github.com/mw00/project-maya/tree/25deec505b525212e05faa58697d9d2b7d17fdb3).
 Both models are active at **32,768 tokens**. Current local validation is in
-[the v1.1.19/ROCm comparison](../hardware/MAYA-ROCM10-2026-10-20.md). All profiles use both cards;
+[the October23 update](../hardware/MAYA-UPDATE-2026-10-23.md). All profiles use both cards;
 this is experimental upstream AMD support. Existing llama.cpp, Strata,
 vLLM/SGLang environments and the saved DSH default are preserved.
 
@@ -117,7 +117,9 @@ DSH stays optional and separate; `--no-browser` suppresses browser opening.
 
 ## GLM S/S24 comparison
 
-Selected GLM quant stays **Maya-S**,32K/RAM40/MTP. The [S/S24 ABBA selection](../hardware/MAYA-S-VS-S24-2026-10-20.md) remains historical; [v1.1.19 source/SDK results](../hardware/MAYA-ROCM10-2026-10-20.md) now provide current speeds for both models.
+Selected GLM quant stays **Maya-S**,32K/RAM40/MTP. The [S/S24 ABBA selection](../hardware/MAYA-S-VS-S24-2026-10-20.md) remains historical; [October23 source validation](../hardware/MAYA-UPDATE-2026-10-23.md) provides current speeds for both models.
 
 Maya has no separate native desktop app in this setup. Its browser entry is
 hidden from the application menu; the Desktop launcher and `llm-maya` remain.
+
+The selected gfx1100 GLM profile explicitly sets `MAYA_GLM_PREFILL_FUSED=0`: the new default fused IQ2_S path failed parity on both cards. Keep MMQ and the profile fingerprint. The source19 rollback is private; no new quants/DSpark or other-engine changes accompany this update.

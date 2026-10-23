@@ -1,5 +1,9 @@
 # LLM benchmark and context history
 
+## October23 — Maya1.1.24, retained SDK7
+
+Exact25deec5 development source promoted with tested binaries after selected-format kernel,near31.5K/history,normalDesktop/browser selector/API/switchback gates. GLM19.72/15.69 decode/535.6PP/11.928s freshTTFT; DeepSeek6.42/6.78/299.0/21.062s. NewGLM fused parity fails, explicitlyoff; knownDS4mixed exclusions retained. Samequants/32K/bothAMD/guards; full thermal peaks and all three-trial counts preserved. [Report](MAYA-UPDATE-2026-10-23.md), [numeric evidence](results/maya-update-2026-10-23.json).
+
 ## October 22 — llama.cpp prompt batch sweep 2 (Super, Qwen3.6, Empero, Sage)
 
 Same build/method, production contexts (256K Qwen3.6/Empero, 64K Sage, 32K Super). Native ~8K

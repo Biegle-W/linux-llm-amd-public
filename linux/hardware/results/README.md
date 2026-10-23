@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Maya1.1.24 update — October23](maya-update-2026-10-23.json): four matched source19/24 arms, all trials/native PP/SSE TTFT+decode, near31.5K/history, guards/thermals/known kernel failures and normal integration; [report](../MAYA-UPDATE-2026-10-23.md).
+
 - [Ornith122B metadata/tensor inspection](ornith-122b-assessment-2026-10-21.json), [assessment](../ORNITH-122B-ASSESSMENT-2026-10-21.md): research-only memory/quant candidates, **no inference or throughput measurements**.
 
 - [llama.cpp batch sweep](llama-batch-sweep-2026-10-22.json), [report](../LLAMA-BATCH-SWEEP-2026-10-22.md): all five llama.cpp profiles: Ornith/Qwen3.6/Empero/Sage 4096/4096, Super 2048/1024; prefill 4.6–13.6×, decode within 2%; Ornith 8192 and Super ≥2048 break the 3 GiB/card guard.

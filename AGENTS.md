@@ -65,7 +65,7 @@ excluded from Git.
 
 ## Project Maya — October 20
 
-Maya v1.1.19 / 3384b5e is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
+Maya v1.1.24 / 25deec5 is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
 DeepSeek-V4.1-Flash-1017 Maya-S, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
 GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
@@ -297,7 +297,7 @@ See `linux/graphics/DESKTOP-2026-10-20.md`.
 
 ## Maya source/SDK validation — October 20
 
-3384b5e9366e696e5f23f51772fb94a8a7948e41/v1.1.19 is promoted with exact tested SDK7 binaries. ROCm10 failed both performance gates; DeepSeek10nostream stalled with no completed timed sample. Keep ROCm7.2.3/rocWMMA2.2.0. Selected DeepSeek requires `DS4_IQ_Q8K=0` (prior rounding; default1 reversedIQ3_S/IQ2_S parity fails) and `DS4_STREAM=0` (optional PCIe lane only; CPU experts/GPU hotcache retained). GLM-S40GiB/MTP and DeepSeek-S24threads/noDSpark remain32K/bothGPUs/native8GiB/actual6GiB startup/52G no-swap. Near31.5K/history and actualDesktop/Ptyxis/nativeUI/authenticated gateway/switchback pass; host-self routes are not a remote-peer test. GLM source19 six-sample rates18.44/16.10/518.0PP,12.363s freshTTFT; DeepSeek selectedthree6.89/7.08/188.6,33.418s. No universal source speedup; failed SDK10/old17 evidence retained. Other production engines remain unchanged; isolated comparisons are complete in linux/hardware/ROCM10-OTHER-ENGINES-2026-10-20.md. Fresh exact-production SDK7 controls update the benchmark overview; candidate SDK10 is not activated. See linux/hardware/MAYA-ROCM10-2026-10-20.md and numeric record. Never enable approximate prompt skipping or failed/untested formats.
+The October20 3384b5e9366e696e5f23f51772fb94a8a7948e41/v1.1.19 promotion is historical (superseded October23) with exact tested SDK7 binaries. ROCm10 failed both performance gates; DeepSeek10nostream stalled with no completed timed sample. Keep ROCm7.2.3/rocWMMA2.2.0. Selected DeepSeek requires `DS4_IQ_Q8K=0` (prior rounding; default1 reversedIQ3_S/IQ2_S parity fails) and `DS4_STREAM=0` (optional PCIe lane only; CPU experts/GPU hotcache retained). GLM-S40GiB/MTP and DeepSeek-S24threads/noDSpark remain32K/bothGPUs/native8GiB/actual6GiB startup/52G no-swap. Near31.5K/history and actualDesktop/Ptyxis/nativeUI/authenticated gateway/switchback pass; host-self routes are not a remote-peer test. GLM source19 six-sample rates18.44/16.10/518.0PP,12.363s freshTTFT; DeepSeek selectedthree6.89/7.08/188.6,33.418s. No universal source speedup; failed SDK10/old17 evidence retained. Other production engines remain unchanged; isolated comparisons are complete in linux/hardware/ROCM10-OTHER-ENGINES-2026-10-20.md. Fresh exact-production SDK7 controls update the benchmark overview; candidate SDK10 is not activated. See linux/hardware/MAYA-ROCM10-2026-10-20.md and numeric record. Never enable approximate prompt skipping or failed/untested formats.
 
 ## Maya web switching and DSH reuse — October 21
 
@@ -333,3 +333,7 @@ input/history/vision smoke pass, zero owned swap/spill. SDK10.1 effectively tied
 not selected;7.14.1 is researched but untested locally. Native256K metadata is
 not near-window quality validation. See hardware/SAGE-A15-2026-10-21.md and
 hardware/ROCM-SELECTION-2026-10-21.md (under linux/ in the public repository).
+
+## Maya1.1.24 — October23
+
+25deec505b525212e05faa58697d9d2b7d17fdb3/VERSION1.1.24 and exact tested HIP7.2.3 binaries are promoted for both retained Maya-S32K profiles after native and normal integration gates. GLM MUST retain MAYA_GLM_PREFILL_FUSED=0 (newgfx1100 fused IQ2_S down parity fails on bothcards); use MMQ, do not relax tolerances. DeepSeek retains DS4_IQ_Q8K=0/DS4_STREAM=0/24threads/noDSpark; bothGPUs/layer groups, no trueTP2 for2304/256expert blocks. Original8GiB/actual6GiB reserves/52Gno-swap/latching remain. Current3trial GLM19.72/15.69/535.6PP/11.928sTTFT; DS6.42/6.78/299.0/21.062s. Bothnear31.5K/history/JSON/tools/SSE, actualDesktop/Ptyxis/originalbrowserselector/authAPI/switchback pass. Preserve source19 rollback and known mixed-format exclusions; new source is not a universal speedup claim. See linux/hardware/MAYA-UPDATE-2026-10-23.md and numeric record. Otherengines/weights/default unchanged.

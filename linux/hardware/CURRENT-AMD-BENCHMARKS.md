@@ -1,11 +1,33 @@
-# Current dual-AMD benchmarks — October 21,2026
+# Current dual-AMD benchmarks — October 23, 2026
 
-**Eleven active profiles:** five llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+## Latest Maya 1.1.24 — October 23
+
+Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.
+Same Maya-S quants, both GPUs,32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
+all memory guards and the Strata DSH default remain. **GLM PREFILL_FUSED=0** retains
+MMQ because the newly enabled gfx1100 fused path failed parity on both cards.
+DeepSeek native fresh prefill185.1→299.0t/s and TTFT34.045→21.062s; decode remains similar.
+GLM performance is approximately unchanged. These are sequential matched workloads,
+not thermally equalised A/B trials; no universal source speedup is claimed.
+
+| Model /1.1.24 | Context | Code / prose decode t/s | Native PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| GLM-5.3-Flash Maya-S | 32,768 | 19.72 / 15.69 | 535.6 | 11.928 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | 32,768 | 6.42 / 6.78 | 299.0 | 21.062 |
+
+Both candidates passed near31.5K retrieval/history,JSON/tools/SSE, dual-GPU/no-swap
+and normal Desktop/Ptyxis/original browser UI/selector/authenticated API/switchback.
+Actual counts, timings, sampled high temperatures and failed/excluded kernels:
+[update report](MAYA-UPDATE-2026-10-23.md) · [numeric evidence](results/maya-update-2026-10-23.json).
+
+Other latest llama.cpp sizes and rates are in the [October22 batch sweep](LLAMA-BATCH-SWEEP-2026-10-22.md); its new-size full-window tests were not repeated. All earlier rates below retain their original workload/build/date.
+
+**Ten active profiles:** four llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
 
-All selected stacks remain unchanged; no ROCm 10.1 candidate passed every performance and validation gate.
+All production ROCm stacks remain on 7.2.3; no ROCm 10.1 candidate passed every performance and validation gate.
 [ROCm 10.1 comparison, decisions and exact build fingerprints](ROCM101-2026-10-21.md),
 [all trials/thermals](results/rocm101-2026-10-21.json).
 No driver/kernel update or global SDK replacement was performed.
@@ -26,7 +48,7 @@ near61,999-input retrieval/full history and a separate vision smoke.
 | ROCm10.1.0 MTP3 | 84.03 | 66.33 | 386.65 | 21.182 |
 
 10.1 is effectively tied for Sage; retain7.2.3. Latest official is10.1;
-7.14.1 is a plausible next isolated candidate, **not locally validated**.
+7.2.4/7.14.1 were subsequently tested and rejected; see [October22 comparison](ROCM-724-7141-2026-10-22.md).
 [Detailed test/limits](SAGE-A15-2026-10-21.md) ·
 [all trials](results/sage-a15-2026-10-21.json) ·
 [ROCm/driver distinction and both-forum research](ROCM-SELECTION-2026-10-21.md).
@@ -37,14 +59,14 @@ near61,999-input retrieval/full history and a separate vision smoke.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Five MoE profiles (incl. Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm 7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm 7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm 7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
-| Maya | [3384b5e/v1.1.19](https://github.com/mw00/project-maya/commit/3384b5e9366e696e5f23f51772fb94a8a7948e41), ROCm 7.2.3 | Both32K Maya-S profiles; original guards/source/quantization retained |
+| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm 7.2.3 | Both 32K Maya-S profiles; guards/quants retained; GLM MMQ with failed fused path disabled |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
-### Eight profiles using the shared benchmark method
+### October 21 shared-method baseline (historical)
 
 Fresh October 21 controls: three timed requests/task and three fresh prefills,
 except vLLM's six fixed-seed controls across two starts. Empero's row uses
@@ -57,7 +79,7 @@ Decode is `(completion_tokens−1)/(stream_end−first_output)`; model cold-star
 
 | Model / quant | Backend / strategy | Context tokens | Actual fresh input | PP t/s | Fresh TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP 7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
+| Qwen3.6-35B-A3B MXFP4_MOE (retired Oct23) | llama.cpp HIP 7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
 | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | vLLM TP2, Triton int4 MoE | 262,144 | 7,922–7,925 | 2,958.7 | 2.692 | 0.077 / 0.071 | 37.32 / 37.21 |
 | Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP 7, cache/MTP3 | 262,144 | 8,185–8,190 | 395.1 | 20.727 | 0.058 / 0.057 | 122.11 / 74.32 |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,188–8,190 | 1449.7 | 5.657 | 0.086 / 0.083 | 211.58 / 72.57 |

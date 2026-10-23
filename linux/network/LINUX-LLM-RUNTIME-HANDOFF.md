@@ -1,6 +1,6 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 21, 2026**. Current hardware is i9-13900KS,
+Updated **October 23, 2026**. Current hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang stays pinned; Strata9ae93f7b/0.1.46.1 is promoted after full5GiB-startup validation.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
@@ -15,6 +15,10 @@ references, not alternative current configurations. Their old CUDA commands,
 addresses, defaults and single-GPU policies must not override the settings here.
 No model files, runtime settings, credentials or inference processes were changed
 by the original consolidation; the subsequent MoE offload update is documented below.
+
+## Maya update — October23 (current)
+
+Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. Same bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). Earlier dated sections retain their historical measurements; current source/settings in this section supersede old source19 timings.
 
 ## Current status and hardware
 
@@ -172,7 +176,7 @@ Forum claims remain separate from local measurements; [source trail](../hardware
 
 ## Project Maya: GLM and DeepSeek, both active
 
-Maya HIP v1.1.19 / `3384b5e9366e696e5f23f51772fb94a8a7948e41` is a separate
+Maya HIP v1.1.24 / `25deec505b525212e05faa58697d9d2b7d17fdb3` is a separate
 Strata fork with its own source, Python 3.12.14 environment and pinned llama.cpp
 3cf03257 dependency. ROCm SDK 7.2.3 is unchanged; isolated rocWMMA 2.2.0 headers
 and the retained GCC 14.4/sysroot resolved its build dependencies. Existing engine
@@ -190,8 +194,8 @@ backing is mapped/page-cached, not a fully resident 150 GB RAM copy. Its DSpark
 weights stay on NVMe. DSpark was retested at the retained production settings (32K,
 24 threads, 8 GiB reserve) and was **−20% overall**: code decode −33%, prose −22%,
 despite 85% draft acceptance. It stays off. [DSpark retest](../hardware/DEEPSEEK-DSPARK-2026-10-20.md).
-**DeepSeek needs 52 GiB available RAM before loading.** Heavy desktop apps can keep
-it from starting; close them and retry. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
+**DeepSeek needs 52 GiB available RAM before loading.** Heavy desktop apps such as
+Chrome can keep it from starting; close them and retry. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
 its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
 and stateful caches; this is not a universal optimum.
 
@@ -673,7 +677,7 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 | vLLM |`0.32.1rc1.dev36+ge68efc685.rocm72`, local repairs|
 | ROCm SDK /PyTorch /RCCL |7.2.3 /`2.13.0+git733fca1` /no-hostcall 2.27.7|
 | Strata HIP |0.1.46.1 /`9ae93f7b1fe989d04a8e404d32cddaeeff10505f`|
-| Maya HIP | `1.1.19 / 3384b5e9366e696e5f23f51772fb94a8a7948e41` on retained ROCm7.2.3; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
+| Maya HIP | `1.1.24 / 25deec505b525212e05faa58697d9d2b7d17fdb3` on retained ROCm7.2.3; isolated llama dependency `3cf03257`, rocWMMA `48b7db12` |
 
 llama.cpp 4c3c5810 and vLLM dev36 passed their fixed promotion criteria; throughput
 was performance-neutral within noise. The vLLM wheel SHA-256 is

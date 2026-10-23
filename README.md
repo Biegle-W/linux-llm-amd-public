@@ -63,6 +63,26 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 [DeepInfer compatibility assessment — October20](linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
 
+## Maya 1.1.24 — October 23
+
+Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.
+Same Maya-S quants, both GPUs,32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
+all memory guards and the Strata DSH default remain. **GLM PREFILL_FUSED=0** retains
+MMQ because the newly enabled gfx1100 fused path failed parity on both cards.
+DeepSeek native fresh prefill185.1→299.0t/s and TTFT34.045→21.062s; decode remains similar.
+GLM performance is approximately unchanged. These are sequential matched workloads,
+not thermally equalised A/B trials; no universal source speedup is claimed.
+
+| Model /1.1.24 | Context | Code / prose decode t/s | Native PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| GLM-5.3-Flash Maya-S | 32,768 | 19.72 / 15.69 | 535.6 | 11.928 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | 32,768 | 6.42 / 6.78 | 299.0 | 21.062 |
+
+Both candidates passed near31.5K retrieval/history,JSON/tools/SSE, dual-GPU/no-swap
+and normal Desktop/Ptyxis/original browser UI/selector/authenticated API/switchback.
+Actual counts, timings, sampled high temperatures and failed/excluded kernels:
+[update report](linux/hardware/MAYA-UPDATE-2026-10-23.md) · [numeric evidence](linux/hardware/results/maya-update-2026-10-23.json).
+
 ## AMD: latest setup and results
 
 **Ten active profiles:** four llama.cpp (Ornith-1.5-122B added October22; Qwen3.6-35B-A3B retired October23), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
@@ -70,7 +90,7 @@ Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
 
-All selected stacks remain unchanged; no ROCm10.1 candidate passed every performance and validation gate.
+All production ROCm stacks remain on 7.2.3; no ROCm10.1 candidate passed every performance and validation gate.
 [ROCm10.1 comparison, decisions and exact build fingerprints](linux/hardware/ROCM101-2026-10-21.md),
 [all trials/thermals](linux/hardware/results/rocm101-2026-10-21.json).
 No driver/kernel update or global SDK replacement was performed.
@@ -79,14 +99,14 @@ No driver/kernel update or global SDK replacement was performed.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Five MoE profiles (incl. Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
-| Maya | [3384b5e/v1.1.19](https://github.com/mw00/project-maya/commit/3384b5e9366e696e5f23f51772fb94a8a7948e41), ROCm7.2.3 | Both32K Maya-S profiles; original guards/source/quantization retained |
+| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm7.2.3 | Both 32K Maya-S profiles; guards/quants retained; GLM MMQ with failed fused path disabled |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
-### Eight profiles using the shared benchmark method
+### October21 shared-method baseline (historical; newer Maya/batch results above)
 
 Fresh October21 controls: three timed requests/task and three fresh prefills,
 except vLLM's six fixed-seed controls across two starts. Empero's row uses
