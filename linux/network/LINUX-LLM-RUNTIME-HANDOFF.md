@@ -26,7 +26,7 @@ by the original consolidation; the subsequent MoE offload update is documented b
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Ten profiles:** five llama.cpp, one SGLang, one vLLM, one Strata, two Maya. Presence in
+- **Ten profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -69,6 +69,10 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 **Slow-model research (October 22):** the top community lead is llama.cpp `ubatch` (128 in every
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 [Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
+
+**Qwen3.6-35B-A3B retired (October 23, user):** `qwen3.6-35b-a3b` is removed from the llama.cpp
+catalog, presets and offload plan. A saved DSH selection of it moves to `empero-qwen3.8-35b-a3b`,
+which matches its speed. Ten active profiles. Its GGUF file is still on the SATA1 drive.
 
 **llama.cpp batch sweep (October 22):** every llama.cpp profile now overrides the inherited 512/128
 batch. Native ~8K prefill, decode within 2%: Ornith 4096/4096 52.7 → 714.9 tok/s; Super 2048/1024
@@ -283,7 +287,7 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **10 enabled profiles**: five llama.cpp, one SGLang, one vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **10 enabled profiles**: four llama.cpp, one SGLang, two vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -293,9 +297,10 @@ not guarantees of full-window speed or general long-context accuracy.
 
 | Backend / placement | Exact API model ID | Total context | Target quantization | Speculation |
 |---|---|---:|---|---|
-| llama.cpp / HIP, CPU experts + cache | `qwen3.6-35b-a3b` | 262,144* | MXFP4_MOE | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
 | llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
+| llama.cpp / HIP, CPU experts + cache | `sage-a1.5` | 65,536 | Q4_K_M + vision projector | MTP3 |
+| llama.cpp / HIP, CPU experts + cache | `ornith-1.5-122b` | 32,768 | Q4_K_M + vision projector | Off |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 163,840 | GPTQ INT4/group64 | DFlash2, 8 draft tokens; BF16 KV |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |

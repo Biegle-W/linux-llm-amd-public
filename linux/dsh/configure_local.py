@@ -4,7 +4,7 @@ from pathlib import Path
 import yaml
 ROOT = Path(__file__).resolve().parent
 HUB_PORT = 30100
-LOCAL = {'llama-local': 'qwen3.6-35b-a3b', 'sglang-local': 'qwen3.8-27b-sglang-dflash2',
+LOCAL = {'llama-local': 'empero-qwen3.8-35b-a3b', 'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm', 'strata-local': 'qwen3.8-flash-next-iq3_xxs',
          'maya-local': 'glm-5.3-flash-maya',
          'hyperqwen-local': 'qwen3.8-27b-hyperqwen-dflash2'}
@@ -57,6 +57,9 @@ def configure(default_provider=None):
                     'qwen3.8-27b-q4': 'qwen3.8-27b-vllm'}
     if selection.get('provider') == 'llama-local' and selection.get('model') in replacements:
         settings['agent-default-model'] = selection = {'provider':'vllm-local', 'model':replacements[selection['model']]}
+    # Qwen3.6-35B-A3B was retired October 23 at the user's request; Empero is its llama.cpp successor.
+    if selection.get('provider') == 'llama-local' and selection.get('model') == 'qwen3.6-35b-a3b':
+        settings['agent-default-model'] = selection = {'provider': 'llama-local', 'model': 'empero-qwen3.8-35b-a3b'}
     provider = selection.get('provider')
     invalid_local = provider in LOCAL and selection.get('model') not in {m['id'] for m in providers.get(provider, {}).get('models', [])}
     if default_provider or not selection or invalid_local:

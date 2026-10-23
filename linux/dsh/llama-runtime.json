@@ -1,7 +1,6 @@
 {
   "backend": "hip-amd",
   "models": [
-    "qwen3.6-35b-a3b",
     "empero-qwen3.8-35b-a3b",
     "nemotron-3.5-super-iq3",
     "sage-a1.5",

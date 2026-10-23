@@ -65,7 +65,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 ## AMD: latest setup and results
 
-**Eleven active profiles:** five llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+**Ten active profiles:** four llama.cpp (Ornith-1.5-122B added October22; Qwen3.6-35B-A3B retired October23), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -98,7 +98,7 @@ External SSE TTFT/decode are separate; model cold-start is excluded.
 
 | Model / quant | Backend / strategy | Context tokens | Actual fresh input | PP t/s | Fresh TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Qwen3.6-35B-A3B MXFP4_MOE | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
+| Qwen3.6-35B-A3B MXFP4_MOE (retired Oct 23) | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
 | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | vLLM TP2, Triton int4 MoE | 262,144 | 7,922–7,925 | 2,958.7 | 2.692 | 0.077 / 0.071 | 37.32 / 37.21 |
 | Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,185–8,190 | 395.1 | 20.727 | 0.058 / 0.057 | 122.11 / 74.32 |
 | Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,188–8,190 | 1449.7 | 5.657 | 0.086 / 0.083 | 211.58 / 72.57 |
