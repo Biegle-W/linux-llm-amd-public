@@ -139,6 +139,12 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 [Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
 
+**Boot without a login (October 23):** model drives mount from `/etc/fstab` by UUID (`nofail`)
+instead of desktop-session udisks mounts, and user services run through lingering, so models serve
+after a reboot with nobody logged in. Secure Boot is disabled so the DKMS motherboard fan driver
+loads. The unused NVIDIA driver was purged. `amdgpu.ppfeaturemask=0xfff7ffff` enables RDNA3
+OverDrive fan control. Monitors go on the motherboard outputs; the 7900 XTX outputs stay dark by design.
+
 **FLUX 3 Image Klein (October 23, user):** the official BFL ComfyUI BF16 release (distilled
 transformer, Qwen3-VL-4B encoder, int8 prompt upsampler, FLUX.2 VAE; 28 GiB) is in
 `sharedSATA1/Graphics-Models`, so Windows ComfyUI sees it through the same folders. Linux passed
