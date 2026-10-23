@@ -1,5 +1,26 @@
 # LLM benchmark and context history
 
+## Maya-XS + matching DSpark test — October23
+
+Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
+Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
+
+| Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| XS DSpark off | 20.45 | 15.56 | 428.7 | 14.714 |
+| XS **matching DSpark on** | 31.28 | 15.36 | 445.5 | 14.156 |
+| Saved same-day Maya-S, no DSpark | 6.42 | 6.78 | 299.0 | 21.062 |
+
+
+Single1024-output HTML code probe: **10.95→12.54t/s** off→on;
+short-code medians do not predict every workload.
+Both arms passed; near-window/history/tools/JSON/SSE, exact counts, longer1024-output
+probes, thermal coverage and draft/no-draft comparison are in the
+[XS test report](MAYA-XS-DSPARK-2026-10-23.md). The saved S row is a separate
+same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed locally.
+
+
 ## October23 — Maya1.1.24, retained SDK7
 
 Exact25deec5 development source promoted with tested binaries after selected-format kernel,near31.5K/history,normalDesktop/browser selector/API/switchback gates. GLM19.72/15.69 decode/535.6PP/11.928s freshTTFT; DeepSeek6.42/6.78/299.0/21.062s. NewGLM fused parity fails, explicitlyoff; knownDS4mixed exclusions retained. Samequants/32K/bothAMD/guards; full thermal peaks and all three-trial counts preserved. [Report](MAYA-UPDATE-2026-10-23.md), [numeric evidence](results/maya-update-2026-10-23.json).

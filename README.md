@@ -63,6 +63,26 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 [DeepInfer compatibility assessment — October20](linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
 
+## Maya-XS + matching DSpark test — October23
+
+Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
+Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
+
+| Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| XS DSpark off | 20.45 | 15.56 | 428.7 | 14.714 |
+| XS **matching DSpark on** | 31.28 | 15.36 | 445.5 | 14.156 |
+| Saved same-day Maya-S, no DSpark | 6.42 | 6.78 | 299.0 | 21.062 |
+
+
+Single1024-output HTML code probe: **10.95→12.54t/s** off→on;
+short-code medians do not predict every workload.
+Both arms passed; near-window/history/tools/JSON/SSE, exact counts, longer1024-output
+probes, thermal coverage and draft/no-draft comparison are in the
+[XS test report](linux/hardware/MAYA-XS-DSPARK-2026-10-23.md). The saved S row is a separate
+same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed locally.
+
 ## Maya 1.1.24 — October 23
 
 Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.

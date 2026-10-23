@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00001-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00001-of-00005.gguf",
+      "size": 47781530400,
+      "sha256": "a0cb7966afd68bc35c46f78018d1fa1d2e4bcbe3c3baf39f60cd1733ed9ad7e5"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00002-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00002-of-00005.gguf",
+      "size": 47775748128,
+      "sha256": "ba5afb43adfc667436ebcfbd82d25411fa2843ee7e1d877290611cd60f93cca1"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00003-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00003-of-00005.gguf",
+      "size": 19784230848,
+      "sha256": "1482443bb4957c8d2f005ded365445f98558ff05c50674f9ee9a96ddabc122a4"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "dspark/dspark-xs2.bin",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark-xs2.bin",
+      "size": 4251725568,
+      "sha256": "8dfe21082a6cb320f334fddb454630c241c6d44e0463eef4f8b0b07334511779"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "dspark/dspark-xs2.json",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark-xs2.json",
+      "size": 99146,
+      "sha256": "56d47ad12d6548a8d3d50a79be96451411f18d5b77064de7b8544bb2da22988f"
+    }
+  ],
+  "status": "test-only; production Maya-S remains selected",
+  "purpose": "Pinned XS IQ1_S + matching DSpark xs2 on Maya1.1.24, ROCm7.2.3, bothgfx1100 cards",
+  "shared_assets": [
+    {
+      "reuse_existing": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
+      "size": 80641295472,
+      "published_xs_file": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00004-of-00005.gguf",
+      "published_xs_sha256": "0d93315942c523d82f6dbc0a6e0e1751548e309f3963f96b82f92e8f9bc52e36",
+      "sha256": "c98d46f96a25d17c4c54da5a60782c130255c364a22e621ea28d5c98a692ceb2",
+      "method": "GGUF headers differ in split.no/count; verify entire virtual XS checksum with published XS header plus existing S payload, then map original S tensors by original offsets. Do not rename S file or treat whole-file checksums as interchangeable."
+    },
+    {
+      "reuse_existing": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00006-of-00006.gguf",
+      "size": 80643503412,
+      "published_xs_file": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00005-of-00005.gguf",
+      "published_xs_sha256": "39bbc8cde8b17604fed9a7ba7fc6bc9c5e72e34733657943ac049b4b9ca2d340",
+      "sha256": "98d65ef4f36e0b193935d44c3586241ca09b1b47e90f118e85332cfdb5860263",
+      "method": "GGUF headers differ in split.no/count; verify entire virtual XS checksum with published XS header plus existing S payload, then map original S tensors by original offsets. Do not rename S file or treat whole-file checksums as interchangeable."
+    }
+  ],
+  "upstream_installer_revision": "c273fcbdda76a1db074c2f414cb70edbfca2f2ef",
+  "new_files_match_upstream_installer_manifest": true
+}

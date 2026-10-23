@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Maya-XS/matching DSpark dual-AMD test](maya-xs-dspark-2026-10-23.json), [report](../MAYA-XS-DSPARK-2026-10-23.md): source1.1.24/SDK7.2.3,32K, off/on three-trial and1024-output probes, format/memory/thermal/context checks. Test only; production Maya-S unchanged.
+
 - [Maya1.1.24 update — October23](maya-update-2026-10-23.json): four matched source19/24 arms, all trials/native PP/SSE TTFT+decode, near31.5K/history, guards/thermals/known kernel failures and normal integration; [report](../MAYA-UPDATE-2026-10-23.md).
 
 - [Ornith122B metadata/tensor inspection](ornith-122b-assessment-2026-10-21.json), [assessment](../ORNITH-122B-ASSESSMENT-2026-10-21.md): research-only memory/quant candidates, **no inference or throughput measurements**.

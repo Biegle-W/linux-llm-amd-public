@@ -20,6 +20,26 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. Same bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). Earlier dated sections retain their historical measurements; current source/settings in this section supersede old source19 timings.
 
+## Maya-XS + matching DSpark test — October23
+
+Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
+Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
+
+| Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| XS DSpark off | 20.45 | 15.56 | 428.7 | 14.714 |
+| XS **matching DSpark on** | 31.28 | 15.36 | 445.5 | 14.156 |
+| Saved same-day Maya-S, no DSpark | 6.42 | 6.78 | 299.0 | 21.062 |
+
+
+Single1024-output HTML code probe: **10.95→12.54t/s** off→on;
+short-code medians do not predict every workload.
+Both arms passed; near-window/history/tools/JSON/SSE, exact counts, longer1024-output
+probes, thermal coverage and draft/no-draft comparison are in the
+[XS test report](../hardware/MAYA-XS-DSPARK-2026-10-23.md). The saved S row is a separate
+same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed locally.
+
 ## Current status and hardware
 
 - Intel **i9-13900KS (24 cores /32 threads)**, **64 GB installed RAM (61.51 GiB OS-visible)**,
