@@ -42,7 +42,7 @@ def validate_devices(text, minimum_free_mib=2048):
             raise RuntimeError('The RTX 3060 needs at least 2 GiB reported free VRAM.')
     return [{'device': d, 'name': n, 'total_mib': int(t), 'free_mib': int(f)} for d,n,t,f in rows]
 
-def preflight(require_model=True):
+def preflight(require_model=True, profile=None):
     from test_models import memory
     stack = json.loads((ROOT/'config/stack.json').read_text(encoding='utf-8'))
     if stack.get('backend') != 'cuda':
@@ -58,8 +58,8 @@ def preflight(require_model=True):
     if ram['physical_available_gib'] < 2 or ram['commit_available_gib'] < 8:
         raise RuntimeError('Close unused applications: at least 2 GiB available RAM and 8 GiB commit headroom are required.')
     if require_model:
-        profiles = json.loads((ROOT/'config/selected-profiles.json').read_text(encoding='utf-8'))
-        if not profiles or stack.get('defaultModel') not in {p['id'] for p in profiles}:
+        profiles = [profile] if profile is not None else json.loads((ROOT/'config/selected-profiles.json').read_text(encoding='utf-8'))
+        if not profiles or (profile is None and stack.get('defaultModel') not in {p['id'] for p in profiles}):
             raise RuntimeError('No Windows model is registered. Run scripts/register_model.py with an existing GGUF path.')
         for p in profiles:
             if not Path(p['path']).is_file():

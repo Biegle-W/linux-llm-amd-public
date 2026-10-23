@@ -36,3 +36,9 @@ Tailscale forwarding selects only port 10000 while Windows Strata is disabled. U
 `config/selected-profiles.json` and `config/stack.json` are the sources; `scripts/build_configuration.py` regenerates catalogs. The stale Windows dual-AMD draft is retired. Strata is disabled for this single-3060/16-GB reference; its historical source/settings remain, with setup/launch/verification refusing while disabled. Do not enable Linux AMD profiles here.
 
 Keep Windows changes under `windows/`, preserve all Linux settings and historical measurement attribution, publish example paths and curated results only. Never commit runtime binaries, weights, keys, addresses, raw logs or private histories. This restoration reuses a validated runtime and does not claim a latest-version upgrade.
+
+## LFM2.5 and official Qwen3.8 comparison — October 23
+
+Separate8K IQ3_XXS test profiles passed chat, streaming, tools and~6K-input retrieval. LFM2.5 24B-A2B:78.24/85.04t/s total generation; Qwen3.8 27B:4.97/5.59t/s. LFM's128-token samples were reasoning only; Qwen's were visible prose with thinking off. First visible marker reply:1.828s LFM /0.922s Qwen. These are not matched completed-answer or quality results. Both used GPU + RAM; LFM required less host weight memory. Ornith remains the production default. The owned backend was left stopped after its existing memory preflight refused restart under current desktop pressure; production limits are unchanged.
+
+[Methods, verified files, memory and limits](reports/WINDOWS-LFM-QWEN-TESTS-20261023.md), [numeric record](reports/windows-lfm-qwen-summary-20261023.json), [example separate test profiles](config/test-profiles-lfm-qwen-20261023.json). Weights must be downloaded separately; update example paths before testing. No Linux or network changes.

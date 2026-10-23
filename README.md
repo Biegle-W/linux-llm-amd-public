@@ -426,7 +426,7 @@ No Windows throughput is inferred from Linux results.
 |---|---|
 | [`linux/`](linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |
 | [`linux-nvidia/`](linux-nvidia/README.md) | Historical dual-NVIDIA configuration; use as an alternative installation |
-| [`windows/`](windows/) | Separate RTX 3060 / 16 GB Windows build; CUDA, Ornith 1.5 35B-A3B IQ2_S MoE at 32K, [validation and limits](windows/README.md) |
+| [`windows/`](windows/) | Separate RTX 3060 / 16 GB Windows build; CUDA, Ornith 1.5 35B-A3B IQ2_S MoE at 32K, [setup](windows/README.md), [LFM2.5/Qwen3.8 trials](windows/reports/WINDOWS-LFM-QWEN-TESTS-20261023.md) |
 | [Consolidated handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) | Model IDs, storage, API/SSH use and validation limits |
 | [Full dated benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md) | Single-AMD, earlier motherboards, tuning controls, retired engines and update stages |
 | [Previous README archive](linux/hardware/README-ARCHIVE-2026-10-19.md) | All previous publication tables and chronological notes |

@@ -73,6 +73,11 @@ def checked_response(response, expected):
 def run(profile, common, runtime, output, long_tokens, speed_only=False, latency_tokens=None):
     global GPU_PID
     model = profile['id']
+    chat_kwargs = profile.get('chatTemplateKwargs', {'enable_thinking': False})
+    check_tokens = profile.get('checkMaxTokens', 1024)
+    def model_chat(messages, **kwargs):
+        return chat(model, messages, **{'chat_template_kwargs': chat_kwargs,
+                    'max_tokens': check_tokens, 'temperature': profile.get('checkTemperature', 0), **kwargs})
     options = dict(common)
     options.pop('load-on-startup', None)
     options.update(profile.get('options', {}))
@@ -103,7 +108,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
         with socket.socket() as probe:
             probe.bind(('127.0.0.1', PORT))
         from hardware_guard import clean_environment, preflight
-        result['hardware_preflight'] = preflight()
+        result['hardware_preflight'] = preflight(profile=profile)
         env = clean_environment()
         env['LLAMA_CACHE'] = str(ROOT / 'data' / 'cache' / 'router')
         with log_path.open('w', encoding='utf-8') as log:
@@ -140,6 +145,9 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                 raise AssertionError(f'Expected context {profile["context"]}, got {actual_context}')
             result['memory_loaded'] = memory()
             result['gpu_loaded'] = gpu()
+            if profile.get('minimumLoadedFreeVRAMMiB'):
+                free = float(result['gpu_loaded'][0].split(',')[3].strip().split()[0])
+                assert free >= profile['minimumLoadedFreeVRAMMiB'], 'Actual loaded VRAM margin is below the test profile requirement'
             loaded_log = log_path.read_text(encoding='utf-8', errors='replace')
             buffers = {name: float(size) for name, size in re.findall(r'(CUDA\d+) model buffer size\s*=\s*([\d.]+) MiB', loaded_log)}
             cpu_buffers = [float(x) for x in re.findall(r'(?:CPU(?:_Mapped)?|CUDA_Host) model buffer size\s*=\s*([\d.]+) MiB', loaded_log)]
@@ -163,11 +171,12 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                     result['checks'][name] = {'passed': False, 'seconds': round(time.monotonic()-begin, 2), 'error': str(error)}
                     print(f'{model}: {name} FAILED: {error}', flush=True)
                 (output / (model + '.json')).write_text(json.dumps(result, indent=2))
-                if not result['checks'][name]['passed']:
+                if not result['checks'][name]['passed'] and (
+                        not profile.get('continueAfterCheckFailure') or process.poll() is not None or guard_errors):
                     raise RuntimeError(f'{name} failed; stopping this experiment')
 
             def initial():
-                response = chat(model, [{'role': 'user', 'content': 'Reply with exactly LOCAL_BACKEND_OK.'}])
+                response = model_chat([{'role': 'user', 'content': 'Reply with exactly LOCAL_BACKEND_OK.'}])
                 result['chat_response'] = response
                 checked_response(response, 'LOCAL_BACKEND_OK')
                 return response
@@ -175,11 +184,15 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
 
             def streaming():
                 body = {'model': model, 'messages': [{'role': 'user', 'content': 'Reply with exactly WINDOWS_NVIDIA_CONNECTED.'}],
-                        'temperature': 0, 'max_tokens': 64, 'stream': True,
-                        'stream_options': {'include_usage': True}, 'chat_template_kwargs': {'enable_thinking': False}}
+                        'temperature': profile.get('checkTemperature', 0), 'max_tokens': profile.get('streamMaxTokens', 64), 'stream': True,
+                        'stream_options': {'include_usage': True}, 'chat_template_kwargs': chat_kwargs}
                 request = urllib.request.Request(f'http://127.0.0.1:{PORT}/v1/chat/completions',
                     data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
                 content = ''
+                reasoning = ''
+                started = time.monotonic()
+                first_generated = first_visible = None
+                evidence = {}
                 with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
                     for line in response:
                         if not line.startswith(b'data: '): continue
@@ -188,9 +201,23 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                         event = json.loads(data)
                         if event.get('error'): raise RuntimeError(str(event['error']))
                         for choice in event.get('choices', []):
-                            content += choice.get('delta', {}).get('content') or ''
+                            delta = choice.get('delta', {})
+                            think = delta.get('reasoning_content') or delta.get('reasoning') or ''
+                            visible = delta.get('content') or ''
+                            if (think or visible) and first_generated is None:
+                                first_generated = round(time.monotonic()-started, 3)
+                            if visible and first_visible is None:
+                                first_visible = round(time.monotonic()-started, 3)
+                            reasoning += think
+                            content += visible
+                        for field in ('timings', 'usage'):
+                            if event.get(field): evidence[field] = event[field]
+                record = {'content': content, 'reasoning_characters': len(reasoning),
+                        'first_generated_seconds': first_generated, 'first_visible_seconds': first_visible,
+                        'total_seconds': round(time.monotonic()-started, 3), 'max_tokens': body['max_tokens'], **evidence}
+                result['stream_response'] = record
                 assert 'WINDOWS_NVIDIA_CONNECTED' in content, 'Streaming exact-reply check failed'
-                return {'content': content, 'max_tokens': 64}
+                return record
             check('streaming', streaming)
 
             def speed():
@@ -201,7 +228,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                 monitor.start()
                 try:
                     for _ in range(2):
-                        response = chat(model, [{'role': 'user', 'content':
+                        response = model_chat([{'role': 'user', 'content':
                             'Write a detailed practical maintenance checklist for a desktop computer. '
                             'Cover dust cleaning, backups, updates, cooling, disk health, and diagnostics. '
                             'Write at least 400 words.'}], max_tokens=128, cache_prompt=False,
@@ -268,13 +295,13 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                     'description': 'Echo the supplied text.', 'parameters': {'type': 'object',
                     'properties': {'text': {'type': 'string'}}, 'required': ['text']}}}
                 messages = [{'role': 'user', 'content': 'Call local_echo with text LOCAL_TOOL_OK. After the tool responds, reply with its returned text.'}]
-                response = chat(model, messages, tools=[tool],
+                response = model_chat(messages, tools=[tool],
                     tool_choice={'type': 'function', 'function': {'name': 'local_echo'}})
                 msg = response['choices'][0]['message']
                 calls = msg.get('tool_calls', [])
                 assert calls and calls[0]['function']['name'] == 'local_echo', 'Missing requested tool call'
                 assert json.loads(calls[0]['function']['arguments'])['text'] == 'LOCAL_TOOL_OK'
-                follow = chat(model, messages + [msg, {'role': 'tool', 'tool_call_id': calls[0]['id'],
+                follow = model_chat(messages + [msg, {'role': 'tool', 'tool_call_id': calls[0]['id'],
                     'content': 'LOCAL_TOOL_OK'}], tools=[tool])
                 checked_response(follow, 'LOCAL_TOOL_OK')
                 return {'call': response, 'followup': follow}
@@ -288,7 +315,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
                 secret = 'LOCAL-CONTEXT-OK-7429'
                 prompt = f'The verification passphrase is {secret}.\n' + filler * count + '\nReturn only the verification passphrase from the beginning of this message.'
                 print(f'{model}: processing approximately {target:,} prompt tokens', flush=True)
-                response = chat(model, [{'role': 'user', 'content': prompt}], cache_prompt=False)
+                response = model_chat([{'role': 'user', 'content': prompt}], cache_prompt=False)
                 result['long_prompt_response'] = response
                 checked_response(response, secret)
                 assert response['usage']['prompt_tokens'] >= target - 512, 'Unexpectedly short prompt'
@@ -325,6 +352,7 @@ def main():
     global SPEED_TEMPERATURE
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('models', nargs='*')
+    parser.add_argument('--profiles-file', type=Path, help='Test a separate JSON profile list without changing the active catalog')
     parser.add_argument('--long-tokens', type=int, default=21000)
     parser.add_argument('--context', type=int, help='Test an alternate context without changing saved presets')
     parser.add_argument('--runtime', help='Test an alternate local llama-server without changing saved presets')
@@ -338,7 +366,7 @@ def main():
     REQUEST_TIMEOUT = args.request_timeout
     SPEED_TEMPERATURE = args.speed_temperature
     stack = json.loads((ROOT / 'config' / 'stack.json').read_text())
-    profiles = json.loads((ROOT / 'config' / 'selected-profiles.json').read_text())
+    profiles = json.loads((args.profiles_file or ROOT / 'config' / 'selected-profiles.json').read_text(encoding='utf-8'))
     if not profiles:
         raise SystemExit('No registered Windows models. Run scripts/register_model.py with a local GGUF first.')
     by_id = {p['id']: p for p in profiles}
