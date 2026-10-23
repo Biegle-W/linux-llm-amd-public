@@ -64,6 +64,10 @@ def preflight(require_model=True):
         for p in profiles:
             if not Path(p['path']).is_file():
                 raise RuntimeError(f"Model file is missing for {p['id']}; register its Windows path again.")
+        required_ram = max(p.get('minimumAvailableRAMGiB', 2) for p in profiles)
+        required_commit = max(p.get('minimumCommitGiB', 8) for p in profiles)
+        if ram['physical_available_gib'] < required_ram or ram['commit_available_gib'] < required_commit:
+            raise RuntimeError(f'The registered profile requires {required_ram} GiB available system RAM and {required_commit} GiB commit headroom; close unused applications first.')
         required = max(p.get('minimumFreeVRAMMiB', 2048) for p in profiles)
         if selected_gpu()['free_mib'] < required:
             raise RuntimeError(f'The registered profile requires {required} MiB free on the RTX 3060; close GPU-heavy apps first.')

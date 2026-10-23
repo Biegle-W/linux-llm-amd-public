@@ -1,14 +1,18 @@
 [
   {
-    "id": "Qwen3.5-9B-UD-Q4_K_XL",
-    "label": "Qwen3.5 9B (UD-Q4_K_XL) | 32K | Full GPU",
-    "path": "C:\\Models\\Qwen3.5-9B-UD-Q4_K_XL.gguf",
+    "id": "Ornith-1.5-35B-A3B-IQ2_S",
+    "label": "Ornith 1.5 35B-A3B (IQ2_S) | 32K | GPU + RAM",
+    "path": "C:\\Models\\Ornith-1.5-35B-A3B-IQ2_S.gguf",
     "context": 32768,
     "options": {
-      "fit": "off",
-      "gpu-layers": "all"
+      "fit": "on",
+      "gpu-layers": "auto",
+      "fit-target": 2816,
+      "no-host": "true"
     },
-    "minimumFreeVRAMMiB": 8192,
-    "requireFullGpu": true
+    "requireFullGpu": false,
+    "minimumFreeVRAMMiB": 9728,
+    "minimumAvailableRAMGiB": 4,
+    "minimumCommitGiB": 16
   }
 ]

@@ -23,7 +23,9 @@ Report any blocked commit, push or handoff synchronization explicitly.
 Windows is a separate RTX 3060 12 GB / i5-13600KF / 16 GB machine.
 Keep CUDA Windows profiles under `windows/`; do not apply Linux AMD devices,
 guards, context budgets, model paths or engine preferences to Windows.
-Its current profile is Qwen3.5 9B UD-Q4_K_XL, 32K, full GPU; Strata is disabled.
+Its current profile is Ornith 1.5 35B-A3B IQ2_S,32K,GPU + RAM; Strata is disabled.
+Preserve fit-target2816/no-host true and4-GiB RAM/16-GiB commit/9728-MiB VRAM fresh admission.
+Use selected-profile44–48t/s samples, not faster low-headroom trials; see windows/reports/WINDOWS-MOE-MODELS-20261023.md.
 See `windows/README.md`. The Windows machine has no attached Shared D: drive;
 its current handoff stays in the Windows repository, without overwriting Linux's.
 Private Windows instructions are consolidated in its README, not AGENTS.md.

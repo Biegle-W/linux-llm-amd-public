@@ -6,26 +6,26 @@ Current Windows reference, validated 23 October 2026. This is a separate machine
 |---|---|
 | Hardware | i5-13600KF, 16 GB DDR5 at 6000 MT/s, RTX 3060 12 GB |
 | Runtime | llama.cpp b11630 (`6868a52cb`), CUDA 13.4, NVIDIA 610.88 |
-| Model | Qwen3.5 9B UD-Q4_K_XL, text only |
-| Profile | 32,768 allocated context, all 33 layers on CUDA0, Q8 K/V, Flash Attention |
-| Short decode samples | 50.74 / 50.90 tokens/s (two 128-token-limit samples) |
+| Model | Ornith 1.5 35B-A3B IQ2_S MoE, text only |
+| Profile | 32,768 allocated context, GPU + RAM weights, Q8 K/V, Flash Attention |
+| Short decode samples | 48.24 / 44.29 tokens/s (two 128-token-limit samples) |
 
-Chat, streaming, tool round trip and 8,080-token input retrieval passed. Allocation is not a full-32K quality or stress test. Measurements describe this complete profile and are not a controlled comparison with Linux or archived dual-NVIDIA results. See [curated evidence](reports/WINDOWS-RTX3060-20261023.md) and [numeric record](reports/windows-rtx3060-summary-20261023.json).
+Chat, streaming, tool round trip and 8,080-token input retrieval passed. Allocation is not a full-32K quality or stress test. Measurements describe this complete profile and are not a controlled comparison with Linux or archived dual-NVIDIA results. See [curated evidence](reports/WINDOWS-MOE-MODELS-20261023.md) and [numeric record](reports/windows-moe-summary-20261023.json).
 
 ## Prepare and launch
 
 This directory is a reference distribution: install the runtime and download weights separately. Binaries, models and private app data are excluded.
 
 1. Put the matching CUDA runtime at `runtimes/llama.cpp-b11630-cuda-13.4/` under this directory. The launcher expects Python at `runtimes/python/cpython-3.11.15-windows-x86_64-none/python.exe`; install that runtime, a compatible NVIDIA driver and Windows Terminal.
-2. Download [Qwen3.5-9B-UD-Q4_K_XL.gguf](https://huggingface.co/unsloth/Qwen3.5-9B-GGUF/tree/3885219b6810b007914f3a7950a8d1b469d598a5). The example profile uses `C:\Models`; another local location, including Downloads, can be registered:
+2. Download [Ornith-1.5-35B-A3B-IQ2_S.gguf](https://huggingface.co/bartowski/Ornith-1.5-35B-A3B-GGUF/tree/64b0493d34a5ca4c1b4ad67bb99b41d74b4f07d6). The example profile uses `C:\Models`. Update its path in `config/selected-profiles.json` if different, preserving all options/admission fields; run `python scripts/build_configuration.py` to regenerate. Do not use `--full-gpu` for this mixed profile.
 
-```powershell
-python scripts/register_model.py 'C:\Models\Qwen3.5-9B-UD-Q4_K_XL.gguf' --id Qwen3.5-9B-UD-Q4_K_XL --name 'Qwen3.5 9B (UD-Q4_K_XL)' --context 32768 --full-gpu --default
-```
+3. Open `Start Local LLM.cmd`. The owned backend opens in the visible Local-LLM terminal. The authenticated OpenAI-compatible API is `http://127.0.0.1:10000/v1`, model ID `Ornith-1.5-35B-A3B-IQ2_S`.
 
-3. Open `Start Local LLM.cmd`. The owned backend opens in the visible Local-LLM terminal. The authenticated OpenAI-compatible API is `http://127.0.0.1:10000/v1`, model ID `Qwen3.5-9B-UD-Q4_K_XL`.
+The launcher discovers the RTX 3060 UUID and exposes it as CUDA0. It refuses missing/wrong hardware or weights. This mixed profile requires at least **4 GiB available RAM,16 GiB commit headroom and9,728 MiB actual free VRAM** before fresh start. Keep one model loaded; stop the owned backend with `scripts/Start.ps1 -Mode Stop` before benchmarking.
 
-The launcher discovers the RTX 3060 UUID and exposes it as CUDA0. It refuses a missing/wrong GPU or model and requires at least 8 GiB actual free VRAM for this profile. One model runs at a time. Split mode is none, batch/microbatch 512/128, thinking off, no speculation, no CPU weight offload. Host RAM remains necessary; available host RAM after test load was 2.28 GiB. Do not run a benchmark worker beside a loaded production model. Stop the owned backend first with `scripts/Start.ps1 -Mode Stop`.
+Selected options: fit on, GPU layers auto, **fit-target2816**, **no-host true**, split none, batch/microbatch512/128, Q8 KV, thinking off, no speculation. Measured normal model buffers:7,840.74 MiB GPU /2,643.67 MiB host; after streaming:1,571MiB actual free VRAM /1.19GiB available RAM. One short-generation sample reached1,336MiB free VRAM, so fitter target is not guaranteed headroom.
+
+Both newer community MoEs passed functional tests: September's Empero Qwen3.8 distillation and August's Ornith1.5. Empero's IQ2_M and earlier Qwen3.5 weights remain downloaded but outside the active catalog. Empero is distilled into Qwen3.6 architecture; do not mistake its name for an official small Qwen3.8 release. Early faster trials used much less desktop VRAM headroom. Low-bit quantization and these functional checks do not establish answer-quality superiority. [All trials, hashes and limitations](reports/WINDOWS-MOE-MODELS-20261023.md).
 
 ## Clients and maintenance
 

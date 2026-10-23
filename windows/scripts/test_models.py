@@ -49,7 +49,7 @@ def api(path, data=None, timeout=None):
         raise RuntimeError(f'HTTP {error.code}: {error.read().decode()[:2000]}') from error
 
 def gpu():
-    result = subprocess.run(['nvidia-smi', '--query-gpu=index,name,memory.used,memory.free',
+    result = subprocess.run(['nvidia-smi', '--query-gpu=index,name,memory.used,memory.free,temperature.gpu,power.draw',
         '--format=csv,noheader'], capture_output=True, text=True,
         creationflags=subprocess.CREATE_NO_WINDOW)
     return result.stdout.strip().splitlines()
@@ -142,7 +142,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
             result['gpu_loaded'] = gpu()
             loaded_log = log_path.read_text(encoding='utf-8', errors='replace')
             buffers = {name: float(size) for name, size in re.findall(r'(CUDA\d+) model buffer size\s*=\s*([\d.]+) MiB', loaded_log)}
-            cpu_buffers = [float(x) for x in re.findall(r'CPU(?:_Mapped)? model buffer size\s*=\s*([\d.]+) MiB', loaded_log)]
+            cpu_buffers = [float(x) for x in re.findall(r'(?:CPU(?:_Mapped)?|CUDA_Host) model buffer size\s*=\s*([\d.]+) MiB', loaded_log)]
             offload = re.search(r'offloaded (\d+)/(\d+) layers to GPU', loaded_log)
             assert set(buffers) == {'CUDA0'} and buffers['CUDA0'] > 100, 'The selected RTX 3060 must hold model layers'
             assert offload and int(offload[1]) > 0, 'No model layers were offloaded to CUDA'

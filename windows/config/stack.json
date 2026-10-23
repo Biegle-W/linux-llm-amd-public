@@ -1,7 +1,7 @@
 {
   "runtime": "runtimes/llama.cpp-b11630-cuda-13.4/llama-server.exe",
-  "defaultModel": "Qwen3.5-9B-UD-Q4_K_XL",
-  "preferredFastModel": "Qwen3.5-9B-UD-Q4_K_XL",
+  "defaultModel": "Ornith-1.5-35B-A3B-IQ2_S",
+  "preferredFastModel": "Ornith-1.5-35B-A3B-IQ2_S",
   "backendVersion": "b11630",
   "cudaRuntime": "13.4",
   "terminalWindow": "Local-LLM",
