@@ -86,7 +86,38 @@ and normal Desktop/Ptyxis/original browser UI/selector/authenticated API/switchb
 Actual counts, timings, sampled high temperatures and failed/excluded kernels:
 [update report](MAYA-UPDATE-2026-10-23.md) · [numeric evidence](results/maya-update-2026-10-23.json).
 
-Other latest llama.cpp sizes and rates are in the [October22 batch sweep](LLAMA-BATCH-SWEEP-2026-10-22.md); its new-size full-window tests were not repeated. All earlier rates below retain their original workload/build/date.
+## llama.cpp profiles after the prompt batch sweep — October22
+
+Every active llama.cpp profile now overrides the inherited `batch-size = 512` /
+`ubatch-size = 128`. These are the current llama.cpp rates: the shared method (three short
+code/prose runs, three fresh ~8K prompts; medians), llama.cpp4c3c5810/HIP7.2.3, both 7900XTX,
+production settings with only batch/ubatch changed, 6 threads.
+
+| Profile | Context | batch / ubatch | Code / prose decode t/s | Native fresh ~8K PP t/s (before) | Fresh TTFT s (before) | Min free VRAM GiB |
+|---|---:|---|---:|---:|---:|---:|
+| `ornith-1.5-122b` | 32,768 | 4096 / 4096 | 11.44 / 13.34 | **714.9** (52.7) | **11.5** (155.2) | 4.03 / 5.02 |
+| `nemotron-3.5-super-iq3` | 32,768 | 2048 / 1024 | 15.65 / 17.23 | **431.4** (93.9) | **18.4** (84.4) | 3.61 / 4.68 |
+| `empero-qwen3.8-35b-a3b` | 262,144 | 4096 / 4096 | 121.45 / 73.52 | **2,944.7** (397.2) | **2.8** (20.6) | 9.65 / 6.24 |
+| `sage-a1.5` | 65,536 | 4096 / 4096 | 80.81 / 65.16 | **2,793.7** (385.1) | **2.9** (21.3) | 9.91 / 10.11 |
+
+- "Before" is each profile's same-session 512/128 control. Decode stayed within 2% of it.
+- Actual fresh inputs: 8,185–8,191 tokens (Qwen-family tokenizers), 7,922–7,927 (Super).
+- Ornith and Super keep their production 3 GiB/card VRAM guard. The larger sizes that measured
+  faster (Ornith 8192: 986.9 t/s; Super 4096: 847.0) fall below it; Ornith 8192 was stopped
+  by the guard in production.
+- Thread count (6/8/16) and P-core pinning changed nothing beyond ±1%.
+- Every selected size then passed one fresh ~11.1K-token prompt through the model hub with the
+  guard active.
+- Near-full-window prompts were not repeated at the new sizes.
+- The Qwen3.6-35B-A3B profile was measured too (381.7 → 2,881.8 t/s) but was retired on October23.
+
+[Sweep report, all arms and thermals](LLAMA-BATCH-SWEEP-2026-10-22.md) ·
+[numeric record](results/llama-batch-sweep-2026-10-22.json).
+
+## Catalog and platform
+
+All earlier rates below retain their original workload/build/date. The llama.cpp rows in the
+sections below were measured at the old 512/128 batch.
 
 **Eleven active profiles:** four llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, three Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
@@ -113,6 +144,7 @@ near61,999-input retrieval/full history and a separate vision smoke.
 | ROCm7.2.3 MTP3 | 83.42 | 66.75 | 387.02 | 21.160 |
 | ROCm10.1.0 MTP3 | 84.03 | 66.33 | 386.65 | 21.182 |
 
+These Sage rows used the old 512/128 batch; current Sage prefill is in the October22 batch table above.
 10.1 is effectively tied for Sage; retain7.2.3. Latest official is10.1;
 7.2.4/7.14.1 were subsequently tested and rejected; see [October22 comparison](ROCM-724-7141-2026-10-22.md).
 [Detailed test/limits](SAGE-A15-2026-10-21.md) ·
@@ -125,11 +157,11 @@ near61,999-input retrieval/full history and a separate vision smoke.
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts; batch/ubatch 4096/4096 (Super 2048/1024) since October22 |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm 7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
 | vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm 7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
 | Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm 7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
-| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm 7.2.3 | Both 32K Maya-S profiles; guards/quants retained; GLM MMQ with failed fused path disabled |
+| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm 7.2.3 | Three 32K profiles: GLM Maya-S v2/MTP (MMQ; failed fused path disabled), DeepSeek Maya-XS + matching DSpark xs2, DeepSeek Maya-S without DSpark; guards retained |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
 ### October 21 shared-method baseline (historical)
@@ -155,11 +187,12 @@ Decode is `(completion_tokens−1)/(stream_end−first_output)`; model cold-star
 | DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP 7, no DSpark | 32,768 | 6,297–6,301 | 187.3 | 33.666 | 0.380 / 0.553 | 6.92 / 7.08 |
 
 These are selected-stack timings, not a universal SDK or source speedup claim.
+The llama.cpp rows used the old 512/128 batch; current llama.cpp prefill is in the October22 batch table.
 Earlier October20/i5/NVIDIA measurements retain their original build/method/date.
 The new record retains every actual short input/output count, fresh-input/cache metadata,
 quality result, source/library fingerprint and thermal sample coverage.
 
-### Super IQ3 using fixed ~8K-input workloads
+### Super IQ3 using fixed ~8K-input workloads (historical, 512/128 batch)
 
 | Super / workload | Context | Actual input / output | Native PP t/s | External TTFT s | External decode t/s |
 |---|---:|---:|---:|---:|---:|

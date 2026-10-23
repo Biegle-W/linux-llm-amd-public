@@ -903,7 +903,7 @@ network administration instructions remain intact in the dated archive.
 
 ## Measurements and open work
 
-The [current ten-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md) and
+The [current eleven-profile report](../hardware/CURRENT-AMD-BENCHMARKS.md) and
 [dated ledger](../hardware/BENCHMARK-HISTORY.md) preserve engine/native prompt
 phase timing separately from external SSE TTFT/decode and input/TTFT proxies.
 Nine active profiles use short prompts plus fresh ~8K probes; Super IQ3 uses
