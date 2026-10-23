@@ -3,8 +3,11 @@
 set -euo pipefail
 MAYA_SETUP_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 MAYA_MODELS_ROOT=${MAYA_MODELS_ROOT:?Set MAYA_MODELS_ROOT to the Maya folder on the shared NVMe}
-case "${1:-}" in glm|deepseek) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/LLM-Models/Maya maya/install.sh {glm|deepseek}' >&2; exit 2 ;; esac
+case "${1:-}" in glm|deepseek|deepseek-s) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/LLM-Models/Maya maya/install.sh {glm|deepseek|deepseek-s}' >&2; exit 2 ;; esac
 cd "$MAYA_SETUP_ROOT"
+if [[ $family == deepseek-s ]]; then
+    exec python3 maya/verify-xs-pack.py --root "$MAYA_MODELS_ROOT" --profile s
+fi
 # The selected XS pack references the existing S Engram shards. Stock setup
 # would download another 161 GB under XS filenames and replace this metadata.
 if [[ $family == deepseek ]] && [[ $(python3 -c 'import json; print(json.load(open("dsh/maya-deepseek-profile.json"))["installer"]["ds4_quant"])') == maya-xs ]]; then

@@ -45,7 +45,7 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Eleven profiles are active: five llama.cpp (incl. Sage-A1.5 and Ornith-1.5-122B), one SGLang, two vLLM, one Strata, two Maya. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
+Eleven profiles are active: five llama.cpp (incl. Sage-A1.5 and Ornith-1.5-122B), one SGLang, two vLLM, one Strata, three Maya. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
 Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; keep the SATA original as a backup. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
@@ -66,9 +66,9 @@ excluded from Git.
 ## Project Maya — October 20
 
 Maya v1.1.24 / 25deec5 is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
-DeepSeek-V4.1-Flash-1017 Maya-XS + matching DSpark xs2, each 32K, both 7900XTX cards through layer groups.
+DeepSeek-V4.1-Flash-1017 Maya-XS + matching DSpark xs2 and separate Maya-S/noDSpark, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
-GPU hot caching and matching DSpark. Shared NVMe holds all weights/generated packs.
+GPU hot caching, with matching DSpark for XS only. Shared NVMe holds all weights/generated packs.
 The native 8 GiB/card reserve must leave >=6 GiB actual whole-card free at startup;
 keep continuous latched guards, zero worker swap/spill and 52G worker scope.
 Physical 60 GiB / available 52 GiB before load remains required. The 64 GB Strata 13.5 GiB
@@ -342,6 +342,10 @@ hardware/ROCM-SELECTION-2026-10-21.md (under linux/ in the public repository).
 
 User-requested Maya1.1.24+IQ1_S XS+matching IQ2_XXS dspark-xs2 tested on BOTHgfx1100 cards at32K/SDK7.2.3; at that test time production remained Maya-S/noDSpark. The later explicit user-authorized production promotion below supersedes that test-only status. Keep new XS/drafter assets on sharedNVMe; reused S Engram tensor payloads are fully SHA-verified via published XS headers, not whole-file identical GGUFs. Existing S/GLM/guards/default and ten-profile catalog unchanged. See linux/hardware/MAYA-XS-DSPARK-2026-10-23.md and numeric record; retain all partial/failed preparation evidence privately.
 
-## Maya-XS production — October23 (current)
+## Maya-XS production — October23 (retained XS selection)
 
 User explicitly authorized production XS+matchingDSpark. DeepSeek keeps sameAPIid deepseek-v4.1-flash-1017-maya,32K/24threads/bothAMD/SDK7.2.3/source25deec5/exacttestedbinary, DS4_IQ_Q8K0/STREAM0 andallguards. XS IQ1_S admission is restricted to matchingdrafter on/32K/24threads with existing source/binary/config/pack fingerprints. GLM-Sv2/MTP/fused0 and otherengines/defaultStrata unchanged. NormalDesktop/Ptyxis/nativeUI/authAPI/GLM-XS-GLM-XS passed; finalXS worker intentionally ready. Earlier31.28/15.36/445.5/14.156 and1024HTML12.54 rates remain savedexperiment, no production speed rerun. Keep S rollback weights/manifest; S Engram5/6 remain ACTIVE XS dependencies and must not be removed. maya/install.sh deepseek only verifies sealed XS metadata/dependencies to avoid duplicate161GBstock download. Publicconfigs require localvalidation. See linux/hardware/MAYA-XS-PRODUCTION-2026-10-23.md and numeric proof.
+
+## Maya dual DeepSeek selection — October23 (current)
+
+User requested BOTH DeepSeek quants selectable. XS ID deepseek-v4.1-flash-1017-maya remains unchanged; S is active as deepseek-v4.1-flash-1017-maya-s,32K/24threads/noDSpark, exact retained source25deec5/SDK7.2.3 binary/pack/guards/bothAMD. Three Maya profiles, eleven total; one worker at a time. GLM and Strata DSH default unchanged. Separate S expert routing seed copied from preserved S rollback; full six-file published SHA verified anew. NormalDesktop/Ptyxis/nativeUI S-XS-S-XS and authenticated host-self API/tools/JSON/SSE pass; no throughput/full-window rerun. Existing S/XS dated speeds retain their original methods/quality distinction. Both quants use shared S Engram5/6; never delete those. S is active, not merely rollback; old manifest remains historical. Installer deepseek-s verifies sealed existing S without stock reconfiguration/download. Public reference configs require localvalidation. See linux/hardware/MAYA-DUAL-DEEPSEEK-2026-10-23.md and numeric proof.

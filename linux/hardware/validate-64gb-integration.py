@@ -26,11 +26,11 @@ def main():
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--model',choices=['nemotron-3.5-super-iq3',
                                      'qwen3.8-flash-next-iq3_xxs','glm-5.3-flash-maya',
-                                     'deepseek-v4.1-flash-1017-maya'])
+                                     'deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s'])
     ap.add_argument('--result',type=Path,help='Require exact measured Q4 placement, CPU/cache parameters and binary')
     a=ap.parse_args()
     ident=a.model or ('nemotron-3.5-super-iq3' if a.kind=='llama' else 'qwen3.8-flash-next-iq3_xxs')
-    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and ident=='qwen3.8-flash-next-iq3_xxs') or (a.kind=='maya' and ident in ('glm-5.3-flash-maya','deepseek-v4.1-flash-1017-maya'))
+    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and ident=='qwen3.8-flash-next-iq3_xxs') or (a.kind=='maya' and ident in ('glm-5.3-flash-maya','deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s'))
     cfg=json.loads((ROOT/'dsh/data/network-access.json').read_text());key=Path(cfg['key_file']).read_text().strip()
     expected=next(m['context'] for m in json.loads((ROOT/'dsh/models.json').read_text()) if m['id']==ident) if a.kind=='llama' else json.loads((ROOT/f'dsh/{a.kind}-profiles.json').read_text())[ident]['context']
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))

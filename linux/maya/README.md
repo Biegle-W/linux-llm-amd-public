@@ -1,7 +1,7 @@
 # Project Maya on two RX 7900 XTX cards
 
 The isolated HIP build uses [Project Maya v1.1.24, commit `25deec5`](https://github.com/mw00/project-maya/tree/25deec505b525212e05faa58697d9d2b7d17fdb3).
-Both models are active at **32,768 tokens**. Current local validation is in
+All three profiles are active at **32,768 tokens**. Current local validation is in
 [the October23 update](../hardware/MAYA-UPDATE-2026-10-23.md). All profiles use both cards;
 this is experimental upstream AMD support. Existing llama.cpp, Strata,
 vLLM/SGLang environments and the saved DSH default are preserved.
@@ -19,7 +19,7 @@ Model files live beneath the **Maya directory on the new shared NVMe**:
 `/mnt/shared-nvme/LLM-Models/Maya`. The [pinned download manifest](models.json)
 records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) records the retained control files; it is not another active model.
 GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-XS**, three XS GGUF shards plus the shared original S Engram
-shards5/6, matching `dspark-xs2` drafter and existing vision assets. S rollback weights stay.
+shards5/6, matching `dspark-xs2` drafter and existing vision assets. The full S quant is also selectable under its own ID; no extra weight copy was created.
 No original FP8 checkpoint, EXL3 copy or second full expert pack was downloaded.
 The engine reads experts from GGUF in place; the generated indexes/dense packs
 are additional required assets. DeepSeek's vision source is converted losslessly
@@ -34,12 +34,13 @@ export MAYA_MODELS_ROOT='/mnt/shared-nvme/LLM-Models/Maya'
 python3 maya/download-models.py --root "$MAYA_MODELS_ROOT"
 maya/install.sh glm
 maya/install.sh deepseek
+maya/install.sh deepseek-s
 ```
 
 The downloader resumes partials and checks full SHA-256 before publishing a file.
 Existing complete mismatches are preserved for review. The preparation scripts
 never start or calibrate inference, and never activate newly generated configs.
-GLM preparation uses `--no-start --no-speed-calibration`; DeepSeek XS only verifies
+GLM preparation uses `--no-start --no-speed-calibration`; Both DeepSeek quant installers only verify
 existing sealed metadata/dependencies to avoid duplicate Engram downloads. The
 calibration restriction matters because
 DeepSeek's installer can otherwise run calibration despite `--no-start`.
@@ -51,7 +52,7 @@ Do not run bulk transfers/builds during clean timing measurements.
 The **Maya** desktop launcher also keeps a visible terminal. DSH is optional;
 start `dsh` separately and select the **Local Maya** provider when wanted.
 The router's OpenAI chat API is loopback port **30030**, with one owned worker
-on **30031**. Remote clients use the existing authenticated LAN/Tailscale gateway
+on **30032**, with the persistent web UI on **30031**. Remote clients use the existing authenticated LAN/Tailscale gateway
 on port **10000**, with the exact model IDs in the current report. Switching
 between Maya models unloads the previous model. Switching to another configured
 backend unloads only the configured inference processes and their owned workers.
@@ -127,11 +128,26 @@ hidden from the application menu; the Desktop launcher and `llm-maya` remain.
 
 The selected gfx1100 GLM profile explicitly sets `MAYA_GLM_PREFILL_FUSED=0`: the new default fused IQ2_S path failed parity on both cards. Keep MMQ and the profile fingerprint. The source19 rollback is private; no new quants/DSpark or other-engine changes accompany this update.
 
-## Maya-XS + DSpark is production — October23
+## Both DeepSeek quants are selectable — October23
+
+Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+(`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
+(`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
+Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
+API; only one worker runs at a time. Strata remains the DSH default.
+Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
+No new throughput benchmark: saved S code/prose**6.42/6.78t/s**, PP**299.0**, fresh
+TTFT**21.062s**; saved XS+DSpark**31.28/15.36t/s**, PP**445.5**, TTFT**14.156s**.
+These are separate earlier same-day three-trial sessions, not an equal-quality A/B.
+All six S shards passed fresh full-file SHA256; no download/deletion was needed.
+[Deployment and validation](../hardware/MAYA-DUAL-DEEPSEEK-2026-10-23.md).
+
+## Maya-XS + DSpark rollout history — October23 (before separate S selection)
 
 DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
 `deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
-Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default were preserved at that rollout; S is now separately selectable above.
 Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
 XS is ready. [Production proof and rollback](../hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
 Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
@@ -141,7 +157,7 @@ or new speed claim accompanies production integration. XS trades quality for siz
 ## XS/drafter isolated test — October23
 
 The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
-preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
+preceded the user-authorized XS + DSpark production switch above. Ten profiles existed at that test stage. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |

@@ -1,10 +1,26 @@
 # LLM benchmark and context history
 
+## Both DeepSeek quants are selectable — October23
+
+Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+(`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
+(`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
+Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
+API; only one worker runs at a time. Strata remains the DSH default.
+Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
+No new throughput benchmark: saved S code/prose**6.42/6.78t/s**, PP**299.0**, fresh
+TTFT**21.062s**; saved XS+DSpark**31.28/15.36t/s**, PP**445.5**, TTFT**14.156s**.
+These are separate earlier same-day three-trial sessions, not an equal-quality A/B.
+All six S shards passed fresh full-file SHA256; no download/deletion was needed.
+[Deployment and validation](MAYA-DUAL-DEEPSEEK-2026-10-23.md).
+
+
 ## Maya-XS + DSpark is production — October23
 
 DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
 `deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
-Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default were preserved at that rollout; S is now separately selectable above.
 Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
 XS is ready. [Production proof and rollback](MAYA-XS-PRODUCTION-2026-10-23.md).
 Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,

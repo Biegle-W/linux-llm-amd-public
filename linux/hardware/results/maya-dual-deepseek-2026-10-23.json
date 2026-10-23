@@ -1,0 +1,405 @@
+{
+  "schema": 1,
+  "date": "2026-10-23",
+  "status": "deployed",
+  "version": "1.1.24",
+  "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+  "rocm": "7.2.3",
+  "binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+  "new_model_id": "deepseek-v4.1-flash-1017-maya-s",
+  "existing_xs_model_id": "deepseek-v4.1-flash-1017-maya",
+  "maya_profile_count": 3,
+  "total_profile_count": 11,
+  "context": 32768,
+  "both_gpus": true,
+  "parallelism": "Layer groups, not true TP2",
+  "validation_type": "Functional-only integration; no new throughput or full-window rerun",
+  "retained_s_full_sha256_checks": [
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
+      "size": 47887697312,
+      "sha256": "1f3437f57042e69f94c141ffbcba0d5610dab63feb07244fb468be4940d6763f",
+      "verified": true,
+      "elapsed_s": 71.40242763399146
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
+      "size": 47669578400,
+      "sha256": "66501fee8702ffd54e6f065323ab54bb3150d20b10b01922c589e7462c7b5ba6",
+      "verified": true,
+      "elapsed_s": 69.72105939500034
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
+      "size": 47103347360,
+      "sha256": "3195b23f33337c46a07c48583946d99147c3635412bc4adc6acdc4cf42bf30ad",
+      "verified": true,
+      "elapsed_s": 68.02916403199197
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
+      "size": 35532532032,
+      "sha256": "d60dba35fac9601cd5c6026439dd980c457a5bb1c009192ea539b220108ea0db",
+      "verified": true,
+      "elapsed_s": 53.89391710900236
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
+      "size": 80641295472,
+      "sha256": "c98d46f96a25d17c4c54da5a60782c130255c364a22e621ea28d5c98a692ceb2",
+      "verified": true,
+      "elapsed_s": 119.7575275929994
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00006-of-00006.gguf",
+      "size": 80643503412,
+      "sha256": "98d65ef4f36e0b193935d44c3586241ca09b1b47e90f118e85332cfdb5860263",
+      "verified": true,
+      "elapsed_s": 124.3125374079973
+    }
+  ],
+  "normal_integration": {
+    "status": "passed",
+    "sequence": [
+      "deepseek-v4.1-flash-1017-maya-s",
+      "deepseek-v4.1-flash-1017-maya",
+      "deepseek-v4.1-flash-1017-maya-s",
+      "deepseek-v4.1-flash-1017-maya"
+    ],
+    "one_native_worker": true,
+    "worker_swap_bytes": 0,
+    "worker_spill_bytes": 0,
+    "final_active_model": "deepseek-v4.1-flash-1017-maya",
+    "final_startup_whole_card_free_bytes": [
+      8313241600,
+      8346779648
+    ],
+    "catalog_models": 3,
+    "total_catalog_models": 11,
+    "method": "Normal Desktop/Ptyxis/original UI selector/authenticated gateway functional validation only; no speed rerun, host-self routes not remote peers.",
+    "thermal": {
+      "schema": 1,
+      "label": "maya-dual-deepseek-normal",
+      "status": "complete",
+      "interval_seconds": 1.0,
+      "samples": 207,
+      "sample_errors": 0,
+      "raw_samples_dropped": 0,
+      "raw_limit_bytes": 67108864,
+      "cards": {
+        "0000:03:00.0": {
+          "gpu_index": 0,
+          "samples": 207,
+          "busy_samples": 72,
+          "sensor_samples": {
+            "mem": 207,
+            "edge": 207,
+            "junction": 207
+          },
+          "peak_temperature_c": {
+            "mem": 48.0,
+            "edge": 44.0,
+            "junction": 53.0
+          },
+          "peak_busy_temperature_c": {
+            "mem": 47.0,
+            "edge": 44.0,
+            "junction": 53.0
+          },
+          "throttle_samples_available": 207,
+          "thermal_limit_samples": 131,
+          "hotspot_limit_samples": 131,
+          "power_limit_samples": 8,
+          "current_limit_samples": 0,
+          "peak_fan_rpm": 0.0,
+          "peak_power_average_w": 166.0,
+          "peak_gfx_clock_mhz": 3073.0,
+          "peak_memory_clock_mhz": 1249.0,
+          "peak_busy_percent": 100.0,
+          "last_throttle_status": "available"
+        },
+        "0000:06:00.0": {
+          "gpu_index": 1,
+          "samples": 207,
+          "busy_samples": 93,
+          "sensor_samples": {
+            "mem": 207,
+            "edge": 207,
+            "junction": 207
+          },
+          "peak_temperature_c": {
+            "mem": 60.0,
+            "edge": 41.0,
+            "junction": 54.0
+          },
+          "peak_busy_temperature_c": {
+            "mem": 60.0,
+            "edge": 41.0,
+            "junction": 54.0
+          },
+          "throttle_samples_available": 207,
+          "thermal_limit_samples": 177,
+          "hotspot_limit_samples": 177,
+          "power_limit_samples": 17,
+          "current_limit_samples": 0,
+          "peak_fan_rpm": 0.0,
+          "peak_power_average_w": 194.0,
+          "peak_gfx_clock_mhz": 3140.0,
+          "peak_memory_clock_mhz": 1249.0,
+          "peak_busy_percent": 100.0,
+          "last_throttle_status": "available"
+        }
+      },
+      "cpu_peak_package_c": {
+        "Package id 0": 82.0
+      },
+      "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+      "started_utc": "2026-10-23T16:38:44.269837+00:00",
+      "last_sample_utc": "2026-10-23T16:42:10.885203+00:00"
+    }
+  },
+  "normal_s": {
+    "status": "passed",
+    "model": "deepseek-v4.1-flash-1017-maya-s",
+    "context": 32768,
+    "routes": {
+      "loopback": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "lan": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "tailscale": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      }
+    },
+    "remote_peer_tested": false,
+    "runtime_proof": {
+      "runtime_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+      "production_binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+      "profile_arguments_match": true,
+      "both_gpus_configured": true,
+      "config_sha256": "6546a838a46eab8110efed562bf13b215784de753dd00dbae7cc4f51012a3c24",
+      "startup_whole_card_free_bytes": [
+        8308817920,
+        8355303424
+      ]
+    },
+    "json": true,
+    "tool_roundtrip": true,
+    "measured_arguments_and_binary_match": false,
+    "measured_q4_arguments_and_binary_match": false,
+    "owned_scope_swap_max_bytes": 0,
+    "worker_swap_bytes": 0,
+    "worker_vram_spill_bytes": 0,
+    "gpu_used_bytes": [
+      17687293952,
+      17640894464
+    ],
+    "available_host_bytes": 54160125952,
+    "initial_model_check_and_functional_wall_seconds": 38.108,
+    "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+  },
+  "normal_xs": {
+    "status": "passed",
+    "model": "deepseek-v4.1-flash-1017-maya",
+    "context": 32768,
+    "routes": {
+      "loopback": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "lan": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "tailscale": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      }
+    },
+    "remote_peer_tested": false,
+    "runtime_proof": {
+      "runtime_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+      "production_binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+      "profile_arguments_match": true,
+      "both_gpus_configured": true,
+      "config_sha256": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
+      "startup_whole_card_free_bytes": [
+        8311545856,
+        8350810112
+      ]
+    },
+    "json": true,
+    "tool_roundtrip": true,
+    "measured_arguments_and_binary_match": false,
+    "measured_q4_arguments_and_binary_match": false,
+    "owned_scope_swap_max_bytes": 0,
+    "worker_swap_bytes": 0,
+    "worker_vram_spill_bytes": 0,
+    "gpu_used_bytes": [
+      17689812992,
+      17650622464
+    ],
+    "available_host_bytes": 54169825280,
+    "initial_model_check_and_functional_wall_seconds": 24.474,
+    "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+  },
+  "native_frontend_s": {
+    "status": "passed",
+    "kind": "maya",
+    "model": "deepseek-v4.1-flash-1017-maya-s",
+    "context": 32768,
+    "original_html_sha256": "f125c688175dea19da92e6ec3c67e587a7e59a8c29c4e68fff5405727b9e8919",
+    "original_asset_count": 7,
+    "metrics_status_settings": true,
+    "runtime_mutations_blocked": [
+      "/api/context",
+      "/api/update",
+      "/api/port",
+      "/config",
+      "/load",
+      "/unload"
+    ],
+    "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+  },
+  "native_frontend_xs": {
+    "status": "passed",
+    "kind": "maya",
+    "model": "deepseek-v4.1-flash-1017-maya",
+    "context": 32768,
+    "original_html_sha256": "f125c688175dea19da92e6ec3c67e587a7e59a8c29c4e68fff5405727b9e8919",
+    "original_asset_count": 7,
+    "metrics_status_settings": true,
+    "runtime_mutations_blocked": [
+      "/api/context",
+      "/api/update",
+      "/api/port",
+      "/config",
+      "/load",
+      "/unload"
+    ],
+    "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+  },
+  "steps": [
+    {
+      "model": "deepseek-v4.1-flash-1017-maya-s",
+      "health": {
+        "status": "ok",
+        "active_model": "deepseek-v4.1-flash-1017-maya-s",
+        "memory_fault": null,
+        "startup_whole_card_free_bytes": [
+          8308817920,
+          8355303424
+        ]
+      },
+      "one_worker": true,
+      "swap": 0,
+      "spill": 0,
+      "scope": {
+        "memory.max": "55834574848",
+        "memory.swap.max": "0",
+        "memory.peak": "55834574848",
+        "memory.events": "low 0\nhigh 0\nmax 3537\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+      }
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "health": {
+        "status": "ok",
+        "active_model": "deepseek-v4.1-flash-1017-maya",
+        "memory_fault": null,
+        "startup_whole_card_free_bytes": [
+          8311545856,
+          8350810112
+        ]
+      },
+      "one_worker": true,
+      "swap": 0,
+      "spill": 0,
+      "scope": {
+        "memory.max": "55834574848",
+        "memory.swap.max": "0",
+        "memory.peak": "46816796672",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+      }
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-maya-s",
+      "health": {
+        "status": "ok",
+        "active_model": "deepseek-v4.1-flash-1017-maya-s",
+        "memory_fault": null,
+        "startup_whole_card_free_bytes": [
+          8309264384,
+          8348766208
+        ]
+      },
+      "one_worker": true,
+      "swap": 0,
+      "spill": 0,
+      "scope": {
+        "memory.max": "55834574848",
+        "memory.swap.max": "0",
+        "memory.peak": "42607812608",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+      }
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "health": {
+        "status": "ok",
+        "active_model": "deepseek-v4.1-flash-1017-maya",
+        "memory_fault": null,
+        "startup_whole_card_free_bytes": [
+          8313241600,
+          8346779648
+        ]
+      },
+      "one_worker": true,
+      "swap": 0,
+      "spill": 0,
+      "scope": {
+        "memory.max": "55834574848",
+        "memory.swap.max": "0",
+        "memory.peak": "42408775680",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+      }
+    }
+  ],
+  "saved_benchmarks": {
+    "s": {
+      "evidence": "maya-update-2026-10-23.json",
+      "code_decode_tps": 6.42,
+      "prose_decode_tps": 6.78,
+      "native_prefill_tps": 299.0,
+      "fresh_ttft_s": 21.062
+    },
+    "xs_dspark": {
+      "evidence": "maya-xs-dspark-2026-10-23.json",
+      "code_decode_tps": 31.28,
+      "prose_decode_tps": 15.36,
+      "native_prefill_tps": 445.5,
+      "fresh_ttft_s": 14.156
+    },
+    "method": "Earlier same-day three-trial short code/prose and fresh ~6.3K actual DeepSeek token tests. Separate sessions/quant quality; deployment only changes S alias/log/seed location, no current throughput rerun."
+  },
+  "preserved": [
+    "All memory guards",
+    "GLM profile/settings",
+    "XS stable model ID/settings",
+    "Strata DSH default",
+    "other engines",
+    "shared XS/S Engram dependencies",
+    "S rollback snapshot"
+  ],
+  "partial_glm_startup": {
+    "status": "intentionally_stopped_before_readiness",
+    "reason": "Unchanged GLM cold expert-tier warmup was slow; deployment validation restarted directly on S. Not a failed GLM functional test; partial private logs/thermals preserved."
+  },
+  "downloaded_bytes": 0,
+  "deleted_model_bytes": 0
+}

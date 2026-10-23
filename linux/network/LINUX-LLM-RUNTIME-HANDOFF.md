@@ -20,11 +20,26 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. At source promotion: bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark; subsequently XS production below,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). These source-update S measurements are historical; the XS production section below defines current DeepSeek selection.
 
-## Maya-XS + DSpark is production — October23
+## Both DeepSeek quants are selectable — October23
+
+Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+(`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
+(`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
+Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
+API; only one worker runs at a time. Strata remains the DSH default.
+Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
+No new throughput benchmark: saved S code/prose**6.42/6.78t/s**, PP**299.0**, fresh
+TTFT**21.062s**; saved XS+DSpark**31.28/15.36t/s**, PP**445.5**, TTFT**14.156s**.
+These are separate earlier same-day three-trial sessions, not an equal-quality A/B.
+All six S shards passed fresh full-file SHA256; no download/deletion was needed.
+[Deployment and validation](../hardware/MAYA-DUAL-DEEPSEEK-2026-10-23.md).
+
+## Maya-XS + DSpark rollout history — October23 (before separate S selection)
 
 DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
 `deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
-Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default were preserved at that rollout; S is now separately selectable above.
 Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
 XS is ready. [Production proof and rollback](../hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
 Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
@@ -34,7 +49,7 @@ or new speed claim accompanies production integration. XS trades quality for siz
 ## Maya-XS + matching DSpark test — October23
 
 The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
-preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
+preceded the user-authorized XS + DSpark production switch above. Ten profiles existed at that test stage. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
@@ -61,7 +76,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Ten profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, two Maya. Presence in
+- **Eleven profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, three Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -201,11 +216,11 @@ and [numeric evidence](../hardware/results/rocm101-2026-10-21.json). vLLM fixeds
 improvement fails diverse-seed gate; Strata faster prefill trades against slower
 prose. Normal Comfy image23.686→18.331s/H3 83.831→85.279s: video regression rejects
 migration. The separate52GiB pilot HIP fault is retained, not attributed to a proven
-cause. Latest LLM rates are in the [ten-profile overview](../hardware/CURRENT-AMD-BENCHMARKS.md).
+cause. Latest LLM rates are in the [current profile overview](../hardware/CURRENT-AMD-BENCHMARKS.md).
 Earlier10.0 trials remain [historical](../hardware/ROCM10-OTHER-ENGINES-2026-10-20.md).
 Forum claims remain separate from local measurements; [source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md).
 
-## Project Maya: GLM and DeepSeek, both active
+## Project Maya: GLM-S, DeepSeek-XS and DeepSeek-S selectable
 
 Maya HIP v1.1.24 / `25deec505b525212e05faa58697d9d2b7d17fdb3` is a separate
 Strata fork with its own source, Python 3.12.14 environment and pinned llama.cpp
@@ -217,6 +232,7 @@ versions and the saved DSH default are preserved.
 |---|---:|---|
 | `glm-5.3-flash-maya` | 32,768 | Maya-S, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
 | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S + matching dspark-xs2, shared Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads |
+| `deepseek-v4.1-flash-1017-maya-s` | 32,768 | Retained Maya-S mixed IQ2/3, no DSpark, shared Q6_K Engram, 24 CPU threads + GPU hot cache |
 
 Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
 requested TP2 automatically becomes width 1 because its 256-value blocks do not
@@ -234,7 +250,7 @@ its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
 and stateful caches; this is not a universal optimum.
 
 The **Maya** Desktop entry (application-menu entry hidden because it is a browser frontend) opens a visible terminal; `llm-maya` uses the
-current terminal or SSH TTY. Both load GLM by default. Start `dsh` separately, choose **Local Maya**, then either ID.
+current terminal or SSH TTY. Both load GLM by default. Start `dsh` separately, choose **Local Maya**, then any of the three IDs.
 `llm-maya --model deepseek-v4.1-flash-1017-maya` selects DeepSeek initially.
 In the Maya web sidebar, choose **Maya model → Switch model**. The same page
 stays open during the guarded GLM/DeepSeek reload and displays progress/errors;
@@ -333,7 +349,7 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **10 enabled profiles**: four llama.cpp, one SGLang, two vLLM, one Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **11 enabled profiles**: four llama.cpp, one SGLang, two vLLM, one Strata and three Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -352,7 +368,8 @@ not guarantees of full-window speed or general long-context accuracy.
 | vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
 | Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S v2, mixed IQ2/3 experts / Q6_K attention/shared | MTP |
-| Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | DSpark not loaded |
+| Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S / Q6_K Engram | Matching dspark-xs2 |
+| Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya-s` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | Off |
 
 All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
 microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
@@ -631,7 +648,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all ten enabled profiles even when their backends are
+`GET /v1/models` lists all eleven enabled profiles even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -879,7 +896,7 @@ speed screen failed. Neither is active. No general full-window quality guarantee
 or sustained long-context decode result is inferred from short marker outputs.
 
 Earlier normal API proofs covered authenticated host self-access on
-loopback/LAN/Tailscale, not a remote peer. Current catalog has ten IDs; the
+loopback/LAN/Tailscale, not a remote peer. Current catalog has eleven IDs; the
 retired IDs must be removed from client selectors. The three smaller llama.cpp
 MoEs retain older ~64K retrieval evidence, not fresh full 256K quality claims.
 Maya's [initial numeric record](../hardware/results/maya-dual-amd-2026-10-20.json)

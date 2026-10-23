@@ -1,10 +1,25 @@
 # Current dual-AMD benchmarks — October 23, 2026
 
-## Maya-XS + DSpark is production — October23
+## Both DeepSeek quants are selectable — October23
+
+Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+(`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
+(`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
+Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
+API; only one worker runs at a time. Strata remains the DSH default.
+Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
+No new throughput benchmark: saved S code/prose**6.42/6.78t/s**, PP**299.0**, fresh
+TTFT**21.062s**; saved XS+DSpark**31.28/15.36t/s**, PP**445.5**, TTFT**14.156s**.
+These are separate earlier same-day three-trial sessions, not an equal-quality A/B.
+All six S shards passed fresh full-file SHA256; no download/deletion was needed.
+[Deployment and validation](MAYA-DUAL-DEEPSEEK-2026-10-23.md).
+
+## Maya-XS + DSpark rollout history — October23 (before separate S selection)
 
 DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
 `deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
-Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default were preserved at that rollout; S is now separately selectable above.
 Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
 XS is ready. [Production proof and rollback](MAYA-XS-PRODUCTION-2026-10-23.md).
 Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
@@ -14,7 +29,7 @@ or new speed claim accompanies production integration. XS trades quality for siz
 ## Maya-XS + matching DSpark test — October23
 
 The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
-preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
+preceded the user-authorized XS + DSpark production switch above. Ten profiles existed at that test stage. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
@@ -35,7 +50,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 
 Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.
 At source promotion, both quants were Maya-S, both GPUs/32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
-DeepSeek subsequently switched to XS + DSpark above. These S rates remain historical;
+DeepSeek subsequently switched to XS + DSpark above. These S rates retain their original trial date; S is selectable again under a new alias;
 all memory guards and the Strata DSH default remain. **GLM PREFILL_FUSED=0** retains
 MMQ because the newly enabled gfx1100 fused path failed parity on both cards.
 DeepSeek native fresh prefill185.1→299.0t/s and TTFT34.045→21.062s; decode remains similar.
@@ -54,7 +69,7 @@ Actual counts, timings, sampled high temperatures and failed/excluded kernels:
 
 Other latest llama.cpp sizes and rates are in the [October22 batch sweep](LLAMA-BATCH-SWEEP-2026-10-22.md); its new-size full-window tests were not repeated. All earlier rates below retain their original workload/build/date.
 
-**Ten active profiles:** four llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+**Eleven active profiles:** four llama.cpp (Ornith-1.5-122B added October22), one SGLang, two vLLM, one Strata, three Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
