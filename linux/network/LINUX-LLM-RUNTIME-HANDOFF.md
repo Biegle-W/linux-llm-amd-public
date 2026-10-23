@@ -35,6 +35,25 @@ These are separate earlier same-day three-trial sessions, not an equal-quality A
 All six S shards passed fresh full-file SHA256; no download/deletion was needed.
 [Deployment and validation](../hardware/MAYA-DUAL-DEEPSEEK-2026-10-23.md).
 
+### Maya-S DSpark retest — October23
+
+**Current S selection: DSpark off.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
+32K/24threads/both7900XTX, identical starting S routing seeds and unchanged guards.
+Against the arithmetic mean of the two no-draft arm medians, DSpark changes code **-3.37%**, prose **-5.14%** and native prefill **-6.82%**; geometric mean **-5.12%**. Speed gate **fails**.
+
+| Arm /32K | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| A1-none | 7.29 | 6.92 | 303.4 | 20.768 |
+| B-dspark | 6.71 | 6.42 | 277.4 | 22.716 |
+| A2-none | 6.59 | 6.61 | 292.0 | 21.577 |
+
+Sequential A1(off)→B(on)→A2(off), three timed256-output trials per code/prose
+workload and three fresh~6.3K actual DeepSeek input probes per arm. These are not
+thermally equalized or a matched comparison to the older1.1.17/128-output test.
+Retain S with DSpark disabled. XS keeps its own matching xs2 drafter; GLM and all other profiles are unchanged.
+[All trials, functional/context checks and thermal coverage](../hardware/MAYA-S-DSPARK-2026-10-23.md).
+
+
 ## Maya-XS + DSpark rollout history — October23 (before separate S selection)
 
 DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID

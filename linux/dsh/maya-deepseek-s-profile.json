@@ -57,12 +57,14 @@
     "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
     "evidence": "hardware/results/maya-dual-deepseek-2026-10-23.json",
     "candidate_tag": "deepseek-candidate24",
-    "scope": "Retained exact Maya-S inference settings/source/binary/pack from source24 validation; distinct API alias/independent copied routing seed. New normal Desktop/Ptyxis/original UI selector S-XS-S-XS and authenticated host-self streaming/JSON/tools passed. Prior near31.5K/history checks not repeated. Vision unvalidated; no new speed benchmark.",
+    "scope": "Retained exact Maya-S inference settings/source/binary/pack from source24 validation; distinct API alias/independent copied routing seed. New normal Desktop/Ptyxis/original UI selector S-XS-S-XS and authenticated host-self streaming/JSON/tools passed. Prior near31.5K/history checks not repeated. Vision unvalidated. Original alias deployment was functional-only; the fresh DSpark comparison in benchmark_evidence retains noDSpark.",
     "pack_metadata_sha256": "c4d4a5851e6c6c13391e91b181bd9c1b5b6592ca0ce8605cd57fbe7bd421e025",
     "normal_validated_utc": "2026-10-23T16:42:36.404263+00:00",
-    "benchmark_evidence": "hardware/results/maya-update-2026-10-23.json",
+    "benchmark_evidence": "hardware/results/maya-s-dspark-2026-10-23.json",
     "reference_config_sha256": "6546a838a46eab8110efed562bf13b215784de753dd00dbae7cc4f51012a3c24",
-    "note": "Sanitized reference paths require local metadata and binary/config validation before use."
+    "note": "Sanitized reference paths require local metadata and binary/config validation before use.",
+    "benchmark_selection": "Retain S noDSpark after1.1.24 matched A1none-Bon-A2none: on has -5.12% geometric mean; all native functional/memory checks passed.",
+    "benchmark_validated_utc": "2026-10-23T17:23:28.815177+00:00"
   },
   "expert_profile_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5",
   "env": {

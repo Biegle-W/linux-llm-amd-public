@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Maya-S DSpark1.1.24 retest](maya-s-dspark-2026-10-23.json), [report](../MAYA-S-DSPARK-2026-10-23.md): matched A1off-Bon-A2off, all timed trials/nativePP/SSE TTFT+decode, thermal/memory/functional/context gates; S DSpark not selected; production S remains off.
+
 - [Both DeepSeek quants deployed](maya-dual-deepseek-2026-10-23.json), [report](../MAYA-DUAL-DEEPSEEK-2026-10-23.md): S restored as independent selection alongside unchanged XS; three Maya / eleven total profiles, full six-file S SHA256 and normal selector/API proof; no throughput rerun.
 
 - [Maya-XS production integration](maya-xs-production-2026-10-23.json), [report](../MAYA-XS-PRODUCTION-2026-10-23.md): same1.1.24/SDK7 binary, XS+matchingDSpark now selected; normalDesktop/UI/authAPI/GLM↔XS passed. Functional only; earlier XS benchmark rates remain attributed to its experiment.
