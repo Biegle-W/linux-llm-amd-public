@@ -25,7 +25,7 @@ The launcher discovers the RTX 3060 UUID and exposes it as CUDA0. It refuses mis
 
 Selected options: fit on, GPU layers auto, **fit-target2816**, **no-host true**, split none, batch/microbatch512/128, Q8 KV, thinking off, no speculation. Measured normal model buffers:7,840.74 MiB GPU /2,643.67 MiB host; after streaming:1,571MiB actual free VRAM /1.19GiB available RAM. One short-generation sample reached1,336MiB free VRAM, so fitter target is not guaranteed headroom.
 
-Both newer community MoEs passed functional tests: September's Empero Qwen3.8 distillation and August's Ornith1.5. Empero's IQ2_M and earlier Qwen3.5 weights remain downloaded but outside the active catalog. Empero is distilled into Qwen3.6 architecture; do not mistake its name for an official small Qwen3.8 release. Early faster trials used much less desktop VRAM headroom. Low-bit quantization and these functional checks do not establish answer-quality superiority. [All trials, hashes and limitations](reports/WINDOWS-MOE-MODELS-20261023.md).
+Both newer community MoEs passed functional tests: September's Empero Qwen3.8 distillation and August's Ornith1.5. Empero's IQ2_M remains downloaded outside the active catalog. The retired Qwen3.5 9B file was deleted at the user's request on October 23, freeing 5.56 GiB; historical results are retained. Empero is distilled into Qwen3.6 architecture; do not mistake its name for an official small Qwen3.8 release. Early faster trials used much less desktop VRAM headroom. Low-bit quantization and these functional checks do not establish answer-quality superiority. [All trials, hashes and limitations](reports/WINDOWS-MOE-MODELS-20261023.md).
 
 ## Clients and maintenance
 
