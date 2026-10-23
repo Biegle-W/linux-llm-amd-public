@@ -18,6 +18,15 @@ normal startup with the official Ubuntu sandbox passed October21;
 | H3 encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | New matching native compact encoder |
 | H3 video VAE | `vae/minimax_h3_video_vae_fp16.safetensors` | Existing downloaded file, moved intact |
 | H3 audio VAE | `vae/minimax_h3_audio_vae_fp32.safetensors` | Existing downloaded file, moved intact |
+| FLUX 3 Image Klein (distilled) | `diffusion_models/flux3-image-klein-bf16.safetensors` | Official BFL ComfyUI release, BF16 (October 23) |
+| Klein encoder | `text_encoders/qwen3vl_4b_bf16.safetensors` | Official BFL ComfyUI release, BF16 |
+| Klein prompt upsampler | `text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors` | Official BFL ComfyUI release, INT8 ConvRot |
+| Klein VAE | `vae/flux2-vae.safetensors` | Official BFL ComfyUI release |
+
+**FLUX 3 Image Klein (October 23):** text-to-image and reference-image edits pass on both 7900 XTX
+(1024×1024 in 34 s, a 1248×832 edit in 48 s, cold). Edits need the patchify-Conv3d workaround in
+`comfyui-device-loaders` for the current torch nightly. Licence: FLUX Kommunity (non-commercial,
+with exceptions). [Report](FLUX3-KLEIN-2026-10-23.md).
 
 ## Storage and integration
 

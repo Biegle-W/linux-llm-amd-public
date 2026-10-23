@@ -9,6 +9,24 @@ import comfy.sd
 import comfy.utils
 
 
+_torch_conv3d_forward = torch.nn.Conv3d._conv_forward
+
+
+def _conv3d_forward(self, input, weight, bias):
+    # torch 2.15.0.dev20260827+rocm7.2 aborts with std::bad_variant_access in its non-MIOpen
+    # conv3d when a bias is given. ComfyUI disables MIOpen on AMD, which breaks the Qwen3-VL
+    # vision patch embedding (kernel == stride) behind image prompts, such as the FLUX 3 Klein
+    # edit upsampler. Only these patchify convolutions use MIOpen; VAE convolutions are unchanged.
+    if (bias is not None and input.is_cuda and torch.version.hip and not torch.backends.cudnn.enabled
+            and tuple(self.kernel_size) == tuple(self.stride)):
+        with torch.backends.cudnn.flags(enabled=True):
+            return _torch_conv3d_forward(self, input, weight, bias)
+    return _torch_conv3d_forward(self, input, weight, bias)
+
+
+torch.nn.Conv3d._conv_forward = _conv3d_forward
+
+
 def gpu_device(name):
     device = torch.device(name)
     if device.type != 'cuda' or device.index not in range(torch.cuda.device_count()):
@@ -21,7 +39,7 @@ class GraphicsCLIPLoader:
     def INPUT_TYPES(cls):
         return {'required': {
             'clip_name': (folder_paths.get_filename_list('text_encoders'),),
-            'type': (['qwen_image', 'minimax'],),
+            'type': (['qwen_image', 'minimax', 'flux3'],),
             'device': (['cuda:0', 'cuda:1'], {'default': 'cuda:1'}),
         }}
 

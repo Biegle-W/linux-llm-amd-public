@@ -58,15 +58,52 @@
       "precision": "FP32",
       "origin": "repacked existing Unsloth Qwen-Image-2.1 20f5a734a394f0fce241bf2f9dc1b3d97ac18b2a",
       "verification": "every tensor byte verified independently; no dtype casting"
+    },
+    {
+      "path": "diffusion_models/flux3-image-klein-bf16.safetensors",
+      "bytes": 11097404512,
+      "sha256": "c3e9813cdd049c831c836b2e9db61150e49a93fc1a4c63b256494642fee0bd7c",
+      "precision": "BF16 (distilled, 16 steps)",
+      "origin": "black-forest-labs/flux-3-image-klein-comfy feef60b0aaf63a4773ace96636ebbcf43b881312 (FLUX Kommunity License, gated)",
+      "verification": "full SHA-256 matched authenticated upstream LFS metadata after download (October 23)"
+    },
+    {
+      "path": "text_encoders/qwen3vl_4b_bf16.safetensors",
+      "bytes": 8875719408,
+      "sha256": "f0b24fc5c8d7c0ea6ca909da14c20af5cac53f22506be942c6c956f838b9630f",
+      "precision": "BF16",
+      "origin": "black-forest-labs/flux-3-image-klein-comfy feef60b0aaf63a4773ace96636ebbcf43b881312 (FLUX Kommunity License, gated)",
+      "verification": "full SHA-256 matched authenticated upstream LFS metadata after download (October 23)"
+    },
+    {
+      "path": "text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors",
+      "bytes": 9748113996,
+      "sha256": "cb8cb9b9dcd2569509de755dca54d96fd93a16a7aabfd2f4051f0a144230620f",
+      "precision": "INT8 ConvRot",
+      "origin": "black-forest-labs/flux-3-image-klein-comfy feef60b0aaf63a4773ace96636ebbcf43b881312 (FLUX Kommunity License, gated)",
+      "verification": "full SHA-256 matched authenticated upstream LFS metadata after download (October 23)"
+    },
+    {
+      "path": "vae/flux2-vae.safetensors",
+      "bytes": 336211292,
+      "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3",
+      "precision": "BF16",
+      "origin": "black-forest-labs/flux-3-image-klein-comfy feef60b0aaf63a4773ace96636ebbcf43b881312 (FLUX Kommunity License, gated)",
+      "verification": "full SHA-256 matched authenticated upstream LFS metadata after download (October 23)"
     }
   ],
   "original_weight_bytes": 100050424232,
-  "retained_weight_bytes": 75586194719,
+  "retained_weight_bytes": 105643643927,
   "generation_validation": "passed: Qwen 512x512/40 steps; H3 608x352/39 frames/20 steps with finite stereo audio; see validation-results.json",
   "gpu_policy": "validated staged placement: denoiser GPU 0; encoder/VAEs GPU 1; not tensor parallel",
   "source_model_cache_cleanup": "five exact Unsloth model repositories; user media/app/LLM model directories preserved",
   "old_model_cache_removed": true,
   "native_safetensors_parser_validated": true,
   "qwen_tensor_payloads_verified": 1285,
-  "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76"
+  "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+  "flux3_klein": {
+    "added": "2026-10-23",
+    "validation": "passed: 1024x1024 text-to-image and 1248x832 single-reference edit with the official prompt upsampler; see FLUX3-KLEIN-2026-10-23.md",
+    "requires": "graphics/comfyui-device-loaders patchify Conv3d MIOpen workaround for the upsampler image path on torch 2.15.0.dev20260827+rocm7.2"
+  }
 }

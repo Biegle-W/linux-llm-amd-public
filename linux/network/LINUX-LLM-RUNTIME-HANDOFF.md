@@ -70,6 +70,14 @@ The empty spare SATA drive is labelled **sharedSATA2**.
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 [Note](../hardware/SLOW-MODEL-OPTIMIZATION-RESEARCH-2026-10-22.md).
 
+**FLUX 3 Image Klein (October 23, user):** the official BFL ComfyUI BF16 release (distilled
+transformer, Qwen3-VL-4B encoder, int8 prompt upsampler, FLUX.2 VAE; 28 GiB) is in
+`sharedSATA1/Graphics-Models`, so Windows ComfyUI sees it through the same folders. Linux passed
+text-to-image (1024×1024, 34 s) and a reference edit (1248×832, 48 s) on both 7900 XTX. Edits need
+a local workaround: torch 2.15.0.dev20260827+rocm7.2 aborts in conv3d with a bias when MIOpen is off,
+which ComfyUI's default on AMD triggers in the Qwen3-VL vision tower. Gated FLUX Kommunity License.
+[Report](../graphics/FLUX3-KLEIN-2026-10-23.md).
+
 **Qwen3.6-35B-A3B retired (October 23, user):** `qwen3.6-35b-a3b` is removed from the llama.cpp
 catalog, presets and offload plan. A saved DSH selection of it moves to `empero-qwen3.8-35b-a3b`,
 which matches its speed. Ten active profiles. Its 22.2 GB GGUF was deleted from SATA1 at the user's request.
