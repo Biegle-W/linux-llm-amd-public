@@ -63,10 +63,21 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 [DeepInfer compatibility assessment — October20](linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
 
+## Maya-XS + DSpark is production — October23
+
+DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
+`deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
+XS is ready. [Production proof and rollback](linux/hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
+Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
+**14.156s fresh TTFT**; single1024-output HTML**12.54t/s**. No throughput rerun
+or new speed claim accompanies production integration. XS trades quality for size.
+
 ## Maya-XS + matching DSpark test — October23
 
-Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
-Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
+preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
@@ -86,7 +97,8 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 ## Maya 1.1.24 — October 23
 
 Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.
-Same Maya-S quants, both GPUs,32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
+At source promotion, both quants were Maya-S, both GPUs/32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
+DeepSeek subsequently switched to XS + DSpark above. These S rates remain historical;
 all memory guards and the Strata DSH default remain. **GLM PREFILL_FUSED=0** retains
 MMQ because the newly enabled gfx1100 fused path failed parity on both cards.
 DeepSeek native fresh prefill185.1→299.0t/s and TTFT34.045→21.062s; decode remains similar.

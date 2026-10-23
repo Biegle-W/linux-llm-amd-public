@@ -73,7 +73,18 @@ def check_config(cfg, before_handover=False, require_validated=True):
     if not glm:
         index=pack/'tensors.txt'
         types={line.split()[2] for line in index.read_text().splitlines() if line.startswith('t ')}
-        if not types or types - {'BF16','F32','IQ2_S','IQ2_XXS','IQ3_S','IQ3_XXS','MXFP4','Q6_K','Q8_0'}:
+        xs='IQ1_S' in types
+        if xs:
+            # Admit only the exact tested XS/matching-drafter profile; keep all
+            # source/binary/config/metadata fingerprints and memory gates below.
+            if (cfg.get('installer',{}).get('ds4_quant')!='maya-xs' or
+                    pack.parent.name!='Maya-XS' or
+                    '--dspark' not in args or value('--dspark')!='on' or
+                    int(value('--max-context'))!=32768 or
+                    '--cpu-threads' not in args or int(value('--cpu-threads'))!=24 or
+                    types - {'BF16','F32','IQ1_S','IQ2_XXS','Q6_K','Q8_0'}):
+                raise RuntimeError('Use the validated Maya-XS pack with its matching DSpark drafter and retained32K/24threads.')
+        if not types or types - {'IQ1_S','BF16','F32','IQ2_S','IQ2_XXS','IQ3_S','IQ3_XXS','MXFP4','Q6_K','Q8_0'}:
             raise RuntimeError('DeepSeek is admitted only for the tested format set; Q4_K/IQ4_XS parity remains unresolved.')
         if require_validated and validation.get('pack_metadata_sha256')!=pack_metadata_fingerprint(pack):
             raise RuntimeError('DeepSeek pack metadata changed; regenerate and validate Linux paths before loading.')

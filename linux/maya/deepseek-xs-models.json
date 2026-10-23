@@ -46,7 +46,7 @@
       "sha256": "56d47ad12d6548a8d3d50a79be96451411f18d5b77064de7b8544bb2da22988f"
     }
   ],
-  "status": "test-only; production Maya-S remains selected",
+  "status": "production selected; user-authorized XS + matching DSpark,32K/dualAMD/ROCm7.2.3",
   "purpose": "Pinned XS IQ1_S + matching DSpark xs2 on Maya1.1.24, ROCm7.2.3, bothgfx1100 cards",
   "shared_assets": [
     {

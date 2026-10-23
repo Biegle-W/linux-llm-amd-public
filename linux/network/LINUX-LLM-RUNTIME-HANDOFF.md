@@ -16,14 +16,25 @@ addresses, defaults and single-GPU policies must not override the settings here.
 No model files, runtime settings, credentials or inference processes were changed
 by the original consolidation; the subsequent MoE offload update is documented below.
 
-## Maya update — October23 (current)
+## Maya source update — October23 (before XS production)
 
-Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. Same bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). Earlier dated sections retain their historical measurements; current source/settings in this section supersede old source19 timings.
+Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. At source promotion: bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark; subsequently XS production below,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). These source-update S measurements are historical; the XS production section below defines current DeepSeek selection.
+
+## Maya-XS + DSpark is production — October23
+
+DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
+`deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
+XS is ready. [Production proof and rollback](../hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
+Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
+**14.156s fresh TTFT**; single1024-output HTML**12.54t/s**. No throughput rerun
+or new speed claim accompanies production integration. XS trades quality for size.
 
 ## Maya-XS + matching DSpark test — October23
 
-Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
-Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
+preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
@@ -205,15 +216,18 @@ versions and the saved DSH default are preserved.
 | API model ID | Total context | Selected quant / strategy |
 |---|---:|---|
 | `glm-5.3-flash-maya` | 32,768 | Maya-S, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
-| `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-S, Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads, no DSpark |
+| `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S + matching dspark-xs2, shared Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads |
 
 Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
 requested TP2 automatically becomes width 1 because its 256-value blocks do not
 divide 2,304-wide experts into two parts; neither GPU is dropped. DeepSeek's RAM
-backing is mapped/page-cached, not a fully resident 150 GB RAM copy. Its DSpark
-weights stay on NVMe. DSpark was retested at the retained production settings (32K,
-24 threads, 8 GiB reserve) and was **−20% overall**: code decode −33%, prose −22%,
-despite 85% draft acceptance. It stays off. [DSpark retest](../hardware/DEEPSEEK-DSPARK-2026-10-20.md).
+backing is mapped/page-cached; XS + DSpark reports roughly91.3GB of logical CPU-lane
+weights, not fully resident RAM. The matching xs2 drafter is enabled. The old
+Maya-S/source1.1.17 DSpark rejection (−20% overall) is historical and does not
+define the new XS selection. The source1.1.24 XS retest improved short code52.9%,
+with prose nearly unchanged; the user authorized production deployment.
+[XS benchmark](../hardware/MAYA-XS-DSPARK-2026-10-23.md) and
+[normal production proof](../hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
 **DeepSeek needs 52 GiB available RAM before loading.** Heavy desktop apps such as
 Chrome can keep it from starting; close them and retry. GLM's 40 GiB RAM tier passed >=10 GiB available headroom and improved
 its aggregate 22.91% over 36 GiB under the same GPU reserves, with only 3 trials
@@ -249,7 +263,7 @@ physical / 52 GiB available RAM and 16 GiB free on each GPU after handover. Fail
 unloads only the owned worker and requires explicit reload. Never lower these
 limits or use swap as capacity to make a new profile pass.
 
-Current Maya source19/SDK7 rates: GLM-S six samples/workload across two starts,
+Historical October20 Maya source19/SDK7 rates (superseded by source24/XS above): GLM-S six samples/workload across two starts,
 code/prose18.44/16.10t/s, nativePP518.0, freshTTFT12.363s; actual fresh6308–6314.
 DeepSeek-S selected `DS4_IQ_Q8K=0`/`DS4_STREAM=0`, three samples/workload,
 6.89/7.08t/s,188.6PP,33.418s, actual6295–6299. Both use32K, retained native8GiB
@@ -273,7 +287,7 @@ must match before loading. Models are at `/mnt/shared-nvme/LLM-Models/Maya` on t
 no model weights were left in the Maya engine folder on the Linux primary NVMe.
 
 **Windows:** reuse the GGUF/draft/vision assets, but build/validate Windows engines
-separately. The Linux DeepSeek pack `Maya-S/maya-ds4/ds4.txt` contains a Linux
+separately. The Linux DeepSeek pack `Maya-XS/maya-ds4/ds4.txt` contains a Linux
 absolute `model_dir`; generate a separate `maya-ds4-windows` pack/index and point
 the Windows config to it. Do not let a Windows installer overwrite the Linux
 pack. The new NVMe's Windows drive letter is unknown. The handoff remains on

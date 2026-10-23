@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## Maya-XS + DSpark is production — October23
+
+DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
+`deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
+XS is ready. [Production proof and rollback](MAYA-XS-PRODUCTION-2026-10-23.md).
+Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
+**14.156s fresh TTFT**; single1024-output HTML**12.54t/s**. No throughput rerun
+or new speed claim accompanies production integration. XS trades quality for size.
+
+
 ## Maya-XS + matching DSpark test — October23
 
 Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains

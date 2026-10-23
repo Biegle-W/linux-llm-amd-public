@@ -18,15 +18,16 @@ other engines are patched. Maya uses its own Python 3.12.14 environment and
 Model files live beneath the **Maya directory on the new shared NVMe**:
 `/mnt/shared-nvme/LLM-Models/Maya`. The [pinned download manifest](models.json)
 records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) records the retained control files; it is not another active model.
-GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-S**, six GGUF shards
-including Q6_K Engram, plus the matching DSpark draft and vision assets.
+GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-XS**, three XS GGUF shards plus the shared original S Engram
+shards5/6, matching `dspark-xs2` drafter and existing vision assets. S rollback weights stay.
 No original FP8 checkpoint, EXL3 copy or second full expert pack was downloaded.
 The engine reads experts from GGUF in place; the generated indexes/dense packs
 are additional required assets. DeepSeek's vision source is converted losslessly
 into `vision.bin` and `vision.json`, then the installer deletes that raw source
 shard/config. This conversion does not remove its GGUF target weights.
 
-For a fresh installation after providing the retained ROCm/toolchain dependencies:
+For an existing locally validated installation (fresh XS metadata/admission must
+be prepared and validated separately; this is not a turnkey fresh XS install):
 
 ```bash
 export MAYA_MODELS_ROOT='/mnt/shared-nvme/LLM-Models/Maya'
@@ -38,7 +39,9 @@ maya/install.sh deepseek
 The downloader resumes partials and checks full SHA-256 before publishing a file.
 Existing complete mismatches are preserved for review. The preparation scripts
 never start or calibrate inference, and never activate newly generated configs.
-They use `--no-start --no-speed-calibration`; the latter matters because
+GLM preparation uses `--no-start --no-speed-calibration`; DeepSeek XS only verifies
+existing sealed metadata/dependencies to avoid duplicate Engram downloads. The
+calibration restriction matters because
 DeepSeek's installer can otherwise run calibration despite `--no-start`.
 Do not run bulk transfers/builds during clean timing measurements.
 
@@ -117,17 +120,28 @@ DSH stays optional and separate; `--no-browser` suppresses browser opening.
 
 ## GLM S/S24 comparison
 
-Selected GLM quant stays **Maya-S**,32K/RAM40/MTP. The [S/S24 ABBA selection](../hardware/MAYA-S-VS-S24-2026-10-20.md) remains historical; [October23 source validation](../hardware/MAYA-UPDATE-2026-10-23.md) provides current speeds for both models.
+Selected GLM quant stays **Maya-S**,32K/RAM40/MTP. The [S/S24 ABBA selection](../hardware/MAYA-S-VS-S24-2026-10-20.md) remains historical; [October23 source validation](../hardware/MAYA-UPDATE-2026-10-23.md) provides GLM and historical DeepSeek-S speeds; current DeepSeek-XS rates and production proof are below.
 
 Maya has no separate native desktop app in this setup. Its browser entry is
 hidden from the application menu; the Desktop launcher and `llm-maya` remain.
 
 The selected gfx1100 GLM profile explicitly sets `MAYA_GLM_PREFILL_FUSED=0`: the new default fused IQ2_S path failed parity on both cards. Keep MMQ and the profile fingerprint. The source19 rollback is private; no new quants/DSpark or other-engine changes accompany this update.
 
+## Maya-XS + DSpark is production — October23
+
+DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
+`deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default are preserved.
+Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
+XS is ready. [Production proof and rollback](../hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
+Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
+**14.156s fresh TTFT**; single1024-output HTML**12.54t/s**. No throughput rerun
+or new speed claim accompanies production integration. XS trades quality for size.
+
 ## XS/drafter isolated test — October23
 
-Isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test; production remains
-Maya-S/noDSpark and ten profiles. XS is the smaller, lower-quality IQ1_S quant;
+The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
+preceded the user-authorized XS + DSpark production switch above. Ten profiles remain. XS is the smaller, lower-quality IQ1_S quant;
 its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
 
 | Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |

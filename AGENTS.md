@@ -66,9 +66,9 @@ excluded from Git.
 ## Project Maya — October 20
 
 Maya v1.1.24 / 25deec5 is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
-DeepSeek-V4.1-Flash-1017 Maya-S, each 32K, both 7900XTX cards through layer groups.
+DeepSeek-V4.1-Flash-1017 Maya-XS + matching DSpark xs2, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
-GPU hot caching and no DSpark. Shared NVMe holds all weights/generated packs.
+GPU hot caching and matching DSpark. Shared NVMe holds all weights/generated packs.
 The native 8 GiB/card reserve must leave >=6 GiB actual whole-card free at startup;
 keep continuous latched guards, zero worker swap/spill and 52G worker scope.
 Physical 60 GiB / available 52 GiB before load remains required. The 64 GB Strata 13.5 GiB
@@ -334,10 +334,14 @@ not selected;7.14.1 is researched but untested locally. Native256K metadata is
 not near-window quality validation. See hardware/SAGE-A15-2026-10-21.md and
 hardware/ROCM-SELECTION-2026-10-21.md (under linux/ in the public repository).
 
-## Maya1.1.24 — October23
+## Maya1.1.24 — October23 (source-promotion history)
 
-25deec505b525212e05faa58697d9d2b7d17fdb3/VERSION1.1.24 and exact tested HIP7.2.3 binaries are promoted for both retained Maya-S32K profiles after native and normal integration gates. GLM MUST retain MAYA_GLM_PREFILL_FUSED=0 (newgfx1100 fused IQ2_S down parity fails on bothcards); use MMQ, do not relax tolerances. DeepSeek retains DS4_IQ_Q8K=0/DS4_STREAM=0/24threads/noDSpark; bothGPUs/layer groups, no trueTP2 for2304/256expert blocks. Original8GiB/actual6GiB reserves/52Gno-swap/latching remain. Current3trial GLM19.72/15.69/535.6PP/11.928sTTFT; DS6.42/6.78/299.0/21.062s. Bothnear31.5K/history/JSON/tools/SSE, actualDesktop/Ptyxis/originalbrowserselector/authAPI/switchback pass. Preserve source19 rollback and known mixed-format exclusions; new source is not a universal speedup claim. See linux/hardware/MAYA-UPDATE-2026-10-23.md and numeric record. Otherengines/weights/default unchanged.
+25deec505b525212e05faa58697d9d2b7d17fdb3/VERSION1.1.24 and exact tested HIP7.2.3 binaries are promoted for both retained Maya-S32K profiles after native and normal integration gates. GLM MUST retain MAYA_GLM_PREFILL_FUSED=0 (newgfx1100 fused IQ2_S down parity fails on bothcards); use MMQ, do not relax tolerances. DeepSeek retains DS4_IQ_Q8K=0/DS4_STREAM=0/24threads/noDSpark; bothGPUs/layer groups, no trueTP2 for2304/256expert blocks. Original8GiB/actual6GiB reserves/52Gno-swap/latching remain. Source-promotion historical3trial GLM19.72/15.69/535.6PP/11.928sTTFT; DS6.42/6.78/299.0/21.062s. Bothnear31.5K/history/JSON/tools/SSE, actualDesktop/Ptyxis/originalbrowserselector/authAPI/switchback pass. Preserve source19 rollback and known mixed-format exclusions; new source is not a universal speedup claim. See linux/hardware/MAYA-UPDATE-2026-10-23.md and numeric record. Otherengines/weights/default unchanged.
 
 ## Maya-XS test — October23
 
-User-requested Maya1.1.24+IQ1_S XS+matching IQ2_XXS dspark-xs2 tested on BOTHgfx1100 cards at32K/SDK7.2.3; production remains Maya-S/noDSpark. Do not silently activate XS or expand its production format allowlist. Keep new XS/drafter assets on sharedNVMe; reused S Engram tensor payloads are fully SHA-verified via published XS headers, not whole-file identical GGUFs. Existing S/GLM/guards/default and ten-profile catalog unchanged. See linux/hardware/MAYA-XS-DSPARK-2026-10-23.md and numeric record; retain all partial/failed preparation evidence privately.
+User-requested Maya1.1.24+IQ1_S XS+matching IQ2_XXS dspark-xs2 tested on BOTHgfx1100 cards at32K/SDK7.2.3; at that test time production remained Maya-S/noDSpark. The later explicit user-authorized production promotion below supersedes that test-only status. Keep new XS/drafter assets on sharedNVMe; reused S Engram tensor payloads are fully SHA-verified via published XS headers, not whole-file identical GGUFs. Existing S/GLM/guards/default and ten-profile catalog unchanged. See linux/hardware/MAYA-XS-DSPARK-2026-10-23.md and numeric record; retain all partial/failed preparation evidence privately.
+
+## Maya-XS production — October23 (current)
+
+User explicitly authorized production XS+matchingDSpark. DeepSeek keeps sameAPIid deepseek-v4.1-flash-1017-maya,32K/24threads/bothAMD/SDK7.2.3/source25deec5/exacttestedbinary, DS4_IQ_Q8K0/STREAM0 andallguards. XS IQ1_S admission is restricted to matchingdrafter on/32K/24threads with existing source/binary/config/pack fingerprints. GLM-Sv2/MTP/fused0 and otherengines/defaultStrata unchanged. NormalDesktop/Ptyxis/nativeUI/authAPI/GLM-XS-GLM-XS passed; finalXS worker intentionally ready. Earlier31.28/15.36/445.5/14.156 and1024HTML12.54 rates remain savedexperiment, no production speed rerun. Keep S rollback weights/manifest; S Engram5/6 remain ACTIVE XS dependencies and must not be removed. maya/install.sh deepseek only verifies sealed XS metadata/dependencies to avoid duplicate161GBstock download. Publicconfigs require localvalidation. See linux/hardware/MAYA-XS-PRODUCTION-2026-10-23.md and numeric proof.

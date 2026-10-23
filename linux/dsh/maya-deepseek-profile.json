@@ -2,13 +2,13 @@
   "exe": "/opt/local-llm/maya/upstream/build-hip/maya-ds4",
   "args": [
     "--pack",
-    "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4",
+    "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4",
     "--max-context",
     "32768",
     "--tp",
     "2",
     "--dspark",
-    "none",
+    "on",
     "--reserve-mib",
     "8192",
     "--expert-profile",
@@ -17,7 +17,7 @@
     "24"
   ],
   "cwd": "/opt/local-llm/maya/upstream",
-  "tokenizer": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tokenizer",
+  "tokenizer": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4/tokenizer",
   "backend": "hip",
   "model_name": "deepseek-v4.1-flash-1017-maya",
   "gpu": [
@@ -39,33 +39,33 @@
     "family": "deepseek",
     "models_dir": "/mnt/shared-nvme/LLM-Models/Maya",
     "quant": "DeepSeek-V4.1-Flash-1017",
-    "ds4_quant": "maya-s",
-    "model_dir": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
-    "written": "2026-10-20 08:01"
+    "ds4_quant": "maya-xs",
+    "model_dir": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS",
+    "written": "2026-10-23T15:55:23.283061+00:00"
   },
   "parallel": 1,
   "split_skip_if_fits": false,
   "layer_split": "auto",
   "mcp_servers": {},
   "idle_unload_s": 0,
-  "local_validation": {
-    "status": "requires-local-validation",
-    "native_validation": "passed",
-    "normal_integration_status": "requires-local-validation",
-    "validated_utc": "2026-10-23T08:08:11.258615+00:00",
-    "binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
-    "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
-    "evidence": "hardware/results/maya-update-2026-10-23.json",
-    "candidate_tag": "deepseek-candidate24",
-    "scope": "Exact tested source25deec5/SDK7.2.3 binary; retained Maya-S32K/bothAMD/reserves/52Gno-swap; near31.5K/history/JSON/tools/SSE and actualDesktop/Ptyxis/original browserUI/selector/authgateway/GLM-DS-GLM passed. GLM failed gfx1100 fused path explicitlyoff; mixedDS4 formats remain excluded. Host-self routes are not remote-peer tests.",
-    "pack_metadata_sha256": "c4d4a5851e6c6c13391e91b181bd9c1b5b6592ca0ce8605cd57fbe7bd421e025",
-    "normal_validated_utc": "2026-10-23T08:21:36.033997+00:00",
-    "reference_config_sha256": "185528f41547161b0c09cedeaf7d8f25698fbbf33fe008db3af5b3cd4b737bbc",
-    "note": "Sanitized reference paths differ from the measured workstation; validate the installed source/binary/profile locally."
-  },
   "expert_profile_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5",
   "env": {
     "DS4_IQ_Q8K": "0",
     "DS4_STREAM": "0"
+  },
+  "local_validation": {
+    "status": "requires-local-validation",
+    "native_validation": "passed",
+    "normal_integration_status": "requires-local-validation",
+    "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+    "binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+    "pack_metadata_sha256": "6fed44760415e7addc67f16f0c731ed1eef8a06ca8789dc5fff80bb7e8a1e1c8",
+    "evidence": "hardware/results/maya-xs-production-2026-10-23.json",
+    "candidate_tag": "xs-draft",
+    "scope": "User-authorized productionXS+matchingxs2; exactsource25deec5/SDK7binary,32K/24threads/bothAMD/allguards. Priorselectedformatparity/fresh/near31497/history31529 passed; normalDesktop/Ptyxis/nativeUI/authenticatedgateway/GLM-XS-GLM-XS passed. Host-self routes, not remote-peer validation. Vision unvalidated; no new speed benchmark.",
+    "normal_validated_utc": "2026-10-23T16:06:04.805352+00:00",
+    "benchmark_evidence": "hardware/results/maya-xs-dspark-2026-10-23.json",
+    "reference_config_sha256": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
+    "note": "Sanitized reference paths differ from measured workstation; prepare metadata and validate local binary/profile before loading."
   }
 }

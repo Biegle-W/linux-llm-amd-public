@@ -1,0 +1,302 @@
+{
+  "schema": 1,
+  "date": "2026-10-23",
+  "status": "production-promoted",
+  "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+  "version": "1.1.24",
+  "rocm": "7.2.3",
+  "model_id": "deepseek-v4.1-flash-1017-maya",
+  "quant": "Maya-XS IQ1_S + matching IQ2_XXS dspark-xs2",
+  "context": 32768,
+  "cpu_threads": 24,
+  "both_gpus": true,
+  "parallelism": "Layer splitting, not true TP2",
+  "binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+  "config_sha256_reference": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
+  "pack_metadata_sha256_reference": "6fed44760415e7addc67f16f0c731ed1eef8a06ca8789dc5fff80bb7e8a1e1c8",
+  "memory_guards": "Native8GiB/card; actualstartup6GiB/card; continuous3GiB/hard1.5GiB; 52Gnoswap/latchedownedworkersonly unchanged",
+  "normal_integration": {
+    "status": "passed",
+    "sequence": [
+      "glm",
+      "deepseek-xs-dspark",
+      "glm",
+      "deepseek-xs-dspark"
+    ],
+    "one_native_worker": true,
+    "worker_swap_bytes": 0,
+    "worker_spill_bytes": 0,
+    "startup_whole_card_free_bytes": [
+      8311410688,
+      8348905472
+    ],
+    "method": "Actual Desktop/Ptyxis/native frontend model selector; authenticated gateway host-self access, not remote-peer validation; no throughput claims",
+    "thermal": {
+      "schema": 1,
+      "label": "maya-xs-production-normal",
+      "status": "complete",
+      "interval_seconds": 1.0,
+      "samples": 511,
+      "sample_errors": 0,
+      "raw_samples_dropped": 0,
+      "raw_limit_bytes": 67108864,
+      "cards": {
+        "0000:03:00.0": {
+          "gpu_index": 0,
+          "samples": 511,
+          "busy_samples": 76,
+          "sensor_samples": {
+            "mem": 511,
+            "edge": 511,
+            "junction": 511
+          },
+          "peak_temperature_c": {
+            "mem": 44.0,
+            "edge": 41.0,
+            "junction": 50.0
+          },
+          "peak_busy_temperature_c": {
+            "mem": 43.0,
+            "edge": 41.0,
+            "junction": 50.0
+          },
+          "throttle_samples_available": 511,
+          "thermal_limit_samples": 275,
+          "hotspot_limit_samples": 275,
+          "power_limit_samples": 7,
+          "current_limit_samples": 0,
+          "peak_fan_rpm": 0.0,
+          "peak_power_average_w": 188.0,
+          "peak_gfx_clock_mhz": 3080.0,
+          "peak_memory_clock_mhz": 1249.0,
+          "peak_busy_percent": 100.0,
+          "last_throttle_status": "available"
+        },
+        "0000:06:00.0": {
+          "gpu_index": 1,
+          "samples": 511,
+          "busy_samples": 70,
+          "sensor_samples": {
+            "mem": 511,
+            "edge": 511,
+            "junction": 511
+          },
+          "peak_temperature_c": {
+            "mem": 56.0,
+            "edge": 36.0,
+            "junction": 48.0
+          },
+          "peak_busy_temperature_c": {
+            "mem": 56.0,
+            "edge": 36.0,
+            "junction": 48.0
+          },
+          "throttle_samples_available": 511,
+          "thermal_limit_samples": 386,
+          "hotspot_limit_samples": 386,
+          "power_limit_samples": 17,
+          "current_limit_samples": 0,
+          "peak_fan_rpm": 0.0,
+          "peak_power_average_w": 194.0,
+          "peak_gfx_clock_mhz": 3140.0,
+          "peak_memory_clock_mhz": 1249.0,
+          "peak_busy_percent": 100.0,
+          "last_throttle_status": "available"
+        }
+      },
+      "cpu_peak_package_c": {
+        "Package id 0": 81.0
+      },
+      "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+      "started_utc": "2026-10-23T15:57:13.263979+00:00",
+      "last_sample_utc": "2026-10-23T16:05:45.217392+00:00"
+    }
+  },
+  "validation_type": "Functional production integration only; no new benchmark throughput",
+  "benchmark_reference": "maya-xs-dspark-2026-10-23.json",
+  "saved_benchmark": {
+    "code_decode_tps": 31.279733322300725,
+    "prose_decode_tps": 15.35934719295897,
+    "native_fresh_prefill_tps": 445.5,
+    "fresh_ttft_seconds": 14.155979501985712,
+    "source": "Earlier same-day isolated XS/matchingdrafter three-trial benchmark, same source/binary/context/settings; production normal proof does not remeasure speed",
+    "long_html_single1024_output_decode_tps": 12.544030279545135
+  },
+  "unchanged": [
+    "GLM-S model/settings",
+    "other engines",
+    "Strata DSH default",
+    "API model id/ports/catalog count10",
+    "all memory guards"
+  ],
+  "rollback": "Prior S profile/code/seed/manifests kept privately; S model GGUF1-4 and olddrafter inactive; S Engram5-6 remain active shared XS dependencies. No model deletion.",
+  "glm-normal.json": {
+    "status": "passed",
+    "model": "glm-5.3-flash-maya",
+    "context": 32768,
+    "routes": {
+      "loopback": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "lan": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "tailscale": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      }
+    },
+    "remote_peer_tested": false,
+    "runtime_proof": {
+      "runtime_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+      "production_binary_sha256": "4ed17ade56259fdfeed1a2a8411a00d39553c63cf6ea91ddde3014e486516269",
+      "profile_arguments_match": true,
+      "both_gpus_configured": true,
+      "config_sha256": "4eb65267282859f6ba905e50abb5f8b7b27a5c561d5a256da4aef94b0b1774bb",
+      "startup_whole_card_free_bytes": [
+        8327319552,
+        8371560448
+      ]
+    },
+    "json": true,
+    "tool_roundtrip": true,
+    "measured_arguments_and_binary_match": false,
+    "measured_q4_arguments_and_binary_match": false,
+    "owned_scope_swap_max_bytes": 0,
+    "worker_swap_bytes": 0,
+    "worker_vram_spill_bytes": 0,
+    "gpu_used_bytes": [
+      17619816448,
+      17567186944
+    ],
+    "available_host_bytes": 15091724288,
+    "initial_model_check_and_functional_wall_seconds": 15.252,
+    "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+  },
+  "deepseek-normal.json": {
+    "status": "passed",
+    "model": "deepseek-v4.1-flash-1017-maya",
+    "context": 32768,
+    "routes": {
+      "loopback": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "lan": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      },
+      "tailscale": {
+        "authenticated_streaming": true,
+        "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084"
+      }
+    },
+    "remote_peer_tested": false,
+    "runtime_proof": {
+      "runtime_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
+      "production_binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
+      "profile_arguments_match": true,
+      "both_gpus_configured": true,
+      "config_sha256": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
+      "startup_whole_card_free_bytes": [
+        8311656448,
+        8342196224
+      ]
+    },
+    "json": true,
+    "tool_roundtrip": true,
+    "measured_arguments_and_binary_match": false,
+    "measured_q4_arguments_and_binary_match": false,
+    "owned_scope_swap_max_bytes": 0,
+    "worker_swap_bytes": 0,
+    "worker_vram_spill_bytes": 0,
+    "gpu_used_bytes": [
+      17689714688,
+      17659244544
+    ],
+    "available_host_bytes": 54134845440,
+    "initial_model_check_and_functional_wall_seconds": 20.05,
+    "method": "Existing normal launcher; authenticated host self-access on loopback/LAN/Tailscale; functional check, not a throughput benchmark"
+  },
+  "glm-normal.frontend.json": {
+    "status": "passed",
+    "kind": "maya",
+    "model": "glm-5.3-flash-maya",
+    "context": 32768,
+    "original_html_sha256": "f125c688175dea19da92e6ec3c67e587a7e59a8c29c4e68fff5405727b9e8919",
+    "original_asset_count": 7,
+    "metrics_status_settings": true,
+    "runtime_mutations_blocked": [
+      "/api/context",
+      "/api/update",
+      "/api/port",
+      "/config",
+      "/load",
+      "/unload"
+    ],
+    "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+  },
+  "deepseek-normal.frontend.json": {
+    "status": "passed",
+    "kind": "maya",
+    "model": "deepseek-v4.1-flash-1017-maya",
+    "context": 32768,
+    "original_html_sha256": "f125c688175dea19da92e6ec3c67e587a7e59a8c29c4e68fff5405727b9e8919",
+    "original_asset_count": 7,
+    "metrics_status_settings": true,
+    "runtime_mutations_blocked": [
+      "/api/context",
+      "/api/update",
+      "/api/port",
+      "/config",
+      "/load",
+      "/unload"
+    ],
+    "method": "Existing native HTTP worker; functional frontend validation only, no benchmark."
+  },
+  "glm-normal.effective-flags.json": {
+    "STRATA_GLM_PREFILL_FUSED": "0",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "ROCR_VISIBLE_DEVICES": "0,1"
+  },
+  "deepseek-normal.effective-flags.json": {
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "ROCR_VISIBLE_DEVICES": "0,1"
+  },
+  "normal-scope-limits.json": {
+    "memory.max": "55834574848",
+    "memory.swap.max": "0",
+    "memory.peak": "55834574848",
+    "memory.events": "low 0\nhigh 0\nmax 280\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+  },
+  "actual_loaded_libraries": [
+    {
+      "basename": "libamd_comgr.so.3.0.0",
+      "sha256": "cbae40b0e4fdeb6c1dab7d2b187260bcc9f402e37de2f819044648c4bd459605"
+    },
+    {
+      "basename": "libamdhip64.so.7.2.70203",
+      "sha256": "770eb323b8e2c48514fde3e2b319985b37f8ebc8e6593f5c05487a8a7a7684ac"
+    },
+    {
+      "basename": "libhipblas.so.3.2.70203",
+      "sha256": "dc17f16ae4b6264bc279329acdb8a1c3afa09217e85713b53d287a3ac992c192"
+    },
+    {
+      "basename": "libhipblaslt.so.1.2.70203",
+      "sha256": "143a4d10017e0bc175f81250aebeae23a36352fca680daa273c59932292189ba"
+    },
+    {
+      "basename": "libhsa-runtime64.so.1.18.70203",
+      "sha256": "7d2149819a73eee2b857068332e9fad8925924eeb8dc68ccefcb199ab1b2d1f7"
+    },
+    {
+      "basename": "librocblas.so.5.2.70203",
+      "sha256": "1f10207869e8d7325ddbc0e6b4a7ac42b385113252bb0e08c04caf1880e56257"
+    }
+  ]
+}

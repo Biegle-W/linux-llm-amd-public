@@ -6,9 +6,9 @@
   "rocwmma_commit": "48b7db12a9ade97f0b7ab2ff9321ba0cbb4e5b77",
   "rocwmma_version": "2.2.0 / ROCm 7.2.3",
   "llama_dependency": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
-  "status": "Promoted exact tested source25deec5/1.1.24 SDK7 binaries after both selected Maya-S32K native, near31.5K/history and normal Desktop/Ptyxis/browser selector/authenticated gateway/switchback gates",
+  "status": "Maya1.1.24 exact tested SDK7 binaries active; GLM-Sv2 plus user-authorized productionDeepSeekXS/matchingDSpark after normalintegration",
   "rocm_sdk": "7.2.3",
   "python": "3.12.14",
   "gpu_architecture": "gfx1100",
-  "scope": "Selected Maya-S quants/32K/bothAMD/ROCm7.2.3; GLM PREFILL_FUSED=0 excludes failed gfx1100 IQ2_S path; DS4_IQ_Q8K=0/DS4_STREAM=0/noDSpark retained; mixed Q4_K/IQ4_XS excluded."
+  "scope": "GLM-S40GiB/MTP with failedfused0; DeepSeekXS IQ1_S+matching IQ2_XXS dspark-xs2/24threads/DS4_IQ_Q8K0/STREAM0; both32K/dualAMD/8GiBnative6GiBactual/52Gno-swap. MixedQ4_K/IQ4_XS excluded."
 }

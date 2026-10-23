@@ -71,6 +71,19 @@ class MayaTests(unittest.TestCase):
                 bad['local_validation']['config_sha256']=runtime.config_fingerprint(bad)
                 bad['local_validation']['pack_metadata_sha256']=runtime.pack_metadata_fingerprint(pack)
                 runtime.check_config(bad)
+                xs_pack=root/'models/Maya/Maya-XS/maya-ds4';xs_pack.mkdir(parents=True)
+                (xs_pack/'tensors.txt').write_text('t experts.w1.weight IQ1_S 0 0 0 0 0\n')
+                (xs_pack/'ds4.txt').write_text('model_dir /linux/xs\n')
+                (xs_pack/'engram.bin').write_bytes(b'validated-xs-metadata')
+                xs=copy.deepcopy(bad);xs['installer']={'ds4_quant':'maya-xs'}
+                xs['args']=['--pack',str(xs_pack),'--max-context','32768','--reserve-mib','8192','--dspark','on','--cpu-threads','24']
+                xs['local_validation']['config_sha256']=runtime.config_fingerprint(xs)
+                xs['local_validation']['pack_metadata_sha256']=runtime.pack_metadata_fingerprint(xs_pack)
+                runtime.check_config(xs)
+                for flag,value in [('--dspark','none'),('--cpu-threads','8'),('--max-context','65536')]:
+                    changed=copy.deepcopy(xs);changed['args'][changed['args'].index(flag)+1]=value
+                    changed['local_validation']['config_sha256']=runtime.config_fingerprint(changed)
+                    with self.assertRaisesRegex(RuntimeError,'validated Maya-XS'):runtime.check_config(changed)
                 (pack/'ds4.txt').write_text('model_dir WINDOWS_MODEL_PATH\n')
                 with self.assertRaisesRegex(RuntimeError,'pack metadata changed'):runtime.check_config(bad)
                 bad=copy.deepcopy(cfg);bad['env']['MAYA_GLM_MISS_SKIP_W']='0.1'

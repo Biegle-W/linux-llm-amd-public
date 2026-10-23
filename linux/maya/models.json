@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "upstream_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
+  "upstream_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
   "files": [
     {
       "family": "glm",
@@ -32,38 +32,6 @@
     {
       "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
       "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
-      "size": 47887697312,
-      "sha256": "1f3437f57042e69f94c141ffbcba0d5610dab63feb07244fb468be4940d6763f"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
-      "size": 47669578400,
-      "sha256": "66501fee8702ffd54e6f065323ab54bb3150d20b10b01922c589e7462c7b5ba6"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
-      "size": 47103347360,
-      "sha256": "3195b23f33337c46a07c48583946d99147c3635412bc4adc6acdc4cf42bf30ad"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
-      "size": 35532532032,
-      "sha256": "d60dba35fac9601cd5c6026439dd980c457a5bb1c009192ea539b220108ea0db"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
       "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00005-of-00006.gguf",
       "size": 80641295472,
@@ -76,22 +44,6 @@
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00006-of-00006.gguf",
       "size": 80643503412,
       "sha256": "98d65ef4f36e0b193935d44c3586241ca09b1b47e90f118e85332cfdb5860263"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "dspark/dspark.bin",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark.bin",
-      "size": 7967616768,
-      "sha256": "42df65159f980a9189d80597e42b30012c7b10e0dd385a47051f3b2fd659bb7b"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "dspark/dspark.json",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark.json",
-      "size": 96965,
-      "sha256": "639c3144bca8cfe4db59057047dca40411f0cc732796e2a9321feb98fee2295f"
     },
     {
       "repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
@@ -108,11 +60,56 @@
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/config.json",
       "size": 3311,
       "sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00001-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00001-of-00005.gguf",
+      "size": 47781530400,
+      "sha256": "a0cb7966afd68bc35c46f78018d1fa1d2e4bcbe3c3baf39f60cd1733ed9ad7e5"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00002-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00002-of-00005.gguf",
+      "size": 47775748128,
+      "sha256": "ba5afb43adfc667436ebcfbd82d25411fa2843ee7e1d877290611cd60f93cca1"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00003-of-00005.gguf",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/DeepSeek-V4.1-Flash-1017-Maya-XS-IQ1_S-00003-of-00005.gguf",
+      "size": 19784230848,
+      "sha256": "1482443bb4957c8d2f005ded365445f98558ff05c50674f9ee9a96ddabc122a4"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "dspark/dspark-xs2.bin",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark-xs2.bin",
+      "size": 4251725568,
+      "sha256": "8dfe21082a6cb320f334fddb454630c241c6d44e0463eef4f8b0b07334511779"
+    },
+    {
+      "family": "deepseek",
+      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
+      "revision": "d1fc01009f21e26157acb6858c315d0365483b72",
+      "remote": "dspark/dspark-xs2.json",
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark-xs2.json",
+      "size": 99146,
+      "sha256": "56d47ad12d6548a8d3d50a79be96451411f18d5b77064de7b8544bb2da22988f"
     }
   ],
-  "total_bytes": 443117880880,
-  "quant_selection": "GLM Maya-S24 for 24GB cards; DeepSeek Maya-S native GGUF with Q6_K Engram; upstream checksummed packed DSpark and matching vision source. No original FP8/EXL3 copies.",
-  "note": "Pinned original downloads; DeepSeek vision safetensors/config are losslessly repacked by the installer into vision.bin + vision.json and then removed. Do not treat this as the current post-conversion inventory.",
+  "total_bytes": 378317262165,
+  "quant_selection": "GLM Maya-Sv2; DeepSeekMaya-XS + matchingdspark-xs2; reusedS Engram payloads",
+  "note": "Active assets only. Original Maya-S manifest/weights retained for rollback; its Engram shards remain production dependencies. Prepare Windows/Linux pack metadata independently.",
   "converted_assets": [
     {
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",
