@@ -72,7 +72,7 @@ profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
 
 **Qwen3.6-35B-A3B retired (October 23, user):** `qwen3.6-35b-a3b` is removed from the llama.cpp
 catalog, presets and offload plan. A saved DSH selection of it moves to `empero-qwen3.8-35b-a3b`,
-which matches its speed. Ten active profiles. Its GGUF file is still on the SATA1 drive.
+which matches its speed. Ten active profiles. Its 22.2 GB GGUF was deleted from SATA1 at the user's request.
 
 **llama.cpp batch sweep (October 22):** every llama.cpp profile now overrides the inherited 512/128
 batch. Native ~8K prefill, decode within 2%: Ornith 4096/4096 52.7 → 714.9 tok/s; Super 2048/1024
