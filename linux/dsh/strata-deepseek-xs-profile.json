@@ -68,6 +68,6 @@
     "both_gpus": true,
     "seed_sha256": "82833f7218db53718a1467ac4b8825c01cf11baf7b2f5192574f23991f0086d9",
     "reference_config_sha256": "e9fb8ac725625093ca3533ccf58b73e0b438376059cabac0c2d238492a58398d",
-    "note": "Sanitized example paths; verify the local source, binary, pack and configuration before loading."
+    "note": "Sanitized example paths; validate the local binary, pack and profile before loading."
   }
 }

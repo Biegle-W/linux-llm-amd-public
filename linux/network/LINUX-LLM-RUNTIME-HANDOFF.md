@@ -9,18 +9,18 @@ This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUN
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-23 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-10-24 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `edc353842c1b` |
-| vLLM | `0.32.1rc1.dev361+g83c078d95.rocm72` |
+| llama.cpp | `6b9ba4f2e8c1` |
+| vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata Qwen | `7ddc17a38fe7` |
-| Strata DeepSeek (manual setup October24) | `8183c6b67162` / engine0.1.49.1 |
+| Strata | `8183c6b67162` |
 | Maya | `f26d8bab43f9` |
+| Strata DeepSeek | `8183c6b67162` |
 
-Last run: llama.cpp promoted; vLLM promoted; Strata promoted; Maya promoted.
+Last run: llama.cpp promoted; vLLM promoted; Strata promoted.
 <!-- daily-update:end -->
 
 ## Strata 0.2.4 DeepSeek — October 24

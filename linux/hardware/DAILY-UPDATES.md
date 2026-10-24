@@ -7,6 +7,76 @@ promotion gate passes (prefill and code/prose decode ≥95% of production, short
 first token within max(1.25×, +0.05 s), no fewer retrieval markers, zero VRAM spill).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
+## 2026-10-24
+
+- **llama.cpp** `edc353842c1b` → `6b9ba4f2e8c1`: **promoted**. all gates passed
+- **vLLM** `0.32.1rc1.dev361+g83c078d95.rocm72` → `0.32.1rc1.dev435+gc50aca144.rocm72`: **promoted**. all gates passed
+- **Strata** `7ddc17a38fe7` → `8183c6b67162`: **promoted**. all gates passed
+
+llama.cpp gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| empero-qwen3.8-35b-a3b | prefill_tps | 2975.797 | 2977.874 | +0.1% |
+| empero-qwen3.8-35b-a3b | code_decode_tps | 119.849 | 120.702 | +0.7% |
+| empero-qwen3.8-35b-a3b | prose_decode_tps | 73.520 | 73.471 | -0.1% |
+| empero-qwen3.8-35b-a3b | code_ttft_s | 0.059 | 0.058 | -0.5% |
+| empero-qwen3.8-35b-a3b | prose_ttft_s | 0.058 | 0.059 | +0.8% |
+| empero-qwen3.8-35b-a3b | markers | 3.000 | 3.000 |  |
+| empero-qwen3.8-35b-a3b | verdict | | | pass |
+| nemotron-3.5-super-iq3 | prefill_tps | 433.020 | 433.601 | +0.1% |
+| nemotron-3.5-super-iq3 | code_decode_tps | 15.656 | 15.694 | +0.2% |
+| nemotron-3.5-super-iq3 | prose_decode_tps | 17.237 | 17.234 | -0.0% |
+| nemotron-3.5-super-iq3 | code_ttft_s | 0.922 | 0.920 | -0.2% |
+| nemotron-3.5-super-iq3 | prose_ttft_s | 0.623 | 0.618 | -0.8% |
+| nemotron-3.5-super-iq3 | markers | 3.000 | 3.000 |  |
+| nemotron-3.5-super-iq3 | verdict | | | pass |
+| sage-a1.5 | prefill_tps | 2817.591 | 2816.180 | -0.1% |
+| sage-a1.5 | code_decode_tps | 80.897 | 80.740 | -0.2% |
+| sage-a1.5 | prose_decode_tps | 64.561 | 65.038 | +0.7% |
+| sage-a1.5 | code_ttft_s | 0.056 | 0.056 | -0.6% |
+| sage-a1.5 | prose_ttft_s | 0.054 | 0.054 | -0.3% |
+| sage-a1.5 | markers | 3.000 | 3.000 |  |
+| sage-a1.5 | verdict | | | pass |
+| ornith-1.5-122b | prefill_tps | 718.397 | 720.127 | +0.2% |
+| ornith-1.5-122b | code_decode_tps | 11.505 | 11.505 | -0.0% |
+| ornith-1.5-122b | prose_decode_tps | 13.444 | 13.416 | -0.2% |
+| ornith-1.5-122b | code_ttft_s | 0.535 | 0.539 | +0.8% |
+| ornith-1.5-122b | prose_ttft_s | 0.724 | 0.732 | +1.1% |
+| ornith-1.5-122b | markers | 3.000 | 3.000 |  |
+| ornith-1.5-122b | verdict | | | pass |
+
+vLLM gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| qwen3.8-27b-vllm | prefill_tps | 1506.484 | 1510.822 | +0.3% |
+| qwen3.8-27b-vllm | code_decode_tps | 142.173 | 142.303 | +0.1% |
+| qwen3.8-27b-vllm | prose_decode_tps | 78.315 | 76.769 | -2.0% |
+| qwen3.8-27b-vllm | code_ttft_s | 0.070 | 0.071 | +1.0% |
+| qwen3.8-27b-vllm | prose_ttft_s | 0.063 | 0.066 | +3.8% |
+| qwen3.8-27b-vllm | markers | 3.000 | 3.000 |  |
+| qwen3.8-27b-vllm | verdict | | | pass |
+| nemotron-3.5-bolt-vllm | prefill_tps | 2941.267 | 2904.223 | -1.3% |
+| nemotron-3.5-bolt-vllm | code_decode_tps | 38.060 | 37.964 | -0.3% |
+| nemotron-3.5-bolt-vllm | prose_decode_tps | 38.104 | 38.072 | -0.1% |
+| nemotron-3.5-bolt-vllm | code_ttft_s | 0.075 | 0.078 | +3.7% |
+| nemotron-3.5-bolt-vllm | prose_ttft_s | 0.071 | 0.070 | -0.9% |
+| nemotron-3.5-bolt-vllm | markers | 3.000 | 3.000 |  |
+| nemotron-3.5-bolt-vllm | verdict | | | pass |
+
+Strata gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| qwen3.8-flash-next-iq3_xxs | prefill_tps | 918.800 | 915.900 | -0.3% |
+| qwen3.8-flash-next-iq3_xxs | code_decode_tps | 73.049 | 73.361 | +0.4% |
+| qwen3.8-flash-next-iq3_xxs | prose_decode_tps | 46.371 | 50.008 | +7.8% |
+| qwen3.8-flash-next-iq3_xxs | code_ttft_s | 0.238 | 0.236 | -0.7% |
+| qwen3.8-flash-next-iq3_xxs | prose_ttft_s | 0.235 | 0.233 | -1.0% |
+| qwen3.8-flash-next-iq3_xxs | markers | 3.000 | 3.000 |  |
+| qwen3.8-flash-next-iq3_xxs | verdict | | | pass |
+
 ## 2026-10-23
 
 - **llama.cpp** `4c3c5810f87e` → `edc353842c1b`: **promoted**. all gates passed
