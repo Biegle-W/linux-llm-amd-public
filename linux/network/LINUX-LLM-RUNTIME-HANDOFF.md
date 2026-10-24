@@ -223,15 +223,6 @@ Any catalog model requested there, or through the gateway (which now forwards to
 starts or switches its backend via the normal guarded launcher. Nothing starts while
 `hardware/generated/GPU-LOCK` exists. [Details](../hardware/MODEL-HUB-2026-10-22.md).
 
-**Desktop Model Router (October 24):** the new shortcut opens DSH's existing
-browser selector for all 13 active profiles. Choose a local provider/model and
-send a message to start or switch its backend through the same hub and guards.
-Opening the shortcut alone loads no model; repeated launches reuse the owned
-DSH listener. It starts the existing hub service if needed, opens a visible
-Ptyxis terminal, preserves the Strata Q3 default and adds no ports. Template:
-`launchers/Model-Router.desktop`; helper: `dsh/start-model-router`. Functional
-Desktop/catalog checks only, no new inference timings or Windows changes.
-
 **ROCm update test (October 22):** the 7.2.4 runtime and 7.14.1 llama.cpp builds gave no gain over
 fresh 7.2.3 controls (vLLM Qwen, llama Qwen3.6/Sage, Ornith also on 10.1); 7.2.3 is retained. The
 opt-in `LOCAL_ROCM_RUNTIME_OVERLAY` hook is for isolated tests only.
