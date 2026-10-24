@@ -20,3 +20,5 @@ All previous reports, failed trials and benchmark evidence remain under
 `reports/`; no historical result was rerun or reassigned to the current hardware.
 The small `config/strata.json` disabled marker remains in the maintained layout
 because current network/client helpers read it.
+
+The dated LFM/Qwen8K test-profile list is also archived under `config/` here. It is historical evidence, outside the active model catalog. The maintained test helper can accept that file explicitly to reproduce the dated trial.

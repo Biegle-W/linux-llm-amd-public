@@ -55,3 +55,12 @@ are unchanged; dense Qwen27B is unchanged. Native CPU allocation is verified,
 all three pass functional tests and retrieval beyond their old allocations.
 Full windows are untested; preserve the physical-RAM admission and continuous
 guard. [Methods and proof](WINDOWS-MOE-RAM-CONTEXT-20261023.md).
+
+## Current: one setting per model — later October 23
+
+Exactly four canonical IDs remain: Ornith128K (default), LFM128K, Qwen27B8K and
+Empero64K. They use the previously verified largest configurations. Three MoEs
+keep Q8 KV in RAM; Qwen27B keeps GPU KV. Old suffixed RAM IDs and smaller active
+alternatives are removed. Dated test profiles moved into retired/20261023/config.
+Preserve their measured fitting/resource limits. Reopen DSH to refresh its four
+entries. No inference rerun; weights/chats/history retained. README is current.

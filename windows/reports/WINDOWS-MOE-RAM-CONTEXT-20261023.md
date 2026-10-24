@@ -1,4 +1,5 @@
 # Optional MoE context in CPU RAM — October 23, 2026
+> Later October 23: the active catalog was consolidated to one setting per model. See [current README](../README.md). Dated trial IDs and original settings below are preserved as evidence.
 
 Three additional router profiles reuse the existing GGUFs and keep Q8 K/V in CPU
 RAM using `--no-kv-offload`. The original four profiles and Ornith default are

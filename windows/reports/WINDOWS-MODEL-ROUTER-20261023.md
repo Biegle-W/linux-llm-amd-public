@@ -1,4 +1,5 @@
 # Windows model router — October 23, 2026
+> Later October 23: the active catalog was consolidated to one setting per model. See [current README](../README.md). Dated trial IDs and original settings below are preserved as evidence.
 
 The authenticated OpenAI-compatible API at `http://127.0.0.1:10000/v1` now
 advertises all four downloaded models. Select an ID in a connected harness, or

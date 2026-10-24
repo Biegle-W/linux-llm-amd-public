@@ -20,30 +20,24 @@ Report any blocked commit, push or handoff synchronization explicitly.
 
 ## Separate Windows build — October 23
 
-Windows is a separate RTX 3060 12 GB / i5-13600KF / 16 GB machine.
-Keep CUDA Windows profiles under `windows/`; do not apply Linux AMD devices,
-guards, context budgets, model paths or engine preferences to Windows.
-Windows default remains Ornith 1.5 35B-A3B IQ2_S,32K,GPU + RAM; Strata is disabled.
-The Windows router on10000 now exposes Ornith plus LFM2.5-24B-A2B8K,
-Qwen3.8-27B8K and Empero35B-A3B8K through the OpenAI model field. One guarded
-private worker on10001; unload before admission, retain SSE switch exclusion,
-1024MiB loaded free VRAM and0.75GiB/five-second RAM stop. Do not lower per-model
-limits or silently substitute models. DSH saved selector has four entries;
-installed SDK streams all four; real tools/JSON/unload pass. Final router is idle.
-Thinking defaults are per model; LFM requires reasoning. See
-windows/reports/WINDOWS-MODEL-ROUTER-20261023.md. These are functional smokes,
-not new full-window/throughput or GUI/remote-client validation.
-Preserve fit-target2816/no-host true and4-GiB RAM/16-GiB commit/9728-MiB VRAM fresh admission.
-Use selected-profile44–48t/s samples, not faster low-headroom trials; see windows/reports/WINDOWS-MOE-MODELS-20261023.md.
-See `windows/README.md`. The Windows machine has no attached Shared D: drive;
-its current handoff stays in the Windows repository, without overwriting Linux's.
-Private Windows instructions are consolidated in its README, not AGENTS.md.
-Windows optional RAM-context profiles now add Ornith128K/LFM128K/Empero64K;
-seven IDs reuse four weights, original four/default unchanged. Q8 KV is verified
-on CPU; chat/SSE/tools/retrieval beyond old allocations pass. Full windows are
-untested. Preserve RAM-profile4.5/5GiB fresh physical RAM,20GiB commit and
-8192/9216MiB fresh VRAM plus loaded1024MiB and existing continuous RAM guard.
-See windows/reports/WINDOWS-MOE-RAM-CONTEXT-20261023.md. No Linux changes.
+Windows is independent: RTX3060 12GB /i5-13600KF /16GB; CUDA settings under
+windows/. Keep Linux AMD hardware/engines/guards and handoffs separate.
+Standing user preference: exactly one active setting per model, at its largest
+currently configured context. Four canonical IDs match GGUF filename stems:
+Ornith128K (default), LFM128K, Qwen27B8K, Empero64K. Do not restore smaller
+alternatives or suffixed RAM aliases. Three MoEs use Q8 KV in CPU RAM; Qwen27B
+keeps GPU KV. Weights/chats/history remain; no inference rerun for consolidation.
+Preserve measured fitting and per-model admission: RAM profiles4.5/5GiB physical
+available RAM +20GiB commit; dense3.5GiB +16GiB commit; fresh VRAM8192MiB for
+LFM/Qwen27B and9216MiB for Ornith/Empero. All keep loaded1024MiB and continuous
+0.75GiB/five-second RAM guard, one private worker on10001, authenticated router
+on10000 and SSE switch exclusion. No silent model fallback or unrelated-app kill.
+LFM requires reasoning. DSH selector has four IDs and Ornith default; GUI and
+remote-peer/full-window tests remain unperformed. Earlier throughput numbers
+retain original settings, especially retired Ornith32K44–48t/s. See Windows
+README, RAM-context report and windows-single-profile-20261023.json.
+Private instructions are consolidated in README, without root AGENTS.md. No D:
+drive is attached; Windows handoff stays here without overwriting Linux's.
 All remaining AMD hardware/engine/default-model policies below apply to Linux.
 
 Current Linux hardware policy: use BOTH RX 7900 XTX cards for every active model.

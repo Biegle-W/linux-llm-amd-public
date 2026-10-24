@@ -43,7 +43,7 @@ The approved apps/service were restored. **Ornith remains the configured default
 Reproduce with the saved separate profiles, after stopping the owned backend:
 
 ```powershell
-python scripts/test_models.py --profiles-file config/test-profiles-lfm-qwen-20261023.json --long-tokens 6144 --speed-temperature 0.1
+python scripts/test_models.py --profiles-file retired/20261023/config/test-profiles-lfm-qwen-20261023.json --long-tokens 6144 --speed-temperature 0.1
 ```
 
 Adjust example model paths first in public exports. The CLI does not stop/restart production automatically. LFM's reasoning behavior and Pythonic native tools follow the [publisher card](https://huggingface.co/LiquidAI/LFM2.5-24B-A2B); Qwen thinking control follows its [official card](https://huggingface.co/Qwen/Qwen3.8-27B). Tool round trips here passed through llama.cpp's native OpenAI-compatible parser. [Curated numeric evidence](windows-lfm-qwen-summary-20261023.json). Earlier failed admission records and successful raw test outputs are preserved privately; weights, raw logs and private app state remain outside Git.
