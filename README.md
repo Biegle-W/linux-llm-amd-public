@@ -451,6 +451,10 @@ No Windows throughput is inferred from Linux results.
 
 ## Install, launch and connect
 
+Desktop **Model Router** opens DSH’s browser selector for all 13 active Linux models.
+Choose a local provider/model and send a message; the existing hub starts its backend
+automatically. The default remains Strata Q3. [Usage](linux/hardware/MODEL-HUB-2026-10-22.md#desktop-selector--october-24).
+
 | Reference files | Purpose |
 |---|---|
 | [`linux/`](linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |

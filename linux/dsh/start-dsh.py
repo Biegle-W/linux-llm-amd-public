@@ -16,7 +16,7 @@ try:
     if reuse_existing():
         raise SystemExit(0)
     configure()
-    print('DSH only. Start an inference backend separately, then select its provider/model in DSH.', flush=True)
+    print('Choose a local provider/model in DSH; the model hub starts its backend on your first message.', flush=True)
     print('Closing this terminal stops DSH; the backend stays running in its own terminal.', flush=True)
     app = subprocess.Popen([str(ROOT / 'run'), 'web', '--host', '127.0.0.1', '--port', '3080', *sys.argv[1:]],
                            cwd=ROOT / 'workspace', start_new_session=True)
