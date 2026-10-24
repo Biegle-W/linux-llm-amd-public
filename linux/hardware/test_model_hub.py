@@ -89,11 +89,13 @@ class HubTests(unittest.TestCase):
         self.assertEqual((hub.switching, hub.inflight), (False, 0))
 
     def test_maya_and_strata_launch_headless_with_the_requested_model(self):
-        with patch.object(mh.subprocess, 'Popen') as popen:
-            mh.Hub()._launch('maya', 'deepseek-v4.1-flash-1017-maya')
-        args = popen.call_args.args[0]
-        self.assertEqual(args[1:], ['maya', '--no-browser', '--model', 'deepseek-v4.1-flash-1017-maya'])
-        self.assertTrue(popen.call_args.kwargs['start_new_session'])
+        for kind,model in [('maya','deepseek-v4.1-flash-1017-maya'),
+                           ('strata','deepseek-v4.1-flash-1017-strata-xs')]:
+            with self.subTest(kind=kind),patch.object(mh.subprocess,'Popen') as popen:
+                mh.Hub()._launch(kind,model)
+                args=popen.call_args.args[0]
+                self.assertEqual(args[1:],[kind,'--no-browser','--model',model])
+                self.assertTrue(popen.call_args.kwargs['start_new_session'])
 
 
 class HttpTests(unittest.TestCase):

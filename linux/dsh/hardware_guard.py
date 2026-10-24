@@ -36,9 +36,9 @@ def require_current_cuda_pair(cards=None):
             'No backend has been stopped.')
 
 
-def require_strata(before_handover=False):
+def require_strata(before_handover=False,model=None):
     from strata_runtime import require_strata as require_hip_strata
-    return require_hip_strata(before_handover=before_handover)
+    return require_hip_strata(before_handover=before_handover,model=model)
 
 
 def require_hyperqwen():

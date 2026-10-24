@@ -205,10 +205,10 @@ def wait_port(port, launcher, timeout):
 def launcher_bench(kind, models, stage, label, logfile):
     """Normal launcher + unchanged shared benchmark for each model. Returns the merged record."""
     profiles = []
-    groups = [[m] for m in models] if kind == 'maya' else [models]
+    groups = [[m] for m in models] if kind in ('maya','strata') else [models]
     for group in groups:
         args = ['--no-browser'] if kind in ('strata', 'maya') else []
-        if kind == 'maya':
+        if kind in ('maya','strata'):
             args += ['--model', group[0]]
         with open(stage/f'{label}-launcher.log', 'a') as launch_log:
             launcher = subprocess.Popen(['/usr/bin/python3', str(ROOT/'dsh/launch-backend.py'), kind, *args],
@@ -257,7 +257,7 @@ def gates(stage, logfile):
 def smoke(kind, model, stage, label, logfile):
     """Short normal-launcher check after a rollback: the restored build answers."""
     args = ['--no-browser'] if kind in ('strata', 'maya') else []
-    if kind == 'maya':
+    if kind in ('maya','strata'):
         args += ['--model', model]
     with open(stage/f'{label}-launcher.log', 'a') as launch_log:
         launcher = subprocess.Popen(['/usr/bin/python3', str(ROOT/'dsh/launch-backend.py'), kind, *args],
@@ -474,7 +474,8 @@ class Strata(Engine):
     build = ROOT/'strata/build-hip'
 
     def models(self):
-        return [k for k, v in json.loads((ROOT/'dsh/strata-profiles.json').read_text()).items() if v.get('enabled', True)]
+        return [k for k, v in json.loads((ROOT/'dsh/strata-profiles.json').read_text()).items()
+                if v.get('enabled', True) and v.get('family')!='deepseek41']
 
     def current(self):
         return json.loads((self.build/'local-build.json').read_text())['source_commit']
@@ -664,7 +665,95 @@ class Maya(Engine):
             path.write_text(json.dumps(cfg, indent=2) + '\n')
 
 
-ENGINES = {e.kind: e for e in (Llama(), Vllm(), Sglang(), Strata(), Maya())}
+class StrataDeepSeek(Engine):
+    """Separate upstream component: never substitute its binary for the Qwen engine."""
+    name,kind,routing_kind='Strata DeepSeek','strata-dsv41','strata'
+    url='https://github.com/Niko1221/Strata.git'
+    src=ROOT/'strata-dsv41/upstream'
+    pin=ROOT/'strata-dsv41/runtime.json'
+
+    def models(self):
+        return [k for k,v in json.loads((ROOT/'dsh/strata-profiles.json').read_text()).items()
+                if v.get('enabled',True) and v.get('family')=='deepseek41']
+
+    def profile_files(self):
+        profiles=json.loads((ROOT/'dsh/strata-profiles.json').read_text())
+        return [ROOT/'dsh'/profiles[m]['config'] for m in self.models()]
+
+    def current(self):
+        return json.loads(self.pin.read_text())['source_commit']
+
+    def latest(self):
+        return remote_head(self.url)
+
+    def prepare(self,stage,rev,logfile):
+        source=stage/'src'
+        git_clone_at(self.src,self.url,rev,source,logfile)
+        declared=(source/'third_party/ggml/VERSION.txt').read_text().split()[0]
+        old=json.loads((self.src/'build-hip/local-build.json').read_text())['ggml']
+        ggml=Path(old['source_directory'])
+        if declared!=old.get('declared_archive_commit',old.get('source_commit')):
+            ggml=stage/'ggml-llama.cpp'
+            git_clone_at(ROOT/'llama.cpp','https://github.com/ggml-org/llama.cpp.git',declared,ggml,logfile)
+        sh(['bash',str(ROOT/'hardware/build-strata-dsv41-hip.sh')],logfile,
+           env={**os.environ,'STRATA_DSV41_SOURCE_DIR':str(source),
+                'STRATA_GGML_DIR':str(ggml),'BUILD_JOBS':BUILD_JOBS})
+        sh([str(ROOT/'strata/.venv/bin/python'),'-W','ignore','-m','unittest','serve.test_dsv41'],
+           stage/'cpu-tests.log',cwd=source)
+
+    def check(self,stage,logfile):
+        from gpu_telemetry import ThermalRecorder
+        telemetry=ThermalRecorder('daily-strata-deepseek-parity').start()
+        try:
+            sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
+               f'"{stage}/src/build-hip/ds4_iq_test" --devices 0,1 --type 19,16,18,21,22',logfile)
+            sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
+               f'"{stage}/src/build-hip/ds4_iq_shape_test" --devices 0,1 --type 19,16,18,21,22',logfile)
+            for gpu in (0,1):
+                sh(f'source hardware/rocm-env.sh && export HIP_VISIBLE_DEVICES={gpu} ROCR_VISIBLE_DEVICES=0,1 && '
+                   f'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
+                   f'"{stage}/src/build-hip/ds4_core_selected_test" 5120 2304',stage/f'core-parity-gpu{gpu}.log')
+            sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
+               f'"{stage}/src/build-hip/ds4_slot_test"',logfile)
+        finally:
+            (stage/'parity-thermal.json').write_text(json.dumps(telemetry.stop(),indent=2)+'\n')
+
+    def install(self,stage,rev,logfile):
+        from strata_ds41_runtime import config_fingerprint
+        version=re.search(r'project\(strata VERSION ([0-9.]+)',(stage/'src/CMakeLists.txt').read_text())
+        if version is None:
+            raise Step('Cannot read the candidate DeepSeek engine version; refusing installation')
+        rollback=stage/'rollback';rollback.mkdir()
+        for path in [self.pin,*self.profile_files()]:shutil.copy2(path,rollback/path.name)
+        os.rename(self.src,rollback/'upstream')
+        shutil.copytree(stage/'src',self.src,symlinks=True)
+        pin=json.loads(self.pin.read_text());pin.update(source_commit=rev,status='provisional daily-update '+TODAY)
+        pin['engine_version']=version.group(1)
+        self.pin.write_text(json.dumps(pin,indent=2)+'\n')
+        binary=sha256(self.src/'build-hip/strata-dsv41')
+        for path in self.profile_files():
+            cfg=json.loads(path.read_text())
+            cfg['local_validation'].update(status='passed',source_commit=rev,binary_sha256=binary,
+                config_sha256=config_fingerprint(cfg),normal_integration_status='pending')
+            path.write_text(json.dumps(cfg,indent=2)+'\n')
+
+    def rollback(self,stage,logfile):
+        rollback=stage/'rollback'
+        if (rollback/'upstream').exists():
+            shutil.rmtree(self.src,ignore_errors=True);os.rename(rollback/'upstream',self.src)
+        for path in [self.pin,*self.profile_files()]:
+            if (rollback/path.name).exists():shutil.copy2(rollback/path.name,path)
+
+    def finalize(self,stage,rev,gate_table):
+        pin=json.loads(self.pin.read_text());pin['status']='promoted after dual-card parity and normal-launcher gates'
+        self.pin.write_text(json.dumps(pin,indent=2)+'\n')
+        for path in self.profile_files():
+            cfg=json.loads(path.read_text());cfg['local_validation'].update(
+                normal_integration_status='passed',evidence=f'hardware/generated/daily-update/{TODAY}/strata-dsv41')
+            path.write_text(json.dumps(cfg,indent=2)+'\n')
+
+
+ENGINES = {e.kind: e for e in (Llama(), Vllm(), Sglang(), Strata(), Maya(), StrataDeepSeek())}
 
 
 # ---------------------------------------------------------------- run
@@ -806,7 +895,7 @@ def test_engine(engine, current, latest, stage, state, logfile):
     row = {'engine': engine.name, 'kind': engine.kind, 'from': current, 'to': latest}
     log(f'{engine.name}: baseline benchmark of production {current[:12]}', logfile)
     try:
-        baseline = launcher_bench(engine.kind, engine.models(), stage, 'baseline', logfile)
+        baseline = launcher_bench(getattr(engine,'routing_kind',engine.kind), engine.models(), stage, 'baseline', logfile)
     except Step as error:
         return {**row, 'result': 'skipped (production baseline failed)', 'detail': str(error)}
     failed = [p['model'] for p in baseline['profiles'] if p.get('status') != 'passed']
@@ -826,7 +915,7 @@ def test_engine(engine, current, latest, stage, state, logfile):
         log(f'{engine.name}: installing {latest[:12]} provisionally', logfile)
         engine.install(stage, latest, stage/'install.log')
         log(f'{engine.name}: candidate benchmark through the normal launcher', logfile)
-        launcher_bench(engine.kind, engine.models(), stage, 'candidate', logfile)
+        launcher_bench(getattr(engine,'routing_kind',engine.kind), engine.models(), stage, 'candidate', logfile)
         passed, table = gates(stage, logfile)
         detail = 'all gates passed' if passed else 'missed a promotion gate'
     except (Step, OSError, subprocess.SubprocessError, ValueError, KeyError) as error:
@@ -842,7 +931,7 @@ def test_engine(engine, current, latest, stage, state, logfile):
             stop_backends()
             engine.rollback(stage, stage/'rollback.log')
             restored = engine.current() == current
-            answered = smoke(engine.kind, engine.models()[0], stage, 'rollback-smoke', logfile)
+            answered = smoke(getattr(engine,'routing_kind',engine.kind), engine.models()[0], stage, 'rollback-smoke', logfile)
             detail += f'; rollback {"verified" if restored and answered else "NEEDS ATTENTION"}'
         except Exception as error:
             detail += f'; ROLLBACK FAILED: {error}'

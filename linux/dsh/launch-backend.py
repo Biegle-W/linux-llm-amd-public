@@ -30,6 +30,12 @@ if kind == 'maya':
     parser.add_argument('--model', choices=list(maya_profiles()))
     parser.add_argument('--no-browser', action='store_true', help='Keep serving without opening the native web frontend.')
     parser.parse_args(sys.argv[2:])
+strata_model=None
+if kind=='strata':
+    available={k:v for k,v in json.loads((ROOT/'strata-profiles.json').read_text()).items() if v.get('enabled',True)}
+    parser=argparse.ArgumentParser(description='Start a guarded Strata Qwen or DeepSeek profile.')
+    parser.add_argument('--model',choices=list(available),default=next(iter(available)))
+    strata_model=parser.parse_args(sys.argv[2:]).model
 backend = monitor = log = frontend = thermal = None
 worker_env = {**os.environ, 'CUDA_DEVICE_ORDER': 'PCI_BUS_ID', 'CUDA_VISIBLE_DEVICES': '0,1'}
 
@@ -47,9 +53,11 @@ try:
         require_rocm(kind)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
-        profile_config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or 'strata-iq3-profile.json')
-        ensure_strata_models(profile_config)
-        require_strata(before_handover=True)
+        selected_profile=available[strata_model]
+        if selected_profile.get('family')!='deepseek41':
+            profile_config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or selected_profile['config'])
+            ensure_strata_models(profile_config)
+        require_strata(before_handover=True,model=strata_model)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'maya':
         require_maya(before_handover=True)
@@ -91,7 +99,7 @@ try:
             require_rocm_headroom(min(profile.get('min_free_vram_gib', 21.0)
                                       for profile in profiles.values()))
         if kind == 'strata':
-            require_strata()
+            require_strata(model=strata_model)
             require_rocm_headroom(16)
         if kind == 'maya':
             require_maya()

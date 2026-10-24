@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+source "$ROOT/hardware/rocm-env.sh"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$ROOT/llm-tools/cuda-build/lib"
+while IFS= read -r name; do
+    case "$name" in MAYA_*|STRATA_*|DS4_*) unset "$name" ;; esac
+done < <(compgen -e)
+cd "$ROOT/strata-dsv41/upstream"
+exec "$ROOT/strata/.venv/bin/python" -B "$ROOT/dsh/native-ui-server.py" \
+    --project strata-dsv41 --engine strata --host 127.0.0.1 "$@"

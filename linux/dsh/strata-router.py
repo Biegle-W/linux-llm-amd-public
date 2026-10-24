@@ -16,7 +16,9 @@ from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, startup_vram_blocker, vram_snapshot
 
 ROOT = Path(__file__).resolve().parent
-PROFILES = json.loads((ROOT / 'strata-profiles.json').read_text())
+PROFILES = {model:profile for model,profile in
+            json.loads((ROOT / 'strata-profiles.json').read_text()).items()
+            if profile.get('enabled', True)}
 DEFAULT = next(iter(PROFILES))
 WORKER_PORT = 30021
 requests = threading.Lock()
@@ -24,6 +26,7 @@ lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
 memory_fault = None
+startup_free_vram = None
 
 
 def watch_memory():
@@ -42,6 +45,8 @@ def watch_memory():
         except (OSError, ValueError, RuntimeError):
             readings = None
         reason = guard.check(available, swap, spill, readings)
+        if getattr(proc, 'deepseek41', False) and (swap or spill):
+            reason=f'Strata DeepSeek requires zero owned swap/spill; observed {swap}/{spill} bytes'
         if reason:
             with lifecycle:
                 if worker is proc:
@@ -53,9 +58,10 @@ def watch_memory():
 
 
 def stop_worker(timeout=40):
-    global worker, active, logfile
+    global worker, active, logfile, startup_free_vram
     proc, worker = worker, None
     active = None
+    startup_free_vram = None
     if proc is not None and proc.poll() is None:
         try:
             os.killpg(proc.pid, signal.SIGTERM)
@@ -71,7 +77,7 @@ def stop_worker(timeout=40):
 
 
 def ensure_worker(model):
-    global worker, active, logfile
+    global worker, active, logfile, startup_free_vram
     with lifecycle:
         if stopping.is_set():
             raise RuntimeError('Strata is shutting down')
@@ -81,16 +87,20 @@ def ensure_worker(model):
             return
         stop_worker()
         from hardware_guard import require_strata
-        require_strata()
+        require_strata(model=model)
         profile = PROFILES[model]
-        config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])
+        override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family')!='deepseek41' else None
+        config = ROOT / (override or profile['config'])
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
+        script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
         worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemoryMax=52G',
-                                   '--property=MemorySwapMax=0', str(ROOT / 'run-strata-backend'),
+                                   '--property=MemorySwapMax=0', str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
+        worker.deepseek41 = profile.get('family') == 'deepseek41'
+        startup_free_vram = None
         proc = worker
     try:
         for _ in range(600):
@@ -109,13 +119,17 @@ def ensure_worker(model):
                 continue
             if health.get('model') != model or health.get('max_context', 0) < profile['context']:
                 raise RuntimeError('Strata worker has an unexpected model or context capacity')
-            reason = startup_vram_blocker(vram_snapshot())
+            readings = vram_snapshot()
+            reason = startup_vram_blocker(readings)
+            if profile.get('family')=='deepseek41' and min(r['free'] for r in readings)<6*1024**3:
+                reason='Strata DeepSeek needs at least6GiB actual free VRAM on each card at readiness'
             if reason:
                 raise RuntimeError(reason)
             with lifecycle:
                 if stopping.is_set():
                     raise RuntimeError('Strata is shutting down')
                 active = model
+                startup_free_vram = [r['free'] for r in readings]
             return
         raise RuntimeError('Strata startup exceeded 10 minutes')
     except Exception:
@@ -139,7 +153,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/health':
             return self.send_json(200, {'status': 'degraded' if memory_fault else 'ok',
-                                        'active_model': active, 'memory_fault': memory_fault})
+                                        'active_model': active, 'memory_fault': memory_fault,
+                                        'startup_whole_card_free_bytes': startup_free_vram})
         if self.path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': [
                 {'id': key, 'object': 'model', 'owned_by': 'local-strata',
@@ -159,7 +174,7 @@ class Handler(BaseHTTPRequestHandler):
             model = data.get('model', DEFAULT)
             if model not in PROFILES:
                 return self.send_json(400, {'error': {
-                    'message': f'Strata serves only {DEFAULT}. Q2 has been retired; select Q3 in your client.',
+                    'message': f'This Strata launcher serves {DEFAULT}; select another enabled model through the model hub.',
                     'type': 'invalid_request_error'}})
         except (ValueError, TypeError):
             return self.send_json(400, {'error': 'Invalid JSON request'})
@@ -178,7 +193,8 @@ class Handler(BaseHTTPRequestHandler):
                 ensure_worker(model)
                 if self.path == '/models/load':
                     return self.send_json(200, {'success': True})
-                data = add_document_prefix(data)
+                if PROFILES[model].get('family')!='deepseek41':
+                    data = add_document_prefix(data)
                 connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)
                 connection.request('POST', self.path, json.dumps(data), {'Content-Type': 'application/json'})
                 response = connection.getresponse()
@@ -209,21 +225,24 @@ def interrupted(*_):
 if __name__ == '__main__':
     from hardware_guard import require_strata
     try:
-        require_strata()
+        # Parse the selection before admission, so DeepSeek uses its own guard.
+        selection=argparse.ArgumentParser(add_help=False)
+        selection.add_argument('--model',choices=list(PROFILES),default=DEFAULT)
+        selected,_=selection.parse_known_args()
+        require_strata(model=selected.model)
     except RuntimeError as error:
         raise SystemExit(str(error))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model', choices=list(PROFILES), default=DEFAULT)
     args = parser.parse_args()
     DEFAULT = args.model
-    PROFILES = {DEFAULT: PROFILES[DEFAULT]}
     for sig in (signal.SIGTERM, signal.SIGHUP):
         signal.signal(sig, interrupted)
     server = ThreadingHTTPServer(('127.0.0.1', 30020), Handler)
     threading.Thread(target=watch_memory, daemon=True).start()
     try:
         ensure_worker(DEFAULT)
-        print('Strata Q3 ready on 30020:', DEFAULT, '(close this terminal before switching backends).', flush=True)
+        print('Strata ready on 30020:', DEFAULT, '(close this terminal before switching backends).', flush=True)
         server.serve_forever()
     except KeyboardInterrupt:
         pass

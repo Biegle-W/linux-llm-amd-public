@@ -65,14 +65,24 @@ def check_config(cfg, total, available, *, check_available=True):
         raise RuntimeError(' '.join(problems))
 
 
-def require_strata(before_handover=False):
+def require_strata(before_handover=False,model=None):
     profiles = json.loads((ROOT / 'dsh/strata-profiles.json').read_text())
-    enabled = [p for p in profiles.values() if p.get('enabled', True)]
-    if len(enabled) != 1:
-        raise RuntimeError('Exactly one validated Strata profile must be enabled. No backend has been stopped.')
+    enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
+    if len([p for p in enabled.values() if p.get('family')!='deepseek41'])!=1:
+        raise RuntimeError('Exactly one validated Strata Qwen profile must be enabled. No backend has been stopped.')
+    selected=model or next(iter(enabled))
+    if selected not in enabled:
+        raise RuntimeError('Unknown or disabled Strata profile. No backend has been stopped.')
+    profile=enabled[selected]
+    if profile.get('family')=='deepseek41':
+        from strata_ds41_runtime import require_profile
+        cfg=json.loads((ROOT/'dsh'/profile['config']).read_text())
+        if cfg['model_name']!=selected or profile['context']!=32768:
+            raise RuntimeError('Strata DeepSeek catalog and sealed model/context must match.')
+        return require_profile(cfg,before_handover=before_handover)
     # STRATA_PROFILE_CONFIG permits an isolated candidate check before promotion,
     # like LLAMA_CPP_DIR/VLLM_ENV_PATH; its own RAM gate and guards still apply.
-    cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or enabled[0]['config'])).read_text())
+    cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])).read_text())
     # Old managed weights may occupy the available RAM; check it strictly only
     # after handover, while always rejecting insufficient physical capacity first.
     check_config(cfg, *host_memory(), check_available=not before_handover)

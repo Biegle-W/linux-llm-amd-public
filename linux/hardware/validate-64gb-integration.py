@@ -26,11 +26,13 @@ def main():
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--model',choices=['nemotron-3.5-super-iq3',
                                      'qwen3.8-flash-next-iq3_xxs','glm-5.3-flash-maya',
-                                     'deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s'])
+                                     'deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s',
+                                     'deepseek-v4.1-flash-1017-strata-s','deepseek-v4.1-flash-1017-strata-xs'])
     ap.add_argument('--result',type=Path,help='Require exact measured Q4 placement, CPU/cache parameters and binary')
     a=ap.parse_args()
     ident=a.model or ('nemotron-3.5-super-iq3' if a.kind=='llama' else 'qwen3.8-flash-next-iq3_xxs')
-    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and ident=='qwen3.8-flash-next-iq3_xxs') or (a.kind=='maya' and ident in ('glm-5.3-flash-maya','deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s'))
+    deepseek_strata = a.kind=='strata' and ident in ('deepseek-v4.1-flash-1017-strata-s','deepseek-v4.1-flash-1017-strata-xs')
+    assert (a.kind=='llama' and ident.startswith('nemotron-3.5-super-')) or (a.kind=='strata' and (ident=='qwen3.8-flash-next-iq3_xxs' or deepseek_strata)) or (a.kind=='maya' and ident in ('glm-5.3-flash-maya','deepseek-v4.1-flash-1017-maya','deepseek-v4.1-flash-1017-maya-s'))
     cfg=json.loads((ROOT/'dsh/data/network-access.json').read_text());key=Path(cfg['key_file']).read_text().strip()
     expected=next(m['context'] for m in json.loads((ROOT/'dsh/models.json').read_text()) if m['id']==ident) if a.kind=='llama' else json.loads((ROOT/f'dsh/{a.kind}-profiles.json').read_text())[ident]['context']
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -72,7 +74,7 @@ def main():
     reply=chat(history+[message,{'role':'tool','tool_call_id':call['id'],'content':'{"sku":"BOLT-42","stock":137}'}],tools=tools,tool_choice='none')['choices'][0]['message']['content']
     assert '137' in reply
     tree=processes()
-    binaries={'llama':{str(ROOT/'llama.cpp/build-hip/bin/llama-server')},'strata':{str(ROOT/'strata/build-hip/strata')},
+    binaries={'llama':{str(ROOT/'llama.cpp/build-hip/bin/llama-server')},'strata':{str(ROOT/('strata-dsv41/upstream/build-hip/strata-dsv41' if deepseek_strata else 'strata/build-hip/strata'))},
               'maya':{str(ROOT/'maya/upstream/build-hip/maya'),str(ROOT/'maya/upstream/build-hip/maya-ds4')}}[a.kind]
     workers={p.pid for p in tree.values() if p.args and p.args[0] in binaries};assert workers
     runtime_proof = {}
@@ -100,6 +102,21 @@ def main():
             'production_binary_sha256':hashlib.sha256(Path(command[0]).read_bytes()).hexdigest(),
             'profile_arguments_match':True,'settings':settings,
             'binary_provenance':'Current production rebuild; this functional proof does not assert binary identity with a prior candidate benchmark.'}
+    elif deepseek_strata:
+        from strata_ds41_runtime import require_profile, config_fingerprint
+        profile=json.loads((ROOT/'dsh/strata-profiles.json').read_text())[ident]
+        cfg=json.loads((ROOT/'dsh'/profile['config']).read_text())
+        require_profile(cfg,before_handover=True)
+        assert len(workers)==1
+        command=tree[next(iter(workers))].args
+        for flag in cfg['args'][::2]:
+            assert command[command.index(flag)+1]==cfg['args'][cfg['args'].index(flag)+1],flag
+        env=dict(v.decode().split('=',1) for v in Path(f'/proc/{next(iter(workers))}/environ').read_bytes().split(b'\0') if b'=' in v)
+        assert env['STRATA_DS4_PROMPT_SKIP']==env['DS4_YOCO']==env['STRATA_DS4_SLOT_KEEP']=='0'
+        runtime_proof={'runtime_commit':cfg['local_validation']['source_commit'],
+            'production_binary_sha256':cfg['local_validation']['binary_sha256'],
+            'profile_arguments_match':True,'both_gpus_configured':True,
+            'config_sha256':config_fingerprint(cfg),'prompt_skip_disabled':True}
     elif a.kind=='strata':
         cfg=json.loads((ROOT/'dsh/strata-iq3-profile.json').read_text())
         assert cfg['gpu']==[0,1] and not cfg['split_skip_if_fits']
@@ -167,7 +184,7 @@ def main():
         props=api('/props?model='+ident,port=8080);assert props['default_generation_settings']['n_ctx']==expected
     else:
         health=api('/health',port=30030 if a.kind=='maya' else 30020);assert health['active_model']==ident and not health.get('memory_fault')
-        if a.kind=='maya':
+        if a.kind=='maya' or deepseek_strata:
             free=health['startup_whole_card_free_bytes'];assert len(free)==2 and min(free)>=6*1024**3
             runtime_proof['startup_whole_card_free_bytes']=free
     result={'status':'passed','model':ident,'context':expected,'routes':addresses,'remote_peer_tested':False,

@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parent.parent
 # Chat, cancellation, token counts and shared sampling are native UI features.
 # Loading, context edits and self-updates must go through validated launchers.
 ALLOWED_POSTS={'/v1/chat/completions','/v1/messages','/v1/completions','/v1/responses',
-               '/v1/strata/cancel','/api/tokens','/settings','/mcp'}
+               '/v1/messages/count_tokens','/v1/strata/cancel','/api/tokens','/settings','/mcp'}
 
 
 def install_guard(server):
@@ -37,9 +37,9 @@ def install_guard(server):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__,add_help=False)
-    parser.add_argument('--project',choices=['strata','maya'],required=True)
+    parser.add_argument('--project',choices=['strata','maya','strata-dsv41'],required=True)
     args,remaining=parser.parse_known_args()
-    project=ROOT/('strata' if args.project=='strata' else 'maya/upstream')
+    project=ROOT/{'strata':'strata','maya':'maya/upstream','strata-dsv41':'strata-dsv41/upstream'}[args.project]
     sys.path.insert(0,str(project))
     sys.argv=[str(project/'serve/server.py'),*remaining]
     server=importlib.import_module('serve.server')

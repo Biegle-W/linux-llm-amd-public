@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Functional validation of an already-running Maya worker; tools are synthetic."""
+"""Validate a running native Maya or Strata DeepSeek worker; tools are synthetic."""
 import argparse,hashlib,importlib.util,json,re,sys,time,uuid
 from pathlib import Path
 import urllib.request
@@ -7,6 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'dsh'))
 from amd_device import amd_devices
 ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,required=True);ap.add_argument('--model',required=True);ap.add_argument('--context',type=int,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--long-tokens',type=int);ap.add_argument('--prompt-seed',help='Fixed synthetic record salt for matched comparisons; default is fresh random salt')
+ap.add_argument('--token-count-path',choices=['/api/tokens','/v1/messages/count_tokens'],default='/api/tokens',help='Native token-count route; Strata DeepSeek uses the Anthropic route')
 a=ap.parse_args();assert not a.output.exists(),'Preserve the previous validation record'
 spec=importlib.util.spec_from_file_location('benchmark',ROOT/'hardware/benchmark-current-amd.py');b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b);b.PORTS['maya']=(a.port,a.port)
 record={'model':a.model,'context':a.context,'status':'running','tests':{},'method':'Functional checks with thinking off and greedy sampling; synthetic tool results only; not a throughput benchmark'}
@@ -15,7 +16,7 @@ def request(path,body=None):return b.request(a.port,path,body,timeout=1200)
 def chat(messages,**extra):return request('/v1/chat/completions',dict(model=a.model,messages=messages,max_tokens=128,temperature=0,chat_template_kwargs={'enable_thinking':False},**extra))
 save()
 try:
- h=request('/health');assert h['model']==a.model and h['max_context']==a.context and not h['unloaded']
+ h=request('/health');assert h['model']==a.model and h['max_context']==a.context and h.get('loaded',not h.get('unloaded',True))
  math,text=b.stream('maya',a.model,'What is 17 times 19? Reply with only the integer.',limit=64,sampled=False);assert re.search(r'\b323\b',text);record['tests']['arithmetic_streaming']={'passed':True,**math};save()
  result=chat([{'role':'user','content':'Return only a JSON object with key answer and integer value 137. No markdown.'}]);message=result['choices'][0]['message'];assert json.loads(message['content'])['answer']==137;record['tests']['json']={'passed':True,'usage':result['usage'],'answer_sha256':hashlib.sha256(message['content'].encode()).hexdigest()};save()
  tools=[{'type':'function','function':{'name':'lookup_inventory','description':'Look up stock for a SKU','parameters':{'type':'object','properties':{'sku':{'type':'string'}},'required':['sku']}}}]
@@ -32,7 +33,9 @@ try:
   lo,hi=20,a.long_tokens
   while lo+1<hi:
    mid=(lo+hi)//2;req={'model':a.model,'messages':[{'role':'user','content':prompt(mid)}],'chat_template_kwargs':{'enable_thinking':False}}
-   if request('/api/tokens',req)['tokens']<=a.long_tokens:lo=mid
+   count_req={**req,'thinking':{'type':'disabled'}} if a.token_count_path=='/v1/messages/count_tokens' else req
+   counts=request(a.token_count_path,count_req)
+   if counts.get('tokens',counts.get('input_tokens'))<=a.long_tokens:lo=mid
    else:hi=mid
   history=[{'role':'user','content':prompt(lo)}];long,text=b.stream('maya',a.model,'',limit=64,sampled=False,messages=history);long['markers_passed']=all(m in text for m in ('ALPHA-734','BRAVO-915','CHARLIE-268'));assert long['markers_passed'] and long['cached_tokens']==0
   record['long_context']=long;save()

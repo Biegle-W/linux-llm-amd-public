@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 Updated **October 23, 2026**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
+64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
@@ -16,11 +16,26 @@ source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 | llama.cpp | `edc353842c1b` |
 | vLLM | `0.32.1rc1.dev361+g83c078d95.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `7ddc17a38fe7` |
+| Strata Qwen | `7ddc17a38fe7` |
+| Strata DeepSeek (manual setup October24) | `8183c6b67162` / engine0.1.49.1 |
 | Maya | `f26d8bab43f9` |
 
 Last run: llama.cpp promoted; vLLM promoted; Strata promoted; Maya promoted.
 <!-- daily-update:end -->
+
+## Strata 0.2.4 DeepSeek — October 24
+
+Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the Qwen engine remains 7ddc17a3. No weight download/duplication, no new ports.
+
+| Model ID | RAM-store GB | Code / prose t/s | Native PP t/s | TTFT s |
+|---|---:|---:|---:|---:|
+| `deepseek-v4.1-flash-1017-strata-s` | 0 | 7.00 / 7.16 | 168.0 | 37.491 |
+| `deepseek-v4.1-flash-1017-strata-xs` | 0 | 18.25 / 12.77 | 183.7 | 34.289 |
+
+Exact-binary isolated timings, three code/prose trials with a 256-token output cap and three fresh prompts with ~6.3K actual input tokens; native prefill and external SSE TTFT/decode are distinct. Selected profiles pass the normal Ptyxis launcher, original UI, authenticated host-self API, near-31.5K/history checks and Q3 switchback with zero owned swap/spill. These are not a matched Maya speed comparison. [Setup, gates and thermals](../hardware/STRATA-DEEPSEEK-2026-10-24.md) · [numeric record](../hardware/results/strata-deepseek-2026-10-24.json).
+
+DeepSeek profiles use separate `strata-dsv41/upstream` source/build on Linux ext4. Shared-NVMe metadata is under `LLM-Models/Strata/DeepSeek-V4.1-Flash-1017/{Maya-S,Maya-XS}/pack`, referencing existing Maya S/XS/drafter weights; S Engram shards 5/6 remain shared dependencies. Both profiles:32K/24threads/native8GiB actual6GiB startup/52G no-swap/latched guards; S no drafter, XS matching xs2. Prompt skip/YOCO/expert omission/persistent slots disabled. The same 30020/30021 ports and one native worker; no Windows DeepSeek-Strata pack is validated. Windows must create separate metadata/validation while keeping shared weights intact.
+
 
 The previous nine Shared Markdown documents are preserved byte-for-byte in
 `D:\LLM-ARCHIVE\LLM-HANDOFF-ARCHIVE\2026-10-18\` (Linux:
@@ -39,7 +54,7 @@ Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten a
 Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
-Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.
 Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
 API; only one worker runs at a time. Strata remains the DSH default.
 Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
@@ -109,7 +124,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Eleven profiles:** four llama.cpp, one SGLang, two vLLM, one Strata, three Maya. Presence in
+- **Thirteen profiles:** four llama.cpp, one SGLang, two vLLM, three Strata, three Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -389,7 +404,7 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **11 enabled profiles**: four llama.cpp, one SGLang, two vLLM, one Strata and three Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **13 enabled profiles**: four llama.cpp, one SGLang, two vLLM, three Strata and three Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -407,24 +422,23 @@ not guarantees of full-window speed or general long-context accuracy.
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
+| Strata DeepSeek / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-strata-s` | 32,768 | Reused Maya-S mixed IQ2/3 | Off |
+| Strata DeepSeek / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-strata-xs` | 32,768 | Reused Maya-XS IQ1_S | Matching xs2 |
 | Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S v2, mixed IQ2/3 experts / Q6_K attention/shared | MTP |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S / Q6_K Engram | Matching dspark-xs2 |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya-s` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | Off |
 
-All llama.cpp rows use both cards, Q8_0 K/V, flash attention, batch 512,
-microbatch 128, one slot and embeddings on GPU0. Dense models use Vulkan with
-GPU-resident weights. Qwen/Empero use HIP with layer split 1:1, 20 CPU expert
-layers and a 12,288 MiB total cache ceiling. Bolt Q4 uses HIP with layer split
-21:19, 12 CPU expert layers (12.73 GiB backing) and a 7,168 MiB total GPU
-expert-cache ceiling. CPU backing and cached copies both consume memory. Actual
-cache allocation is bounded by each GPU's host-expert set. Qwen/Empero MTP draft
-experts remain on GPU. Effective settings come from `dsh/models-amd.ini`,
-`dsh/models-hip.ini`, `dsh/moe-offload.json` and model-specific overrides.
+All active llama.cpp profiles use both cards and HIP, Q8_0 K/V and flash attention.
+Empero, Sage and Ornith override batch/ubatch to4096/4096; Super uses2048/1024.
+They retain their model-specific CPU expert backing and GPU hot caches. Dense
+Qwen27B remains GPU-resident on SGLang/vLLM; Bolt uses vLLM W4A16. The old
+llama.cpp Bolt/Qwen Q4 and Vulkan profiles are retired. Effective settings come
+from the maintained model catalog, `dsh/models-hip.ini`, `dsh/moe-offload.json`
+and sealed model profiles.
 
 *MoE 256K allocation passed with approximately 64K actual retrieval, tools/JSON
 and arithmetic; full 256K filling, quality and sustained speed are untested.
-The same launcher/router switches Vulkan/HIP automatically for the selected
-model. CPU/cache profiles require their expert bytes plus 4 GiB available RAM;
+The launcher/router uses the selected profile's validated backend. CPU/cache profiles require their expert bytes plus 4 GiB available RAM;
 loaded requests need 3 GiB. A scoped monitor stops only an unsafe owned worker
 on sustained low memory, owned swap or dedicated VRAM spill. No unrelated
 application/frontend is stopped. See [measurements and both forums' source trail](../hardware/MOE-OFFLOAD-2026-10-18.md).

@@ -83,7 +83,7 @@ class Hub:
         args = [str(LAUNCHER), kind]
         if kind in ('strata', 'maya'):
             args.append('--no-browser')
-        if kind == 'maya':
+        if kind in ('maya','strata'):
             args += ['--model', model]
         print(f'Starting {BACKENDS[kind][2]} for {model}.', flush=True)
         return subprocess.Popen(args, cwd=ROOT / 'workspace', stdin=subprocess.DEVNULL,

@@ -1,0 +1,12 @@
+{
+  "upstream": "https://github.com/Niko1221/Strata",
+  "source_commit": "8183c6b67162340c09b67360860177c577a65f2e",
+  "release": "0.2.4",
+  "terminal_version": "0.2.4.1",
+  "engine_version": "0.1.49.1",
+  "release_package_version": "0.1.49",
+  "runtime": "ROCm7.2.3",
+  "architecture": "gfx1100",
+  "status": "Promoted after dual-card kernel/native/context/normal launcher/UI/authenticated host-self API gates",
+  "component": "DeepSeek engine only; retained Strata Qwen is independent"
+}

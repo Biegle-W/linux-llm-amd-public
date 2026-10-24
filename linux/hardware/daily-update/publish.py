@@ -17,7 +17,8 @@ LEDGER = 'hardware/DAILY-UPDATES.md'
 HANDOFF = ROOT/'network/LINUX-LLM-RUNTIME-HANDOFF.md'
 SHARED = Path('/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md')
 PINS = ['dsh/llama-runtime.json', 'maya/runtime.json', 'dsh/maya-glm-profile.json', 'dsh/maya-deepseek-profile.json',
-        'dsh/maya-deepseek-s-profile.json', 'sglang/fork-pin.json', 'sglang/apply-rocm-fixes.py']
+        'dsh/maya-deepseek-s-profile.json', 'sglang/fork-pin.json', 'sglang/apply-rocm-fixes.py',
+        'strata-dsv41/runtime.json','dsh/strata-deepseek-s-profile.json','dsh/strata-deepseek-xs-profile.json']
 BEGIN, END = '<!-- daily-update:begin -->', '<!-- daily-update:end -->'
 def _identity():
     """Local account and Git e-mail names, read at run time so they never appear in the source."""
@@ -123,6 +124,26 @@ def commit(repo, paths, message, logfile):
     return f'{head} pushed' if push.returncode == 0 else f'{head} committed locally; push failed'
 
 
+def public_deepseek_pins():
+    """Publish example paths and require a new local proof after sanitizing a profile."""
+    from shared_storage import STREAM_SHARED
+    exported=[]
+    for name in ('strata-dsv41/runtime.json','dsh/strata-deepseek-s-profile.json','dsh/strata-deepseek-xs-profile.json'):
+        path=ROOT/name
+        if not path.exists():continue
+        text=path.read_text().replace(str(ROOT),'/opt/local-llm').replace(str(STREAM_SHARED),'/mnt/shared-nvme')
+        cfg=json.loads(text)
+        if 'local_validation' in cfg:
+            v=cfg['local_validation'];v['status']='requires-local-validation'
+            if 'config_sha256' in v:v['reference_config_sha256']=v.pop('config_sha256')
+            v['note']='Sanitized example paths; validate the local binary, pack and profile before loading.'
+        text=json.dumps(cfg,indent=2)+'\n'
+        if PRIVATE.search(text):raise RuntimeError('Strata DeepSeek reference contains private workstation information')
+        dest=PUBLIC/'linux'/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(text)
+        exported.append('linux/'+name)
+    return exported
+
+
 def publish(run, results, logfile):
     from daily_update import log
     text = entry(results)
@@ -139,6 +160,7 @@ def publish(run, results, logfile):
         if public_handoff.exists() and BEGIN in public_handoff.read_text():   # the block holds no private paths
             public_handoff.write_text(re.sub(re.escape(BEGIN) + '.*?' + re.escape(END), lambda _: handoff_block(results),
                                              public_handoff.read_text(), flags=re.S))
-        log('public repository: ' + commit(PUBLIC, ['linux/' + LEDGER, 'linux/network/LINUX-LLM-RUNTIME-HANDOFF.md'],
+        references=public_deepseek_pins()
+        log('public repository: ' + commit(PUBLIC, ['linux/' + LEDGER, 'linux/network/LINUX-LLM-RUNTIME-HANDOFF.md',*references],
                                            message, logfile), logfile)
     (run/'published.json').write_text(json.dumps({'message': message}, indent=2) + '\n')

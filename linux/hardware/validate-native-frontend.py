@@ -13,11 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--kind', choices=['strata', 'maya'], required=True)
+    parser.add_argument('--kind', choices=['strata', 'maya', 'strata-dsv41'], required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    port = 30021 if args.kind == 'strata' else 30031
-    project = ROOT / ('strata' if args.kind == 'strata' else 'maya/upstream')
+    port = 30031 if args.kind == 'maya' else 30021
+    project = ROOT / {'strata':'strata', 'maya':'maya/upstream', 'strata-dsv41':'strata-dsv41/upstream'}[args.kind]
     base = f'http://127.0.0.1:{port}'
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 

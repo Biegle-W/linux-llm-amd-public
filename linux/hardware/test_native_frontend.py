@@ -29,7 +29,7 @@ class FrontendTests(unittest.TestCase):
         for path in ('/api/context','/api/update','/config','/unload','/load','/api/context?x=1'):
             request=guarded();request.path=path;request.do_POST()
             self.assertEqual(request.reply[0],409);self.assertFalse(getattr(request,'native_called',False))
-        for path in ('/v1/chat/completions','/settings','/api/tokens','/v1/strata/cancel'):
+        for path in ('/v1/chat/completions','/settings','/api/tokens','/v1/messages/count_tokens','/v1/strata/cancel'):
             request=guarded();request.path=path;request.do_POST();self.assertTrue(request.native_called)
         self.assertEqual(Service().context_limits(),{'context':32768,'min':32768,'max':32768})
 
@@ -64,8 +64,10 @@ class FrontendTests(unittest.TestCase):
     def test_wrapped_worker_ownership_is_exact(self):
         root=Path('/test-llm')
         def process(args):return backend_switch.Process(10,1,'1',tuple(args),'','S')
-        for project in ('maya','strata'):
+        for project in ('maya','strata','strata-dsv41'):
             self.assertTrue(backend_switch.is_inference(process(['python3',str(root/'dsh/native-ui-server.py'),'--project',project]),root))
+        self.assertTrue(backend_switch.is_inference(process([str(root/'strata-dsv41/upstream/build-hip/strata-dsv41')]),root))
+        self.assertTrue(backend_switch.is_inference(process(['python3',str(root/'strata-dsv41/upstream/serve/server.py'),'--engine','strata']),root))
         for args in (['python3','training.py',str(root/'dsh/native-ui-server.py'),'--project','maya'],
                      ['python3',str(root/'dsh/native-ui-server.py'),'--project','unrelated']):
             self.assertFalse(backend_switch.is_inference(process(args),root))

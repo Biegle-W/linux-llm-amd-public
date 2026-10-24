@@ -1,0 +1,73 @@
+{
+  "exe": "/opt/local-llm/strata-dsv41/upstream/build-hip/strata-dsv41",
+  "args": [
+    "--pack",
+    "/mnt/shared-nvme/LLM-Models/Strata/DeepSeek-V4.1-Flash-1017/Maya-S/pack",
+    "--max-context",
+    "32768",
+    "--tp",
+    "2",
+    "--dspark",
+    "none",
+    "--reserve-mib",
+    "8192",
+    "--expert-profile",
+    "/opt/local-llm/dsh/data/strata-dsv41/deepseek-s-expert-profile.bin",
+    "--cpu-threads",
+    "24",
+    "--ssd-cache",
+    "0"
+  ],
+  "cwd": "/opt/local-llm/strata-dsv41/upstream",
+  "tokenizer": "/mnt/shared-nvme/LLM-Models/Strata/DeepSeek-V4.1-Flash-1017/Maya-S/pack/tokenizer",
+  "arch": "deepseek41",
+  "model_name": "deepseek-v4.1-flash-1017-strata-s",
+  "backend": "hip",
+  "gpu": [
+    0,
+    1
+  ],
+  "gpus_asked": true,
+  "split_skip_if_fits": false,
+  "parallel": 1,
+  "env": {
+    "STRATA_DS4_PROMPT_SKIP": "0",
+    "DS4_YOCO": "0",
+    "STRATA_DS4_SLOT_KEEP": "0",
+    "STRATA_DS4_DISK_SKIP_W": "0"
+  },
+  "lib_dirs": [
+    "/opt/local-llm/llm-tools/rocm-sdk/opt/rocm-7.2.3/lib"
+  ],
+  "log": "/opt/local-llm/dsh/logs/strata-deepseek-s.native.log",
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "engine_ready_s": 900,
+  "idle_unload_s": 0,
+  "open_browser": false,
+  "worker_swap_max_bytes": 0,
+  "startup_free_vram_gib": 6,
+  "mcp_servers": {},
+  "installer": {
+    "quant": "Maya-S",
+    "weights_reused_from": "Maya shared-NVMe assets; separate Strata pack",
+    "vision_inference_validated": false
+  },
+  "expert_profile_seed_sha256": "a495af6a46c04f519fc77139a0d0228a54d14abd2cec703dd4f8918c6a1c6627",
+  "local_validation": {
+    "status": "requires-local-validation",
+    "source_commit": "8183c6b67162340c09b67360860177c577a65f2e",
+    "binary_sha256": "52215c1c90e51522c0cebcd5a12137114551b372df0b5158717de5b438e7fc59",
+    "pack_metadata_sha256": "c4d4a5851e6c6c13391e91b181bd9c1b5b6592ca0ce8605cd57fbe7bd421e025",
+    "normal_integration_status": "passed",
+    "evidence": "hardware/results/strata-deepseek-2026-10-24.json",
+    "context": 32768,
+    "approximate_prompt_skip": false,
+    "both_gpus": true,
+    "seed_sha256": "a495af6a46c04f519fc77139a0d0228a54d14abd2cec703dd4f8918c6a1c6627",
+    "reference_config_sha256": "3b16997b7249e3aee2776d2d8d49f95f4e1ab211816c41e324d61fec630af89b",
+    "note": "Sanitized example paths; verify the local source, binary, pack and configuration before loading."
+  }
+}

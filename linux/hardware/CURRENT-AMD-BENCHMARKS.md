@@ -1,6 +1,18 @@
-# Current dual-AMD benchmarks — October 23, 2026
+# Current dual-AMD benchmarks — October 24, 2026
 
-## All eleven profiles re-measured — October23 (current rates)
+## Strata 0.2.4 DeepSeek — October 24
+
+Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the Qwen engine remains 7ddc17a3. No weight download/duplication, no new ports.
+
+| Model ID | RAM-store GB | Code / prose t/s | Native PP t/s | TTFT s |
+|---|---:|---:|---:|---:|
+| `deepseek-v4.1-flash-1017-strata-s` | 0 | 7.00 / 7.16 | 168.0 | 37.491 |
+| `deepseek-v4.1-flash-1017-strata-xs` | 0 | 18.25 / 12.77 | 183.7 | 34.289 |
+
+Exact-binary isolated timings, three code/prose trials with a 256-token output cap and three fresh prompts with ~6.3K actual input tokens; native prefill and external SSE TTFT/decode are distinct. Selected profiles pass the normal Ptyxis launcher, original UI, authenticated host-self API, near-31.5K/history checks and Q3 switchback with zero owned swap/spill. These are not a matched Maya speed comparison. [Setup, gates and thermals](STRATA-DEEPSEEK-2026-10-24.md) · [numeric record](results/strata-deepseek-2026-10-24.json).
+
+
+## Eleven profiles measured — October23 (pre-daily-update builds)
 
 Every active profile was re-run with its production launcher and unchanged settings, using the shared
 method (three 256-output code/prose runs, three fresh ~8K marker prompts, medians), one backend at a time,
@@ -38,7 +50,7 @@ other ten recorded zero. [Report, thermals and fan setup](ALL-MODELS-2026-10-23.
 Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
-Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.
 Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
 API; only one worker runs at a time. Strata remains the DSH default.
 Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.

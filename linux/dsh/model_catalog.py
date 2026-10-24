@@ -7,7 +7,7 @@ BACKENDS = {
     'llama': ('models.json', 8080, 'llama.cpp'),
     'sglang': ('sglang-profiles.json', 30000, 'SGLang'),
     'vllm': ('vllm-profiles.json', 30010, 'vLLM'),
-    'strata': ('strata-profiles.json', 30020, 'Strata Q3'),
+    'strata': ('strata-profiles.json', 30020, 'Strata'),
     'maya': ('maya-profiles.json', 30030, 'Maya'),
 }
 

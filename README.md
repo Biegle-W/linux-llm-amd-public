@@ -40,6 +40,17 @@ prompt-processing duration and total request time are not substituted for TTFT
 or native PP. Different rows can use different workloads and output lengths.
 These are saved complete-profile results, not a controlled AMD-versus-NVIDIA ranking.
 
+## Strata 0.2.4 DeepSeek — October 24
+
+Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the Qwen engine remains 7ddc17a3. No weight download/duplication, no new ports.
+
+| Model ID | RAM-store GB | Code / prose t/s | Native PP t/s | TTFT s |
+|---|---:|---:|---:|---:|
+| `deepseek-v4.1-flash-1017-strata-s` | 0 | 7.00 / 7.16 | 168.0 | 37.491 |
+| `deepseek-v4.1-flash-1017-strata-xs` | 0 | 18.25 / 12.77 | 183.7 | 34.289 |
+
+Exact-binary isolated timings, three code/prose trials with a 256-token output cap and three fresh prompts with ~6.3K actual input tokens; native prefill and external SSE TTFT/decode are distinct. Selected profiles pass the normal Ptyxis launcher, original UI, authenticated host-self API, near-31.5K/history checks and Q3 switchback with zero owned swap/spill. These are not a matched Maya speed comparison. [Setup, gates and thermals](linux/hardware/STRATA-DEEPSEEK-2026-10-24.md) · [numeric record](linux/hardware/results/strata-deepseek-2026-10-24.json).
+
 ## Current Linux hardware inventory
 
 **i9-13900KS,64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB**, MSI MPG Z690
@@ -50,7 +61,7 @@ One managed model runs at a time.
 
 ## Strata Linux app update and verified Intel desktop — October 20
 
-Managed Strata **0.1.46.1 /9ae93f7b is active** after candidate and normal
+The October20 rollout promoted **0.1.46.1 /9ae93f7b** after candidate and normal
 Desktop/native-frontend/authenticated-API validation. The user-selected actual
 startup minimum is5GiB/card; engine7/8GiB targets, continuous3GiB protection,
 52G/no-swap worker, Q3/13.5GiB/256K and both cards remain. Intel UHD770/i915
@@ -64,7 +75,7 @@ Earlier0.1.45 rates retain their original build; no matched A/B speedup is claim
 
 [DeepInfer compatibility assessment — October20](linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
 
-## All eleven profiles re-measured — October23 (current rates)
+## Eleven profiles measured — October23 (pre-daily-update builds)
 
 Every active profile was re-run with its production launcher and unchanged settings, using the shared
 method (three 256-output code/prose runs, three fresh ~8K marker prompts, medians), one backend at a time,
@@ -102,7 +113,7 @@ other ten recorded zero. [Report, thermals and fan setup](linux/hardware/ALL-MOD
 Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
-Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
+Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.
 Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
 API; only one worker runs at a time. Strata remains the DSH default.
 Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
@@ -185,7 +196,7 @@ Actual counts, timings, sampled high temperatures and failed/excluded kernels:
 
 ## AMD: latest setup and results
 
-**Ten active profiles:** four llama.cpp (Ornith-1.5-122B added October22; Qwen3.6-35B-A3B retired October23), one SGLang, two vLLM, one Strata, two Maya. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+**Thirteen active profiles:** four llama.cpp, one SGLang, two vLLM, three Strata and three Maya. Qwen3.6-35B-A3B remains retired. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
 Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
 CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
 Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
@@ -195,15 +206,16 @@ All production ROCm stacks remain on 7.2.3; no ROCm10.1 candidate passed every p
 [all trials/thermals](linux/hardware/results/rocm101-2026-10-21.json).
 No driver/kernel update or global SDK replacement was performed.
 
-### Installed and measured builds
+### Current runtime pins (performance retains its measured build)
 
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| llama.cpp | [edc35384](https://github.com/ggml-org/llama.cpp/commit/edc353842c1be9b4ebc27460a1da4526a026d3a9); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
-| vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
-| Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
-| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm7.2.3 | Both 32K Maya-S profiles; guards/quants retained; GLM MMQ with failed fused path disabled |
+| vLLM | 0.32.1rc1.dev361+g83c078d95.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
+| Strata Qwen | [7ddc17a3](https://github.com/Niko1221/Strata/commit/7ddc17a38fe7f31637e895ecfba58c2cd43d65ec), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
+| Strata DeepSeek | [8183c6b6/0.1.49.1](https://github.com/Niko1221/Strata/commit/8183c6b67162340c09b67360860177c577a65f2e), ROCm7.2.3 | Reused Maya-S / Maya-XS+xs2, both GPUs/32K; independent engine, guards and rollback |
+| Maya | [f26d8ba/v1.1.26](https://github.com/mw00/project-maya/commit/f26d8bab43f9b10f0475986b541dc46ada45285e), ROCm7.2.3 | Three32K profiles: GLM-Sv2, DeepSeek-XS+xs2 and S/noDSpark; guards retained; GLM MMQ with failed fused path disabled |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
 ### October21 shared-method baseline (historical; newer Maya/batch results above)

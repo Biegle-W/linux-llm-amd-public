@@ -64,3 +64,5 @@ State (last tested and rejected revisions, a provisional install) is in
 `hardware/generated/daily-update/state.json`; logs, benchmark records, gate tables and
 rollback copies are in `hardware/generated/daily-update/<date>/<engine>/`. Rollback copies
 of large environments are deleted after 14 days by the job's cleanup step.
+
+Strata DeepSeek is a separate `strata-dsv41` component beside Strata Qwen. The same03:00 job tests its selected S/XS models individually through the normal Strata launcher, checks selected-format parity on both GPUs, seals source/binary/config fingerprints and rolls back only that component. Model quants/contexts/guards and the existing timer are unchanged. Unselected mixed Q2_K/Q3_K and Q4_K/IQ4_XS expert formats are not admitted.

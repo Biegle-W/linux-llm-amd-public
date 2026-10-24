@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec /opt/local-llm/dsh/start-strata-q3 "$@"
+exec /opt/local-llm/dsh/start-backend-terminal strata "$@"

@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Strata DeepSeek reusing Maya weights](strata-deepseek-2026-10-24.json), [report](../STRATA-DEEPSEEK-2026-10-24.md): independent S/XS profiles, exact tested gfx1100/HIP7.2.3 binary, RAM-store selection, all trials/counts/thermals, selected-kernel parity, unused-format failures and normal near32K/UI/authenticated API proof.
+
 - [All eleven active profiles re-measured](all-models-2026-10-23.json), [report](../ALL-MODELS-2026-10-23.md): production launchers, shared method, every trial/count/thermal summary, whole-run fan peaks after the October23 fan-control changes; all eleven passed.
 
 - [Maya-S DSpark1.1.24 retest](maya-s-dspark-2026-10-23.json), [report](../MAYA-S-DSPARK-2026-10-23.md): matched A1off-Bon-A2off, all timed trials/nativePP/SSE TTFT+decode, thermal/memory/functional/context gates; S DSpark not selected; production S remains off.
@@ -32,7 +34,7 @@
 
 - [Strata user-selected 5 GiB startup floor](../STRATA-STARTUP5-2026-10-20.md): 0.1.46.1 promoted; all candidate/near256K and actualDesktop/nativeUI/API gates pass. Fresh912.2PP,9.015s freshTTFT,75.28/50.31decode; [all trials](strata-startup5-2026-10-20.json). Former6GiB failures remain historical.
 
-Current hardware: i9-13900KS,64 GB RAM, two RX 7900 XTX 24 GB. Ten selectable
+Current hardware: i9-13900KS,64 GB RAM, two RX 7900 XTX 24 GB. Thirteen selectable
 profiles remain after Muse Q4 and Super Q4 retirement: nine shared-method profiles and Super IQ3 with its separate fixed-8K workload. Historical batches keep all original results.
 
 - [Strata Linux app/update admission evidence](strata-linux-update-2026-10-20.json), [scope and limits](../STRATA-LINUX-UPDATE-2026-10-20.md): app0.2.1 installed; Intel primary rendering verified after login; former6GiB startup rule failed twice (exact loaded5.388/6.269GiB free). These historical failures are superseded by the passed5GiB rollout above; old0.1.45 measurements remain dated.

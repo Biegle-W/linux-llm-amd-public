@@ -83,17 +83,18 @@ def is_inference(p, root=ROOT):
                 ('llama.cpp/llama-server', 'llama.cpp/build/bin/llama-server',
                  'llama.cpp/build-vulkan/bin/llama-server', 'llama.cpp/build-hip/bin/llama-server',
                  'strata/engine/strata', 'strata/build-hip/strata',
+                 'strata-dsv41/upstream/build-hip/strata-dsv41',
                  'maya/upstream/build-hip/maya', 'maya/upstream/build-hip/maya-ds4')}
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':
         if entry[1] == str(root / 'dsh/native-ui-server.py'):
             args = entry[2]
-            return any(arg == '--project' and i + 1 < len(args) and args[i + 1] in ('strata', 'maya')
+            return any(arg == '--project' and i + 1 < len(args) and args[i + 1] in ('strata', 'maya', 'strata-dsv41')
                        for i, arg in enumerate(args))
         # Maya is the configured Strata fork; match its exact inference entry
         # point, never every Python process in its environment.
-        projects = (root / 'strata', root / 'maya/upstream')
+        projects = (root / 'strata', root / 'maya/upstream', root / 'strata-dsv41/upstream')
         is_strata_server = any(entry[1] == str(project / 'serve/server.py') or (
             entry[1] == 'serve/server.py' and p.cwd == str(project)) for project in projects)
         if is_strata_server:

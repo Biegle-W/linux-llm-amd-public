@@ -4,5 +4,19 @@
     "context": 262144,
     "config": "strata-iq3-profile.json",
     "enabled": true
+  },
+  "deepseek-v4.1-flash-1017-strata-s": {
+    "name": "DeepSeek-V4.1-Flash-1017 Strata Maya-S (no drafter)",
+    "context": 32768,
+    "config": "strata-deepseek-s-profile.json",
+    "enabled": true,
+    "family": "deepseek41"
+  },
+  "deepseek-v4.1-flash-1017-strata-xs": {
+    "name": "DeepSeek-V4.1-Flash-1017 Strata Maya-XS + xs2",
+    "context": 32768,
+    "config": "strata-deepseek-xs-profile.json",
+    "enabled": true,
+    "family": "deepseek41"
   }
 }
