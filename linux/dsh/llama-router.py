@@ -5,6 +5,7 @@ import http.client
 import json
 import os
 from pathlib import Path
+from inference_idle import inference_request
 import signal
 import subprocess
 import threading
@@ -63,6 +64,7 @@ def backend_for_model(model):
     return settings.get('runtime_overrides', {}).get(model, settings['backend'])
 
 
+@inference_request
 def activate_native(mode, spec=None):
     """Switch only this router's native worker; preserve the frontend and API port."""
     global native, active_mode, active_model, memory_watch
@@ -122,6 +124,7 @@ class Handler(BaseHTTPRequestHandler):
         with lock:
             self.proxy(native_port, 'GET')
 
+    @inference_request
     def do_POST(self):
         global active_model
         try:

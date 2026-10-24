@@ -10,6 +10,7 @@ import time
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from inference_idle import inference_request
 from rocm_runtime import require_rocm_headroom
 
 ROOT = Path('/opt/local-llm/dsh')
@@ -68,6 +69,7 @@ def worker_environment(cfg):
             'SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX': str(int(bool(repair)))}
 
 
+@inference_request
 def ensure_worker(model):
     global worker, active, logfile
     cfg = PROFILES[model]
@@ -137,6 +139,7 @@ class Handler(BaseHTTPRequestHandler):
                 if cfg.get('enabled', True)]})
         self.send_json(404, {'error': 'Unknown endpoint'})
 
+    @inference_request
     def do_POST(self):
         if self.path not in ('/v1/chat/completions', '/v1/completions', '/generate'):
             return self.send_json(404, {'error': 'Unknown endpoint'})

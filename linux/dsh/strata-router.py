@@ -11,6 +11,7 @@ import time
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from inference_idle import inference_request
 from strata_prefix import add_document_prefix
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, startup_vram_blocker, vram_snapshot
@@ -76,6 +77,7 @@ def stop_worker(timeout=40):
         logfile = None
 
 
+@inference_request
 def ensure_worker(model):
     global worker, active, logfile, startup_free_vram
     with lifecycle:
@@ -163,6 +165,7 @@ class Handler(BaseHTTPRequestHandler):
                 for key, cfg in PROFILES.items()]})
         self.send_json(404, {'error': 'Unknown endpoint'})
 
+    @inference_request
     def do_POST(self):
         global memory_fault
         if self.path not in ('/v1/chat/completions', '/models/load', '/models/unload'):

@@ -62,9 +62,16 @@ and restored-build smoke check. Gate tables include the recorded byte counts.
 The read-only collector identifies only configured inference servers/routers and
 their descendants, counts each PID once, and de-duplicates shared AMD DRM clients.
 It excludes compilers, environment preparation, DSH and unrelated applications.
+The zero-swap rule applies only to the active managed inference task and owned
+workers. System swap used by unrelated/background tasks is explicitly allowed;
+system-wide swap totals are not a promotion gate and global swap stays enabled.
 No global swap setting, worker guard, runtime version or model profile changes.
 The timer uses this code on its next invocation; no service restart is required.
 Sampling cannot prove the absence of transients between observations.
+
+The separately authorized ten-minute idle unloader defers whenever this updater
+or an agent holds GPU-LOCK. It therefore cannot interrupt update benchmarks,
+parity tests, provisional installation or rollback checks.
 
 Validation: CPU-only comparator/accounting/orchestrator rollback regressions and
 replay of the saved October24 vLLM records. That replay rejects their nonzero

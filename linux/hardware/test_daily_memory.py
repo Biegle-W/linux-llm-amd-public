@@ -43,7 +43,10 @@ class Accounting(unittest.TestCase):
                 (base / 'fdinfo/1').write_text('drm-driver:\tamdgpu\ndrm-pdev:\t0000:03:00.0\n'
                     'drm-client-id:\t12\ndrm-total-vram:\t10 KiB\ndrm-resident-vram:\t8 KiB\n')
             snapshot[99] = Process(99, 0, '1', ('python3', 'training.py'), '', 'S')
-            # No fake proc file for unrelated PID99: reading it would also fail this test.
+            background = root / '99'
+            (background / 'fdinfo').mkdir(parents=True)
+            (background / 'status').write_text('VmSwap:\t1000000000 kB\n')
+            # This background task's swap must not affect the inference reading.
             sample = mem.sample_memory(snapshot, root)
             self.assertEqual(sample, {'swap': sum(range(1, 13)) * 1024, 'spill': 2048, 'processes': 12})
 

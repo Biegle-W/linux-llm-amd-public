@@ -204,12 +204,13 @@ def read_owner(state):
         return None
 
 
-def stop_other_backends(root=ROOT, state=None, grace=50):
+def stop_other_backends(root=ROOT, state=None, grace=50, *, idle=False):
     me = os.getpid()
     owner = read_owner(state) if state else None
     owned = owned_processes(processes(), root, owner, exclude=me)
     if owned:
-        print('Stopping the previous local inference backend. Active replies will be interrupted.', flush=True)
+        print('Stopping the idle managed inference backend.' if idle else
+              'Stopping the previous local inference backend. Active replies will be interrupted.', flush=True)
         launchers = {pid: p for pid, p in owned.items() if is_launcher(p, root)}
         # Let launchers clean up their own worker groups and log monitors first.
         first = launchers or owned
@@ -235,7 +236,8 @@ def stop_other_backends(root=ROOT, state=None, grace=50):
     while True:
         gpu = gpu_compute_pids()
         if not gpu:
-            print('GPU inference memory released; starting the selected backend.', flush=True)
+            print('Idle inference GPU resources released.' if idle else
+                  'GPU inference memory released; starting the selected backend.', flush=True)
             return
         if not waiting:
             print('Waiting for the NVIDIA driver to release GPU compute contexts...', flush=True)

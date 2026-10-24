@@ -23,6 +23,23 @@ source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 Last run: llama.cpp promoted; vLLM promoted; Strata promoted.
 <!-- daily-update:end -->
 
+**Inference-only swap / 10-minute idle policy (October24):** unrelated/background
+tasks may use system swap; only managed inference/owned worker swap blocks updates.
+Global swap is unchanged. Models and engines now unload after 600 seconds since
+the last inference request completes (five-second watcher). New backend launches
+receive a full grace period. Hub/direct-router/native Chat POSTs and loading are
+tracked; status/health/model-list GETs do not reset the clock. Active requests,
+startup, native queued jobs, unknown state and GPU-LOCK defer unloading. Cleanup
+uses existing owned-backend matching, preserving DSH, gateway and unrelated apps.
+The next hub/DSH/gateway request restarts the guarded backend; native backend pages
+and terminals may need reopening. No new port, weight, runtime version, context,
+placement, default or memory-guard change. [Policy and tests](../hardware/MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24).
+Live vLLM/Qwen27B unload was observed at 607.0 seconds including polling/cleanup;
+zero owned inference processes remained, sampled card memory fell 16.871→0.026 GiB
+each, DSH/gateway were preserved and all 13 IDs remained. Other-engine safety and
+next-request reload are CPU-tested; no new all-model GPU/power benchmark.
+[Functional evidence](../hardware/results/model-idle-2026-10-24.json).
+
 **Daily updater zero-swap correction (October24):** future promotions require
 zero observed worker swap and dedicated VRAM spill in each model record and the
 normal launch-through-shutdown monitor, including loading. Missing/invalid counters,

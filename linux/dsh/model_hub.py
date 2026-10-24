@@ -7,6 +7,8 @@ its startup handover stops the previous backend and keeps every memory/VRAM guar
 Switches wait for in-flight replies on the old backend, never run while an agent holds
 hardware/generated/GPU-LOCK, and are serialized. Streaming clients receive SSE comment
 keep-alives while a model loads.
+After ten minutes of inference inactivity, the guarded idle watcher stops only
+managed inference; DSH/gateway stay up and the next request starts it again.
 """
 import argparse
 import http.client
@@ -25,6 +27,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from model_catalog import BACKENDS, catalog
+from inference_idle import inference_request, IdleUnloader, TIMEOUT
 
 PORT = 30100
 GPU_LOCK = ROOT.parent / 'hardware/generated/GPU-LOCK'
@@ -128,6 +131,25 @@ class Hub:
             self.inflight -= 1
             self.cond.notify_all()
 
+    def unload_idle(self):
+        """Called only under the cross-process activity/startup/GPU locks."""
+        with self.cond:
+            if self.inflight or self.switching:
+                return False
+            self.switching = True
+        stopped = False
+        try:
+            from backend_switch import stop_other_backends
+            stop_other_backends(ROOT.parent, ROOT / 'data/backend-owner.json', idle=True)
+            stopped = True
+            return True
+        finally:
+            with self.cond:
+                if stopped:
+                    self.active = self.process = None
+                self.switching = False
+                self.cond.notify_all()
+
     def _start(self, kind, model, progress):
         if self.serving(kind, model):
             return
@@ -150,6 +172,7 @@ class Hub:
 
 
 hub = Hub()
+idle = None
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -180,7 +203,9 @@ class Handler(BaseHTTPRequestHandler):
             model['auto_start'] = True
         if path == '/health':
             return self.send_json(200, {'status': 'ok', 'active_backend': hub.active,
-                                        'switching': hub.switching, 'gpu_reserved_by': gpu_lock_owner()})
+                                        'switching': hub.switching, 'gpu_reserved_by': gpu_lock_owner(),
+                                        'inflight': hub.inflight, 'idle_timeout_seconds': TIMEOUT,
+                                        'idle_state': idle.status if idle else 'not started'})
         if path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': list(models.values())})
         if path.startswith('/v1/models/'):
@@ -188,6 +213,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(200, model) if model else self.error_json(404, 'Unknown model.', 'model_not_found')
         self.error_json(404, 'Unknown endpoint.', 'not_found')
 
+    @inference_request
     def do_POST(self):
         path = urlsplit(self.path).path
         if path not in ('/v1/chat/completions', '/v1/completions'):
@@ -312,10 +338,12 @@ def detect_active():
 
 
 def main():
+    global idle
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=PORT)
     args = parser.parse_args()
     detect_active()
+    idle = IdleUnloader(hub.unload_idle, lambda: hub.active).start()
     ThreadingHTTPServer.daemon_threads = True
     server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
     def stop(*_):
@@ -327,6 +355,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
+        idle.done.set()
         # Backends keep running; they are owned by their launchers, not the hub.
         server.server_close()
 

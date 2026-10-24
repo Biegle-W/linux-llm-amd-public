@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## Inference swap scope and idle timeout — October24 (functional only)
+
+Zero-swap gating excludes unrelated/background tasks; no global swap change.
+Managed inference now unloads after 600 seconds idle, preserving DSH/gateway and
+normal guarded reload on the next request. CPU safety/reload tests and a full
+production idle cycle validate behavior; no new throughput or per-model power
+benchmark is implied. [Idle policy and evidence](MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24).
+The live Qwen27B/vLLM idle shutdown was observed at 607.0 seconds, with zero
+remaining owned inference processes and sampled card usage 16.871→0.026 GiB each;
+DSH/gateway/all 13 catalog IDs remained. Both repositories pass 86 CPU regressions.
+[Functional record and limits](results/model-idle-2026-10-24.json).
+
 ## Daily updater zero-swap gate — October24 (validation only)
 
 Fixed promotion to require zero recorded worker swap and VRAM spill, valid

@@ -451,6 +451,13 @@ No Windows throughput is inferred from Linux results.
 
 ## Install, launch and connect
 
+Managed models and engines now unload after **10 minutes without inference** to
+save power. DSH and the gateway stay running; the next request starts the normal
+guarded backend again. Active requests/loading/queued jobs and GPU-LOCK block
+unloading; health/status polling does not reset the timer. Background applications
+may use system swap; the zero-swap rule concerns inference workers only.
+[Idle policy and validation](linux/hardware/MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24).
+
 The daily updater now requires **zero observed worker swap and VRAM spill** with
 valid memory telemetry covering model loading through shutdown. A failed candidate
 rolls back; a failed production baseline skips installation. [October24 gate repair

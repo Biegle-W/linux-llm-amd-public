@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-24",
+  "validation": "functional only; no new inference throughput or power measurement",
+  "timeout_seconds": 600,
+  "poll_interval_seconds": 5,
+  "swap_policy": {
+    "scope": "active managed inference and owned workers",
+    "unrelated_system_swap_allowed": true,
+    "global_swap_changed": false
+  },
+  "production_idle_cycle": {
+    "model": "qwen3.8-27b-vllm",
+    "backend": "vllm",
+    "inactivity_seconds_at_unload_observation": 607.0,
+    "gpu_used_gib_before": [
+      16.871,
+      16.871
+    ],
+    "gpu_used_gib_after": [
+      0.026,
+      0.026
+    ],
+    "remaining_managed_inference_processes": 0,
+    "dsh_listener_preserved": true,
+    "gateway_process_preserved": true,
+    "hub_healthy": true,
+    "model_catalog_count": 13,
+    "gpu_lock_released": true,
+    "runtime_version": "0.32.1rc1.dev435+gc50aca144.rocm72",
+    "configured_context_tokens": 163840,
+    "new_prompt_input_tokens": 0,
+    "new_prompt_output_tokens": 0
+  },
+  "cpu_regressions": {
+    "private_tests": 86,
+    "public_tests": 86,
+    "coverage": [
+      "600-second threshold",
+      "streams and loading",
+      "native queues and slots",
+      "unknown activity defers shutdown",
+      "startup and GPU locks",
+      "inference ownership excludes DSH/gateway/training",
+      "next request restarts a simulated backend",
+      "background process swap excluded"
+    ]
+  },
+  "limits": [
+    "Live idle cycle covers only the already loaded vLLM Qwen profile; other backends use CPU regression fixtures.",
+    "Automatic reload after idle is CPU-simulated, not a new GPU inference run.",
+    "GPU figures are sampled whole-card allocations, not measured power savings.",
+    "Model/runtime/context/default/placement/memory guards remain unchanged."
+  ],
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "installed_ram_gb": 64,
+    "os_visible_ram_gib": 61.51,
+    "gpu": "2 x RX 7900 XTX 24 GB",
+    "gpu_links": "CPU PCIe 4.0 x8/x8"
+  }
+}

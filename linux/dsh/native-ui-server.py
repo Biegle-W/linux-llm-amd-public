@@ -5,6 +5,7 @@ import importlib
 from pathlib import Path
 import sys
 from urllib.parse import urlsplit
+from inference_idle import inference_request
 
 ROOT=Path(__file__).resolve().parent.parent
 # Chat, cancellation, token counts and shared sampling are native UI features.
@@ -18,6 +19,7 @@ def install_guard(server):
     def make_handler(service):
         native=original(service)
         class ManagedUI(native):
+            @inference_request
             def do_POST(self):
                 path=urlsplit(self.path).path.rstrip('/')
                 if path not in ALLOWED_POSTS:

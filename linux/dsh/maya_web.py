@@ -6,6 +6,7 @@ import mimetypes
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+from inference_idle import inference_request
 
 ROOT = Path(__file__).resolve().parent
 POSTS = {'/v1/chat/completions', '/v1/messages', '/v1/completions', '/v1/responses',
@@ -86,6 +87,7 @@ def make_web_handler(controller, web_root, worker_port):
                                   mimetypes.guess_type(asset.name)[0] or 'application/octet-stream')
             self.proxy('GET')
 
+        @inference_request
         def do_POST(self):
             if not self.local_request():
                 return

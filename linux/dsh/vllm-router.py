@@ -11,6 +11,7 @@ import time
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from inference_idle import inference_request
 from rocm_runtime import require_rocm_headroom
 from shared_storage import ensure_vllm_models
 
@@ -59,6 +60,7 @@ def get_worker(path):
         body = response.read()
         return json.loads(body) if body else {}
 
+@inference_request
 def ensure_worker(model):
     global worker, active, logfile
     if active == model and worker is not None and worker.poll() is None:
@@ -132,6 +134,7 @@ class Handler(BaseHTTPRequestHandler):
                  'context_length': cfg['context']} for key, cfg in PROFILES.items()]})
         self.send_json(404, {'error': 'Unknown endpoint'})
 
+    @inference_request
     def do_POST(self):
         if self.path not in ('/v1/chat/completions', '/v1/completions', '/generate'):
             return self.send_json(404, {'error': 'Unknown endpoint'})
