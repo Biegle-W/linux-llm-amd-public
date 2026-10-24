@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a running native Maya or Strata DeepSeek worker; tools are synthetic."""
+"""Validate a running native Maya or Strata worker; tools are synthetic."""
 import argparse,hashlib,importlib.util,json,re,sys,time,uuid
 from pathlib import Path
 import urllib.request
@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'dsh'))
 from amd_device import amd_devices
 ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--port',type=int,required=True);ap.add_argument('--model',required=True);ap.add_argument('--context',type=int,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--long-tokens',type=int);ap.add_argument('--prompt-seed',help='Fixed synthetic record salt for matched comparisons; default is fresh random salt')
-ap.add_argument('--token-count-path',choices=['/api/tokens','/v1/messages/count_tokens'],default='/api/tokens',help='Native token-count route; Strata DeepSeek uses the Anthropic route')
+ap.add_argument('--token-count-path',choices=['/api/tokens','/v1/messages/count_tokens'],default='/api/tokens',help='Native token-count route; current Strata Qwen and DeepSeek use the Anthropic route')
 a=ap.parse_args();assert not a.output.exists(),'Preserve the previous validation record'
 spec=importlib.util.spec_from_file_location('benchmark',ROOT/'hardware/benchmark-current-amd.py');b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b);b.PORTS['maya']=(a.port,a.port)
 record={'model':a.model,'context':a.context,'status':'running','tests':{},'method':'Functional checks with thinking off and greedy sampling; synthetic tool results only; not a throughput benchmark'}

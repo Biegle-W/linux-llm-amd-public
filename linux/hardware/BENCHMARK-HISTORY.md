@@ -1,5 +1,21 @@
 # LLM benchmark and context history
 
+
+## Strata Qwen table selection — October24
+
+The matching gfx1100/hipBLASLt100202 table is now selected on source8183c6b6/HIP7.2.3;
+Linux model `qwen3.8-flash-next-iq3_xxs` retains262144 context, prefill2048 and every
+existing dual-GPU/memory guard. Windows CUDA profiles and connection settings are unchanged. Pooled repeated
+controls→table: native fresh~8K PP **916.1→1208.85t/s (+32.0%)**,
+external fresh TTFT **8.973→6.807s**. Normal-production
+three-trial medians: code/prose **77.38/50.61t/s**, PP**1208.2**,
+fresh TTFT**6.810s**. This is an exact-build settings comparison,
+not a universal decode/quality speedup.4096 failed unchanged5GiB/card startup
+admission (4.655/5.510GiB);8192 was not attempted. Near257990-input markers,
+full-history follow-up, JSON/tools/SSE/originalUI/authenticated host-self API pass;
+zero owned swap/spill. [Gates, failures and full-run thermals](./STRATA-TUNING-2026-10-24.md)
+and [all trials](./results/strata-tuning-2026-10-24.json).
+
 ## Strata 0.2.4 DeepSeek — October 24
 
 Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the Qwen engine remains 7ddc17a3. No weight download/duplication, no new ports.

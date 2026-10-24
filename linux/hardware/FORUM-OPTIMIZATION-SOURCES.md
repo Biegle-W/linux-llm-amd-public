@@ -756,6 +756,10 @@ User-requested isolated XS/off-on tests use [source25deec5](https://github.com/m
 
 [LCZ2195/9](https://lcz.me/topic/2195/9), older October8 Maya1.0.11/NVIDIA64K report, changed sampling; current fetch cache-missed. [Level1Techs257789,page3](https://forum.level1techs.com/t/ultimate-2x-r9700-guide-for-qwen-3-8-27b-mxfp4-200t-s-c-1-500t-s-at-c-8/257789?page=3), digitalscream/Strawberry October13 speculation discussion, RDNA4 Radiance; no matched XS/7900XTX recipe. No forum setting was deployed or external speed presented as a local measurement.
 
+## October24 — local Strata matching-table follow-up
+
+[Local selection](STRATA-TUNING-2026-10-24.md) tests the existing100202 table on bothXTX/source8183c6b6/HIP7.2.3 with unchanged256K/guards. [LCZ2032](https://lcz.me/topic/2032), [LCZ2027](https://lcz.me/topic/2027) and [Level1Techs250869](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869) remain research sources, not local timings; author/date/hardware limits are in the report and broad review below. Repeated PP gain and normal gates pass;4096 fails existing5GiB admission,8192 unattempted. Earlier source9ae table/prose regression remains historical in [the October20 report](ROCM10-OTHER-ENGINES-2026-10-20.md). [All trials/thermals](results/strata-tuning-2026-10-24.json).
+
 ## October24 — broad LCZ RX7900XTX review
 
 [Full review and local applicability](LCZ-7900XTX-RESEARCH-2026-10-24.md).

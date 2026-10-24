@@ -1,6 +1,6 @@
 # RX 7900 XTX forum sweep — October 24, 2026
 
-Research and read-only configuration audit, **not a new benchmark or runtime promotion**.
+Original review: research and read-only configuration audit. **Later user-authorized follow-up selected the matching Strata table**; [separate current-build measurements and limits](STRATA-TUNING-2026-10-24.md). The candidate descriptions below retain their research-time scope.
 Target: i9-13900KS, 64 GB RAM (61.51 GiB visible), two RX 7900 XTX 24 GB on
 CPU PCIe4 x8/x8, Intel desktop, ROCm7.2.3. Both GPUs remain required for every
 active model. No clocks, drivers, firmware, profiles, contexts, defaults or servers

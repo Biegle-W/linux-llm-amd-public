@@ -78,10 +78,11 @@
     "STRATA_PREFILL_MMQ": "1",
     "STRATA_NO_ARENA_THP": "1",
     "STRATA_IO_STATS": "1",
-    "STRATA_SPLIT_OVERLAP": "1"
+    "STRATA_SPLIT_OVERLAP": "1",
+    "STRATA_HIPBLASLT_TUNING": "/opt/local-llm/strata/tools/hip/gfx1100-hipblaslt-100202.txt"
   },
   "minimum_host_ram_gib": 60,
-  "validation_status": "passed: engine0.1.46.1/source9ae93f7b, actual5GiB/card startup, i9/64GB, dualAMD six-worker13.5GiB pool,257984-input/256-output retrieval+code and258266-history follow-up, normal actualDesktop/Ptyxis/nativeUI/authenticatedgateway; zero swap/spill",
+  "validation_status": "Reference: passed: source8183c6b6/HIP7.2.3, matchinggfx1100hipBLASLt100202 table, prefill2048, bothAMD/split26/native256K/13.5GiB/allguards; repeated controls/confirmation and normal near258K/history/UI/authenticatedhostself API, zero owned swap/spill; see linux/hardware/STRATA-TUNING-2026-10-24.md; requires exact SDK and local validation.",
   "worker_swap_max_bytes": 0,
   "runtime_validation": {
     "status": "validated_reference_requires_local_validation",
@@ -92,5 +93,13 @@
     "evidence": "linux/hardware/results/strata-startup5-2026-10-20.json",
     "normal_integration_status": "passed",
     "validated_utc": "2026-10-20T18:18:51.059915+00:00"
+  },
+  "tuning_validation": {
+    "source_commit": "8183c6b67162340c09b67360860177c577a65f2e",
+    "binary_sha256": "3e214bbf98e416164a7a97e41a5657dbb2bd6561d5e57ea4fa5d30cad0b82871",
+    "prefill_chunk": 2048,
+    "hipblaslt_table_sha256": "a594869223200c62019d3c997345e89664d5126fcbd089a44f4f95a267ad2ff3",
+    "evidence": "linux/hardware/results/strata-tuning-2026-10-24.json",
+    "status": "validated_reference_requires_local_validation"
   }
 }

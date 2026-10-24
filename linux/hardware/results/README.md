@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Strata table/prefill selection](strata-tuning-2026-10-24.json), [report](../STRATA-TUNING-2026-10-24.md): same8183c6b6 binary, repeated table controls, rejected4096 admission, independent repeat and normal near256K/history/UI/authenticated host-self API; every trial and lifecycle thermal summary.
+
 - [Strata DeepSeek reusing Maya weights](strata-deepseek-2026-10-24.json), [report](../STRATA-DEEPSEEK-2026-10-24.md): independent S/XS profiles, exact tested gfx1100/HIP7.2.3 binary, RAM-store selection, all trials/counts/thermals, selected-kernel parity, unused-format failures and normal near32K/UI/authenticated API proof.
 
 - [All eleven active profiles re-measured](all-models-2026-10-23.json), [report](../ALL-MODELS-2026-10-23.md): production launchers, shared method, every trial/count/thermal summary, whole-run fan peaks after the October23 fan-control changes; all eleven passed.
