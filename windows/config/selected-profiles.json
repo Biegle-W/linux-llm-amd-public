@@ -53,26 +53,27 @@
     "requiresThinking": true
   },
   {
-    "context": 8192,
+    "context": 65536,
     "minimumLoadedFreeVRAMMiB": 1024,
-    "continueAfterCheckFailure": true,
+    "continueAfterCheckFailure": false,
     "checkMaxTokens": 2048,
-    "streamMaxTokens": 64,
+    "streamMaxTokens": 128,
     "id": "Qwen3.8-27B-UD-IQ3_XXS",
-    "label": "Qwen3.8 27B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
+    "label": "Qwen3.8 27B (UD-IQ3_XXS) | 64K | Q8 KV in RAM",
     "path": "models/Qwen3.8-27B-UD-IQ3_XXS.gguf",
     "chatTemplateKwargs": {
       "enable_thinking": false
     },
-    "minimumFreeVRAMMiB": 8192,
-    "minimumAvailableRAMGiB": 3.5,
-    "minimumCommitGiB": 16,
+    "minimumFreeVRAMMiB": 9216,
+    "minimumAvailableRAMGiB": 6,
+    "minimumCommitGiB": 20,
     "options": {
       "fit": "on",
       "gpu-layers": "auto",
-      "fit-target": 3584,
+      "fit-target": 2816,
       "no-host": "true",
-      "chat-template-kwargs": "{\"enable_thinking\":false}"
+      "chat-template-kwargs": "{\"enable_thinking\":false}",
+      "no-kv-offload": "true"
     },
     "maxTokens": 4096,
     "requireFullGpu": false

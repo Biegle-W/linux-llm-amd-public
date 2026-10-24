@@ -37,8 +37,8 @@
       },
       {
         "id": "Qwen3.8-27B-UD-IQ3_XXS",
-        "name": "Qwen3.8 27B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
-        "contextWindow": 8192,
+        "name": "Qwen3.8 27B (UD-IQ3_XXS) | 64K | Q8 KV in RAM",
+        "contextWindow": 65536,
         "maxTokens": 4096,
         "input": [
           "text"

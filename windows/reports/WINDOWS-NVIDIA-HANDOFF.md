@@ -64,3 +64,7 @@ keep Q8 KV in RAM; Qwen27B keeps GPU KV. Old suffixed RAM IDs and smaller active
 alternatives are removed. Dated test profiles moved into retired/20261023/config.
 Preserve their measured fitting/resource limits. Reopen DSH to refresh its four
 entries. No inference rerun; weights/chats/history retained. README is current.
+
+## Current: Qwen64K for harness input — later October23
+
+Qwen27B now has one64K/Q8-CPU-KV profile, replacing8K in place. Chat/SSE/tools and24,460-input retrieval pass; installed SDK passed16,310-input system instructions/tools with a tool-result follow-up. Full64K/GUI/remote-peer are untested. Fresh6GiB RAM/20GiB commit/9216MiB VRAM, fit-target2816/no-host; loaded1024MiB and existing continuous RAM guard retained. Four profiles and Ornith128K default remain. Large dense-model prefill takes minutes. See [current proof](WINDOWS-QWEN-CONTEXT-20261023.md).

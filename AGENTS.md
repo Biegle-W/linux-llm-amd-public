@@ -24,12 +24,11 @@ Windows is independent: RTX3060 12GB /i5-13600KF /16GB; CUDA settings under
 windows/. Keep Linux AMD hardware/engines/guards and handoffs separate.
 Standing user preference: exactly one active setting per model, at its largest
 currently configured context. Four canonical IDs match GGUF filename stems:
-Ornith128K (default), LFM128K, Qwen27B8K, Empero64K. Do not restore smaller
-alternatives or suffixed RAM aliases. Three MoEs use Q8 KV in CPU RAM; Qwen27B
-keeps GPU KV. Weights/chats/history remain; no inference rerun for consolidation.
+Ornith128K (default), LFM128K, Qwen27B64K, Empero64K. Do not restore smaller
+alternatives or suffixed RAM aliases. All four use Q8 KV in CPU RAM. Weights/chats/history remain; no inference rerun for consolidation.
 Preserve measured fitting and per-model admission: RAM profiles4.5/5GiB physical
-available RAM +20GiB commit; dense3.5GiB +16GiB commit; fresh VRAM8192MiB for
-LFM/Qwen27B and9216MiB for Ornith/Empero. All keep loaded1024MiB and continuous
+available RAM +20GiB commit; dense6GiB +20GiB commit; fresh VRAM8192MiB for
+LFM and9216MiB for Ornith/Empero/Qwen27B. All keep loaded1024MiB and continuous
 0.75GiB/five-second RAM guard, one private worker on10001, authenticated router
 on10000 and SSE switch exclusion. No silent model fallback or unrelated-app kill.
 LFM requires reasoning. DSH selector has four IDs and Ornith default; GUI and

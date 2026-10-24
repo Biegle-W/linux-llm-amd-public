@@ -12,16 +12,15 @@ currently configured context for each model. Ornith remains default at128K.
 |---|---:|---|---:|
 | `Ornith-1.5-35B-A3B-IQ2_S` | 128K | CPU RAM | 5 GiB |
 | `LFM2.5-24B-A2B-UD-IQ3_XXS` | 128K | CPU RAM | 4.5 GiB |
-| `Qwen3.8-27B-UD-IQ3_XXS` | 8K | GPU VRAM | 3.5 GiB |
+| `Qwen3.8-27B-UD-IQ3_XXS` | 64K | CPU RAM | 6 GiB |
 | `Qwen3.8-35B-A3B-IQ2_M` (Empero) | 64K | CPU RAM | 5 GiB |
 
-These are the same verified RAM-context settings; only duplicate profiles and
-their suffixed API IDs were removed. All weights remain mixed GPU/RAM. The three
-MoEs use Q8 KV in CPU RAM; dense Qwen27B retains its8K GPU-KV setting. Native
+Each model has one verified setting. Qwen27B now uses64K/Q8 CPU KV in place
+of its earlier8K limit; the other three settings are unchanged. All weights remain mixed GPU/RAM. The three
+MoEs and dense Qwen27B all use Q8 KV in CPU RAM; Qwen27B is now64K. Native
 context allocation is not a full-window quality test: tested input lengths were
-35,890/16,268/16,270 for Ornith/LFM/Empero and6,025 for Qwen27B. No new inference
-benchmark was run for consolidation. [Measured placement and limits](reports/WINDOWS-MOE-RAM-CONTEXT-20261023.md),
-[current catalog proof](reports/verification/windows-single-profile-20261023.json).
+35,890/16,268/16,270 for Ornith/LFM/Empero and24,460 for Qwen27B. Qwen64K also passed a16,310-input instructions/tools SDK round trip. [Measured placement and limits](reports/WINDOWS-MOE-RAM-CONTEXT-20261023.md),
+[current Qwen context proof](reports/verification/windows-qwen-context-20261023.json).
 
 ## Prepare and connect
 
@@ -45,9 +44,8 @@ LFM's required reasoning template; do not globally disable thinking. The same
 real key applies to `http://<TAILSCALE_HOST>:10000/v1`; remote-peer reachability
 is not established by a host self-check. Network configuration was not changed.
 
-RAM profiles need20GiB commit headroom and4.5–5GiB available physical RAM;
-Qwen27B needs16GiB commit and3.5GiB available RAM. Fresh VRAM minimums remain
-9216MiB for Ornith/Empero and8192MiB for LFM/Qwen27B, plus at least1024MiB after
+All profiles need20GiB commit headroom and the physical RAM listed above.
+Fresh VRAM minimums remain9216MiB for Ornith/Empero/Qwen27B and8192MiB for LFM, plus at least1024MiB after
 loading. Preserve the0.75GiB/five-second RAM guard and CUDA0/split-none fitting.
 CPU KV increases capacity at a speed cost. The router is left running idle.
 
@@ -57,3 +55,5 @@ in `retired/20261023/`; dated reports preserve their original IDs and settings.
 Historical settings may differ from the current registry. Keep weights/runtime/
 state/backups ignored; publish no credentials, workstation paths or private app
 data. Preserve Linux files and historical hardware/method attribution.
+
+Qwen27B's8K-only setting was replaced in place by64K/Q8 KV in RAM; no extra profile was added. Large first prompts can take minutes on this dense model. [Current methods and limits](reports/WINDOWS-QWEN-CONTEXT-20261023.md).
