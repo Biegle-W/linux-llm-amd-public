@@ -6,6 +6,7 @@
 from pathlib import Path
 import argparse
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -20,6 +21,13 @@ STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
 SPARE = Path('/mnt/shared-spare')
 SPARE_MODELS = SPARE / 'vLLM-Models'
 SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'
+# Streaming models (Strata/Maya SSD streaming packs) added from October 24 live on the system NVMe.
+INTERNAL_STREAM_MODELS = Path(__file__).resolve().parents[1] / 'models' / 'streaming'
+# Placement of NEW model files (user instruction, October 24): nothing new on the Shared NVMe;
+# non-streaming weights go to sharedSATA2, SSD-streaming packs to the system NVMe; every drive
+# stays below 90% used after the copy.
+NEW_MODEL_DIRS = {'static': SPARE_MODELS, 'streaming': INTERNAL_STREAM_MODELS}
+MAX_USE = 0.90
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
     ('sharedSATA1', UUID, SHARED, MODELS, True),
@@ -87,10 +95,30 @@ def ensure_streaming_models():
     ensure_model_drive(STREAM_SHARED, STREAM_MODELS, STREAM_UUID, 'Shared NVMe')
 
 
+def new_model_dir(kind, size_bytes):
+    """Return the directory for a new model of `kind` ('static' or 'streaming') and `size_bytes`.
+
+    Refuses when the copy would take its drive to 90% or more; never falls back to the Shared NVMe.
+    """
+    target = NEW_MODEL_DIRS[kind]
+    if kind == 'static':
+        ensure_model_drive(SPARE, SPARE_MODELS, SPARE_UUID, 'sharedSATA2')
+    else:
+        target.mkdir(parents=True, exist_ok=True)
+    usage = shutil.disk_usage(target)
+    after = (usage.used + size_bytes) / usage.total
+    if after >= MAX_USE:
+        raise RuntimeError(f'{target} would be {after:.0%} used after adding {size_bytes / 1e9:.1f} GB '
+                           f'(limit {MAX_USE:.0%}). Ask the user where to put this model.')
+    return target
+
+
 def ensure_model_paths(paths):
     """Mount exactly the model volumes these files live on; refuse unknown locations."""
     needed = set()
     for path in map(Path, paths):
+        if path.is_relative_to(INTERNAL_STREAM_MODELS):
+            continue   # system disk: always present
         for label, uuid, mount, models, required in VOLUMES:
             if models is not None and path.is_relative_to(models):
                 needed.add((label, uuid, mount, models))
@@ -124,7 +152,9 @@ def ensure_strata_models(config=None):
     cfg = json.loads(config.read_text())
     args = cfg['args']
     pack = Path(args[args.index('--pack') + 1])
-    if pack.is_relative_to(STREAM_MODELS):
+    if pack.is_relative_to(INTERNAL_STREAM_MODELS):
+        pass
+    elif pack.is_relative_to(STREAM_MODELS):
         ensure_streaming_models()
     elif pack.is_relative_to(MODELS):
         ensure_shared_models()
@@ -164,7 +194,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--all', action='store_true', help='Mount every configured volume (login service)')
     parser.add_argument('--wait', type=float, default=120.0, help='Seconds to wait for late devices')
+    parser.add_argument('--place', choices=sorted(NEW_MODEL_DIRS), help='Print where a new model goes')
+    parser.add_argument('--size-gb', type=float, help='Size of the new model for --place')
     options = parser.parse_args()
+    if options.place:
+        if options.size_gb is None:
+            parser.error('--place needs --size-gb')
+        print(new_model_dir(options.place, int(options.size_gb * 1e9)))
+        raise SystemExit(0)
     if options.all:
         raise SystemExit(1 if mount_all(options.wait) else 0)
     ensure_shared_models()
