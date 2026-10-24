@@ -73,9 +73,6 @@ if ($Mode -eq 'Launch') {
     if (Test-Service 'router') { Write-Host 'The llama.cpp backend is already running in Local-LLM.'; return }
     $preflightJson = & "$root\runtimes\python\cpython-3.11.15-windows-x86_64-none\python.exe" "$PSScriptRoot\hardware_guard.py"
     if ($LASTEXITCODE -ne 0) { throw 'NVIDIA/model preflight failed; existing services were left running.' }
-    if (Test-Path -LiteralPath "$PSScriptRoot\Start-Strata.ps1") {
-        & "$PSScriptRoot\Start-Strata.ps1" -Mode Stop
-    }
     $services = @(
         @{name='router';mode='Backend';title='llama.cpp Backend';color='#4CC2FF';port=10000;timeout=45}
     )

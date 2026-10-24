@@ -34,8 +34,9 @@ def main():
     for name in ['selected-profiles.json','stack.json','models.ini','harness-provider.json']:
         shutil.copy2(ROOT/'config'/name, backup/name)
     mode = 'Full GPU' if args.full_gpu else 'CUDA automatic fit'
+    stored_path = model.relative_to(ROOT).as_posix() if model.is_relative_to(ROOT) else str(model)
     profile = {'id': model_id, 'label': f'{args.name or model.stem} | {args.context//1024}K | {mode}',
-               'path': str(model), 'context': args.context, 'options': {}}
+               'path': stored_path, 'context': args.context, 'options': {}}
     if args.full_gpu:
         profile.update(options={'fit':'off','gpu-layers':'all'},minimumFreeVRAMMiB=8192,requireFullGpu=True)
     profiles = [p for p in profiles if p['id'] != model_id] + [profile]

@@ -1,6 +1,6 @@
 # Windows LFM2.5 and Qwen3.8 tests — 23 October 2026
 
-The user requested both models downloaded into Windows Downloads and tested. Both IQ3_XXS files passed upstream byte-size/SHA256 checks and remain there. The active registry/default remains **Ornith-1.5-35B-A3B-IQ2_S**; these are separate test profiles, not active production entries. No Linux files/settings were changed.
+The user requested both models downloaded into Windows Downloads and tested. Both IQ3_XXS files passed upstream byte-size/SHA256 checks. They were subsequently consolidated into project `models/`; the saved benchmark results are unchanged. The active registry/default remains **Ornith-1.5-35B-A3B-IQ2_S**; these are separate test profiles, not active production entries. No Linux files/settings were changed.
 
 Hardware: RTX 3060 12 GB, i5-13600KF, 16 GB DDR5 at 6000 MT/s, NVIDIA 610.88. Runtime: existing llama.cpp b11630 /CUDA13.4, commit `6868a52cb`.
 

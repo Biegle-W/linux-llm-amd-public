@@ -7,7 +7,7 @@
     "streamMaxTokens": 2048,
     "id": "LFM2.5-24B-A2B-UD-IQ3_XXS",
     "label": "LFM2.5 24B-A2B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
-    "path": "C:\\Models\\LFM2.5-24B-A2B-UD-IQ3_XXS.gguf",
+    "path": "models/LFM2.5-24B-A2B-UD-IQ3_XXS.gguf",
     "chatTemplateKwargs": {},
     "checkTemperature": 0.1,
     "minimumFreeVRAMMiB": 8192,
@@ -32,7 +32,7 @@
     "streamMaxTokens": 64,
     "id": "Qwen3.8-27B-UD-IQ3_XXS",
     "label": "Qwen3.8 27B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
-    "path": "C:\\Models\\Qwen3.8-27B-UD-IQ3_XXS.gguf",
+    "path": "models/Qwen3.8-27B-UD-IQ3_XXS.gguf",
     "chatTemplateKwargs": {
       "enable_thinking": false
     },

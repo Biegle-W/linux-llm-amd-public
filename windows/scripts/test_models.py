@@ -81,7 +81,7 @@ def run(profile, common, runtime, output, long_tokens, speed_only=False, latency
     options = dict(common)
     options.pop('load-on-startup', None)
     options.update(profile.get('options', {}))
-    options.update({'model': profile['path'], 'ctx-size': profile['context'],
+    options.update({'model': str((ROOT / profile['path']).resolve()), 'ctx-size': profile['context'],
         'fit-ctx': profile['context'], 'host': '127.0.0.1', 'port': PORT,
         'alias': model, 'log-verbosity': 4})
     command = [str(runtime)]

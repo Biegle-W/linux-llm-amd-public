@@ -62,7 +62,7 @@ def preflight(require_model=True, profile=None):
         if not profiles or (profile is None and stack.get('defaultModel') not in {p['id'] for p in profiles}):
             raise RuntimeError('No Windows model is registered. Run scripts/register_model.py with an existing GGUF path.')
         for p in profiles:
-            if not Path(p['path']).is_file():
+            if not (ROOT / p['path']).is_file():
                 raise RuntimeError(f"Model file is missing for {p['id']}; register its Windows path again.")
         required_ram = max(p.get('minimumAvailableRAMGiB', 2) for p in profiles)
         required_commit = max(p.get('minimumCommitGiB', 8) for p in profiles)

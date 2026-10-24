@@ -18,8 +18,9 @@ def build():
     ini.extend(f'{k} = {v}' for k,v in common.items())
     catalog=[]
     for p in selected:
-        if not Path(p['path']).is_file():raise FileNotFoundError(p['path'])
-        ini.extend(['',f"[{p['id']}]",f"model = {Path(p['path']).as_posix()}",f"ctx-size = {p['context']}",f"fit-ctx = {p['context']}"])
+        model = (ROOT / p['path']).resolve()
+        if not model.is_file():raise FileNotFoundError(model)
+        ini.extend(['',f"[{p['id']}]",f"model = {model.as_posix()}",f"ctx-size = {p['context']}",f"fit-ctx = {p['context']}"])
         ini.extend(f'{k} = {v}' for k,v in p.get('options',{}).items())
         catalog.append({'id':p['id'],'name':p['label'],'contextWindow':p['context'],
                         'maxTokens':p.get('maxTokens',8192),'input':['text'],'reasoningEfforts':False})

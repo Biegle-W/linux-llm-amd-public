@@ -2,7 +2,7 @@
   {
     "id": "Ornith-1.5-35B-A3B-IQ2_S",
     "label": "Ornith 1.5 35B-A3B (IQ2_S) | 32K | GPU + RAM",
-    "path": "C:\\Models\\Ornith-1.5-35B-A3B-IQ2_S.gguf",
+    "path": "models/Ornith-1.5-35B-A3B-IQ2_S.gguf",
     "context": 32768,
     "options": {
       "fit": "on",

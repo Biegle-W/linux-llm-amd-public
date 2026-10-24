@@ -17,7 +17,7 @@ Chat, streaming, tool round trip and 8,080-token input retrieval passed. Allocat
 This directory is a reference distribution: install the runtime and download weights separately. Binaries, models and private app data are excluded.
 
 1. Put the matching CUDA runtime at `runtimes/llama.cpp-b11630-cuda-13.4/` under this directory. The launcher expects Python at `runtimes/python/cpython-3.11.15-windows-x86_64-none/python.exe`; install that runtime, a compatible NVIDIA driver and Windows Terminal.
-2. Download [Ornith-1.5-35B-A3B-IQ2_S.gguf](https://huggingface.co/bartowski/Ornith-1.5-35B-A3B-GGUF/tree/64b0493d34a5ca4c1b4ad67bb99b41d74b4f07d6). The example profile uses `C:\Models`. Update its path in `config/selected-profiles.json` if different, preserving all options/admission fields; run `python scripts/build_configuration.py` to regenerate. Do not use `--full-gpu` for this mixed profile.
+2. Download [Ornith-1.5-35B-A3B-IQ2_S.gguf](https://huggingface.co/bartowski/Ornith-1.5-35B-A3B-GGUF/tree/64b0493d34a5ca4c1b4ad67bb99b41d74b4f07d6) into this directory's `models/` folder. The source profile uses `models/<filename>`, resolved against the project root. Preserve all options/admission fields; run `python scripts/build_configuration.py` to regenerate. Do not use `--full-gpu` for this mixed profile.
 
 3. Open `Start Local LLM.cmd`. The owned backend opens in the visible Local-LLM terminal. The authenticated OpenAI-compatible API is `http://127.0.0.1:10000/v1`, model ID `Ornith-1.5-35B-A3B-IQ2_S`.
 
@@ -33,7 +33,7 @@ The private key is generated/stored in `data/credentials/.local-api-key`. Do not
 
 Tailscale forwarding selects only port 10000 while Windows Strata is disabled. Use `http://<TAILSCALE_HOST>:10000/v1` with the same real key. IPv4/MagicDNS host self-checks passed; a remote peer was not tested. No Funnel or Linux network policy was changed. LAN forwarding was not reconfigured/revalidated during this restoration.
 
-`config/selected-profiles.json` and `config/stack.json` are the sources; `scripts/build_configuration.py` regenerates catalogs. The stale Windows dual-AMD draft is retired. Strata is disabled for this single-3060/16-GB reference; its historical source/settings remain, with setup/launch/verification refusing while disabled. Do not enable Linux AMD profiles here.
+`config/selected-profiles.json` and `config/stack.json` are the sources; `scripts/build_configuration.py` regenerates catalogs. The stale Windows dual-AMD draft is retired. Strata is disabled for this single-3060/16-GB reference; its source/settings are archived in `retired/20261023/`, outside maintained launch paths. Do not enable Linux AMD profiles here.
 
 Keep Windows changes under `windows/`, preserve all Linux settings and historical measurement attribution, publish example paths and curated results only. Never commit runtime binaries, weights, keys, addresses, raw logs or private histories. This restoration reuses a validated runtime and does not claim a latest-version upgrade.
 
@@ -41,4 +41,8 @@ Keep Windows changes under `windows/`, preserve all Linux settings and historica
 
 Separate8K IQ3_XXS test profiles passed chat, streaming, tools and~6K-input retrieval. LFM2.5 24B-A2B:78.24/85.04t/s total generation; Qwen3.8 27B:4.97/5.59t/s. LFM's128-token samples were reasoning only; Qwen's were visible prose with thinking off. First visible marker reply:1.828s LFM /0.922s Qwen. These are not matched completed-answer or quality results. Both used GPU + RAM; LFM required less host weight memory. Ornith remains the production default. The owned backend was left stopped after its existing memory preflight refused restart under current desktop pressure; production limits are unchanged.
 
-[Methods, verified files, memory and limits](reports/WINDOWS-LFM-QWEN-TESTS-20261023.md), [numeric record](reports/windows-lfm-qwen-summary-20261023.json), [example separate test profiles](config/test-profiles-lfm-qwen-20261023.json). Weights must be downloaded separately; update example paths before testing. No Linux or network changes.
+[Methods, verified files, memory and limits](reports/WINDOWS-LFM-QWEN-TESTS-20261023.md), [numeric record](reports/windows-lfm-qwen-summary-20261023.json), [example separate test profiles](config/test-profiles-lfm-qwen-20261023.json). Weights must be downloaded separately into project `models/`; regenerate catalogs before testing. No Linux or network changes.
+
+## Consolidated Windows layout — October 23
+
+All four inference GGUFs belong in `models/`. Keep only selected CUDA/Python runtimes in `runtimes/`; configuration in `config/`; maintained helpers in `scripts/`; private state in `data/`; logs in `logs/`; dated evidence in `reports/`. Retired Strata source is in [retired/20261023](retired/20261023/README.md). Inactive binaries and backups are kept privately under ignored `archive/`. Regenerate catalogs after moving the project. All four model files were SHA256 verified after relocation; no benchmark rerun or default/guard change. [Cleanup record and inventory](reports/WINDOWS-CLEANUP-20261023.md).
