@@ -12,10 +12,7 @@
       "supportsReasoningEffort": false,
       "supportsStrictMode": false,
       "maxTokensField": "max_tokens",
-      "thinkingFormat": "chat-template",
-      "chatTemplateKwargs": {
-        "enable_thinking": false
-      }
+      "thinkingFormat": "chat-template"
     },
     "models": [
       {
@@ -23,6 +20,36 @@
         "name": "Ornith 1.5 35B-A3B (IQ2_S) | 32K | GPU + RAM",
         "contextWindow": 32768,
         "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "LFM2.5-24B-A2B-UD-IQ3_XXS",
+        "name": "LFM2.5 24B-A2B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
+        "contextWindow": 8192,
+        "maxTokens": 4096,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.8-27B-UD-IQ3_XXS",
+        "name": "Qwen3.8 27B (UD-IQ3_XXS) | 8K | CUDA automatic fit",
+        "contextWindow": 8192,
+        "maxTokens": 4096,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.8-35B-A3B-IQ2_M",
+        "name": "Empero Qwen3.8 35B-A3B (IQ2_M) | 8K | GPU + RAM",
+        "contextWindow": 8192,
+        "maxTokens": 4096,
         "input": [
           "text"
         ],

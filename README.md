@@ -6,6 +6,7 @@ and saved measurements, with independent Windows and Linux configurations.
 Model weights, installed runtimes, credentials and personal app data are excluded.
 
 - [Windows RTX 3060: setup and results](windows/README.md)
+- [Windows: four-model OpenAI-compatible router](windows/reports/WINDOWS-MODEL-ROUTER-20261023.md)
 - [AMD: latest setup and results](#amd-latest-setup-and-results)
 - [NVIDIA: archived setup and results](#nvidia-archived-setup-and-results)
 - [Install, launch and connect](#install-launch-and-connect)

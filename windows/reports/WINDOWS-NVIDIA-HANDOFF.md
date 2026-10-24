@@ -23,3 +23,26 @@ Ornith's default/catalog and production limits are unchanged. Perplexity, the Qu
 ## Directory consolidation — later October 23
 
 All four inference GGUFs are in project `models/`; source paths are project-relative. Candidate profiles are in `config/test-profiles-lfm-qwen-20261023.json`. Regenerate catalogs after moving the project. Retired Strata source is in `retired/20261023/`; inactive runtimes are in ignored `archive/retired-windows-20261023/runtimes/`. Reports and prior benchmarks remain preserved; no inference rerun. See [cleanup record](WINDOWS-CLEANUP-20261023.md).
+
+## Current: model router — later October 23
+
+The authenticated API on10000 now lists all four downloaded models and selects
+by the OpenAI request's `model` field. Ornith remains default at32K; LFM, Qwen27B
+and Empero have selectable8K profiles. Earlier test-only/stopped-backend snapshots
+above are historical. The lightweight router is running idle without loaded
+weights; its single private worker on10001 loads on demand and unloads before a
+switch. Admission uses each model's own unchanged limits, plus1024MiB loaded
+actual free VRAM and the0.75GiB/five-second RAM guard. Resource refusal returns503;
+it never silently substitutes another model. An in-progress stream holds the
+switch lock; another request returns503 `router_busy`.
+
+DSH's installed SDK streamed through all four; its saved selector/catalog and
+Ornith default are verified. The real API passed tools/JSON, bad-key/unknown-model
+checks and unloading. Global thinking suppression was removed for LFM's required
+reasoning template. Reopen DSH if its selector is cached; GUI/remote-peer/full
+context/throughput tests were not repeated. Perplexity and Quest were terminated
+as requested; Quest service remains stopped without a startup-policy change.
+Chrome was reopened with session restoration requested after testing.
+
+See [router API and proof](WINDOWS-MODEL-ROUTER-20261023.md). Keep both repositories
+current, Windows-only exports sanitized, and Linux files unchanged.

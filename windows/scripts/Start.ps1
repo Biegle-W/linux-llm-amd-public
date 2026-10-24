@@ -48,9 +48,11 @@ if ($Mode -eq 'Stop') {
     return
 }
 if (-not (Test-Path -LiteralPath $runtime)) { throw "Backend missing: $runtime" }
+$python = Join-Path $root 'runtimes/python/cpython-3.11.15-windows-x86_64-none/python.exe'
 New-Item -ItemType Directory -Force "$root\logs" | Out-Null
 $keyFile = "$root\data\credentials\.local-api-key"
 if (-not (Test-Path -LiteralPath $keyFile)) {
+    New-Item -ItemType Directory -Force (Split-Path -Parent $keyFile) | Out-Null
     $bytes = New-Object byte[] 32
     $rng = [Security.Cryptography.RandomNumberGenerator]::Create()
     try { $rng.GetBytes($bytes) } finally { $rng.Dispose() }
@@ -62,7 +64,9 @@ function Test-Service([string]$name) {
     if (-not (Get-OwnedProcess (Read-State $name))) { return $false }
     try {
         $models = Invoke-RestMethod 'http://127.0.0.1:10000/v1/models' -Headers $headers -TimeoutSec 3
-        return @($models.data.id).Contains($config.defaultModel)
+        $expected = @((Get-Content -LiteralPath "$root\config\selected-profiles.json" -Raw | ConvertFrom-Json).id | Sort-Object)
+        $actual = @($models.data.id | Sort-Object)
+        return @($actual).Contains($config.defaultModel) -and -not @(Compare-Object $expected $actual).Count
     } catch { return $false }
 }
 function Assert-PortFree([int]$port) {
@@ -71,10 +75,11 @@ function Assert-PortFree([int]$port) {
 }
 if ($Mode -eq 'Launch') {
     if (Test-Service 'router') { Write-Host 'The llama.cpp backend is already running in Local-LLM.'; return }
-    $preflightJson = & "$root\runtimes\python\cpython-3.11.15-windows-x86_64-none\python.exe" "$PSScriptRoot\hardware_guard.py"
-    if ($LASTEXITCODE -ne 0) { throw 'NVIDIA/model preflight failed; existing services were left running.' }
+    & $python "$PSScriptRoot\model_router.py" --check-config
+    if ($LASTEXITCODE -ne 0) { throw 'Model router configuration failed; existing services were left running.' }
+    if (Get-OwnedProcess (Read-State 'router')) { Stop-Owned 'router' }
     $services = @(
-        @{name='router';mode='Backend';title='llama.cpp Backend';color='#4CC2FF';port=10000;timeout=45}
+        @{name='router';mode='Backend';title='Local Model Router';color='#4CC2FF';port=10000;timeout=45}
     )
     $needed = @($services | Where-Object { -not (Test-Service $_.name) })
     try {
@@ -108,20 +113,15 @@ if ($Mode -eq 'Launch') {
 # Service mode: the visible terminal owns the entire service process tree.
 # Output is saved to files and streamed here, including native stderr messages.
 $name = 'router'
-$host.UI.RawUI.WindowTitle = 'Local LLM - llama.cpp backend'
+$host.UI.RawUI.WindowTitle = 'Local LLM - model router'
 Write-Host ("=== " + $host.UI.RawUI.WindowTitle + " ===") -ForegroundColor Cyan
 Write-Host 'Close this tab to stop the backend and any loaded model.'
 if (Get-OwnedProcess (Read-State $name)) { throw "The $name service is already running." }
 if ($Mode -eq 'Backend') {
-    $preflightJson = & "$root\runtimes\python\cpython-3.11.15-windows-x86_64-none\python.exe" "$PSScriptRoot\hardware_guard.py"
-    if ($LASTEXITCODE -ne 0) { throw 'NVIDIA/model preflight failed.' }
-    $hardware = $preflightJson | ConvertFrom-Json
-    Get-ChildItem Env: | Where-Object { $_.Name -like 'LLAMA_ARG_*' -or $_.Name -like 'GGML_VK_*' -or $_.Name -in @('CUDA_VISIBLE_DEVICES','HIP_VISIBLE_DEVICES','ROCR_VISIBLE_DEVICES') } | ForEach-Object { Remove-Item "Env:$($_.Name)" }
-    $env:CUDA_VISIBLE_DEVICES = $hardware.cudaVisibleDevices
-    $env:LLAMA_CACHE = "$root\data\cache\router"
-    New-Item -ItemType Directory -Force $env:LLAMA_CACHE | Out-Null
-    $executable = $runtime
-    $arguments = '--host 127.0.0.1 --port 10000 --models-preset "' + "$root\config\models.ini" + '" --models-max 1 --timeout 600 --cors-origins localhost --api-key-file "' + $keyFile + '" --log-verbosity 4'
+    & $python "$PSScriptRoot\model_router.py" --check-config
+    if ($LASTEXITCODE -ne 0) { throw 'Model router configuration failed.' }
+    $executable = $python
+    $arguments = '-u "' + "$PSScriptRoot\model_router.py" + '"'
 }
 Add-Type -TypeDefinition @'
 using System;

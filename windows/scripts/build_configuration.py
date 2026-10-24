@@ -5,6 +5,11 @@ ROOT=Path(__file__).resolve().parent.parent
 
 def build():
     selected=json.loads((ROOT/'config'/'selected-profiles.json').read_text())
+    if not selected or len({p['id'] for p in selected}) != len(selected):
+        raise ValueError('Register at least one model with unique API IDs.')
+    stack=json.loads((ROOT/'config'/'stack.json').read_text())
+    if stack['defaultModel'] not in {p['id'] for p in selected}:
+        raise ValueError('The default model must be registered.')
     common={
         'device':'CUDA0','split-mode':'none','main-gpu':0,'fit':'on','fit-target':1536,
         'gpu-layers':'auto',
@@ -29,9 +34,7 @@ def build():
               'api':'openai-completions','baseURL':'http://127.0.0.1:10000/v1',
               'apiKeyEnv':'LLAMA_CPP_API_KEY','timeoutMs':600000,'streamIdleTimeoutMs':600000,
               'compat':{'supportsDeveloperRole':False,'supportsStore':False,'supportsReasoningEffort':False,
-                        'supportsStrictMode':False,'maxTokensField':'max_tokens','thinkingFormat':'chat-template',
-                        'chatTemplateKwargs':{'enable_thinking':False}},'models':catalog}
-    stack=json.loads((ROOT/'config'/'stack.json').read_text())
+                        'supportsStrictMode':False,'maxTokensField':'max_tokens','thinkingFormat':'chat-template'},'models':catalog}
     (ROOT/'config'/'harness-provider.json').write_text(json.dumps({'provider':provider,'defaultModel':stack['defaultModel']},indent=2))
     print(f'Generated {len(selected)} backend profiles and {len(catalog)} Harness profiles.')
 

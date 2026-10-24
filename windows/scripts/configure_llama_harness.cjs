@@ -1,12 +1,17 @@
 // Run through DSH Desktop's Electron with ELECTRON_RUN_AS_NODE=1.
 const fs = require('node:fs');
 const path = require('node:path');
+const os = require('node:os');
 const {pathToFileURL} = require('node:url');
 const {isDeepStrictEqual} = require('node:util');
 
 (async () => {
   const root = path.resolve(__dirname, '..');
-  const modules = path.join(process.env.LOCALAPPDATA, 'Programs/DeepSeek Harness/resources/app.asar/dsh/node_modules');
+  const install = [process.env.LOCALAPPDATA, path.join(os.homedir(), 'AppData/Local')]
+    .filter(Boolean).map(base => path.join(base,'Programs/DeepSeek Harness'))
+    .find(base => fs.existsSync(path.join(base,'resources/app.asar')));
+  if (!install) throw new Error('DSH Desktop installation unavailable');
+  const modules = path.join(install, 'resources/app.asar/dsh/node_modules');
   const load = name => import(pathToFileURL(path.join(modules, name)).href);
   const {parseDocument} = await load('yaml/dist/index.js');
   const {withFileLock, writeFileAtomic} = await load('@deepseek-ai/dsh-atomic-write/lib/index.js');
@@ -32,7 +37,10 @@ const {isDeepStrictEqual} = require('node:util');
     const existing = expected[p].config.providers.llamacpp || {...desired.provider};
     // Retain credential routing and all unrelated provider options.
     const updated = {...existing, displayName: desired.provider.displayName,
-      baseURL: desired.provider.baseURL, models: desired.provider.models};
+      baseURL: desired.provider.baseURL, models: desired.provider.models,
+      compat: {...existing.compat, ...desired.provider.compat}};
+    // Thinking is model-specific; LFM requires its reasoning template.
+    delete updated.compat.chatTemplateKwargs;
     expected[p].config.providers.llamacpp = updated;
     doc.setIn([p,'config','providers','llamacpp'], updated);
     const strata = JSON.parse(fs.readFileSync(path.join(root,'config/strata.json'), 'utf8'));

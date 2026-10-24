@@ -58,7 +58,9 @@ def preflight(require_model=True, profile=None):
     if ram['physical_available_gib'] < 2 or ram['commit_available_gib'] < 8:
         raise RuntimeError('Close unused applications: at least 2 GiB available RAM and 8 GiB commit headroom are required.')
     if require_model:
-        profiles = [profile] if profile is not None else json.loads((ROOT/'config/selected-profiles.json').read_text(encoding='utf-8'))
+        profiles = [profile] if profile is not None else [p for p in json.loads(
+            (ROOT/'config/selected-profiles.json').read_text(encoding='utf-8'))
+            if p['id'] == stack.get('defaultModel')]
         if not profiles or (profile is None and stack.get('defaultModel') not in {p['id'] for p in profiles}):
             raise RuntimeError('No Windows model is registered. Run scripts/register_model.py with an existing GGUF path.')
         for p in profiles:

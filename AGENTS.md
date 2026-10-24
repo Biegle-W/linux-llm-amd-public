@@ -23,7 +23,16 @@ Report any blocked commit, push or handoff synchronization explicitly.
 Windows is a separate RTX 3060 12 GB / i5-13600KF / 16 GB machine.
 Keep CUDA Windows profiles under `windows/`; do not apply Linux AMD devices,
 guards, context budgets, model paths or engine preferences to Windows.
-Its current profile is Ornith 1.5 35B-A3B IQ2_S,32K,GPU + RAM; Strata is disabled.
+Windows default remains Ornith 1.5 35B-A3B IQ2_S,32K,GPU + RAM; Strata is disabled.
+The Windows router on10000 now exposes Ornith plus LFM2.5-24B-A2B8K,
+Qwen3.8-27B8K and Empero35B-A3B8K through the OpenAI model field. One guarded
+private worker on10001; unload before admission, retain SSE switch exclusion,
+1024MiB loaded free VRAM and0.75GiB/five-second RAM stop. Do not lower per-model
+limits or silently substitute models. DSH saved selector has four entries;
+installed SDK streams all four; real tools/JSON/unload pass. Final router is idle.
+Thinking defaults are per model; LFM requires reasoning. See
+windows/reports/WINDOWS-MODEL-ROUTER-20261023.md. These are functional smokes,
+not new full-window/throughput or GUI/remote-client validation.
 Preserve fit-target2816/no-host true and4-GiB RAM/16-GiB commit/9728-MiB VRAM fresh admission.
 Use selected-profile44–48t/s samples, not faster low-headroom trials; see windows/reports/WINDOWS-MOE-MODELS-20261023.md.
 See `windows/README.md`. The Windows machine has no attached Shared D: drive;
