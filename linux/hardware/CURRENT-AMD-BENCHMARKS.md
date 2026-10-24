@@ -188,13 +188,15 @@ These Sage rows used the old 512/128 batch; current Sage prefill is in the Octob
 
 ### Installed and measured builds
 
+Engines now update daily when a newer upstream version passes every promotion gate against the same night's production run; see [DAILY-UPDATES.md](DAILY-UPDATES.md). The rates in the tables above predate the October 23 update unless marked.
+
 | Engine | Source / selected stack | Scope |
 |---|---|---|
-| llama.cpp | [4c3c5810](https://github.com/ggml-org/llama.cpp/commit/4c3c5810f87efe177949f1b85ae509d38a2a311f); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts; batch/ubatch 4096/4096 (Super 2048/1024) since October22 |
+| llama.cpp | [edc35384](https://github.com/ggml-org/llama.cpp/commit/edc353842c1be9b4ebc27460a1da4526a026d3a9) (daily update Oct 23; was 4c3c5810); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts; batch/ubatch 4096/4096 (Super 2048/1024) since October22 |
 | SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm 7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
-| vLLM | 0.32.1rc1.dev36+ge68efc685.rocm72, retained ROCm 7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
-| Strata | [9ae93f7b/0.1.46.1](https://github.com/Niko1221/Strata/commit/9ae93f7b1fe989d04a8e404d32cddaeeff10505f), ROCm 7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
-| Maya | [25deec5/v1.1.24](https://github.com/mw00/project-maya/commit/25deec505b525212e05faa58697d9d2b7d17fdb3), ROCm 7.2.3 | Three 32K profiles: GLM Maya-S v2/MTP (MMQ; failed fused path disabled), DeepSeek Maya-XS + matching DSpark xs2, DeepSeek Maya-S without DSpark; guards retained |
+| vLLM | 0.32.1rc1.dev361+g83c078d95.rocm72 (daily update Oct 23; was dev36), amd-aiter 0.1.26, retained ROCm 7.2.3 Torch stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
+| Strata | [7ddc17a3](https://github.com/Niko1221/Strata/commit/7ddc17a38fe7f31637e895ecfba58c2cd43d65ec) (daily update Oct 23; was 9ae93f7b/0.1.46.1), ROCm 7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
+| Maya | [f26d8ba/v1.1.26](https://github.com/mw00/project-maya/commit/f26d8bab43f9b10f0475986b541dc46ada45285e) (daily update Oct 23; was 25deec5/v1.1.24), ROCm 7.2.3 | Three 32K profiles: GLM Maya-S v2/MTP (MMQ; failed fused path disabled), DeepSeek Maya-XS + matching DSpark xs2, DeepSeek Maya-S without DSpark; guards retained |
 | ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
 
 ### October 21 shared-method baseline (historical)

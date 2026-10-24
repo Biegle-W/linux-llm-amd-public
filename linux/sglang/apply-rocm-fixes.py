@@ -3,7 +3,9 @@ from pathlib import Path
 import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 base = ROOT / 'sglang/rocm-src/python/sglang'
-assert subprocess.check_output(['git','-C',str(base),'rev-parse','HEAD'],text=True).strip() == 'f84475ccf593087df3d1da13c9e675eadee12352'
+# The daily update passes a newer fork commit; every edit below still refuses changed source.
+import os
+assert subprocess.check_output(['git','-C',str(base),'rev-parse','HEAD'],text=True).strip() == os.environ.get('SGLANG_FORK_COMMIT', 'f84475ccf593087df3d1da13c9e675eadee12352')
 def one(s, old, new):
     assert s.count(old) == 1, 'Review changed source: ' + old[:80]
     return s.replace(old, new, 1)

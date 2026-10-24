@@ -1,12 +1,26 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 Updated **October 23, 2026**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. llama.cpp 4c3c5810 and vLLM dev36 are promoted; SGLang stays pinned; Strata9ae93f7b/0.1.46.1 is promoted after full5GiB-startup validation.
+64 GB RAM and two RX 7900 XTX 24 GB. Ten enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
+
+<!-- daily-update:begin -->
+**Engine versions after the 2026-10-23 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+
+| Engine | Production |
+|---|---|
+| llama.cpp | `edc353842c1b` |
+| vLLM | `0.32.1rc1.dev361+g83c078d95.rocm72` |
+| SGLang | `f84475ccf593` |
+| Strata | `7ddc17a38fe7` |
+| Maya | `f26d8bab43f9` |
+
+Last run: llama.cpp promoted; vLLM promoted; Strata promoted; Maya promoted.
+<!-- daily-update:end -->
 
 The previous nine Shared Markdown documents are preserved byte-for-byte in
 `D:\LLM-ARCHIVE\LLM-HANDOFF-ARCHIVE\2026-10-18\` (Linux:

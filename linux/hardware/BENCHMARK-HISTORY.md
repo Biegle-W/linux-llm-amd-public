@@ -1,5 +1,14 @@
 # LLM benchmark and context history
 
+## First daily engine update — October23
+
+The new daily update (`hardware/daily-update/`) promoted llama.cpp edc35384, vLLM dev361, Strata 7ddc17a3
+and Maya 1.1.26 after each passed every gate against a same-night production run (shared method, normal
+launchers). Notable changes against that night's production: Maya DeepSeek XS prefill +42.9% (448.5→640.9
+t/s) and DeepSeek S +28.2% (293.4→376.0); vLLM Qwen 27B decode +5.2% code / +8.8% prose (135.0→142.0,
+71.9→78.3); Strata code decode −4.1% (within the 5% gate); llama.cpp within ±2.2%. Full tables:
+[DAILY-UPDATES.md](DAILY-UPDATES.md). The October23 table below predates these versions.
+
 ## All eleven profiles re-measured — October23 (current rates)
 
 Every active profile was re-run with its production launcher and unchanged settings, using the shared

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the local LLM engine update every day at 03:00
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+# A missed night is not made up during the day.
+Persistent=false
+RandomizedDelaySec=0
+
+[Install]
+WantedBy=timers.target

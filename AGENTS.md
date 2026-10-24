@@ -60,8 +60,9 @@ native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
 The 20 GiB candidate is not selected and remains inactive. Do not regenerate the
 obsolete 32K/128K Strata presets or remove IQ3 on the basis of superseded plans.
 
-llama.cpp 4c3c5810 and vLLM 0.32.1rc1.dev36+ge68efc685.rocm72 are promoted after
-validation. SGLang f84475cc is retained; Strata9ae93f7b/0.1.46.1 is now promoted after all5GiB-startup candidate and normal gates. Current results preserve
+Current engine versions are kept by the daily update (`linux/hardware/daily-update/`,
+`linux/hardware/DAILY-UPDATES.md`); on October 23 it promoted llama.cpp edc35384, vLLM dev361,
+Strata 7ddc17a3 and Maya f26d8ba/1.1.26. SGLang f84475cc (gfx1100 fork head) is retained. Current results preserve
 candidate-source timings versus production rebuild functional proofs; no speedup
 is claimed for these performance-neutral updates. See
 `linux/hardware/CPU-RAM-PROFILES-2026-10-20.md`. Earlier i5/32 GB and NVIDIA results

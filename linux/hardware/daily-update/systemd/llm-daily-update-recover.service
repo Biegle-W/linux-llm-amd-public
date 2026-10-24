@@ -1,0 +1,12 @@
+[Unit]
+Description=Roll back an engine build left provisionally installed by an interrupted daily update
+After=local-llm-mounts.service
+Before=local-llm-hub.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/local-llm
+ExecStart=/usr/bin/python3 /opt/local-llm/hardware/daily-update/daily_update.py --recover-only
+
+[Install]
+WantedBy=default.target
