@@ -756,6 +756,46 @@ User-requested isolated XS/off-on tests use [source25deec5](https://github.com/m
 
 [LCZ2195/9](https://lcz.me/topic/2195/9), older October8 Maya1.0.11/NVIDIA64K report, changed sampling; current fetch cache-missed. [Level1Techs257789,page3](https://forum.level1techs.com/t/ultimate-2x-r9700-guide-for-qwen-3-8-27b-mxfp4-200t-s-c-1-500t-s-at-c-8/257789?page=3), digitalscream/Strawberry October13 speculation discussion, RDNA4 Radiance; no matched XS/7900XTX recipe. No forum setting was deployed or external speed presented as a local measurement.
 
+## October24 — broad LCZ RX7900XTX review
+
+[Full review and local applicability](LCZ-7900XTX-RESEARCH-2026-10-24.md).
+Research/read-only audit only, no runtime or GPU test. Broad site searches plus
+the [7900xtx tag index](https://lcz.me/tags/7900xtx) are not an exhaustive archive.
+Accessed October24; post dates generally absent from the retrieved view.
+
+- [naniandemeng2032](https://lcz.me/topic/2032), singleXTX/X99/64GBDDR3/ROCm10/
+  Strata0.1.27/SwiftIQ3_XXS, and [BenLee2027](https://lcz.me/topic/2027),
+  gfx1100/7.2.3/100202 tuning: motivate checking actual hipBLASLt selection/shape
+  hits. Local Qwen has no explicit table, no adjacent tuning folder and no
+  reviewed enabled-log message; not yet proof of a runtime fallback or speed gain.
+  [Pinned GEMM selection](https://github.com/Niko1221/Strata/blob/8183c6b67162340c09b67360860177c577a65f2e/src/prefill/gemm.cu)
+  and [AMD guide](https://github.com/Niko1221/Strata/blob/8183c6b67162340c09b67360860177c577a65f2e/docs/AMD_HIP.md).
+- [LCZ1921/11](https://lcz.me/topic/1921/11), retrieved search excerpt only,
+  dualXTX/27B/196608/48GB host cache, favors write-through in its eviction test;
+  [T7910 report1791/118](https://lcz.me/topic/1791/118) instead succeeds with
+  write-back. Test exact fork/policy/eviction and bounded RAM; do not copy either
+  as universal. [Primary HiCache documentation](https://docs.sglang.io/docs/advanced_features/hicache).
+- [farmer node2317](https://lcz.me/topic/2317), EPYC7452/~125GiB/Strata0.1.43/
+  IQ3_S, is two single-card replicas with shared arena, not layer-split TP.
+  [2343](https://lcz.me/topic/2343) changes source and SDK together. Both differ
+  from this host's64GB/guard/both-cards-per-model policy.
+- [BenLee2347](https://lcz.me/topic/2347) and [2422](https://lcz.me/topic/2422):
+  Hipfire0.4.2.1/6b363a56a1ae, singleXTX/Qwen27B MQ4-XTS/Q8KV/DFlash;
+  [current primary multi-GPU guide](https://github.com/warpfront/hipfire/blob/master/docs/multi-gpu.md)
+  limits denseTP drafting and requires peers for Flash-Next EP. Candidate only;
+  gfx1201 receipts do not validate local gfx1100 or the single-card speed on TP.
+- [LCZ1791/108](https://lcz.me/topic/1791/108) links
+  [nasone32's experimental RDNA3 fork](https://github.com/nasone32/llama.cpp-RDNA3-7900xtx-opt),
+  T7910/switch/P2P/QwenQ8. Quantized weights and wire-Q8 are not full precision;
+  no matching DeepSeek/GLM gain. [LCZ2525](https://lcz.me/topic/2525) is user-supplied
+  text (page/API inaccessible), CPUx16+PCHGen3x4, and its
+  [hostcall PR11277](https://github.com/ROCm/rocm-systems/pull/11277) is not a
+  missing fix for our already-working CPUx8/x8 TP2 host transport.
+- [ivgranite,Level1Techs May31](https://forum.level1techs.com/t/7900xtx-llm-inference-notes/250869),
+  XTX/9600X/96GB/32K, reinforces completed-answer wall-clock methodology, not a
+  matching Strata/Maya optimization. Local SDK/context/quant/overlap evidence and
+  the bounded candidate order are linked in the full review.
+
 ## Strata DeepSeek release reuse — October24
 
 Reviewed official [release0.2.4](https://github.com/Niko1221/Strata/releases/tag/v0.2.4), [pinned source documentation](https://github.com/Niko1221/Strata/blob/8183c6b67162340c09b67360860177c577a65f2e/docs/DEEPSEEK41.md) and [packer](https://github.com/Niko1221/Strata/blob/8183c6b67162340c09b67360860177c577a65f2e/tools/dsv41/pack_gguf.py). Local validation uses both7900XTX/i9-13900KS/64GB, Maya S/XS reused quants,32K/24threads/HIP7.2.3.

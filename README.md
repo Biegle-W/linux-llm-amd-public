@@ -481,7 +481,9 @@ and [saved generation results](linux/graphics/VALIDATION-2026-10-18.md).
 
 Research-derived tuning retains direct [lcz.me](https://lcz.me/) and
 [Level1Techs](https://forum.level1techs.com/) post URLs and primary upstream sources
-in the [source ledger](linux/hardware/FORUM-OPTIMIZATION-SOURCES.md). Forum speeds
+in the [source ledger](linux/hardware/FORUM-OPTIMIZATION-SOURCES.md). The
+[October24 XTX forum review](linux/hardware/LCZ-7900XTX-RESEARCH-2026-10-24.md) identifies
+remaining candidates and incompatible recipes; research only. Forum speeds
 are not local measurements. Personal repair/warranty records, model weights,
 private history, runtime binaries and app state are outside this public reference.
 
