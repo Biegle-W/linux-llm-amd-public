@@ -114,8 +114,12 @@ def commit(repo, paths, message, logfile):
         subprocess.run(['git', '-C', str(repo), 'add', '--', *paths], check=True, stdout=f, stderr=subprocess.STDOUT)
         subprocess.run(['git', '-C', str(repo), 'commit', '-m', message, '--', *paths], check=True, stdout=f,
                        stderr=subprocess.STDOUT)
-        head = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', '--short', 'HEAD'], text=True).strip()
         push = subprocess.run(['git', '-C', str(repo), 'push', 'origin', 'HEAD:main'], stdout=f, stderr=subprocess.STDOUT)
+        if push.returncode:   # another agent pushed first: replay this commit on top once, never force
+            subprocess.run(['git', '-C', str(repo), 'pull', '--rebase', '--autostash', 'origin', 'main'], stdout=f,
+                           stderr=subprocess.STDOUT)
+            push = subprocess.run(['git', '-C', str(repo), 'push', 'origin', 'HEAD:main'], stdout=f, stderr=subprocess.STDOUT)
+        head = subprocess.check_output(['git', '-C', str(repo), 'rev-parse', '--short', 'HEAD'], text=True).strip()
     return f'{head} pushed' if push.returncode == 0 else f'{head} committed locally; push failed'
 
 
