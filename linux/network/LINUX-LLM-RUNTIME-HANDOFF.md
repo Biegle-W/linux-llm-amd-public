@@ -23,6 +23,19 @@ source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 Last run: llama.cpp promoted; vLLM promoted; Strata promoted.
 <!-- daily-update:end -->
 
+**Daily updater zero-swap correction (October24):** future promotions require
+zero observed worker swap and dedicated VRAM spill in each model record and the
+normal launch-through-shutdown monitor, including loading. Missing/invalid counters,
+sampling errors, no worker samples or incomplete model coverage block promotion.
+A failed production baseline skips installation; a failed candidate follows the
+existing rollback and restored-build smoke path. PIDs/shared DRM clients are
+de-duplicated; compilers, DSH and other apps are excluded. CPU-only regressions and
+saved October24 vLLM replay passed (the old nonzero swap records now reject).
+Historical counts may double-count descendants; old results remain dated. No
+installed engine/profile/context/guard, timer or network setting changed, and no
+fresh throughput/full-window/runtime rollback trial was run. Readings are sampled,
+not a guarantee against between-sample transients. [Policy](../hardware/daily-update/README.md#zero-swap-gate-correction--october-24).
+
 
 ## Strata Qwen table selection — October24
 

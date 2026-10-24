@@ -4,8 +4,24 @@ Every night at 03:00 `llm-daily-update.timer` checks llama.cpp, vLLM, SGLang, St
 Maya for newer upstream versions. Each one is built in isolation, benchmarked against the
 current production build with the shared method, and kept only when every standard
 promotion gate passes (prefill and code/prose decode ≥95% of production, short time to
-first token within max(1.25×, +0.05 s), no fewer retrieval markers, zero VRAM spill).
+first token within max(1.25×, +0.05 s), no fewer retrieval markers, zero observed
+worker swap and VRAM spill with valid launch-through-shutdown memory telemetry).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
+
+## October 24: zero-swap promotion gate repaired
+
+The comparator now rejects any observed worker swap, alongside VRAM spill, and
+fails closed on missing/invalid memory evidence. The updater also samples the
+normal inference lifecycle, including loading, and rejects sampling errors or
+absent worker samples. Each PID/shared DRM client is counted once. A bad baseline
+skips installation; a bad candidate rolls back and smoke-tests the restored build.
+CPU-only rejection/rollback tests and saved-record replay validate this repair;
+no new inference benchmark or runtime promotion/rollback was performed.
+
+The October24 vLLM candidate records below were promoted under the older gate;
+their nonzero swap fields now fail replay. Historical byte totals may double-count
+descendants and are retained as reported, without rewriting old timings/results.
+[Policy, coverage and limits](daily-update/README.md#zero-swap-gate-correction--october-24).
 
 ## 2026-10-24
 

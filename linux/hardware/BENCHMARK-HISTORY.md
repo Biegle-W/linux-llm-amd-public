@@ -1,5 +1,16 @@
 # LLM benchmark and context history
 
+## Daily updater zero-swap gate — October24 (validation only)
+
+Fixed promotion to require zero recorded worker swap and VRAM spill, valid
+per-model and launch-through-shutdown memory evidence, and complete model coverage.
+The collector counts PIDs/shared DRM clients once. CPU-only regression tests prove
+rejection and the updater's rollback/smoke path; saved October24 vLLM records now
+reject for their reported swap. Old counts may include duplicate descendants;
+old results remain dated under their original gate. No new performance measurement,
+hardware/profile change or installed runtime rollback occurred. [Method and limits](daily-update/README.md#zero-swap-gate-correction--october-24).
+
+
 
 ## Strata Qwen table selection — October24
 

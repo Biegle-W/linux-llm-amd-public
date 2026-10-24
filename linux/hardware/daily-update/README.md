@@ -32,7 +32,11 @@ rolled back and reported.
 8. Keep it only if `hardware/compare-runtime-candidate.py` passes for every model:
    prefill and code/prose decode at least 95% of production; short time to first token at
    most max(1.25 × production, production + 0.05 s); no fewer retrieval markers; zero
-   VRAM spill. Otherwise roll back and check that the restored build answers.
+   observed worker swap and VRAM spill. Both counters must be valid nonnegative
+   integers and exactly zero; even one recorded byte rejects the candidate.
+   Missing/invalid readings, sampling errors, no worker samples or incomplete
+   model coverage also block promotion. Otherwise roll back and check that the
+   restored build answers.
 9. Release the lock, write `hardware/generated/daily-update/<date>/report.md`, append to
    `hardware/DAILY-UPDATES.md`, update the version block in the handoff and its Shared copy,
    commit only those files and the engine pin files in both repositories and push, and show
@@ -43,6 +47,34 @@ rolls back before releasing the lock. If the machine loses power instead,
 `llm-daily-update-recover.service` rolls back at the next login, before the model hub starts.
 
 ## What it does not decide
+
+### Zero-swap gate correction — October 24
+
+The original comparator checked dedicated VRAM spill but omitted worker swap.
+It now checks both the shared benchmark's per-model memory record and a separate
+0.5-second lifecycle monitor, started before the normal launcher and stopped
+after worker shutdown. This includes loading, prewarm, benchmark and teardown;
+loading still does not count as measured TTFT. Peaks and sampling errors latch
+throughout that lifecycle. A swapping or unverifiable production baseline skips
+installation; a swapping or unverifiable candidate triggers the existing rollback
+and restored-build smoke check. Gate tables include the recorded byte counts.
+
+The read-only collector identifies only configured inference servers/routers and
+their descendants, counts each PID once, and de-duplicates shared AMD DRM clients.
+It excludes compilers, environment preparation, DSH and unrelated applications.
+No global swap setting, worker guard, runtime version or model profile changes.
+The timer uses this code on its next invocation; no service restart is required.
+Sampling cannot prove the absence of transients between observations.
+
+Validation: CPU-only comparator/accounting/orchestrator rollback regressions and
+replay of the saved October24 vLLM records. That replay rejects their nonzero
+swap fields. The old collector could double-count descendants, so those original
+byte values remain historical reported values, not exact unique-process totals.
+No fresh throughput, full-window inference or real runtime rollback was run for
+this fix; the previously installed versions remain unchanged. Earlier promotion
+records retain the gates that existed when they were produced.
+
+### Retained limits
 
 It never relaxes a gate, edits upstream source beyond the existing local patch scripts,
 changes model settings, quantizations, contexts or memory guards, or upgrades ROCm,

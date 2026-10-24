@@ -27,6 +27,8 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT/'dsh'))
+sys.path.insert(0, str(ROOT/'hardware'))
+from inference_memory import MemoryMonitor, memory_failures, lifecycle_failures
 GEN = ROOT/'hardware/generated'
 LOCK = GEN/'GPU-LOCK'
 COORD = GEN/'AGENT-COORDINATION.md'
@@ -206,49 +208,53 @@ def launcher_bench(kind, models, stage, label, logfile):
     """Normal launcher + unchanged shared benchmark for each model. Returns the merged record."""
     profiles = []
     groups = [[m] for m in models] if kind in ('maya','strata') else [models]
-    for group in groups:
-        args = ['--no-browser'] if kind in ('strata', 'maya') else []
-        if kind in ('maya','strata'):
-            args += ['--model', group[0]]
-        with open(stage/f'{label}-launcher.log', 'a') as launch_log:
-            launcher = subprocess.Popen(['/usr/bin/python3', str(ROOT/'dsh/launch-backend.py'), kind, *args],
-                                        cwd=ROOT, stdout=launch_log, stderr=subprocess.STDOUT, start_new_session=True)
-        try:
-            wait_port(PORT[kind], launcher, 1800)
-            for model in group:
-                started = time.monotonic()
-                try:
-                    post(PORT[kind], {'model': model, 'messages': [{'role': 'user', 'content': 'Hi'}], 'max_tokens': 4,
-                                      'chat_template_kwargs': {'enable_thinking': False}}, 3600)
-                except OSError as error:
-                    log(f'{label} {model}: prewarm failed ({error})', logfile)
-                log(f'{label} {model}: loaded in {time.monotonic() - started:.0f} s', logfile)
-                result = stage/f'{label}-{model}.json'
-                sh([str(HARNESS), str(ROOT/'hardware/benchmark-current-amd.py'), '--kind', kind, '--date', TODAY,
-                    '--model', model, '--output', str(result)], stage/f'{label}-bench.log', check=False)
-                try:
-                    profile = json.loads(result.read_text())['profiles'][0]
-                except (OSError, ValueError, IndexError):
-                    profile = {'model': model, 'status': 'failed', 'error_type': 'no result'}
-                profiles.append(profile)
-                log(f'{label} {model}: {profile["status"]}', logfile)
-        finally:
-            if launcher.poll() is None:
-                os.killpg(launcher.pid, signal.SIGTERM)
-                try:
-                    launcher.wait(180)
-                except subprocess.TimeoutExpired:
-                    stop_backends()
-            stop_backends()
-            wait_idle()
-    record = {'date': TODAY, 'backend': kind, 'label': label, 'profiles': profiles}
-    (stage/f'{label}.json').write_text(json.dumps(record, indent=2) + '\n')
+    monitor = MemoryMonitor().start()
+    try:
+        for group in groups:
+            args = ['--no-browser'] if kind in ('strata', 'maya') else []
+            if kind in ('maya','strata'):
+                args += ['--model', group[0]]
+            with open(stage/f'{label}-launcher.log', 'a') as launch_log:
+                launcher = subprocess.Popen(['/usr/bin/python3', str(ROOT/'dsh/launch-backend.py'), kind, *args],
+                                            cwd=ROOT, stdout=launch_log, stderr=subprocess.STDOUT, start_new_session=True)
+            try:
+                wait_port(PORT[kind], launcher, 1800)
+                for model in group:
+                    started = time.monotonic()
+                    try:
+                        post(PORT[kind], {'model': model, 'messages': [{'role': 'user', 'content': 'Hi'}], 'max_tokens': 4,
+                                          'chat_template_kwargs': {'enable_thinking': False}}, 3600)
+                    except OSError as error:
+                        log(f'{label} {model}: prewarm failed ({error})', logfile)
+                    log(f'{label} {model}: loaded in {time.monotonic() - started:.0f} s', logfile)
+                    result = stage/f'{label}-{model}.json'
+                    sh([str(HARNESS), str(ROOT/'hardware/benchmark-current-amd.py'), '--kind', kind, '--date', TODAY,
+                        '--model', model, '--output', str(result)], stage/f'{label}-bench.log', check=False)
+                    try:
+                        profile = json.loads(result.read_text())['profiles'][0]
+                    except (OSError, ValueError, IndexError):
+                        profile = {'model': model, 'status': 'failed', 'error_type': 'no result'}
+                    profiles.append(profile)
+                    log(f'{label} {model}: {profile["status"]}', logfile)
+            finally:
+                if launcher.poll() is None:
+                    os.killpg(launcher.pid, signal.SIGTERM)
+                    try:
+                        launcher.wait(180)
+                    except subprocess.TimeoutExpired:
+                        stop_backends()
+                stop_backends()
+                wait_idle()
+    finally:
+        record = {'date': TODAY, 'backend': kind, 'label': label, 'profiles': profiles,
+                  'lifecycle_memory': monitor.stop()}
+        (stage/f'{label}.json').write_text(json.dumps(record, indent=2) + '\n')
     return record
 
 
 def gates(stage, logfile):
     p = subprocess.run([sys.executable, str(ROOT/'hardware/compare-runtime-candidate.py'), '--baseline',
-                        str(stage/'baseline.json'), str(stage/'candidate.json')], capture_output=True, text=True)
+                        str(stage/'baseline.json'), str(stage/'candidate.json'), '--require-lifecycle-memory'], capture_output=True, text=True)
     (stage/'gates.md').write_text(p.stdout + p.stderr)
     log('gates:\n' + p.stdout, logfile)
     return p.returncode == 0, p.stdout
@@ -898,9 +904,16 @@ def test_engine(engine, current, latest, stage, state, logfile):
         baseline = launcher_bench(getattr(engine,'routing_kind',engine.kind), engine.models(), stage, 'baseline', logfile)
     except Step as error:
         return {**row, 'result': 'skipped (production baseline failed)', 'detail': str(error)}
-    failed = [p['model'] for p in baseline['profiles'] if p.get('status') != 'passed']
-    if failed:
-        return {**row, 'result': 'skipped (production baseline failed)', 'detail': ', '.join(failed)}
+    failed = [p['model'] for p in baseline['profiles']
+              if p.get('status') != 'passed' or memory_failures(p.get('memory'))]
+    lifecycle = lifecycle_failures(baseline)
+    expected = engine.models()
+    actual = [p['model'] for p in baseline['profiles']]
+    if not expected or sorted(actual) != sorted(expected) or len(actual) != len(set(actual)):
+        lifecycle.append('incomplete_production_model_coverage')
+    if failed or lifecycle:
+        detail = ', '.join(failed + lifecycle)
+        return {**row, 'result': 'skipped (production baseline failed)', 'detail': detail}
     try:
         engine.check(stage, stage/'check.log')
     except (Step, OSError, subprocess.SubprocessError) as error:

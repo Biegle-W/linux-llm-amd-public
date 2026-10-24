@@ -451,6 +451,11 @@ No Windows throughput is inferred from Linux results.
 
 ## Install, launch and connect
 
+The daily updater now requires **zero observed worker swap and VRAM spill** with
+valid memory telemetry covering model loading through shutdown. A failed candidate
+rolls back; a failed production baseline skips installation. [October24 gate repair
+and validation limits](linux/hardware/daily-update/README.md#zero-swap-gate-correction--october-24).
+
 | Reference files | Purpose |
 |---|---|
 | [`linux/`](linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |

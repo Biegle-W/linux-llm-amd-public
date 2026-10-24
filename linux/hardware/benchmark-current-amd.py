@@ -20,8 +20,8 @@ import uuid
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'dsh'))
 from amd_device import amd_devices
-from backend_switch import processes, is_inference
-from moe_memory import host_memory, worker_memory
+from moe_memory import host_memory
+from inference_memory import sample_memory
 from strata_memory import vram_snapshot
 from gpu_telemetry import ThermalRecorder, record_request
 
@@ -184,13 +184,12 @@ def main():
         def monitor():
             while not done.is_set():
                 try:
-                    tree=processes()
-                    pids={p.pid for p in tree.values() if is_inference(p)}
-                    for _ in range(8):pids.update(p.pid for p in tree.values() if p.parent in pids)
-                    memory=[worker_memory(pid) for pid in pids]
+                    memory=sample_memory()
+                    if memory is None:
+                        raise RuntimeError('No managed inference process memory sample')
                     readings.append({'available':host_memory()[1],'vram':vram_snapshot(),
-                                     'swap':sum(x[0] for x in memory),'spill':sum(x[1] for x in memory)})
-                except (OSError,RuntimeError):pass
+                                     'swap':memory['swap'],'spill':memory['spill']})
+                except (OSError,RuntimeError,ValueError,KeyError):pass
                 done.wait(1)
         try:
             # Loading/correctness occurs before the timed monitor; loading is not TTFT.
