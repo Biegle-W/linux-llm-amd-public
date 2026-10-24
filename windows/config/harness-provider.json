@@ -54,6 +54,36 @@
           "text"
         ],
         "reasoningEfforts": false
+      },
+      {
+        "id": "LFM2.5-24B-A2B-UD-IQ3_XXS-128K-RAM",
+        "name": "LFM2.5 24B-A2B (UD-IQ3_XXS) | 128K | Q8 KV in RAM",
+        "contextWindow": 131072,
+        "maxTokens": 4096,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Ornith-1.5-35B-A3B-IQ2_S-128K-RAM",
+        "name": "Ornith 1.5 35B-A3B (IQ2_S) | 128K | Q8 KV in RAM",
+        "contextWindow": 131072,
+        "maxTokens": 8192,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
+      },
+      {
+        "id": "Qwen3.8-35B-A3B-IQ2_M-64K-RAM",
+        "name": "Empero Qwen3.8 35B-A3B (IQ2_M) | 64K | Q8 KV in RAM",
+        "contextWindow": 65536,
+        "maxTokens": 4096,
+        "input": [
+          "text"
+        ],
+        "reasoningEfforts": false
       }
     ]
   },

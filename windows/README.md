@@ -62,3 +62,15 @@ tools/JSON and unload checks plus seven protocol/concurrency tests pass. These a
 functional smokes, not new throughput, full-window or GUI/remote-client tests.
 The final router is running idle; desktop resource pressure can still refuse a
 model load. [Usage and validation](reports/WINDOWS-MODEL-ROUTER-20261023.md).
+
+## Optional MoE context in RAM — October 23
+
+The router now has seven choices for four GGUF files. Original profiles and the
+Ornith default remain unchanged. Extra `-128K-RAM` profiles for Ornith and LFM,
+and `-64K-RAM` for Empero, keep Q8 K/V in CPU RAM. They reuse the same model files.
+All passed chat/streaming/tools and retrieval beyond their previous allocations;
+full64K/128K prompts were not tested. CPU attention trades speed for capacity.
+LFM requires4.5GiB and Ornith/Empero5GiB available RAM before loading, with20GiB
+commit headroom and the documented GPU limits. Reopen DSH to refresh its selector.
+The router is running idle; desktop memory pressure can still refuse a load.
+[Settings, measured cache placement and limits](reports/WINDOWS-MOE-RAM-CONTEXT-20261023.md).

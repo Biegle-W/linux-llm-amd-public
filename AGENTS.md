@@ -38,6 +38,12 @@ Use selected-profile44–48t/s samples, not faster low-headroom trials; see wind
 See `windows/README.md`. The Windows machine has no attached Shared D: drive;
 its current handoff stays in the Windows repository, without overwriting Linux's.
 Private Windows instructions are consolidated in its README, not AGENTS.md.
+Windows optional RAM-context profiles now add Ornith128K/LFM128K/Empero64K;
+seven IDs reuse four weights, original four/default unchanged. Q8 KV is verified
+on CPU; chat/SSE/tools/retrieval beyond old allocations pass. Full windows are
+untested. Preserve RAM-profile4.5/5GiB fresh physical RAM,20GiB commit and
+8192/9216MiB fresh VRAM plus loaded1024MiB and existing continuous RAM guard.
+See windows/reports/WINDOWS-MOE-RAM-CONTEXT-20261023.md. No Linux changes.
 All remaining AMD hardware/engine/default-model policies below apply to Linux.
 
 Current Linux hardware policy: use BOTH RX 7900 XTX cards for every active model.

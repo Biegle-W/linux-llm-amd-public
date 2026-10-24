@@ -46,3 +46,12 @@ Chrome was reopened with session restoration requested after testing.
 
 See [router API and proof](WINDOWS-MODEL-ROUTER-20261023.md). Keep both repositories
 current, Windows-only exports sanitized, and Linux files unchanged.
+
+## Current: optional RAM context — later October 23
+
+Seven router/DSH IDs now reuse four files. Three new MoE alternatives put Q8 KV
+in CPU RAM: Ornith128K, LFM128K, Empero64K. Original four profiles/default/limits
+are unchanged; dense Qwen27B is unchanged. Native CPU allocation is verified,
+all three pass functional tests and retrieval beyond their old allocations.
+Full windows are untested; preserve the physical-RAM admission and continuous
+guard. [Methods and proof](WINDOWS-MOE-RAM-CONTEXT-20261023.md).
