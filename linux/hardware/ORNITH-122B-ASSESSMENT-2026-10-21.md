@@ -98,7 +98,7 @@ No ROCm upgrade is needed merely to investigate the candidate.
 
 Searches on both forums found no matched Ornith122B/dual7900XTX/64GB result.
 [lcz topic1382](https://lcz.me/topic/1382/12), accessed October21 (exact dates not
-exposed), contains conflicting35B-family anecdotes: 西域草影 reports dual6800XT/
+exposed), contains conflicting35B-family anecdotes: Xiyu Caoying reports dual6800XT/
 llama.cpp-turboquant-hip around51t/s, while others discuss quant-dependent tool
 quality. Quant/context/workload are incomplete; do not transfer that rate to122B.
 [Level1Techs post7](https://forum.level1techs.com/t/one-week-of-local-ai-on-strix-halo/254086/7),

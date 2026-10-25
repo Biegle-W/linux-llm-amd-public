@@ -439,11 +439,11 @@ for actual capacity and throughput. No runtime update was required.
 ## PCIe switch purchase — October 19
 
 The owner reports buying the four-GPU PEX88096 kit whose listing spells it
-“plx8096 PCIe4.0扩展 四卡GPU”. Installation, link negotiation, HIP peer access,
+“plx8096 PCIe 4.0 expansion, four GPUs”. Installation, link negotiation, HIP peer access,
 RCCL correctness and inference speed are pending local validation. Current
 benchmarks still use the motherboard x8/x8 layout and host transport.
 
-- [lcz.me, 张光璞, September 2026 purchase thread](https://lcz.me/topic/1791):
+- [lcz.me, Zhang Guangpu, September 2026 purchase thread](https://lcz.me/topic/1791):
   Taobao four-slot kit, reported RMB 2,380 including host card/two cables.
 - [Same owner's dual-7900-XTX follow-up](https://lcz.me/topic/1791/118):
   PEX88096, 32 GiB BARs, 7.23 GB/s peer copy / 7.06 GB/s direct peer kernel read;
@@ -504,8 +504,8 @@ pass. Local arithmetic/JSON/tools/marker checks do not establish general quality
 
 External reports and locally reviewed implementation are separate from validation.
 
-- [lcz.me topic 1921, original report](https://lcz.me/topic/1921/5), 懒人烘培 (date not exposed in the fetched page; reviewed October 20): Ryzen 7500F, 96 GB, dual 7900 XTX TP2, same AutoRound GPTQ target, SGLang f84475cc, BF16 KV/DFLASH/196608 configured context, HiCache. This supplies a compatible candidate, not a speed prediction. Its initial vLLM “cold” table contains prefix hits, acknowledged later; it must not be imported as cold prefill performance.
-- [lcz.me topic 1921 follow-up](https://lcz.me/topic/1921/11), 张光璞 (reviewed October 20): GPU-evicted-prefix tests distinguish write-through host reuse from a GPU hit. `hicache-size` is per rank, so TP2 doubles that allocation. HiCache is prefix retention, not a substitute for enough live GPU KV capacity. No host-cache allocation is added merely to enlarge a context flag.
+- [lcz.me topic 1921, original report](https://lcz.me/topic/1921/5), Lanren Hongpei (date not exposed in the fetched page; reviewed October 20): Ryzen 7500F, 96 GB, dual 7900 XTX TP2, same AutoRound GPTQ target, SGLang f84475cc, BF16 KV/DFLASH/196608 configured context, HiCache. This supplies a compatible candidate, not a speed prediction. Its initial vLLM “cold” table contains prefix hits, acknowledged later; it must not be imported as cold prefill performance.
+- [lcz.me topic 1921 follow-up](https://lcz.me/topic/1921/11), Zhang Guangpu (reviewed October 20): GPU-evicted-prefix tests distinguish write-through host reuse from a GPU hit. `hicache-size` is per rank, so TP2 doubles that allocation. HiCache is prefix retention, not a substitute for enough live GPU KV capacity. No host-cache allocation is added merely to enlarge a context flag.
 - [lcz.me dual-XTX discussion](https://lcz.me/topic/1674), flyer666/community (reviewed October 20): SGLang BF16 KV and vLLM INT8 KV have different capacities. Reported gfx1100 FP8 execution is slower in the discussed implementation. Preserve the previously faster BF16 SGLang path and evaluate vLLM per-token/head INT8 only with actual long-prefill/retrieval checks.
 - [lcz.me RDNA3 vLLM implementation discussion](https://lcz.me/topic/1252/14), iamvirus/community (reviewed October 20), links [JartX RDNA3 source branch](https://github.com/JartX/vllm/tree/perf/rdna3_full_stack). Its INT8 prefill/decode kernels are candidates for that branch; no fork/kernel upgrade is installed by this task. Our retained wheel already exposes per-token/head INT8 KV, but performance and support must be validated on the exact installed build.
 - [Level1Techs Crucible discussion](https://forum.level1techs.com/t/crucible-llm-bench-your-llm-and-server-is-it-fast-enough-for-everyone/257531), MadGoat, October 1 with October 12 release details: measure actual token counts, retrieval at different depths and per-request TTFT/decode separately. This is methodology, not a matching gfx1100 configuration or a reason to copy another system's rate. Existing local probes already count tokens and place markers near the beginning/middle/end; no new benchmark package is installed.
@@ -704,7 +704,7 @@ are not justified by a newer version number.
 
 No matched122B/dual7900XTX/64GB benchmark found in either forum search.
 [lcz1382](https://lcz.me/topic/1382/12), accessed October21 (exact date not exposed):
-西域草影 reports35B/dual6800XT/llama.cpp-turboquant-hip, while others describe
+Xiyu Caoying reports35B/dual6800XT/llama.cpp-turboquant-hip, while others describe
 quant-dependent agent reliability; incomplete quant/context/workload, not122B.
 [Level1Techs post7](https://forum.level1techs.com/t/one-week-of-local-ai-on-strix-halo/254086/7),
 lhl,August23,2026: gfx1100/gfx1151 projects and35B evaluations in a Strix-Halo

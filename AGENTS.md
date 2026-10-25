@@ -1,5 +1,11 @@
 # Public repository maintenance
 
+Standing language policy: all GitHub-facing documentation, comments, CLI messages,
+commit messages, issues and pull requests must be in English. Chat may remain
+Chinese. Preserve historical multilingual benchmark/test payload values using
+Unicode escapes rather than translating measured inputs or outputs. Explain
+fixtures in English and retain attribution links for Latin-script author names.
+
 This is a sanitized reference distribution. Never copy private workstation paths,
 IP addresses, hostnames, credentials, chat sessions, raw logs, or private Git
 history here. Use example paths and addresses in documentation. Keep models and
