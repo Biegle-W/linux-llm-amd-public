@@ -5,7 +5,7 @@ snapshot. Offline NVIDIA rollback files and research were separately archived
 before the user-approved AMD workspace cleanup. Original rollback environments
 and unused source were removed after checksum verification; this reference tree
 and all tracked setup files are retained. No installed runtime or model is
-included in this public tree. See [archive scope and version boundaries](../linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md).
+included in this public tree. See [archive scope and version boundaries](../../linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md).
 
 Historical reference from October 15, 2026, before the AMD migration:
 RTX 4070 12 GB + RTX 3060 12 GB, Intel i5-13600KF, 64 GB RAM and approximately
@@ -81,7 +81,7 @@ larger pool caused a long-prompt CUDA OOM. Strata retains the process-local
 
 ## Saved benchmarks
 
-See the [public README NVIDIA result set](../README.md#nvidia-archived-setup-and-results)
+See the [public README NVIDIA result set](../documentation/ubuntu-readme-before-organization-2026-10-24.md#nvidia-archived-setup-and-results)
 for per-model prefill/decode, the direct HyperQwen comparison, and longer-input
 results, plus the October 15 INT8-MLP TTFT comparison. Measurements retain their
 original dates, runtime versions and settings; earlier decode results predate

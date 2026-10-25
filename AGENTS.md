@@ -18,11 +18,11 @@ The private Linux repository's AGENTS.md identifies its workspace and exact hand
 locations; Windows instructions are in its README. Keep the Linux repository handoff and its Shared-drive copy identical.
 Report any blocked commit, push or handoff synchronization explicitly.
 
-## Separate platform repositories — October 24
+## Hardware-specific repositories — October 24
 
-This is `Biegle-W/ubuntu-llm-public`. Maintain Linux AMD and the historical
-`linux-nvidia/` tree here. Windows setup, reports and retired configurations now
-live at the root of `Biegle-W/windows-llm-public`; publish Windows changes there.
+This is `Biegle-W/ubuntu-llm-amd-public`. Maintain Linux AMD and the historical
+`archives/ubuntu-nvidia/` tree here. Windows setup, reports and retired configurations now
+live at the root of `Biegle-W/windows-llm-nvidia-public`; publish Windows changes there.
 The pre-split public Windows snapshot remains in this repository's history.
 Do not recreate `windows/` here or copy private repository history. Linux clients
 running on Windows are still covered by the Linux network handoff. The existing
@@ -355,3 +355,14 @@ User requested fresh S drafter test on installedsource25deec5/1.1.24 exactSDK7.2
 ## Strata Qwen matching table — October24
 
 User-authorized current8183c6b6/HIP7.2.3 retest selected the existing gfx1100/hipBLASLt100202 table explicitly via STRATA_HIPBLASLT_TUNING. Keep prefill2048/split26/overlap/13.5GiB/native256K/INT8KV32K/all existing guards.4096 failed actual5GiB/card startup (4.655/5.510GiB),8192 unattempted; do not relax reserves to select them. Independent repeat and normal near258K/history/JSON/tools/SSE/originalUI/authenticatedhostself API pass, zero owned swap/spill. Older9ae table/prose regression remains historical. Table changes rounding; public profiles need exact SDK/local validation. DeepSeek/Maya/defaults unchanged. See linux/hardware/STRATA-TUNING-2026-10-24.md and numeric record.
+
+
+## Organization and archives — October 24
+
+Repositories are `ubuntu-llm-amd` / `ubuntu-llm-amd-public` and
+`windows-llm-nvidia` / `windows-llm-nvidia-public`. Preserve private/public
+boundaries. Active Ubuntu source paths stay fixed for installed launchers and the
+daily publisher. Archive retired setup source under `archives/`; never move live
+runtime environments, weights, dependencies or private state as a documentation
+cleanup. Keep exact dated measurements and hardware attribution. Review archive
+links after moving source. No retired setup becomes active through reorganization.

@@ -1,0 +1,540 @@
+> Archived overview captured before the October 24 repository organization. Use the [current system index](../../README.md) for active settings; measurements below retain their original dates and builds.
+
+# Ubuntu local LLM hardware, engines and benchmarks
+
+Current **Ubuntu dual AMD** setup and **archived dual NVIDIA** results.
+This repository contains sanitized Linux launchers, configuration, build/patch
+helpers and saved measurements. The independent Windows RTX 3060 build lives in
+[windows-llm-public](https://github.com/Biegle-W/windows-llm-nvidia-public).
+Model weights, installed runtimes, credentials and personal app data are excluded.
+
+- [Windows RTX 3060: setup and results](https://github.com/Biegle-W/windows-llm-nvidia-public)
+- [Windows: four-model OpenAI-compatible router](https://github.com/Biegle-W/windows-llm-nvidia-public/blob/main/reports/WINDOWS-MODEL-ROUTER-20261023.md)
+- [AMD: latest setup and results](#amd-latest-setup-and-results)
+- [NVIDIA: archived setup and results](#nvidia-archived-setup-and-results)
+- [Install, launch and connect](#install-launch-and-connect)
+- [Complete benchmark history and experiments](../../linux/hardware/BENCHMARK-HISTORY.md)
+
+Saved **October21,2026 i9/64GB AMD benchmarks** cover the ten currently active profiles with their distinct methods; retired profiles remain historical; older i5/32 GB results remain dated.
+The archived NVIDIA measurements retain their original dates and builds.
+[Full fresh AMD method, token counts and numeric evidence](../../linux/hardware/CURRENT-AMD-BENCHMARKS.md).
+
+<a id="saved-benchmark-results"></a>
+
+Maya’s web sidebar now offers **Maya model → GLM or DeepSeek → Switch model**.
+The page stays open during guarded reload; both GPUs, 32K contexts and memory
+guards are retained. Reopening `dsh` reuses its verified existing frontend and
+leaves inference untouched. [Functional validation](../../linux/hardware/MAYA-WEB-SWITCHING-2026-10-21.md).
+
+
+## Strata Qwen table selection — October24
+
+The matching gfx1100/hipBLASLt100202 table is now selected on source8183c6b6/HIP7.2.3;
+Linux model `qwen3.8-flash-next-iq3_xxs` retains262144 context, prefill2048 and every
+existing dual-GPU/memory guard. Windows CUDA profiles and connection settings are unchanged. Pooled repeated
+controls→table: native fresh~8K PP **916.1→1208.85t/s (+32.0%)**,
+external fresh TTFT **8.973→6.807s**. Normal-production
+three-trial medians: code/prose **77.38/50.61t/s**, PP**1208.2**,
+fresh TTFT**6.810s**. This is an exact-build settings comparison,
+not a universal decode/quality speedup.4096 failed unchanged5GiB/card startup
+admission (4.655/5.510GiB);8192 was not attempted. Near257990-input markers,
+full-history follow-up, JSON/tools/SSE/originalUI/authenticated host-self API pass;
+zero owned swap/spill. [Gates, failures and full-run thermals](../../linux/hardware/STRATA-TUNING-2026-10-24.md)
+and [all trials](../../linux/hardware/results/strata-tuning-2026-10-24.json).
+
+
+## Separate public repositories
+
+The former `local-llm-public` repository is now `ubuntu-llm-public`; its existing
+public commits and Linux/NVIDIA paths are retained. Windows files now live at
+the root of [windows-llm-public](https://github.com/Biegle-W/windows-llm-nvidia-public).
+The [pre-split Windows snapshot](https://github.com/Biegle-W/ubuntu-llm-amd-public/tree/8fbe5b515ba623b786d7a28d825989bcd627a725/windows)
+remains available in this repository's history. The two private operational
+repositories remain private; only sanitized public content was moved.
+
+## Reading the measurements
+
+**Context** is the configured total token budget: instructions, tools, history,
+input and output. An allocated window is not proof of full-window validation;
+the long-input tables show the actual lengths tested. K means 1,024 tokens.
+**Prefill (PP)** and **decode** are tokens/s. **TTFT** is seconds from request
+submission to the first visible output; model cold-start time is excluded from
+the warm benchmarks. **—** means not recorded, not zero.
+
+“Code / prose” gives separate workloads in that order. Warm short results are
+three-run medians unless a different sample count or smoke method is stated. Native PP comes from engine
+timing; **Book PP** is llama-benchy 0.4.0's latency-adjusted estimate for a
+2,048-token prompt at depth 0, not native prompt timing. Input divided by TTFT,
+prompt-processing duration and total request time are not substituted for TTFT
+or native PP. Different rows can use different workloads and output lengths.
+These are saved complete-profile results, not a controlled AMD-versus-NVIDIA ranking.
+
+## Strata 0.2.4 DeepSeek — October 24
+
+Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the current Qwen engine is8183c6b6 (October24 daily promotion). No weight download/duplication, no new ports.
+
+| Model ID | RAM-store GB | Code / prose t/s | Native PP t/s | TTFT s |
+|---|---:|---:|---:|---:|
+| `deepseek-v4.1-flash-1017-strata-s` | 0 | 7.00 / 7.16 | 168.0 | 37.491 |
+| `deepseek-v4.1-flash-1017-strata-xs` | 0 | 18.25 / 12.77 | 183.7 | 34.289 |
+
+Exact-binary isolated timings, three code/prose trials with a 256-token output cap and three fresh prompts with ~6.3K actual input tokens; native prefill and external SSE TTFT/decode are distinct. Selected profiles pass the normal Ptyxis launcher, original UI, authenticated host-self API, near-31.5K/history checks and Q3 switchback with zero owned swap/spill. These are not a matched Maya speed comparison. [Setup, gates and thermals](../../linux/hardware/STRATA-DEEPSEEK-2026-10-24.md) · [numeric record](../../linux/hardware/results/strata-deepseek-2026-10-24.json).
+
+## Current Linux hardware inventory
+
+**i9-13900KS,64 GB RAM (61.51 GiB OS-visible), two RX 7900 XTX 24 GB**, MSI MPG Z690
+CARBON WIFI, CPU PCIe 4.0 x8/x8. The PEX88096 switch is purchased but not installed
+or validated. Both GPUs participate in every active profile. llama.cpp/Strata
+split layers; SGLang/vLLM use TP2 through host transport with direct P2P disabled.
+One managed model runs at a time.
+
+## Strata Linux app update and verified Intel desktop — October 20
+
+The October20 rollout promoted **0.1.46.1 /9ae93f7b** after candidate and normal
+Desktop/native-frontend/authenticated-API validation. The user-selected actual
+startup minimum is5GiB/card; engine7/8GiB targets, continuous3GiB protection,
+52G/no-swap worker, Q3/13.5GiB/256K and both cards remain. Intel UHD770/i915
+renders the desktop. The separate App0.2.1/bundled0.1.46 remains installed.
+
+Promotion-batch three-trial medians: native prefill**912.2t/s**, fresh8K TTFT**9.015s**,
+code/prose decode**75.28/50.31t/s**. Actual257984-input/256-output retrieval/code
+and258266-input cached full-history follow-up passed. Zero owned swap/spill.
+Earlier0.1.45 rates retain their original build; no matched A/B speedup is claimed.
+[Update, exact versions and validation limits](../../linux/hardware/STRATA-STARTUP5-2026-10-20.md).
+
+[DeepInfer compatibility assessment — October20](../../linux/hardware/DEEPINFER-ASSESSMENT-2026-10-20.md): reviewed upstream774ce244 has no ROCm/gfx1100 build path and expects a Hugging Face checkpoint rather than the existing Maya GGUF packs. Research only; no runtime or weight changes.
+
+## Eleven profiles measured — October23 (pre-daily-update builds)
+
+Every active profile was re-run with its production launcher and unchanged settings, using the shared
+method (three 256-output code/prose runs, three fresh ~8K marker prompts, medians), one backend at a time,
+after enabling GPU fan control (OverDrive `amdgpu.ppfeaturemask=0xfff7ffff`, CoolerControl max-cooling
+curves on every fan) and BIOS OS-controlled ASPM. **All eleven passed** (all markers, no cache reuse, both
+GPUs, zero VRAM spill).
+
+| Model · engine | Context | Code / prose decode t/s | Fresh PP t/s | Fresh TTFT s | Actual fresh input | vs previous: code / prose / PP |
+|---|---:|---:|---:|---:|---:|---|
+| Empero Qwen3.8-35B-A3B IQ4_XS · llama.cpp | 262,144 | 119.89 / 72.61 | 2,988.5 | 2.748 | 8,185–8,188 | -1.3% / -1.2% / +1.5% |
+| Sage-A1.5 Q4_K_M · llama.cpp MTP3 | 65,536 | 80.42 / 64.93 | 2,839.2 | 2.892 | 8,186–8,188 | -0.5% / -0.4% / +1.6% |
+| Nemotron Super IQ3_XXS · llama.cpp | 32,768 | 15.63 / 17.14 | 433.4 | 18.300 | 7,924–7,925 | -0.1% / -0.5% / +0.5% |
+| Ornith-1.5-122B Q4_K_M · llama.cpp | 32,768 | 11.43 / 13.32 | 717.2 | 11.425 | 8,187–8,189 | -0.1% / -0.1% / +0.3% |
+| Qwen3.8-27B INT4 · SGLang TP2 DFlash2 | 163,840 | 206.18 / 71.08 | 1,468.8ᵉ | 5.585 | 8,187–8,189 | -2.6% / -2.1% / +1.3% |
+| Qwen3.8-27B INT4 · vLLM TP2 MTP3 | 163,840 | 134.82 / 71.73 | 1,511.0ᵉ | 5.435 | 8,186–8,191 | +0.7% / +1.2% / +2.4% |
+| Nemotron Bolt W4A16 · vLLM TP2 | 262,144 | 38.12 / 38.08 | 2,950.4ᵉ | 2.699 | 7,923–7,927 | +2.1% / +2.3% / -0.3% |
+| Qwen3.8-Flash-Next IQ3_XXS · Strata | 262,144 | 78.05 / 47.63 | 916.0 | 8.974 | 8,185–8,187 | +0.9% / -10.6% / +0.8% |
+| GLM-5.3-Flash Maya-S · Maya | 32,768 | 18.64 / 16.28 | 539.1 | 13.289 | 6,310–6,312 | -5.5% / +3.8% / +0.7% |
+| DeepSeek-V4.1 Maya-XS + DSpark · Maya | 32,768 | 27.60 / 13.67 | 448.1 | 14.074 | 6,299–6,300 | -11.8% / -11.0% / +0.6% |
+| DeepSeek-V4.1 Maya-S · Maya | 32,768 | 6.73 / 6.78 | 301.2 | 20.919 | 6,296–6,300 | +4.8% / +0.0% / +0.7% |
+
+ᵉ engine-phase prefill (SGLang/vLLM); others native. Previous values: llama.cpp from the October22 batch sweep; SGLang/vLLM Qwen and Strata from the October21 shared baseline; Bolt from its October21 production benchmark; GLM and DeepSeek-S from the October23 Maya1.1.24 update; DeepSeek-XS from the October23 isolated XS+DSpark test.
+
+Nine profiles are within ±5.5% of their previous rates. **Strata prose −10.6%** (consistent 47.5–47.7 t/s;
+different generated text than every earlier run, so not an isolated cause) and **DeepSeek-XS −11.8% / −11.0%**
+decode against its earlier isolated test harness (first production-launcher XS rate; prefill unchanged).
+Under load both GPUs' fans now reach 3,600 / 3,100 RPM; sampled GPU hotspot peaks were 84 / 73 °C,
+CPU package 100 °C. GLM recorded 25.8 MiB swap across its process tree at 12.45 GiB available RAM; the
+other ten recorded zero. [Report, thermals and fan setup](../../linux/hardware/ALL-MODELS-2026-10-23.md) ·
+[numeric record](../../linux/hardware/results/all-models-2026-10-23.json).
+
+
+## Both DeepSeek quants are selectable — October23
+
+Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+(`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
+(`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
+Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.
+Choose either DeepSeek quant in Maya's web selector, DSH, or the OpenAI-compatible
+API; only one worker runs at a time. Strata remains the DSH default.
+Normal S→XS→S→XS, authenticated API/tools/JSON/SSE and original UI passed.
+No new throughput benchmark: saved S code/prose**6.42/6.78t/s**, PP**299.0**, fresh
+TTFT**21.062s**; saved XS+DSpark**31.28/15.36t/s**, PP**445.5**, TTFT**14.156s**.
+These are separate earlier same-day three-trial sessions, not an equal-quality A/B.
+All six S shards passed fresh full-file SHA256; no download/deletion was needed.
+[Deployment and validation](../../linux/hardware/MAYA-DUAL-DEEPSEEK-2026-10-23.md).
+
+### Maya-S DSpark retest — October23
+
+**Current S selection: DSpark off.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
+32K/24threads/both7900XTX, identical starting S routing seeds and unchanged guards.
+Against the arithmetic mean of the two no-draft arm medians, DSpark changes code **-3.37%**, prose **-5.14%** and native prefill **-6.82%**; geometric mean **-5.12%**. Speed gate **fails**.
+
+| Arm /32K | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| A1-none | 7.29 | 6.92 | 303.4 | 20.768 |
+| B-dspark | 6.71 | 6.42 | 277.4 | 22.716 |
+| A2-none | 6.59 | 6.61 | 292.0 | 21.577 |
+
+Sequential A1(off)→B(on)→A2(off), three timed256-output trials per code/prose
+workload and three fresh~6.3K actual DeepSeek input probes per arm. These are not
+thermally equalized or a matched comparison to the older1.1.17/128-output test.
+Retain S with DSpark disabled. XS keeps its own matching xs2 drafter; GLM and all other profiles are unchanged.
+[All trials, functional/context checks and thermal coverage](../../linux/hardware/MAYA-S-DSPARK-2026-10-23.md).
+
+
+## Maya-XS + DSpark rollout history — October23 (before separate S selection)
+
+DeepSeek now uses **Maya-XS + matching dspark-xs2** under the same model ID
+`deepseek-v4.1-flash-1017-maya`:32K,both7900XTX,ROCm7.2.3/Maya1.1.24. GLM stays
+Maya-S v2/MTP; all guards, ten-model catalog and Strata DSH default were preserved at that rollout; S is now separately selectable above.
+Normal Desktop/Ptyxis/original UI/authenticated API and GLM→XS→GLM→XS passed;
+XS is ready. [Production proof and rollback](../../linux/hardware/MAYA-XS-PRODUCTION-2026-10-23.md).
+Saved earlier XS benchmark: **31.28 code /15.36 prose t/s**, **445.5 native PP**,
+**14.156s fresh TTFT**; single1024-output HTML**12.54t/s**. No throughput rerun
+or new speed claim accompanies production integration. XS trades quality for size.
+
+## Maya-XS + matching DSpark test — October23
+
+The earlier isolated **Maya1.1.24/ROCm7.2.3, both7900XTX,32K** test below
+preceded the user-authorized XS + DSpark production switch above. Ten profiles existed at that test stage. XS is the smaller, lower-quality IQ1_S quant;
+its matching drafter is `dspark-xs2` (IQ2_XXS). Existing memory guards are unchanged.
+
+| Maya1.1.24 /32K /ROCm7.2.3 | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| XS DSpark off | 20.45 | 15.56 | 428.7 | 14.714 |
+| XS **matching DSpark on** | 31.28 | 15.36 | 445.5 | 14.156 |
+| Saved same-day Maya-S, no DSpark | 6.42 | 6.78 | 299.0 | 21.062 |
+
+
+Single1024-output HTML code probe: **10.95→12.54t/s** off→on;
+short-code medians do not predict every workload.
+Both arms passed; near-window/history/tools/JSON/SSE, exact counts, longer1024-output
+probes, thermal coverage and draft/no-draft comparison are in the
+[XS test report](../../linux/hardware/MAYA-XS-DSPARK-2026-10-23.md). The saved S row is a separate
+same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed locally.
+
+## Maya 1.1.24 — October 23
+
+Promoted exact tested development source **25deec5 /1.1.24** on retained ROCm7.2.3.
+At source promotion, both quants were Maya-S, both GPUs/32K,GLM40GiB/MTP and DeepSeek24threads/noDSpark;
+DeepSeek subsequently switched to XS + DSpark above. These S rates remain historical;
+all memory guards and the Strata DSH default remain. **GLM PREFILL_FUSED=0** retains
+MMQ because the newly enabled gfx1100 fused path failed parity on both cards.
+DeepSeek native fresh prefill185.1→299.0t/s and TTFT34.045→21.062s; decode remains similar.
+GLM performance is approximately unchanged. These are sequential matched workloads,
+not thermally equalised A/B trials; no universal source speedup is claimed.
+
+| Model /1.1.24 | Context | Code / prose decode t/s | Native PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| GLM-5.3-Flash Maya-S | 32,768 | 19.72 / 15.69 | 535.6 | 11.928 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | 32,768 | 6.42 / 6.78 | 299.0 | 21.062 |
+
+Both candidates passed near31.5K retrieval/history,JSON/tools/SSE, dual-GPU/no-swap
+and normal Desktop/Ptyxis/original browser UI/selector/authenticated API/switchback.
+Actual counts, timings, sampled high temperatures and failed/excluded kernels:
+[update report](../../linux/hardware/MAYA-UPDATE-2026-10-23.md) · [numeric evidence](../../linux/hardware/results/maya-update-2026-10-23.json).
+
+## AMD: latest setup and results
+
+**Thirteen active profiles:** four llama.cpp, one SGLang, two vLLM, three Strata and three Maya. Qwen3.6-35B-A3B remains retired. On October21 Bolt moved from llama.cpp to vLLM (13× faster prefill), and the llama.cpp Qwen3.8-27B Q4 profile was retired in favour of its faster SGLang/vLLM versions.
+Hardware: i9-13900KS,64GB installed/61.51GiB OS-visible, two RX7900XTX24GB,
+CPU PCIe4x8/x8; Intel desktop. Switch installation/P2P status is unchanged.
+Super IQ3 is active; retired Muse Q4/Super Q4 and SGLang MTP remain historical.
+
+All production ROCm stacks remain on 7.2.3; no ROCm10.1 candidate passed every performance and validation gate.
+[ROCm10.1 comparison, decisions and exact build fingerprints](../../linux/hardware/ROCM101-2026-10-21.md),
+[all trials/thermals](../../linux/hardware/results/rocm101-2026-10-21.json).
+No driver/kernel update or global SDK replacement was performed.
+
+### Current runtime pins (performance retains its measured build)
+
+| Engine | Source / selected stack | Scope |
+|---|---|---|
+| llama.cpp | [edc35384](https://github.com/ggml-org/llama.cpp/commit/edc353842c1be9b4ebc27460a1da4526a026d3a9); MoE HIP | Four MoE profiles (Empero, Super, Sage, Ornith) on HIP 7.2.3; no Vulkan profile remains; both GPUs, unchanged expert backing/cache/MTP/contexts |
+| SGLang | [f84475cc](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), retained ROCm7.2.3 stack | TP2 DFlash2/BF16 KV/163840; local RDNA repairs preserved |
+| vLLM | 0.32.1rc1.dev361+g83c078d95.rocm72, retained ROCm7.2.3 stack | Qwen: TP2/compiled MTP3/BF16 KV/163840. Bolt: TP2/AutoRound W4A16/BF16 KV/262144 |
+| Strata Qwen | [7ddc17a3](https://github.com/Niko1221/Strata/commit/7ddc17a38fe7f31637e895ecfba58c2cd43d65ec), ROCm7.2.3 | Q3/13.5GiB/six workers/256K/INT8 KV32K resident; native frontend unchanged |
+| Strata DeepSeek | [8183c6b6/0.1.49.1](https://github.com/Niko1221/Strata/commit/8183c6b67162340c09b67360860177c577a65f2e), ROCm7.2.3 | Reused Maya-S / Maya-XS+xs2, both GPUs/32K; independent engine, guards and rollback |
+| Maya | [f26d8ba/v1.1.26](https://github.com/mw00/project-maya/commit/f26d8bab43f9b10f0475986b541dc46ada45285e), ROCm7.2.3 | Three32K profiles: GLM-Sv2, DeepSeek-XS+xs2 and S/noDSpark; guards retained; GLM MMQ with failed fused path disabled |
+| ComfyUI | [8f04fd6e/0.42.0](https://github.com/Comfy-Org/ComfyUI/tree/8f04fd6ecf4a548937971e840af2a985529fab76), Torch2.15 nightly/packaged ROCm7.2.1 | Normal-RAM image/video controls; browser/native Desktop share this stack |
+
+### October21 shared-method baseline (historical; newer Maya/batch results above)
+
+Fresh October21 controls: three timed requests/task and three fresh prefills,
+except vLLM's six fixed-seed controls across two starts. Empero's row uses
+six retained-control trials across two starts.
+One excluded short warmup/task; max256 output, seed42, temperature0.6/top-p0.95,
+thinking off. Different tokenizers count the same fresh record workload differently.
+Native PP is used for llama.cpp/Strata/Maya; SGLang/vLLM use engine-phase measurements.
+External SSE TTFT/decode are separate; model cold-start is excluded.
+
+| Model / quant | Backend / strategy | Context tokens | Actual fresh input | PP t/s | Fresh TTFT s | Short TTFT s, code / prose | Decode t/s, code / prose |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Qwen3.6-35B-A3B MXFP4_MOE (retired Oct 23) | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,183–8,188 | 379.6 | 21.579 | 0.059 / 0.059 | 124.95 / 76.72 |
+| Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | vLLM TP2, Triton int4 MoE | 262,144 | 7,922–7,925 | 2,958.7 | 2.692 | 0.077 / 0.071 | 37.32 / 37.21 |
+| Empero Qwen3.8-35B-A3B IQ4_XS | llama.cpp HIP7, cache/MTP3 | 262,144 | 8,185–8,190 | 395.1 | 20.727 | 0.058 / 0.057 | 122.11 / 74.32 |
+| Qwen3.8-27B GPTQ INT4 | SGLang TP2, DFlash2 | 163,840 | 8,188–8,190 | 1449.7 | 5.657 | 0.086 / 0.083 | 211.58 / 72.57 |
+| Qwen3.8-27B GPTQ INT4 | vLLM TP2, compiled MTP3 | 163,840 | 8,186–8,189 | 1475.2 | 5.562 | 0.068 / 0.075 | 133.92 / 70.91 |
+| Qwen3.8-Flash-Next IQ3_XXS | Strata HIP7, overlap/MTP3 | 262,144 | 8,187–8,189 | 908.5 | 9.047 | 0.223 / 0.229 | 77.33 / 53.25 |
+| GLM-5.3-Flash Maya-S | Maya HIP7, layer split/MTP | 32,768 | 6,311–6,312 | 532.5 | 12.041 | 0.086 / 0.097 | 17.96 / 16.09 |
+| DeepSeek-V4.1-Flash-1017 Maya-S | Maya HIP7, no DSpark | 32,768 | 6,297–6,301 | 187.3 | 33.666 | 0.380 / 0.553 | 6.92 / 7.08 |
+
+These are selected-stack timings, not a universal SDK or source speedup claim.
+Earlier October20/i5/NVIDIA measurements retain their original build/method/date.
+The new record retains every actual short input/output count, fresh-input/cache metadata,
+quality result, source/library fingerprint and thermal sample coverage.
+
+### Super IQ3 using fixed ~8K-input workloads
+
+| Super / workload | Context | Actual input / output | Native PP t/s | External TTFT s | External decode t/s |
+|---|---:|---:|---:|---:|---:|
+| IQ3_XXS / code | 32,768 | 8,108 / 256 | 98.64 | 82.213 | 15.94 |
+| IQ3_XXS / prose | 32,768 | 8,111 / 256 | 98.31 | 82.517 | 16.94 |
+
+Three trials/task, fixed8108/8111-token inputs,256 outputs, cache_prompt=false.
+These TTFTs include8K processing and are **not short-prompt TTFT**. Retain HIP7,
+21:19 layer split,19.124GiB CPU experts/2GiB GPU cache, six threads, MTP off.
+
+### Context, storage and validation limits
+
+Empero's failed promotion gate is recorded in the new report; its allocated256K window is not a new full-window production proof.
+Qwen3.6/Bolt retain256K allocation; latest shared-method probes are8K, with older
+~64K retrieval evidence separately dated. Strata's retained selected build has
+October20 near257984-input/256-output and full-history validation; its new SDK7
+control timings above are fresh8K. The rejected10.1 Strata build was not tested
+near256K. SGLang/vLLM retain their previously validated163840 settings; candidate
+vLLM10.1 additionally passed160866-input retrieval/160913-input history, but failed
+the diverse-seed speed gate and is not selected. No cache-token count or uncached
+PP is inferred when the API omits cache usage. Maya retains its earlier near31.5K
+history proof, while this batch adds fresh controls rather than new context sizes.
+
+[Full numeric results](../../linux/hardware/results/rocm101-2026-10-21.json) ·
+[Results index](../../linux/hardware/results/README.md) ·
+[Benchmark ledger](../../linux/hardware/BENCHMARK-HISTORY.md) ·
+[Historical i5/32GB AMD](../../linux/hardware/AMD-BENCHMARKS-2026-10-19.md).
+
+All previous storage/guards/DSH default/PATH/frontend policies are retained.
+No weights were downloaded or moved during that ROCm comparison; the separate Sage test below adds its own verified assets. Streaming Strata/Maya/Super assets stay on
+shared NVMe; resident GGUFs on Shared SATA, SGLang/vLLM checkpoints on Linux NVMe.
+[Storage evidence](../../linux/hardware/results/streaming-storage-2026-10-20.json).
+
+### Graphics controls
+
+Normal allowance61.51GiB, same seeded full workflows, one excluded full warmup
+and three timed runs/workflow/stack. QwenImage2.1 BF16:512×512/40steps;
+MiniMaxH3 INT8:608×352/39frames/20steps/24fps/audio. Both GPUs stage components,
+not TP. Server medians: retained/new image23.686/18.331s, video83.831/85.279s.
+Video regressed, so retain current ComfyUI. All16 normal outputs pass technical
+checks plus sampled visual review; the separate52GiB pilot's HIP fault remains
+recorded and did not recur under normal RAM. [Full comparison](../../linux/hardware/ROCM101-2026-10-21.md).
+
+## Sage-A1.5 test and ROCm selection — October21
+
+Official **Q4_K_M + vision projector** are downloaded and checksum-verified on
+Shared SATA. **Now active** as the llama.cpp profile `sage-a1.5`
+(64K/MTP3 + projector), usable through DSH, the model hub and the API (its Desktop Chat shortcut was removed October22). The Agents-A1 harness is not installed. DSH default is Strata Q3 (user, October21). llama.cpp4c3c5810/HIP7.2.3, both GPUs with
+CPU expert backing/hot cache, **64K/MTP3** passes tools/JSON/SSE, fresh8K,
+near61,999-input retrieval/full history and a separate vision smoke.
+
+| Sage64K test arm | Code decode t/s | Prose decode t/s | Native fresh PP t/s | Fresh TTFT s |
+|---|---:|---:|---:|---:|
+| ROCm7.2.3 noMTP | 53.58 | 53.16 | 393.18 | 20.832 |
+| ROCm7.2.3 MTP3 | 83.42 | 66.75 | 387.02 | 21.160 |
+| ROCm10.1.0 MTP3 | 84.03 | 66.33 | 386.65 | 21.182 |
+
+10.1 is effectively tied for Sage; retain7.2.3. Latest official is10.1;
+7.14.1 is a plausible next isolated candidate, **not locally validated**.
+[Detailed test/limits](../../linux/hardware/SAGE-A15-2026-10-21.md) ·
+[all trials](../../linux/hardware/results/sage-a15-2026-10-21.json) ·
+[ROCm/driver distinction and both-forum research](../../linux/hardware/ROCM-SELECTION-2026-10-21.md).
+
+### Any model on demand — local model hub
+
+[Model hub](../../linux/hardware/MODEL-HUB-2026-10-22.md): `http://127.0.0.1:30100/v1` (and the
+authenticated network gateway) lists every model on this PC and starts or switches its backend
+when a request names it. No manual backend launch is needed. Switches wait for in-flight replies,
+streaming clients get keep-alives while a model loads, and the hub never touches the GPUs while an
+agent holds `GPU-LOCK`. DSH providers point at it.
+
+### llama.cpp prompt batch — 4.6–13.6× faster prefill
+
+[Batch sweep](../../linux/hardware/LLAMA-BATCH-SWEEP-2026-10-22.md) (October 22): `ornith-1.5-122b` now uses
+`batch-size = ubatch-size = 4096` instead of the inherited 512/128, as do Empero, Sage and the since-retired Qwen3.6;
+Super uses 2048/1024. Native fresh ~8K prefill: Ornith 52.7 → 714.9 tok/s (TTFT 155 → 11.5 s),
+Super 93.9 → 431.4, the 35B models ~380–400 → 2,794–2,945 (TTFT ~21 → ~2.8 s). Decode is within 2%.
+Larger Ornith/Super sizes leave under 3 GiB free on a card, below the production VRAM guard.
+CPU thread count made no difference.
+
+### ROCm 7.2.4 / 7.14.1 — no gain
+
+[ROCm update test](../../linux/hardware/ROCM-724-7141-2026-10-22.md): neither the 7.2.4 runtime nor a
+7.14.1 llama.cpp rebuild beat fresh 7.2.3 controls. That covers vLLM Qwen, llama.cpp
+Qwen3.6/Sage and Ornith (also on 10.1). All were within ±3%. Sage's +3.1% on 7.14.1 vanished
+across seeds (−0.05%). 10.1.0 is still AMD's latest and was rejected on October 21. Retain 7.2.3.
+
+### Bolt on vLLM — isolated test
+
+[Bolt vLLM vs llama.cpp](../../linux/hardware/BOLT-VLLM-2026-10-21.md): the 4-bit AutoRound build on vLLM TP2
+decodes at the same speed (38.0/37.9 vs 36.8/36.7 t/s). It reads prompts about **13× faster**
+(2,910 vs 224 t/s; ~8K TTFT 2.7 s vs 35.4 s) and passed a 255K-token retrieval at 262K context.
+**Now active** as `nemotron-3.5-bolt-vllm`; the llama.cpp Bolt and Qwen3.8-27B Q4 profiles are retired.
+
+### vLLM alternatives for slow llama.cpp models — research only
+
+[Bolt/Sage research](../../linux/hardware/VLLM-ALTERNATIVES-BOLT-SAGE-2026-10-21.md): a 43.6 GB AutoRound
+W4A16 build of Bolt targets vLLM. The local vLLM has its architecture and a gfx1100 int4 MoE
+kernel, so it is the one candidate worth testing; memory will be tight. Sage has no ready
+4-bit vLLM build, and its official FP8 build needs FP8 hardware that RDNA3 lacks. Super-VL
+cannot fit in 48 GiB of VRAM. Nothing was downloaded.
+
+### Ornith-1.5-122B — Q4 test
+
+[Measured test](../../linux/hardware/ORNITH-122B-TEST-2026-10-21.md): test-only, not an active profile.
+Q4_K_M runs on both GPUs with 30 CPU expert layers, a 4 GiB GPU cache and 32K context.
+MTP off: **11.43 / 13.34** code/prose decode t/s and **52.68** native prefill.
+MTP3 was rejected (−27.3% geomean). A 30,988-token retrieval, the cached follow-up
+and vision passed. Fresh 31K TTFT is 594 s.
+
+[Architecture, quants and hardware assessment](../../linux/hardware/ORNITH-122B-ASSESSMENT-2026-10-21.md):
+Q4_K_M70.64GiB and UD-IQ3_XXS46.11GiB both contain MTP. A dual-GPU/CPU-expert-cache
+Q4 profile is plausible on64GB RAM (the assessment predates the test above). Publisher256K is not local context validation. Current
+profiles and measured speed tables remain unchanged.
+
+## NVIDIA: archived setup and results
+
+**RTX 4070 12 GB + RTX 3060 12 GB (24 GB total VRAM), i5-13600KF, 64 GB RAM.**
+Both GPUs participated; there was no CUDA P2P/NVLink. SGLang/vLLM/HyperQwen used
+TP2 with fallback transport; llama.cpp/Strata split layers and used CPU backing
+where configured. [Archived setup](../ubuntu-nvidia/README.md).
+
+### Archived installed builds versus measured builds
+
+The final October 14–15 configuration snapshot contains llama.cpp `a0e6dc7384ed`,
+Strata 0.1.44.1 / `296b59d2f73c`, SGLang
+`0.5.22.dev20261015+ga12814c158`, vLLM
+`0.32.0rc1.dev182+g429a3da66`, and HyperQwen `95ee3b64b0df` on vLLM 0.31.0.
+[Build instructions and exact pins](../ubuntu-nvidia/BUILD.md).
+Most saved throughput tests predate that update; the table records their actual
+measured versions. The October 15 HyperQwen results are TTFT-only, below.
+
+### Every model/backend with retained measurements
+
+| Model / quant | Measured backend / strategy | Context tokens | Prefill t/s | Short TTFT s, code / prose | Decode t/s | Date / method |
+|---|---|---:|---|---|---|---|
+| Flash-Next IQ3_XXS | Strata 0.1.40.3, MTP4, INT8 KV | 262,144 | 1,538.5 native at 14,195 input | — | 68.8 / 64.6 code/prose; 71.9 at 14,195 input/1,024 output | Oct 7; 3 warm short runs/task [NH] |
+| Flash-Next IQ2_XS, retired | Strata 0.1.39, MTP | 131,072 | 71.7 / 75.8 native short code/prose | — | 68.9 / 60.3 code/prose | Oct 5; 192 output each [NH] |
+| Qwen3.8-27B Q4_K_M | llama.cpp v0.5.0, MTP | 65,536 | 49.2 / 123.7 native short code/prose | — | 53.5 / 32.0 code/prose | Oct 5; 192 output each [NH] |
+| Muse-Glimmer-30B Q4 | llama.cpp v0.5.0 | 131,072 | 291.1 native | — | 23.6 | Oct 1; 70 input/93 output smoke [NH] |
+| Qwen3.6-35B-A3B MXFP4 | llama.cpp v0.5.0, CPU offload/MTP | 262,144 | 72.7 native | — | 26.2 | Oct 1; 26 input/**3 output**, smoke only [NH] |
+| Nemotron Lightning MXFP4, retired | llama.cpp v0.5.0, CPU offload/MTP | 1,048,576 | 55.0 native | — | 22.1 | Oct 1; 30 input/**3 output**; 1M allocation unproven [NH] |
+| Empero Qwen3.8-35B-A3B IQ4 | llama.cpp v0.5.0, CPU offload/MTP | 262,144 | 105.7 native | — | 32.6 | Oct 1; 26 input/**3 output**, smoke only [NH] |
+| GPT-OSS-20B, retired | llama.cpp v0.5.0 | 131,072 | 307.6 native | — | 83.9 | Oct 1; 81 input/57 output smoke [NH] |
+| GPT-OSS-120B, retired | Older llama.cpp, CPU offload | 131,072 | 5.6 native | — | 6.8 | Before Oct 1; 81 input/32 output; later build unverified [NH] |
+| Qwen3.8-27B INT4/group128 | SGLang 0.5.21, TP2/MTP | 40,960 | — | — | 83.56 / 51.59 code/prose | Oct 7; 3 warm 256-output medians/task [NH] |
+| Qwen3.8-27B INT4/group128 | vLLM 0.30.0, TP2/MTP3 | 49,152 | — | — | 86.04 / 58.01 code/prose | Oct 7; 3 warm 256-output medians/task [NH] |
+| Qwen3.8-27B AWQ | HyperQwen `10bb48841806` + vLLM 0.30.0, TP2/MTP3 | 65,536 | — | 0.094 / 0.091 | 108.3 / 66.8 code/prose | Oct 5; 3 warm 256-output medians/task [NH] |
+| Qwen3.8-27B AWQ | HyperQwen `10bb48841806` + vLLM 0.30.0, TP2/DFlash2 | 65,536 | — | 0.066 / 0.099 | 170.1 / 67.3 code/prose | Oct 5; same method [NH] |
+
+<a id="direct-hyperqwen-comparison--october-5-2026"></a>
+
+Three-token smoke outputs establish that generation ran; they do not establish
+sustained throughput or the advertised context capacity. Old Q5/Bonsai setups
+have no retained per-model benchmark in this summary; no results are invented.
+HyperQwen's October 5 figures predate INT8-MLP and the later 1 GiB/rank DFlash KV
+pool. Its directly retested vLLM baseline at 32K measured **86.1/53.6 decode**
+and **0.070/0.067 s TTFT** for code/prose; that is a different batch from the
+October 7 vLLM row above. [Original comparison and method](../../linux/hardware/README-ARCHIVE-2026-10-19.md#direct-hyperqwen-comparison--october-5-2026).
+
+### Long input and later HyperQwen TTFT tests
+
+| Model / measured backend | Context | Actual input / output tokens | Native prefill t/s | TTFT s | Decode t/s | Date |
+|---|---:|---:|---:|---|---|---|
+| Flash-Next Q3 / Strata 0.1.40.3 | 262,144 | 257,850 / 22 | 2,266.2 | — | Not a sustained decode test | Oct 7 [NH] |
+| Flash-Next Q3 / Strata 0.1.39 | 131,072 | 126,462 / 31 | 2,375.0 | — | 32.8, short retrieval | Oct 5 [NH] |
+| Qwen27B Q4 / llama.cpp v0.5.0 | 65,536 | 60,042 / 14 | 687.9 | — | 32.8, short retrieval | Oct 1 [NH] |
+| Qwen27B INT4 / SGLang 0.5.21 | 40,960 | 39,484 / short retrieval | — | 78.79 | — | Oct 7 [NH] |
+| Qwen27B INT4 / vLLM 0.30.0 | 49,152 | 47,666 / short retrieval | — | 120.28 | — | Oct 7 [NH] |
+| Qwen27B INT4 / SGLang 0.5.21 | 40,960 | 30,049 / 256 per trial | — | 55.20, first request | 33.11 median, repeats may cache | Oct 7 [NH] |
+| Qwen27B INT4 / vLLM 0.30.0 | 49,152 | 30,049 / 256 per trial | — | 63.54, first request | 36.99 median, repeats may cache | Oct 7 [NH] |
+| Qwen27B AWQ / HyperQwen DFlash2, vLLM 0.30.0 | 65,536 | 59,244 / 256 | — | 159.01 | 19.2 | Oct 5 [NH] |
+
+On October 15, the newer HyperQwen/vLLM 0.31.0 build compared W4A16 versus
+INT8-MLP with **dense prefix retention in both arms** (128 output tokens):
+
+| Input / cache condition | W4A16 TTFT s | INT8-MLP TTFT s |
+|---|---:|---:|
+| Fresh 5,237 input tokens, two-run mean | 8.04 | 5.93 |
+| Immediate 5,237-token repeat, two-run mean | 3.02 | 2.51 |
+| 21,077 input, 3,392 cached tokens | 34.33 | 27.32 |
+| 21,077 input, no cached prefix | 39.40 | 30.81 |
+
+These are TTFT measurements, not isolated PP/decode. The archived default later
+selected boundary-only prefix retention, so this trial is not an exact-default
+benchmark. [Saved method and limitations](../../linux/hardware/README-ARCHIVE-2026-10-19.md#later-nvidia-optimization--october-15-2026).
+No Windows throughput is inferred from Linux results.
+
+## Install, launch and connect
+
+Managed models and engines now unload after **10 minutes without inference** to
+save power. DSH and the gateway stay running; the next request starts the normal
+guarded backend again. Active requests/loading/queued jobs and GPU-LOCK block
+unloading; health/status polling does not reset the timer. Background applications
+may use system swap; the zero-swap rule concerns inference workers only.
+[Idle policy and validation](../../linux/hardware/MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24).
+
+The daily updater now requires **zero observed worker swap and VRAM spill** with
+valid memory telemetry covering model loading through shutdown. A failed candidate
+rolls back; a failed production baseline skips installation. [October24 gate repair
+and validation limits](../../linux/hardware/daily-update/README.md#zero-swap-gate-correction--october-24).
+
+| Reference files | Purpose |
+|---|---|
+| [`linux/`](../../linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |
+| [`linux-nvidia/`](../ubuntu-nvidia/README.md) | Historical dual-NVIDIA configuration; use as an alternative installation |
+| [Windows repository](https://github.com/Biegle-W/windows-llm-nvidia-public) | Independent RTX 3060 / 16 GB Windows setup, four-model CUDA router, dated reports and retired configurations |
+| [Consolidated handoff](../../linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) | Model IDs, storage, API/SSH use and validation limits |
+| [Full dated benchmark ledger](../../linux/hardware/BENCHMARK-HISTORY.md) | Single-AMD, earlier motherboards, tuning controls, retired engines and update stages |
+| [Previous README archive](../../linux/hardware/README-ARCHIVE-2026-10-19.md) | All previous publication tables and chronological notes |
+
+The Linux tree assumes `/opt/local-llm`. Active resident GGUF examples use
+`/mnt/shared/GGUF-Models`; Strata/Maya streaming assets use
+`/mnt/shared-nvme/LLM-Models`. HF GPTQ weights and the DFlash2 drafter remain
+under Linux NVMe `models/`. Obtain binaries/dependencies separately, adapt paths
+and GPU PCI addresses, and configure both `CONFIGURE_SHARED_DRIVE_UUID` and
+`CONFIGURE_SHARED_NVME_UUID` before using the storage helpers. Generate private harness/network settings locally and keep
+credentials outside Git. These hardware-specific examples are not a universal installer.
+
+To mount both model drives at desktop login, install the user service
+[`linux/network/local-llm-mounts.service`](../../linux/network/local-llm-mounts.service)
+with `systemctl --user enable local-llm-mounts.service`. It uses udisks without sudo.
+Ubuntu allows unprompted mounts only for the active local session, so log in to the
+desktop after a reboot before launching over SSH. Launchers still verify their own drive.
+
+[Maya](../../linux/maya/README.md) adds `llm-maya`, two 32K DSH profiles and loopback API 30030.
+
+Backend launchers start visible terminals; **dsh** is separate. **Strata Q3** /
+`llm-strata` starts the managed backend. **Strata App** is the separate AMD
+AppImage GUI; it does not inherit the managed profile/watchdog. See
+[menu installation](../../linux/launchers/STRATA-APP.md) and
+[official icon sources/licenses](../../linux/launchers/icons/README.md).
+Backend switching stops only configured inference workers, preserving DSH,
+the gateway and unrelated applications.
+
+The authenticated OpenAI-compatible LAN/Tailscale gateway uses
+`http://YOUR_LLM_HOST:10000/v1`. Use your own private key and address;
+[client and SSH instructions](../../linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
+
+Graphics generation is separate from the LLM benchmark tables:
+[Official Comfy Desktop setup/validation](../../linux/graphics/DESKTOP-2026-10-20.md)
+(`comfy-desktop`, reuses existing models/workflows; normal startup passed October21;
+terminal server remains `comfyui`),
+[ComfyUI setup](../../linux/graphics/INSTALL.md), [retained Qwen-Image/H3 models](../../linux/graphics/README.md)
+and [saved generation results](../../linux/graphics/VALIDATION-2026-10-18.md).
+
+Research-derived tuning retains direct [lcz.me](https://lcz.me/) and
+[Level1Techs](https://forum.level1techs.com/) post URLs and primary upstream sources
+in the [source ledger](../../linux/hardware/FORUM-OPTIMIZATION-SOURCES.md). The
+[October24 XTX forum review](../../linux/hardware/LCZ-7900XTX-RESEARCH-2026-10-24.md) identifies
+remaining candidates and incompatible recipes; research only. Forum speeds
+are not local measurements. Personal repair/warranty records, model weights,
+private history, runtime binaries and app state are outside this public reference.
+
+[L1]: linux/hardware/LEVEL1-TESTS-2026-10-17.md
+[D16]: linux/hardware/UPGRADE-DUAL-7900XTX.md
+[MOE]: linux/hardware/MOE-OFFLOAD-2026-10-18.md
+[Q4]: linux/hardware/NEMOTRON-Q4-2026-10-18.md
+[C17]: linux/hardware/CLEAN-TUNING-2026-10-17.md
+[U18]: linux/hardware/RUNTIME-UPGRADE-2026-10-18.md
+[CTX19]: linux/hardware/STRATA-CONTEXT-2026-10-19.md
+[NH]: linux/hardware/BENCHMARK-HISTORY.md#update-history-nvidia-pair-64-gb-ram
+
+The managed Strata Q3 and Maya launchers also open their native Chat/Monitor pages locally after their workers are ready; terminal logs stay visible. See the [frontend guide](../../linux/hardware/NATIVE-FRONTENDS-2026-10-20.md). DSH remains separate.

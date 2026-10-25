@@ -13,8 +13,8 @@ fresh TTFT**6.810s**. This is an exact-build settings comparison,
 not a universal decode/quality speedup.4096 failed unchanged5GiB/card startup
 admission (4.655/5.510GiB);8192 was not attempted. Near257990-input markers,
 full-history follow-up, JSON/tools/SSE/originalUI/authenticated host-self API pass;
-zero owned swap/spill. [Gates, failures and full-run thermals](./STRATA-TUNING-2026-10-24.md)
-and [all trials](./results/strata-tuning-2026-10-24.json).
+zero owned swap/spill. [Gates, failures and full-run thermals](STRATA-TUNING-2026-10-24.md)
+and [all trials](results/strata-tuning-2026-10-24.json).
 
 ## Strata 0.2.4 DeepSeek — October 24
 

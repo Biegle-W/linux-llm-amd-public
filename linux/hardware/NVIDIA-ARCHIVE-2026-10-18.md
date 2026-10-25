@@ -56,5 +56,5 @@ JIT still use its C++ compiler, sysroot and libraries. Current ROCm environments
 SDK, RCCL, active kernel caches, Vulkan builds, models and Strata preparation
 stay in place. Historical tracked configuration paths and reports also stay.
 
-The historical [Flash-MTP patch, license and setup notes](../../linux-nvidia/research/flash-mtp-2026-09-18/README.md)
+The historical [Flash-MTP patch, license and setup notes](../../archives/ubuntu-nvidia/research/flash-mtp-2026-09-18/README.md)
 are also retained as text in Git, independently of the private binary archive.

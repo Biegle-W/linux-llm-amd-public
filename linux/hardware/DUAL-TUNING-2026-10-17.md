@@ -17,7 +17,7 @@ vLLM uses INT4 KV and BF16 Mamba state. All model weights stay on the GPUs.
 ## Method and limits
 
 The two user-only prompts, sampling and output budget match the saved
-[NVIDIA short-prompt benchmark](../../README.md#direct-hyperqwen-comparison--october-5-2026):
+[NVIDIA short-prompt benchmark](../../archives/documentation/ubuntu-readme-before-organization-2026-10-24.md#direct-hyperqwen-comparison--october-5-2026):
 
 - Code: “Write a Python function that merges two sorted lists. Explain its time and space complexity.”
 - Prose: “Write a short story about a lighthouse keeper finding a letter.”

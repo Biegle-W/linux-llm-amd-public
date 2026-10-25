@@ -36,8 +36,8 @@ fresh TTFT**6.810s**. This is an exact-build settings comparison,
 not a universal decode/quality speedup.4096 failed unchanged5GiB/card startup
 admission (4.655/5.510GiB);8192 was not attempted. Near257990-input markers,
 full-history follow-up, JSON/tools/SSE/originalUI/authenticated host-self API pass;
-zero owned swap/spill. [Gates, failures and full-run thermals](./STRATA-TUNING-2026-10-24.md)
-and [all trials](./results/strata-tuning-2026-10-24.json).
+zero owned swap/spill. [Gates, failures and full-run thermals](STRATA-TUNING-2026-10-24.md)
+and [all trials](results/strata-tuning-2026-10-24.json).
 
 ## Strata 0.2.4 DeepSeek — October 24
 
@@ -830,8 +830,8 @@ READMEs and the consolidated Shared handoff when relevant.
 [NVA]: NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md
 [ST18]: STRATA-DUAL-AMD-2026-10-18.md
 [FT]: FREETOKEN-RETIRED-2026-10-18.md
-[PUB]: https://github.com/Biegle-W/ubuntu-llm-public#saved-benchmark-results
-[NVB]: https://github.com/Biegle-W/ubuntu-llm-public/blob/main/linux-nvidia/BUILD.md
+[PUB]: https://github.com/Biegle-W/ubuntu-llm-amd-public#saved-benchmark-results
+[NVB]: https://github.com/Biegle-W/ubuntu-llm-amd-public/blob/main/archives/ubuntu-nvidia/BUILD.md
 
 [OPT19]: STRATA-OPTIMIZATION-2026-10-19.md
 

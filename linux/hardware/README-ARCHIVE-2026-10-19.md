@@ -11,7 +11,7 @@ and [dated benchmark ledger](BENCHMARK-HISTORY.md). Old statements such as
 ## Benchmark and context overview — October 19
 
 [Full dated history: every retained model/engine, hardware phase, context,
-prefill/decode and validation-only update](../../linux/hardware/BENCHMARK-HISTORY.md).
+prefill/decode and validation-only update](BENCHMARK-HISTORY.md).
 History compiled from saved results; October 19 Strata tuning adds new measurements. This table is the current
 nine-profile index; older dated sections below retain their historical settings.
 All current profiles use **both RX 7900 XTX cards**, with 32 GB system RAM.
@@ -39,14 +39,14 @@ answers do not establish sustained full-window decode.
 The latest llama.cpp `31288c9c66e5` update and unchanged SGLang fork received
 functional revalidation, **not fresh speed tests**. Keep earlier speeds dated.
 [Methods, actual tested lengths, historical NVIDIA/single-AMD results and all
-update stages](../../linux/hardware/BENCHMARK-HISTORY.md).
+update stages](BENCHMARK-HISTORY.md).
 <!-- /benchmark-history-2026-10-19 -->
 
-Graphics models: [one retained Qwen-Image/H3 set and ComfyUI paths](../../linux/graphics/README.md); 70.40 GiB on Shared SATA. Both families passed ComfyUI generation on the two RX 7900 XTX cards.
+Graphics models: [one retained Qwen-Image/H3 set and ComfyUI paths](../graphics/README.md); 70.40 GiB on Shared SATA. Both families passed ComfyUI generation on the two RX 7900 XTX cards.
 
 Reference hardware configurations, inference-engine setup, reproducible tuning and measured performance for Linux and Windows.
 
-Image/video setup: [ComfyUI walkthrough](../../linux/hardware/IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](../../linux/hardware/UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](../../linux/graphics/VALIDATION-2026-10-18.md) and [launch instructions](../../linux/graphics/INSTALL.md) are current.
+Image/video setup: [ComfyUI walkthrough](IMAGE-VIDEO-SETUP-2026-10-18.md) and [current graphics inventory](UNSLOTH-MODEL-INVENTORY-2026-10-18.md). ComfyUI is installed; [generation results](../graphics/VALIDATION-2026-10-18.md) and [launch instructions](../graphics/INSTALL.md) are current.
 
 **October 19 Strata context:** native **256K** now passes on both RX 7900 XTX
 cards with 32 GB RAM, INT8 KV/32K GPU residency and RAM backing. Near-full
@@ -54,13 +54,13 @@ cards with 32 GB RAM, INT8 KV/32K GPU residency and RAM backing. Near-full
 Short code/prose medians: **72.2/48.0**. Split 26/trim/overlap, 2048 prefill,
 13.5 GiB CPU expert budget, 7/8 GiB reserves and worker-only guards. No model or
 runtime update, KV precision reduction or RoPE extension.
-[Configuration, all measurements, sources and limits](../../linux/hardware/STRATA-CONTEXT-2026-10-19.md).
+[Configuration, all measurements, sources and limits](STRATA-CONTEXT-2026-10-19.md).
 
 **October 18 development updates:** llama.cpp HIP/Vulkan `31288c9c66e5`,
 Strata HIP **0.1.45** and vLLM ROCm **dev329 / 39983a5e7** replace the earlier
 builds. SGLang retains the latest gfx1100 fork head `f84475ccf593` with its local
 repairs; official main is not a compatible unchanged replacement.
-[Exact versions, validation and rollback](../../linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
+[Exact versions, validation and rollback](RUNTIME-UPGRADE-2026-10-18.md).
 
 **Strata IQ3_XXS on both RX 7900 XTX cards:** native 256K on 32 GB RAM, MTP3,
 bounded CPU expert backing and GPU caches. Its separately gated 64 GB candidate
@@ -77,8 +77,8 @@ One temperature-zero sample each, with a background C++ build. These are not a
 controlled version comparison. Tools/results, streaming and retrieval passed;
 worker swap and sampled VRAM spill were zero. Minimum available RAM was 14.2 GiB;
 whole-card VRAM peaks were 22.23 / 23.77 GiB. The short retrieval answer does not
-establish sustained full-context decode. [Original 0.1.44.1 measurements](../../linux/hardware/STRATA-DUAL-AMD-2026-10-18.md)
-and [historical NVIDIA comparison](../../linux/hardware/NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
+establish sustained full-context decode. [Original 0.1.44.1 measurements](STRATA-DUAL-AMD-2026-10-18.md)
+and [historical NVIDIA comparison](NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md)
 keep their actual versions and methods.
 
 **Updated vLLM dev329, both cards:** three warm SSE decode samples per saved
@@ -92,12 +92,12 @@ short workload, 64K configured, compiled MTP3/BF16 KV:
 No background compilation; temperature 0.6, top-p 0.95, seed 42, 256-token cap.
 This is not a controlled old/new comparison. Fresh 64,033-token retrieval passed
 with 54.56 s TTFT; its short answer is not sustained decode.
-[Method and result data](../../linux/hardware/RUNTIME-UPGRADE-2026-10-18.md).
+[Method and result data](RUNTIME-UPGRADE-2026-10-18.md).
 
 **Fast Qwen 27B research:** the verified ~1,000 t/s headline is aggregate
 concurrency, rather than ordinary single-stream decode. Experimental Radeon
 ExLlamaV3 ports are promising; the current dual-card SGLang DFlash2 profile remains
-the established local choice. [AMD options, primary benchmarks and both forum source trails](../../linux/hardware/QWEN27B-AMD-SPECULATION-2026-10-18.md).
+the established local choice. [AMD options, primary benchmarks and both forum source trails](QWEN27B-AMD-SPECULATION-2026-10-18.md).
 
 <!-- comfyui-validation-2026-10-18 -->
 
@@ -109,12 +109,12 @@ the established local choice. [AMD options, primary benchmarks and both forum so
 Both passed coherent output checks; H3 also produced finite stereo audio.
 Single validation runs on 32 GB RAM with SATA weights; H3 staged through swap.
 These are staged two-GPU component workflows, not TP or maximum-capacity tests.
-[Methods, versions and limits](../../linux/graphics/VALIDATION-2026-10-18.md).
+[Methods, versions and limits](../graphics/VALIDATION-2026-10-18.md).
 
 <!-- freetoken-rocm-2026-10-18 -->
 **October 18: FreeToken removed at the user's request.** Runtime, Desktop app,
 launchers, saved app data and caches are removed. Shared models and other engines
-remain. [Historical measurements and limits](../../linux/hardware/FREETOKEN-RETIRED-2026-10-18.md).
+remain. [Historical measurements and limits](FREETOKEN-RETIRED-2026-10-18.md).
 <!-- /freetoken-rocm-2026-10-18 -->
 
 <!-- moe-offload-2026-10-18 -->
@@ -132,12 +132,12 @@ uses the bounded 32 GB dual-HIP profile above. Earlier GPU-only rows are histori
 | `empero-qwen3.8-35b-a3b` | 262,144 | 104.9 | 457.8 |
 
 Nemotron now uses **Q4_K_M**, 12 CPU expert layers, a 7 GiB GPU cache ceiling
-and layer split 21:19. [Replacement, measurements and source](../../linux/hardware/NEMOTRON-Q4-2026-10-18.md).
+and layer split 21:19. [Replacement, measurements and source](NEMOTRON-Q4-2026-10-18.md).
 Its retired IQ2 results remain in the historical report.
 
 Single runs with differing short output lengths; not matched speed rankings. CPU/cache
 placement, memory limits, measured token counts and both forums' direct sources:
-[validation report](../../linux/hardware/MOE-OFFLOAD-2026-10-18.md). The normal llama launcher
+[validation report](MOE-OFFLOAD-2026-10-18.md). The normal llama launcher
 selects Vulkan for dense models and HIP for MoEs; DSH model IDs remain unchanged.
 <!-- /moe-offload-2026-10-18 -->
 
@@ -147,15 +147,15 @@ groups of obsolete NVIDIA originals, CUDA caches, downloaded installers,
 unselected experiment build/cache files and UV package cache. Observed NVMe
 recovery: **55.58 GiB**. Current models, AMD runtimes/toolchains and compiled
 kernel caches, Strata preparation and private state are preserved.
-[Exact scope and checks](../../linux/hardware/CLEANUP-REVIEW-2026-10-18.md).
-The verified [NVIDIA recovery archive](../../linux/hardware/NVIDIA-ARCHIVE-2026-10-18.md)
+[Exact scope and checks](CLEANUP-REVIEW-2026-10-18.md).
+The verified [NVIDIA recovery archive](NVIDIA-ARCHIVE-2026-10-18.md)
 remains on Shared SATA (10.16 GiB). Historical setup records, patches and benchmarks
 remain in Git for future reference.
 <!-- /cleanup-review-2026-10-18 -->
 
 <!-- consolidated-handoff-2026-10-18 -->
 **Shared handoff consolidated October 18:** use the single
-[current Linux/Windows-client guide](../../linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
+[current Linux/Windows-client guide](../network/LINUX-LLM-RUNTIME-HANDOFF.md).
 It reconciles nine active profiles, both AMD cards, current contexts, vLLM's
 startup fix, client/API/SSH access and deferred/retired setups. Nine original
 Shared documents are preserved in a dated archive; their old settings are historical.
@@ -169,7 +169,7 @@ TP2, 65,536 context, MTP3 and fixed 3.5 GiB KV per GPU are preserved. Long retri
 tools/JSON and prefix caching passed with GPU-resident weights. Startup host
 swap was observed on the 32 GB system; see the validation limits.
 Desktop startup errors are logged and remain visible until Enter; CLI/SSH failures still return normally.
-[Diagnosis, validation and limits](../../linux/hardware/VLLM-STARTUP-2026-10-18.md).
+[Diagnosis, validation and limits](VLLM-STARTUP-2026-10-18.md).
 <!-- /vllm-startup-2026-10-18 -->
 
 <!-- level1-tests-2026-10-17 -->
@@ -191,12 +191,12 @@ matched, while cross-engine rows compare complete profiles and quant/cache
 formats differ. Restored rocWMMA passed 84 CPU-reference cases but reduced long
 prefill speed; Radiance used the existing GPTQ model. P2P remains unavailable;
 manual fan A/B still needs administrator access. See [measurements, sources and
-limits](../../linux/hardware/LEVEL1-TESTS-2026-10-17.md).
+limits](LEVEL1-TESTS-2026-10-17.md).
 <!-- /level1-tests-2026-10-17 -->
 
 **Research sources:** [Level1Techs](https://forum.level1techs.com/) and
 [lcz.me](https://lcz.me/) are now part of the standing HIP/ROCm/C++ research
-workflow. See the [source review and optimization decisions](../../linux/hardware/FORUM-OPTIMIZATION-SOURCES.md)
+workflow. See the [source review and optimization decisions](FORUM-OPTIMIZATION-SOURCES.md)
 for direct posts, upstream code, applicability and local validation status.
 Forum-derived changes must retain citations in both repositories.
 
@@ -210,7 +210,7 @@ Forum-derived changes must retain citations in both repositories.
 | Book PP2048 estimate, t/s | 1,114.44 | 1,585.23 |
 | Book decode, mean t/s | 38.97 | 88.93 |
 
-Three timed runs plus excluded warm-up, saved NVIDIA code/prose prompts and sampling; separate seeded llama-benchy book workload. The tuned INT8-cache profile took 130.38s TTFT on the same 64,033-input marker probe; BF16 took **53.73s** and returned all markers correctly. Small functional and numerical/graph checks passed; rates depend on text and speculative acceptance. No sampled VRAM spill or backend-owned post-load swap growth in the selected run. DSH selection and connection settings are preserved. See [measurements, configuration and limits](../../linux/hardware/VLLM-TUNING-2026-10-17.md).
+Three timed runs plus excluded warm-up, saved NVIDIA code/prose prompts and sampling; separate seeded llama-benchy book workload. The tuned INT8-cache profile took 130.38s TTFT on the same 64,033-input marker probe; BF16 took **53.73s** and returned all markers correctly. Small functional and numerical/graph checks passed; rates depend on text and speculative acceptance. No sampled VRAM spill or backend-owned post-load swap growth in the selected run. DSH selection and connection settings are preserved. See [measurements, configuration and limits](VLLM-TUNING-2026-10-17.md).
 <!-- /vllm-tuning-2026-10-17 -->
 
 **Earlier October 17 clean retry — SGLang retained; vLLM superseded above:** SGLang MTP now uses **MTP3**
@@ -235,7 +235,7 @@ DSH currently defaults to vLLM; select **Local SGLang /
 `qwen3.8-27b-sglang-dflash2`** for the faster measured profile. Its saved selection
 is preserved. GPU0 reached 108°C hotspot and SMU reported hotspot-limit activity;
 a cooling A/B test is still needed to quantify any associated slowdown.
-[Full comparison, forum differences and limits](../../linux/hardware/CLEAN-TUNING-2026-10-17.md).
+[Full comparison, forum differences and limits](CLEAN-TUNING-2026-10-17.md).
 
 **October 17 Harness update:** DeepSeek Harness is pinned to
 `@deepseek-ai/dsh@0.2.1-rc.2`, the newest official npm prerelease checked on
@@ -260,7 +260,7 @@ MTP3 startup hit the host-memory guard while Unsloth Studio competed for RAM.
 The optimized-verifier attempt was cancelled during loading; DFlash2/vLLM
 protocol comparisons remain untested. This is not evidence of MTP3 or verifier
 incompatibility. Keep MTP2, auto protocol and standard verification. No workers
-remain running. [Measurements and limits](../../linux/hardware/DUAL-TUNING-2026-10-17.md).
+remain running. [Measurements and limits](DUAL-TUNING-2026-10-17.md).
 
 **October 17 motherboard update:** MSI MPG Z690 CARBON WIFI, two RX 7900 XTX
 24 GB cards, both CPU-connected at **PCIe 4.0 x8**. There is still 32 GB system
@@ -272,7 +272,7 @@ peer queries remain false with fine-grain PCIe enabled. Large BARs and kernel
 P2P options are already enabled. The proposed remedy while retaining this CPU
 and board is a real active PCIe switch shared by both GPUs, pending hardware and
 transfer validation. No software fix, kernel/BIOS change or speedup was deployed.
-[Evidence and switch requirements](../../linux/hardware/PCIE-P2P-2026-10-17.md).
+[Evidence and switch requirements](PCIE-P2P-2026-10-17.md).
 
 **October 17 SGLang tuning:** DFlash2 now has a **65,536-token** context,
 GPU prefix caching and 2,048-token prefill chunks. MTP retains **40,960 tokens**
@@ -293,7 +293,7 @@ passed in 66.6 seconds; MTP's near-40K input passed in 37.0 seconds. Short decod
 is broadly comparable to the DFlash2 16K baseline, but the selected profile's
 prose mean was 2.8% lower. Large prompts still take time to process; cache gains
 require a matching prefix and disappear when the worker unloads.
-[Settings, comparison and limits](../../linux/hardware/SGLANG-DUAL-CONTEXT-2026-10-17.md).
+[Settings, comparison and limits](SGLANG-DUAL-CONTEXT-2026-10-17.md).
 
 ## Previous motherboard results — October 16
 
@@ -329,8 +329,8 @@ still deferred at that historical check; its current 32K dual-HIP setup is above
 The second card is behind a chipset PCIe 4.0 x4 link and neither card exposes
 ROCm peer access. Both-card execution does not guarantee higher speed. The
 isolated RCCL compatibility library fixes initial collective failures without
-replacing the system/SDK library. See the [migration report](../../linux/hardware/UPGRADE-DUAL-7900XTX.md)
-and [sanitized result data](../../linux/hardware/dual-amd-2026-10-16.json).
+replacing the system/SDK library. See the [migration report](UPGRADE-DUAL-7900XTX.md)
+and [sanitized result data](dual-amd-2026-10-16.json).
 
 **Historical single-AMD SGLang context update (earlier October 16):** `qwen3.8-27b-sglang` now serves **40,960
 total tokens** on one RX 7900 XTX, retaining MTP2 and BF16 KV. The tested static
@@ -340,7 +340,7 @@ spill. Fresh short decode means: 53.50 inventory / 61.93 code / 42.78 prose t/s.
 The fresh 16K baseline was 53.74 / 62.18 / 44.66 t/s, so this is not a promise of
 zero slowdown. FP8 was tested and not selected because of its workload-dependent
 speed penalties. DFlash2 remains 16K BF16; vLLM and llama.cpp are unchanged.
-[Full comparison and limits](../../linux/hardware/SGLANG-CONTEXT-2026-10-16.md).
+[Full comparison and limits](SGLANG-CONTEXT-2026-10-16.md).
 
 **October 16 model-folder organization:** both SGLang and vLLM share
 `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/`. SGLang's DFlash2 drafter now lives in
@@ -362,13 +362,13 @@ Adapt paths, GPU selection, memory budgets and runtime versions before launching
 
 October 19: **Strata App** is available in the application menu with its official
 bundled desktop logo. It opens the existing AMD AppImage; **Strata Q3** remains
-the separate managed DSH backend. See [app-menu installation](../../linux/launchers/STRATA-APP.md).
+the separate managed DSH backend. See [app-menu installation](../launchers/STRATA-APP.md).
 Menu registration was validated without starting the app or another model.
 
 
 Official upstream logos/favicons replaced the initial custom artwork on
 October 18 for llama.cpp, SGLang, vLLM, Strata Q3, dsh and Turnstone.
-[Logo sources, pinned checksums and original licenses](../../linux/launchers/icons/README.md)
+[Logo sources, pinned checksums and original licenses](../launchers/icons/README.md)
 are retained with the setup. Assets are unchanged; Turnstone's existing inline
 SVG favicon is decoded from its official HTML. Update each absolute `Icon=` path
 when moving the installation. Backend commands and model settings are unaffected.
@@ -404,7 +404,7 @@ SGLang requires 21 GiB free VRAM per card before loading; vLLM's selected profil
 requires 20 GiB. These are admission gates, not actual model allocation sizes.
 
 Runtime versions for older measurements remain attached to their dated reports.
-See the [current development update](../../linux/hardware/RUNTIME-UPGRADE-2026-10-18.md)
+See the [current development update](RUNTIME-UPGRADE-2026-10-18.md)
 for newly installed pins and validation. Earlier baseline pins:
 
 - [Radeon SGLang fork](https://github.com/StevenChenSE/sglang), branch
@@ -425,7 +425,7 @@ HyperQwen is retired from the current Linux setup: its CUDA runtime, launchers
 and profiles were removed after its unused target. Old SGLang/vLLM CUDA
 environments, the old llama.cpp CUDA build and obsolete SGLang Flash-Next
 source/dependencies were also removed. Active AMD runtimes are preserved.
-See the [cleanup record](../../linux/hardware/RETIRED-SETUPS-2026-10-16.md). The obsolete LowLatency checkpoint,
+See the [cleanup record](RETIRED-SETUPS-2026-10-16.md). The obsolete LowLatency checkpoint,
 separate Qwen MTP GGUF and unused Bolt vision projector were also removed from
 the active machine. Historical NVIDIA profiles remain as reference configurations.
 The SGLang DFlash2 drafter is still required.
@@ -435,14 +435,14 @@ cards at 32K with MTP and an 8 GiB CPU expert budget. Click **Strata Q3** or run
 `llm-strata`; DSH stays separate. Select **Local Strata** /
 `qwen3.8-flash-next-iq3_xxs`; local API `http://127.0.0.1:30020/v1`.
 The prepared 64 GB / 128K candidate remains inactive until the installed-memory
-gate and actual long-context checks pass. [Settings and upgrade procedure](../../linux/hardware/STRATA-AFTER-RAM.md).
+gate and actual long-context checks pass. [Settings and upgrade procedure](STRATA-AFTER-RAM.md).
 
 ## Previous NVIDIA setup
 
-The [linux-nvidia/](../../linux-nvidia/README.md) archive contains the previous RTX 4070
+The [linux-nvidia/](../../archives/ubuntu-nvidia/README.md) archive contains the previous RTX 4070
 12 GB + RTX 3060 12 GB / 64 GB RAM configuration: CUDA llama.cpp, SGLang, vLLM,
 HyperQwen and Strata, plus separate DSH/Turnstone launchers. It includes historical
-TP2/offload profiles, compatibility patches and [pinned build notes](../../linux-nvidia/BUILD.md).
+TP2/offload profiles, compatibility patches and [pinned build notes](../../archives/ubuntu-nvidia/BUILD.md).
 Use it as an alternative to `linux/`; both use the same example workspace and ports.
 It does not change the current AMD configuration or restore retired model files.
 
@@ -526,7 +526,7 @@ The same 30,233-token retrieval request took 156.79 seconds with FP8/32K and
 37.92 seconds with BF16/32K. BF16/40K retrieved all markers from 38,410 input
 tokens in 51.94 seconds. These are total request times, not pure prefill rates.
 40K inventory/code speed was close to the fresh 16K baseline; prose averaged
-about 4% lower. No sampled VRAM spill. See the [full context report](../../linux/hardware/SGLANG-CONTEXT-2026-10-16.md)
+about 4% lower. No sampled VRAM spill. See the [full context report](SGLANG-CONTEXT-2026-10-16.md)
 for limits, exact settings, and machine-readable results.
 
 #### Qwen speculative decoding by workload
@@ -558,7 +558,7 @@ Historical dual-NVIDIA setup with 64 GB RAM. SGLang, vLLM and HyperQwen use TP2
 without CUDA P2P; llama.cpp uses layer splitting, sometimes with CPU expert
 offload. Strata uses its GPU split and expert paging. The following results
 **predate the October 14 nightly update** recorded in
-[the NVIDIA build notes](../../linux-nvidia/BUILD.md); they are not speed claims for
+[the NVIDIA build notes](../../archives/ubuntu-nvidia/BUILD.md); they are not speed claims for
 those newer builds or for the current AMD machine.
 
 | Measured engine | Model / strategy | Tested configuration context | Prefill t/s | Decode t/s | Date / sample |

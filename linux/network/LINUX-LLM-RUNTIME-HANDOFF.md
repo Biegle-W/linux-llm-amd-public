@@ -8,14 +8,13 @@ This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUN
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
-**Public repository split prepared (October24; publication pending):** the planned
-Ubuntu setup and historical Linux NVIDIA archive repository is [ubuntu-llm-public](https://github.com/Biegle-W/ubuntu-llm-public).
-The planned independent Windows RTX3060 setup, reports and retired repository is
-[windows-llm-public](https://github.com/Biegle-W/windows-llm-public), at its root.
-The prepared split retains Ubuntu public history and copies only sanitized public
-Windows files. Creation, rename and pushes await explicit approval of these names
-and the reviewed public snapshot. Private repositories remain private. This changes no
-runtime, model profile, port or connection setting.
+**Repository organization (October24; prepared for publication):** private/public
+Ubuntu repositories are named `ubuntu-llm-amd` / `ubuntu-llm-amd-public`; Windows
+repositories are `windows-llm-nvidia` / `windows-llm-nvidia-public`. The former Ubuntu
+NVIDIA setup and retired source are under `archives/`; Windows keeps its own archive.
+Private/public history stays separate. Existing local checkout paths, installed
+launchers, model assets, guards, ports and daily publisher paths stay unchanged.
+[Archive index](../../archives/README.md).
 
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-24 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
@@ -1038,7 +1037,7 @@ against a same-hardware baseline with `hardware/compare-runtime-candidate.py --b
 [Staging guide](../hardware/CANDIDATE-STAGING.md).
 
 Earlier October 19 public documentation cleanup (before the fresh benchmark batch): the
-[public README](https://github.com/Biegle-W/local-llm-public#amd-latest-setup-and-results)
+[public README](https://github.com/Biegle-W/ubuntu-llm-amd-public#amd-latest-setup-and-results)
 now presents two hardware result sets: latest dual-AMD setup and archived dual-NVIDIA.
 Each model/backend has context, prefill, TTFT and decode fields, with measured
 build/date, missing metrics and older-build timings labeled. Short and long-input

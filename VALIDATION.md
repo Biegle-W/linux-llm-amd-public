@@ -58,3 +58,12 @@ retired assets. Only its README/ignore rules changed, with a validation note add
 Checked file preservation, document links, syntax and publication privacy.
 No runtime, model, profile, port, benchmark or service setting changed; no GPU
 or Windows inference trial was performed for this repository-only change.
+
+
+October 24 hardware-specific reorganization: repository identities distinguish
+Ubuntu AMD from Windows NVIDIA. Retired setup source is indexed under `archives/`.
+All previously tracked source/configuration and numeric evidence is preserved;
+non-document bytes are unchanged. Markdown links were adjusted for relocation.
+Python/JSON syntax and publication privacy checks pass, with no new broken local
+document targets. Active launchers, model profiles, contexts, guards, ports and
+runtime paths are unchanged. No new inference or performance test is claimed.
