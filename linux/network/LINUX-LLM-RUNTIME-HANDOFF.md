@@ -19,18 +19,18 @@ Existing local checkout paths, installed launchers, model assets, guards, ports
 and daily publisher paths remain unchanged.
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-25 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `6b9ba4f2e8c1` |
+| llama.cpp | `2280f0fd163b` |
 | vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 
-Last run: llama.cpp skipped (production baseline failed); vLLM rejected; Strata promoted; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed).
+Last run: llama.cpp promoted; Strata DeepSeek rejected; Maya rejected.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
@@ -58,11 +58,13 @@ shutdown lifecycle. Larger swap fails; dedicated VRAM spill must remain zero.
 Invalid/missing telemetry, sampling errors, absent workers and incomplete coverage
 still fail closed; performance/quality gates remain. Background system swap is
 allowed. Existing worker cgroup limits, RAM/VRAM admission and latched watchdogs
-remain. Saved October25 llama.cpp/Maya/Strata DeepSeek baselines pass the new
-memory check; vLLM dev466 still fails large swap and Qwen prose regression.
-18 CPU regression tests and saved-record replay validate the policy only: no new
-GPU test, runtime promotion or speed measurement. The skipped candidates still
-need fresh tests. [Policy](../hardware/daily-update/README.md#minor-worker-swap-allowance--october-25).
+remain. Fresh normal-launcher tests promoted llama.cpp `2280f0fd`; Maya 1.1.28
+failed DeepSeek decode gates and was rolled back/answer-smoke verified, while
+Strata DeepSeek 0.1.51 failed selected IQ3_XXS parity before installation. All fresh
+baselines and the tested candidate memory records met the 64 MiB cap. Existing
+Maya 1.1.26 and Strata DeepSeek 0.1.49.1 are retained. No new full-window or remote-peer
+check. [Fresh outcomes, timings and thermals](../hardware/FRESH-ENGINE-TESTS-2026-10-25.md).
+[Policy](../hardware/daily-update/README.md#minor-worker-swap-allowance--october-25).
 
 
 ## Strata Qwen table selection — October24

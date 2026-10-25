@@ -8,6 +8,94 @@ first token within max(1.25×, +0.05 s), no fewer retrieval markers, at most 64 
 worker swap and zero VRAM spill with valid launch-through-shutdown memory telemetry).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
+## 2026-10-25 — fresh tests after the 64 MiB allowance
+
+- **llama.cpp** `6b9ba4f2e8c1` → `2280f0fd163b`: **promoted**. all gates passed
+- **Strata DeepSeek** `8183c6b67162` → `4b9e05a2a806`: **rejected before installation**. IQ3_XXS WMMA/scalar parity exceeded tolerance on both GPUs (3.14e-3 > 3e-3); production retained. [Details](FRESH-ENGINE-TESTS-2026-10-25.md#strata-deepseek-parity-rejection).
+- **Maya** `f26d8bab43f9` → `6afa525bbabc`: **rejected**. missed a promotion gate; rollback verified
+
+llama.cpp gates (baseline = production in this run):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | worker_swap_limit_bytes | | 67108864 | |
+| lifecycle | max_worker_swap_bytes | | 0 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| empero-qwen3.8-35b-a3b | prefill_tps | 2967.140 | 2951.966 | -0.5% |
+| empero-qwen3.8-35b-a3b | code_decode_tps | 119.683 | 121.652 | +1.6% |
+| empero-qwen3.8-35b-a3b | prose_decode_tps | 72.848 | 77.653 | +6.6% |
+| empero-qwen3.8-35b-a3b | code_ttft_s | 0.060 | 0.061 | +2.2% |
+| empero-qwen3.8-35b-a3b | prose_ttft_s | 0.059 | 0.061 | +2.8% |
+| empero-qwen3.8-35b-a3b | markers | 3.000 | 3.000 |  |
+| empero-qwen3.8-35b-a3b | max_worker_swap_bytes | | 0 | |
+| empero-qwen3.8-35b-a3b | max_nonresident_vram_bytes | | 0 | |
+| empero-qwen3.8-35b-a3b | verdict | | | pass |
+| nemotron-3.5-super-iq3 | prefill_tps | 432.503 | 430.413 | -0.5% |
+| nemotron-3.5-super-iq3 | code_decode_tps | 15.533 | 15.579 | +0.3% |
+| nemotron-3.5-super-iq3 | prose_decode_tps | 17.097 | 17.093 | -0.0% |
+| nemotron-3.5-super-iq3 | code_ttft_s | 0.926 | 0.956 | +3.2% |
+| nemotron-3.5-super-iq3 | prose_ttft_s | 0.631 | 0.649 | +2.8% |
+| nemotron-3.5-super-iq3 | markers | 3.000 | 3.000 |  |
+| nemotron-3.5-super-iq3 | max_worker_swap_bytes | | 0 | |
+| nemotron-3.5-super-iq3 | max_nonresident_vram_bytes | | 0 | |
+| nemotron-3.5-super-iq3 | verdict | | | pass |
+| sage-a1.5 | prefill_tps | 2806.686 | 2796.396 | -0.4% |
+| sage-a1.5 | code_decode_tps | 79.830 | 81.234 | +1.8% |
+| sage-a1.5 | prose_decode_tps | 63.932 | 67.740 | +6.0% |
+| sage-a1.5 | code_ttft_s | 0.057 | 0.058 | +2.9% |
+| sage-a1.5 | prose_ttft_s | 0.055 | 0.057 | +2.1% |
+| sage-a1.5 | markers | 3.000 | 3.000 |  |
+| sage-a1.5 | max_worker_swap_bytes | | 0 | |
+| sage-a1.5 | max_nonresident_vram_bytes | | 0 | |
+| sage-a1.5 | verdict | | | pass |
+| ornith-1.5-122b | prefill_tps | 718.383 | 711.202 | -1.0% |
+| ornith-1.5-122b | code_decode_tps | 11.423 | 11.265 | -1.4% |
+| ornith-1.5-122b | prose_decode_tps | 13.312 | 13.470 | +1.2% |
+| ornith-1.5-122b | code_ttft_s | 0.556 | 0.545 | -2.0% |
+| ornith-1.5-122b | prose_ttft_s | 0.731 | 0.752 | +2.8% |
+| ornith-1.5-122b | markers | 3.000 | 3.000 |  |
+| ornith-1.5-122b | max_worker_swap_bytes | | 0 | |
+| ornith-1.5-122b | max_nonresident_vram_bytes | | 0 | |
+| ornith-1.5-122b | verdict | | | pass |
+
+Maya gates (baseline = production in this run):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | worker_swap_limit_bytes | | 67108864 | |
+| lifecycle | max_worker_swap_bytes | | 35897344 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| glm-5.3-flash-maya | prefill_tps | 539.300 | 537.100 | -0.4% |
+| glm-5.3-flash-maya | code_decode_tps | 19.043 | 18.853 | -1.0% |
+| glm-5.3-flash-maya | prose_decode_tps | 15.520 | 15.746 | +1.5% |
+| glm-5.3-flash-maya | code_ttft_s | 0.082 | 0.082 | -0.0% |
+| glm-5.3-flash-maya | prose_ttft_s | 0.094 | 0.095 | +1.3% |
+| glm-5.3-flash-maya | markers | 3.000 | 3.000 |  |
+| glm-5.3-flash-maya | max_worker_swap_bytes | | 33574912 | |
+| glm-5.3-flash-maya | max_nonresident_vram_bytes | | 0 | |
+| glm-5.3-flash-maya | verdict | | | pass |
+| deepseek-v4.1-flash-1017-maya | prefill_tps | 634.100 | 630.600 | -0.6% |
+| deepseek-v4.1-flash-1017-maya | code_decode_tps | 22.586 | 18.997 | -15.9% |
+| deepseek-v4.1-flash-1017-maya | prose_decode_tps | 13.313 | 12.417 | -6.7% |
+| deepseek-v4.1-flash-1017-maya | code_ttft_s | 0.096 | 0.106 | +10.6% |
+| deepseek-v4.1-flash-1017-maya | prose_ttft_s | 0.191 | 0.149 | -22.1% |
+| deepseek-v4.1-flash-1017-maya | markers | 3.000 | 3.000 |  |
+| deepseek-v4.1-flash-1017-maya | max_worker_swap_bytes | | 0 | |
+| deepseek-v4.1-flash-1017-maya | max_nonresident_vram_bytes | | 0 | |
+| deepseek-v4.1-flash-1017-maya | verdict | | | FAIL: code_decode_tps, prose_decode_tps |
+| deepseek-v4.1-flash-1017-maya-s | prefill_tps | 381.700 | 375.900 | -1.5% |
+| deepseek-v4.1-flash-1017-maya-s | code_decode_tps | 5.708 | 6.642 | +16.4% |
+| deepseek-v4.1-flash-1017-maya-s | prose_decode_tps | 6.665 | 6.271 | -5.9% |
+| deepseek-v4.1-flash-1017-maya-s | code_ttft_s | 0.431 | 0.457 | +5.9% |
+| deepseek-v4.1-flash-1017-maya-s | prose_ttft_s | 0.601 | 0.564 | -6.1% |
+| deepseek-v4.1-flash-1017-maya-s | markers | 3.000 | 3.000 |  |
+| deepseek-v4.1-flash-1017-maya-s | max_worker_swap_bytes | | 0 | |
+| deepseek-v4.1-flash-1017-maya-s | max_nonresident_vram_bytes | | 0 | |
+| deepseek-v4.1-flash-1017-maya-s | verdict | | | FAIL: prose_decode_tps |
+
+
 ## October 25: minor worker swap allowed (policy validation only)
 
 Promotion now allows up to 64 MiB aggregate owned-worker swap per model and

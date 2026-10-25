@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Fresh engine tests after the 64 MiB swap allowance](fresh-engine-tests-2026-10-25.json), [report](../FRESH-ENGINE-TESTS-2026-10-25.md): llama.cpp promoted; Maya rejected/rollback verified; Strata DeepSeek rejected on dual-card kernel parity. All trials/counts, memory and thermal coverage retained; no new full-window claim.
+
 - [October25 minor worker swap policy](../daily-update/README.md#minor-worker-swap-allowance--october-25): **validation only**, 64 MiB aggregate cap, 18 CPU regressions and saved-record replay; no fresh throughput test or runtime promotion.
 
 - [Ten-minute idle unload and inference-only swap scope](model-idle-2026-10-24.json), [policy/report](../MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24): **functional only**, full live vLLM idle cycle, preserved DSH/gateway/catalog, CPU safety/reload tests; no new throughput or power benchmark.

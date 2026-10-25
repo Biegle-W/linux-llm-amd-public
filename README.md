@@ -66,6 +66,11 @@ this repository organization.
 
 ## Current measurements and engine pins
 
+[October25 fresh tests](linux/hardware/FRESH-ENGINE-TESTS-2026-10-25.md) promoted llama.cpp
+`2280f0fd`; Maya 1.1.28 failed DeepSeek decode gates and rolled back, while Strata
+DeepSeek 0.1.51 failed selected kernel parity before installation. The 64 MiB swap
+allowance passed the fresh baselines; current contexts/guards/dual-GPU settings remain.
+
 The [current AMD report](linux/hardware/CURRENT-AMD-BENCHMARKS.md),
 [numeric-results index](linux/hardware/results/README.md) and
 [benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md) retain exact builds,

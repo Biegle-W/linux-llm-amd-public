@@ -1,5 +1,16 @@
 # LLM benchmark and context history
 
+## Fresh engine tests — October25
+
+Fresh normal-launcher gates promoted llama.cpp `2280f0fd` on all four profiles.
+Maya 1.1.28 failed DeepSeek XS code/prose and S prose decode gates, then rolled back
+to 1.1.26 with the restored GLM launcher answering. Strata DeepSeek 0.1.51 failed
+selected IQ3_XXS kernel parity on both cards before installation; 0.1.49.1 stays.
+All completed memory records met the new 64 MiB cap/zero spill. Actual counts,
+full trials, lifecycle memory and sampled thermals are retained; no full-window
+or general speedup claim. [Report](FRESH-ENGINE-TESTS-2026-10-25.md) and
+[numeric record](results/fresh-engine-tests-2026-10-25.json).
+
 ## Minor worker swap allowance — October25 (validation only)
 
 User-authorized update acceptance now permits up to 64 MiB (67,108,864 bytes) of
