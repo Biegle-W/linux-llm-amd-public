@@ -1,5 +1,16 @@
 # LLM benchmark and context history
 
+## Minor worker swap allowance — October25 (validation only)
+
+User-authorized update acceptance now permits up to 64 MiB (67,108,864 bytes) of
+aggregate inference worker swap per model and full lifecycle, including loading;
+larger swap fails. Zero VRAM spill, valid telemetry, model coverage and all
+performance/quality gates remain. All 18 CPU memory/promotion/rollback tests pass.
+Saved October25 llama.cpp/Maya/Strata DeepSeek baselines pass the new memory gate;
+vLLM dev466 still fails large swap and Qwen prose regression. Historical nightly
+outcomes remain unchanged. No fresh GPU/throughput test or runtime promotion;
+worker cgroup limits and live guards remain. [Policy and replay limits](daily-update/README.md#minor-worker-swap-allowance--october-25).
+
 ## Inference swap scope and idle timeout — October24 (functional only)
 
 Zero-swap gating excludes unrelated/background tasks; no global swap change.

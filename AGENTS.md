@@ -372,3 +372,17 @@ daily publisher. Archive retired setup source under `archives/`; never move live
 runtime environments, weights, dependencies or private state as a documentation
 cleanup. Keep exact dated measurements and hardware attribution. Review archive
 links after moving source. No retired setup becomes active through reorganization.
+
+
+## Minor inference worker swap allowance — October25 (current)
+
+User instruction: a few MB of inference swap is acceptable; reject major swap.
+This supersedes the exact-zero worker-swap acceptance rule above: use an inclusive
+64 MiB (67,108,864 bytes) aggregate owned-worker cap for runtime update baselines
+and candidates, in every model record and the full launch/load/test/shutdown
+lifecycle. Larger amounts fail. Keep zero dedicated VRAM spill, valid telemetry,
+complete coverage and all performance/quality gates. Background system swap is
+allowed. Existing worker cgroup limits, RAM/VRAM admission and latched watchdogs
+remain. Historical zero-swap results and nightly outcomes retain their original
+policy/date; replay is not a fresh GPU test or permission to promote a candidate
+without normal validation. See linux/hardware/daily-update/README.md.

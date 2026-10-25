@@ -34,7 +34,8 @@ Last run: llama.cpp skipped (production baseline failed); vLLM rejected; Strata 
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
-tasks may use system swap; only managed inference/owned worker swap blocks updates.
+tasks may use system swap; updates check only aggregate managed inference worker
+swap against the current October25 allowance below.
 Global swap is unchanged. Models and engines now unload after 600 seconds since
 the last inference request completes (five-second watcher). New backend launches
 receive a full grace period. Hub/direct-router/native Chat POSTs and loading are
@@ -50,18 +51,18 @@ each, DSH/gateway were preserved and all 13 IDs remained. Other-engine safety an
 next-request reload are CPU-tested; no new all-model GPU/power benchmark.
 [Functional evidence](../hardware/results/model-idle-2026-10-24.json).
 
-**Daily updater zero-swap correction (October24):** future promotions require
-zero observed worker swap and dedicated VRAM spill in each model record and the
-normal launch-through-shutdown monitor, including loading. Missing/invalid counters,
-sampling errors, no worker samples or incomplete model coverage block promotion.
-A failed production baseline skips installation; a failed candidate follows the
-existing rollback and restored-build smoke path. PIDs/shared DRM clients are
-de-duplicated; compilers, DSH and other apps are excluded. CPU-only regressions and
-saved October24 vLLM replay passed (the old nonzero swap records now reject).
-Historical counts may double-count descendants; old results remain dated. No
-installed engine/profile/context/guard, timer or network setting changed, and no
-fresh throughput/full-window/runtime rollback trial was run. Readings are sampled,
-not a guarantee against between-sample transients. [Policy](../hardware/daily-update/README.md#zero-swap-gate-correction--october-24).
+**Worker swap allowance (October25, current):** update baseline eligibility and
+candidate promotion now permit up to **64 MiB (67,108,864 bytes)** of aggregate
+owned inference worker swap in each model record and the full loading/testing/
+shutdown lifecycle. Larger swap fails; dedicated VRAM spill must remain zero.
+Invalid/missing telemetry, sampling errors, absent workers and incomplete coverage
+still fail closed; performance/quality gates remain. Background system swap is
+allowed. Existing worker cgroup limits, RAM/VRAM admission and latched watchdogs
+remain. Saved October25 llama.cpp/Maya/Strata DeepSeek baselines pass the new
+memory check; vLLM dev466 still fails large swap and Qwen prose regression.
+18 CPU regression tests and saved-record replay validate the policy only: no new
+GPU test, runtime promotion or speed measurement. The skipped candidates still
+need fresh tests. [Policy](../hardware/daily-update/README.md#minor-worker-swap-allowance--october-25).
 
 
 ## Strata Qwen table selection — October24

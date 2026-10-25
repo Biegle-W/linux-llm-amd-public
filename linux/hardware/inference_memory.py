@@ -6,6 +6,10 @@ import threading
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
 from backend_switch import processes, is_inference
 
+# User-authorized minor-swap allowance (October 25). Applied to the aggregate
+# owned-process peak in every model record and the full inference lifecycle.
+WORKER_SWAP_LIMIT_BYTES = 64 * 1024**2
+
 
 def sample_memory(snapshot=None, proc_root=Path('/proc')):
     """Count each managed PID and shared DRM client once, excluding other apps.
@@ -65,12 +69,12 @@ def memory_failures(memory):
     if not isinstance(memory, dict):
         return ['memory_telemetry_missing']
     failures = []
-    for field, name in [('max_worker_swap_bytes', 'worker_swap'),
-                        ('max_nonresident_vram_bytes', 'vram_spill')]:
+    for field, name, limit in [('max_worker_swap_bytes', 'worker_swap', WORKER_SWAP_LIMIT_BYTES),
+                               ('max_nonresident_vram_bytes', 'vram_spill', 0)]:
         value = memory.get(field)
         if type(value) is not int or value < 0:
             failures.append(name + '_telemetry_invalid')
-        elif value:
+        elif value > limit:
             failures.append(name)
     return failures
 

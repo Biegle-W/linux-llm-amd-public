@@ -4,9 +4,20 @@ Every night at 03:00 `llm-daily-update.timer` checks llama.cpp, vLLM, SGLang, St
 Maya for newer upstream versions. Each one is built in isolation, benchmarked against the
 current production build with the shared method, and kept only when every standard
 promotion gate passes (prefill and code/prose decode ≥95% of production, short time to
-first token within max(1.25×, +0.05 s), no fewer retrieval markers, zero observed
-worker swap and VRAM spill with valid launch-through-shutdown memory telemetry).
+first token within max(1.25×, +0.05 s), no fewer retrieval markers, at most 64 MiB aggregate observed
+worker swap and zero VRAM spill with valid launch-through-shutdown memory telemetry).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
+
+## October 25: minor worker swap allowed (policy validation only)
+
+Promotion now allows up to 64 MiB aggregate owned-worker swap per model and
+throughout loading/testing/shutdown; larger amounts fail. Zero VRAM spill,
+valid telemetry, complete model coverage and performance/quality gates remain.
+All 18 CPU memory/promotion/rollback tests pass. Saved October25 llama.cpp,
+Maya and Strata DeepSeek baselines pass the new memory gate; vLLM dev466 still
+fails major swap and Qwen prose regression. No new GPU test, runtime promotion
+or performance measurement. Original nightly results below are unchanged.
+[Exact policy and replay limits](daily-update/README.md#minor-worker-swap-allowance--october-25).
 
 ## 2026-10-25
 

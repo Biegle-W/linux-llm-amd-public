@@ -31,9 +31,9 @@ rolled back and reported.
    same benchmark through the normal launcher.
 8. Keep it only if `hardware/compare-runtime-candidate.py` passes for every model:
    prefill and code/prose decode at least 95% of production; short time to first token at
-   most max(1.25 × production, production + 0.05 s); no fewer retrieval markers; zero
-   observed worker swap and VRAM spill. Both counters must be valid nonnegative
-   integers and exactly zero; even one recorded byte rejects the candidate.
+   most max(1.25 × production, production + 0.05 s); no fewer retrieval markers;
+   at most 64 MiB aggregate observed worker swap and zero VRAM spill. Both counters
+   must be valid nonnegative integers; swap above 67,108,864 bytes rejects.
    Missing/invalid readings, sampling errors, no worker samples or incomplete
    model coverage also block promotion. Otherwise roll back and check that the
    restored build answers.
@@ -46,9 +46,38 @@ If the job is stopped while a build is provisionally installed (shutdown, timeou
 rolls back before releasing the lock. If the machine loses power instead,
 `llm-daily-update-recover.service` rolls back at the next login, before the model hub starts.
 
-## What it does not decide
+## Memory promotion policy
+
+### Minor worker swap allowance — October 25
+
+User instruction supersedes the October24 exact-zero worker-swap promotion rule:
+allow at most **64 MiB (67,108,864 bytes)** of sampled aggregate managed inference
+worker swap. More than that fails. Apply the same inclusive cap to every model's
+memory record and the full launch/load/warmup/benchmark/shutdown lifecycle, for
+both production baseline eligibility and candidate promotion. The cap is for the
+owned process total, not a separate allowance for each PID. Gate tables print it.
+Dedicated VRAM spill must still be exactly zero. Missing/invalid counters,
+sampling errors, absent workers, incomplete coverage and all performance/quality
+gates still fail closed. Background system swap is outside this check.
+
+The three October25 skipped production baselines pass replay of the new memory
+gate: llama.cpp lifecycle peak 12,468,224 bytes, Maya 34,598,912 bytes and Strata
+DeepSeek 25,956,352 bytes. vLLM dev466 still fails: lifecycle swap 4,041,416,704
+bytes, Qwen27B swap 2,535,796,736 bytes and prose decode down 6.7%. Bolt's
+8,265,728-byte reading alone is now acceptable. These are saved-record replays,
+not fresh GPU tests or promotions; original nightly results stay unchanged.
+Skipped candidates require fresh normal tests before installation/promotion.
+
+Validation: 18 CPU-only accounting/comparator/updater tests, including the exact
+64 MiB boundary, one byte over, lifecycle-only violations, missing telemetry,
+small-swap promotion and large-swap rollback/smoke. Existing worker cgroup limits,
+RAM/VRAM admission, continuous latched watchdogs, model profiles, runtime pins,
+ROCm and global swap are unchanged. No inference or new throughput measurement
+was run. The next scheduled updater invocation reads this rule without restart.
 
 ### Zero-swap gate correction — October 24
+
+The October25 allowance above supersedes this section's exact-zero swap threshold.
 
 The original comparator checked dedicated VRAM spill but omitted worker swap.
 It now checks both the shared benchmark's per-model memory record and a separate

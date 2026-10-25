@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [October25 minor worker swap policy](../daily-update/README.md#minor-worker-swap-allowance--october-25): **validation only**, 64 MiB aggregate cap, 18 CPU regressions and saved-record replay; no fresh throughput test or runtime promotion.
+
 - [Ten-minute idle unload and inference-only swap scope](model-idle-2026-10-24.json), [policy/report](../MODEL-HUB-2026-10-22.md#ten-minute-idle-power-saving--october24): **functional only**, full live vLLM idle cycle, preserved DSH/gateway/catalog, CPU safety/reload tests; no new throughput or power benchmark.
 
 - [Strata table/prefill selection](strata-tuning-2026-10-24.json), [report](../STRATA-TUNING-2026-10-24.md): same8183c6b6 binary, repeated table controls, rejected4096 admission, independent repeat and normal near256K/history/UI/authenticated host-self API; every trial and lifecycle thermal summary.

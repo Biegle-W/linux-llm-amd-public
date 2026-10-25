@@ -34,8 +34,9 @@ uses port 10000 and `/v1`; use the [canonical handoff](linux/network/LINUX-LLM-R
 for access, storage, startup and per-engine limits. **DSH defaults to Strata Q3.**
 Managed inference unloads after 600 seconds without inference activity. Active
 requests/loading/jobs and GPU-LOCK defer unloading; DSH, gateway and unrelated
-apps are preserved. Zero swap applies to owned inference workers; background
-system swap is allowed. Existing RAM/VRAM admission and latched guards remain.
+apps are preserved. Update acceptance permits up to 64 MiB aggregate owned-worker
+swap; background system swap is allowed. Existing RAM/VRAM admission, worker
+cgroup limits and latched guards remain.
 
 ## Active profiles
 
@@ -76,8 +77,8 @@ separately dated evidence. Historical speeds are not attributed to later builds.
 
 Current validated engine pins live in the [daily ledger](linux/hardware/DAILY-UPDATES.md)
 and the handoff. The 03:00 updater tests newer sources in isolation and promotes
-only after all gates pass, including zero observed worker swap/spill with valid
-launch-through-shutdown telemetry. ROCm 7.2.3 is retained. See the
+only after all gates pass, including at most 64 MiB aggregate worker swap and
+zero VRAM spill with valid launch-through-shutdown telemetry. ROCm 7.2.3 is retained. See the
 [updater method](linux/hardware/daily-update/README.md).
 
 ## Directory map

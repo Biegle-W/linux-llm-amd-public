@@ -1,4 +1,4 @@
-"""CPU-only regressions for zero-swap promotion and rollback; no real launcher."""
+"""CPU-only regressions for bounded worker swap and rollback; no real launcher."""
 import copy
 import importlib.util
 import json
@@ -62,10 +62,11 @@ class Accounting(unittest.TestCase):
     def test_loading_swap_and_sampling_errors_remain_latched(self):
         monitor = mem.MemoryMonitor()
         with patch.object(mem, 'sample_memory', side_effect=[
-                {'swap': 4096, 'spill': 0}, {'swap': 0, 'spill': 0}, PermissionError('unreadable')]):
+                {'swap': mem.WORKER_SWAP_LIMIT_BYTES + 1, 'spill': 0},
+                {'swap': 0, 'spill': 0}, PermissionError('unreadable')]):
             for _ in range(3):
                 monitor.sample()
-        self.assertEqual(monitor.summary['max_worker_swap_bytes'], 4096)
+        self.assertEqual(monitor.summary['max_worker_swap_bytes'], mem.WORKER_SWAP_LIMIT_BYTES + 1)
         self.assertEqual(monitor.summary['sampling_errors'], 1)
         self.assertEqual(mem.lifecycle_failures({'lifecycle_memory': monitor.summary}),
                          ['worker_swap', 'lifecycle_sampling_errors'])
@@ -99,13 +100,24 @@ class Comparator(unittest.TestCase):
         result = self.compare(record(), True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def test_even_one_byte_of_swap_rejects_and_prints_amount(self):
+    def test_minor_swap_including_limit_passes_per_model_and_lifecycle(self):
+        for value in (1, 4096, 33 * 1024**2, mem.WORKER_SWAP_LIMIT_BYTES):
+            with self.subTest(value=value):
+                candidate = record()
+                candidate['profiles'][0]['memory']['max_worker_swap_bytes'] = value
+                candidate['lifecycle_memory']['max_worker_swap_bytes'] = value
+                result = self.compare(candidate, True)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn(f'worker_swap_limit_bytes | | {mem.WORKER_SWAP_LIMIT_BYTES}', result.stdout)
+
+    def test_swap_above_limit_rejects_and_prints_amount(self):
         candidate = record()
-        candidate['profiles'][0]['memory']['max_worker_swap_bytes'] = 1
+        value = mem.WORKER_SWAP_LIMIT_BYTES + 1
+        candidate['profiles'][0]['memory']['max_worker_swap_bytes'] = value
         result = self.compare(candidate)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('FAIL: worker_swap', result.stdout)
-        self.assertIn('max_worker_swap_bytes | | 1', result.stdout)
+        self.assertIn(f'max_worker_swap_bytes | | {value}', result.stdout)
 
     def test_missing_and_invalid_swap_fail_closed(self):
         for value in [None, -1, False, '0', 0.0, 'missing']:
@@ -122,7 +134,8 @@ class Comparator(unittest.TestCase):
 
     def test_missing_or_invalid_lifecycle_evidence_rejects(self):
         for field, value in [('worker_samples', 0), ('sampling_errors', 1),
-                             ('max_worker_swap_bytes', 1), ('max_nonresident_vram_bytes', 1)]:
+                             ('max_worker_swap_bytes', mem.WORKER_SWAP_LIMIT_BYTES + 1),
+                             ('max_nonresident_vram_bytes', 1)]:
             with self.subTest(field=field):
                 candidate = record()
                 candidate['lifecycle_memory'][field] = value
@@ -170,7 +183,7 @@ class Updater(unittest.TestCase):
 
     def test_swap_candidate_rolls_back_and_smokes_restored_build(self):
         candidate = record()
-        candidate['profiles'][0]['memory']['max_worker_swap_bytes'] = 4096
+        candidate['profiles'][0]['memory']['max_worker_swap_bytes'] = mem.WORKER_SWAP_LIMIT_BYTES + 1
         result, state, engine, smoke = self.exercise(candidate)
         self.assertEqual(result['result'], 'rejected')
         self.assertIn('worker_swap', result['gates'])
@@ -187,7 +200,7 @@ class Updater(unittest.TestCase):
             with self.subTest(change=change):
                 candidate = record()
                 if change == 'loading':
-                    candidate['lifecycle_memory']['max_worker_swap_bytes'] = 4096
+                    candidate['lifecycle_memory']['max_worker_swap_bytes'] = mem.WORKER_SWAP_LIMIT_BYTES + 1
                 elif change == 'missing':
                     candidate.pop('lifecycle_memory')
                 else:
@@ -200,7 +213,7 @@ class Updater(unittest.TestCase):
 
     def test_swapping_production_baseline_skips_install(self):
         baseline = record()
-        baseline['lifecycle_memory']['max_worker_swap_bytes'] = 1
+        baseline['lifecycle_memory']['max_worker_swap_bytes'] = mem.WORKER_SWAP_LIMIT_BYTES + 1
         result, _, engine, smoke = self.exercise(record(), baseline)
         self.assertEqual(result['result'], 'skipped (production baseline failed)')
         engine.install.assert_not_called()
@@ -221,6 +234,16 @@ class Updater(unittest.TestCase):
         engine.rollback.assert_not_called()
         smoke.assert_not_called()
         self.assertEqual(state['engines']['vllm']['production'], 'new')
+
+    def test_minor_swap_baseline_and_candidate_can_promote(self):
+        baseline, candidate = record(), record()
+        for data in (baseline, candidate):
+            data['profiles'][0]['memory']['max_worker_swap_bytes'] = mem.WORKER_SWAP_LIMIT_BYTES
+            data['lifecycle_memory']['max_worker_swap_bytes'] = mem.WORKER_SWAP_LIMIT_BYTES
+        result, _, engine, _ = self.exercise(candidate, baseline)
+        self.assertEqual(result['result'], 'promoted')
+        engine.finalize.assert_called_once()
+        engine.rollback.assert_not_called()
 
     def test_lifecycle_monitor_wraps_normal_launcher_and_cleanup(self):
         with tempfile.TemporaryDirectory() as directory:
