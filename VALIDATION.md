@@ -49,3 +49,12 @@ private network configuration and read-only authenticated gateway catalogs.
 Original Shared documents archived with byte counts/SHA-256; no inference,
 benchmark, restart or runtime/configuration change was performed. Public guide
 uses example paths/addresses and omits the private historical archive.
+
+
+October 24 public split: retained the Ubuntu repository's existing public history,
+Linux paths and NVIDIA archive. Moved all 55 tracked Windows files to the new
+Windows public repository, preserving scripts, configuration, dated reports and
+retired assets. Only its README/ignore rules changed, with a validation note added.
+Checked file preservation, document links, syntax and publication privacy.
+No runtime, model, profile, port, benchmark or service setting changed; no GPU
+or Windows inference trial was performed for this repository-only change.

@@ -29,7 +29,7 @@ refreshing model providers does not recreate legacy settings or remove sessions.
 Model weights, app data, credentials and logs remain excluded from Git.
 
 Older CUDA/single-card/pending-RAM instructions are historical. Their original
-text is preserved in the [pre-Maya committed record](https://github.com/Biegle-W/local-llm-public/blob/95a052ad560b25d3559891d9b49c9779079ed504/linux/dsh/README.md)
+text is preserved in the [pre-Maya committed record](https://github.com/Biegle-W/ubuntu-llm-public/blob/95a052ad560b25d3559891d9b49c9779079ed504/linux/dsh/README.md)
 and dated hardware reports. They do not override the current catalog or
 [dual-AMD offload policy](../hardware/MOE-OFFLOAD-2026-10-18.md).
 

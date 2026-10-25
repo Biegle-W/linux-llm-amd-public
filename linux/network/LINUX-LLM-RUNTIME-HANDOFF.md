@@ -8,6 +8,15 @@ This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUN
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
+**Public repository split prepared (October24; publication pending):** the planned
+Ubuntu setup and historical Linux NVIDIA archive repository is [ubuntu-llm-public](https://github.com/Biegle-W/ubuntu-llm-public).
+The planned independent Windows RTX3060 setup, reports and retired repository is
+[windows-llm-public](https://github.com/Biegle-W/windows-llm-public), at its root.
+The prepared split retains Ubuntu public history and copies only sanitized public
+Windows files. Creation, rename and pushes await explicit approval of these names
+and the reviewed public snapshot. Private repositories remain private. This changes no
+runtime, model profile, port or connection setting.
+
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-24 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 

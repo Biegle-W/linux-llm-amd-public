@@ -13,31 +13,20 @@ including applicable README/benchmark documentation and the shared Windows
 handoff Markdown. Commit and push validated changes to each `origin/main`
 without another reminder. Synchronize only reviewed, sanitized changes here;
 never copy private history, settings or personal details. Preserve historical
-NVIDIA and Windows snapshots unless their setups change or the user requests it.
+NVIDIA snapshots here and Windows snapshots in the separate Windows repository.
 The private Linux repository's AGENTS.md identifies its workspace and exact handoff
 locations; Windows instructions are in its README. Keep the Linux repository handoff and its Shared-drive copy identical.
 Report any blocked commit, push or handoff synchronization explicitly.
 
-## Separate Windows build — October 23
+## Separate platform repositories — October 24
 
-Windows is independent: RTX3060 12GB /i5-13600KF /16GB; CUDA settings under
-windows/. Keep Linux AMD hardware/engines/guards and handoffs separate.
-Standing user preference: exactly one active setting per model, at its largest
-currently configured context. Four canonical IDs match GGUF filename stems:
-Ornith128K (default), LFM128K, Qwen27B64K, Empero64K. Do not restore smaller
-alternatives or suffixed RAM aliases. All four use Q8 KV in CPU RAM. Weights/chats/history remain; no inference rerun for consolidation.
-Preserve measured fitting and per-model admission: RAM profiles4.5/5GiB physical
-available RAM +20GiB commit; dense6GiB +20GiB commit; fresh VRAM8192MiB for
-LFM and9216MiB for Ornith/Empero/Qwen27B. All keep loaded1024MiB and continuous
-0.75GiB/five-second RAM guard, one private worker on10001, authenticated router
-on10000 and SSE switch exclusion. No silent model fallback or unrelated-app kill.
-LFM requires reasoning. DSH selector has four IDs and Ornith default; GUI and
-remote-peer/full-window tests remain unperformed. Earlier throughput numbers
-retain original settings, especially retired Ornith32K44–48t/s. See Windows
-README, RAM-context report and windows-single-profile-20261023.json.
-Private instructions are consolidated in README, without root AGENTS.md. No D:
-drive is attached; Windows handoff stays here without overwriting Linux's.
-All remaining AMD hardware/engine/default-model policies below apply to Linux.
+This is `Biegle-W/ubuntu-llm-public`. Maintain Linux AMD and the historical
+`linux-nvidia/` tree here. Windows setup, reports and retired configurations now
+live at the root of `Biegle-W/windows-llm-public`; publish Windows changes there.
+The pre-split public Windows snapshot remains in this repository's history.
+Do not recreate `windows/` here or copy private repository history. Linux clients
+running on Windows are still covered by the Linux network handoff. The existing
+local checkout name may remain `local-llm-public` for updater compatibility.
 
 Current Linux hardware policy: use BOTH RX 7900 XTX cards for every active model.
 This supersedes the previous single-card preference. Validate per-engine dual-card

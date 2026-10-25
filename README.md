@@ -1,12 +1,13 @@
-# Local LLM hardware, engines and benchmarks
+# Ubuntu local LLM hardware, engines and benchmarks
 
-Separate current builds: **Linux dual AMD** and **Windows RTX 3060**, plus **archived dual NVIDIA** results.
-This repository contains sanitized launchers, configuration, build/patch helpers
-and saved measurements, with independent Windows and Linux configurations.
+Current **Ubuntu dual AMD** setup and **archived dual NVIDIA** results.
+This repository contains sanitized Linux launchers, configuration, build/patch
+helpers and saved measurements. The independent Windows RTX 3060 build lives in
+[windows-llm-public](https://github.com/Biegle-W/windows-llm-public).
 Model weights, installed runtimes, credentials and personal app data are excluded.
 
-- [Windows RTX 3060: setup and results](windows/README.md)
-- [Windows: four-model OpenAI-compatible router](windows/reports/WINDOWS-MODEL-ROUTER-20261023.md)
+- [Windows RTX 3060: setup and results](https://github.com/Biegle-W/windows-llm-public)
+- [Windows: four-model OpenAI-compatible router](https://github.com/Biegle-W/windows-llm-public/blob/main/reports/WINDOWS-MODEL-ROUTER-20261023.md)
 - [AMD: latest setup and results](#amd-latest-setup-and-results)
 - [NVIDIA: archived setup and results](#nvidia-archived-setup-and-results)
 - [Install, launch and connect](#install-launch-and-connect)
@@ -38,6 +39,16 @@ admission (4.655/5.510GiB);8192 was not attempted. Near257990-input markers,
 full-history follow-up, JSON/tools/SSE/originalUI/authenticated host-self API pass;
 zero owned swap/spill. [Gates, failures and full-run thermals](linux/hardware/STRATA-TUNING-2026-10-24.md)
 and [all trials](linux/hardware/results/strata-tuning-2026-10-24.json).
+
+
+## Separate public repositories
+
+The former `local-llm-public` repository is now `ubuntu-llm-public`; its existing
+public commits and Linux/NVIDIA paths are retained. Windows files now live at
+the root of [windows-llm-public](https://github.com/Biegle-W/windows-llm-public).
+The [pre-split Windows snapshot](https://github.com/Biegle-W/ubuntu-llm-public/tree/8fbe5b515ba623b786d7a28d825989bcd627a725/windows)
+remains available in this repository's history. The two private operational
+repositories remain private; only sanitized public content was moved.
 
 ## Reading the measurements
 
@@ -467,7 +478,7 @@ and validation limits](linux/hardware/daily-update/README.md#zero-swap-gate-corr
 |---|---|
 | [`linux/`](linux/) | Current dual-AMD wrappers, profiles, patch/build helpers |
 | [`linux-nvidia/`](linux-nvidia/README.md) | Historical dual-NVIDIA configuration; use as an alternative installation |
-| [`windows/`](windows/) | Separate RTX 3060 / 16 GB Windows build; CUDA, Ornith 1.5 35B-A3B IQ2_S MoE at 32K, [setup](windows/README.md), [LFM2.5/Qwen3.8 trials](windows/reports/WINDOWS-LFM-QWEN-TESTS-20261023.md) |
+| [Windows repository](https://github.com/Biegle-W/windows-llm-public) | Independent RTX 3060 / 16 GB Windows setup, four-model CUDA router, dated reports and retired configurations |
 | [Consolidated handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) | Model IDs, storage, API/SSH use and validation limits |
 | [Full dated benchmark ledger](linux/hardware/BENCHMARK-HISTORY.md) | Single-AMD, earlier motherboards, tuning controls, retired engines and update stages |
 | [Previous README archive](linux/hardware/README-ARCHIVE-2026-10-19.md) | All previous publication tables and chronological notes |
