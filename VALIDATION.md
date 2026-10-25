@@ -67,3 +67,10 @@ non-document bytes are unchanged. Markdown links were adjusted for relocation.
 Python/JSON syntax and publication privacy checks pass, with no new broken local
 document targets. Active launchers, model profiles, contexts, guards, ports and
 runtime paths are unchanged. No new inference or performance test is claimed.
+
+
+October 25 publication: retained the latest already-public NVIDIA-host preparation
+(commit `7b22916`) in the independent Windows repository before removing the
+combined Windows subtree. Existing public history and all archived source/numeric
+payloads are preserved. The hardware-specific split changes no runtime settings;
+no inference or native GPU-unlock installation was performed for publication.

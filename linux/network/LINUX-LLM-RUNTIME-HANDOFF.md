@@ -1,6 +1,6 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-Updated **October 23, 2026**. Current hardware is i9-13900KS,
+Updated **October 25, 2026**. Current hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
@@ -8,13 +8,15 @@ This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUN
 `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` in Linux. Its maintained
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
-**Repository organization (October24; prepared for publication):** private/public
-Ubuntu repositories are named `ubuntu-llm-amd` / `ubuntu-llm-amd-public`; Windows
-repositories are `windows-llm-nvidia` / `windows-llm-nvidia-public`. The former Ubuntu
-NVIDIA setup and retired source are under `archives/`; Windows keeps its own archive.
-Private/public history stays separate. Existing local checkout paths, installed
-launchers, model assets, guards, ports and daily publisher paths stay unchanged.
-[Archive index](../../archives/README.md).
+**Repository organization (October25):** private repositories remain
+`ubuntu-llm-amd` and `windows-llm-nvidia`. Public references are now separated as
+[ubuntu-llm-amd-public](https://github.com/Biegle-W/ubuntu-llm-amd-public) and
+[windows-llm-nvidia-public](https://github.com/Biegle-W/windows-llm-nvidia-public). Ubuntu's existing public history is
+retained, including earlier Windows snapshots; the new Windows public repository
+contains reviewed sanitized files only. Retired setup source/documentation is
+indexed under [archives](../../archives/README.md), with dated hardware/results preserved.
+Existing local checkout paths, installed launchers, model assets, guards, ports
+and daily publisher paths remain unchanged.
 
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-24 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
