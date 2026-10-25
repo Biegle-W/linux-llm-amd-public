@@ -8,6 +8,57 @@ first token within max(1.25×, +0.05 s), no fewer retrieval markers, zero observ
 worker swap and VRAM spill with valid launch-through-shutdown memory telemetry).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
+## 2026-10-25
+
+- **llama.cpp** `6b9ba4f2e8c1` → `b3fa69955ea8`: **skipped (production baseline failed)**. ornith-1.5-122b, worker_swap
+- **vLLM** `0.32.1rc1.dev435+gc50aca144.rocm72` → `0.32.1rc1.dev466+ge4a5b5537.rocm72`: **rejected**. missed a promotion gate; rollback verified
+- **Strata** `8183c6b67162` → `7dd5cf18e68c`: **promoted**. all gates passed
+- **Maya** `f26d8bab43f9` → `4615f346d931`: **skipped (production baseline failed)**. glm-5.3-flash-maya, worker_swap
+- **Strata DeepSeek** `8183c6b67162` → `7dd5cf18e68c`: **skipped (production baseline failed)**. deepseek-v4.1-flash-1017-strata-s, worker_swap
+
+vLLM gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| lifecycle | max_worker_swap_bytes | | 4041416704 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | FAIL: worker_swap |
+| qwen3.8-27b-vllm | prefill_tps | 1517.341 | 1510.649 | -0.4% |
+| qwen3.8-27b-vllm | code_decode_tps | 142.258 | 141.623 | -0.4% |
+| qwen3.8-27b-vllm | prose_decode_tps | 77.015 | 71.841 | -6.7% |
+| qwen3.8-27b-vllm | code_ttft_s | 0.069 | 0.070 | +2.1% |
+| qwen3.8-27b-vllm | prose_ttft_s | 0.064 | 0.066 | +3.9% |
+| qwen3.8-27b-vllm | markers | 3.000 | 3.000 |  |
+| qwen3.8-27b-vllm | max_worker_swap_bytes | | 2535796736 | |
+| qwen3.8-27b-vllm | max_nonresident_vram_bytes | | 0 | |
+| qwen3.8-27b-vllm | verdict | | | FAIL: prose_decode_tps, worker_swap |
+| nemotron-3.5-bolt-vllm | prefill_tps | 2958.688 | 2940.017 | -0.6% |
+| nemotron-3.5-bolt-vllm | code_decode_tps | 37.901 | 38.081 | +0.5% |
+| nemotron-3.5-bolt-vllm | prose_decode_tps | 37.976 | 38.182 | +0.5% |
+| nemotron-3.5-bolt-vllm | code_ttft_s | 0.078 | 0.079 | +0.3% |
+| nemotron-3.5-bolt-vllm | prose_ttft_s | 0.070 | 0.076 | +9.3% |
+| nemotron-3.5-bolt-vllm | markers | 3.000 | 3.000 |  |
+| nemotron-3.5-bolt-vllm | max_worker_swap_bytes | | 8265728 | |
+| nemotron-3.5-bolt-vllm | max_nonresident_vram_bytes | | 0 | |
+| nemotron-3.5-bolt-vllm | verdict | | | FAIL: worker_swap |
+
+Strata gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| lifecycle | max_worker_swap_bytes | | 0 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| qwen3.8-flash-next-iq3_xxs | prefill_tps | 1210.000 | 1206.200 | -0.3% |
+| qwen3.8-flash-next-iq3_xxs | code_decode_tps | 76.669 | 75.515 | -1.5% |
+| qwen3.8-flash-next-iq3_xxs | prose_decode_tps | 49.000 | 47.440 | -3.2% |
+| qwen3.8-flash-next-iq3_xxs | code_ttft_s | 0.229 | 0.232 | +1.3% |
+| qwen3.8-flash-next-iq3_xxs | prose_ttft_s | 0.236 | 0.245 | +3.7% |
+| qwen3.8-flash-next-iq3_xxs | markers | 3.000 | 3.000 |  |
+| qwen3.8-flash-next-iq3_xxs | max_worker_swap_bytes | | 0 | |
+| qwen3.8-flash-next-iq3_xxs | max_nonresident_vram_bytes | | 0 | |
+| qwen3.8-flash-next-iq3_xxs | verdict | | | pass |
+
 ## October 24: zero-swap promotion gate repaired
 
 The comparator now rejects any observed worker swap, alongside VRAM spill, and

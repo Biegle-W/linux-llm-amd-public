@@ -19,18 +19,18 @@ Existing local checkout paths, installed launchers, model assets, guards, ports
 and daily publisher paths remain unchanged.
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-24 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-10-25 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
 | llama.cpp | `6b9ba4f2e8c1` |
 | vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `8183c6b67162` |
+| Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 
-Last run: llama.cpp promoted; vLLM promoted; Strata promoted.
+Last run: llama.cpp skipped (production baseline failed); vLLM rejected; Strata promoted; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed).
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
