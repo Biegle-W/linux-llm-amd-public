@@ -36,9 +36,13 @@ Trials use GPU-LOCK, both cards, an isolated worker cgroup (7 GiB memory.high,
 8 GiB memory.max, 4 GiB memory.swap.max) and launch-through-shutdown memory/
 thermal evidence. Experimental `low-churn-v1` is selected per test only, not as
 the production default. Its settled-swap allowance does not waive swap-I/O,
-host-pressure, correctness or zero-VRAM-spill gates. The initial loading trial
-was interrupted for monitor corrections and is not a qualification or speed
-result. No reduced-RAM model has passed yet. Existing 64 GB results remain dated.
+host-pressure, correctness or zero-VRAM-spill gates. All three reviewed loading
+trials exceeded the 4 GiB cumulative host swapout budget and were guard-stopped
+before any complete inference window. None qualified; no throughput or correctness
+claim follows. All owned units stopped, both GPUs returned to baseline, the lock
+was released and the hub/API remained active. The earlier interrupted load remains
+nonqualifying. Existing 64 GB results retain their original attribution.
+[Exact byte counts, thermal coverage and constraints](../hardware/VRAM-QUALIFICATION-2026-10-26.md).
 
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):

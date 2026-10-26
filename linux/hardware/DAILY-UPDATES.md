@@ -2,9 +2,10 @@
 
 **Current status — October 26:** the timer is disabled; no nightly engine update
 is running. Guarded reduced-RAM qualification is authorized only for the two
-vLLM profiles and SGLang Qwen DFlash2. It is not update activation. The first
-qualification load was interrupted for experimental monitor corrections and
-produced no passing benchmark. The 64 MiB default promotion rule below remains.
+vLLM profiles and SGLang Qwen DFlash2. It is not update activation. All three
+reviewed loading trials were stopped by the 4 GiB cumulative system swapout
+budget under the 7 GiB soft / 8 GiB hard worker RAM cap; none qualified. The
+64 MiB default promotion rule below remains. [Outcomes and limits](VRAM-QUALIFICATION-2026-10-26.md).
 
 Every night at 03:00 `llm-daily-update.timer` checks llama.cpp, vLLM, SGLang, Strata and
 Maya for newer upstream versions. Each one is built in isolation, benchmarked against the

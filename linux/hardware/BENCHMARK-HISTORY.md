@@ -1,5 +1,20 @@
 # LLM benchmark and context history
 
+## Reduced-RAM GPU-resident qualification — October26 (loading only)
+
+At 14.83 GiB OS-visible RAM, normal-launcher Qwen/vLLM, Bolt/vLLM and
+Qwen/SGLang DFlash2 trials used verified 7 GiB memory.high / 8 GiB memory.max /
+4 GiB memory.swap.max worker units. All three exceeded the explicit experimental
+4 GiB cumulative system swapout budget during loading and were guard-stopped.
+No complete inference window, throughput, correctness or full-context result;
+none qualified. Recorded worker swap and dedicated-VRAM spill are distinct from
+system-wide swap I/O. Constraints do not invalidate earlier 64 GB results or prove
+all configurations with the same physical RAM impossible. All owned workers were
+cleaned up; settings/pins unchanged, updates held. Both trees pass 28 swap and
+18 memory/updater CPU tests, with independent monitor re-review.
+[Report](VRAM-QUALIFICATION-2026-10-26.md) and
+[numeric record](results/vram-qualification-2026-10-26.json).
+
 ## Fresh engine tests — October25
 
 Fresh normal-launcher gates promoted llama.cpp `2280f0fd` on all four profiles.

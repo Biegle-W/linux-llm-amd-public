@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Reduced-RAM GPU-resident loading qualification](vram-qualification-2026-10-26.json), [report](../VRAM-QUALIFICATION-2026-10-26.md): 14.83 GiB OS RAM, bounded worker units; all three scoped profiles guard-stopped during loading at the cumulative host swapout budget. None qualified; no inference throughput/correctness result, no runtime promotion. Exact memory/thermal coverage retained; historical 64 GB results unchanged.
+
 - [Fresh engine tests after the 64 MiB swap allowance](fresh-engine-tests-2026-10-25.json), [report](../FRESH-ENGINE-TESTS-2026-10-25.md): llama.cpp promoted; Maya rejected/rollback verified; Strata DeepSeek rejected on dual-card kernel parity. All trials/counts, memory and thermal coverage retained; no new full-window claim.
 
 - [October25 minor worker swap policy](../daily-update/README.md#minor-worker-swap-allowance--october-25): **validation only**, 64 MiB aggregate cap, 18 CPU regressions and saved-record replay; no fresh throughput test or runtime promotion.

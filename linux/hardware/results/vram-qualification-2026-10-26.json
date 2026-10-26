@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-26",
+  "scope": "Guarded loading qualification only; no completed inference benchmark",
+  "hardware": {
+    "cpu": "13th Gen Intel(R) Core(TM) i9-13900KS",
+    "gpu": "2 x RX 7900 XTX 24 GB",
+    "os_visible_ram_bytes": 15924899840
+  },
+  "versions": {
+    "vllm": "0.32.1rc1.dev435+gc50aca144.rocm72",
+    "sglang_source_commit": "f84475ccf593087df3d1da13c9e675eadee12352",
+    "rocm": "7.2.3"
+  },
+  "worker_limits": {
+    "memory.high": 7516192768,
+    "memory.max": 8589934592,
+    "memory.swap.max": 4294967296
+  },
+  "swap_policy": "low-churn-v1",
+  "policy_limits": {
+    "aggregate_worker_swap_bytes": 4294967296,
+    "cumulative_system_swapout_bytes": 4294967296,
+    "inference_swapout_bytes_per_second": 1048576,
+    "inference_total_swap_io_bytes_per_second": 8388608,
+    "inference_window_seconds": 30,
+    "minimum_available_host_bytes": 2147483648,
+    "full_memory_psi_avg10_limit": 10.0,
+    "pressure_consecutive_samples": 3,
+    "dedicated_vram_spill_bytes": 0
+  },
+  "qualification_passed": false,
+  "scheduled_updates_enabled": false,
+  "limitations": [
+    "Worker swap is process-owned; swap I/O is system-wide and not per-process attribution.",
+    "All trials stopped during loading; zero completed inference windows is missing qualification, not a measured zero inference-I/O rate.",
+    "Worker cgroup limits are a constrained experiment and do not prove impossibility under every configuration with the same installed RAM.",
+    "Earlier full-RAM performance results retain their original date, hardware and workload.",
+    "Sensor peaks cover these stopped loading trials only; SMU flags do not prove overheating or a measured slowdown."
+  ],
+  "profiles": [
+    {
+      "model": "qwen3.8-27b-vllm",
+      "engine": "vllm",
+      "configured_context": 163840,
+      "result": "guard_stopped_during_loading",
+      "qualifies": false,
+      "guard_failures": [
+        "swapout_budget"
+      ],
+      "elapsed_seconds": 51.744976310999846,
+      "available_before_bytes": 11711348736,
+      "memory": {
+        "worker_samples": 96,
+        "sampling_errors": 0,
+        "enforcement_attempts": 1,
+        "enforcement_errors": 0,
+        "enforcement_state": "notified",
+        "max_worker_swap_bytes": 3968884736,
+        "max_nonresident_vram_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "low-churn-v1",
+        "samples": 103,
+        "sampling_errors": 0,
+        "elapsed_seconds": 51.744976310999846,
+        "worker_swap_peak_bytes": 3968884736,
+        "total_swapin_bytes": 1774149632,
+        "total_swapout_bytes": 4411277312,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 5813669888,
+        "max_memory_full_psi_avg10": 3.32,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": [
+          "swapout_budget"
+        ]
+      },
+      "cgroup_memory_peak_bytes": 7538225152,
+      "cgroup_swap_peak_bytes": 3994636288,
+      "thermal": {
+        "status": "complete",
+        "samples": 53,
+        "sampling_errors": 0,
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 28.0,
+              "edge": 25.0,
+              "junction": 31.0
+            },
+            "thermal_limit_samples": 31,
+            "hotspot_limit_samples": 31
+          },
+          {
+            "gpu_index": 1,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 21.0,
+              "junction": 32.0
+            },
+            "thermal_limit_samples": 42,
+            "hotspot_limit_samples": 42
+          }
+        ],
+        "cpu_peak_package_c": {
+          "Package id 0": 71.0
+        }
+      },
+      "shutdown_verified": true
+    },
+    {
+      "model": "nemotron-3.5-bolt-vllm",
+      "engine": "vllm",
+      "configured_context": 262144,
+      "result": "guard_stopped_during_loading",
+      "qualifies": false,
+      "guard_failures": [
+        "swapout_budget"
+      ],
+      "elapsed_seconds": 167.6985771619984,
+      "available_before_bytes": 11580997632,
+      "memory": {
+        "worker_samples": 326,
+        "sampling_errors": 0,
+        "enforcement_attempts": 1,
+        "enforcement_errors": 0,
+        "enforcement_state": "notified",
+        "max_worker_swap_bytes": 4278280192,
+        "max_nonresident_vram_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "low-churn-v1",
+        "samples": 331,
+        "sampling_errors": 0,
+        "elapsed_seconds": 167.6985771619984,
+        "worker_swap_peak_bytes": 4278280192,
+        "total_swapin_bytes": 2418757632,
+        "total_swapout_bytes": 4302635008,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 5501546496,
+        "max_memory_full_psi_avg10": 2.33,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": [
+          "swapout_budget"
+        ]
+      },
+      "cgroup_memory_peak_bytes": 7521251328,
+      "cgroup_swap_peak_bytes": 4294967296,
+      "thermal": {
+        "status": "complete",
+        "samples": 169,
+        "sampling_errors": 0,
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 169,
+            "sensor_samples": {
+              "mem": 169,
+              "edge": 169,
+              "junction": 169
+            },
+            "peak_temperature_c": {
+              "mem": 33.0,
+              "edge": 27.0,
+              "junction": 34.0
+            },
+            "thermal_limit_samples": 50,
+            "hotspot_limit_samples": 50
+          },
+          {
+            "gpu_index": 1,
+            "samples": 169,
+            "sensor_samples": {
+              "mem": 169,
+              "edge": 169,
+              "junction": 169
+            },
+            "peak_temperature_c": {
+              "mem": 47.0,
+              "edge": 22.0,
+              "junction": 33.0
+            },
+            "thermal_limit_samples": 117,
+            "hotspot_limit_samples": 117
+          }
+        ],
+        "cpu_peak_package_c": {
+          "Package id 0": 81.0
+        }
+      },
+      "shutdown_verified": true
+    },
+    {
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "engine": "sglang",
+      "configured_context": 163840,
+      "result": "guard_stopped_during_loading",
+      "qualifies": false,
+      "guard_failures": [
+        "swapout_budget"
+      ],
+      "elapsed_seconds": 51.422184689999995,
+      "available_before_bytes": 11633676288,
+      "memory": {
+        "worker_samples": 89,
+        "sampling_errors": 0,
+        "enforcement_attempts": 1,
+        "enforcement_errors": 0,
+        "enforcement_state": "notified",
+        "max_worker_swap_bytes": 3226030080,
+        "max_nonresident_vram_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "low-churn-v1",
+        "samples": 102,
+        "sampling_errors": 0,
+        "elapsed_seconds": 51.422184689999995,
+        "worker_swap_peak_bytes": 3226030080,
+        "total_swapin_bytes": 39542784,
+        "total_swapout_bytes": 4550332416,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 5269565440,
+        "max_memory_full_psi_avg10": 2.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": [
+          "swapout_budget"
+        ]
+      },
+      "cgroup_memory_peak_bytes": 7517220864,
+      "cgroup_swap_peak_bytes": 3290394624,
+      "thermal": {
+        "status": "complete",
+        "samples": 53,
+        "sampling_errors": 0,
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 30.0,
+              "edge": 26.0,
+              "junction": 33.0
+            },
+            "thermal_limit_samples": 9,
+            "hotspot_limit_samples": 9
+          },
+          {
+            "gpu_index": 1,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 21.0,
+              "junction": 32.0
+            },
+            "thermal_limit_samples": 27,
+            "hotspot_limit_samples": 27
+          }
+        ],
+        "cpu_peak_package_c": {
+          "Package id 0": 67.0
+        }
+      },
+      "shutdown_verified": true
+    }
+  ]
+}

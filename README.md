@@ -33,10 +33,11 @@ publisher compatibility. GitHub repository names identify the system and hardwar
 the 64 GB measurements below retain their original hardware attribution. Nightly
 engine updates are paused. Only Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlash2
 are authorized for guarded GPU-resident qualification; RAM-offloaded profiles stay
-held. The first load was interrupted to correct experimental monitor coverage;
-no model has passed reduced-RAM qualification yet. Production pins, contexts and
-the default 64 MiB worker-swap acceptance rule are unchanged. Ubuntu changes go
-only to the paired Ubuntu repositories; Windows remains separate.
+held. All three reviewed loading trials were guard-stopped at the 4 GiB cumulative
+system swapout budget under a 7 GiB soft / 8 GiB hard worker RAM cap; none qualified.
+Production pins, contexts and the default 64 MiB worker-swap rule are unchanged.
+AMD changes go only to `linux-llm-amd` / `linux-llm-amd-public`; Windows and native
+Linux NVIDIA remain separate. [Outcomes and limits](linux/hardware/VRAM-QUALIFICATION-2026-10-26.md).
 
 ## Start and connect
 
