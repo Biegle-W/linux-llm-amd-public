@@ -87,12 +87,13 @@ See `linux/hardware/MAYA-2026-10-20.md` and
 `linux/hardware/results/maya-dual-amd-2026-10-20.json`. No speed claim is inferred
 from forum reports or other hardware; all trials/contexts/methods remain dated.
 
-## Forum research and source citations
+## Forum and reference-site research and source citations
 
-Standing user instruction: consult both [lcz.me](https://lcz.me/) and
-[Level1Techs Forums](https://forum.level1techs.com/) when researching local
+Standing user instruction: consult [lcz.me](https://lcz.me/),
+[Level1Techs Forums](https://forum.level1techs.com/) and
+[Digital Spaceport](https://digitalspaceport.com/) when researching local
 inference optimizations, including HIP kernels, ROCm and C++ runtimes. In BOTH
-GitHub repositories, cite direct topic/post URLs beside forum-derived claims,
+GitHub repositories, cite direct article/topic/post URLs beside source-derived claims,
 recommendations and changes. Record author/date when available, relevant hardware,
 model, quantization, context and workload. Link the primary upstream GitHub
 commit/PR or official documentation supporting implementation details; pin
