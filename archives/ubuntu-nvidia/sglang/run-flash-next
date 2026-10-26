@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-printf "%s\n" "Flash-Next now runs exclusively in Strata. Open dsh Strata on the Desktop, or run /opt/local-llm/dsh/start-strata." >&2
-exit 1

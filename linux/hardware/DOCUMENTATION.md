@@ -8,7 +8,7 @@
 - [Machine-readable result index](results/README.md)
 - [Dated benchmark history](BENCHMARK-HISTORY.md)
 - [Image/video setup](../graphics/README.md)
-- [NVIDIA archive](../../archives/ubuntu-nvidia/README.md)
+- [NVIDIA archive](https://github.com/Biegle-W/retired-llm-setting/blob/main/linux-amd-public/archives/ubuntu-nvidia/README.md)
 
 Dated reports describe their original hardware/build/workload. Legacy DSH
 recipes and HyperQwen reports are retained for historical references; they are

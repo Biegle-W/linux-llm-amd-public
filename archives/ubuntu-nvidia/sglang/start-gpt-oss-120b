@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-echo "Retired: GPT-OSS-120B uses the llama.cpp GGUF profile. The unused HF checkpoint was removed; CPU offload in this backend previously exhausted host RAM." >&2
-exit 1

@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-exec /opt/local-llm/dsh/start-strata-q3 "$@"

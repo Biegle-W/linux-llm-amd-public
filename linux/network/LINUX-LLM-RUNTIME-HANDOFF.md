@@ -1,5 +1,14 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**October 25 repository split:** AMD repositories are now `linux-llm-amd` /
+`linux-llm-amd-public`, retaining their original history. Native NVIDIA Linux is
+separate (`linux-llm-nvidia` / `linux-llm-nvidia-public`); Windows remains separate.
+Retired settings are centralized in private `retired-llm-setting`. Active AMD
+runtime paths, profiles, guards, model storage, publisher directories and schedules
+are unchanged. On the AMD host, pull the organization commit, set each checkout's
+origin to its matching new GitHub name, then copy this handoff to the existing
+Shared location. This Windows session cannot update the AMD host's mounted copy.
+
 Updated **October 25, 2026**. Current hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
@@ -9,8 +18,8 @@ This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUN
 source is `network/LINUX-LLM-RUNTIME-HANDOFF.md` in the Linux repository.
 
 **Repository organization (October25):** private repositories remain
-`ubuntu-llm-amd` and `windows-llm-nvidia`. Public references are now separated as
-[ubuntu-llm-amd-public](https://github.com/Biegle-W/ubuntu-llm-amd-public) and
+`linux-llm-amd` and `windows-llm-nvidia`. Public references are now separated as
+[linux-llm-amd-public](https://github.com/Biegle-W/linux-llm-amd-public) and
 [windows-llm-nvidia-public](https://github.com/Biegle-W/windows-llm-nvidia-public). Ubuntu's existing public history is
 retained, including earlier Windows snapshots; the new Windows public repository
 contains reviewed sanitized files only. Retired setup source/documentation is
@@ -1042,7 +1051,7 @@ against a same-hardware baseline with `hardware/compare-runtime-candidate.py --b
 [Staging guide](../hardware/CANDIDATE-STAGING.md).
 
 Earlier October 19 public documentation cleanup (before the fresh benchmark batch): the
-[public README](https://github.com/Biegle-W/ubuntu-llm-amd-public#amd-latest-setup-and-results)
+[public README](https://github.com/Biegle-W/linux-llm-amd-public#amd-latest-setup-and-results)
 now presents two hardware result sets: latest dual-AMD setup and archived dual-NVIDIA.
 Each model/backend has context, prefill, TTFT and decode fields, with measured
 build/date, missing metrics and older-build timings labeled. Short and long-input

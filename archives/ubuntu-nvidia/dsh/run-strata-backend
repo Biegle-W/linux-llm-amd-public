@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-cd /opt/local-llm/strata
-export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=0,1
-export XDG_CONFIG_HOME=/opt/local-llm/strata/local-config
-exec .venv/bin/python serve/server.py --engine strata --config /opt/local-llm/dsh/strata-iq3-profile.json --host 127.0.0.1 --port 30020 "$@"

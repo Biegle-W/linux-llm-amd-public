@@ -852,8 +852,8 @@ READMEs and the consolidated Shared handoff when relevant.
 [NVA]: NVIDIA-COMPARISON-RUNTIME-AUDIT-2026-10-18.md
 [ST18]: STRATA-DUAL-AMD-2026-10-18.md
 [FT]: FREETOKEN-RETIRED-2026-10-18.md
-[PUB]: https://github.com/Biegle-W/ubuntu-llm-amd-public#saved-benchmark-results
-[NVB]: https://github.com/Biegle-W/ubuntu-llm-amd-public/blob/main/archives/ubuntu-nvidia/BUILD.md
+[PUB]: https://github.com/Biegle-W/linux-llm-amd-public#saved-benchmark-results
+[NVB]: https://github.com/Biegle-W/linux-llm-amd-public/blob/main/archives/ubuntu-nvidia/BUILD.md
 
 [OPT19]: STRATA-OPTIMIZATION-2026-10-19.md
 

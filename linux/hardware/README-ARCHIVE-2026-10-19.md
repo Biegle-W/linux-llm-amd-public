@@ -439,10 +439,10 @@ gate and actual long-context checks pass. [Settings and upgrade procedure](STRAT
 
 ## Previous NVIDIA setup
 
-The [linux-nvidia/](../../archives/ubuntu-nvidia/README.md) archive contains the previous RTX 4070
+The [linux-nvidia/](https://github.com/Biegle-W/retired-llm-setting/blob/main/linux-amd-public/archives/ubuntu-nvidia/README.md) archive contains the previous RTX 4070
 12 GB + RTX 3060 12 GB / 64 GB RAM configuration: CUDA llama.cpp, SGLang, vLLM,
 HyperQwen and Strata, plus separate DSH/Turnstone launchers. It includes historical
-TP2/offload profiles, compatibility patches and [pinned build notes](../../archives/ubuntu-nvidia/BUILD.md).
+TP2/offload profiles, compatibility patches and [pinned build notes](https://github.com/Biegle-W/retired-llm-setting/blob/main/linux-amd-public/archives/ubuntu-nvidia/BUILD.md).
 Use it as an alternative to `linux/`; both use the same example workspace and ports.
 It does not change the current AMD configuration or restore retired model files.
 
@@ -558,7 +558,7 @@ Historical dual-NVIDIA setup with 64 GB RAM. SGLang, vLLM and HyperQwen use TP2
 without CUDA P2P; llama.cpp uses layer splitting, sometimes with CPU expert
 offload. Strata uses its GPU split and expert paging. The following results
 **predate the October 14 nightly update** recorded in
-[the NVIDIA build notes](../../archives/ubuntu-nvidia/BUILD.md); they are not speed claims for
+[the NVIDIA build notes](https://github.com/Biegle-W/retired-llm-setting/blob/main/linux-amd-public/archives/ubuntu-nvidia/BUILD.md); they are not speed claims for
 those newer builds or for the current AMD machine.
 
 | Measured engine | Model / strategy | Tested configuration context | Prefill t/s | Decode t/s | Date / sample |

@@ -1,8 +1,0 @@
-{
-  "qwen3.8-27b-sglang": {
-    "name": "Qwen3.8-27B SGLang (40K, MTP)",
-    "context": 40960,
-    "mtp": true,
-    "memory_fraction": 0.98
-  }
-}

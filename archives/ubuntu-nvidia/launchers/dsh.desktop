@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=dsh
-Comment=DeepSeek Harness; start an inference backend separately
-Exec=/opt/local-llm/dsh/start-dsh
-Path=/opt/local-llm/dsh/workspace
-Terminal=true
-Icon=applications-development
-Categories=Development;
