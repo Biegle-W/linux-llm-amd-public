@@ -1,5 +1,31 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Note for Claude Code and Codex — this server's maintenance scope
+
+Standing user instruction after the repository restructure: **this server
+maintains only `Biegle-W/linux-llm-amd` (private) and
+`Biegle-W/linux-llm-amd-public` (sanitized public reference).**
+
+- Exclude all Windows and native Linux NVIDIA repositories from this server's
+  edits, testing, synchronization and publication unless the user explicitly
+  changes scope. Links to those repositories and retained historical snapshots
+  are reference material, not maintenance assignments. Do not merge their
+  histories, copy their active trees here or delete their historical records.
+- Keep the existing AMD checkout, installed engine/environment and model-storage
+  paths unchanged. Repository renaming is not permission to relocate live assets.
+- Keep both AMD repositories current after authorized AMD changes. Publish only
+  reviewed, sanitized files to the public repository; never copy private history,
+  credentials, personal settings, raw logs or model weights.
+- Read the AMD repository's root `README.md` first. It remains the sole root
+  maintenance instruction file; do not recreate `AGENTS.md` or introduce
+  competing root instruction files for individual agents.
+- Preserve concurrent agent/user work and all existing runtime safety guards and
+  maintenance holds. This scope note does not authorize GPU trials, engine
+  updates, service restarts or resuming paused nightly updates.
+
+This scope takes precedence over legacy cross-platform maintenance wording.
+Work on other repositories requires a new explicit user instruction.
+
 **October 25 repository split:** AMD repositories are now `linux-llm-amd` /
 `linux-llm-amd-public`, retaining their original history. Native NVIDIA Linux is
 separate (`linux-llm-nvidia` / `linux-llm-nvidia-public`); Windows remains separate.

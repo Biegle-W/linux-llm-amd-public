@@ -40,6 +40,32 @@ the later October26 user instruction makes low-churn the default (see below).
 AMD changes go only to `linux-llm-amd` / `linux-llm-amd-public`; Windows and native
 Linux NVIDIA remain separate. [Outcomes and limits](linux/hardware/VRAM-QUALIFICATION-2026-10-26.md).
 
+## Note for Claude Code and Codex — this server's maintenance scope
+
+Standing user instruction after the repository restructure: **this server
+maintains only `Biegle-W/linux-llm-amd` (private) and
+`Biegle-W/linux-llm-amd-public` (sanitized public reference).**
+
+- Exclude all Windows and native Linux NVIDIA repositories from this server's
+  edits, testing, synchronization and publication unless the user explicitly
+  changes scope. Links to those repositories and retained historical snapshots
+  are reference material, not maintenance assignments. Do not merge their
+  histories, copy their active trees here or delete their historical records.
+- Keep the existing AMD checkout, installed engine/environment and model-storage
+  paths unchanged. Repository renaming is not permission to relocate live assets.
+- Keep both AMD repositories current after authorized AMD changes. Publish only
+  reviewed, sanitized files to the public repository; never copy private history,
+  credentials, personal settings, raw logs or model weights.
+- Read the AMD repository's root `README.md` first. It remains the sole root
+  maintenance instruction file; do not recreate `AGENTS.md` or introduce
+  competing root instruction files for individual agents.
+- Preserve concurrent agent/user work and all existing runtime safety guards and
+  maintenance holds. This scope note does not authorize GPU trials, engine
+  updates, service restarts or resuming paused nightly updates.
+
+This scope takes precedence over legacy cross-platform maintenance wording.
+Work on other repositories requires a new explicit user instruction.
+
 ## Start and connect
 
 This public tree is a hardware-specific reference. Adapt example paths, install the pinned runtimes and validate your own hardware before launching. Active source is under `linux/`; install that tree in the example `/opt/local-llm` workspace.
@@ -206,7 +232,8 @@ Report any blocked commit, push or handoff synchronization explicitly.
 
 This is `Biegle-W/linux-llm-amd-public`. Maintain Linux AMD and the historical
 `archives/ubuntu-nvidia/` tree here. Windows setup, reports and retired configurations now
-live at the root of `Biegle-W/windows-llm-nvidia-public`; publish Windows changes there.
+live at the root of `Biegle-W/windows-llm-nvidia-public`; that work is handled
+separately and is outside this AMD server's maintenance scope.
 The pre-split public Windows snapshot remains in this repository's history.
 Do not recreate `windows/` here or copy private repository history. Linux clients
 running on Windows are still covered by the Linux network handoff. The existing
