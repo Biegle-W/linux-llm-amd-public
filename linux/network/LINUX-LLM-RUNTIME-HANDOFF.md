@@ -4,13 +4,15 @@
 `linux-llm-amd-public`, retaining their original history. Native NVIDIA Linux is
 separate (`linux-llm-nvidia` / `linux-llm-nvidia-public`); Windows remains separate.
 Retired settings are centralized in private `retired-llm-setting`. Active AMD
-runtime paths, profiles, guards, model storage, publisher directories and schedules
-are unchanged. On the AMD host, pull the organization commit, set each checkout's
-origin to its matching new GitHub name, then copy this handoff to the existing
-Shared location. This Windows session cannot update the AMD host's mounted copy.
+runtime paths, profiles, guards, model storage and publisher directories are
+unchanged. Both AMD checkout origins now use the renamed repositories. The
+canonical handoff is synchronized to the existing Shared location on the AMD host.
 
-Updated **October 25, 2026**. Current hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB. Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired. Engine versions are now updated daily after passing every promotion gate; the current versions are in the block below.
+Updated **October 26, 2026**. The benchmark-reference hardware is i9-13900KS,
+64 GB RAM and two RX 7900 XTX 24 GB; the live OS currently exposes **14.83 GiB RAM**.
+Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
+**Nightly engine updates are paused**, not automatically resumed by qualification.
+The retained versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
 comparison are documented with their distinct timing methods and build scope.
 This is the **single current handoff on Shared**, available as `D:\LINUX-LLM-RUNTIME-HANDOFF.md` in Windows and
@@ -26,6 +28,17 @@ contains reviewed sanitized files only. Retired setup source/documentation is
 indexed under [archives](../../archives/README.md), with dated hardware/results preserved.
 Existing local checkout paths, installed launchers, model assets, guards, ports
 and daily publisher paths remain unchanged.
+
+**GPU-resident qualification (October 26):** authorization is restricted to
+`qwen3.8-27b-vllm`, `nemotron-3.5-bolt-vllm` and
+`qwen3.8-27b-sglang-dflash2`. RAM-offloaded llama.cpp, Maya and Strata stay held.
+Trials use GPU-LOCK, both cards, an isolated worker cgroup (7 GiB memory.high,
+8 GiB memory.max, 4 GiB memory.swap.max) and launch-through-shutdown memory/
+thermal evidence. Experimental `low-churn-v1` is selected per test only, not as
+the production default. Its settled-swap allowance does not waive swap-I/O,
+host-pressure, correctness or zero-VRAM-spill gates. The initial loading trial
+was interrupted for monitor corrections and is not a qualification or speed
+result. No reduced-RAM model has passed yet. Existing 64 GB results remain dated.
 
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):

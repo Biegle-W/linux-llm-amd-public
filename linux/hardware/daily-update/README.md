@@ -1,5 +1,8 @@
 # Daily engine update
 
+**Current status (October 26):** scheduled updates are disabled. Reduced-RAM
+GPU-resident baseline qualification is separate and does not resume this updater.
+
 User request (October 23): keep every inference engine on its newest upstream version and
 check every day. `llm-daily-update.timer` runs `daily_update.py` at 03:00. A newer version
 replaces production **only after it passes the standard promotion gates**; anything else is
@@ -47,6 +50,34 @@ rolls back before releasing the lock. If the machine loses power instead,
 `llm-daily-update-recover.service` rolls back at the next login, before the model hub starts.
 
 ## Memory promotion policy
+
+### Experimental reduced-RAM qualification — October 26
+
+The default remains `bounded-64mib`; nightly updates are not opted in. A separately
+authorized qualification process may explicitly set `LOCAL_LLM_SWAP_POLICY=low-churn-v1`
+for Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlash2 only. It does not authorize
+RAM-offloaded profiles, production setting changes, or update promotion.
+
+The experimental gate allows aggregate settled owned-worker swap up to 4 GiB,
+with a cumulative **system-wide** swapout budget of 4 GiB per trial. System-wide
+I/O is a conservative bound, not per-worker attribution. During continuous
+inference, rolling sampled windows of at least 30 seconds must stay at or below
+1 MiB/s swapout and 8 MiB/s combined swap I/O. Three consecutive readings below
+2 GiB host MemAvailable, or above 10% full-memory PSI avg10, reject the trial.
+Dedicated VRAM spill remains zero; existing quality/performance checks remain.
+These are conservative trial bounds, not guarantees of SSD longevity.
+
+Qualification evidence must include complete inference windows with valid owned
+worker observations, as well as launch/load/shutdown coverage. Phase changes are
+serialized with both telemetry readers and reset rate history even between
+samples. Missing inference workers invalidate evidence; absence before launch
+and after shutdown is allowed. Violation callback exceptions latch a permanent
+validation error; enforcement retries once, then records terminal failure while
+sampling continues. No exception message or private process text is published.
+
+CPU verification: 28 swap/activity/monitor tests and 18 existing accounting,
+comparator and updater regressions pass. CPU tests are not real-model
+qualification. Original 64 GB measurements keep their dates and hardware scope.
 
 ### Minor worker swap allowance — October 25
 

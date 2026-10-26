@@ -8,7 +8,7 @@ Active runtime paths, model profiles, guards and schedules are unchanged.
 This README is now the sole root maintenance instruction file; previous root
 instructions are consolidated below. [Seven-repository map](linux/hardware/REPOSITORY-MAP.md).
 
-Current workstation: **2 × RX 7900 XTX 24 GB, Intel i9-13900KS, 64 GB RAM**,
+Benchmark-reference workstation: **2 × RX 7900 XTX 24 GB, Intel i9-13900KS, 64 GB RAM**,
 MSI MPG Z690 CARBON WIFI, CPU PCIe 4.0 x8/x8. Every active model uses both AMD
 cards. This repository covers the Ubuntu HIP/ROCm system. The independent
 Windows NVIDIA / i5-13600KF / 64 GB fallback has its own
@@ -28,6 +28,15 @@ Private repositories remain private. Public files exclude credentials, personal
 settings, model weights, installed runtimes, raw private logs and private history.
 The local Ubuntu checkout names remain unchanged for installed launcher and daily
 publisher compatibility. GitHub repository names identify the system and hardware.
+
+**October 26 qualification status:** the live OS currently exposes **14.83 GiB RAM**;
+the 64 GB measurements below retain their original hardware attribution. Nightly
+engine updates are paused. Only Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlash2
+are authorized for guarded GPU-resident qualification; RAM-offloaded profiles stay
+held. The first load was interrupted to correct experimental monitor coverage;
+no model has passed reduced-RAM qualification yet. Production pins, contexts and
+the default 64 MiB worker-swap acceptance rule are unchanged. Ubuntu changes go
+only to the paired Ubuntu repositories; Windows remains separate.
 
 ## Start and connect
 
