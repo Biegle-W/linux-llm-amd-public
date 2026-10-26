@@ -20,7 +20,7 @@
     "kv_cache_bytes": 1879048192,
     "runtime": "rocm",
     "launcher": "/opt/local-llm/vllm/start-bolt-rocm",
-    "model_path": "/mnt/shared-spare/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
+    "model_path": "/mnt/shared/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
     "min_free_vram_gib": 22.0,
     "kv_cache_dtype": "bfloat16",
     "context_validation": "Fresh 254,994-input three-marker retrieval and 255,034-token full-history follow-up at 262,144; arithmetic/SSE; both cards, zero owned swap/spill (October 21)"

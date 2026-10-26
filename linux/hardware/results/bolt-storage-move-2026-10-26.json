@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-26",
+  "scope": "storage relocation only; not inference qualification",
+  "model": "Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
+  "profile": "nemotron-3.5-bolt-vllm",
+  "source_volume": "sharedSATA2",
+  "destination_volume": "sharedSATA1",
+  "model_subdirectory": "vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
+  "file_count": 33,
+  "logical_bytes": 43645320930,
+  "logical_gib": 40.65,
+  "checkpoint_index_shards": 9,
+  "all_file_sha256_matched": true,
+  "manifest_sha256": "17185cb6ef3549ce1200a1e0d99c1ee748be4d023246e79916a99e6587530526",
+  "original_model_directory_deleted": true,
+  "storage_tests_per_checkout": 16,
+  "independent_review_passed": true,
+  "inference_run": false,
+  "runtime_context_quantization_and_guards_changed": false,
+  "physical_drive_removal_ready": false,
+  "remaining_administrator_actions": [
+    "unmount retired sharedSATA2 volume",
+    "remove obsolete sharedSATA2 entry from /etc/fstab",
+    "reload system systemd manager"
+  ],
+  "nas_sharing_configured": false
+}

@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [Bolt SATA2-to-SATA1 relocation](bolt-storage-move-2026-10-26.json), [report](../BOLT-STORAGE-MOVE-2026-10-26.md): storage-only verification, 33 SHA-256-matched files / 43,645,320,930 bytes; original model removed, active paths updated, 16 CPU storage tests per checkout. Administrator unmount/fstab cleanup still pending; no new inference or NAS service.
+
 - [Reduced-RAM GPU-resident loading qualification](vram-qualification-2026-10-26.json), [report](../VRAM-QUALIFICATION-2026-10-26.md): 14.83 GiB OS RAM, bounded worker units; all three scoped profiles guard-stopped during loading at the cumulative host swapout budget. None qualified; no inference throughput/correctness result, no runtime promotion. Exact memory/thermal coverage retained; historical 64 GB results unchanged.
 
 - [Fresh engine tests after the 64 MiB swap allowance](fresh-engine-tests-2026-10-25.json), [report](../FRESH-ENGINE-TESTS-2026-10-25.md): llama.cpp promoted; Maya rejected/rollback verified; Strata DeepSeek rejected on dual-card kernel parity. All trials/counts, memory and thermal coverage retained; no new full-window claim.

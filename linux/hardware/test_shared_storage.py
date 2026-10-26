@@ -11,6 +11,48 @@ import shared_storage as storage
 
 
 class ModelVolumeTests(unittest.TestCase):
+    def test_new_static_models_use_sata1_checkpoint_directory(self):
+        target = storage.SHARED / 'vLLM-Models'
+        self.assertEqual(storage.NEW_MODEL_DIRS['static'], target)
+        from types import SimpleNamespace
+        with patch.object(storage, 'ensure_model_drive') as ensure, \
+                patch.object(storage.shutil, 'disk_usage', return_value=SimpleNamespace(total=1000, used=100)):
+            self.assertEqual(storage.new_model_dir('static', 200), target)
+        ensure.assert_called_once_with(storage.SHARED, target, storage.UUID, 'sharedSATA1')
+
+    def test_vllm_checkpoint_on_sata1_mounts_only_sata1(self):
+        checkpoint = storage.SHARED / 'vLLM-Models' / 'Bolt'
+        with patch.object(storage, 'ensure_model_drive') as ensure:
+            storage.ensure_vllm_models({'bolt': {'model_path': str(checkpoint)}})
+        ensure.assert_called_once_with(storage.SHARED, checkpoint.parent, storage.UUID, 'sharedSATA1')
+
+    def test_retired_sata2_is_not_discovered_or_admitted(self):
+        self.assertEqual({row[0] for row in storage.VOLUMES}, {'sharedSATA1', 'Shared NVMe'})
+        with patch.object(storage, 'ensure_model_drive') as ensure, \
+                patch.object(storage.Path, 'exists', return_value=True):
+            self.assertEqual(storage.mount_all(wait=0), [])
+        self.assertEqual(ensure.call_count, 2)
+        old_path = storage.SHARED.with_name('sharedSATA2') / 'vLLM-Models' / 'Bolt'
+        with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaises(RuntimeError):
+            storage.ensure_model_paths([old_path])
+        ensure.assert_not_called()
+
+    def test_bolt_profile_and_launcher_use_sata1(self):
+        root = Path(__file__).resolve().parents[1]
+        model = storage.SHARED / 'vLLM-Models' / 'Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16'
+        profile = json.loads((root / 'dsh/vllm-profiles.json').read_text())['nemotron-3.5-bolt-vllm']
+        self.assertEqual(profile['model_path'], str(model))
+        launcher = (root / 'vllm/start-bolt-rocm').read_text()
+        self.assertIn('MODEL=' + str(model), launcher)
+        self.assertIn('"$MODEL/ultra_v3_reasoning_parser.py"', launcher)
+
+    def test_static_placement_still_rejects_the_ninety_percent_boundary(self):
+        from types import SimpleNamespace
+        with patch.object(storage, 'ensure_model_drive'), \
+                patch.object(storage.shutil, 'disk_usage', return_value=SimpleNamespace(total=1000, used=700)):
+            with self.assertRaises(RuntimeError):
+                storage.new_model_dir('static', 200)
+
     def test_wrong_uuid_never_attempts_mount_or_creates_directory(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

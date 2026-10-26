@@ -109,6 +109,21 @@ only after all gates pass, including at most 64 MiB aggregate worker swap and
 zero VRAM spill with valid launch-through-shutdown telemetry. ROCm 7.2.3 is retained. See the
 [updater method](linux/hardware/daily-update/README.md).
 
+## Model storage — October 26
+
+Nemotron Bolt's AutoRound W4A16 checkpoint was moved from sharedSATA2 to
+**sharedSATA1/vLLM-Models**. All 33 files (43,645,320,930 bytes) matched SHA-256
+before the source model directory was removed. The Bolt profile, launcher and
+reasoning-parser path now use SATA1. New static checkpoints also use SATA1;
+new streaming packs remain on the system NVMe and the Shared NVMe stays closed
+to new models. The 90% drive-use ceiling is unchanged.
+
+The retired SATA2 volume is no longer required by model-volume discovery. It
+remains mounted until an administrator unmounts it and removes its obsolete
+`/etc/fstab` entry; do not unplug it live. This is storage-only verification,
+not another reduced-RAM inference test. NAS sharing has not been installed.
+[Migration evidence and removal steps](linux/hardware/BOLT-STORAGE-MOVE-2026-10-26.md).
+
 ## Directory map
 
 | Location | Scope |
@@ -389,7 +404,8 @@ See `linux/hardware/THERMAL-LOGGING.md`.
 At the user's request the shared SATA model drive is labelled `sharedSATA1` (exFAT limit
 11 characters). Mount it by UUID through `dsh/shared_storage.py`; never create model
 folders on an unmounted path. Public examples keep `/mnt/shared`.
-The empty spare SATA drive is labelled `sharedSATA2` and holds no models.
+The former Bolt volume `sharedSATA2` is retired from model configuration; Bolt now resides on sharedSATA1.
+Administrator unmount/fstab cleanup is required before physical removal.
 
 ### Engine preference — standing user instruction (October 22)
 

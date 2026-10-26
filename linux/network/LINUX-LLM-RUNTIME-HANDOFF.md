@@ -44,6 +44,17 @@ was released and the hub/API remained active. The earlier interrupted load remai
 nonqualifying. Existing 64 GB results retain their original attribution.
 [Exact byte counts, thermal coverage and constraints](../hardware/VRAM-QUALIFICATION-2026-10-26.md).
 
+**Model storage migration (October 26):** Bolt W4A16 now lives on
+sharedSATA1 under `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16`.
+All 33 files (43,645,320,930 bytes) were SHA-256 matched before deleting the source
+model directory from SATA2. Active launcher/profile/parser paths and the static
+placement helper now use SATA1; the helper no longer waits for or mounts SATA2.
+No quantization, context, runtime version or inference guard changed, and no new
+inference test was run. New streaming packs still use system NVMe; do not add
+models to Shared NVMe. SATA2 is still mounted and its old boot entry remains:
+administrator unmount/fstab cleanup is required before live physical removal.
+[Migration evidence and removal steps](../hardware/BOLT-STORAGE-MOVE-2026-10-26.md).
+
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
@@ -220,8 +231,8 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 - Shared SATA and the new shared NVMe are exFAT; builds/environments stay Linux ext4.
   This machine is dual-boot: Windows boot stops the Linux service. Model-file sharing
   does not make Linux HIP binaries or absolute paths runnable in Windows.
-  Both model drives mount automatically at Linux desktop login (`local-llm-mounts.service`).
-  After a reboot, log in to the desktop before starting backends, including over SSH.
+  Retained model drives mount at boot through `/etc/fstab`; `local-llm-mounts.service` is a session-start fallback (current October 26 layout below).
+  Desktop login is not required for the configured headless boot mounts and lingering services.
   [Details](#storage-and-runtime-pins).
 
 ## Ornith-1.5-122B Q4 test and Sage activation — October21
@@ -247,7 +258,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 **Drive rename (user request):** the shared SATA model drive is now labelled
 **sharedSATA1**. exFAT allows at most 11 characters. The mount script, model presets,
 Strata settings and ComfyUI paths follow its mount point; the examples here keep `/mnt/shared`.
-The empty spare SATA drive is labelled **sharedSATA2**.
+The former Bolt volume **sharedSATA2** is now retired from model configuration; physical removal awaits administrator unmount/fstab cleanup (October 26).
 
 **Slow-model research (October 22):** the top community lead is llama.cpp `ubatch` (128 in every
 profile) × `GGML_OP_OFFLOAD_MIN_BATCH` for CPU-expert prefill. Not yet tested.
@@ -298,7 +309,7 @@ opt-in `LOCAL_ROCM_RUNTIME_OVERLAY` hook is for isolated tests only.
 [Report](../hardware/ROCM-724-7141-2026-10-22.md).
 
 **Switch-over (user instruction):** Bolt now runs on vLLM as `nemotron-3.5-bolt-vllm`
-(`vllm/start-bolt-rocm`, 262K, sharedSATA2 a required model volume). Router checks passed
+(`vllm/start-bolt-rocm`, 262K, weights moved from sharedSATA2 to sharedSATA1 October 26). Router checks passed
 (arithmetic/JSON/tools); 37.32/37.21 t/s decode, 2,959 t/s prefill. The llama.cpp `nemotron-3.5-bolt`
 and `qwen3.8-27b-q4` profiles are retired; llama.cpp defaults to HIP. Their GGUF files were deleted at the user's request (October 22). Ten active profiles.
 
@@ -831,30 +842,24 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 - Linux-only GPTQ target `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/` and DFlash2
   draft `models/drafts/Qwen3.8-27B-DFlash2-W4A16/` remain on Linux NVMe, shared by
   SGLang/vLLM. Windows cannot use those Linux absolute paths.
-- **Automatic mounting.** The user service `local-llm-mounts.service` runs
-  `dsh/shared_storage.py --all` at every desktop login. It mounts, by UUID:
-  - the shared SATA (`/mnt/shared`, `CONFIGURE_SHARED_DRIVE_UUID`)
-  - the shared NVMe (`/mnt/shared-nvme`, `CONFIGURE_SHARED_NVME_UUID`)
-  - an optional spare (`/mnt/shared-spare`)
-
-  It waits up to 120 s for late devices. Replace the UUID placeholders, then install:
-  `cp network/local-llm-mounts.service ~/.config/systemd/user/ && systemctl --user enable local-llm-mounts.service`.
-- No sudo or fstab entry is used. Ubuntu polkit allows unprompted internal-drive
-  mounts only for the active local desktop session, so after a reboot someone must
-  log in to the desktop; before that, SSH alone cannot mount the volumes.
-- Launcher preflight still checks each backend's own volume before handover:
-  - llama.cpp checks every volume its presets reference: the shared SATA, plus the shared NVMe for Super IQ3.
-  - Strata and Maya check the shared NVMe.
-
-  Wrong or unavailable volumes are rejected without creating an empty replacement
-  tree. A refused direct mount (SSH) is retried through the user's systemd manager.
-- Validated on the reference host:
-  - The login service remounted all unmounted volumes.
-  - Launcher preflight remounted unmounted volumes.
-  - The user-manager retry recovered a refused direct mount.
-
-  A real reboot was later validated: all volumes mounted by UUID after login, despite an NVMe
-  device rename. llama-server also loaded a space-containing NVMe model path. A real SSH session was not tested.
+- **Current model volumes (October 26).** Only sharedSATA1 (GGUF files plus
+  `vLLM-Models/` for Bolt/static checkpoints) and Shared NVMe (existing streaming
+  models and Super IQ3) are configured. SATA2 is retired from model discovery.
+- `/etc/fstab` provides headless boot mounts; lingering starts user services
+  without desktop login. The login `local-llm-mounts.service` is a fallback and
+  runs `dsh/shared_storage.py --all`, which verifies only the two retained volumes.
+  Replace public UUID placeholders before installing examples.
+- The obsolete SATA2 fstab entry remains pending administrator cleanup, and the
+  retired drive is still mounted. Unmount it and remove only its old boot entry
+  before live removal; see the migration report linked above.
+- Launcher preflight checks only the model's actual volume: llama.cpp may use SATA1
+  or Shared NVMe; Strata/Maya check Shared NVMe; Bolt/vLLM checks SATA1; internal
+  Qwen checkpoints need no shared-drive mount. Wrong UUIDs, unknown locations and
+  absent model roots are rejected without creating replacement model trees.
+- Storage verification: 16 CPU tests pass in each checkout, Bolt's 33 copied files
+  match SHA-256, and its nine indexed shards exist. No inference or reboot test
+  was repeated. The October 20 login/remount and October 23 headless boot proofs
+  remain historical, not new measurements of the post-migration layout.
 - Builds, SDKs, environments, caches, harness data and private settings remain Linux-specific.
   Weights, binaries, credentials, raw logs and private archives stay excluded from Git.
   SSD speed affects cold loads and actual PLE/expert streaming; resident-model
@@ -1084,7 +1089,7 @@ profile, launcher or client endpoint changed during this documentation task.
 | HTTP 404 / unknown model | Copy an exact enabled ID from `/v1/models`; do not use Q2, HyperQwen or retired IDs. |
 | HTTP 503 | Start the required backend and inspect its terminal; gateway availability is separate from worker readiness. |
 | Refused / timed out | Check Linux session, address, service, client LAN/Tailscale path and TCP 10000 access. |
-| Models fail after reboot / "Cannot mount" | Log in to the Linux desktop; unprompted mounts need an active local session. Check `systemctl --user status local-llm-mounts.service`, then restart it. Do not redownload. |
+| Models fail after reboot / "Cannot mount" | Check `findmnt`, retained-drive UUIDs and `/etc/fstab` boot mounts first. The user mount service is a fallback (`systemctl --user status local-llm-mounts.service`); session-based udisks recovery may require desktop login. SATA2 is no longer a configured model volume. Do not redownload. |
 | Context error | Input, history, tools and output together must fit the selected context. |
 | Very slow first request | Inspect loading/JIT/host RAM/swap; prefix caching helps repeated prefixes, not every new prompt. |
 

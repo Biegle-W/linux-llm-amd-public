@@ -3,7 +3,7 @@
 # NVIDIA's tool parser and its byte-identical ultra_v3 reasoning-parser plugin.
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-MODEL=/mnt/shared-spare/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16
+MODEL=/mnt/shared/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 export VLLM_ENGINE_READY_TIMEOUT_S=1800
 exec "$ROOT/vllm/run-rocm" serve "$MODEL" \

@@ -17,22 +17,19 @@ UUID = 'CONFIGURE_SHARED_DRIVE_UUID'
 STREAM_SHARED = Path('/mnt/shared-nvme')
 STREAM_MODELS = STREAM_SHARED / 'LLM-Models'
 STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
-# sharedSATA2 holds vLLM checkpoints (Nemotron Bolt AutoRound W4A16, October 21).
-SPARE = Path('/mnt/shared-spare')
-SPARE_MODELS = SPARE / 'vLLM-Models'
-SPARE_UUID = 'CONFIGURE_SPARE_DRIVE_UUID'
+# SATA1 holds GGUF files and checkpoints; SATA2 was removed from the configured volumes.
+STATIC_MODELS = SHARED / 'vLLM-Models'
 # Streaming models (Strata/Maya SSD streaming packs) added from October 24 live on the system NVMe.
 INTERNAL_STREAM_MODELS = Path(__file__).resolve().parents[1] / 'models' / 'streaming'
-# Placement of NEW model files (user instruction, October 24): nothing new on the Shared NVMe;
-# non-streaming weights go to sharedSATA2, SSD-streaming packs to the system NVMe; every drive
+# Placement of NEW model files (user instruction, October 26): nothing new on the Shared NVMe;
+# non-streaming weights go to sharedSATA1, SSD-streaming packs to the system NVMe; every drive
 # stays below 90% used after the copy.
-NEW_MODEL_DIRS = {'static': SPARE_MODELS, 'streaming': INTERNAL_STREAM_MODELS}
+NEW_MODEL_DIRS = {'static': STATIC_MODELS, 'streaming': INTERNAL_STREAM_MODELS}
 MAX_USE = 0.90
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
     ('sharedSATA1', UUID, SHARED, MODELS, True),
     ('Shared NVMe', STREAM_UUID, STREAM_SHARED, STREAM_MODELS, True),
-    ('sharedSATA2', SPARE_UUID, SPARE, SPARE_MODELS, True),
 )
 
 
@@ -102,7 +99,7 @@ def new_model_dir(kind, size_bytes):
     """
     target = NEW_MODEL_DIRS[kind]
     if kind == 'static':
-        ensure_model_drive(SPARE, SPARE_MODELS, SPARE_UUID, 'sharedSATA2')
+        ensure_model_drive(SHARED, STATIC_MODELS, UUID, 'sharedSATA1')
     else:
         target.mkdir(parents=True, exist_ok=True)
     usage = shutil.disk_usage(target)
@@ -119,6 +116,9 @@ def ensure_model_paths(paths):
     for path in map(Path, paths):
         if path.is_relative_to(INTERNAL_STREAM_MODELS):
             continue   # system disk: always present
+        if path.is_relative_to(STATIC_MODELS):
+            needed.add(('sharedSATA1', UUID, SHARED, STATIC_MODELS))
+            continue
         for label, uuid, mount, models, required in VOLUMES:
             if models is not None and path.is_relative_to(models):
                 needed.add((label, uuid, mount, models))
