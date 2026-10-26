@@ -1,5 +1,16 @@
 # Forum optimization sources — October 17, 2026
 
+## Reference sites
+
+- [lcz.me](https://lcz.me/)
+- [Level1Techs Forums](https://forum.level1techs.com/)
+- [Digital Spaceport](https://digitalspaceport.com/) — additional local-AI and
+  homelab reference, added at the user's request on October 25, 2026.
+
+This source-list addition includes no new optimization findings, benchmark
+results, software installations or changes to the paused update schedule.
+The dated review below retains its original hardware and method.
+
 Research scope: dual RX 7900 XTX (gfx1100), Intel i5-13600KF/Z690, CPU PCIe4 x8/x8,
 32 GB host RAM, GPU-resident models. This review adds sources and future candidates;
 it makes no runtime changes and adds no benchmark results. Existing measurements
