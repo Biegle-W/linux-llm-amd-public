@@ -9,13 +9,13 @@ from swap_activity import (SwapActivity, read_host_activity, validate_summary,
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
 from backend_switch import processes, is_inference
 
-# User-authorized minor-swap allowance (October 25). Applied to the aggregate
-# owned-process peak in every model record and the full inference lifecycle.
+# Explicit legacy bounded-64mib override. The default low-churn policy also
+# requires host activity/pressure evidence and a complete inference window.
 WORKER_SWAP_LIMIT_BYTES = 64 * 1024**2
 
 
 def swap_policy():
-    policy = os.environ.get('LOCAL_LLM_SWAP_POLICY', 'bounded-64mib')
+    policy = os.environ.get('LOCAL_LLM_SWAP_POLICY', POLICY_NAME)
     if policy not in ('bounded-64mib', POLICY_NAME):
         raise ValueError('Unknown inference swap policy')
     return policy

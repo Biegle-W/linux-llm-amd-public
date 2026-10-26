@@ -41,10 +41,11 @@ class StrataGuardTests(unittest.TestCase):
                 health={'loaded':True,'model':router.DEFAULT,'max_context':router.PROFILES[router.DEFAULT]['context']}
                 with patch.object(router,'ROOT',root), \
                      patch('hardware_guard.require_strata'), \
-                     patch.object(router.subprocess,'Popen',return_value=proc), \
+                     patch.object(router,'swap_guard') as swap_guard, \
                      patch.object(router.urllib.request,'urlopen',return_value=io.StringIO(json.dumps(health))), \
                      patch.object(router,'vram_snapshot',return_value=[{'free':v} for v in free]), \
                      patch.object(router.os,'killpg') as kill:
+                    swap_guard.spawn.return_value = proc
                     if accepted:
                         router.ensure_worker(router.DEFAULT)
                         self.assertEqual(router.active,router.DEFAULT)

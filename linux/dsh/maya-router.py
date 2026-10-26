@@ -14,6 +14,7 @@ import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
+from inference_swap import WorkerSwapGuard
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, vram_snapshot
 
@@ -29,6 +30,7 @@ lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
 memory_fault = None
+swap_guard = WorkerSwapGuard()
 startup_whole_card_free_bytes = None
 switch_state_lock = threading.Lock()
 switch_operation = None
@@ -128,6 +130,7 @@ def watch_memory():
 
 def stop_worker(timeout=40):
     global worker, active, logfile, startup_whole_card_free_bytes
+    swap_guard.stop(worker)
     proc, worker = worker, None
     active = None
     startup_whole_card_free_bytes = None
@@ -148,6 +151,7 @@ def stop_worker(timeout=40):
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile, memory_fault, startup_whole_card_free_bytes
+    swap_guard.check()
     with lifecycle:
         if stopping.is_set():
             raise RuntimeError('Maya is shutting down')
@@ -163,7 +167,7 @@ def ensure_worker(model):
         config = ROOT / profile['config']
         logfile = (ROOT / 'logs' / ('maya-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Maya weights are unloaded.', flush=True)
-        worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
+        worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemorySwapMax=0', '--property=MemoryMax=52G', str(ROOT / 'run-maya-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
@@ -193,6 +197,7 @@ def ensure_worker(model):
                     memory_fault='Maya whole-card startup headroom is below 6 GiB; close unrelated GPU apps before explicit reload'
                     raise RuntimeError(memory_fault)
                 startup_whole_card_free_bytes=free
+                swap_guard.ready(proc)
                 active = model
             return
         raise RuntimeError('Maya startup exceeded 20 minutes')

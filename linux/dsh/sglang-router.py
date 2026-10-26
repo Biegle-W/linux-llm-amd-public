@@ -11,6 +11,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
+from inference_swap import WorkerSwapGuard
 from rocm_runtime import require_rocm_headroom
 
 ROOT = Path('/opt/local-llm/dsh')
@@ -21,23 +22,15 @@ lock = threading.Lock()
 worker = None
 active = None
 logfile = None
+swap_guard = WorkerSwapGuard()
 
 def stop_worker():
     global worker, active, logfile
+    swap_guard.stop(worker)
     if worker is not None:
-        try:
-            os.killpg(worker.pid, signal.SIGTERM)
-        except ProcessLookupError:
-            pass
-        try:
-            worker.wait(timeout=20)
-        except subprocess.TimeoutExpired:
-            pass
-        try:
-            os.killpg(worker.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        worker.wait()
+        # The guard verified the owned cgroup empty; only reap the parent.
+        # Its numeric PID/PGID may already have been reused.
+        worker.wait(timeout=20)
     worker = None
     active = None
     if logfile is not None:
@@ -72,6 +65,7 @@ def worker_environment(cfg):
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile
+    swap_guard.check()
     cfg = PROFILES[model]
     if not cfg.get('enabled', True):
         raise RuntimeError(cfg.get('disabled_reason', 'This profile is disabled.'))
@@ -98,7 +92,7 @@ def ensure_worker(model):
         args = ['systemd-run', '--user', '--scope', '--quiet',
                 '-p', 'MemoryMax=' + cfg['scope_memory_max'], *args]
     logfile = (ROOT / 'logs' / ('sglang-' + model + '.log')).open('a')
-    worker = subprocess.Popen(args, stdout=logfile, stderr=subprocess.STDOUT,
+    worker = swap_guard.spawn(args, stdout=logfile, stderr=subprocess.STDOUT,
                               env=env,
                               start_new_session=True)
     for _ in range(600):
@@ -115,6 +109,7 @@ def ensure_worker(model):
         if not capacities or min(capacities) < cfg['context']:
             stop_worker()
             raise RuntimeError('Insufficient actual KV cache for this profile: ' + str(capacities))
+        swap_guard.ready(worker)
         active = model
         return
     stop_worker()

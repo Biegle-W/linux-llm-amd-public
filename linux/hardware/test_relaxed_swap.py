@@ -1,4 +1,4 @@
-"""CPU-only tests for the explicitly selected low-churn swap policy."""
+"""CPU-only tests for the default low-churn swap policy and strict override."""
 import os
 from pathlib import Path
 import sys
@@ -33,12 +33,87 @@ def evidence(swap=GIB):
 
 
 class RelaxedSwap(unittest.TestCase):
-    def test_settled_swap_is_allowed_only_with_explicit_low_churn_policy(self):
+    def setUp(self):
+        policy = patch.dict(os.environ)
+        policy.start()
+        self.addCleanup(policy.stop)
+        os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+
+    def test_default_monitor_demonstrates_settled_swap_and_enforces_low_churn_evidence(self):
+        with patch.dict(os.environ):
+            os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+            monitor = mem.MemoryMonitor()
+            with patch.object(mem, 'sample_memory', return_value=dict(swap=GIB, spill=0)), \
+                 patch.object(mem, 'read_host_activity', side_effect=[
+                     host_reading(0), host_reading(1, GIB), host_reading(31, GIB)]):
+                monitor.sample()
+                monitor.set_phase('inference')
+                monitor.sample()
+                monitor.sample()
+            self.assertEqual(mem.swap_policy(), 'low-churn-v1')
+            self.assertEqual(mem.worker_swap_limit_bytes(), 4 * GIB)
+            self.assertEqual(monitor.summary['swap_activity']['inference_window_samples'], 1)
+            self.assertEqual(mem.memory_failures(monitor.summary), [])
+            self.assertEqual(mem.lifecycle_failures({'lifecycle_memory': monitor.summary}), [])
+
+    def test_explicit_low_churn_and_bounded_overrides_are_preserved(self):
         memory = evidence()
         with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
             self.assertEqual(mem.memory_failures(memory), [])
         with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib'}):
+            self.assertEqual(mem.worker_swap_limit_bytes(), 64 * 1024**2)
+            self.assertIsNone(mem.MemoryMonitor().activity)
             self.assertIn('worker_swap', mem.memory_failures(memory))
+
+    def test_default_rejects_worker_swap_above_four_gib(self):
+        self.assertIn('worker_swap', mem.memory_failures(evidence(4 * GIB + 1)))
+
+    def test_default_rejects_churn_budget_and_sustained_pressure(self):
+        cases = [
+            ({'total_swapout_bytes': 4 * GIB + 1}, 'swapout_budget'),
+            ({'max_inference_swapout_bytes_per_second': 1024**2 + 1,
+              'max_inference_swap_io_bytes_per_second': 1024**2 + 1}, 'inference_swapout_rate'),
+            ({'max_inference_swap_io_bytes_per_second': 8 * 1024**2 + 1}, 'inference_swap_io_rate'),
+            ({'min_available_bytes': 2 * GIB - 1,
+              'max_low_memory_consecutive_samples': 3}, 'low_host_memory'),
+            ({'max_memory_full_psi_avg10': 10.01,
+              'max_full_psi_consecutive_samples': 3}, 'memory_full_psi'),
+        ]
+        for update, reason in cases:
+            with self.subTest(reason=reason):
+                memory = evidence()
+                memory['swap_activity'].update(update)
+                self.assertIn('swap_activity_' + reason, mem.memory_failures(memory))
+
+    def test_default_rejects_missing_invalid_or_incomplete_activity_even_with_zero_swap(self):
+        for activity in (None, {}, {'sampling_errors': 1}):
+            with self.subTest(activity=activity):
+                memory = evidence(0)
+                memory['swap_activity'] = activity
+                self.assertTrue(mem.memory_failures(memory))
+        memory = evidence(0)
+        memory.pop('swap_activity')
+        self.assertIn('swap_activity_summary_missing', mem.memory_failures(memory))
+        memory = evidence(0)
+        memory['swap_activity']['inference_window_samples'] = 0
+        self.assertIn('swap_activity_no_inference_window', mem.memory_failures(memory))
+        memory = evidence()
+        memory['swap_activity']['worker_swap_peak_bytes'] = 0
+        self.assertIn('swap_activity_worker_peak_mismatch', mem.memory_failures(memory))
+
+    def test_default_still_rejects_any_vram_spill(self):
+        memory = evidence()
+        memory['max_nonresident_vram_bytes'] = 1
+        self.assertIn('vram_spill', mem.memory_failures(memory))
+
+    def test_invalid_policy_is_rejected_not_silently_defaulted(self):
+        for value in ('', 'unknown', 'low-churn-v1 ', 'bounded-64mib '):
+            with self.subTest(policy=value), patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': value}):
+                self.assertEqual(mem.memory_failures(evidence()), ['memory_policy_invalid'])
+                with self.assertRaises(ValueError):
+                    mem.worker_swap_limit_bytes()
+                with self.assertRaises(ValueError):
+                    mem.MemoryMonitor()
 
 
 def host_reading(t, sout=0):

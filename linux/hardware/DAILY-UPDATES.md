@@ -5,14 +5,15 @@ is running. Guarded reduced-RAM qualification is authorized only for the two
 vLLM profiles and SGLang Qwen DFlash2. It is not update activation. All three
 reviewed loading trials were stopped by the 4 GiB cumulative system swapout
 budget under the 7 GiB soft / 8 GiB hard worker RAM cap; none qualified. The
-64 MiB default promotion rule below remains. [Outcomes and limits](VRAM-QUALIFICATION-2026-10-26.md).
+early trials used opt-in low-churn. The user subsequently authorized low-churn as
+the default policy; this does not activate the updater. [Outcomes and limits](VRAM-QUALIFICATION-2026-10-26.md).
 
 Every night at 03:00 `llm-daily-update.timer` checks llama.cpp, vLLM, SGLang, Strata and
 Maya for newer upstream versions. Each one is built in isolation, benchmarked against the
 current production build with the shared method, and kept only when every standard
 promotion gate passes (prefill and code/prose decode ≥95% of production, short time to
-first token within max(1.25×, +0.05 s), no fewer retrieval markers, at most 64 MiB aggregate observed
-worker swap and zero VRAM spill with valid launch-through-shutdown memory telemetry).
+first token within max(1.25×, +0.05 s), no fewer retrieval markers, the default bounded
+low-churn swap limits and zero VRAM spill with valid launch-through-shutdown telemetry).
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
 ## 2026-10-25 — fresh tests after the 64 MiB allowance

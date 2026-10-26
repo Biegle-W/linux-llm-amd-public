@@ -35,7 +35,8 @@ engine updates are paused. Only Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlas
 are authorized for guarded GPU-resident qualification; RAM-offloaded profiles stay
 held. All three reviewed loading trials were guard-stopped at the 4 GiB cumulative
 system swapout budget under a 7 GiB soft / 8 GiB hard worker RAM cap; none qualified.
-Production pins, contexts and the default 64 MiB worker-swap rule are unchanged.
+Production pins and contexts are unchanged. Those early trials used opt-in low-churn;
+the later October26 user instruction makes low-churn the default (see below).
 AMD changes go only to `linux-llm-amd` / `linux-llm-amd-public`; Windows and native
 Linux NVIDIA remain separate. [Outcomes and limits](linux/hardware/VRAM-QUALIFICATION-2026-10-26.md).
 
@@ -57,8 +58,8 @@ uses port 10000 and `/v1`; use the [canonical handoff](linux/network/LINUX-LLM-R
 for access, storage, startup and per-engine limits. **DSH defaults to Strata Q3.**
 Managed inference unloads after 600 seconds without inference activity. Active
 requests/loading/jobs and GPU-LOCK defer unloading; DSH, gateway and unrelated
-apps are preserved. Update acceptance permits up to 64 MiB aggregate owned-worker
-swap; background system swap is allowed. Existing RAM/VRAM admission, worker
+apps are preserved. Update acceptance uses the bounded low-churn swap policy below;
+system-wide swap I/O is conservatively monitored. Existing RAM/VRAM admission, worker
 cgroup limits and latched guards remain.
 
 ## Active profiles
@@ -105,9 +106,31 @@ separately dated evidence. Historical speeds are not attributed to later builds.
 
 Current validated engine pins live in the [daily ledger](linux/hardware/DAILY-UPDATES.md)
 and the handoff. The 03:00 updater tests newer sources in isolation and promotes
-only after all gates pass, including at most 64 MiB aggregate worker swap and
-zero VRAM spill with valid launch-through-shutdown telemetry. ROCm 7.2.3 is retained. See the
+only after all gates pass, including bounded low-churn swap and zero VRAM spill
+with valid launch-through-shutdown telemetry. Updates remain paused. ROCm 7.2.3 is retained. See the
 [updater method](linux/hardware/daily-update/README.md).
+
+## Inference swap policy — October 26
+
+User-authorized default: **`low-churn-v1`**, not unrestricted swap. Permit up to
+4 GiB aggregate owned-worker swap only while the low-churn checks pass: at most
+4 GiB cumulative host swapout per monitored lifecycle, at most 1 MiB/s swapout and
+8 MiB/s combined swap I/O over sampled continuous-inference windows of at least
+30 seconds. Three consecutive samples below 2 GiB available host RAM or above
+10% full-memory PSI reject; dedicated VRAM spill remains zero.
+
+Normal managed inference and benchmark/update validation use the same low-churn
+bounds. Existing stricter engine-specific no-swap cgroups, worker guards and
+physical-RAM/VRAM admission rules remain in force. Swap is not extra expert RAM.
+`LOCAL_LLM_SWAP_POLICY=bounded-64mib` retains the explicit stricter validation
+option. Unknown policy values fail closed.
+
+These sampled guardrails reduce permitted swap churn; they cannot guarantee SSD
+lifespan, eliminate every transient or prove that inference is unaffected.
+Performance/quality promotion gates remain. No swap partition, swappiness, model
+profile, runtime pin or update schedule is changed; nightly updates stay paused.
+No new reduced-16-GB inference trial is authorized by this policy change.
+[Policy and limits](linux/hardware/daily-update/README.md#default-low-churn-policy--october-26).
 
 ## Model storage — October 26
 
@@ -118,9 +141,9 @@ reasoning-parser path now use SATA1. New static checkpoints also use SATA1;
 new streaming packs remain on the system NVMe and the Shared NVMe stays closed
 to new models. The 90% drive-use ceiling is unchanged.
 
-The retired SATA2 volume is no longer required by model-volume discovery. It
-remains mounted until an administrator unmounts it and removes its obsolete
-`/etc/fstab` entry; do not unplug it live. This is storage-only verification,
+The retired SATA2 volume is no longer required by model-volume discovery. After
+user unmount/shutdown/removal and the October26 reboot it is no longer detected;
+only its obsolete `/etc/fstab` entry remains for administrator cleanup. This is storage-only verification,
 not another reduced-RAM inference test. NAS sharing has not been installed.
 [Migration evidence and removal steps](linux/hardware/BOLT-STORAGE-MOVE-2026-10-26.md).
 
@@ -531,7 +554,10 @@ cleanup. Keep exact dated measurements and hardware attribution. Review archive
 links after moving source. No retired setup becomes active through reorganization.
 
 
-### Minor inference worker swap allowance — October25 (current)
+### Minor inference worker swap allowance — October25 (historical)
+
+Superseded as the default by the October26 low-churn policy above; the stricter
+64 MiB validation option and these dated results remain available.
 
 User instruction: a few MB of inference swap is acceptable; reject major swap.
 This supersedes the exact-zero worker-swap acceptance rule above: use an inclusive

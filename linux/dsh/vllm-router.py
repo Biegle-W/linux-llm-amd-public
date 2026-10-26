@@ -12,6 +12,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
+from inference_swap import WorkerSwapGuard
 from rocm_runtime import require_rocm_headroom
 from shared_storage import ensure_vllm_models
 
@@ -29,28 +30,18 @@ closing = threading.Event()
 worker = None
 active = None
 logfile = None
+swap_guard = WorkerSwapGuard()
 
 def stop_worker():
     global worker, active, logfile
     with lifecycle:
-        process, worker = worker, None
+        swap_guard.stop(worker)
+        if worker is not None:
+            # The guard verified the owned cgroup empty; only reap the parent.
+            # Its numeric PID/PGID may already have been reused.
+            worker.wait(timeout=20)
+        worker = None
         active = None
-        if process is not None:
-            # vLLM can leave a rank alive when another rank fails during startup.
-            # Clean the entire owned group even if the API parent already exited.
-            try:
-                os.killpg(process.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-            try:
-                process.wait(timeout=20)
-            except subprocess.TimeoutExpired:
-                pass
-            try:
-                os.killpg(process.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            process.wait()
         if logfile is not None:
             logfile.close()
             logfile = None
@@ -63,6 +54,7 @@ def get_worker(path):
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile
+    swap_guard.check()
     if active == model and worker is not None and worker.poll() is None:
         return
     stop_worker()
@@ -91,7 +83,7 @@ def ensure_worker(model):
         if closing.is_set():
             raise RuntimeError(BACKEND + ' router is stopping')
         logfile = (ROOT / 'logs' / (BACKEND + '-' + model + '.log')).open('a')
-        worker = subprocess.Popen(args, stdout=logfile, stderr=subprocess.STDOUT,
+        worker = swap_guard.spawn(args, stdout=logfile, stderr=subprocess.STDOUT,
                                   env=worker_env,
                                   start_new_session=True)
     for _ in range(1200):
@@ -110,6 +102,7 @@ def ensure_worker(model):
         if not capacities or min(capacities) < cfg['context']:
             stop_worker()
             raise RuntimeError('Worker context does not match profile: ' + str(capacities))
+        swap_guard.ready(worker)
         active = model
         return
     stop_worker()

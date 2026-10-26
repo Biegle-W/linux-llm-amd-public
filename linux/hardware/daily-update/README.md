@@ -35,8 +35,8 @@ rolled back and reported.
 8. Keep it only if `hardware/compare-runtime-candidate.py` passes for every model:
    prefill and code/prose decode at least 95% of production; short time to first token at
    most max(1.25 × production, production + 0.05 s); no fewer retrieval markers;
-   at most 64 MiB aggregate observed worker swap and zero VRAM spill. Both counters
-   must be valid nonnegative integers; swap above 67,108,864 bytes rejects.
+   the default low-churn swap limits below and zero VRAM spill, with complete
+   worker/host swap-activity evidence. Settled swap alone cannot establish a pass.
    Missing/invalid readings, sampling errors, no worker samples or incomplete
    model coverage also block promotion. Otherwise roll back and check that the
    restored build answers.
@@ -51,21 +51,31 @@ rolls back before releasing the lock. If the machine loses power instead,
 
 ## Memory promotion policy
 
-### Experimental reduced-RAM qualification — October 26
+### Default low-churn policy — October 26
 
-The default remains `bounded-64mib`; nightly updates are not opted in. A separately
-authorized qualification process may explicitly set `LOCAL_LLM_SWAP_POLICY=low-churn-v1`
-for Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlash2 only. It does not authorize
-RAM-offloaded profiles, production setting changes, or update promotion.
+[Deployment, collector integration, CPU verification and limitations](../LOW-CHURN-DEFAULT-2026-10-26.md).
 
-The experimental gate allows aggregate settled owned-worker swap up to 4 GiB,
+The user authorized `low-churn-v1` as the default for managed inference and
+benchmark/update validation, conditional on bounded swap activity. The explicit
+`LOCAL_LLM_SWAP_POLICY=bounded-64mib` validation override remains available; invalid
+values fail closed. The policy change does not resume the paused updater, start
+inference, admit RAM-offloaded models on insufficient physical RAM, or authorize
+more reduced-16-GB GPU trials. Early October26 trials used this policy opt-in;
+their unsuccessful outcomes and experimental worker caps remain historical.
+
+The default gate allows aggregate settled owned-worker swap up to 4 GiB,
 with a cumulative **system-wide** swapout budget of 4 GiB per trial. System-wide
 I/O is a conservative bound, not per-worker attribution. During continuous
 inference, rolling sampled windows of at least 30 seconds must stay at or below
 1 MiB/s swapout and 8 MiB/s combined swap I/O. Three consecutive readings below
 2 GiB host MemAvailable, or above 10% full-memory PSI avg10, reject the trial.
 Dedicated VRAM spill remains zero; existing quality/performance checks remain.
-These are conservative trial bounds, not guarantees of SSD longevity.
+These are sampled conservative bounds, not guarantees of SSD longevity or zero
+slowdown. A 30-second rate window can miss shorter bursts, and enforcement can
+overshoot between samples. Host swap I/O includes unrelated tasks and is used as
+a conservative stop signal, not falsely attributed to the inference worker.
+Existing engine-specific stricter no-swap cgroups/guards and physical-RAM/VRAM
+admission checks take precedence. No global swap or swappiness change is made.
 
 Qualification evidence must include complete inference windows with valid owned
 worker observations, as well as launch/load/shutdown coverage. Phase changes are
@@ -75,11 +85,15 @@ and after shutdown is allowed. Violation callback exceptions latch a permanent
 validation error; enforcement retries once, then records terminal failure while
 sampling continues. No exception message or private process text is published.
 
-CPU verification: 28 swap/activity/monitor tests and 18 existing accounting,
-comparator and updater regressions pass. CPU tests are not real-model
-qualification. Original 64 GB measurements keep their dates and hardware scope.
+Current CPU verification and independent-review outcomes are recorded in the
+linked deployment report. Earlier opt-in validation comprised 28 swap/activity/
+monitor tests and 18 accounting/comparator/updater regressions. CPU tests are not
+real-model qualification. Original 64 GB results retain their date and hardware.
 
 ### Minor worker swap allowance — October 25
+
+Historical default, superseded by the October26 low-churn policy above. The
+explicit `bounded-64mib` override and these original acceptance results remain.
 
 User instruction supersedes the October24 exact-zero worker-swap promotion rule:
 allow at most **64 MiB (67,108,864 bytes)** of sampled aggregate managed inference

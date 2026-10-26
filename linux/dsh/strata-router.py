@@ -12,6 +12,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
+from inference_swap import WorkerSwapGuard
 from strata_prefix import add_document_prefix
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, startup_vram_blocker, vram_snapshot
@@ -27,6 +28,7 @@ lifecycle = threading.Lock()
 stopping = threading.Event()
 worker = active = logfile = None
 memory_fault = None
+swap_guard = WorkerSwapGuard()
 startup_free_vram = None
 
 
@@ -60,6 +62,7 @@ def watch_memory():
 
 def stop_worker(timeout=40):
     global worker, active, logfile, startup_free_vram
+    swap_guard.stop(worker)
     proc, worker = worker, None
     active = None
     startup_free_vram = None
@@ -80,6 +83,7 @@ def stop_worker(timeout=40):
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile, startup_free_vram
+    swap_guard.check()
     with lifecycle:
         if stopping.is_set():
             raise RuntimeError('Strata is shutting down')
@@ -96,12 +100,12 @@ def ensure_worker(model):
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
-        worker = subprocess.Popen(['systemd-run', '--user', '--scope', '--quiet',
+        worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemoryMax=52G',
                                    '--property=MemorySwapMax=0', str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
-        worker.deepseek41 = profile.get('family') == 'deepseek41'
+        setattr(worker, 'deepseek41', profile.get('family') == 'deepseek41')
         startup_free_vram = None
         proc = worker
     try:
@@ -130,6 +134,7 @@ def ensure_worker(model):
             with lifecycle:
                 if stopping.is_set():
                     raise RuntimeError('Strata is shutting down')
+                swap_guard.ready(proc)
                 active = model
                 startup_free_vram = [r['free'] for r in readings]
             return

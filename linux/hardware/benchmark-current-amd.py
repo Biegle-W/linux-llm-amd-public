@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'dsh'))
 from amd_device import amd_devices
 from moe_memory import host_memory
-from inference_memory import sample_memory
+from inference_memory import MemoryMonitor
 from strata_memory import vram_snapshot
 from gpu_telemetry import ThermalRecorder, record_request
 
@@ -180,15 +180,15 @@ def main():
         out['profiles'].append(result);save()
         print('LOAD',args.kind,model,flush=True)
         readings=[];done=threading.Event()
+        watcher=None
+        memory_monitor=MemoryMonitor(interval=1)
+        memory_monitor.set_phase('loading')
+        memory_started=False
         thermal=ThermalRecorder(f'benchmark-{args.kind}-{model}').start()
         def monitor():
             while not done.is_set():
                 try:
-                    memory=sample_memory()
-                    if memory is None:
-                        raise RuntimeError('No managed inference process memory sample')
-                    readings.append({'available':host_memory()[1],'vram':vram_snapshot(),
-                                     'swap':memory['swap'],'spill':memory['spill']})
+                    readings.append({'available':host_memory()[1],'vram':vram_snapshot()})
                 except (OSError,RuntimeError,ValueError,KeyError):pass
                 done.wait(1)
         try:
@@ -196,6 +196,10 @@ def main():
             _,text=stream(args.kind,model,'What is 17 times 19? Reply with only the integer.',limit=128,sampled=False)
             assert re.search(r'\b323\b',text), 'Arithmetic smoke failed'
             result['arithmetic']=True
+            # Keep the original post-readiness observation scope (including
+            # excluded task warmups). Daily update separately covers loading.
+            memory_monitor.set_phase('inference')
+            memory_monitor.start();memory_started=True
             watcher=threading.Thread(target=monitor,daemon=True);watcher.start()
             for task,prompt in PROMPTS.items():
                 stream(args.kind,model,prompt) # excluded per-task warmup
@@ -217,11 +221,14 @@ def main():
                 if trial.get('native_timings'):assert trial['native_timings'].get('cache_n',0)==0
                 result['prefill'].append(trial);save()
                 print('PREFILL',model,index,trial['usage']['prompt_tokens'],round(trial['ttft_seconds'],3),trial.get('prefill_native_tps'),round(trial.get('prefill_phase_tps',0),2),flush=True)
+            memory_monitor.set_phase('shutdown')
+            memory=memory_monitor.stop();memory_started=False
             assert readings,'No memory telemetry'
-            result['memory']={'minimum_available_gib':round(min(r['available'] for r in readings)/1024**3,3),
-                             'peak_vram_gib':[round(max(r['vram'][i]['used'] for r in readings)/1024**3,3) for i in range(2)],
-                             'max_worker_swap_bytes':max(r['swap'] for r in readings),
-                             'max_nonresident_vram_bytes':max(r['spill'] for r in readings)}
+            result['memory']={**memory,
+                             'scope':'managed inference: post-readiness workload warmups and timed benchmark',
+                             'minimum_available_gib':round(min(r['available'] for r in readings)/1024**3,3),
+                             'peak_vram_gib':[round(max(r['vram'][i]['used'] for r in readings)/1024**3,3) for i in range(2)]}
+            assert memory['worker_samples']>0,'No managed inference process memory telemetry'
             assert min(result['memory']['peak_vram_gib'])>2,'Both GPU allocations not observed'
             assert result['memory']['max_nonresident_vram_bytes']==0,'Dedicated VRAM spill'
             result['marker_checks_passed']=sum(t['markers_passed'] for t in result['prefill'])
@@ -232,7 +239,10 @@ def main():
             print('FAILED',model,type(error).__name__,str(error)[:180],flush=True)
         finally:
             done.set()
-            if 'watcher' in locals():watcher.join(timeout=3)
+            if watcher is not None:watcher.join(timeout=3)
+            if memory_started:
+                memory_monitor.set_phase('shutdown')
+                result.setdefault('memory',{}).update(memory_monitor.stop())
             result['thermal']=thermal.stop()
             save()
         print('PROFILE',model,result['status'],flush=True)

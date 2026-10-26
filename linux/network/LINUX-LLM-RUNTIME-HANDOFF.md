@@ -34,8 +34,8 @@ and daily publisher paths remain unchanged.
 `qwen3.8-27b-sglang-dflash2`. RAM-offloaded llama.cpp, Maya and Strata stay held.
 Trials use GPU-LOCK, both cards, an isolated worker cgroup (7 GiB memory.high,
 8 GiB memory.max, 4 GiB memory.swap.max) and launch-through-shutdown memory/
-thermal evidence. Experimental `low-churn-v1` is selected per test only, not as
-the production default. Its settled-swap allowance does not waive swap-I/O,
+thermal evidence. Those early trials selected `low-churn-v1` explicitly; a later
+October26 user instruction makes it the default as described below. Settled swap does not waive swap-I/O,
 host-pressure, correctness or zero-VRAM-spill gates. All three reviewed loading
 trials exceeded the 4 GiB cumulative host swapout budget and were guard-stopped
 before any complete inference window. None qualified; no throughput or correctness
@@ -51,9 +51,28 @@ model directory from SATA2. Active launcher/profile/parser paths and the static
 placement helper now use SATA1; the helper no longer waits for or mounts SATA2.
 No quantization, context, runtime version or inference guard changed, and no new
 inference test was run. New streaming packs still use system NVMe; do not add
-models to Shared NVMe. SATA2 is still mounted and its old boot entry remains:
-administrator unmount/fstab cleanup is required before live physical removal.
+models to Shared NVMe. After user unmount/shutdown/removal and the October26
+reboot, SATA2 is no longer detected; its obsolete boot entry still needs
+administrator `/etc/fstab` cleanup.
 [Migration evidence and removal steps](../hardware/BOLT-STORAGE-MOVE-2026-10-26.md).
+
+**Default low-churn inference swap (October26, later user authorization):**
+`low-churn-v1` is now the default, with at most 4 GiB aggregate worker swap,
+4 GiB cumulative host swapout per monitored lifecycle, at most 1 MiB/s swapout
+and 8 MiB/s combined swap I/O over continuous sampled inference windows of at
+least 30 seconds. Three consecutive <2 GiB available-RAM or >10% full-memory PSI
+samples reject; dedicated VRAM spill remains zero. Existing stricter no-swap
+engine scopes, guards, physical-RAM/VRAM admission and performance gates remain.
+Host swap I/O is conservatively system-wide, not worker-attributed. These are
+sampled bounds, not SSD-lifetime or no-slowdown guarantees. Global swap capacity,
+swappiness, model profiles and runtime pins are unchanged. Nightly updates remain
+paused; no new reduced-16-GB GPU test was run or candidate promoted.
+Normal workers are gated in unique user-systemd cgroups before payload exec;
+writable `cgroup.kill` containment and refreshed empty verification are required.
+Unsupported ownership fails closed. All five managed routers are covered; strict
+existing engine no-swap scopes still take precedence. CPU-only verification:
+241 tests per checkout, including real orphan/fork cleanup and safe parent reaping.
+[Detailed policy](../hardware/daily-update/README.md#default-low-churn-policy--october-26).
 
 <!-- daily-update:begin -->
 **Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
@@ -72,7 +91,7 @@ Last run: llama.cpp promoted; Strata DeepSeek rejected; Maya rejected.
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
 tasks may use system swap; updates check only aggregate managed inference worker
-swap against the current October25 allowance below.
+swap and conservative system-wide swap I/O against the current October26 low-churn limits below.
 Global swap is unchanged. Models and engines now unload after 600 seconds since
 the last inference request completes (five-second watcher). New backend launches
 receive a full grace period. Hub/direct-router/native Chat POSTs and loading are
@@ -88,7 +107,7 @@ each, DSH/gateway were preserved and all 13 IDs remained. Other-engine safety an
 next-request reload are CPU-tested; no new all-model GPU/power benchmark.
 [Functional evidence](../hardware/results/model-idle-2026-10-24.json).
 
-**Worker swap allowance (October25, current):** update baseline eligibility and
+**Worker swap allowance (October25, historical; superseded by the October26 default below):** update baseline eligibility and
 candidate promotion now permit up to **64 MiB (67,108,864 bytes)** of aggregate
 owned inference worker swap in each model record and the full loading/testing/
 shutdown lifecycle. Larger swap fails; dedicated VRAM spill must remain zero.
@@ -850,8 +869,8 @@ Shared handoff itself remains on the original Shared SATA drive / Windows D:.
   runs `dsh/shared_storage.py --all`, which verifies only the two retained volumes.
   Replace public UUID placeholders before installing examples.
 - The obsolete SATA2 fstab entry remains pending administrator cleanup, and the
-  retired drive is still mounted. Unmount it and remove only its old boot entry
-  before live removal; see the migration report linked above.
+  retired drive is no longer detected after user removal and reboot. Remove only
+  its old boot entry; see the migration report linked above for original evidence.
 - Launcher preflight checks only the model's actual volume: llama.cpp may use SATA1
   or Shared NVMe; Strata/Maya check Shared NVMe; Bolt/vLLM checks SATA1; internal
   Qwen checkpoints need no shared-drive mount. Wrong UUIDs, unknown locations and

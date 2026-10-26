@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -29,7 +30,15 @@ def record():
             'lifecycle_memory': {**memory, 'worker_samples': 5, 'sampling_errors': 0}}
 
 
-class Accounting(unittest.TestCase):
+class BoundedPolicyCase(unittest.TestCase):
+    """Retain the explicit legacy 64 MiB policy for strict regression fixtures."""
+    def setUp(self):
+        policy = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib'})
+        policy.start()
+        self.addCleanup(policy.stop)
+
+
+class Accounting(BoundedPolicyCase):
     def test_descendants_and_shared_gpu_clients_count_once_and_other_apps_are_excluded(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -84,7 +93,7 @@ class Accounting(unittest.TestCase):
         self.assertEqual(monitor.summary['sampling_errors'], 1)
 
 
-class Comparator(unittest.TestCase):
+class Comparator(BoundedPolicyCase):
     def compare(self, candidate, lifecycle=False):
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
@@ -99,6 +108,21 @@ class Comparator(unittest.TestCase):
     def test_zero_swap_and_spill_pass(self):
         result = self.compare(record(), True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_default_prints_effective_limit_and_accepts_demonstrated_settled_swap(self):
+        candidate = record()
+        activity = mem.SwapActivity()
+        for timestamp in (0, 30):
+            activity.observe(dict(timestamp=timestamp, swapin_bytes=0, swapout_bytes=0,
+                                  available_bytes=8 * 1024**3, memory_full_psi_avg10=0.0),
+                             phase='inference', worker_swap_bytes=4 * 1024**3)
+        for memory in (candidate['profiles'][0]['memory'], candidate['lifecycle_memory']):
+            memory.update(max_worker_swap_bytes=4 * 1024**3, swap_activity=activity.summary())
+        with patch.dict(os.environ):
+            os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+            result = self.compare(candidate, True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn(f'worker_swap_limit_bytes | | {4 * 1024**3}', result.stdout)
 
     def test_minor_swap_including_limit_passes_per_model_and_lifecycle(self):
         for value in (1, 4096, 33 * 1024**2, mem.WORKER_SWAP_LIMIT_BYTES):
@@ -159,7 +183,7 @@ class Comparator(unittest.TestCase):
                 self.assertNotEqual(self.compare(candidate).returncode, 0)
 
 
-class Updater(unittest.TestCase):
+class Updater(BoundedPolicyCase):
     def exercise(self, candidate, baseline=None):
         with tempfile.TemporaryDirectory() as directory:
             stage = Path(directory)
@@ -262,13 +286,191 @@ class Updater(unittest.TestCase):
                 (stage / 'candidate-test-model.json').write_text(json.dumps(record()))
             with patch.object(daily, 'MemoryMonitor', return_value=monitor), \
                  patch.object(daily.subprocess, 'Popen', side_effect=spawn), \
-                 patch.object(daily, 'wait_port'), patch.object(daily, 'post'), \
+                 patch.object(daily, 'wait_port'), patch.object(daily, 'post', return_value=200), \
                  patch.object(daily, 'sh', side_effect=bench), patch.object(daily, 'log'), \
                  patch.object(daily, 'stop_backends', side_effect=lambda: events.append('shutdown')), \
                  patch.object(daily, 'wait_idle'):
                 result = daily.launcher_bench('vllm', ['test-model'], stage, 'candidate', stage / 'log')
             self.assertEqual(events, ['monitor-start', 'launcher', 'benchmark', 'shutdown', 'monitor-stop'])
             self.assertEqual(result['lifecycle_memory']['worker_samples'], 5)
+
+
+class LauncherCollector(unittest.TestCase):
+    """Exercise launcher_bench with real activity accounting and CPU-only I/O."""
+    def exercise(self, models=('first',), kind='vllm', duration=30, prewarm_error=None,
+                 ready_error=None, bench_error=None, prewarm_status=200, launcher_alive=False,
+                 wait_timeout=False):
+        events, monitors = [], []
+        state = {'time': 0, 'live': False}
+
+        class ControlledMonitor(mem.MemoryMonitor):
+            def start(self):
+                monitors.append(self)
+                super().start()
+                self.thread.join(5)
+                self.sample()
+                events.append('monitor-start')
+                return self
+
+            def set_phase(self, phase):
+                super().set_phase(phase)
+                events.append(phase)
+
+            def stop(self):
+                events.append('monitor-stop')
+                return super().stop()
+
+        def host():
+            state['time'] += 1
+            return dict(timestamp=state['time'], swapin_bytes=0, swapout_bytes=0,
+                        available_bytes=8 * 1024**3, memory_full_psi_avg10=0.0)
+
+        def sample():
+            monitors[0].sample()
+
+        def spawn(*args, **kwargs):
+            state['live'] = True
+            events.append('launcher')
+            launcher = Mock(pid=999)
+            launcher.poll.return_value = None if launcher_alive else 0
+            def wait(timeout):
+                events.append(('launcher-wait', monitors[0].phase))
+                if wait_timeout:
+                    raise subprocess.TimeoutExpired('controlled launcher', timeout)
+            launcher.wait.side_effect = wait
+            return launcher
+
+        def ready(*args):
+            events.append(('ready', monitors[0].phase))
+            sample()
+            if ready_error:
+                raise ready_error
+
+        def prewarm(port, body, timeout):
+            events.append(('prewarm', body['model'], monitors[0].phase))
+            sample()
+            if prewarm_error:
+                raise prewarm_error
+            return prewarm_status
+
+        def bench(command, *args, **kwargs):
+            model = command[command.index('--model') + 1]
+            events.append(('benchmark', model, monitors[0].phase))
+            sample()
+            state['time'] += duration - 1
+            sample()
+            if bench_error:
+                raise bench_error
+            data = record()
+            data['profiles'][0]['model'] = model
+            Path(command[command.index('--output') + 1]).write_text(json.dumps(data))
+
+        def shutdown():
+            events.append(('shutdown', monitors[0].phase))
+            state['live'] = False
+            sample()
+
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}), \
+             patch.object(mem.MemoryMonitor, '_run', return_value=None), \
+             patch.object(mem, 'sample_memory', side_effect=lambda: dict(swap=1024**3, spill=0)
+                          if state['live'] else None), \
+             patch.object(mem, 'read_host_activity', side_effect=host), \
+             patch.object(daily, 'MemoryMonitor', ControlledMonitor), \
+             patch.object(daily.subprocess, 'Popen', side_effect=spawn), \
+             patch.object(daily.os, 'killpg', side_effect=lambda *args: events.append(('signal', monitors[0].phase))), \
+             patch.object(daily, 'wait_port', side_effect=ready), \
+             patch.object(daily, 'post', side_effect=prewarm), \
+             patch.object(daily, 'sh', side_effect=bench), patch.object(daily, 'log'), \
+             patch.object(daily, 'stop_backends', side_effect=shutdown), \
+             patch.object(daily, 'wait_idle'):
+            stage = Path(directory)
+            error = None
+            try:
+                result = daily.launcher_bench(kind, list(models), stage, 'candidate', stage/'log')
+            except Exception as caught:
+                error = caught
+                result = json.loads((stage/'candidate.json').read_text())
+            persisted = json.loads((stage/'candidate.json').read_text())
+        self.assertEqual(result, persisted)
+        self.assertTrue(all(not m.thread.is_alive() and m.done.is_set() for m in monitors))
+        return result, events, error
+
+    def test_successful_prewarm_supplies_real_inference_window_and_shutdown_evidence(self):
+        result, events, error = self.exercise()
+        self.assertIsNone(error)
+        self.assertIn(('prewarm', 'first', 'loading'), events)
+        self.assertIn(('benchmark', 'first', 'inference'), events)
+        self.assertIn(('shutdown', 'shutdown'), events)
+        self.assertEqual(events[-1], 'monitor-stop')
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+            self.assertEqual(mem.lifecycle_failures(result), [])
+        memory = result['lifecycle_memory']
+        self.assertEqual(memory['swap_activity']['inference_window_samples'], 1)
+        self.assertEqual(memory['max_worker_swap_bytes'], memory['swap_activity']['worker_swap_peak_bytes'])
+
+    def test_model_changes_restart_inference_windows_in_shared_and_per_model_launchers(self):
+        for kind in ('vllm', 'maya', 'strata'):
+            with self.subTest(kind=kind):
+                result, events, error = self.exercise(models=('first', 'second'), kind=kind, duration=20)
+                self.assertIsNone(error)
+                for model in ('first', 'second'):
+                    self.assertIn(('prewarm', model, 'loading'), events)
+                    self.assertIn(('benchmark', model, 'inference'), events)
+                self.assertTrue(all(e[1] == 'loading' for e in events if isinstance(e, tuple) and e[0] == 'ready'))
+                with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+                    self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
+                self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
+                self.assertGreater(result['lifecycle_memory']['swap_activity']['elapsed_seconds'], 30)
+
+    def test_readiness_or_benchmark_failure_still_shuts_down_and_stops_monitor(self):
+        for kwargs in ({'ready_error': daily.Step('not ready')},
+                       {'bench_error': daily.Step('benchmark failed')}):
+            with self.subTest(kwargs=kwargs):
+                result, events, error = self.exercise(**kwargs)
+                self.assertIsInstance(error, daily.Step)
+                self.assertIn(('shutdown', 'shutdown'), events)
+                self.assertEqual(events[-1], 'monitor-stop')
+                self.assertEqual(result['lifecycle_memory']['sampling_errors'], 0)
+                if 'ready_error' in kwargs:
+                    self.assertNotIn('inference', events)
+                    self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
+
+    def test_short_observation_is_not_padded_into_a_qualifying_window(self):
+        result, events, error = self.exercise(duration=29)
+        self.assertIsNone(error)
+        self.assertIn(('benchmark', 'first', 'inference'), events)
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+            self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
+        self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
+
+    def test_failed_prewarm_cannot_run_benchmark_or_qualify(self):
+        result, events, error = self.exercise(prewarm_error=OSError('prewarm failed'))
+        self.assertIsInstance(error, daily.Step)
+        self.assertFalse(any(isinstance(e, tuple) and e[0] == 'benchmark' for e in events))
+        self.assertNotIn('inference', events)
+        self.assertIn(('shutdown', 'shutdown'), events)
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+            self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
+
+
+    def test_running_launcher_cleanup_attributes_termination_and_timeout_to_shutdown(self):
+        for timeout in (False, True):
+            with self.subTest(timeout=timeout):
+                result, events, error = self.exercise(launcher_alive=True, wait_timeout=timeout)
+                self.assertIsNone(error)
+                self.assertIn(('signal', 'shutdown'), events)
+                self.assertIn(('launcher-wait', 'shutdown'), events)
+                self.assertEqual(events.count(('shutdown', 'shutdown')), 2 if timeout else 1)
+                self.assertEqual(events[-1], 'monitor-stop')
+                self.assertEqual(result['lifecycle_memory']['sampling_errors'], 0)
+
+    def test_non_success_prewarm_status_never_enters_inference(self):
+        result, events, error = self.exercise(prewarm_status=503)
+        self.assertIsInstance(error, daily.Step)
+        self.assertNotIn('inference', events)
+        self.assertFalse(any(isinstance(e, tuple) and e[0] == 'benchmark' for e in events))
+        self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
 
 
 if __name__ == '__main__':

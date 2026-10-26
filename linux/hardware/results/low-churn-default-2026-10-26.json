@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-26",
+  "scope": "default low-churn validation and managed-router enforcement; CPU-only verification",
+  "default_policy": "low-churn-v1",
+  "strict_validation_override": "bounded-64mib",
+  "limits": {
+    "aggregate_worker_swap_bytes": 4294967296,
+    "cumulative_host_swapout_bytes_per_lifecycle": 4294967296,
+    "inference_swapout_bytes_per_second": 1048576,
+    "inference_combined_swap_io_bytes_per_second": 8388608,
+    "minimum_continuous_window_seconds": 30,
+    "minimum_available_host_bytes": 2147483648,
+    "full_memory_psi_avg10_limit": 10.0,
+    "pressure_consecutive_samples": 3,
+    "dedicated_vram_spill_bytes": 0
+  },
+  "managed_engines": [
+    "llama",
+    "vllm",
+    "sglang",
+    "strata",
+    "maya"
+  ],
+  "stricter_engine_guards_preserved": true,
+  "tests": {
+    "private": {
+      "hardware": 210,
+      "runtime": 31,
+      "total": 241
+    },
+    "public": {
+      "hardware": 210,
+      "runtime": 31,
+      "total": 241
+    },
+    "focused_policy_and_collector": 68
+  },
+  "independent_review_status": "passed",
+  "real_model_inference_test_run": false,
+  "ssd_endurance_guarantee": false,
+  "kernel_io_rate_limit_installed": false,
+  "swap_capacity_changed": false,
+  "swappiness_changed": false,
+  "model_profiles_changed": false,
+  "engine_versions_changed": false,
+  "scheduled_updates_activated": false,
+  "owned_kernel_containment": "gated unique user-systemd cgroup v2 with pinned cgroup.kill and refreshed empty verification",
+  "platform_requirements": [
+    "working user systemd",
+    "cgroup v2",
+    "writable cgroup.kill in owned scope"
+  ],
+  "real_cpu_orphan_and_fork_cleanup_verified": true,
+  "cgroup_owned_parent_reaping_without_numeric_group_signals": true,
+  "reviewed_components": [
+    "default policy and runtime enforcement",
+    "benchmark/updater evidence collection",
+    "race/orphan/fork containment corrections",
+    "numeric PID/PGID fallback removal"
+  ]
+}

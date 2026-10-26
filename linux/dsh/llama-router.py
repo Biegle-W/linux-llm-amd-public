@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 from inference_idle import inference_request
+from inference_swap import WorkerSwapGuard
 import signal
 import subprocess
 import threading
@@ -24,6 +25,7 @@ native_port = 0
 active_model = None
 active_mode = None
 memory_watch = None
+swap_guard = WorkerSwapGuard()
 
 
 def call(port, path, data=None, timeout=5):
@@ -34,6 +36,7 @@ def call(port, path, data=None, timeout=5):
 
 
 def stop_process(proc):
+    swap_guard.stop(proc)
     if proc is not None and proc.poll() is None:
         try:
             os.killpg(proc.pid, signal.SIGTERM)
@@ -68,6 +71,7 @@ def backend_for_model(model):
 def activate_native(mode, spec=None):
     """Switch only this router's native worker; preserve the frontend and API port."""
     global native, active_mode, active_model, memory_watch
+    swap_guard.check()
     if native is not None and native.poll() is None and active_mode == mode:
         return
     # Verify the requested binary/devices before unloading a working model.
@@ -84,8 +88,9 @@ def activate_native(mode, spec=None):
     if enabled is not None:
         args = ['systemd-run', '--user', '--scope', '--quiet',
                 '--property=MemorySwapMax=0', *args]
-    native = subprocess.Popen(args, env=env, start_new_session=True)
+    native = swap_guard.spawn(args, env=env, start_new_session=True)
     ready(native, native_port)
+    swap_guard.ready(native)
     active_mode = mode
     memory_watch = watch_worker(native, lambda: active_model, stop_process)
     print(f'llama.cpp native runtime selected: {mode}', flush=True)

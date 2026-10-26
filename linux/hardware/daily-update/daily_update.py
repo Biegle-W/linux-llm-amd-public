@@ -211,6 +211,7 @@ def launcher_bench(kind, models, stage, label, logfile):
     monitor = MemoryMonitor().start()
     try:
         for group in groups:
+            monitor.set_phase('loading')
             args = ['--no-browser'] if kind in ('strata', 'maya') else []
             if kind in ('maya','strata'):
                 args += ['--model', group[0]]
@@ -220,12 +221,18 @@ def launcher_bench(kind, models, stage, label, logfile):
             try:
                 wait_port(PORT[kind], launcher, 1800)
                 for model in group:
+                    monitor.set_phase('loading')
                     started = time.monotonic()
                     try:
-                        post(PORT[kind], {'model': model, 'messages': [{'role': 'user', 'content': 'Hi'}], 'max_tokens': 4,
-                                          'chat_template_kwargs': {'enable_thinking': False}}, 3600)
+                        status = post(PORT[kind], {'model': model, 'messages': [{'role': 'user', 'content': 'Hi'}], 'max_tokens': 4,
+                                                   'chat_template_kwargs': {'enable_thinking': False}}, 3600)
+                        if status != 200:
+                            raise Step(f'{label} {model}: prewarm returned HTTP {status}')
                     except OSError as error:
                         log(f'{label} {model}: prewarm failed ({error})', logfile)
+                        raise Step(f'{label} {model}: prewarm failed') from error
+                    else:
+                        monitor.set_phase('inference')
                     log(f'{label} {model}: loaded in {time.monotonic() - started:.0f} s', logfile)
                     result = stage/f'{label}-{model}.json'
                     sh([str(HARNESS), str(ROOT/'hardware/benchmark-current-amd.py'), '--kind', kind, '--date', TODAY,
@@ -237,6 +244,7 @@ def launcher_bench(kind, models, stage, label, logfile):
                     profiles.append(profile)
                     log(f'{label} {model}: {profile["status"]}', logfile)
             finally:
+                monitor.set_phase('shutdown')
                 if launcher.poll() is None:
                     os.killpg(launcher.pid, signal.SIGTERM)
                     try:
@@ -246,6 +254,7 @@ def launcher_bench(kind, models, stage, label, logfile):
                 stop_backends()
                 wait_idle()
     finally:
+        monitor.set_phase('shutdown')
         record = {'date': TODAY, 'backend': kind, 'label': label, 'profiles': profiles,
                   'lifecycle_memory': monitor.stop()}
         (stage/f'{label}.json').write_text(json.dumps(record, indent=2) + '\n')

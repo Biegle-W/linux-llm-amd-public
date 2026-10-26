@@ -3,14 +3,14 @@
 
 Applies the fixed promotion thresholds: prefill and code/prose decode medians
 >= 95% of baseline; short TTFT <= max(1.25 x baseline, baseline + 0.05 s);
-marker checks no fewer than baseline; at most 64 MiB worker swap and zero VRAM spill. Prints a table and exits
+marker checks no fewer than baseline; effective swap policy and zero VRAM spill. Prints a table and exits
 non-zero if any compared profile misses a threshold. It changes nothing.
 """
 import argparse
 import json
 from pathlib import Path
 import statistics
-from inference_memory import WORKER_SWAP_LIMIT_BYTES, memory_failures, lifecycle_failures
+from inference_memory import worker_swap_limit_bytes, memory_failures, lifecycle_failures
 
 
 def prefill(profile):
@@ -53,7 +53,7 @@ def main():
         parser.error('Baseline contains no model profiles; cannot establish promotion evidence')
     failed = False
     print('| Model | Metric | Baseline | Candidate | Change |\n|---|---|---:|---:|---:|')
-    print(f'| policy | worker_swap_limit_bytes | | {WORKER_SWAP_LIMIT_BYTES} | |')
+    print(f'| policy | worker_swap_limit_bytes | | {worker_swap_limit_bytes()} | |')
     for path in options.candidates:
         record = json.loads(path.read_text())
         if options.require_lifecycle_memory:
