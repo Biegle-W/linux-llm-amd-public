@@ -30,8 +30,12 @@ Exclude model weights, binaries/environments, credentials, chats and raw logs fr
 all seven repositories. Local ignored recovery binaries/backups remain where they
 were; central Git archival concerns source/settings, not a weight backup service.
 
-New NVIDIA Linux status is **prepared, not deployed** until the Linux agent records
-native installation, per-GPU correctness/unlock, topology/P2P and real inference.
+**October27 source-review update:** the NVIDIA Linux repository now records native
+installation, per-GPU correctness/unlock, real inference and six selected profiles.
+P2P is documented as not enabled. This supersedes the October25 prepared-only status;
+it is a read-only documentation observation, not fresh remote-host validation.
+See the [gap audit](AMD-NVIDIA-GAP-AUDIT-2026-10-27.md) and
+[NVIDIA README](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/README.md).
 The separate AMD Linux machine's runtime, profiles, guards, mounts and schedules
 are unchanged by repository organization. Keep all GitHub-facing prose in English.
 

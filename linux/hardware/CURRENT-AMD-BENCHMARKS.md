@@ -1,5 +1,13 @@
 # Current dual-AMD benchmarks — October 27, 2026
 
+## Handoff and cross-repository review — October 27
+
+Read-only AMD/native Linux NVIDIA [gap audit](AMD-NVIDIA-GAP-AUDIT-2026-10-27.md):
+no new inference measurements or selected settings in this review. The latest
+Sage INT4 selection/retirement below remains current. Root README/AGENTS and the
+canonical handoff now record the standing takeover-ready documentation requirement.
+Proposed parity changes await the user's choice; no NVIDIA source/runtime changed.
+
 ## Current Sage INT4 selection — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the

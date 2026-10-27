@@ -1,5 +1,21 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Agent handoff upkeep and parity review — October 27
+
+Root `AGENTS.md` is a thin discovery entry point into the canonical README,
+current benchmark Markdown and this handoff. After relevant changes keep both
+AMD repos and these records current, with verified results, selected/candidate
+status, active jobs/locks, actual blockers and next steps. Preserve historical
+measurements and private evidence; do not repeat completed tests just for docs.
+Review public sanitization and verify both pushes and this Shared-copy match.
+
+The [read-only AMD/native Linux NVIDIA audit](../hardware/AMD-NVIDIA-GAP-AUDIT-2026-10-27.md)
+records G1–G8 proposals awaiting user selection. No new GPU test, runtime/profile,
+guard or schedule change occurred. NVIDIA source/docs now record native deployment
+and six maintained profiles; the old prepared-only repository-map status is superseded.
+The completed Sage selection below remains the last runtime change. Current audit
+work owns no GPU job or lock. The H3 RAM-upgrade follow-up and updater hold remain.
+
 ## Current Sage INT4 selection — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the

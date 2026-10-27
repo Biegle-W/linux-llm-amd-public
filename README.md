@@ -1,5 +1,25 @@
 # Linux LLM AMD — public reference
 
+## Standing handoff upkeep — October 27
+
+After relevant work, keep both AMD repositories, `README.md`, `AGENTS.md`,
+[current benchmark Markdown](linux/hardware/CURRENT-AMD-BENCHMARKS.md), numeric results
+and the [canonical handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) current in the same task.
+Keep `AGENTS.md` as a thin entry point; change its instructions when needed,
+rather than copying benchmark numbers or runtime settings into it. Before yielding,
+record selected versus candidate settings, completed checks, actual failures,
+active jobs/locks, unfinished work and the next concrete step. Preserve historical
+measurements and private evidence; do not rerun completed GPU tests merely to refresh docs.
+Review sanitized public changes, commit/push both maintained repositories and verify
+publication, or record the exact outstanding sync step. The private canonical
+handoff and Shared copy must match after relevant changes.
+
+A read-only [AMD/native Linux NVIDIA gap audit](linux/hardware/AMD-NVIDIA-GAP-AUDIT-2026-10-27.md)
+records actionable proposals and hardware/method differences. NVIDIA now records
+six deployed profiles; the earlier prepared-only map is superseded. Ask the user
+which gaps to fill before changing NVIDIA or applying parity candidates.
+No inference test, engine/profile setting or schedule changed in this documentation review.
+
 ## Current Sage INT4 selection — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
@@ -48,8 +68,8 @@ October27: [VRAM engine refresh and native INT4 attempts](linux/hardware/VRAM-EN
 repositories and validation. Retired source/settings moved to private
 [retired-llm-setting](https://github.com/Biegle-W/retired-llm-setting).
 Active runtime paths, model profiles, guards and schedules are unchanged.
-This README is now the sole root maintenance instruction file; previous root
-instructions are consolidated below. [Seven-repository map](linux/hardware/REPOSITORY-MAP.md).
+This README is the canonical maintenance policy; `AGENTS.md` is its thin agent
+entry point. Previous root instructions remain consolidated below. [Seven-repository map](linux/hardware/REPOSITORY-MAP.md).
 
 Benchmark-reference workstation: **2 × RX 7900 XTX 24 GB, Intel i9-13900KS, 64 GB RAM**,
 MSI MPG Z690 CARBON WIFI, CPU PCIe 4.0 x8/x8. Every active model uses both AMD
@@ -104,9 +124,10 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
   Reaffirmed October27: always keep both repositories updated. This standing
   publication authorization includes model names, measured disk sizes, the three
   model categories and sanitized example storage paths in the public inventory.
-- Read the AMD repository's root `README.md` first. It remains the sole root
-  maintenance instruction file; do not recreate `AGENTS.md` or introduce
-  competing root instruction files for individual agents.
+- Read the AMD repository's root `README.md` first. It remains the canonical
+  maintenance policy; root `AGENTS.md` points incoming agents to it and current
+  handoff/benchmark records. Keep both current; do not duplicate volatile settings
+  or introduce competing policy copies.
 - Preserve concurrent agent/user work and all existing runtime safety guards and
   maintenance holds. This scope note does not authorize GPU trials, engine
   updates, service restarts or resuming paused nightly updates.
@@ -701,6 +722,6 @@ The user's October 25 split supersedes earlier instructions to retain retired
 NVIDIA/Windows setup trees here. Retired source/settings now belong only in the
 private central archive; keep pointers rather than copied recipes. Earlier public
 history and current AMD benchmark/regression evidence remain intact. This README
-is the sole root instruction file. English is the primary communication language;
+is the canonical policy and `AGENTS.md` is its agent entry point. English is the primary communication language;
 all GitHub-facing content is English. Preserve all active AMD profiles, paths,
 guards, publisher checkout paths, model dependencies and schedules.

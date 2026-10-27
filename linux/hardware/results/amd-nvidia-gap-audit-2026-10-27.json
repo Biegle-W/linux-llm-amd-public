@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-27",
+  "method": "Read-only source/document review using GitHub connector; no NVIDIA runtime access or hardware testing. File blob IDs identify sampled content; main may advance.",
+  "sources": [
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "config/maintained-profiles.json",
+      "git_blob_sha": "a8252712e01b94b378c07cc1052a20df04e4d01e",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/config/maintained-profiles.json"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "network/worker_manager.py",
+      "git_blob_sha": "f902a33fe4a670960c1201a7f865924ea13c6a0f",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/network/worker_manager.py"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "network/router.py",
+      "git_blob_sha": "64959fcffe2eca6b3297bee41b860f09398a7e33",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/network/router.py"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "scripts/run_bounded_test.sh",
+      "git_blob_sha": "db4fc316d9d29581b63e2d8f4c11e7ead9d13d93",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/scripts/run_bounded_test.sh"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "docs/MAINTAINED-PROFILES.md",
+      "git_blob_sha": "c4f1a3a905abe3aa4e876923707cfca1ab78953b",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/MAINTAINED-PROFILES.md"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "scripts/patches/maya-lazy-cpu-vision.patch",
+      "git_blob_sha": "ad0853c147ab5e88e6685cffca02479350d275d5",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/scripts/patches/maya-lazy-cpu-vision.patch"
+    },
+    {
+      "repository": "Biegle-W/linux-llm-nvidia-public",
+      "path": "README.md",
+      "git_blob_sha": "fdbd6e7809ce64c540b707c8ec0779fd749251a5",
+      "url": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/README.md"
+    }
+  ],
+  "nvidia_selected_profiles": [
+    {
+      "id": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "context": 32768,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "worker_memory_gib": null
+    },
+    {
+      "id": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "context": 16384,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "worker_memory_gib": null
+    },
+    {
+      "id": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "context": 32768,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      },
+      "worker_memory_gib": null
+    },
+    {
+      "id": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "context": 32768,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/Maya-S24"
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      }
+    },
+    {
+      "id": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Strata",
+      "context": 65536,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      },
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": 1
+      }
+    },
+    {
+      "id": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Maya",
+      "context": 32768,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      }
+    }
+  ],
+  "nvidia_model_count": 4,
+  "nvidia_profile_count": 6,
+  "confirmed_document_error": {
+    "path": "docs/MAINTAINED-PROFILES.md",
+    "row": "GLM-5.3-Flash / Maya-S24",
+    "column": "Storage location",
+    "actual": "10,908",
+    "expected_from_registry": "NVMe: models/maya/Maya-S24"
+  },
+  "status": "Proposals only; NVIDIA source/runtime unchanged"
+}
