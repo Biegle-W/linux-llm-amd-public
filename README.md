@@ -1,5 +1,8 @@
 # Linux LLM AMD — public reference
 
+October27: [Current-RAM H3 and LLM retries after compiler-temp cleanup](linux/hardware/CURRENT-RAM-RETEST-2026-10-27.md). Nothing was retired or promoted; all memory/VRAM guards remain.
+
+
 October27: [VRAM engine refresh and native INT4 attempts](linux/hardware/VRAM-ENGINE-UPDATE-2026-10-27.md): llama.cpp qualified for three VRAM profiles; newer vLLM/INT4 loading remains held by current RAM/swap guards; required SGLang fork already current.
 
 

@@ -1,5 +1,15 @@
 # Current benchmark results
 
+## Current-RAM retest — October27
+
+After verified inactive compiler temps were retained on disk, both H3 and blocked
+vLLM/SGLang/native INT4 profiles were retried with more free RAM and unchanged
+guards. H3 advanced to text-encoder loading, then hit its RAM floor; LLM loading
+still hit the swapout budget, with an additional Sage auto-Marlin HIP compile
+failure. No new model/engine promotion or retirement; no new inference medians.
+[All attempts, memory counters and thermals](../CURRENT-RAM-RETEST-2026-10-27.md).
+
+
 ## VRAM engine refresh — October27
 
 Qualified llama.cpp19cce691 for Empero/Sage/Flint with profile-specific source

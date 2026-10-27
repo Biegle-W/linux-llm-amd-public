@@ -1,5 +1,20 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+
+**Current-RAM retry — October27:** no additional OS-visible RAM (still14.83GiB).
+Ten inactive HIP compiler temp directories were retained with SHA-256-verified
+copies on the system disk;3.63GiB allocated tmpfs space was released. Both H3
+arms now pass the VAE stage but hit the unchanged3GiB RAM floor during32B encoder
+loading, before denoising/SP2 rank-1 startup. All five corrected framework cases,
+Sage/vLLM, Flint/vLLM and explicit-GPTQ Sage/SGLang hit the unchanged4GiB system
+swapout budget; automatic Sage/SGLang instead failed Marlin HIP compilation.
+No new throughput/generation timings; no models, weights, engines or workflows
+retired, no runtime promotion and no profile/guard/default changes. Short disk
+TMPDIR is used only in isolated trials; global/production environments remain.
+The H3 follow-up still waits for a real MemTotal increase and now includes short
+disk-temp guidance. [Full current-RAM record](../hardware/CURRENT-RAM-RETEST-2026-10-27.md).
+
+
 **October27 VRAM engine refresh:** llama.cpp19cce6919992 is selected only for
 Empero/Sage/Flint through source_overrides; global2280f0fd remains for CPU models.
 Source-aware router reuse includes the commit/path; mismatched pins fail before

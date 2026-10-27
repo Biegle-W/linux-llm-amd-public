@@ -1,5 +1,8 @@
 # VRAM engine updates and native INT4 trials — October 27, 2026
 
+Later October27: the [current-RAM retry](CURRENT-RAM-RETEST-2026-10-27.md) reclaimed inactive tmpfs compiler storage and repeated framework/native INT4 loading. Guards still blocked inference; Sage auto-Marlin also failed HIP compilation. The qualified llama medians below remain the earlier session; no model or runtime was retired.
+
+
 The three VRAM-only llama.cpp profiles passed fresh paired benchmarks on latest
 source **19cce6919992** and are selected through model-specific source pins.
 The default CPU-backed source remains **2280f0fd163b**. SGLang's required gfx1100
