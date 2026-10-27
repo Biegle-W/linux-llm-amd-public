@@ -1,5 +1,7 @@
 # VRAM-only defaults and selectable Flint — October 27, 2026
 
+Later October 27: Flint's unchanged128-token reasoning profile now has [fresh timed results](FLINT-REASONING128-2026-10-27.md). The earlier reasoning-off speeds remain separate experiments.
+
 At the user's request, **Empero and Sage now default to all-GPU weights**, and
 **Flint is selectable** in the normal llama.cpp catalog, DSH settings and
 network API. Both RX 7900 XTX cards remain required. The retained source is

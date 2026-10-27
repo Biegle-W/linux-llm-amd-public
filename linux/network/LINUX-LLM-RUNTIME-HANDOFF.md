@@ -26,6 +26,19 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
+**Flint current reasoning budget 128 — October 27:**
+
+Fresh normal-launcher/authenticated API medians on both RX 7900 XTX and 14.83 GiB
+host RAM: native prefill **6034.8 tokens/s**, fresh ~8K first-token TTFT
+**1.396 s**, code/prose decode **46.63/46.57 tokens/s**.
+First visible-answer TTFT is **4.436 s**; decode includes reasoning.
+Context 32,768, storage 25.06 GB on SATA1, retained 2280f0fd/ROCm 7.2.3, VRAM-only,
+reasoning 128 and all guards remain. Three runs/task, all fresh markers pass;
+zero worker swap/spill, full lifecycle thermals and owned cleanup pass.
+Earlier reasoning-off timings stay separate.
+[Report](../hardware/FLINT-REASONING128-2026-10-27.md) and
+[all trials](../hardware/results/flint-reasoning128-2026-10-27.json).
+
 **October27 VRAM-only defaults / Flint activation:** Empero256K/MTP3/batch512
 and Sage64K/MTP3/projector/batch4096 now keep all weights on both GPUs. Flint is
 selectable as `flint-40b-a2.5b`,32K/noMTP/reasoning-budget128. DIO load, zero CPU

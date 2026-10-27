@@ -1,5 +1,7 @@
 # Graphics model collection
 
+[October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) compares existing local two-XTX component placement, DisTorch2 donor weights, R9700 Dual-Sage and distributed sampling. Research only; no runtime/workflow change or new graphics benchmark.
+
 One quality-oriented precision per image/video model, with one required encoder
 and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
 both families passed two-GPU generation. See [measured results](VALIDATION-2026-10-18.md)

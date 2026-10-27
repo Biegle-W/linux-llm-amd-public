@@ -1,5 +1,10 @@
 # Forum optimization sources — October 17, 2026
 
+## October 27 — MiniMax H3 multi-GPU source review
+
+The [source-linked H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) distinguishes local dual-XTX component placement, [Leon Y's dual 3090 DisTorch2](https://lcz.me/topic/1075), [Chi Kui Chan's dual R9700 Dual-Sage](https://lcz.me/topic/1469), and [abaalei's T10/3080Ti/XTX pipeline](https://lcz.me/topic/2138). Primary code and reviewed revisions are linked in the report. These are distinct hardware/memory/compute methods; no new local H3 speed or dual-XTX attention qualification is claimed. No software or workflow was changed.
+
+
 ## Reference sites
 
 - [lcz.me](https://lcz.me/)

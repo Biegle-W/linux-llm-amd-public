@@ -1,5 +1,19 @@
 # LLM benchmark and context history
 
+## Flint current reasoning budget 128 — October 27
+
+Fresh normal-launcher/authenticated API medians on both RX 7900 XTX and 14.83 GiB
+host RAM: native prefill **6034.8 tokens/s**, fresh ~8K first-token TTFT
+**1.396 s**, code/prose decode **46.63/46.57 tokens/s**.
+First visible-answer TTFT is **4.436 s**; decode includes reasoning.
+Context 32,768, storage 25.06 GB on SATA1, retained 2280f0fd/ROCm 7.2.3, VRAM-only,
+reasoning 128 and all guards remain. Three runs/task, all fresh markers pass;
+zero worker swap/spill, full lifecycle thermals and owned cleanup pass.
+Earlier reasoning-off timings stay separate.
+[Report](FLINT-REASONING128-2026-10-27.md) and
+[all trials](results/flint-reasoning128-2026-10-27.json).
+
+
 ## October27 — VRAM-only defaults and selectable Flint
 
 User-authorized Empero/Sage all-GPU default promotion and Flint catalog addition:

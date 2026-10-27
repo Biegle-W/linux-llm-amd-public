@@ -1,5 +1,7 @@
 # Model categories and disk storage — October 27, 2026
 
+Flint now has a fresh [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. Storage allocations below are unchanged.
+
 Standing benchmark listing format (October 27): every future benchmark listing,
 inventory with performance, and model comparison must group all model/engine
 profiles into **VRAM only models**, **MoE models with CPU RAM offload**, and
