@@ -1008,6 +1008,17 @@ without a new request.
 remain as reference. MoE API tests passed, but the final MoE GUI chat/Stop test
 was cancelled before completion; it must not be reported as passed.
 
+## October 27 forum source clarification — research only
+
+The [supplied-link audit](../hardware/FORUM-LINK-AUDIT-2026-10-27.md) confirms
+the linked SGLang gfx1100 revision is already installed. Strata's explicit
+two-window pipeline and neutral-penalty requirement are source-confirmed leads,
+not selected profile changes; retain the existing memory admission and tuning.
+The [corrected H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) includes
+[J I's dual-XTX ComfyUI SP2 report](https://lcz.me/post/28082), an inspectable AMD
+SP loader and Bunsei's separate R9700 Radiance TP2 fork. No new GPU run,
+installation, profile, workflow or update-schedule change was made.
+
 ## Image/video generation models — October 18
 
 The graphics collection now has **seven weight files / 70.40 GiB** in the

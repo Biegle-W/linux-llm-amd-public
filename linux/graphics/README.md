@@ -1,6 +1,6 @@
 # Graphics model collection
 
-[October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) compares existing local two-XTX component placement, DisTorch2 donor weights, R9700 Dual-Sage and distributed sampling. Research only; no runtime/workflow change or new graphics benchmark.
+[October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) now includes a firsthand dual-XTX ComfyUI SP2 report, the Kaihui AMD SP implementation and Bunsei’s separate R9700 Radiance TP2 fork. It distinguishes these from locally validated component placement, DisTorch2 and Dual-Sage. Research only; no runtime/workflow change or new graphics benchmark.
 
 One quality-oriented precision per image/video model, with one required encoder
 and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
@@ -53,9 +53,10 @@ future choices, not duplicate model quants to retain now.
 
 ## Hardware placement and limits
 
-Current hardware is two 24 GB gfx1100 GPUs and 64 GB installed RAM
-(61.51 GiB OS-visible). Generation timings below retain their October 18
-32 GB hardware attribution. The validated
+Current hardware is two 24 GB gfx1100 GPUs; the live host exposes 14.83 GiB
+RAM, below the earlier 61.51 GiB normal configuration. Generation timings below
+retain their October 18 32 GB hardware attribution; they do not qualify loading
+on the current reduced-RAM host. The validated
 workflows use the denoiser on GPU 0 and encoder/VAEs on GPU 1. Direct loaders set
 the target at construction to avoid native retargeting's second encoder copy.
 This is staged component placement, not TP or a combined 48 GB allocation.

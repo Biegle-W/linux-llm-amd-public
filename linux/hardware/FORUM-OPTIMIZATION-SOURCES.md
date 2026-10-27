@@ -1,9 +1,18 @@
 # Forum optimization sources — October 17, 2026
 
-## October 27 — MiniMax H3 multi-GPU source review
+## October 27 — supplied SGLang, Strata and H3 links
 
-The [source-linked H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) distinguishes local dual-XTX component placement, [Leon Y's dual 3090 DisTorch2](https://lcz.me/topic/1075), [Chi Kui Chan's dual R9700 Dual-Sage](https://lcz.me/topic/1469), and [abaalei's T10/3080Ti/XTX pipeline](https://lcz.me/topic/2138). Primary code and reviewed revisions are linked in the report. These are distinct hardware/memory/compute methods; no new local H3 speed or dual-XTX attention qualification is claimed. No software or workflow was changed.
+The [link audit](FORUM-LINK-AUDIT-2026-10-27.md) checks the user's exact sources
+against installed code. [SGLang topic 1532](https://lcz.me/topic/1532) uses the
+gfx1100 fork already installed here. [Strata topic 2626](https://lcz.me/topic/2626)
+and [the penalty/pipeline reply in topic 2550](https://lcz.me/post/27547)
+provide candidates with different RAM, quantization, tuning and sampling budgets.
 
+The corrected [H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) records
+[J I's firsthand dual-XTX SP2 success](https://lcz.me/post/28082), distinct from
+[Bunsei's R9700 Radiance TP2](https://lcz.me/topic/2582), with pinned implementation
+sources. It retains the earlier DisTorch2, Dual-Sage and distributed-sampling
+references. No new local performance, runtime or workflow change is claimed.
 
 ## Reference sites
 
