@@ -1,7 +1,31 @@
 {
   "schema": 1,
   "upstream_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
-  "files": [
+  "quant_selection": "GLM Maya-S24 for 24GB cards; DeepSeek Maya-S native GGUF with Q6_K Engram; upstream checksummed packed DSpark and matching vision source. No original FP8/EXL3 copies.",
+  "note": "Historical checksum reference only; DeepSeek-S and its unused drafter were removed at user request October26. Downloading this retired manifest is blocked. Shared S Engram shards5/6 remain required by DeepSeek-XS.",
+  "converted_assets": [
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",
+      "size": 970536960,
+      "sha256": "685d935986a030ba1965af5c1e06b55614c7778c821daae1917dde5d2152ff68",
+      "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+    },
+    {
+      "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.json",
+      "size": 19959,
+      "sha256": "3b682353a9bf572ae2736ec17b946179b24b83319de46c54950f0c442fd13053",
+      "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
+    }
+  ],
+  "conversion_validation": {
+    "source_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+    "tensor_count": 266,
+    "vision_blocks": 32,
+    "all_tensors_exactly_equal_to_source": true,
+    "marker_source": "30KB HTTP range from shard2 at the same pinned official revision",
+    "raw_source_removed_by_installer_after_conversion": true
+  },
+  "historical_files": [
     {
       "family": "glm",
       "repo": "peasantsmith/GLM-5.3-Flash-Maya-GGUF",
@@ -110,29 +134,8 @@
       "sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879"
     }
   ],
-  "total_bytes": 443117880880,
-  "quant_selection": "GLM Maya-S24 for 24GB cards; DeepSeek Maya-S native GGUF with Q6_K Engram; upstream checksummed packed DSpark and matching vision source. No original FP8/EXL3 copies.",
-  "note": "Pinned original downloads; DeepSeek vision safetensors/config are losslessly repacked by the installer into vision.bin + vision.json and then removed. Do not treat this as the current post-conversion inventory.",
-  "converted_assets": [
-    {
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",
-      "size": 970536960,
-      "sha256": "685d935986a030ba1965af5c1e06b55614c7778c821daae1917dde5d2152ff68",
-      "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
-    },
-    {
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.json",
-      "size": 19959,
-      "sha256": "3b682353a9bf572ae2736ec17b946179b24b83319de46c54950f0c442fd13053",
-      "verification_basis": "Generated pack/index/tokenizer or lossless vision asset; SHA256 read after validation"
-    }
-  ],
-  "conversion_validation": {
-    "source_revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
-    "tensor_count": 266,
-    "vision_blocks": 32,
-    "all_tensors_exactly_equal_to_source": true,
-    "marker_source": "30KB HTTP range from shard2 at the same pinned official revision",
-    "raw_source_removed_by_installer_after_conversion": true
-  }
+  "historical_total_bytes": 443117880880,
+  "files": [],
+  "total_bytes": 0,
+  "status": "retired"
 }

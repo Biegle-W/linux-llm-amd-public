@@ -105,43 +105,11 @@
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/dspark/dspark-xs2.json",
       "size": 99146,
       "sha256": "56d47ad12d6548a8d3d50a79be96451411f18d5b77064de7b8544bb2da22988f"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00001-of-00006.gguf",
-      "size": 47887697312,
-      "sha256": "1f3437f57042e69f94c141ffbcba0d5610dab63feb07244fb468be4940d6763f"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00002-of-00006.gguf",
-      "size": 47669578400,
-      "sha256": "66501fee8702ffd54e6f065323ab54bb3150d20b10b01922c589e7462c7b5ba6"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00003-of-00006.gguf",
-      "size": 47103347360,
-      "sha256": "3195b23f33337c46a07c48583946d99147c3635412bc4adc6acdc4cf42bf30ad"
-    },
-    {
-      "repo": "peasantsmith/DeepSeek-V4.1-Flash-1017-Maya-GGUF",
-      "revision": "276e0badcfb4a6d8f6c2b9d4da1b468cd339c221",
-      "remote": "Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
-      "file": "DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/DeepSeek-V4.1-Flash-1017-Maya-S-IQ2_XXS-00004-of-00006.gguf",
-      "size": 35532532032,
-      "sha256": "d60dba35fac9601cd5c6026439dd980c457a5bb1c009192ea539b220108ea0db"
     }
   ],
   "total_bytes": 378317262165,
   "quant_selection": "GLM Maya-Sv2; DeepSeekMaya-XS + matchingdspark-xs2; reusedS Engram payloads",
-  "note": "Active assets only. Original Maya-S manifest/weights retained for rollback; its Engram shards remain production dependencies. Prepare Windows/Linux pack metadata independently.",
+  "note": "Active GLM and DeepSeek-XS assets only. DeepSeek-S is retired October26; only its shared Engram shards5/6 remain as XS dependencies. Do not recreate S-only shards or its drafter. Prepare platform pack metadata independently.",
   "converted_assets": [
     {
       "file": "DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",

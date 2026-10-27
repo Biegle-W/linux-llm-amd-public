@@ -17,8 +17,8 @@ LEDGER = 'hardware/DAILY-UPDATES.md'
 HANDOFF = ROOT/'network/LINUX-LLM-RUNTIME-HANDOFF.md'
 SHARED = Path('/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md')
 PINS = ['dsh/llama-runtime.json', 'maya/runtime.json', 'dsh/maya-glm-profile.json', 'dsh/maya-deepseek-profile.json',
-        'dsh/maya-deepseek-s-profile.json', 'sglang/fork-pin.json', 'sglang/apply-rocm-fixes.py',
-        'strata-dsv41/runtime.json','dsh/strata-deepseek-s-profile.json','dsh/strata-deepseek-xs-profile.json']
+        'sglang/fork-pin.json', 'sglang/apply-rocm-fixes.py',
+        'strata-dsv41/runtime.json','dsh/strata-deepseek-xs-profile.json']
 BEGIN, END = '<!-- daily-update:begin -->', '<!-- daily-update:end -->'
 def _identity():
     """Local account and Git e-mail names, read at run time so they never appear in the source."""
@@ -129,7 +129,7 @@ def public_deepseek_pins():
     """Publish example paths and require a new local proof after sanitizing a profile."""
     from shared_storage import STREAM_SHARED
     exported=[]
-    for name in ('strata-dsv41/runtime.json','dsh/strata-deepseek-s-profile.json','dsh/strata-deepseek-xs-profile.json'):
+    for name in ('strata-dsv41/runtime.json','dsh/strata-deepseek-xs-profile.json'):
         path=ROOT/name
         if not path.exists():continue
         text=path.read_text().replace(str(ROOT),'/opt/local-llm').replace(str(STREAM_SHARED),'/mnt/shared-nvme')

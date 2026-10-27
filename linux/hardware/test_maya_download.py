@@ -17,6 +17,15 @@ spec.loader.exec_module(downloader)
 
 
 class MayaDownloadTests(unittest.TestCase):
+    def test_retired_manifest_cannot_download_or_recreate_s(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); manifest = root / 'retired.json'
+            manifest.write_text(json.dumps({'status': 'retired', 'files': [{'file': 'retired.gguf'}]}))
+            with patch.object(sys, 'argv', ['download', '--root', str(root), '--manifest', str(manifest)]), patch.object(downloader.subprocess, 'run') as curl, contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as result: downloader.main()
+                self.assertEqual(result.exception.code, 2); curl.assert_not_called()
+            self.assertFalse((root / 'retired.gguf').exists())
+
     def test_explicit_glm_manifest_verifies_only_glm_and_leaves_deepseek_untouched(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

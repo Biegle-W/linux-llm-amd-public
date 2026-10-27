@@ -17,10 +17,10 @@ from maya_runtime import config_fingerprint, pack_metadata_fingerprint
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True)
-    parser.add_argument('--profile', choices=('xs', 's'), default='xs')
+    parser.add_argument('--profile', choices=('xs',), default='xs')
     args = parser.parse_args()
-    filename = 'maya-deepseek-s-profile.json' if args.profile == 's' else 'maya-deepseek-profile.json'
-    quant = 'Maya-S' if args.profile == 's' else 'Maya-XS'
+    filename = 'maya-deepseek-profile.json'
+    quant = 'Maya-XS'
     cfg = json.loads((ROOT / 'dsh' / filename).read_text())
     selected = cfg['args']
     pack = Path(selected[selected.index('--pack') + 1])

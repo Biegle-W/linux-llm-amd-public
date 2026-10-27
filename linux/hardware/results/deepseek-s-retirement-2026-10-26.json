@@ -1,0 +1,87 @@
+{
+  "completed": "2026-10-26T21:56:33.473013-04:00",
+  "deleted_files": 28,
+  "deleted_logical_bytes": 186178807975,
+  "deleted_shared_nvme_allocated_bytes": 186180829184,
+  "shared_nvme_free_bytes_before": 149758410752,
+  "shared_nvme_free_bytes_after": 335939895296,
+  "observed_shared_nvme_free_gain_bytes": 186181484544,
+  "protected_files_unchanged": 34,
+  "full_weight_hash_rerun": false,
+  "retained_shared_engram_bytes": 161284798884,
+  "scope": "User-authorized S-only retirement; XS and shared Engram retained; CPU/storage verification only",
+  "catalog_profiles": 11,
+  "retired_ids": [
+    "deepseek-v4.1-flash-1017-maya-s",
+    "deepseek-v4.1-flash-1017-strata-s"
+  ],
+  "retained_xs_ids": [
+    "deepseek-v4.1-flash-1017-maya",
+    "deepseek-v4.1-flash-1017-strata-xs"
+  ],
+  "xs_reference_checks": [
+    {
+      "model": "deepseek-v4.1-flash-1017-maya",
+      "files_checked": 7,
+      "tensor_bounds_checked": 48795,
+      "config_seal_unchanged": true,
+      "pack_seal_unchanged": true,
+      "shared_engram_present": true
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-strata-xs",
+      "files_checked": 7,
+      "tensor_bounds_checked": 48795,
+      "config_seal_unchanged": true,
+      "pack_seal_unchanged": true,
+      "shared_engram_present": true
+    }
+  ],
+  "remaining_deepseek_model_drive_bytes": 281866295003,
+  "ram_hold_preserved": true,
+  "gpu_inference_run": false,
+  "runtime_versions_changed": false,
+  "dsh_default_preserved": true,
+  "cpu_regression_tests_per_checkout": 35,
+  "host_self_api_checks": {
+    "loopback": {
+      "unauthenticated_401": true,
+      "wrong_key_401": true,
+      "catalog_count": 11,
+      "q2_rejected": true,
+      "health_ok": true,
+      "available_models": []
+    },
+    "lan": {
+      "unauthenticated_401": true,
+      "wrong_key_401": true,
+      "catalog_count": 11,
+      "q2_rejected": true,
+      "health_ok": true,
+      "available_models": []
+    },
+    "tailscale": {
+      "unauthenticated_401": true,
+      "wrong_key_401": true,
+      "catalog_count": 11,
+      "q2_rejected": true,
+      "health_ok": true,
+      "available_models": []
+    }
+  },
+  "retired_ids_api_checks": {
+    "loopback": {
+      "retired_s_get_404": true,
+      "retired_s_post_404": true
+    },
+    "lan": {
+      "retired_s_get_404": true,
+      "retired_s_post_404": true
+    },
+    "tailscale": {
+      "retired_s_get_404": true,
+      "retired_s_post_404": true
+    }
+  },
+  "remote_peer_tested": false
+}

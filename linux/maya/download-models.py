@@ -24,6 +24,8 @@ def main():
     ap.add_argument('--manifest',type=Path,default=Path(__file__).with_name('models.json'),
                     help='Explicit pinned asset manifest; defaults to the installed model set.')
     a=ap.parse_args();manifest=json.loads(a.manifest.read_text())
+    if manifest.get('status') == 'retired':
+        ap.error('This manifest is retired checksum history; no assets will be downloaded.')
     for row in manifest['files']:
         family=row.get('family') or ('glm' if Path(row['remote']).name.startswith('GLM-') else 'deepseek')
         if a.family not in (family,'all'):continue

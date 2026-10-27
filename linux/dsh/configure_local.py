@@ -60,6 +60,12 @@ def configure(default_provider=None):
     # Qwen3.6-35B-A3B was retired October 23 at the user's request; Empero is its llama.cpp successor.
     if selection.get('provider') == 'llama-local' and selection.get('model') == 'qwen3.6-35b-a3b':
         settings['agent-default-model'] = selection = {'provider': 'llama-local', 'model': 'empero-qwen3.8-35b-a3b'}
+    # Retired DeepSeek-S selections follow the retained XS quant in the same provider.
+    retired_deepseek = {'maya-local': ('deepseek-v4.1-flash-1017-maya-s', 'deepseek-v4.1-flash-1017-maya'),
+                       'strata-local': ('deepseek-v4.1-flash-1017-strata-s', 'deepseek-v4.1-flash-1017-strata-xs')}
+    replacement = retired_deepseek.get(selection.get('provider'))
+    if replacement and selection.get('model') == replacement[0]:
+        settings['agent-default-model'] = selection = {'provider': selection['provider'], 'model': replacement[1]}
     provider = selection.get('provider')
     invalid_local = provider in LOCAL and selection.get('model') not in {m['id'] for m in providers.get(provider, {}).get('models', [])}
     if default_provider or not selection or invalid_local:

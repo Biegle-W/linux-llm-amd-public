@@ -58,8 +58,7 @@
           const option = document.createElement('option');
           option.value = model.id;
           option.textContent = ({'glm-5.3-flash-maya': 'GLM 5.3 Flash',
-            'deepseek-v4.1-flash-1017-maya': 'DeepSeek V4.1 Flash · XS + DSpark',
-            'deepseek-v4.1-flash-1017-maya-s': 'DeepSeek V4.1 Flash · S (higher quality)'})[model.id] || model.name;
+            'deepseek-v4.1-flash-1017-maya': 'DeepSeek V4.1 Flash · XS + DSpark'})[model.id] || model.name;
           option.title = model.name;
           select.append(option);
         }

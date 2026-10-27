@@ -3,14 +3,11 @@
 set -euo pipefail
 MAYA_SETUP_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 MAYA_MODELS_ROOT=${MAYA_MODELS_ROOT:?Set MAYA_MODELS_ROOT to the Maya folder on the shared NVMe}
-case "${1:-}" in glm|deepseek|deepseek-s) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/LLM-Models/Maya maya/install.sh {glm|deepseek|deepseek-s}' >&2; exit 2 ;; esac
+case "${1:-}" in glm|deepseek) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/LLM-Models/Maya maya/install.sh {glm|deepseek}; DeepSeek-S is retired.' >&2; exit 2 ;; esac
 cd "$MAYA_SETUP_ROOT"
-if [[ $family == deepseek-s ]]; then
-    exec python3 maya/verify-xs-pack.py --root "$MAYA_MODELS_ROOT" --profile s
-fi
-# The selected XS pack references the existing S Engram shards. Stock setup
-# would download another 161 GB under XS filenames and replace this metadata.
-if [[ $family == deepseek ]] && [[ $(python3 -c 'import json; print(json.load(open("dsh/maya-deepseek-profile.json"))["installer"]["ds4_quant"])') == maya-xs ]]; then
+# XS uses the retained S Engram shards5/6. Only verify this sealed pack: stock
+# DeepSeek setup would download retired S assets or duplicate shared Engram data.
+if [[ $family == deepseek ]]; then
     exec python3 maya/verify-xs-pack.py --root "$MAYA_MODELS_ROOT"
 fi
 readarray -t pins < <(python3 - <<'PY'
@@ -32,13 +29,9 @@ MAYA_SETUP_PYTHON=${MAYA_SETUP_PYTHON:-"$MAYA_SETUP_ROOT/llm-tools/python/cpytho
 [[ -x maya/upstream/.venv/bin/python ]] || "$MAYA_SETUP_PYTHON" -m venv maya/upstream/.venv
 maya/upstream/.venv/bin/python -m pip install -r maya/requirements-lock.txt
 common=(--backend hip --gpus 0,1 --context 8192 --models-dir "$MAYA_MODELS_ROOT" --vram-reserve-mib 8192 --port 30031 --host 127.0.0.1 --plain --yes --no-start --no-speed-calibration)
-if [[ $family == glm ]]; then
-    glm_quant=${MAYA_GLM_QUANT:-$(python3 -c 'import json; print(json.load(open("dsh/maya-glm-profile.json"))["installer"]["quant"])')}
-    case "$glm_quant" in Maya-S24|Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; validate it first.' >&2; exit 2 ;; esac
-    # gfx1100 fused IQ2_S down parity failed in the 1.1.24 candidate; retain MMQ.
-    selected=(--model "$glm_quant" --gguf-dir "$MAYA_MODELS_ROOT/$glm_quant" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192 --env MAYA_GLM_PREFILL_FUSED=0)
-else
-    selected=(--model DeepSeek-V4.1-Flash-1017 --ds4-quant maya-s --model-dir "$MAYA_MODELS_ROOT/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S" --env DS4_IQ_Q8K=0 --env DS4_STREAM=0)
-fi
+glm_quant=${MAYA_GLM_QUANT:-$(python3 -c 'import json; print(json.load(open("dsh/maya-glm-profile.json"))["installer"]["quant"])')}
+case "$glm_quant" in Maya-S24|Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; validate it first.' >&2; exit 2 ;; esac
+# gfx1100 fused IQ2_S down parity failed in the 1.1.24 candidate; retain MMQ.
+selected=(--model "$glm_quant" --gguf-dir "$MAYA_MODELS_ROOT/$glm_quant" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192 --env MAYA_GLM_PREFILL_FUSED=0)
 cd maya/upstream
 exec .venv/bin/python -B -u maya.py "${common[@]}" "${selected[@]}"

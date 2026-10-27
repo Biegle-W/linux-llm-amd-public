@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [DeepSeek-S removal and retained XS dependencies](deepseek-s-retirement-2026-10-26.json), [report](../DEEPSEEK-S-RETIREMENT-2026-10-26.md): 186.18 GB reclaimed, shared Engram retained; storage/CPU/API validation only, no inference.
+
 - [Default low-churn swap policy](low-churn-default-2026-10-26.json), [report](../LOW-CHURN-DEFAULT-2026-10-26.md): CPU-only policy/runtime verification, 241 regressions per checkout; bounded host swap I/O and owned-worker guards for all five engines. No fresh LLM inference, SSD endurance measurement, engine update or updater activation.
 
 - [Bolt SATA2-to-SATA1 relocation](bolt-storage-move-2026-10-26.json), [report](../BOLT-STORAGE-MOVE-2026-10-26.md): storage-only verification, 33 SHA-256-matched files / 43,645,320,930 bytes; original model removed, active paths updated, 16 CPU storage tests per checkout. Administrator unmount/fstab cleanup still pending; no new inference or NAS service.

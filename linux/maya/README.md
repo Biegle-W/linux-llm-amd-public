@@ -1,7 +1,14 @@
 # Project Maya on two RX 7900 XTX cards
 
-The isolated HIP build uses [Project Maya v1.1.24, commit `25deec5`](https://github.com/mw00/project-maya/tree/25deec505b525212e05faa58697d9d2b7d17fdb3).
-All three profiles are active at **32,768 tokens**. Current local validation is in
+**Current October26 selection:** GLM and DeepSeek-XS only. S-only assets and its
+unused drafter are removed; XS still requires S Engram shards5/6 at their original
+paths. `deepseek-s` installation is rejected. Source pins are retained in
+[runtime.json](runtime.json); no runtime update accompanies retirement. RAM-offloaded
+profiles remain held on the current14.83GiB system; no guard is relaxed.
+[Removal and verification](../hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
+The retained HIP build uses [Project Maya v1.1.26, commit `f26d8ba`](https://github.com/mw00/project-maya/tree/f26d8bab43f9b10f0475986b541dc46ada45285e).
+The retained GLM and DeepSeek-XS profiles are configured at **32,768 tokens**; DeepSeek-S was retired October26. Current local validation is in
 [the October23 update](../hardware/MAYA-UPDATE-2026-10-23.md). All profiles use both cards;
 this is experimental upstream AMD support. Existing llama.cpp, Strata,
 vLLM/SGLang environments and the saved DSH default are preserved.
@@ -19,7 +26,7 @@ Model files live beneath the **Maya directory on the new shared NVMe**:
 `/mnt/shared-nvme/LLM-Models/Maya`. The [pinned download manifest](models.json)
 records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) records the retained control files; it is not another active model.
 GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-XS**, three XS GGUF shards plus the shared original S Engram
-shards5/6, matching `dspark-xs2` drafter and existing vision assets. The full S quant is also selectable under its own ID; no extra weight copy was created.
+shards5/6, matching `dspark-xs2` drafter and existing vision assets. The full DeepSeek-S quant is retired; only its shared Engram shards5/6 remain.
 No original FP8 checkpoint, EXL3 copy or second full expert pack was downloaded.
 The engine reads experts from GGUF in place; the generated indexes/dense packs
 are additional required assets. DeepSeek's vision source is converted losslessly
@@ -34,13 +41,12 @@ export MAYA_MODELS_ROOT='/mnt/shared-nvme/LLM-Models/Maya'
 python3 maya/download-models.py --root "$MAYA_MODELS_ROOT"
 maya/install.sh glm
 maya/install.sh deepseek
-maya/install.sh deepseek-s
 ```
 
 The downloader resumes partials and checks full SHA-256 before publishing a file.
 Existing complete mismatches are preserved for review. The preparation scripts
 never start or calibrate inference, and never activate newly generated configs.
-GLM preparation uses `--no-start --no-speed-calibration`; Both DeepSeek quant installers only verify
+GLM preparation uses `--no-start --no-speed-calibration`; the DeepSeek-XS installer only verifies
 existing sealed metadata/dependencies to avoid duplicate Engram downloads. The
 calibration restriction matters because
 DeepSeek's installer can otherwise run calibration despite `--no-start`.
@@ -87,7 +93,7 @@ is never described as running true TP merely because `--tp 2` appears in the con
 The 14 documented GLM/kernel numerical checks passed independently on each GPU.
 DeepSeek's broader GGUF suite retains two failed bit-exact token/window tests
 for mixed Q4_K/IQ4_XS on each card, although numerical CPU-reference checks pass.
-Those formats are absent from this exact Maya-S target. No test assertion or
+Those formats are absent from the retained XS target. No test assertion or
 tolerance was weakened; passing this target does not validate other DeepSeek quants.
 Small functional/tool/retrieval checks are not a general model-quality evaluation.
 
@@ -128,9 +134,9 @@ hidden from the application menu; the Desktop launcher and `llm-maya` remain.
 
 The selected gfx1100 GLM profile explicitly sets `MAYA_GLM_PREFILL_FUSED=0`: the new default fused IQ2_S path failed parity on both cards. Keep MMQ and the profile fingerprint. The source19 rollback is private; no new quants/DSpark or other-engine changes accompany this update.
 
-## Both DeepSeek quants are selectable — October23
+## Both DeepSeek quants — October23 history (S retired October26)
 
-Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+The October23 deployment offered **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
 Maya1.1.24/ROCm7.2.3 with existing guards. The total active catalog is **11**.
@@ -145,7 +151,7 @@ All six S shards passed fresh full-file SHA256; no download/deletion was needed.
 
 ### Maya-S DSpark retest — October23
 
-**Current S selection: DSpark off.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
+**Historical S selection: DSpark off; S retired October26.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
 32K/24threads/both7900XTX, identical starting S routing seeds and unchanged guards.
 Against the arithmetic mean of the two no-draft arm medians, DSpark changes code **-3.37%**, prose **-5.14%** and native prefill **-6.82%**; geometric mean **-5.12%**. Speed gate **fails**.
 

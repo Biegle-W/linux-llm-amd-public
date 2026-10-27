@@ -26,6 +26,15 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
+**DeepSeek-S retired (October26):** S model IDs and profiles are removed from
+Maya/Strata. Eleven profiles remain: four llama.cpp, one SGLang, two vLLM,
+two Strata and two Maya. S-only shards1–4, its old drafter, S metadata and routing
+seeds were deleted; Shared NVMe gained186.18 GB. Keep S Engram shards5/6 in place:
+XS in both engines requires their161.28 GB payload. The matching xs2 drafter,
+vision and original XS metadata/seals remain. Existing RAM holds, low-churn
+policy, source pins and paused updater are unchanged; no inference was run.
+[Retirement and retained dependencies](../hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
 **October 25 repository split:** AMD repositories are now `linux-llm-amd` /
 `linux-llm-amd-public`, retaining their original history. Native NVIDIA Linux is
 separate (`linux-llm-nvidia` / `linux-llm-nvidia-public`); Windows remains separate.
@@ -36,7 +45,7 @@ canonical handoff is synchronized to the existing Shared location on the AMD hos
 
 Updated **October 26, 2026**. The benchmark-reference hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB; the live OS currently exposes **14.83 GiB RAM**.
-Thirteen enabled profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
+Eleven catalog profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
 **Nightly engine updates are paused**, not automatically resumed by qualification.
 The retained versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
@@ -190,9 +199,9 @@ by the original consolidation; the subsequent MoE offload update is documented b
 
 Maya25deec5/VERSION1.1.24 is promoted with exact tested SDK7.2.3 binaries; ten activeprofiles and Strata DSH default unchanged. At source promotion: bothGPU/32K/Maya-S models,GLM40GiB/MTP,DeepSeek24threads/noDSpark; subsequently XS production below,8GiB reserve/actual6GiB startup/52Gno-swap/continuous guards. GLM MAYA_GLM_PREFILL_FUSED=0 disables the newgfx1100 kernel that failed IQ2_S down parity. DeepSeek DS4_IQ_Q8K=0/DS4_STREAM=0 retained. Fresh3trial code/prose/PP/TTFT: GLM19.72/15.69/535.6/11.928s; DeepSeek6.42/6.78/299.0/21.062s. Both near31.5K/history/tools/JSON/SSE and normalDesktop/Ptyxis/originalbrowserselector/authenticatedgateway/switchback pass. Source19 rollback retained. [Report and temperatures](../hardware/MAYA-UPDATE-2026-10-23.md). These source-update S measurements are historical; the XS production section below defines current DeepSeek selection.
 
-## Both DeepSeek quants are selectable — October23
+## Both DeepSeek quants — October23 history (S retired October26)
 
-Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+The October23 deployment offered **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
 Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.
@@ -207,7 +216,7 @@ All six S shards passed fresh full-file SHA256; no download/deletion was needed.
 
 ### Maya-S DSpark retest — October23
 
-**Current S selection: DSpark off.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
+**Historical S selection: DSpark off; S retired October26.** Fresh Maya1.1.24/ROCm7.2.3 comparison uses
 32K/24threads/both7900XTX, identical starting S routing seeds and unchanged guards.
 Against the arithmetic mean of the two no-draft arm medians, DSpark changes code **-3.37%**, prose **-5.14%** and native prefill **-6.82%**; geometric mean **-5.12%**. Speed gate **fails**.
 
@@ -265,7 +274,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Thirteen profiles:** four llama.cpp, one SGLang, two vLLM, three Strata, three Maya. Presence in
+- **Eleven profiles:** four llama.cpp, one SGLang, two vLLM, two Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -416,7 +425,7 @@ cause. Latest LLM rates are in the [current profile overview](../hardware/CURREN
 Earlier10.0 trials remain [historical](../hardware/ROCM10-OTHER-ENGINES-2026-10-20.md).
 Forum claims remain separate from local measurements; [source trail](../hardware/FORUM-OPTIMIZATION-SOURCES.md).
 
-## Project Maya: GLM-S, DeepSeek-XS and DeepSeek-S selectable
+## Project Maya: GLM-S and DeepSeek-XS selectable
 
 Maya HIP v1.1.24 / `25deec505b525212e05faa58697d9d2b7d17fdb3` is a separate
 Strata fork with its own source, Python 3.12.14 environment and pinned llama.cpp
@@ -428,7 +437,6 @@ versions and the saved DSH default are preserved.
 |---|---:|---|
 | `glm-5.3-flash-maya` | 32,768 | Maya-S, MTP, bounded 40 GiB whole-machine RAM expert tier, GPU cache, NVMe cold reads |
 | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S + matching dspark-xs2, shared Q6_K Engram, CPU-mapped experts + GPU hot cache, 24 threads |
-| `deepseek-v4.1-flash-1017-maya-s` | 32,768 | Retained Maya-S mixed IQ2/3, no DSpark, shared Q6_K Engram, 24 CPU threads + GPU hot cache |
 
 Both use **both 7900XTX cards through layer groups**, not true TP2. DeepSeek's
 requested TP2 automatically becomes width 1 because its 256-value blocks do not
@@ -545,7 +553,7 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **13 enabled profiles**: four llama.cpp, one SGLang, two vLLM, three Strata and three Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **11 enabled profiles**: four llama.cpp, one SGLang, two vLLM, two Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -563,11 +571,9 @@ not guarantees of full-window speed or general long-context accuracy.
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |
 | Strata / HIP dual-card layer split | `qwen3.8-flash-next-iq3_xxs` | 262,144 | IQ3_XXS, bounded CPU expert backing + GPU cache | MTP (`--spec 3`) |
-| Strata DeepSeek / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-strata-s` | 32,768 | Reused Maya-S mixed IQ2/3 | Off |
 | Strata DeepSeek / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-strata-xs` | 32,768 | Reused Maya-XS IQ1_S | Matching xs2 |
 | Maya / HIP dual-card layer groups | `glm-5.3-flash-maya` | 32,768 | Maya-S v2, mixed IQ2/3 experts / Q6_K attention/shared | MTP |
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S / Q6_K Engram | Matching dspark-xs2 |
-| Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya-s` | 32,768 | Maya-S, mixed IQ2/3 / Q6_K Engram | Off |
 
 All active llama.cpp profiles use both cards and HIP, Q8_0 K/V and flash attention.
 Empero, Sage and Ornith override batch/ubatch to4096/4096; Super uses2048/1024.

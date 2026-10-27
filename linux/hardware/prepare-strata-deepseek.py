@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare separate Strata DeepSeek metadata from existing Maya S/XS weights.
+"""Prepare separate Strata DeepSeek metadata from existing Maya-XS and shared Engram weights.
 
 Requires the pinned Strata source and existing verified Maya weights; never downloads
 or copies weights, and never overwrites a pack. Run before any GPU timing work.
@@ -30,19 +30,16 @@ spec = importlib.util.spec_from_file_location('packer', SRC/'tools/dsv41/pack_gg
 pk = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(pk)
 records = []
-for quant in ('Maya-S', 'Maya-XS'):
+for quant in ('Maya-XS',):
     model = MODELS/quant
     pack = DEST/quant/'pack'
     assert not pack.exists(), 'Never overwrite an existing prepared pack'
     originals = {str(model/'maya-ds4'/name):sha(model/'maya-ds4'/name)
                  for name in ('ds4.txt','tensors.txt','engram.bin')}
     shards = sorted(model.glob('*.gguf'))
-    if quant == 'Maya-XS':
-        assert len(shards) == 3
-        shards += [next((MODELS/'Maya-S').glob(f'*-{n:05d}-of-*.gguf')) for n in (5,6)]
-    else:
-        assert len(shards) == 6
-    drafter = MODELS/'dspark'/('dspark-xs2.json' if quant == 'Maya-XS' else 'dspark.json')
+    assert len(shards) == 3
+    shards += [next((MODELS/'Maya-S').glob(f'*-{n:05d}-of-*.gguf')) for n in (5,6)]
+    drafter = MODELS/'dspark/dspark-xs2.json'
     assert drafter.is_file() and drafter.with_suffix('.bin').is_file()
     command = [sys.executable,str(SRC/'tools/dsv41/pack_gguf.py'),
                '--model',str(model),'--out',str(pack),'--drafter',str(drafter),

@@ -1,5 +1,15 @@
 # LLM benchmark and context history
 
+## DeepSeek-S retired — October26
+
+At the user's request, S is removed from Maya and Strata; **11 profiles** remain.
+XS keeps the shared S Engram shards5/6, matching xs2 drafter and original pack
+metadata. S-only shards1–4, old drafter, metadata and routing seeds were removed,
+reclaiming **186.18 GB** on Shared NVMe. Config/pack seals and both XS dependency
+maps are unchanged. This is storage/CPU/API verification only; no new inference
+or speed measurement, and the reduced-RAM holds and paused updater remain.
+[Removal, retained dependencies and limits](DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
 ## Reduced-RAM GPU-resident qualification — October26 (loading only)
 
 At 14.83 GiB OS-visible RAM, normal-launcher Qwen/vLLM, Bolt/vLLM and

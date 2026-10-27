@@ -1,5 +1,15 @@
 # Current dual-AMD benchmarks — October 25, 2026
 
+## DeepSeek-S retired — October26
+
+At the user's request, S is removed from Maya and Strata; **11 profiles** remain.
+XS keeps the shared S Engram shards5/6, matching xs2 drafter and original pack
+metadata. S-only shards1–4, old drafter, metadata and routing seeds were removed,
+reclaiming **186.18 GB** on Shared NVMe. Config/pack seals and both XS dependency
+maps are unchanged. This is storage/CPU/API verification only; no new inference
+or speed measurement, and the reduced-RAM holds and paused updater remain.
+[Removal, retained dependencies and limits](DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
 ## Fresh engine tests — October25
 
 Fresh normal-launcher gates promoted llama.cpp `2280f0fd` on all four profiles.
@@ -40,7 +50,7 @@ and [all trials](results/strata-tuning-2026-10-24.json).
 
 ## Strata 0.2.4 DeepSeek — October 24
 
-Strata now reuses the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the current Qwen engine is8183c6b6 (October24 daily promotion). No weight download/duplication, no new ports.
+The October24 integration reused the existing Maya-S and Maya-XS weights with independent metadata, both GPUs and 32K. **13 active profiles**; all Maya choices and the Strata Q3 DSH default remain. Separate gfx1100 / HIP 7.2.3 DeepSeek engine 0.1.49.1 at 8183c6b6; the current Qwen engine is8183c6b6 (October24 daily promotion). No weight download/duplication, no new ports.
 
 | Model ID | RAM-store GB | Code / prose t/s | Native PP t/s | TTFT s |
 |---|---:|---:|---:|---:|
@@ -85,7 +95,7 @@ other ten recorded zero. [Report, thermals and fan setup](ALL-MODELS-2026-10-23.
 
 ## Both DeepSeek quants are selectable — October23
 
-Maya now offers **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
+The October23 deployment offered **three profiles**: GLM-S v2, **DeepSeek Maya-XS + matching DSpark**
 (`deepseek-v4.1-flash-1017-maya`, existing ID), and the larger **DeepSeek Maya-S**
 (`deepseek-v4.1-flash-1017-maya-s`, new ID, no DSpark). All are32K, both7900XTX,
 Maya1.1.26 / f26d8ba / ROCm7.2.3 with existing guards. The total active catalog is **13**.

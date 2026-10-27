@@ -26,6 +26,21 @@ class ConfigureLocalTests(unittest.TestCase):
         self.settings = {'llm-pi-ai': {'providers': {'external-test': self.provider}},
                          'agent-default-model': self.selection}
 
+    def test_retired_deepseek_selection_moves_to_xs_in_same_provider(self):
+        source = Path(__file__).resolve().parents[1]
+        shutil.copy2(source / 'maya-profiles.json', self.root / 'maya-profiles.json')
+        path = self.home / 'settings.yaml'
+        for provider, retired, retained in [('maya-local', 'deepseek-v4.1-flash-1017-maya-s', 'deepseek-v4.1-flash-1017-maya'),
+                                            ('strata-local', 'deepseek-v4.1-flash-1017-strata-s', 'deepseek-v4.1-flash-1017-strata-xs')]:
+            with self.subTest(provider=provider):
+                settings = dict(self.settings, **{'agent-default-model': {'provider': provider, 'model': retired}})
+                path.write_text(yaml.safe_dump(settings)); self.module.configure()
+                actual = yaml.safe_load(path.read_text())
+                self.assertEqual(actual['agent-default-model'], {'provider': provider, 'model': retained})
+                ids = {m['id'] for m in actual['llm-pi-ai']['providers'][provider]['models']}
+                self.assertIn(retained, ids); self.assertNotIn(retired, ids)
+                self.assertEqual(actual['llm-pi-ai']['providers']['external-test'], self.provider)
+
     def test_legacy_preserves_selection_and_unrelated_settings(self):
         path = self.home / 'settings.yaml'
         self.settings['ui-onboarding'] = {'welcomeNoticeVersion': 7}

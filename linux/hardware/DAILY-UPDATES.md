@@ -1,5 +1,15 @@
 # Daily engine updates
 
+## DeepSeek-S retired — October26
+
+At the user's request, S is removed from Maya and Strata; **11 profiles** remain.
+XS keeps the shared S Engram shards5/6, matching xs2 drafter and original pack
+metadata. S-only shards1–4, old drafter, metadata and routing seeds were removed,
+reclaiming **186.18 GB** on Shared NVMe. Config/pack seals and both XS dependency
+maps are unchanged. This is storage/CPU/API verification only; no new inference
+or speed measurement, and the reduced-RAM holds and paused updater remain.
+[Removal, retained dependencies and limits](DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
 **Current status — October 26:** the timer is disabled; no nightly engine update
 is running. Guarded reduced-RAM qualification is authorized only for the two
 vLLM profiles and SGLang Qwen DFlash2. It is not update activation. All three

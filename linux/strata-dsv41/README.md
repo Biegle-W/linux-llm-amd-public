@@ -1,5 +1,9 @@
 # Strata DeepSeek component
 
+S-only weights, old drafter and S pack are removed. Shared S Engram shards5/6
+remain required by XS in both engines. The XS pack and configuration are unchanged.
+[Retirement proof and current RAM hold](../hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
 The DeepSeek engine is isolated from the retained Strata Qwen installation.
 Source, build products and local preparation records are ignored by Git. The
 runtime pin and guarded model profiles describe the validated configuration;
@@ -20,16 +24,15 @@ Numerical tolerances and engine source remain unchanged. Unselected mixed
 Q2_K/Q3_K and Q4_K/IQ4_XS expert formats are not admitted by this setup.
 
 With the pinned source and existing verified Maya assets available,
-`hardware/prepare-strata-deepseek.py` creates separate Strata packs on the
+`hardware/prepare-strata-deepseek.py` creates the separate XS Strata pack on the
 mounted shared NVMe. It never downloads, copies or requantizes model weights,
 never overwrites an existing pack, checks tensor bounds and preserves Maya
 metadata. XS references the existing S Engram shards 5/6; both engines depend
 on those files. Strata keeps independent expert-routing seeds.
 
-The two model IDs are `deepseek-v4.1-flash-1017-strata-s` and
-`deepseek-v4.1-flash-1017-strata-xs`. Both use 32K, 24 CPU threads, both GPUs,
-CPU expert access and GPU hot caching. S has no drafter; XS uses the matching
-xs2 drafter. Prompt skipping, expert omission and persistent slots are disabled.
+The retained model ID is `deepseek-v4.1-flash-1017-strata-xs`; S was retired
+October26. XS uses 32K, 24 CPU threads, both GPUs, CPU expert access, GPU hot
+caching and the matching xs2 drafter. Prompt skipping, expert omission and persistent slots are disabled.
 The engine's nominal TP2 falls back to layer groups for this model's dimensions;
 both cards participate, but this is not true tensor parallelism.
 
