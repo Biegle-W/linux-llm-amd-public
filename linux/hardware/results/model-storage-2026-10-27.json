@@ -1,5 +1,5 @@
 {
-  "measured_at": "2026-10-27T01:56:24.412783-04:00",
+  "measured_at": "2026-10-27T02:18:12.701060-04:00",
   "method": "Read-only file metadata scan; allocated bytes = st_blocks * 512; files counted once by device/inode; no symlinks or duplicate inodes found. Directory entries excluded; no weights read or inference started.",
   "scope": "Installed model files under configured system/SATA/shared-NVMe roots, including associated packs, drafts, backups and rollback artifacts; excludes engine binaries, environments, unrelated filesystem contents and runtime-local routing profiles.",
   "categories": {
@@ -71,7 +71,13 @@
       ],
       "logical_bytes": 19627788438,
       "allocated_bytes": 19628294144,
-      "note": ""
+      "note": "",
+      "experimental_vram_only_candidate": {
+        "status": "passed isolated text probes on both GPUs",
+        "context": 262144,
+        "production_profile_changed": false,
+        "evidence": "hardware/results/storage-vram-2026-10-27.json"
+      }
     },
     {
       "name": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
@@ -90,7 +96,7 @@
       ],
       "logical_bytes": 59764210568,
       "allocated_bytes": 59764506624,
-      "note": "An additional SATA backup is listed separately."
+      "note": "Serving copy retained; the SATA backup was removed at user request October27."
     },
     {
       "name": "Sage-A1.5 Q4_K_M",
@@ -109,7 +115,13 @@
       ],
       "logical_bytes": 22612746400,
       "allocated_bytes": 22613065728,
-      "note": ""
+      "note": "",
+      "experimental_vram_only_candidate": {
+        "status": "passed isolated text probes on both GPUs",
+        "context": 65536,
+        "production_profile_changed": false,
+        "evidence": "hardware/results/storage-vram-2026-10-27.json"
+      }
     },
     {
       "name": "Ornith-1.5-122B Q4_K_M",
@@ -132,7 +144,7 @@
     },
     {
       "name": "Qwen3.8-Flash-Next IQ3_XXS (Strata)",
-      "category": "cpu_ram_moe",
+      "category": "ssd_stream",
       "profile_ids": [
         "qwen3.8-flash-next-iq3_xxs"
       ],
@@ -161,7 +173,7 @@
       ],
       "logical_bytes": 128136406123,
       "allocated_bytes": 128140574720,
-      "note": "Classification follows --resident-cpu-experts with the 13.5 GiB bounded RAM expert pool. PLE remains SSD-backed and uncovered experts/lent regions may use mapped fallback. Disk total includes original GGUFs, generated pack and retained MTP conversion artifacts; no cleanup is implied."
+      "note": "SSD-backed cold/PLE path with a bounded 13.5GiB RAM expert tier and GPU cache. --resident-cpu-experts does not make the full active profile RAM-only. Retained originals, generated pack and MTP preparation/runtime artifacts are included in disk use."
     },
     {
       "name": "GLM-5.3-Flash Maya-S v2",
@@ -180,7 +192,7 @@
       ],
       "logical_bytes": 97420232541,
       "allocated_bytes": 97421361152,
-      "note": "SSD cold tier with a bounded RAM expert tier and GPU cache. Maya-S24 rollback is listed separately."
+      "note": "Active Maya-S v2 files retained; old S24 rollback was removed at user request October27. SSD cold tier plus bounded RAM/GPU caches."
     },
     {
       "name": "DeepSeek V4.1 Flash 1017 Maya-XS + xs2",
@@ -212,6 +224,34 @@
   ],
   "additional_stored_assets": [
     {
+      "kind": "download_only",
+      "model": "Flint-40B-A2.5B UD-Q4_K_XL",
+      "category": "vram_only",
+      "label": "Downloaded model with no enabled profile",
+      "path": "/mnt/shared-sata1/GGUF-Models/Flint-40B-A2.5B",
+      "file_count": 10,
+      "logical_bytes": 25054701439,
+      "allocated_bytes": 25056772096,
+      "isolated_trial_status": "passed dual-GPU VRAM-only32K text probes; not an enabled production profile"
+    }
+  ],
+  "category_allocated_bytes": {
+    "vram_only": 64987553792,
+    "cpu_ram_moe": 178762416128,
+    "ssd_stream": 507430305792
+  },
+  "active_model_assets_allocated_bytes": 751180275712,
+  "additional_assets_allocated_bytes": 25056772096,
+  "other_huggingface_module_cache_allocated_bytes": 176128,
+  "all_scanned_allocated_bytes": 776237223936,
+  "all_scanned_logical_bytes": 776219497528,
+  "profile_count": 11,
+  "unique_active_model_count": 9,
+  "runtime_changed": false,
+  "previous_measurement_at": "2026-10-27T01:56:24.412783-04:00",
+  "classification_correction": "Strata Qwen IQ3_XXS belongs to SSD stream: bounded RAM/GPU tiers and an active SSD-backed cold/PLE path.",
+  "removed_additional_stored_assets": [
+    {
       "kind": "backup",
       "model": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
       "category": "cpu_ram_moe",
@@ -230,29 +270,6 @@
       "file_count": 20,
       "logical_bytes": 96700893377,
       "allocated_bytes": 96702431232
-    },
-    {
-      "kind": "download_only",
-      "model": "Flint-40B-A2.5B UD-Q4_K_XL",
-      "category": null,
-      "label": "Downloaded model with no enabled profile",
-      "path": "/mnt/shared-sata1/GGUF-Models/Flint-40B-A2.5B",
-      "file_count": 10,
-      "logical_bytes": 25054701439,
-      "allocated_bytes": 25056772096
     }
-  ],
-  "category_allocated_bytes": {
-    "vram_only": 64987553792,
-    "cpu_ram_moe": 306902990848,
-    "ssd_stream": 379289731072
-  },
-  "active_model_assets_allocated_bytes": 751180275712,
-  "additional_assets_allocated_bytes": 181524365312,
-  "other_huggingface_module_cache_allocated_bytes": 176128,
-  "all_scanned_allocated_bytes": 932704817152,
-  "all_scanned_logical_bytes": 932684603713,
-  "profile_count": 11,
-  "unique_active_model_count": 9,
-  "runtime_changed": false
+  ]
 }

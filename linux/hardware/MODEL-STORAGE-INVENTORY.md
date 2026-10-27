@@ -4,13 +4,14 @@ Standing user preference: group all future model inventories and comparisons int
 **VRAM only models**, **CPU RAM MoE models**, and **SSD stream models**. Classify the
 selected loading profile rather than the model architecture or file location.
 Moving a GGUF to NVMe alone does not make a profile an SSD stream profile.
+A profile with an active SSD cold/PLE path belongs to SSD stream even when it
+also keeps a bounded RAM expert tier and a GPU cache; Strata Qwen is in that group.
 
 - **VRAM only models:** serving weights stay in GPU memory; ordinary host RAM is
   still needed for loading, tokenization and the engine. This is a placement
   description, not proof that the current reduced-RAM host can load them safely.
 - **CPU RAM MoE models:** offloaded experts use CPU RAM alongside GPU-resident
-  weights/cache. Strata Qwen has a bounded resident expert pool; its PLE remains
-  SSD-backed and mapped fallback remains possible.
+  weights/cache; the retained llama.cpp CPU-offload profiles are in this group.
 - **SSD stream models:** the large file-backed cold tier remains on SSD with
   bounded RAM/GPU tiers. These labels do not enable an engine flag or alter
   validated settings, admission rules, swap policy or maintenance holds.
@@ -39,7 +40,7 @@ Directory-entry overhead and engine binaries/environments are excluded.
 
 Category total: **64.99 GB**, counting shared assets once.
 
-## CPU RAM MoE models
+## CPU RAM MoE models — current production profiles
 
 | Model / engine | Disk GB | Location relative to the roots above |
 |---|---:|---|
@@ -47,18 +48,23 @@ Category total: **64.99 GB**, counting shared assets once.
 | Nemotron 3.5 Super 120B UD-IQ3_XXS / llama.cpp | 59.76 | NVMe `Nemotron-Super` |
 | Sage-A1.5 Q4_K_M / llama.cpp | 22.61 | SATA `GGUF-Models/Sage-A1.5-GGUF` |
 | Ornith-1.5-122B Q4_K_M / llama.cpp | 76.76 | SATA `GGUF-Models/Ornith-1.5-122B-GGUF` |
-| Qwen3.8-Flash-Next IQ3_XXS (Strata) / Strata | 128.14 | NVMe `Strata/models`; NVMe `Strata/packs`; NVMe `Strata/mtp` |
 
-Category total: **306.90 GB**, counting shared assets once.
+Category total: **178.76 GB**, counting shared assets once.
+
+Empero and Sage also passed separately tested **VRAM-only candidates on both
+GPUs** (256K/MTP3/512-token prompt batch and64K/MTP3/4096-token prompt batch,
+respectively). Their production CPU-offload profiles are unchanged; the category
+here follows the active configuration. See the [trial report](STORAGE-VRAM-2026-10-27.md).
 
 ## SSD stream models
 
 | Model / engine | Disk GB | Location relative to the roots above |
 |---|---:|---|
+| Qwen3.8-Flash-Next IQ3_XXS (Strata) / Strata | 128.14 | NVMe `Strata/models`; NVMe `Strata/packs`; NVMe `Strata/mtp` |
 | GLM-5.3-Flash Maya-S v2 / Maya | 97.42 | NVMe `Maya/Maya-S-v2-IQ2_XXS` |
 | DeepSeek V4.1 Flash 1017 Maya-XS + xs2 / Maya + Strata | 281.87 | NVMe `Maya/DeepSeek-V4.1-Flash-1017-GGUF`; NVMe `Strata/DeepSeek-V4.1-Flash-1017` |
 
-Category total: **379.29 GB**, counting shared assets once.
+Category total: **507.43 GB**, counting shared assets once.
 
 Qwen27B is **20.05 GB** of shared base weights/configuration plus **1.28 GB**
 of DFlash2 draft assets used by SGLang; vLLM uses the same base. DeepSeek's
@@ -72,23 +78,22 @@ not a claim that every file is read by the selected native path.
 
 | Asset | Disk GB | Location | Status |
 |---|---:|---|---|
-| Nemotron 3.5 Super 120B UD-IQ3_XXS | 59.77 | SATA `GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF` | SATA backup |
-| GLM-5.3-Flash Maya-S24 | 96.70 | NVMe `Maya/Maya-S24` | Older GLM rollback including saved pack slots |
-| Flint-40B-A2.5B UD-Q4_K_XL | 25.06 | SATA `GGUF-Models/Flint-40B-A2.5B` | Downloaded model with no enabled profile |
+| Flint-40B-A2.5B UD-Q4_K_XL | 25.06 | SATA `GGUF-Models/Flint-40B-A2.5B` | Passed isolated dual-GPU VRAM-only32K text probes; not an enabled production profile |
 
-Flint has downloaded files but no enabled serving profile or validated loading
-category. Its category must be established when a profile is configured; its
-presence does not add a fourth execution category. No extra asset was deleted.
-The Super serving copy plus backup uses **119.53 GB**;
-GLM v2 plus the S24 rollback uses **194.12 GB**.
+The **59.77 GB Super SATA backup** and **96.70 GB old GLM Maya-S24 rollback**
+were deleted at the user's request October27. The **59.76 GB Super serving copy**
+on NVMe and **97.42 GB active GLM v2** remain. Shared DeepSeek Engram/XS files
+are unchanged. Historical checksums remain; the S24 manifest cannot reinstall
+retired assets. [Cleanup and VRAM trials](STORAGE-VRAM-2026-10-27.md).
 
 Active-model associated files: **751.18 GB**.
-Additional backup/rollback/download-only files: **181.52 GB**.
-A further **176,128 bytes** belongs to the small Hugging Face
-module cache. All scanned model roots together: **932.70 GB**
-(**868.65 GiB**) of allocated file storage.
+Additional download-only files: **25.06 GB**.
+A further **176,128 bytes** belongs to the small Hugging Face module cache.
+All scanned model roots together: **776.24 GB**
+(**722.93 GiB**) of allocated file storage.
 
-This read-only inventory starts no model and changes no runtime configuration.
+The storage inventory itself changes no runtime configuration. The separately
+requested Empero/Sage/Flint VRAM trials are recorded in the linked report.
 The live host remains at approximately14.83GiB RAM; RAM-offloaded profiles remain
 held, the three GPU-resident qualification trials have not qualified, and nightly
 updates remain paused. Historical 64GB benchmark evidence is unchanged.

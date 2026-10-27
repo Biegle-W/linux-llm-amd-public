@@ -1,5 +1,18 @@
 # Current dual-AMD benchmarks — October 25, 2026
 
+## Backup cleanup and all-VRAM candidates — October27
+
+Super's SATA backup and the old GLM S24 rollback are removed (156.47GB reclaimed);
+active model dependencies remain. Strata Qwen Q3 is **SSD stream**, with bounded
+RAM/GPU tiers. Isolated dual-GPU all-VRAM text probes pass for Empero256K/MTP3
+(batch512), Sage64K/MTP3/projector (batch4096) and Flint32K/reasoning-budget0.
+Three-trial median code/prose/nativePP: Empero131.41/80.42/3397.2; Sage91.26/74.31/4619.7;
+Flint46.86/46.90/6027.1t/s. All selected runs have zero worker swap/spill and valid
+continuous-inference windows. These are candidate experiments, not a fresh CPU
+A/B, normal-launcher qualification or production placement change. Earlier failed
+attempts and thermal evidence remain. [Report](STORAGE-VRAM-2026-10-27.md) and
+[numeric record](results/storage-vram-2026-10-27.json).
+
 ## DeepSeek-S retired — October26
 
 At the user's request, S is removed from Maya and Strata; **11 profiles** remain.

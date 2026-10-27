@@ -10,6 +10,8 @@ cd "$MAYA_SETUP_ROOT"
 if [[ $family == deepseek ]]; then
     exec python3 maya/verify-xs-pack.py --root "$MAYA_MODELS_ROOT"
 fi
+glm_quant=${MAYA_GLM_QUANT:-$(python3 -c 'import json; print(json.load(open("dsh/maya-glm-profile.json"))["installer"]["quant"])')}
+case "$glm_quant" in Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; Maya-S24 rollback is retired.' >&2; exit 2 ;; esac
 readarray -t pins < <(python3 - <<'PY'
 import json
 p=json.load(open('maya/runtime.json'));print(p['source_commit']);print(p['rocwmma_commit'])
@@ -29,8 +31,6 @@ MAYA_SETUP_PYTHON=${MAYA_SETUP_PYTHON:-"$MAYA_SETUP_ROOT/llm-tools/python/cpytho
 [[ -x maya/upstream/.venv/bin/python ]] || "$MAYA_SETUP_PYTHON" -m venv maya/upstream/.venv
 maya/upstream/.venv/bin/python -m pip install -r maya/requirements-lock.txt
 common=(--backend hip --gpus 0,1 --context 8192 --models-dir "$MAYA_MODELS_ROOT" --vram-reserve-mib 8192 --port 30031 --host 127.0.0.1 --plain --yes --no-start --no-speed-calibration)
-glm_quant=${MAYA_GLM_QUANT:-$(python3 -c 'import json; print(json.load(open("dsh/maya-glm-profile.json"))["installer"]["quant"])')}
-case "$glm_quant" in Maya-S24|Maya-S-v2-IQ2_XXS) ;; *) echo 'Unsupported GLM quant; validate it first.' >&2; exit 2 ;; esac
 # gfx1100 fused IQ2_S down parity failed in the 1.1.24 candidate; retain MMQ.
 selected=(--model "$glm_quant" --gguf-dir "$MAYA_MODELS_ROOT/$glm_quant" --draft mtp --no-vision --env MAYA_GLM_RAM_GB=40 --env MAYA_GLM_RAM_HEADROOM_GB=12 --env MAYA_GLM_RESERVE_MB=8192 --env MAYA_GLM_RESERVE_LATER_MB=8192 --env MAYA_GLM_PREFILL_FUSED=0)
 cd maya/upstream

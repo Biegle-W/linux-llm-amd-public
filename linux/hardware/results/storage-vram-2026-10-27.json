@@ -1,0 +1,1497 @@
+{
+  "updated": "2026-10-27T02:31:02.457611-04:00",
+  "scope": "User-authorized two-backup retirement, Strata Qwen category correction and isolated Empero/Sage/Flint VRAM-only experiments",
+  "hardware": {
+    "os_visible_ram_bytes": 15924535296,
+    "gpu": "2 x RX 7900 XTX 24GB",
+    "source_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
+    "sdk": "ROCm 7.2.3"
+  },
+  "cleanup": {
+    "deleted_files": 25,
+    "deleted_logical_bytes": 156465106185,
+    "deleted_allocated_bytes": 156467593216,
+    "protected_files_unchanged": 204,
+    "full_weight_hash_rerun": false,
+    "drives": [
+      {
+        "asset": "Super IQ3 SATA backup",
+        "drive": "Shared SATA SSD",
+        "deleted_files": 5,
+        "deleted_logical_bytes": 59764212808,
+        "deleted_allocated_bytes": 59765161984,
+        "free_bytes_before": 621095682048,
+        "free_bytes_after": 680861630464,
+        "observed_free_gain_bytes": 59765948416
+      },
+      {
+        "asset": "GLM Maya-S24 rollback",
+        "drive": "Shared NVMe",
+        "deleted_files": 20,
+        "deleted_logical_bytes": 96700893377,
+        "deleted_allocated_bytes": 96702431232,
+        "free_bytes_before": 335939895296,
+        "free_bytes_after": 432642850816,
+        "observed_free_gain_bytes": 96702955520
+      }
+    ],
+    "observed_total_free_gain_bytes": 156468903936
+  },
+  "classification_correction": "Qwen3.8-Flash-Next IQ3 / Strata is SSD stream: active SSD cold/PLE path with bounded RAM and GPU caches.",
+  "trials": [
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "tag": "empero-dual-all-vram-dio",
+      "status": "preflight_refused",
+      "context": 262144,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": false,
+      "attempt_id": "empero-dual-all-vram-dio-port-preflight",
+      "error": "OSError: [Errno 98] Address already in use",
+      "available_before_bytes": 11042136064
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "tag": "empero-dual-all-vram-dio-ub512",
+      "status": "completed_isolated_probes",
+      "context": 262144,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": true,
+      "attempt_id": "empero-dual-all-vram-dio-ub512",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 11044282368,
+      "minimum_available_bytes": 9746587648,
+      "minimum_free_vram_bytes": [
+        12878606336,
+        11421175808
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 208,
+        "sampling_errors": 0,
+        "enforcement_attempts": 0,
+        "enforcement_errors": 0,
+        "enforcement_state": "not_attempted",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 209,
+          "sampling_errors": 0,
+          "elapsed_seconds": 106.58964691200026,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 4444160,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 61,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 59287.117079546595,
+          "min_available_bytes": 9764642816,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        }
+      },
+      "memory_failures": [],
+      "functional": {
+        "arithmetic_323": true,
+        "json_137": true
+      },
+      "confirmed_context": 262144,
+      "continuous_request_loop_seconds": 37.509748740000305,
+      "batch_size": 512,
+      "ubatch_size": 512,
+      "mtp_steps": 3,
+      "vision_projector_loaded": false,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 42,
+          "total": 42
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 9286.54
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 9421.49
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 1360.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 1360.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 820.29
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 823.82
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 264.29
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 272.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 4.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 816.28
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 260.28
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 4.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 816.28
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 260.28
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 820.29
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 823.82
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 264.29
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 108,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 64.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 108,
+            "sensor_samples": {
+              "mem": 108,
+              "edge": 108,
+              "junction": 108
+            },
+            "peak_temperature_c": {
+              "mem": 44.0,
+              "edge": 37.0,
+              "junction": 48.0
+            },
+            "thermal_limit_samples": 61,
+            "hotspot_limit_samples": 61
+          },
+          {
+            "gpu_index": 1,
+            "samples": 108,
+            "sensor_samples": {
+              "mem": 108,
+              "edge": 108,
+              "junction": 108
+            },
+            "peak_temperature_c": {
+              "mem": 55.0,
+              "edge": 32.0,
+              "junction": 47.0
+            },
+            "thermal_limit_samples": 83,
+            "hotspot_limit_samples": 83
+          }
+        ]
+      },
+      "timing": {
+        "code": {
+          "trials": 3,
+          "median_decode_tps_sse": 131.40507783789496,
+          "median_native_prefill_tps": 572.4098454493418,
+          "median_ttft_seconds": 0.052477837999958865,
+          "actual_prompt_tokens": [
+            29,
+            29,
+            29
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prose": {
+          "trials": 3,
+          "median_decode_tps_sse": 80.41725961584255,
+          "median_native_prefill_tps": 505.0709119560387,
+          "median_ttft_seconds": 0.0508460380001452,
+          "actual_prompt_tokens": [
+            25,
+            25,
+            25
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prefill": {
+          "trials": 3,
+          "median_decode_tps_sse": 115.902796408745,
+          "median_native_prefill_tps": 3397.211313851338,
+          "median_ttft_seconds": 2.4131418319998374,
+          "actual_prompt_tokens": [
+            8190,
+            8182,
+            8184
+          ],
+          "output_tokens": [
+            22,
+            22,
+            22
+          ],
+          "all_markers_passed": true
+        }
+      }
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "tag": "empero-dual-all-vram-dio",
+      "status": "guard_stopped",
+      "context": 262144,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [
+        "memory_full_psi"
+      ],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": false,
+      "attempt_id": "empero-dual-all-vram-dio",
+      "error": "AssertionError: ['memory_full_psi']",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 10937901056,
+      "minimum_available_bytes": 7156953088,
+      "minimum_free_vram_bytes": [
+        10873438208,
+        7381630976
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 99,
+        "sampling_errors": 0,
+        "enforcement_attempts": 1,
+        "enforcement_errors": 0,
+        "enforcement_state": "notified",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 100,
+          "sampling_errors": 0,
+          "elapsed_seconds": 50.689080928000294,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 13254656,
+          "total_swapout_bytes": 44961792,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 7151910912,
+          "max_memory_full_psi_avg10": 14.24,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 3,
+          "failures": [
+            "memory_full_psi"
+          ]
+        }
+      },
+      "memory_failures": [
+        "swap_activity_memory_full_psi",
+        "swap_activity_no_inference_window"
+      ],
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 3,
+      "vision_projector_loaded": false,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 42,
+          "total": 42
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 9286.54
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 9421.49
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 1360.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 1360.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 2976.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 3004.67
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 2112.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 272.0
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 53,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 52.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 27.0,
+              "junction": 33.0
+            },
+            "thermal_limit_samples": 23,
+            "hotspot_limit_samples": 23
+          },
+          {
+            "gpu_index": 1,
+            "samples": 53,
+            "sensor_samples": {
+              "mem": 53,
+              "edge": 53,
+              "junction": 53
+            },
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 23.0,
+              "junction": 34.0
+            },
+            "thermal_limit_samples": 39,
+            "hotspot_limit_samples": 39
+          }
+        ]
+      }
+    },
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "tag": "empero-dual-all-vram",
+      "status": "guard_stopped",
+      "context": 262144,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "mmap",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [
+        "worker_sampling_errors"
+      ],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": false,
+      "attempt_id": "empero-dual-all-vram",
+      "error": "AssertionError: ['worker_sampling_errors']",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 8650690560,
+      "minimum_available_bytes": 8341139456,
+      "minimum_free_vram_bytes": [
+        15727554560,
+        15604940800
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 192,
+        "sampling_errors": 1,
+        "enforcement_attempts": 1,
+        "enforcement_errors": 0,
+        "enforcement_state": "notified",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 194,
+          "sampling_errors": 0,
+          "elapsed_seconds": 110.28712636599994,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 77520896,
+          "total_swapout_bytes": 2662535168,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 8379121664,
+          "max_memory_full_psi_avg10": 3.6,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        },
+        "first_error_type": "KeyError"
+      },
+      "memory_failures": [
+        "swap_activity_no_inference_window"
+      ],
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 3,
+      "vision_projector_loaded": false,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 42,
+          "total": 42
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 9286.54
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 9421.49
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 112,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 59.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 112,
+            "sensor_samples": {
+              "mem": 112,
+              "edge": 112,
+              "junction": 112
+            },
+            "peak_temperature_c": {
+              "mem": 33.0,
+              "edge": 29.0,
+              "junction": 36.0
+            },
+            "thermal_limit_samples": 54,
+            "hotspot_limit_samples": 54
+          },
+          {
+            "gpu_index": 1,
+            "samples": 112,
+            "sensor_samples": {
+              "mem": 112,
+              "edge": 112,
+              "junction": 112
+            },
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 22.0,
+              "junction": 32.0
+            },
+            "thermal_limit_samples": 84,
+            "hotspot_limit_samples": 84
+          }
+        ]
+      }
+    },
+    {
+      "model": "flint-40b-a2.5b-vram-test",
+      "tag": "flint-dual-all-vram-dio-budget0",
+      "status": "completed_isolated_probes",
+      "context": 32768,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": true,
+      "attempt_id": "flint-dual-all-vram-dio-budget0",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 10971873280,
+      "minimum_available_bytes": 10065174528,
+      "minimum_free_vram_bytes": [
+        10348740608,
+        12017889280
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 259,
+        "sampling_errors": 0,
+        "enforcement_attempts": 0,
+        "enforcement_errors": 0,
+        "enforcement_state": "not_attempted",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 260,
+          "sampling_errors": 0,
+          "elapsed_seconds": 132.70255094699996,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 109993984,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 104,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 3517398.151582314,
+          "min_available_bytes": 10070302720,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        }
+      },
+      "memory_failures": [],
+      "functional": {
+        "arithmetic_323": true,
+        "json_137": true
+      },
+      "confirmed_context": 32768,
+      "continuous_request_loop_seconds": 44.200599084999794,
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 0,
+      "vision_projector_loaded": false,
+      "reasoning_budget_tokens": 0,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 50,
+          "total": 50
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 12697.25
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 11191.55
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 238.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 238.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 90.84
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 85.8
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 950.36
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 902.3
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 358.36
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 134,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 66.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 134,
+            "sensor_samples": {
+              "mem": 134,
+              "edge": 134,
+              "junction": 134
+            },
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 40.0,
+              "junction": 57.0
+            },
+            "thermal_limit_samples": 81,
+            "hotspot_limit_samples": 81
+          },
+          {
+            "gpu_index": 1,
+            "samples": 134,
+            "sensor_samples": {
+              "mem": 134,
+              "edge": 134,
+              "junction": 134
+            },
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 36.0,
+              "junction": 60.0
+            },
+            "thermal_limit_samples": 102,
+            "hotspot_limit_samples": 102
+          }
+        ]
+      },
+      "timing": {
+        "code": {
+          "trials": 3,
+          "median_decode_tps_sse": 46.85863946108108,
+          "median_native_prefill_tps": 364.5433614735227,
+          "median_ttft_seconds": 0.09905745300011404,
+          "actual_prompt_tokens": [
+            19,
+            19,
+            19
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prose": {
+          "trials": 3,
+          "median_decode_tps_sse": 46.90045996641995,
+          "median_native_prefill_tps": 334.56005352960864,
+          "median_ttft_seconds": 0.08983085499994559,
+          "actual_prompt_tokens": [
+            14,
+            14,
+            14
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prefill": {
+          "trials": 3,
+          "median_decode_tps_sse": 48.33737145745232,
+          "median_native_prefill_tps": 6027.098720559374,
+          "median_ttft_seconds": 1.4149858920000042,
+          "actual_prompt_tokens": [
+            8178,
+            8175,
+            8175
+          ],
+          "output_tokens": [
+            17,
+            17,
+            17
+          ],
+          "all_markers_passed": true
+        }
+      }
+    },
+    {
+      "model": "flint-40b-a2.5b-vram-test",
+      "tag": "flint-dual-all-vram-dio",
+      "status": "failed",
+      "context": 32768,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": false,
+      "attempt_id": "flint-dual-all-vram-dio",
+      "error": "AssertionError: ''",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 10918526976,
+      "minimum_available_bytes": 10239770624,
+      "minimum_free_vram_bytes": [
+        10487173120,
+        12124823552
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 98,
+        "sampling_errors": 0,
+        "enforcement_attempts": 0,
+        "enforcement_errors": 0,
+        "enforcement_state": "not_attempted",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 99,
+          "sampling_errors": 0,
+          "elapsed_seconds": 50.197423958999934,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 8486912,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 10237509632,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        }
+      },
+      "memory_failures": [
+        "swap_activity_no_inference_window"
+      ],
+      "functional": {
+        "arithmetic_323": false
+      },
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 0,
+      "vision_projector_loaded": false,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 50,
+          "total": 50
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 12697.25
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 11191.55
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 238.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 238.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 90.84
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 85.8
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 950.36
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 902.3
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 358.36
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 52,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 58.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 52,
+            "sensor_samples": {
+              "mem": 52,
+              "edge": 52,
+              "junction": 52
+            },
+            "peak_temperature_c": {
+              "mem": 38.0,
+              "edge": 33.0,
+              "junction": 41.0
+            },
+            "thermal_limit_samples": 26,
+            "hotspot_limit_samples": 26
+          },
+          {
+            "gpu_index": 1,
+            "samples": 52,
+            "sensor_samples": {
+              "mem": 52,
+              "edge": 52,
+              "junction": 52
+            },
+            "peak_temperature_c": {
+              "mem": 51.0,
+              "edge": 27.0,
+              "junction": 40.0
+            },
+            "thermal_limit_samples": 39,
+            "hotspot_limit_samples": 39
+          }
+        ]
+      }
+    },
+    {
+      "model": "sage-a1.5",
+      "tag": "sage-dual-all-vram-dio-r2",
+      "status": "completed_isolated_probes",
+      "context": 65536,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": true,
+      "attempt_id": "sage-dual-all-vram-dio-r2",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 10986840064,
+      "minimum_available_bytes": 8427560960,
+      "minimum_free_vram_bytes": [
+        10779717632,
+        10924564480
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 212,
+        "sampling_errors": 0,
+        "enforcement_attempts": 0,
+        "enforcement_errors": 0,
+        "enforcement_state": "not_attempted",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 213,
+          "sampling_errors": 0,
+          "elapsed_seconds": 108.7158577109999,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 7602176,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 67,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 113932.20582113371,
+          "min_available_bytes": 8434761728,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        }
+      },
+      "memory_failures": [],
+      "functional": {
+        "arithmetic_323": true,
+        "json_137": true
+      },
+      "confirmed_context": 65536,
+      "continuous_request_loop_seconds": 38.40609606699991,
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 3,
+      "vision_projector_loaded": true,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 42,
+          "total": 42
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 10479.24
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 10217.85
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 340.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 340.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 1344.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1292.67
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 576.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 68.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 32.02
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1024.39
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 544.41
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 248.1
+        },
+        {
+          "device": "CPU",
+          "kind": "compute",
+          "mib": 24.93
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 32.02
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1024.39
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 544.41
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 1344.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1292.67
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 576.45
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 110,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 59.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 110,
+            "sensor_samples": {
+              "mem": 110,
+              "edge": 110,
+              "junction": 110
+            },
+            "peak_temperature_c": {
+              "mem": 43.0,
+              "edge": 36.0,
+              "junction": 55.0
+            },
+            "thermal_limit_samples": 62,
+            "hotspot_limit_samples": 62
+          },
+          {
+            "gpu_index": 1,
+            "samples": 110,
+            "sensor_samples": {
+              "mem": 110,
+              "edge": 110,
+              "junction": 110
+            },
+            "peak_temperature_c": {
+              "mem": 55.0,
+              "edge": 32.0,
+              "junction": 48.0
+            },
+            "thermal_limit_samples": 72,
+            "hotspot_limit_samples": 72
+          }
+        ]
+      },
+      "timing": {
+        "code": {
+          "trials": 3,
+          "median_decode_tps_sse": 91.25651072437702,
+          "median_native_prefill_tps": 582.8559943724249,
+          "median_ttft_seconds": 0.05155572100011341,
+          "actual_prompt_tokens": [
+            29,
+            29,
+            29
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prose": {
+          "trials": 3,
+          "median_decode_tps_sse": 74.3095822620966,
+          "median_native_prefill_tps": 511.7602505578187,
+          "median_ttft_seconds": 0.05075292099991202,
+          "actual_prompt_tokens": [
+            25,
+            25,
+            25
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prefill": {
+          "trials": 3,
+          "median_decode_tps_sse": 65.11450411904835,
+          "median_native_prefill_tps": 4619.714241222656,
+          "median_ttft_seconds": 1.777615120000064,
+          "actual_prompt_tokens": [
+            8183,
+            8188,
+            8185
+          ],
+          "output_tokens": [
+            22,
+            22,
+            22
+          ],
+          "all_markers_passed": true
+        }
+      }
+    },
+    {
+      "model": "sage-a1.5",
+      "tag": "sage-dual-all-vram-dio",
+      "status": "failed",
+      "context": 65536,
+      "placement": "all model weights on two GPUs; no CPU expert offload/cache",
+      "load_mode": "dio",
+      "worker_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "guards": [],
+      "production_configs_changed": false,
+      "shutdown_verified": true,
+      "isolated_probes_passed": false,
+      "attempt_id": "sage-dual-all-vram-dio",
+      "error": "ModuleNotFoundError: No module named 'tokenizers'",
+      "binary_sha256": "c81a5796ea07b7910734674677c1d075eb57731acef4b15ae818a4c202879fc6",
+      "available_before_bytes": 11082215424,
+      "minimum_available_bytes": 8774213632,
+      "minimum_free_vram_bytes": [
+        11001319424,
+        11229450240
+      ],
+      "lifecycle_memory": {
+        "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+        "interval_seconds": 0.5,
+        "worker_samples": 127,
+        "sampling_errors": 0,
+        "enforcement_attempts": 0,
+        "enforcement_errors": 0,
+        "enforcement_state": "not_attempted",
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "swap_activity": {
+          "policy": "low-churn-v1",
+          "samples": 128,
+          "sampling_errors": 0,
+          "elapsed_seconds": 65.08613756399973,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 19263488,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 8774213632,
+          "max_memory_full_psi_avg10": 0.11,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "failures": []
+        }
+      },
+      "memory_failures": [
+        "swap_activity_no_inference_window"
+      ],
+      "functional": {
+        "arithmetic_323": true,
+        "json_137": true
+      },
+      "confirmed_context": 65536,
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "mtp_steps": 3,
+      "vision_projector_loaded": true,
+      "reasoning_budget_tokens": null,
+      "gpu_layer_assignments": [
+        {
+          "offloaded": 42,
+          "total": 42
+        }
+      ],
+      "buffer_allocations_mib": [
+        {
+          "device": "ROCm0",
+          "kind": "model",
+          "mib": 10479.24
+        },
+        {
+          "device": "ROCm1",
+          "kind": "model",
+          "mib": 10217.85
+        },
+        {
+          "device": "ROCm0",
+          "kind": "KV",
+          "mib": 340.0
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 340.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 1344.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1292.67
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 576.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "KV",
+          "mib": 68.0
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 32.02
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1024.39
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 544.41
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 248.1
+        },
+        {
+          "device": "CPU",
+          "kind": "compute",
+          "mib": 24.93
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 32.02
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1024.39
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 544.41
+        },
+        {
+          "device": "ROCm0",
+          "kind": "compute",
+          "mib": 1344.45
+        },
+        {
+          "device": "ROCm1",
+          "kind": "compute",
+          "mib": 1292.67
+        },
+        {
+          "device": "ROCm_Host",
+          "kind": "compute",
+          "mib": 576.45
+        }
+      ],
+      "thermal": {
+        "status": "complete",
+        "samples": 67,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 60.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "samples": 67,
+            "sensor_samples": {
+              "mem": 67,
+              "edge": 67,
+              "junction": 67
+            },
+            "peak_temperature_c": {
+              "mem": 36.0,
+              "edge": 31.0,
+              "junction": 39.0
+            },
+            "thermal_limit_samples": 39,
+            "hotspot_limit_samples": 39
+          },
+          {
+            "gpu_index": 1,
+            "samples": 67,
+            "sensor_samples": {
+              "mem": 67,
+              "edge": 67,
+              "junction": 67
+            },
+            "peak_temperature_c": {
+              "mem": 50.0,
+              "edge": 27.0,
+              "junction": 40.0
+            },
+            "thermal_limit_samples": 42,
+            "hotspot_limit_samples": 42
+          }
+        ]
+      },
+      "timing": {
+        "code": {
+          "trials": 3,
+          "median_decode_tps_sse": 91.96642675357005,
+          "median_native_prefill_tps": 581.6052304360034,
+          "median_ttft_seconds": 0.05163710299984814,
+          "actual_prompt_tokens": [
+            29,
+            29,
+            29
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        },
+        "prose": {
+          "trials": 3,
+          "median_decode_tps_sse": 73.87678423863746,
+          "median_native_prefill_tps": 510.19366951694866,
+          "median_ttft_seconds": 0.05083398299984765,
+          "actual_prompt_tokens": [
+            25,
+            25,
+            25
+          ],
+          "output_tokens": [
+            256,
+            256,
+            256
+          ],
+          "all_markers_passed": null
+        }
+      }
+    }
+  ],
+  "production_profiles_changed": false,
+  "nightly_updates_resumed": false,
+  "limitations": [
+    "Isolated direct native-server experiments, not a production-launcher/DSH/gateway integration qualification.",
+    "Existing production settings and contexts remain; no CPU-offload baseline was run because its physical-RAM admission fails on the current 14.83GiB host.",
+    "Configured context is allocation capacity; these probes do not establish full-window quality. Sage vision projector is loaded but a fresh image/tool-roundtrip suite is not claimed.",
+    "All trials use both AMD cards. A raw file-size fit does not establish a one-card fit after KV/draft/vision/compute buffers and existing VRAM reserves.",
+    "Warmup/load memory pressure is part of acceptance; zero worker swap alone cannot override a host-PSI or other guard failure.",
+    "Host swap activity is system-wide, not per-worker I/O attribution.",
+    "Original mmap attempt was stopped for repeated rereads; a real worker-exit telemetry race was corrected and regression-tested. The first Sage attempt hit a harness tokenizer dependency after short probes; corrected runs use native tokenization."
+  ],
+  "cpu_regression_tests_per_checkout": 45,
+  "protected_files_rechecked_after_trials": true,
+  "maintenance_lock_released": true,
+  "no_inference_workers_remaining": true
+}

@@ -4,7 +4,9 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,6 +19,31 @@ spec.loader.exec_module(downloader)
 
 
 class MayaDownloadTests(unittest.TestCase):
+    def test_retired_s24_manifest_is_non_installable_checksum_history(self):
+        manifest = ROOT / 'maya/glm-s24-rollback-models.json'
+        history = json.loads(manifest.read_text())
+        self.assertEqual(history['status'], 'retired')
+        self.assertEqual(history['files'], [])
+        self.assertEqual(len(history['historical_files']), 3)
+        with tempfile.TemporaryDirectory() as tmp, \
+                patch.object(sys, 'argv', ['download', '--root', tmp, '--manifest', str(manifest)]), \
+                patch.object(downloader.subprocess, 'run') as curl, \
+                contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as result:
+                downloader.main()
+            self.assertEqual(result.exception.code, 2)
+            curl.assert_not_called()
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_s24_installer_selection_rejected_before_preparation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            result = subprocess.run(['bash', str(ROOT / 'maya/install.sh'), 'glm'],
+                env={**os.environ, 'MAYA_MODELS_ROOT': tmp, 'MAYA_GLM_QUANT': 'Maya-S24'},
+                capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn('Maya-S24 rollback is retired', result.stderr)
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
     def test_retired_manifest_cannot_download_or_recreate_s(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); manifest = root / 'retired.json'

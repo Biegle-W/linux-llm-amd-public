@@ -49,6 +49,10 @@ def sample_memory(snapshot=None, proc_root=Path('/proc')):
         except (FileNotFoundError, ProcessLookupError):
             continue
         fields = dict(line.split(':', 1) for line in status.splitlines() if ':' in line)
+        # The worker can exit after the process snapshot but before status is
+        # read. A confirmed zombie/dead task has no VmSwap counter to sample.
+        if fields.get('State', '').strip()[:1] in ('Z', 'X'):
+            continue
         # Missing VmSwap is unknown, never evidence of zero swap.
         amount, unit = fields['VmSwap'].split()
         amount = int(amount)

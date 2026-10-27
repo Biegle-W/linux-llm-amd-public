@@ -26,11 +26,19 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
+**October27 backup cleanup / all-VRAM trials:** removed only the Super SATA
+backup and GLM Maya-S24 rollback, reclaiming156.47GB. Active Super NVMe, GLM v2
+and all shared DeepSeek-XS dependencies remain. Strata Qwen is SSD stream;
+its bounded RAM expert tier does not remove the SSD cold/PLE path. Isolated
+Empero/Sage/Flint all-VRAM experiments are user-authorized; existing guards,
+production contexts and paused updater remain.
+[Storage removal and trial evidence](../hardware/STORAGE-VRAM-2026-10-27.md).
+
 **Model grouping (October27, standing preference):** use three categories in
 future inventories/comparisons: VRAM only (Qwen27B SGLang/vLLM, Bolt); CPU RAM MoE
-(Empero, Super IQ3, Sage, Ornith, Strata Qwen Q3); SSD stream (GLM Maya, DeepSeek XS
+(Empero, Super IQ3, Sage, Ornith); SSD stream (Strata Qwen Q3, GLM Maya, DeepSeek XS
 in Maya/Strata). Classification follows the selected loading profile; Strata Qwen
-still has SSD-backed PLE/mapped fallback. This metadata inventory changes no
+uses an SSD cold tier with bounded RAM/GPU caches. This metadata inventory changes no
 runtime flags, guards or holds. Count shared weights once and list backups and
 rollback/download-only files separately.
 [Measured storage inventory and locations](../hardware/MODEL-STORAGE-INVENTORY.md).
@@ -554,7 +562,9 @@ On the reference host:
 - **Load time:** 42.2 s, versus 112.1 s from SATA.
 - **Inference:** identical, −0.12% geometric mean.
 
-The SATA original is kept as a backup.
+The SATA backup was removed at the user's request October27. The active NVMe
+shards remain; historical checksum/copy evidence is retained in the October20
+[numeric record](../hardware/results/super-nvme-load-2026-10-20.json).
 
 SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forced tool call
 (llama.cpp grammar-sampler exception) and kept the same host model memory.
@@ -887,7 +897,7 @@ New shared NVMe root: `/mnt/shared-nvme/LLM-Models` (UUIDCONFIGURE_SHARED_NVME_U
 Shared handoff itself remains on the original Shared SATA drive / Windows D:.
 
 - Resident GGUF models remain on the shared SATA, except Super IQ3. Super IQ3 loads from its
-  verified shared-NVMe copy; the SATA original is kept as a backup.
+  verified shared-NVMe copy; the SATA backup was removed October27.
 - Managed Strata and standalone App share `Strata/models/IQ3_XXS`,
   `Strata/packs/iq3_xxs`, tokenizer, MTP and retained unique app assets under the NEW
   shared NVMe root. Both app and backend point directly at the same files; no new

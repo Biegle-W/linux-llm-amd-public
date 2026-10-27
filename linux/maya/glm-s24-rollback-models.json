@@ -1,8 +1,10 @@
 {
   "schema": 1,
   "upstream_commit": "8d9a9b5d705049a87da853717cdc59440252de30",
-  "selection": "Verified S24 rollback only; active GLM quant is Maya-S v2",
-  "files": [
+  "selection": "Historical checksum record only: S24 rollback files removed at user request October27; active GLM is Maya-S v2.",
+  "files": [],
+  "status": "retired",
+  "historical_files": [
     {
       "repo": "peasantsmith/GLM-5.3-Flash-Maya-GGUF",
       "revision": "f16ee4ba50d8fd2bb726ea1862ca6ca14ba188da",
@@ -27,5 +29,7 @@
       "size": 832958464,
       "sha256": "a6fd4e88007ac49b431c7d02be34e43ab7a09224d53a0c52782327613cb41917"
     }
-  ]
+  ],
+  "historical_total_bytes": 94701676224,
+  "total_bytes": 0
 }

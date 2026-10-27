@@ -68,6 +68,14 @@ class Accounting(BoundedPolicyCase):
             with self.assertRaises(KeyError):
                 mem.sample_memory({1: proc}, root)
 
+    def test_exit_between_process_snapshot_and_status_is_not_missing_live_telemetry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / '1').mkdir()
+            (root / '1/status').write_text('Name:\tworker\nState:\tZ (zombie)\n')
+            proc = Process(1, 0, '1', ('python3', str(ROOT / 'dsh/vllm-router.py')), '', 'S')
+            self.assertIsNone(mem.sample_memory({1: proc}, root))
+
     def test_loading_swap_and_sampling_errors_remain_latched(self):
         monitor = mem.MemoryMonitor()
         with patch.object(mem, 'sample_memory', side_effect=[

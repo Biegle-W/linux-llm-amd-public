@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## October27 — backup cleanup, corrected storage category and all-VRAM experiments
+
+User-requested Super SATA backup/GLM S24 rollback retirement reclaimed156.47GB;
+204 active files/configs were protected. Strata Qwen Q3 is SSD stream. All-VRAM
+text candidates on both RX7900XTX pass: Empero256K/MTP3/batch512, Sage64K/MTP3/
+projector/batch4096, Flint32K/reasoning-budget0. Code/prose/nativePP medians:
+131.41/80.42/3397.2,91.26/74.31/4619.7,46.86/46.90/6027.1t/s respectively.
+Zero worker swap/spill; current14.83GiB host, retained2280f0fd/ROCm7.2.3, strict
+4GiB high/5GiB max/no-swap workers, original guards. No fresh CPU baseline or
+production promotion; prior failures/harness corrections retained.
+[Report](STORAGE-VRAM-2026-10-27.md), [data](results/storage-vram-2026-10-27.json).
+
 ## DeepSeek-S retired — October26
 
 At the user's request, S is removed from Maya and Strata; **11 profiles** remain.

@@ -24,7 +24,7 @@ other engines are patched. Maya uses its own Python 3.12.14 environment and
 
 Model files live beneath the **Maya directory on the new shared NVMe**:
 `/mnt/shared-nvme/LLM-Models/Maya`. The [pinned download manifest](models.json)
-records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) records the retained control files; it is not another active model.
+records the active assets' revisions, byte sizes and published SHA-256. The [S24 rollback manifest](glm-s24-rollback-models.json) is non-installable checksum history: the old S24 rollback was deleted October27. The active Maya-S v2 weights and pack are retained.
 GLM is **Maya-S v2**, three GGUF shards (mixed IQ2/IQ3 experts, Q6_K attention/shared weights). DeepSeek is **Maya-XS**, three XS GGUF shards plus the shared original S Engram
 shards5/6, matching `dspark-xs2` drafter and existing vision assets. The full DeepSeek-S quant is retired; only its shared Engram shards5/6 remain.
 No original FP8 checkpoint, EXL3 copy or second full expert pack was downloaded.
