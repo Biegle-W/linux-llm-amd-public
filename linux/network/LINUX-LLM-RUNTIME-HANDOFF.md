@@ -43,9 +43,22 @@ Empero/Sage/Flint all-VRAM experiments are user-authorized; existing guards,
 production contexts and paused updater remain.
 [Storage removal and trial evidence](../hardware/STORAGE-VRAM-2026-10-27.md).
 
+Standing benchmark listing format (October 27): every future benchmark listing,
+inventory with performance, and model comparison must group all model/engine
+profiles into **VRAM only models**, **MoE models with CPU RAM offload**, and
+**MoE models with SSD streaming**, according to the selected loading profile.
+For each profile include **prefill (tokens/s)**, **time to first token (seconds)**,
+**decode (tokens/s, code/prose separately when measured)**, **context limit
+(tokens)**, **storage size (GB)**, and **storage location (drive and path)**.
+Keep the model/engine identity and measurement date visible; distinguish native
+prefill from engine-phase timing and configured context from actual tested length.
+Use "not measured" when a metric is unavailable; never estimate or omit TTFT
+because only throughput was recorded. Count shared files once in storage totals
+and identify sharing in individual rows. Public paths use sanitized examples.
+
 **Model grouping (October27, standing preference):** use three categories in
 future inventories/comparisons: VRAM only (Empero, Sage, Flint, Qwen27B
-SGLang/vLLM, Bolt); CPU RAM MoE (Super IQ3, Ornith); SSD stream (Strata Qwen Q3, GLM Maya, DeepSeek XS
+SGLang/vLLM, Bolt); MoE models with CPU RAM offload (Super IQ3, Ornith); MoE models with SSD streaming (Strata Qwen Q3, GLM Maya, DeepSeek XS
 in Maya/Strata). Classification follows the selected loading profile; Strata Qwen
 uses an SSD cold tier with bounded RAM/GPU caches. This metadata inventory changes no
 runtime flags, guards or holds. Count shared weights once and list backups and

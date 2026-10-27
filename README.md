@@ -120,10 +120,23 @@ RAM/VRAM/swap/pressure guards; no broader update hold is lifted.
 
 ## Model categories and disk inventory — October 27
 
+Standing benchmark listing format (October 27): every future benchmark listing,
+inventory with performance, and model comparison must group all model/engine
+profiles into **VRAM only models**, **MoE models with CPU RAM offload**, and
+**MoE models with SSD streaming**, according to the selected loading profile.
+For each profile include **prefill (tokens/s)**, **time to first token (seconds)**,
+**decode (tokens/s, code/prose separately when measured)**, **context limit
+(tokens)**, **storage size (GB)**, and **storage location (drive and path)**.
+Keep the model/engine identity and measurement date visible; distinguish native
+prefill from engine-phase timing and configured context from actual tested length.
+Use "not measured" when a metric is unavailable; never estimate or omit TTFT
+because only throughput was recorded. Count shared files once in storage totals
+and identify sharing in individual rows. Public paths use sanitized examples.
+
 Standing user preference: from now on, group model inventories and comparisons
-into **VRAM only models**, **CPU RAM MoE models**, and **SSD stream models**,
+into **VRAM only models**, **MoE models with CPU RAM offload**, and **MoE models with SSD streaming**,
 according to the selected loading profile. VRAM only: Empero, Sage, Flint,
-Qwen27B (SGLang/vLLM) and Bolt. CPU RAM MoE: Super IQ3 and Ornith. SSD stream: Strata Qwen Q3,
+Qwen27B (SGLang/vLLM) and Bolt. MoE models with CPU RAM offload: Super IQ3 and Ornith. MoE models with SSD streaming: Strata Qwen Q3,
 GLM Maya and DeepSeek XS (Maya/Strata). Strata Qwen uses an SSD cold tier with
 bounded RAM/GPU caches; its RAM expert pool does not make it a RAM-only profile;
 these categories do not change runtime flags or memory guards. Shared weights

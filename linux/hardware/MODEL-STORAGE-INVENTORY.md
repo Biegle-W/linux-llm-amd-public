@@ -1,7 +1,20 @@
 # Model categories and disk storage — October 27, 2026
 
+Standing benchmark listing format (October 27): every future benchmark listing,
+inventory with performance, and model comparison must group all model/engine
+profiles into **VRAM only models**, **MoE models with CPU RAM offload**, and
+**MoE models with SSD streaming**, according to the selected loading profile.
+For each profile include **prefill (tokens/s)**, **time to first token (seconds)**,
+**decode (tokens/s, code/prose separately when measured)**, **context limit
+(tokens)**, **storage size (GB)**, and **storage location (drive and path)**.
+Keep the model/engine identity and measurement date visible; distinguish native
+prefill from engine-phase timing and configured context from actual tested length.
+Use "not measured" when a metric is unavailable; never estimate or omit TTFT
+because only throughput was recorded. Count shared files once in storage totals
+and identify sharing in individual rows. Public paths use sanitized examples.
+
 Standing user preference: group inventories into **VRAM only models**,
-**CPU RAM MoE models**, and **SSD stream models**, by the selected loading
+**MoE models with CPU RAM offload**, and **MoE models with SSD streaming**, by the selected loading
 configuration. VRAM only means GPU-resident model weights, not zero host-RAM
 use. An active SSD cold/PLE tier remains SSD stream even with RAM/GPU caches.
 Strata Qwen is therefore SSD stream.
@@ -36,7 +49,7 @@ excluded. [Exact byte counts](results/model-storage-2026-10-27.json).
 
 Category total: **132.29 GB**.
 
-## CPU RAM MoE models
+## MoE models with CPU RAM offload
 
 | Model | Disk GB | Location relative to the roots above |
 |---|---:|---|
@@ -45,7 +58,7 @@ Category total: **132.29 GB**.
 
 Category total: **136.52 GB**.
 
-## SSD stream models
+## MoE models with SSD streaming
 
 | Model | Disk GB | Location relative to the roots above |
 |---|---:|---|
