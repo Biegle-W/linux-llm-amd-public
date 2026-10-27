@@ -56,6 +56,9 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 - Keep both AMD repositories current after authorized AMD changes. Publish only
   reviewed, sanitized files to the public repository; never copy private history,
   credentials, personal settings, raw logs or model weights.
+  Reaffirmed October27: always keep both repositories updated. This standing
+  publication authorization includes model names, measured disk sizes, the three
+  model categories and sanitized example storage paths in the public inventory.
 - Read the AMD repository's root `README.md` first. It remains the sole root
   maintenance instruction file; do not recreate `AGENTS.md` or introduce
   competing root instruction files for individual agents.
@@ -96,6 +99,17 @@ Engram shards5/6, matching xs2 drafter and all original XS metadata. The catalog
 now has 11 profiles. GLM Maya-S is unchanged; the current reduced-RAM holds,
 paused updater, runtime pins and inference guards remain.
 [Retirement details and verification](linux/hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
+## Model categories and disk inventory — October 27
+
+Standing user preference: from now on, group model inventories and comparisons
+into **VRAM only models**, **CPU RAM MoE models**, and **SSD stream models**,
+according to the selected loading profile. VRAM only: Qwen27B (SGLang/vLLM), Bolt.
+CPU RAM MoE: Empero, Super IQ3, Sage, Ornith, Strata Qwen Q3. SSD stream: GLM Maya
+and DeepSeek XS (Maya/Strata). Strata Qwen retains SSD-backed PLE/mapped fallback;
+these categories do not change runtime flags or memory guards. Shared weights
+count once; backups/rollback/download-only assets are listed separately.
+[Measured per-model disk space and locations](linux/hardware/MODEL-STORAGE-INVENTORY.md).
 
 ## Active profiles
 

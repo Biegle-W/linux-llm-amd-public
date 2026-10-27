@@ -26,6 +26,15 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
+**Model grouping (October27, standing preference):** use three categories in
+future inventories/comparisons: VRAM only (Qwen27B SGLang/vLLM, Bolt); CPU RAM MoE
+(Empero, Super IQ3, Sage, Ornith, Strata Qwen Q3); SSD stream (GLM Maya, DeepSeek XS
+in Maya/Strata). Classification follows the selected loading profile; Strata Qwen
+still has SSD-backed PLE/mapped fallback. This metadata inventory changes no
+runtime flags, guards or holds. Count shared weights once and list backups and
+rollback/download-only files separately.
+[Measured storage inventory and locations](../hardware/MODEL-STORAGE-INVENTORY.md).
+
 **DeepSeek-S retired (October26):** S model IDs and profiles are removed from
 Maya/Strata. Eleven profiles remain: four llama.cpp, one SGLang, two vLLM,
 two Strata and two Maya. S-only shards1–4, its old drafter, S metadata and routing

@@ -1,0 +1,258 @@
+{
+  "measured_at": "2026-10-27T01:56:24.412783-04:00",
+  "method": "Read-only file metadata scan; allocated bytes = st_blocks * 512; files counted once by device/inode; no symlinks or duplicate inodes found. Directory entries excluded; no weights read or inference started.",
+  "scope": "Installed model files under configured system/SATA/shared-NVMe roots, including associated packs, drafts, backups and rollback artifacts; excludes engine binaries, environments, unrelated filesystem contents and runtime-local routing profiles.",
+  "categories": {
+    "vram_only": "VRAM only models",
+    "cpu_ram_moe": "CPU RAM MoE models",
+    "ssd_stream": "SSD stream models"
+  },
+  "models": [
+    {
+      "name": "Qwen3.8-27B W4A16",
+      "category": "vram_only",
+      "profile_ids": [
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm"
+      ],
+      "components": [
+        {
+          "label": "Shared base weights",
+          "path": "/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+          "file_count": 17,
+          "logical_bytes": 20054848547,
+          "allocated_bytes": 20054925312
+        },
+        {
+          "label": "SGLang DFlash2 drafter",
+          "path": "/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+          "file_count": 12,
+          "logical_bytes": 1280640002,
+          "allocated_bytes": 1280671744
+        }
+      ],
+      "logical_bytes": 21335488549,
+      "allocated_bytes": 21335597056,
+      "note": "Base weights are shared by both engines; only SGLang uses the separate DFlash2 drafter. Includes tokenizer/config files."
+    },
+    {
+      "name": "Nemotron 3.5 Bolt 74B-A9B W4A16",
+      "category": "vram_only",
+      "profile_ids": [
+        "nemotron-3.5-bolt-vllm"
+      ],
+      "components": [
+        {
+          "label": "Weights and configuration",
+          "path": "/mnt/shared-sata1/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
+          "file_count": 33,
+          "logical_bytes": 43645320930,
+          "allocated_bytes": 43651956736
+        }
+      ],
+      "logical_bytes": 43645320930,
+      "allocated_bytes": 43651956736,
+      "note": ""
+    },
+    {
+      "name": "Empero Qwen3.8-35B-A3B IQ4_XS",
+      "category": "cpu_ram_moe",
+      "profile_ids": [
+        "empero-qwen3.8-35b-a3b"
+      ],
+      "components": [
+        {
+          "label": "GGUF and associated files",
+          "path": "/mnt/shared-sata1/GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill",
+          "file_count": 2,
+          "logical_bytes": 19627788438,
+          "allocated_bytes": 19628294144
+        }
+      ],
+      "logical_bytes": 19627788438,
+      "allocated_bytes": 19628294144,
+      "note": ""
+    },
+    {
+      "name": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
+      "category": "cpu_ram_moe",
+      "profile_ids": [
+        "nemotron-3.5-super-iq3"
+      ],
+      "components": [
+        {
+          "label": "Serving copy",
+          "path": "/mnt/shared-nvme/LLM-Models/Nemotron-Super",
+          "file_count": 3,
+          "logical_bytes": 59764210568,
+          "allocated_bytes": 59764506624
+        }
+      ],
+      "logical_bytes": 59764210568,
+      "allocated_bytes": 59764506624,
+      "note": "An additional SATA backup is listed separately."
+    },
+    {
+      "name": "Sage-A1.5 Q4_K_M",
+      "category": "cpu_ram_moe",
+      "profile_ids": [
+        "sage-a1.5"
+      ],
+      "components": [
+        {
+          "label": "GGUF and vision projector",
+          "path": "/mnt/shared-sata1/GGUF-Models/Sage-A1.5-GGUF",
+          "file_count": 2,
+          "logical_bytes": 22612746400,
+          "allocated_bytes": 22613065728
+        }
+      ],
+      "logical_bytes": 22612746400,
+      "allocated_bytes": 22613065728,
+      "note": ""
+    },
+    {
+      "name": "Ornith-1.5-122B Q4_K_M",
+      "category": "cpu_ram_moe",
+      "profile_ids": [
+        "ornith-1.5-122b"
+      ],
+      "components": [
+        {
+          "label": "GGUF and vision projector",
+          "path": "/mnt/shared-sata1/GGUF-Models/Ornith-1.5-122B-GGUF",
+          "file_count": 2,
+          "logical_bytes": 76756174848,
+          "allocated_bytes": 76756549632
+        }
+      ],
+      "logical_bytes": 76756174848,
+      "allocated_bytes": 76756549632,
+      "note": ""
+    },
+    {
+      "name": "Qwen3.8-Flash-Next IQ3_XXS (Strata)",
+      "category": "cpu_ram_moe",
+      "profile_ids": [
+        "qwen3.8-flash-next-iq3_xxs"
+      ],
+      "components": [
+        {
+          "label": "Native GGUFs and projector",
+          "path": "/mnt/shared-nvme/LLM-Models/Strata/models",
+          "file_count": 12,
+          "logical_bytes": 76747547192,
+          "allocated_bytes": 76748685312
+        },
+        {
+          "label": "Generated pack",
+          "path": "/mnt/shared-nvme/LLM-Models/Strata/packs",
+          "file_count": 11,
+          "logical_bytes": 44461199057,
+          "allocated_bytes": 44462112768
+        },
+        {
+          "label": "MTP runtime and preparation assets",
+          "path": "/mnt/shared-nvme/LLM-Models/Strata/mtp",
+          "file_count": 40,
+          "logical_bytes": 6927659874,
+          "allocated_bytes": 6929776640
+        }
+      ],
+      "logical_bytes": 128136406123,
+      "allocated_bytes": 128140574720,
+      "note": "Classification follows --resident-cpu-experts with the 13.5 GiB bounded RAM expert pool. PLE remains SSD-backed and uncovered experts/lent regions may use mapped fallback. Disk total includes original GGUFs, generated pack and retained MTP conversion artifacts; no cleanup is implied."
+    },
+    {
+      "name": "GLM-5.3-Flash Maya-S v2",
+      "category": "ssd_stream",
+      "profile_ids": [
+        "glm-5.3-flash-maya"
+      ],
+      "components": [
+        {
+          "label": "Active GGUFs, dense pack and tokenizer",
+          "path": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S-v2-IQ2_XXS",
+          "file_count": 14,
+          "logical_bytes": 97420232541,
+          "allocated_bytes": 97421361152
+        }
+      ],
+      "logical_bytes": 97420232541,
+      "allocated_bytes": 97421361152,
+      "note": "SSD cold tier with a bounded RAM expert tier and GPU cache. Maya-S24 rollback is listed separately."
+    },
+    {
+      "name": "DeepSeek V4.1 Flash 1017 Maya-XS + xs2",
+      "category": "ssd_stream",
+      "profile_ids": [
+        "deepseek-v4.1-flash-1017-maya",
+        "deepseek-v4.1-flash-1017-strata-xs"
+      ],
+      "components": [
+        {
+          "label": "XS weights, shared Engram, drafter, vision and Maya metadata",
+          "path": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF",
+          "file_count": 19,
+          "logical_bytes": 281857488005,
+          "allocated_bytes": 281859063808
+        },
+        {
+          "label": "Separate Strata XS metadata",
+          "path": "/mnt/shared-nvme/LLM-Models/Strata/DeepSeek-V4.1-Flash-1017",
+          "file_count": 8,
+          "logical_bytes": 8806998,
+          "allocated_bytes": 9306112
+        }
+      ],
+      "logical_bytes": 281866295003,
+      "allocated_bytes": 281868369920,
+      "note": "Both engines share one weight set. Includes shared S Engram shards5/6; S-only assets remain retired. Category describes the oversized file-backed cold tier, not a request to enable DS4_STREAM or change any flags."
+    }
+  ],
+  "additional_stored_assets": [
+    {
+      "kind": "backup",
+      "model": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
+      "category": "cpu_ram_moe",
+      "label": "SATA backup",
+      "path": "/mnt/shared-sata1/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF",
+      "file_count": 5,
+      "logical_bytes": 59764212808,
+      "allocated_bytes": 59765161984
+    },
+    {
+      "kind": "rollback",
+      "model": "GLM-5.3-Flash Maya-S24",
+      "category": "ssd_stream",
+      "label": "Older GLM rollback including saved pack slots",
+      "path": "/mnt/shared-nvme/LLM-Models/Maya/Maya-S24",
+      "file_count": 20,
+      "logical_bytes": 96700893377,
+      "allocated_bytes": 96702431232
+    },
+    {
+      "kind": "download_only",
+      "model": "Flint-40B-A2.5B UD-Q4_K_XL",
+      "category": null,
+      "label": "Downloaded model with no enabled profile",
+      "path": "/mnt/shared-sata1/GGUF-Models/Flint-40B-A2.5B",
+      "file_count": 10,
+      "logical_bytes": 25054701439,
+      "allocated_bytes": 25056772096
+    }
+  ],
+  "category_allocated_bytes": {
+    "vram_only": 64987553792,
+    "cpu_ram_moe": 306902990848,
+    "ssd_stream": 379289731072
+  },
+  "active_model_assets_allocated_bytes": 751180275712,
+  "additional_assets_allocated_bytes": 181524365312,
+  "other_huggingface_module_cache_allocated_bytes": 176128,
+  "all_scanned_allocated_bytes": 932704817152,
+  "all_scanned_logical_bytes": 932684603713,
+  "profile_count": 11,
+  "unique_active_model_count": 9,
+  "runtime_changed": false
+}
