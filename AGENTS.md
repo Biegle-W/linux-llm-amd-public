@@ -23,3 +23,7 @@ Preserve unrelated user changes and existing hardware/memory/ownership guards.
 The [cross-repository audit](linux/hardware/AMD-NVIDIA-GAP-AUDIT-2026-10-27.md) is read-only:
 ask which proposed gaps to fill before implementing them. Do not copy AMD runtime
 settings or schedules onto NVIDIA without separate authorization and qualification.
+
+The user-requested [NVIDIA-server gap handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) is now published in both
+NVIDIA repos. It records pending implementation work and host-specific validation;
+this documentation delivery did not change runtimes or schedules.

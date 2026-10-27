@@ -1,5 +1,14 @@
 # AMD / native Linux NVIDIA gap review — October 27, 2026
 
+**NVIDIA-agent notes delivered — October27:** the user requested a
+[NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
+It is published in both NVIDIA repositories and linked from their README/AGENTS;
+their public export allowlist includes those notes. This delivery changes only
+documentation/discovery/export metadata, with no runtime, benchmark, guard or
+schedule change. G3's agent entry point is added; the GLM table repair and runtime
+items remain for NVIDIA-host work. AMD-owned G5/G7 remain separate. Optional new
+models and schedules still require the specific choices in the handoff.
+
 Read-only review of the AMD checkout and current native Linux NVIDIA private/public source and documentation. This compares `linux-llm-amd` with `linux-llm-nvidia`, not the older Windows NVIDIA setup. NVIDIA public source matches its private source for the sampled registry, router, worker manager and bounded-worker wrapper. No NVIDIA files, workers, drivers, services or schedules were changed. No GPU tests were run for this review. Main can advance; [sampled file blob IDs](results/amd-nvidia-gap-audit-2026-10-27.json) identify the evidence.
 
 ## Ready-to-resume documentation

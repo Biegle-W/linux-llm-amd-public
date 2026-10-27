@@ -1,5 +1,14 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**NVIDIA-agent notes delivered — October27:** the user requested a
+[NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
+It is published in both NVIDIA repositories and linked from their README/AGENTS;
+their public export allowlist includes those notes. This delivery changes only
+documentation/discovery/export metadata, with no runtime, benchmark, guard or
+schedule change. G3's agent entry point is added; the GLM table repair and runtime
+items remain for NVIDIA-host work. AMD-owned G5/G7 remain separate. Optional new
+models and schedules still require the specific choices in the handoff.
+
 ## Agent handoff upkeep and parity review — October 27
 
 Root `AGENTS.md` is a thin discovery entry point into the canonical README,

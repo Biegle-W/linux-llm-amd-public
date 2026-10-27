@@ -146,5 +146,14 @@
     "actual": "10,908",
     "expected_from_registry": "NVMe: models/maya/Maya-S24"
   },
-  "status": "Proposals only; NVIDIA source/runtime unchanged"
+  "status": "Proposals only; NVIDIA source/runtime unchanged",
+  "follow_up": {
+    "date": "2026-10-27",
+    "nvidia_handoff": "https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md",
+    "notes_published_in_both_nvidia_repos": true,
+    "root_agent_entry_point_added": true,
+    "public_export_allowlist_updated": true,
+    "runtime_changes": false,
+    "remaining_status": "NVIDIA-host implementation/validation pending; GLM table repair pending; optional model/schedule choices remain conditional"
+  }
 }
