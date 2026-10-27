@@ -1,5 +1,7 @@
 # Current benchmark results
 
+- [H3 guarded SP2 attempt](h3-sp2-2026-10-27.json), [report](../../graphics/H3-SP2-2026-10-27.md): stock ComfyUI0.42 API incompatibility, reduced-RAM control/communication guard stops and isolated compatibility pilot; no completed matched generation speedup.
+
 - [Flint current reasoning128](flint-reasoning128-2026-10-27.json), [report](../FLINT-REASONING128-2026-10-27.md): normal-launcher median prefill 6034.8, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s; 32K, 25.06 GB SATA1; three trials/task, zero worker swap/spill.
 
 - [VRAM-only defaults and selectable Flint](vram-defaults-2026-10-27.json), [report](../VRAM-DEFAULTS-2026-10-27.md): normal launch/auth API, tools, long markers/history and Sage vision; strict owned staging caps; 12 profiles, default preserved.

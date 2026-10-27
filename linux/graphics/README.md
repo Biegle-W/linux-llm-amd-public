@@ -1,5 +1,7 @@
 # Graphics model collection
 
+[October 27 guarded H3 SP2 trial](H3-SP2-2026-10-27.md): stock-loader API incompatibility and reduced-RAM guard stops are recorded; no completed matched speedup or production change.
+
 [October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) now includes a firsthand dual-XTX ComfyUI SP2 report, the Kaihui AMD SP implementation and Bunsei’s separate R9700 Radiance TP2 fork. It distinguishes these from locally validated component placement, DisTorch2 and Dual-Sage. Research only; no runtime/workflow change or new graphics benchmark.
 
 One quality-oriented precision per image/video model, with one required encoder

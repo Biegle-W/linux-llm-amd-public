@@ -1,0 +1,80 @@
+--- a/minimax_h3_amd_sp/h3_forward.py
++++ b/minimax_h3_amd_sp/h3_forward.py
+@@ -13,7 +13,6 @@
+     patchify_video,
+     rope_rotation_table,
+     time_shift_sigma,
+-    time_shift_slope,
+     unpack_audio,
+     unpatchify_video,
+ )
+@@ -37,6 +36,7 @@
+     sigma_video: torch.Tensor
+     shift_video: float
+     shift_audio: float
++    sample_sigmas: object
+ 
+ 
+ def _build_segments(layout, payload, video_time, audio_time, visual_aug, audio_aug):
+@@ -123,7 +123,6 @@
+             audio_t,
+             keyframes=payload.get("keyframes"),
+             refs=payload.get("refs"),
+-            frame_count=payload.get("frame_count"),
+         )
+ 
+     shift_video = float(
+@@ -241,6 +240,7 @@
+         sigma_video,
+         shift_video,
+         shift_audio,
++        transformer_options.get("sample_sigmas"),
+     )
+     return hidden, time_embedding, rope, modulation_segments, state
+ 
+@@ -269,6 +269,9 @@
+         time_embedding,
+         video_segment,
+         audio_segment,
++        state.sigma_video,
++        state.sample_sigmas,
++        (state.shift_video, state.shift_audio),
+     )
+     video_output = unpatchify_video(
+         video_rows,
+@@ -286,15 +289,10 @@
+         :state.orig_w,
+     ]
+     audio_output = unpack_audio(audio_rows)
+-    audio_slope = time_shift_slope(
+-        state.sigma_video,
+-        state.shift_video,
+-        state.shift_audio,
+-    ).to(audio_output.dtype)
+-    return [
+-        -video_output.to(video_dtype),
+-        (-audio_slope) * audio_output.to(audio_dtype),
+-    ]
++    # ComfyUI 0.42 outer forward() owns carried-audio schedule conversion.
++    # Returning the old slope-scaled velocity would apply the wrong convention.
++    return [-video_output.to(video_dtype), -audio_output.to(audio_dtype)]
++
+ 
+ 
+ def send_rank_one_inputs(
+--- a/nodes.py
++++ b/nodes.py
+@@ -153,7 +153,12 @@
+             minimax_payload=None,
+             **kwargs,
+         ):
+-            del kwargs
++            # Experimental 0.42 adapter is restricted to the saved plain T2VA graph.
++            if kwargs.get("denoise_mask") is not None or kwargs.get("audio_denoise_mask") is not None:
++                raise NotImplementedError("0.42 SP2 pilot does not support masked denoising")
++            payload = minimax_payload or {}
++            if payload.get("refs") or payload.get("keyframes"):
++                raise NotImplementedError("0.42 SP2 pilot supports unconditioned T2VA only")
+             current_timestep = float(timestep.flatten()[0])
+             new_prompt = (
+                 _RUNTIME.last_timestep is None

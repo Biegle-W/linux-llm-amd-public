@@ -1016,8 +1016,12 @@ two-window pipeline and neutral-penalty requirement are source-confirmed leads,
 not selected profile changes; retain the existing memory admission and tuning.
 The [corrected H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) includes
 [J I's dual-XTX ComfyUI SP2 report](https://lcz.me/post/28082), an inspectable AMD
-SP loader and Bunsei's separate R9700 Radiance TP2 fork. No new GPU run,
-installation, profile, workflow or update-schedule change was made.
+SP loader and Bunsei's separate R9700 Radiance TP2 fork. The subsequent
+[user-authorized guarded H3 SP2 attempt](../graphics/H3-SP2-2026-10-27.md) found
+stock ComfyUI0.42 API incompatibility and reduced-RAM guard stops. No completed
+matched generation benchmark or local speedup is available. An isolated
+CPU-checked compatibility pilot remains experimental; the active installation,
+profiles, workflows and update schedule are unchanged.
 
 ## Image/video generation models — October 18
 

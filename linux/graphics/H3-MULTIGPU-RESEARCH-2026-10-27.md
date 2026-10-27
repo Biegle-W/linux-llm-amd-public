@@ -7,6 +7,14 @@ The later browser review exposed dates for those posts; earlier sources retain
 their original date limitations. Firsthand reports, implementation evidence and
 local validation are distinguished.
 
+## Subsequent local trial
+
+The user subsequently authorized an isolated Kaihui/control benchmark. The
+[guarded trial report](H3-SP2-2026-10-27.md) records stock ComfyUI0.42 API
+incompatibility, reduced-RAM guard stops and an isolated CPU-checked compatibility
+pilot. No SP2 speedup or completed generation qualification is established.
+The source review below retains its original research-only scope.
+
 ## Correction: a firsthand dual-XTX SP2 report exists
 
 [J I, topic 2594, reply 3](https://lcz.me/post/28082), October 26, reports
@@ -168,7 +176,8 @@ native peer transfers and a revised memory plan before a local trial.
 Compare matching model/quant, seed, frames, resolution, sampler, steps and
 adapters; record loading, denoising, decoding, end-to-end time, output quality,
 per-card memory and host staging. Retain the existing loading guards and RAM
-limits. No new GPU test is authorized by this source review.
+limits. The source review itself did not authorize GPU tests; the subsequent
+user-authorized attempt is linked above.
 
 The standing Level1Techs and Digital Spaceport references were also searched.
 No additional directly reproducible dual-XTX H3 implementation was found on

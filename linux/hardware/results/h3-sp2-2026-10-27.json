@@ -1,0 +1,1177 @@
+{
+  "date": "2026-10-27",
+  "status": "blocked_comparison",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "gpus": "2 x RX 7900 XTX 24 GB / gfx1100",
+    "os_ram_bytes": 15924535296
+  },
+  "core_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+  "plugin_commit": "ebf3953f6385360ef211d93e4ecf23696599eaa3",
+  "runtime": {
+    "validated_on": "2026-10-18",
+    "comfyui_version": "0.42.0",
+    "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+    "python": "3.12.14",
+    "torch": "2.15.0.dev20260827+rocm7.2",
+    "torchvision": "0.30.0.dev20260831+rocm7.2",
+    "torchaudio": "2.11.0.dev20260831+rocm7.2",
+    "hip": "7.2.53211",
+    "comfy_kitchen": "0.2.39",
+    "comfy_aimdo": "0.5.6",
+    "frontend": "1.55.18",
+    "workflow_templates": "0.11.89",
+    "gpu": "2 x RX 7900 XTX 24 GB (gfx1100)",
+    "placement": "denoiser cuda:0; encoder and VAEs cuda:1; staged component placement, not TP",
+    "custom_nodes": [
+      "local_graphics_devices (maintained direct CLIP/VAE loaders)"
+    ],
+    "weights": "Shared SATA Graphics-Models; no duplicate NVMe model weights",
+    "requirements": "requirements-validated.txt"
+  },
+  "guards": {
+    "free_vram_bytes": 2147483648,
+    "hard_free_vram_bytes": 1610612736,
+    "low_vram_samples": 4,
+    "minimum_available_ram_bytes": 3221225472,
+    "host_floor_immediate": true,
+    "sampling_seconds": 1,
+    "worker_swap_limit_bytes": 0,
+    "worker_spill_limit_bytes": 0,
+    "scope_memory_max_bytes": 15924535296,
+    "scope_swap_max_bytes": 0,
+    "activation_reserve_gib": 8
+  },
+  "transport": {
+    "NCCL_P2P_DISABLE": "1",
+    "HSA_ENABLE_SDMA": "0",
+    "NCCL_PROTO": "Simple"
+  },
+  "method": {
+    "workflow": "minimax-h3-base-api.json",
+    "resolution": [
+      608,
+      352
+    ],
+    "frames": 39,
+    "fps": 24,
+    "steps": 20,
+    "seed": 42,
+    "sampler": "res_multistep",
+    "scheduler": "simple",
+    "batch": 1,
+    "warmups": 1,
+    "timed_trials": 3,
+    "placement": "control denoiser GPU0 and encoder/VAEs GPU1; candidate changes only diffusion loader to SP2",
+    "timing": "server execution and submission-to-history external time; cold/full warmup separate",
+    "host_guard": "same 3 GiB floor; enforce immediately instead of historical four low samples on reduced-RAM host"
+  },
+  "storage": {
+    "drive": "Shared SATA1",
+    "directory": "Graphics-Models",
+    "files": [
+      {
+        "file": "diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "logical_bytes": 20970379616,
+        "allocated_bytes": 20970471424,
+        "manifest_sha256": "e889202c41dafb67b10d67b97f0d8541508036a6090af23425a5c2615d03c47a",
+        "verification": "Current stat matches retained size; SHA-256 carried from verified manifest, not freshly rehashed."
+      },
+      {
+        "file": "text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "logical_bytes": 15687142551,
+        "allocated_bytes": 15687221248,
+        "manifest_sha256": "35a88d51044231fe332301d7a62aa81e3f2cba62febeb446e2c1e3e0ef76f2c6",
+        "verification": "Current stat matches retained size; SHA-256 carried from verified manifest, not freshly rehashed."
+      },
+      {
+        "file": "vae/minimax_h3_audio_vae_fp32.safetensors",
+        "logical_bytes": 605254808,
+        "allocated_bytes": 605290496,
+        "manifest_sha256": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48",
+        "verification": "Current stat matches retained size; SHA-256 carried from verified manifest, not freshly rehashed."
+      },
+      {
+        "file": "vae/minimax_h3_video_vae_fp16.safetensors",
+        "logical_bytes": 5207808496,
+        "allocated_bytes": 5208014848,
+        "manifest_sha256": "7c1f131492e7eddacaac9069a61b81bdd39de5cc96561e677c5eab1cdce5e522",
+        "verification": "Current stat matches retained size; SHA-256 carried from verified manifest, not freshly rehashed."
+      }
+    ],
+    "total_logical_bytes": 42470585471,
+    "total_allocated_bytes": 42470998016
+  },
+  "upstream_cpu_tests": {
+    "runner": "direct calls to upstream zero-fixture test functions; pytest absent; no dependencies installed",
+    "passed": [
+      "test_parallel_math.py::test_peer_reduce_scatter_slices_cover_full_sequence",
+      "test_parallel_math.py::test_two_head_shards_reconstruct_dense_attention_projection",
+      "test_partition.py::test_odd_partition_keeps_rank_zero_larger",
+      "test_partition.py::test_segments_are_clipped_and_rebased",
+      "test_quant_shard.py::test_attention_indices_keep_qkv_sections_in_head_order",
+      "test_quant_shard.py::test_dense_column_shards_sum_to_full_projection",
+      "test_quant_shard.py::test_dense_row_shard_matches_reference_linear"
+    ]
+  },
+  "adapter_cpu_boundary_parity": {
+    "passed": true,
+    "cases": [
+      {
+        "audio_scale": 1.0,
+        "sigma": 0.1,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      },
+      {
+        "audio_scale": 1.0,
+        "sigma": 0.5,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      },
+      {
+        "audio_scale": 1.0,
+        "sigma": 0.9,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      },
+      {
+        "audio_scale": 4.0,
+        "sigma": 0.1,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      },
+      {
+        "audio_scale": 4.0,
+        "sigma": 0.5,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      },
+      {
+        "audio_scale": 4.0,
+        "sigma": 0.9,
+        "max_abs_video": 0.0,
+        "max_abs_audio": 0.0
+      }
+    ],
+    "scope": "CPU zero-block float32 synthetic packing/final-layer and carried-audio boundary parity only; no quantized weights, attention, distributed execution or generation quality tested"
+  },
+  "adapter_patch_sha256": "7203c6be05b88687dcfd7dc48b52b1b90f21bdb096026f66d2cb5f16b70765c3",
+  "attempts": [
+    {
+      "attempt": 1,
+      "started": "2026-10-27T11:49:54.666588-04:00",
+      "finished": "2026-10-27T11:50:14.082482-04:00",
+      "variant": "stock Kaihui loader",
+      "shutdown_verified": true,
+      "production_fingerprints_unchanged": true,
+      "gpu_lock_released": true,
+      "arms": [
+        {
+          "tag": "rccl-smoke",
+          "status": "guard_stopped",
+          "available_before_bytes": 9362194432,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 8,
+            "sampling_errors": 0,
+            "min_available_bytes": 2281439232,
+            "min_free_vram_bytes": [
+              25724907520,
+              25724882944
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "9135935488",
+            "memory.current": "9135935488",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": 1,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 7.760871004000364,
+          "available_after_bytes": 9608335360,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-rccl-smoke",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 9,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 9,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 9,
+                  "edge": 9,
+                  "junction": 9
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 28.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 9,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1665.0,
+                "peak_power_average_w": 75.0,
+                "peak_gfx_clock_mhz": 9.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 9,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 9,
+                  "edge": 9,
+                  "junction": 9
+                },
+                "peak_temperature_c": {
+                  "mem": 40.0,
+                  "edge": 19.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 9,
+                "thermal_limit_samples": 6,
+                "hotspot_limit_samples": 6,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1228.0,
+                "peak_power_average_w": 11.0,
+                "peak_gfx_clock_mhz": 8.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 66.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T15:49:54.708489+00:00",
+            "last_sample_utc": "2026-10-27T15:50:02.469203+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Owned test exited 1",
+          "queued_workflows": 0
+        },
+        {
+          "tag": "control",
+          "status": "guard_stopped",
+          "available_before_bytes": 9606787072,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 12,
+            "sampling_errors": 0,
+            "min_available_bytes": 2915680256,
+            "min_free_vram_bytes": [
+              25477025792,
+              25724911616
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "7977111552",
+            "memory.current": "7977111552",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": -15,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 11.579956341003708,
+          "available_after_bytes": 9561010176,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-control",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 13,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 13,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 13,
+                  "edge": 13,
+                  "junction": 13
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 28.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 13,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1665.0,
+                "peak_power_average_w": 76.0,
+                "peak_gfx_clock_mhz": 11.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 13,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 13,
+                  "edge": 13,
+                  "junction": 13
+                },
+                "peak_temperature_c": {
+                  "mem": 40.0,
+                  "edge": 19.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 13,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1219.0,
+                "peak_power_average_w": 10.0,
+                "peak_gfx_clock_mhz": 7.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 66.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T15:50:02.494557+00:00",
+            "last_sample_utc": "2026-10-27T15:50:14.072204+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Server stopped during workflow",
+          "queued_workflows": 1,
+          "sp2_node_registered": false,
+          "rank1_model_worker_started": false,
+          "last_observed_stage": "shared_video_VAE_loading_before_denoising",
+          "graph_sha256": "b67e943c21205251b5752fa1e5dbda28c5b1ddb3729646717b8a7cdc627b7ed1"
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "started": "2026-10-27T11:52:15.948935-04:00",
+      "finished": "2026-10-27T11:52:28.424449-04:00",
+      "variant": "stock Kaihui loader",
+      "shutdown_verified": true,
+      "production_fingerprints_unchanged": true,
+      "gpu_lock_released": true,
+      "arms": [
+        {
+          "tag": "rccl-direct-smoke",
+          "status": "guard_stopped",
+          "available_before_bytes": 9261125632,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 6,
+            "sampling_errors": 0,
+            "min_available_bytes": 2110935040,
+            "min_free_vram_bytes": [
+              25724956672,
+              25724928000
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "7904751616",
+            "memory.current": "7904751616",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": -2,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 5.257647921993339,
+          "available_after_bytes": 8381988864,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-rccl-direct-smoke",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 7,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 7,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 7,
+                  "edge": 7,
+                  "junction": 7
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 7,
+                "thermal_limit_samples": 2,
+                "hotspot_limit_samples": 2,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1665.0,
+                "peak_power_average_w": 72.0,
+                "peak_gfx_clock_mhz": 13.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 7,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 7,
+                  "edge": 7,
+                  "junction": 7
+                },
+                "peak_temperature_c": {
+                  "mem": 40.0,
+                  "edge": 19.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 7,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1228.0,
+                "peak_power_average_w": 12.0,
+                "peak_gfx_clock_mhz": 12.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 59.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T15:52:16.008227+00:00",
+            "last_sample_utc": "2026-10-27T15:52:21.265396+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Owned test exited -2",
+          "queued_workflows": 0
+        },
+        {
+          "tag": "sp2",
+          "status": "failed",
+          "available_before_bytes": 8381784064,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 8,
+            "sampling_errors": 0,
+            "min_available_bytes": 7474495488,
+            "min_free_vram_bytes": [
+              25477021696,
+              25724911616
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "1371172864",
+            "memory.current": "1301487616",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": -15,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 7.126898750997498,
+          "available_after_bytes": 8273448960,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-sp2",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 9,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 9,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 9,
+                  "edge": 9,
+                  "junction": 9
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 28.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 9,
+                "thermal_limit_samples": 5,
+                "hotspot_limit_samples": 5,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1666.0,
+                "peak_power_average_w": 74.0,
+                "peak_gfx_clock_mhz": 18.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 2.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 9,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 9,
+                  "edge": 9,
+                  "junction": 9
+                },
+                "peak_temperature_c": {
+                  "mem": 42.0,
+                  "edge": 19.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 9,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1224.0,
+                "peak_power_average_w": 11.0,
+                "peak_gfx_clock_mhz": 21.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 59.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T15:52:21.292500+00:00",
+            "last_sample_utc": "2026-10-27T15:52:28.419426+00:00"
+          },
+          "trials": [],
+          "error": "AssertionError: SP2 loader not registered",
+          "queued_workflows": 0,
+          "sp2_node_registered": false,
+          "rank1_model_worker_started": false
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "started": "2026-10-27T11:55:20.457748-04:00",
+      "finished": "2026-10-27T12:05:40.118150-04:00",
+      "variant": "isolated ComfyUI0.42 plain-T2VA compatibility pilot; original SP2 algorithm and 8GiB activation reserve retained",
+      "shutdown_verified": true,
+      "production_fingerprints_unchanged": true,
+      "gpu_lock_released": true,
+      "arms": [
+        {
+          "tag": "rccl-direct-smoke",
+          "status": "guard_stopped",
+          "available_before_bytes": 8159907840,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 3,
+            "sampling_errors": 0,
+            "min_available_bytes": 2575908864,
+            "min_free_vram_bytes": [
+              25724948480,
+              25724928000
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "5663002624",
+            "memory.current": "5663002624",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": -2,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 2.256918418999703,
+          "available_after_bytes": 7121952768,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-rccl-direct-smoke",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 4,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 4,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 4,
+                  "edge": 4,
+                  "junction": 4
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 4,
+                "thermal_limit_samples": 1,
+                "hotspot_limit_samples": 1,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1664.0,
+                "peak_power_average_w": 73.0,
+                "peak_gfx_clock_mhz": 14.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 4,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 4,
+                  "edge": 4,
+                  "junction": 4
+                },
+                "peak_temperature_c": {
+                  "mem": 42.0,
+                  "edge": 20.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 4,
+                "thermal_limit_samples": 1,
+                "hotspot_limit_samples": 1,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1229.0,
+                "peak_power_average_w": 12.0,
+                "peak_gfx_clock_mhz": 20.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 59.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T16:05:20.515851+00:00",
+            "last_sample_utc": "2026-10-27T16:05:22.772652+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Owned test exited -2",
+          "queued_workflows": 0
+        },
+        {
+          "tag": "control",
+          "status": "guard_stopped",
+          "available_before_bytes": 7113261056,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 9,
+            "sampling_errors": 0,
+            "min_available_bytes": 1306415104,
+            "min_free_vram_bytes": [
+              25477042176,
+              25724928000
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "7027560448",
+            "memory.current": "7007391744",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+          },
+          "exit_code": -15,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 8.641414206998888,
+          "available_after_bytes": 7883370496,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-control",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 10,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 10,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 10,
+                  "edge": 10,
+                  "junction": 10
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 10,
+                "thermal_limit_samples": 3,
+                "hotspot_limit_samples": 3,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1669.0,
+                "peak_power_average_w": 77.0,
+                "peak_gfx_clock_mhz": 15.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 1.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 10,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 10,
+                  "edge": 10,
+                  "junction": 10
+                },
+                "peak_temperature_c": {
+                  "mem": 42.0,
+                  "edge": 20.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 10,
+                "thermal_limit_samples": 2,
+                "hotspot_limit_samples": 2,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1220.0,
+                "peak_power_average_w": 11.0,
+                "peak_gfx_clock_mhz": 6.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 67.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T16:05:22.798395+00:00",
+            "last_sample_utc": "2026-10-27T16:05:31.433704+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Server stopped during workflow",
+          "queued_workflows": 1,
+          "sp2_node_registered": true,
+          "rank1_model_worker_started": false,
+          "last_observed_stage": "shared_video_VAE_loading_before_denoising",
+          "graph_sha256": "b67e943c21205251b5752fa1e5dbda28c5b1ddb3729646717b8a7cdc627b7ed1"
+        },
+        {
+          "tag": "sp2",
+          "status": "guard_stopped",
+          "available_before_bytes": 7877124096,
+          "vram_before": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "memory": {
+            "samples": 9,
+            "sampling_errors": 0,
+            "min_available_bytes": 1284554752,
+            "min_free_vram_bytes": [
+              25477021696,
+              25724907520
+            ],
+            "max_worker_swap_bytes": 0,
+            "max_worker_spill_bytes": 0
+          },
+          "guard_faults": [
+            "host_available_below_3GiB"
+          ],
+          "scope_observation": {
+            "memory.max": "15924535296",
+            "memory.swap.max": "0",
+            "memory.peak": "7209222144",
+            "memory.current": "7174459392",
+            "memory.swap.current": "0",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 1"
+          },
+          "exit_code": -15,
+          "shutdown_verified": true,
+          "elapsed_lifecycle_seconds": 8.596467305003898,
+          "available_after_bytes": 8033214464,
+          "vram_after": [
+            {
+              "device": "0000:03:00.0",
+              "total": 25753026560,
+              "used": 27983872,
+              "free": 25725042688
+            },
+            {
+              "device": "0000:06:00.0",
+              "total": 25753026560,
+              "used": 28012544,
+              "free": 25725014016
+            }
+          ],
+          "thermal": {
+            "schema": 1,
+            "label": "h3-sp2-sp2",
+            "status": "complete",
+            "interval_seconds": 1.0,
+            "samples": 10,
+            "sample_errors": 0,
+            "raw_samples_dropped": 0,
+            "raw_limit_bytes": 67108864,
+            "cards": {
+              "0000:03:00.0": {
+                "gpu_index": 0,
+                "samples": 10,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 10,
+                  "edge": 10,
+                  "junction": 10
+                },
+                "peak_temperature_c": {
+                  "mem": 24.0,
+                  "edge": 24.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 10,
+                "thermal_limit_samples": 4,
+                "hotspot_limit_samples": 4,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1669.0,
+                "peak_power_average_w": 76.0,
+                "peak_gfx_clock_mhz": 10.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              },
+              "0000:06:00.0": {
+                "gpu_index": 1,
+                "samples": 10,
+                "busy_samples": 0,
+                "sensor_samples": {
+                  "mem": 10,
+                  "edge": 10,
+                  "junction": 10
+                },
+                "peak_temperature_c": {
+                  "mem": 42.0,
+                  "edge": 20.0,
+                  "junction": 29.0
+                },
+                "peak_busy_temperature_c": {},
+                "throttle_samples_available": 10,
+                "thermal_limit_samples": 2,
+                "hotspot_limit_samples": 2,
+                "power_limit_samples": 0,
+                "current_limit_samples": 0,
+                "peak_fan_rpm": 1220.0,
+                "peak_power_average_w": 11.0,
+                "peak_gfx_clock_mhz": 9.0,
+                "peak_memory_clock_mhz": 96.0,
+                "peak_busy_percent": 0.0,
+                "last_throttle_status": "available"
+              }
+            },
+            "cpu_peak_package_c": {
+              "Package id 0": 67.0
+            },
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+            "started_utc": "2026-10-27T16:05:31.471380+00:00",
+            "last_sample_utc": "2026-10-27T16:05:40.058033+00:00"
+          },
+          "trials": [],
+          "error": "RuntimeError: Server stopped during workflow",
+          "queued_workflows": 1,
+          "sp2_node_registered": true,
+          "rank1_model_worker_started": false,
+          "last_observed_stage": "shared_video_VAE_loading_before_denoising",
+          "graph_sha256": "c01b904f64ea24cd72df650e412b05e46e1c8a047832cc732ab0a5ef65720555"
+        }
+      ],
+      "extra_ram_wait": {
+        "desired_available_bytes": 10737418240,
+        "maximum_wait_seconds": 600,
+        "available_after_wait_bytes": 8159596544
+      }
+    }
+  ],
+  "media_validation": {
+    "status": "no_completed_generations",
+    "outputs": [],
+    "limits": "Finite/nonblank/dimensions/audio technical checks; visual inspection recorded separately; no subjective audio listening."
+  },
+  "speedup": null,
+  "generation_metrics": {
+    "completed_generations": 0,
+    "prefill_tokens_per_second": null,
+    "ttft_seconds": null,
+    "decode_tokens_per_second": null,
+    "context_limit_tokens": null,
+    "token_metric_status": "not applicable to diffusion; no completed generation latency is available",
+    "server_execution_seconds": null,
+    "denoising_seconds": null,
+    "decoding_seconds": null,
+    "end_to_end_seconds": null
+  },
+  "limits": [
+    "No guards were lowered. The same 3 GiB host floor was enforced immediately instead of four low samples on this reduced-RAM host.",
+    "Lifecycle seconds are setup/failure durations and must not be presented as generation performance.",
+    "Cgroup memory.peak includes charged file cache; it is not process RSS or model-weight RAM alone.",
+    "SMU flags count sampled bits, not seconds throttled or quantified lost performance.",
+    "Stock loader targets ComfyUI0.30; the isolated 0.42 pilot changes API/audio boundary handling and is not a validated upstream release.",
+    "CPU zero-block parity does not establish quantized attention, RCCL correctness, video quality or real-model parity.",
+    "Existing historical successful H3 runs used different RAM and cannot substitute for a fresh control."
+  ]
+}

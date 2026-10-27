@@ -14,6 +14,8 @@ The corrected [H3 review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md) record
 sources. It retains the earlier DisTorch2, Dual-Sage and distributed-sampling
 references. No new local performance, runtime or workflow change is claimed.
 
+[Subsequent local Kaihui trial](../graphics/H3-SP2-2026-10-27.md): the user authorized isolated testing; stock API incompatibility and RAM-guard stops prevented a completed matched generation benchmark. Candidate compatibility code remains experimental.
+
 ## Reference sites
 
 - [lcz.me](https://lcz.me/)
