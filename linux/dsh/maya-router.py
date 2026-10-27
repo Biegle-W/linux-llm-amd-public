@@ -168,7 +168,7 @@ def ensure_worker(model):
         logfile = (ROOT / 'logs' / ('maya-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Maya weights are unloaded.', flush=True)
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
-                                   '--property=MemorySwapMax=max', '--property=MemoryMax=52G', str(ROOT / 'run-maya-backend'),
+                                   '--property=MemorySwapMax=infinity', '--property=MemoryMax=52G', str(ROOT / 'run-maya-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
         proc = worker

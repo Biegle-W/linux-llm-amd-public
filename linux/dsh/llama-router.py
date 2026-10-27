@@ -95,7 +95,7 @@ def activate_native(mode, spec=None, model=None):
         '--host', '127.0.0.1', '--port', str(native_port)]
     if enabled is not None:
         args = ['systemd-run', '--user', '--scope', '--quiet',
-                '--property=MemorySwapMax=max', *args]
+                '--property=MemorySwapMax=infinity', *args]
     if limits:
         args[4:4] = ['--property=MemoryHigh='+str(limits['memory.high']),
                      '--property=MemoryMax='+str(limits['memory.max'])]

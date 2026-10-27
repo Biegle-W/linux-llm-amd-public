@@ -11,6 +11,19 @@ Keep physical-RAM admission, RAM caps, GPU reserves, zero dedicated-VRAM spill,
 ownership containment, thermal monitoring and quality/performance gates.
 [Current policy, implementation and validation](linux/hardware/LOADING-SWAP-POLICY-2026-10-27.md).
 
+## Loading-swap framework/INT4 retry — October27
+
+Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
+6 completed benchmark/memory checks, including a no-thinking Flint diagnostic.
+Qwen/Bolt vLLM and Sage native INT4 text tests completed; the original Qwen
+paging stop and its successful unchanged-setting confirmation are both retained.
+SGLang hit VRAM/telemetry/kernel blockers; matched reasoning128 Flint remained
+partial at the inference swap-write guard. Three earlier systemd-syntax setup
+failures are separate. Selected versions/profiles and the paused updater remain;
+no models were retired and H3 was not retried.
+[All attempts, benchmark fields and thermals](linux/hardware/LOADING-SWAP-RETRY-2026-10-27.md).
+
+
 October27: [Current-RAM H3 and LLM retries after compiler-temp cleanup](linux/hardware/CURRENT-RAM-RETEST-2026-10-27.md). Nothing was retired or promoted; all memory/VRAM guards remain.
 
 
@@ -122,7 +135,7 @@ paused updater, runtime pins and inference guards remain.
 **October27 VRAM defaults:** Empero256K/MTP3/batch512 and Sage64K/MTP3/projector/
 batch4096 now use all-GPU weights by default. Flint is selectable as
 `flint-40b-a2.5b` at32K, MTP off/reasoning-budget128. All three use both AMD cards,
-DIO loading and a verified4GiB high/5GiB max/zero-swap worker scope. Physical
+DIO loading and a verified4GiB high/5GiB max RAM scope; loading swap is allowed by the current policy above. Physical
 loading/staging admission remains12GiB total/7GiB available, with existing
 continuous guards. CPU-backed Super/Ornith and SSD profiles retain their RAM
 requirements. Twelve profiles are catalogued; DSH default remains Strata Q3.

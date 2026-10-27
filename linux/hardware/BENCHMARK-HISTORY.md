@@ -1,5 +1,18 @@
 # LLM benchmark and context history
 
+## Loading-swap framework/INT4 retry — October27
+
+Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
+6 completed benchmark/memory checks, including a no-thinking Flint diagnostic.
+Qwen/Bolt vLLM and Sage native INT4 text tests completed; the original Qwen
+paging stop and its successful unchanged-setting confirmation are both retained.
+SGLang hit VRAM/telemetry/kernel blockers; matched reasoning128 Flint remained
+partial at the inference swap-write guard. Three earlier systemd-syntax setup
+failures are separate. Selected versions/profiles and the paused updater remain;
+no models were retired and H3 was not retried.
+[All attempts, benchmark fields and thermals](LOADING-SWAP-RETRY-2026-10-27.md).
+
+
 ## Current-RAM retest — October27
 
 After verified inactive compiler temps were retained on disk, both H3 and blocked

@@ -483,6 +483,24 @@ class ContainmentTests(unittest.TestCase):
             self.assertFalse(scope.populated())
             scope.close()
 
+    def test_loading_swap_infinity_preserves_ram_caps_and_kernel_max(self):
+        import inference_swap as swap
+        proc, scope = swap.spawn_owned(['systemd-run', '--user', '--scope', '--quiet',
+            '--property=MemoryHigh=64M', '--property=MemoryMax=96M',
+            '--property=MemorySwapMax=infinity', '/usr/bin/sleep', '60'],
+            start_new_session=True, expected_memory_limits={
+                'memory.high':64*1024**2, 'memory.max':96*1024**2, 'memory.swap.max':'max'})
+        try:
+            self.assertEqual((scope.directory/'memory.high').read_text().strip(),str(64*1024**2))
+            self.assertEqual((scope.directory/'memory.max').read_text().strip(),str(96*1024**2))
+            self.assertEqual((scope.directory/'memory.swap.max').read_text().strip(),'max')
+            self.assertTrue(scope.populated())
+        finally:
+            scope.terminate()
+            proc.wait(timeout=5)
+            self.assertFalse(scope.populated())
+            scope.close()
+
     def test_required_limit_mismatch_never_releases_payload(self):
         import inference_swap as swap
         import tempfile

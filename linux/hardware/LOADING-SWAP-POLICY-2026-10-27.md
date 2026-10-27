@@ -12,7 +12,7 @@ or cumulative-loading-write caps. Future agents must read this before testing.
 benchmark/update memory collector. Loading, idle residency and active inference
 are distinct phases. Loading swap volume and owned swap occupancy are recorded
 without fixed byte rejection caps. Normal llama.cpp, Strata and Maya worker
-scopes allow `MemorySwapMax=max`; VRAM-only llama.cpp profiles retain their
+scopes allow `MemorySwapMax=infinity`; VRAM-only llama.cpp profiles retain their
 4 GiB `memory.high` and 5 GiB `memory.max` RAM caps. This does not enlarge RAM.
 Strata profile swap limits are explicitly null, meaning no static occupancy cap.
 The obsolete secondary 256 MiB and zero-worker-swap watchdog rules are removed.
@@ -73,10 +73,22 @@ software blocker. Fresh guarded attempts are required for new speed results.
 
 ## Validation
 
-**169 CPU-only tests passed in each checkout** (338 total executions), including
+**170 CPU-only tests passed in each checkout** (340 executions in the final verification suites), including
 real CPU scope/orphan/fork cleanup. Policy and router regressions cover loading
 swap above 4 GiB, parked
 swap, phase transitions/lazy loading, inference churn, pressure, missing evidence,
 preserved RAM/VRAM guards and owned-scope cleanup. Legacy fixtures explicitly
 select v1 or bounded validation. No new GPU run, inference throughput, H3 video
 generation, SSD endurance assessment or runtime promotion is claimed here.
+
+## Real-model retry and systemd syntax verification — October27
+
+Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
+6 completed benchmark/memory checks, including a no-thinking Flint diagnostic.
+Qwen/Bolt vLLM and Sage native INT4 text tests completed; the original Qwen
+paging stop and its successful unchanged-setting confirmation are both retained.
+SGLang hit VRAM/telemetry/kernel blockers; matched reasoning128 Flint remained
+partial at the inference swap-write guard. Three earlier systemd-syntax setup
+failures are separate. Selected versions/profiles and the paused updater remain;
+no models were retired and H3 was not retried.
+[Measured outcomes and syntax regression](LOADING-SWAP-RETRY-2026-10-27.md).

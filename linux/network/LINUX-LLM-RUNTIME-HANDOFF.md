@@ -1,5 +1,18 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Loading-swap framework/INT4 retry — October27
+
+Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
+6 completed benchmark/memory checks, including a no-thinking Flint diagnostic.
+Qwen/Bolt vLLM and Sage native INT4 text tests completed; the original Qwen
+paging stop and its successful unchanged-setting confirmation are both retained.
+SGLang hit VRAM/telemetry/kernel blockers; matched reasoning128 Flint remained
+partial at the inference swap-write guard. Three earlier systemd-syntax setup
+failures are separate. Selected versions/profiles and the paused updater remain;
+no models were retired and H3 was not retried.
+[All attempts, benchmark fields and thermals](../hardware/LOADING-SWAP-RETRY-2026-10-27.md).
+
+
 **Standing user instruction — October 27: loading swap is allowed.**
 Allow swap while loading models, and allow parked swap pages afterward. Do not
 reject loading because swap is nonzero, resident swap exceeds 4 GiB, or cumulative

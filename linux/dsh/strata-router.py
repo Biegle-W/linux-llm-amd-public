@@ -102,7 +102,7 @@ def ensure_worker(model):
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemoryMax=52G',
-                                   '--property=MemorySwapMax=max', str(ROOT / script),
+                                   '--property=MemorySwapMax=infinity', str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
         setattr(worker, 'deepseek41', profile.get('family') == 'deepseek41')
