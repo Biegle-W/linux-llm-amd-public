@@ -8,12 +8,12 @@ Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-p
 
 | Model / selected engine | Date | Prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Empero IQ4_XS · llama.cpp | Oct27 | 3406.8 N | 2.410 | 132.83/83.51 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
-| Flint UD-Q4_K_XL · llama.cpp, reasoning128 | Oct27 | 6030.6 N | 1.394 | 46.73/46.82 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
-| Qwen3.8-27B W4A16 · dev602 | Oct27 | 1372.5 E | 6.008 | 140.97/77.73 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
-| Nemotron3.5 Bolt74B-A9B W4A16 · dev435 held | Oct27 | 2642.4 E | 3.026 | 37.88/37.98 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
-| Sage-A1.5 W4A16 AutoRound · dev602 | Oct27 | 5091.7 E | 1.619 | 148.64/139.62 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
-| Qwen27B W4A16 · SGLang DFlash2 | Oct23 reference | 1468.8 E | 5.585 | 206.18/71.08 | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
+| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct27 | 3406.8 N | 2.410 | 132.83/83.51 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
+| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct27 | 6030.6 N | 1.394 | 46.73/46.82 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
+| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct27 | 1372.5 E | 6.008 | 140.97/77.73 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
+| Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct27 | 2642.4 E | 3.026 | 37.88/37.98 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
+| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct27 | 5091.7 E | 1.619 | 148.64/139.62 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+| Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct23 reference | 1468.8 E | 5.585 | 206.18/71.08 | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
 
 SGLang's latest retry failed the VRAM-spill guard; its row is an older reference. Flint's visible-answer TTFT is4.457s. Sage stays text-only; its old GGUF/projector remains removed.
 
@@ -21,17 +21,19 @@ SGLang's latest retry failed the VRAM-spill guard; its row is an older reference
 
 | Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Super120B UD-IQ3_XXS · llama.cpp | Oct25 /64GB | 430.4 | 18.426 | 15.58/17.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
-| Ornith122B Q4_K_M · llama.cpp | Oct25 /64GB | 711.2 | 11.518 | 11.27/13.47 | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
+| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct25 /64GB | 430.4 | 18.426 | 15.58/17.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
+| Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct25 /64GB | 711.2 | 11.518 | 11.27/13.47 | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
 
 ### MoE models with SSD streaming
 
 | Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Qwen Flash-Next IQ3_XXS · Strata | Oct24 /64GB | 1208.2 | 6.810 | 77.38/50.61 | 262,144 | 128.14 | NVMe `Strata/models`, `Strata/packs`, `Strata/mtp` |
-| GLM Maya-S v2 · Maya | Oct25 /64GB | 539.3 | 11.836 | 19.04/15.52 | 32,768 | 97.42 | NVMe `Maya/Maya-S-v2-IQ2_XXS` |
-| DeepSeek Maya-XS +xs2 · Maya | Oct25 /64GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe `Maya/DeepSeek-V4.1-Flash-1017-GGUF` |
-| DeepSeek Maya-XS +xs2 · Strata | Oct25 /64GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same weights + NVMe `Strata/DeepSeek-V4.1-Flash-1017` metadata |
+| Qwen Flash-Next IQ3_XXS · Strata `0.1.49.2/7dd5cf18e68c` | Oct25 /64GB | 1206.2 | 6.824 | 75.52/47.44 | 262,144 | 128.14 | NVMe `Strata/models`, `Strata/packs`, `Strata/mtp` |
+| GLM Maya-S v2 · Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB | 539.3 | 11.836 | 19.04/15.52 | 32,768 | 97.42 | NVMe `Maya/Maya-S-v2-IQ2_XXS` |
+| DeepSeek Maya-XS +xs2 · Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe `Maya/DeepSeek-V4.1-Flash-1017-GGUF` |
+| DeepSeek Maya-XS +xs2 · Strata DeepSeek `0.1.49.1/8183c6b67162` | Oct25 /64GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same weights + NVMe `Strata/DeepSeek-V4.1-Flash-1017` metadata |
+
+The Strata Qwen row is corrected to its actual selected October25 build; the October24 tuning report remains historical. [Recovered selected-build samples](results/strata-qwen-selected-2026-10-25.json). No new inference test or runtime change occurred.
 
 Older evidence: [October25 records](results/fresh-engine-tests-2026-10-25.json), [Strata production selection](STRATA-TUNING-2026-10-24.md), [SGLang reference](ALL-MODELS-2026-10-23.md), [storage inventory](results/model-storage-2026-10-27.json). Locations are sanitized drive-relative references; System is the models area and NVMe folders are beneath `LLM-Models`. Active associated model storage remains773.95GB; engine environments are excluded.
 

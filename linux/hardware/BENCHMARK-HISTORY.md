@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+October27 reporting correction: current tables now include exact selected engine versions and use the [October25 Strata Qwen promoted-build samples](results/strata-qwen-selected-2026-10-25.json). Older October24 tuning evidence is preserved; no GPU test or runtime setting changed.
+
 ## Conditional vLLM promotion — October27
 
 Qwen/Sage qualify on dev602; Bolt remains explicitly on dev435 after two near255K
