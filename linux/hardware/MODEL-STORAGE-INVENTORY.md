@@ -1,6 +1,6 @@
 # Model categories and disk storage — October 27, 2026
 
-Flint now has a fresh [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. Storage allocations below are unchanged.
+Earlier same-day Flint [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. The latest engine refresh is in [the October27 report](VRAM-ENGINE-UPDATE-2026-10-27.md); active allocations below are retained and new INT4 candidates are listed separately.
 
 Standing benchmark listing format (October 27): every future benchmark listing,
 inventory with performance, and model comparison must group all model/engine
@@ -25,7 +25,8 @@ The current catalog has **12 profiles / 10 model weight sets**. Empero and Sage
 now default to their tested VRAM-only placements; Flint is selectable as
 `flint-40b-a2.5b` at32K. Both AMD cards remain required. Existing CPU/SSD profiles
 retain their physical-RAM admission and other guards; DSH's saved default stays
-Strata Q3. No engine, quantization, context or model-storage path was changed.
+Strata Q3. Quantizations, contexts and active model-storage paths are retained;
+qualified engine changes are documented in the report below.
 [Activation and normal-launch checks](VRAM-DEFAULTS-2026-10-27.md).
 
 Sizes are decimal **GB of allocated file storage**, including associated
@@ -50,6 +51,20 @@ excluded. [Exact byte counts](results/model-storage-2026-10-27.json).
 | Flint-40B-A2.5B UD-Q4_K_XL | 25.06 | SATA `GGUF-Models/Flint-40B-A2.5B` |
 
 Category total: **132.29 GB**.
+
+### Download-only native INT4 candidates — October27
+
+These are **unqualified VRAM-only candidates**, retained alongside the working GGUFs.
+No production model selection changed. Runtime loading hit the unchanged host-memory/
+swap guards before generation; prefill, TTFT and decode are **not measured**.
+Test contexts: Sage65,536, Flint32,768. [Attempts and source pins](VRAM-ENGINE-UPDATE-2026-10-27.md).
+
+| Candidate | Allocated GB | Storage location |
+|---|---:|---|
+| Sage-A1.5 W4A16 AutoRound | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+| Flint AWQ INT4 | 22.42 | SATA1 `vLLM-Models/Flint-AWQ` |
+
+Candidate allocated total: **42.75GB**; these are excluded from the active VRAM category total.
 
 ## MoE models with CPU RAM offload
 
@@ -81,7 +96,8 @@ The Super SATA backup and old GLM S24 rollback were removed at the user's reques
 Historical checksums/results remain; the S24 manifest is non-installable.
 [Cleanup and isolated trial history](STORAGE-VRAM-2026-10-27.md).
 
-No extra backup/rollback/download-only model remains in the scanned roots.
-All model-associated files use **776.24GB**, including the small176,128-byte
-Hugging Face module cache. Flint's existing25.06GB download is now active; no
-additional model was downloaded or copied. Nightly updates remain paused.
+
+Candidate allocated total: **42.75GB** (42.74GB logical); active assets remain
+**776.24GB**. Combined model-associated storage is **818.98GB**, including the
+small Hugging Face module cache. Candidate files were measured separately from
+the earlier active-assets scan. Nightly updates remain paused.

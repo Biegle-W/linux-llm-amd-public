@@ -60,3 +60,6 @@ linux/maya/rocwmma-7.2.3/
 /archives/*
 !/archives/README.md
 /retired/
+
+# Locally installed versioned llama runtime bundles
+/linux/llm-tools/llama-vram-*/

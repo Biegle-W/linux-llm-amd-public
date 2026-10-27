@@ -50,7 +50,38 @@ def select_vulkan_devices(binary, env, mixed=False):
     return env
 
 
-def launch_spec(backend=None):
+def runtime_source(model=None):
+    """Select a model-qualified source; explicit test overrides take precedence."""
+    override = os.environ.get('LLAMA_CPP_DIR')
+    if override:
+        return Path(override).resolve(), None
+    config = ROOT / 'llama-runtime.json'
+    settings = json.loads(config.read_text()) if config.exists() else {}
+    selected = settings.get('source_overrides', {}).get(model)
+    if selected:
+        path, commit = selected['path'], selected['source_commit']
+        if not Path(path).is_absolute() or not re.fullmatch(r'[0-9a-f]{40}', commit):
+            raise RuntimeError('Invalid qualified llama source path/pin; no worker was changed.')
+        return Path(path).resolve(), commit
+    return (ROOT.parent / 'llama.cpp').resolve(), None
+
+
+def runtime_identity(mode, model=None):
+    source, commit = runtime_source(model)
+    # Check even when reusing a parent: a later child may exec this path.
+    verify_source_pin(source, commit)
+    return mode, str(source), commit
+
+
+def verify_source_pin(source, commit):
+    if commit:
+        actual = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'],
+                                         text=True, timeout=10).strip()
+        if actual != commit:
+            raise RuntimeError('Qualified llama source revision changed; no worker was changed.')
+
+
+def launch_spec(backend=None, model=None):
     config = ROOT / 'llama-runtime.json'
     mode = backend or (json.loads(config.read_text())['backend'] if config.exists() else 'cuda')
     if mode == 'cuda':
@@ -62,7 +93,8 @@ def launch_spec(backend=None):
     validate_profiles(ROOT)
     hip = mode == 'hip-amd'
     # LLAMA_CPP_DIR permits isolated candidate checks before promotion, like VLLM_ENV_PATH.
-    source = Path(os.environ.get('LLAMA_CPP_DIR') or ROOT.parent / 'llama.cpp')
+    source, commit = runtime_source(model)
+    verify_source_pin(source, commit)
     binary = source / ('build-hip/bin/llama-server' if hip else 'build-vulkan/bin/llama-server')
     env = dict(os.environ)
     for name in ('GGML_VK_PREFER_HOST_MEMORY', 'GGML_VK_ALLOW_SYSMEM_FALLBACK',

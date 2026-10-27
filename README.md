@@ -1,5 +1,8 @@
 # Linux LLM AMD — public reference
 
+October27: [VRAM engine refresh and native INT4 attempts](linux/hardware/VRAM-ENGINE-UPDATE-2026-10-27.md): llama.cpp qualified for three VRAM profiles; newer vLLM/INT4 loading remains held by current RAM/swap guards; required SGLang fork already current.
+
+
 **Repository split — October 25:** this is the existing AMD Linux build, now
 `linux-llm-amd` / `linux-llm-amd-public`. The new NVIDIA Linux build has separate
 repositories and validation. Retired source/settings moved to private

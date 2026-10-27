@@ -1,6 +1,15 @@
-# Current dual-AMD benchmarks — October 25, 2026
+# Current dual-AMD benchmarks — October 27, 2026
 
-## Flint current reasoning budget 128 — October 27
+## VRAM engine refresh — October27
+
+Qualified llama.cpp19cce691 for Empero/Sage/Flint with profile-specific source
+pins; CPU profiles retain2280f0fd. New vLLM dev602 and Sage/Flint native INT4
+trials remain held by current-host loading guards; production staysdev435.
+Required SGLang f84475cc is already latest. All current guards/settings and the
+paused updater remain. [Full fields, paired medians, source pins and failed attempts](VRAM-ENGINE-UPDATE-2026-10-27.md).
+
+
+## Earlier October27 Flint reasoning-budget128 benchmark (2280f0fd)
 
 Fresh normal-launcher/authenticated API medians on both RX 7900 XTX and 14.83 GiB
 host RAM: native prefill **6034.8 tokens/s**, fresh ~8K first-token TTFT
@@ -285,7 +294,7 @@ These Sage rows used the old 512/128 batch; current Sage prefill is in the Octob
 
 ## Active profile results
 
-### Installed and measured builds
+### October23 installed-build snapshot (historical)
 
 Engines now update daily when a newer upstream version passes every promotion gate against the same night's production run; see [DAILY-UPDATES.md](DAILY-UPDATES.md). The rates in the tables above predate the October 23 update unless marked.
 

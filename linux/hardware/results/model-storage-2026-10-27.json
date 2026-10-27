@@ -4,8 +4,8 @@
   "scope": "Installed model files under configured system/SATA/shared-NVMe roots, including associated packs, drafts, backups and rollback artifacts; excludes engine binaries, environments, unrelated filesystem contents and runtime-local routing profiles.",
   "categories": {
     "vram_only": "VRAM only models",
-    "cpu_ram_moe": "CPU RAM MoE models",
-    "ssd_stream": "SSD stream models"
+    "cpu_ram_moe": "MoE models with CPU RAM offload",
+    "ssd_stream": "MoE models with SSD streaming"
   },
   "models": [
     {
@@ -229,17 +229,40 @@
       "note": "Selectable llama.cpp VRAM-only32K on both GPUs, MTP off, bounded reasoning128; uses existing download, no copied weights."
     }
   ],
-  "additional_stored_assets": [],
+  "additional_stored_assets": [
+    {
+      "kind": "download-only INT4 candidate",
+      "repository": "stuchapin/Sage-A1.5-W4A16-AutoRound",
+      "revision": "837d528b8386488d2066d529b5180c07b9522620",
+      "production_selected": false,
+      "path": "/mnt/shared/SATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound",
+      "file_count": 17,
+      "logical_bytes": 20326615494,
+      "allocated_bytes": 20330053632,
+      "category": "vram_only"
+    },
+    {
+      "kind": "download-only INT4 candidate",
+      "repository": "mattbucci/Flint-AWQ",
+      "revision": "2cae47a65e71d151a002172d18bcf2589fe09177",
+      "production_selected": false,
+      "path": "/mnt/shared/SATA1/vLLM-Models/Flint-AWQ",
+      "file_count": 14,
+      "logical_bytes": 22414818923,
+      "allocated_bytes": 22417244160,
+      "category": "vram_only"
+    }
+  ],
   "category_allocated_bytes": {
     "vram_only": 132285685760,
     "cpu_ram_moe": 136521056256,
     "ssd_stream": 507430305792
   },
   "active_model_assets_allocated_bytes": 776237047808,
-  "additional_assets_allocated_bytes": 0,
+  "additional_assets_allocated_bytes": 42747297792,
   "other_huggingface_module_cache_allocated_bytes": 176128,
-  "all_scanned_allocated_bytes": 776237223936,
-  "all_scanned_logical_bytes": 776219497528,
+  "all_scanned_allocated_bytes": 818984521728,
+  "all_scanned_logical_bytes": 818960931945,
   "profile_count": 12,
   "unique_active_model_count": 10,
   "runtime_changed": true,
@@ -268,5 +291,7 @@
     }
   ],
   "engine_versions_changed": false,
-  "activation_evidence": "hardware/results/vram-defaults-2026-10-27.json"
+  "activation_evidence": "hardware/results/vram-defaults-2026-10-27.json",
+  "additional_assets_measured_at": "2026-10-27T13:22:47.008182-04:00",
+  "additional_assets_method": "Read-only candidate-file metadata extension to the earlier October27 active-assets scan; existing active sizes retained, not rescanned. Weight shards match publisher LFS SHA-256; associated small files fetched at pinned revisions and locally hashed."
 }

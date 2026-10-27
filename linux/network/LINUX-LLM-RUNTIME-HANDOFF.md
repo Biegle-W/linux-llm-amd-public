@@ -1,5 +1,21 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**October27 VRAM engine refresh:** llama.cpp19cce6919992 is selected only for
+Empero/Sage/Flint through source_overrides; global2280f0fd remains for CPU models.
+Source-aware router reuse includes the commit/path; mismatched pins fail before
+unloading. Exact configured source binaries are also registered for owned orphan
+cleanup; unrelated applications remain excluded. All three passed fresh paired timing/memory/marker gates and normal
+API/tools/JSON/SSE, Sage vision and4/5GiB no-swap scopes. Full context/history
+quality is not remeasured. Current 14.83GiB host stopped newer vLLMdev602 and native
+Sage/FlintINT4 loading under existing guards; selected vLLMdev435 remains.
+SGLang f84475cc is already the latest required gfx1100 fork. Native candidates on
+SATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound and Flint-AWQ add42.75GB allocated;
+they are not catalog selections. Working GGUFs remain. Both GPUs, contexts,
+Flint reasoning128, swap/pressure/RAM/VRAM guards and updater hold remain.
+[Results and exact pins](../hardware/VRAM-ENGINE-UPDATE-2026-10-27.md).
+Public source paths are examples; clone/build the exact revision locally and set an absolute source_overrides path.
+
+
 ## Note for Claude Code and Codex — this server's maintenance scope
 
 Standing user instruction after the repository restructure: **this server
@@ -26,7 +42,7 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
-**Flint current reasoning budget 128 — October 27:**
+**Earlier October27 Flint reasoning-budget128 benchmark (2280f0fd):**
 
 Fresh normal-launcher/authenticated API medians on both RX 7900 XTX and 14.83 GiB
 host RAM: native prefill **6034.8 tokens/s**, fresh ~8K first-token TTFT
@@ -162,18 +178,19 @@ existing engine no-swap scopes still take precedence. CPU-only verification:
 [Detailed policy](../hardware/daily-update/README.md#default-low-churn-policy--october-26).
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-25 fresh tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Current engine versions after the 2026-10-27 VRAM tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `2280f0fd163b` |
+| llama.cpp default /CPU profiles | `2280f0fd163b` |
+| llama.cpp Empero /Sage /Flint | `19cce6919992` |
 | vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 
-Last run: llama.cpp promoted; Strata DeepSeek rejected; Maya rejected.
+Latest manual VRAM qualification: three llama.cpp profile pins promoted; vLLM held by loading guards; SGLang already current. October25 full-catalog history remains in the ledger.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

@@ -2,8 +2,10 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
 import fcntl
+from functools import lru_cache
 import json
 import os
+import re
 from pathlib import Path
 import signal
 import subprocess
@@ -71,6 +73,33 @@ def is_launcher(p, root=ROOT):
                 entry[2] and entry[2][0] in KINDS)
 
 
+@lru_cache(maxsize=8)
+def _qualified_llama_binaries(root, mtime_ns, size):
+    """Only exact configured source binaries, including an orphaned native worker."""
+    try:
+        settings = json.loads((Path(root) / 'dsh/llama-runtime.json').read_text())
+        binaries = set()
+        for entry in settings.get('source_overrides', {}).values():
+            source, commit = entry.get('path'), entry.get('source_commit')
+            if not (isinstance(source, str) and Path(source).is_absolute()
+                    and isinstance(commit, str) and re.fullmatch(r'[0-9a-f]{40}', commit)):
+                continue
+            source = Path(source).resolve()
+            binaries.update(str(source / folder / 'bin/llama-server')
+                            for folder in ('build-hip', 'build-vulkan'))
+        return frozenset(binaries)
+    except (OSError, ValueError, TypeError, AttributeError):
+        return frozenset()
+
+
+def qualified_llama_binaries(root):
+    try:
+        stat = (Path(root) / 'dsh/llama-runtime.json').stat()
+        return _qualified_llama_binaries(str(root), stat.st_mtime_ns, stat.st_size)
+    except OSError:
+        return frozenset()
+
+
 def is_inference(p, root=ROOT):
     if not p.args:
         return False
@@ -85,6 +114,7 @@ def is_inference(p, root=ROOT):
                  'strata/engine/strata', 'strata/build-hip/strata',
                  'strata-dsv41/upstream/build-hip/strata-dsv41',
                  'maya/upstream/build-hip/maya', 'maya/upstream/build-hip/maya-ds4')}
+    binaries.update(qualified_llama_binaries(root))
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':

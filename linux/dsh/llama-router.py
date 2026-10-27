@@ -14,7 +14,7 @@ import time
 import urllib.parse
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from llama_runtime import launch_spec, require_amd_headroom
+from llama_runtime import launch_spec, require_amd_headroom, runtime_identity
 from moe_memory import admit_model, watch_worker, worker_limits_for_model, require_model_capacity
 
 ROOT = Path(__file__).resolve().parent
@@ -24,6 +24,7 @@ native = None
 native_port = 0
 active_model = None
 active_mode = None
+active_runtime = None
 active_limits = None
 memory_watch = None
 swap_guard = WorkerSwapGuard()
@@ -71,17 +72,18 @@ def backend_for_model(model):
 @inference_request
 def activate_native(mode, spec=None, model=None):
     """Switch only this router's native worker; preserve the frontend and API port."""
-    global native, active_mode, active_model, active_limits, memory_watch
+    global native, active_mode, active_runtime, active_model, active_limits, memory_watch
     swap_guard.check()
     if model is not None:
         require_model_capacity(model)
     limits = worker_limits_for_model(model)
     if limits and mode != 'hip-amd':
         raise RuntimeError('Validated VRAM-only profiles require HIP AMD; no worker was changed.')
-    if native is not None and native.poll() is None and active_mode == mode and active_limits == limits:
+    identity = runtime_identity(mode, model)
+    if native is not None and native.poll() is None and active_runtime == identity and active_limits == limits:
         return
     # Verify the requested binary/devices before unloading a working model.
-    binary, preset, env, enabled = spec or launch_spec(mode)
+    binary, preset, env, enabled = spec or launch_spec(mode, model=model)
     if memory_watch:
         memory_watch.set()
     stop_process(native)
@@ -102,6 +104,7 @@ def activate_native(mode, spec=None, model=None):
     ready(native, native_port)
     swap_guard.ready(native)
     active_mode = mode
+    active_runtime = identity
     active_limits = limits
     memory_watch = watch_worker(native, lambda: active_model, stop_process)
     print(f'llama.cpp native runtime selected: {mode}', flush=True)

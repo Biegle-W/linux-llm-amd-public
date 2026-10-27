@@ -1,8 +1,17 @@
 # Current benchmark results
 
+## VRAM engine refresh — October27
+
+Qualified llama.cpp19cce691 for Empero/Sage/Flint with profile-specific source
+pins; CPU profiles retain2280f0fd. New vLLM dev602 and Sage/Flint native INT4
+trials remain held by current-host loading guards; production staysdev435.
+Required SGLang f84475cc is already latest. All current guards/settings and the
+paused updater remain. [Full fields, paired medians, source pins and failed attempts](../VRAM-ENGINE-UPDATE-2026-10-27.md).
+
+
 - [H3 guarded SP2 attempt](h3-sp2-2026-10-27.json), [report](../../graphics/H3-SP2-2026-10-27.md): stock ComfyUI0.42 API incompatibility, reduced-RAM control/communication guard stops and isolated compatibility pilot; no completed matched generation speedup.
 
-- [Flint current reasoning128](flint-reasoning128-2026-10-27.json), [report](../FLINT-REASONING128-2026-10-27.md): normal-launcher median prefill 6034.8, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s; 32K, 25.06 GB SATA1; three trials/task, zero worker swap/spill.
+- [Earlier October27 Flint reasoning128](flint-reasoning128-2026-10-27.json), [report](../FLINT-REASONING128-2026-10-27.md): normal-launcher median prefill 6034.8, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s; 32K, 25.06 GB SATA1; three trials/task, zero worker swap/spill.
 
 - [VRAM-only defaults and selectable Flint](vram-defaults-2026-10-27.json), [report](../VRAM-DEFAULTS-2026-10-27.md): normal launch/auth API, tools, long markers/history and Sage vision; strict owned staging caps; 12 profiles, default preserved.
 - [October27 backup cleanup and all-VRAM candidates](storage-vram-2026-10-27.json), [report](../STORAGE-VRAM-2026-10-27.md): 156.47GB reclaimed; Strata Qwen reclassified SSD stream; Empero/Sage/Flint isolated GPU-only text probes pass, production profiles unchanged.

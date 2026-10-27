@@ -8,5 +8,19 @@
     "flint-40b-a2.5b"
   ],
   "source_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
-  "runtime_overrides": {}
+  "runtime_overrides": {},
+  "source_overrides": {
+    "empero-qwen3.8-35b-a3b": {
+      "path": "/opt/local-llm/llm-tools/llama-vram-19cce691",
+      "source_commit": "19cce6919992fdffd92e0ac152caaf1e2b8f254e"
+    },
+    "sage-a1.5": {
+      "path": "/opt/local-llm/llm-tools/llama-vram-19cce691",
+      "source_commit": "19cce6919992fdffd92e0ac152caaf1e2b8f254e"
+    },
+    "flint-40b-a2.5b": {
+      "path": "/opt/local-llm/llm-tools/llama-vram-19cce691",
+      "source_commit": "19cce6919992fdffd92e0ac152caaf1e2b8f254e"
+    }
+  }
 }

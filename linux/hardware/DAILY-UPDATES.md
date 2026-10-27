@@ -1,5 +1,14 @@
 # Daily engine updates
 
+## VRAM engine refresh — October27
+
+Qualified llama.cpp19cce691 for Empero/Sage/Flint with profile-specific source
+pins; CPU profiles retain2280f0fd. New vLLM dev602 and Sage/Flint native INT4
+trials remain held by current-host loading guards; production staysdev435.
+Required SGLang f84475cc is already latest. All current guards/settings and the
+paused updater remain. [Full fields, paired medians, source pins and failed attempts](VRAM-ENGINE-UPDATE-2026-10-27.md).
+
+
 ## DeepSeek-S retired — October26
 
 At the user's request, S is removed from Maya and Strata; **11 profiles** remain.

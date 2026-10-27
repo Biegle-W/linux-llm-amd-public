@@ -358,6 +358,9 @@ class Llama(Engine):
         sh(['bash', str(ROOT/'hardware/build-llama-hip.sh')], logfile, env={**os.environ, 'BUILD_JOBS': BUILD_JOBS})
         pin = json.loads(self.pin.read_text())
         pin['source_commit'] = rev
+        # Full-catalog candidate gates must exercise the new global source.
+        # Rollback restores the saved per-model pins with the entire JSON file.
+        pin.pop('source_overrides', None)
         self.pin.write_text(json.dumps(pin, indent=2) + '\n')
 
     def rollback(self, stage, logfile):

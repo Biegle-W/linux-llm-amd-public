@@ -1,5 +1,8 @@
 # Daily engine update
 
+October27: VRAM-only llama profiles can carry separately qualified source_overrides. A full-catalog provisional install clears them so candidate gates use the new global source; rollback restores the saved JSON/pins. The timer remains paused. [Manual qualification](../VRAM-ENGINE-UPDATE-2026-10-27.md).
+
+
 **Current status (October 26):** scheduled updates are disabled. Reduced-RAM
 GPU-resident baseline qualification is separate and does not resume this updater.
 

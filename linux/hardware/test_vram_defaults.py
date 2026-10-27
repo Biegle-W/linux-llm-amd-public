@@ -57,6 +57,8 @@ class VramDefaults(unittest.TestCase):
         spec=importlib.util.spec_from_file_location('vram_router_test',ROOT/'dsh/llama-router.py')
         m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
         m.swap_guard=Mock();m.require_amd_headroom=Mock();m.watch_worker=Mock();m.ready=Mock();m.stop_process=Mock()
+        # Guard tests use an isolated identity, independent of installed source paths.
+        m.runtime_identity=Mock(return_value=('hip-amd','/fake/qualified-source','a'*40))
         return m
 
     def test_cpu_target_refuses_before_replacing_working_gpu_worker(self):
@@ -72,6 +74,7 @@ class VramDefaults(unittest.TestCase):
 
     def test_compatible_gpu_switch_keeps_bounded_worker(self):
         m=self.router();m.native=Mock();m.native.poll.return_value=None;m.active_mode='hip-amd';m.active_limits=moe_memory.vram_worker_limits(self.plan)
+        m.active_runtime=m.runtime_identity('hip-amd','sage-a1.5')
         with patch.object(moe_memory,'host_memory',return_value=(14*GIB,8*GIB)):
             m.activate_native.__wrapped__('hip-amd',model='sage-a1.5')
         m.stop_process.assert_not_called();m.swap_guard.spawn.assert_not_called()
