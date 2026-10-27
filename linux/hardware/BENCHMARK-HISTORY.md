@@ -1,5 +1,14 @@
 # LLM benchmark and context history
 
+## Conditional vLLM promotion — October27
+
+Qwen/Sage qualify on dev602; Bolt remains explicitly on dev435 after two near255K
+inference-churn stops, despite its earlier successful8K performance gates. The
+updater excludes `manual_runtime_pin` profiles and remains paused. Completed speed
+samples are reused; new installed functionality/mixed routing, all failures and
+188 CPU regressions per checkout are recorded. Guards/contexts remain unchanged.
+[Selected results, qualification and recovery](VLLM-DEV602-PROMOTION-2026-10-27.md).
+
 ## Current Sage INT4 selection — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the

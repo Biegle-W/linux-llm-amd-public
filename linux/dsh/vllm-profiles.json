@@ -10,7 +10,7 @@
     "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
     "min_free_vram_gib": 21.0,
     "kv_cache_dtype": "bfloat16",
-    "context_validation": "Fresh160868 input/22 output plus full-history follow-up; arithmetic/JSON/tools/SSE; both cards, zero owned swap/spill"
+    "context_validation": "October27 dev602: fresh 160851 input/history 160897; API/JSON/tools/SSE, ordered markers/history, both GPUs, loading-swap-v2, zero observed dedicated-VRAM spill. See hardware/VLLM-DEV602-PROMOTION-2026-10-27.md; narrow checks, not exhaustive full-window quality."
   },
   "nemotron-3.5-bolt-vllm": {
     "name": "Nemotron-3.5-Bolt-74B-A9B vLLM dual AMD (262K, AutoRound W4A16, BF16 KV)",
@@ -23,7 +23,9 @@
     "model_path": "/mnt/shared/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
     "min_free_vram_gib": 22.0,
     "kv_cache_dtype": "bfloat16",
-    "context_validation": "Fresh 254,994-input three-marker retrieval and 255,034-token full-history follow-up at 262,144; arithmetic/SSE; both cards, zero owned swap/spill (October 21)"
+    "context_validation": "Fresh 254,994-input three-marker retrieval and 255,034-token full-history follow-up at 262,144; arithmetic/SSE; both cards, zero owned swap/spill (October 21)",
+    "manual_runtime_pin": "0.32.1rc1.dev435+gc50aca144.rocm72",
+    "runtime_pin_reason": "dev602 near255K active prefill hit unchanged inference churn guards twice on14.83GiB RAM. Normal dev435 routing/fresh~8K markers/sustained compute verified; retain dev435 until remaining long-window qualification passes."
   },
   "sage-a1.5": {
     "name": "Sage-A1.5 W4A16 INT4 (64K, dual AMD vLLM, MTP3, text-only)",
@@ -39,7 +41,7 @@
     "kv_cache_dtype": "bfloat16",
     "vision_enabled": false,
     "memory_category": "vram_only",
-    "context_validation": "October27 native replacement validation; see hardware/SAGE-INT4-REPLACEMENT-2026-10-27.md. The configured64K limit is distinguished from actual tested input.",
+    "context_validation": "October27 dev602: fresh 62009 input/history 62051; API/JSON/tools/SSE, ordered markers/history, both GPUs, loading-swap-v2, zero observed dedicated-VRAM spill. See hardware/VLLM-DEV602-PROMOTION-2026-10-27.md; narrow checks, not exhaustive full-window quality.",
     "vision_limitation": "Native image check failed on both dev435 and dev602; language-only runtime. GGUF/projector retired at user request."
   }
 }

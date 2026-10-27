@@ -1,5 +1,21 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Current vLLM selection — October27
+
+**Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on
+`0.32.1rc1.dev435+gc50aca144.rocm72`.** Qwen/Sage pass performance gates and new
+installed API/tools/JSON/SSE, near-window/history and sustained-compute validation.
+Bolt dev602 passed its earlier8K speed gates but hit the unchanged swap-churn guards
+twice during near255K prefill; it is not promoted. Its launcher has an explicit
+stable-runtime default and `manual_runtime_pin` excludes it from global updater
+promotions. Actual mixed routing is verified. No guard/context is lowered, Sage
+remains text-only, other engines/default Strata remain, and the updater stays paused.
+[Qualification, selected benchmarks, failures and recovery](../hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
+Earlier dev435/candidate-only snapshots below retain dated evidence; this section
+supersedes them as current runtime state.
+
+Global dev435 recovery and Bolt's separate stable environment are retained privately. Bolt launcher selects its stable environment relative to the repository; restore only with owned workers stopped and GPU ownership reserved.
+
 **NVIDIA-agent notes delivered — October27:** the user requested a
 [NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
 It is published in both NVIDIA repositories and linked from their README/AGENTS;
@@ -25,7 +41,7 @@ and six maintained profiles; the old prepared-only repository-map status is supe
 The completed Sage selection below remains the last runtime change. Current audit
 work owns no GPU job or lock. The H3 RAM-upgrade follow-up and updater hold remain.
 
-## Current Sage INT4 selection — October27
+## Earlier Sage INT4 activation on dev435 — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
 same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and
@@ -252,13 +268,14 @@ change. Nightly updates remain paused.
 |---|---|
 | llama.cpp default /CPU profiles | `2280f0fd163b` |
 | llama.cpp Empero /Flint | `19cce6919992` |
-| vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
+| vLLM global: Qwen/Sage | `0.32.1rc1.dev602+g5d35ce393.rocm72` |
+| vLLM Bolt launcher override | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 
-Latest manual Sage selection: native INT4 on installed vLLMdev435; GGUF removed. Remaining llama.cpp VRAM pins are Empero/Flint19cce691; CPU source2280f0fd. dev602 benchmark evidence remains isolated; SGLang compatibility blockers are recorded. October25 full-catalog history remains in the ledger.
+Latest manual selection: Qwen/Sage dev602 qualified; Bolt dev435 held after two dev602 churn stops; Sage GGUF remains removed. Remaining llama.cpp VRAM pins are Empero/Flint19cce691; CPU source2280f0fd. Actual mixed-runtime routing is verified; SGLang compatibility blockers remain recorded. October25 full-catalog history remains in the ledger.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

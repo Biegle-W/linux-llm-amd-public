@@ -1,5 +1,19 @@
 # Linux LLM AMD — public reference
 
+## Current vLLM selection — October27
+
+**Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on
+`0.32.1rc1.dev435+gc50aca144.rocm72`.** Qwen/Sage pass performance gates and new
+installed API/tools/JSON/SSE, near-window/history and sustained-compute validation.
+Bolt dev602 passed its earlier8K speed gates but hit the unchanged swap-churn guards
+twice during near255K prefill; it is not promoted. Its launcher has an explicit
+stable-runtime default and `manual_runtime_pin` excludes it from global updater
+promotions. Actual mixed routing is verified. No guard/context is lowered, Sage
+remains text-only, other engines/default Strata remain, and the updater stays paused.
+[Qualification, selected benchmarks, failures and recovery](linux/hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
+Earlier dev435/candidate-only snapshots below retain dated evidence; this section
+supersedes them as current runtime state.
+
 **NVIDIA-agent notes delivered — October27:** the user requested a
 [NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
 It is published in both NVIDIA repositories and linked from their README/AGENTS;
@@ -29,7 +43,7 @@ six deployed profiles; the earlier prepared-only map is superseded. Ask the user
 which gaps to fill before changing NVIDIA or applying parity candidates.
 No inference test, engine/profile setting or schedule changed in this documentation review.
 
-## Current Sage INT4 selection — October27
+## Earlier Sage INT4 activation on dev435 — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
 same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and

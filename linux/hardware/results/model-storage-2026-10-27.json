@@ -109,7 +109,7 @@
       ],
       "logical_bytes": 20326615494,
       "allocated_bytes": 20330053632,
-      "note": "Selected vLLM dev435, TP2, MTP3,64K; old GGUF/projector removed. Text-only; native image quality failed."
+      "note": "Selected vLLM dev602, TP2, MTP3,64K; old GGUF/projector removed. Text-only; native image quality failed."
     },
     {
       "name": "Ornith-1.5-122B Q4_K_M",
@@ -303,5 +303,6 @@
   "engine_versions_changed": false,
   "activation_evidence": "hardware/results/sage-int4-replacement-2026-10-27.json",
   "additional_assets_measured_at": "2026-10-27T13:22:47.008182-04:00",
-  "additional_assets_method": "Earlier unchanged metadata allocations retained; Sage native promoted from additional to active assets and two GGUF files verified removed. No duplication of native weights."
+  "additional_assets_method": "Earlier unchanged metadata allocations retained; Sage native promoted from additional to active assets and two GGUF files verified removed. No duplication of native weights.",
+  "latest_runtime_qualification": "hardware/results/vllm-dev602-promotion-2026-10-27.json"
 }

@@ -4,6 +4,9 @@
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 MODEL=/mnt/shared/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16
+# Held on dev435: dev602 near255K prefill hit the unchanged inference churn guards.
+# Explicit candidate VLLM_ENV_PATH overrides remain available for guarded tests.
+export VLLM_ENV_PATH="${VLLM_ENV_PATH:-$ROOT/vllm/bolt-dev435/.venv-rocm}"
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 export VLLM_ENGINE_READY_TIMEOUT_S=1800
 exec "$ROOT/vllm/run-rocm" serve "$MODEL" \

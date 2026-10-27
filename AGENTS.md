@@ -27,3 +27,10 @@ settings or schedules onto NVIDIA without separate authorization and qualificati
 The user-requested [NVIDIA-server gap handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) is now published in both
 NVIDIA repos. It records pending implementation work and host-specific validation;
 this documentation delivery did not change runtimes or schedules.
+
+October27 conditional vLLM qualification: [Qwen/Sage dev602 and Bolt dev435 hold](linux/hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
+The installed global wheel and Bolt's explicit launcher override are separate.
+Respect `manual_runtime_pin`; the updater excludes held models. Unpin only after
+qualification, updating both launcher and metadata together. Keep loading-swap-v2,
+all independent guards and the paused updater. Current versions/results belong
+in the canonical handoff/report; the API version omits the wheel packaging suffix.

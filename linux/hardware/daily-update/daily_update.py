@@ -380,7 +380,9 @@ class Vllm(Engine):
     index = 'https://wheels.vllm.ai/rocm/nightly/{variant}/vllm/'
 
     def models(self):
-        return [k for k, v in json.loads((ROOT/'dsh/vllm-profiles.json').read_text()).items() if v.get('enabled', True)]
+        # Model-specific runtime holds must not be reported as testing a new global wheel.
+        return [k for k, v in json.loads((ROOT/'dsh/vllm-profiles.json').read_text()).items()
+                if v.get('enabled', True) and not v.get('manual_runtime_pin')]
 
     def current(self):
         return out([str(self.env/'bin/python'), '-c', 'import importlib.metadata as m;print(m.version("vllm"))'])

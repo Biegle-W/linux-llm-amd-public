@@ -31,12 +31,13 @@ def _identity():
 PRIVATE = re.compile(r'/home/|/run/media|\b(?:100|192\.168)\.\d+\.\d+|\.ts\.net|' + _identity(), re.I)
 HEADER = '''# Daily engine updates
 
-Every night at 03:00 `llm-daily-update.timer` checks llama.cpp, vLLM, SGLang, Strata and
-Maya for newer upstream versions. Each one is built in isolation, benchmarked against the
-current production build with the shared method, and kept only when every standard
-promotion gate passes (prefill and code/prose decode ≥95% of production, short time to
-first token within max(1.25×, +0.05 s), no fewer retrieval markers, at most 64 MiB aggregate observed
-worker swap and zero VRAM spill with valid launch-through-shutdown memory telemetry).
+The configured updater checks candidate engine builds in isolation. Its timer/hold
+status is recorded in the canonical runtime handoff; this text does not enable it.
+Promotion retains fixed performance/marker/quality gates and valid lifecycle
+memory evidence under loading-swap-v2: loading/parked swap is allowed, sustained
+active inference churn and dedicated-VRAM spill remain guarded. Independent RAM,
+GPU headroom, ownership and thermal protections remain. Manually pinned model
+runtimes are excluded from global update comparisons and reported separately.
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
 '''
@@ -70,6 +71,10 @@ def versions():
             rows.append(f'| {engine.name} | `{short(engine.current())}` |')
         except Exception as error:
             rows.append(f'| {engine.name} | unknown ({type(error).__name__}) |')
+    # A global wheel does not replace a separately held model runtime.
+    for model, cfg in json.loads((ROOT/'dsh/vllm-profiles.json').read_text()).items():
+        if cfg.get('enabled', True) and cfg.get('manual_runtime_pin'):
+            rows.append(f'| vLLM {model} (manual runtime pin) | `{cfg["manual_runtime_pin"]}` |')
     return rows
 
 

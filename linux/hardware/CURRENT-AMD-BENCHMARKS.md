@@ -1,5 +1,40 @@
 # Current dual-AMD benchmarks — October 27, 2026
 
+## Current selected profiles — October27 conditional vLLM update
+
+Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-prefill failures. Five profiles have completed October27 speed samples on14.83GiB RAM. Seven older references below retain their64GB hardware attribution; they are not fresh current-RAM passes. Prefill N=native,E=engine phase. Decode is code/prose. TTFT excludes loading; context is configured capacity. Sizes are decimal allocated associated-file GB, shared sets counted once. [Qualification and retained failures](VLLM-DEV602-PROMOTION-2026-10-27.md).
+
+### VRAM only models
+
+| Model / selected engine | Date | Prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+|---|---|---:|---:|---:|---:|---:|---|
+| Empero IQ4_XS · llama.cpp | Oct27 | 3406.8 N | 2.410 | 132.83/83.51 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
+| Flint UD-Q4_K_XL · llama.cpp, reasoning128 | Oct27 | 6030.6 N | 1.394 | 46.73/46.82 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
+| Qwen3.8-27B W4A16 · dev602 | Oct27 | 1372.5 E | 6.008 | 140.97/77.73 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
+| Nemotron3.5 Bolt74B-A9B W4A16 · dev435 held | Oct27 | 2642.4 E | 3.026 | 37.88/37.98 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
+| Sage-A1.5 W4A16 AutoRound · dev602 | Oct27 | 5091.7 E | 1.619 | 148.64/139.62 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+| Qwen27B W4A16 · SGLang DFlash2 | Oct23 reference | 1468.8 E | 5.585 | 206.18/71.08 | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
+
+SGLang's latest retry failed the VRAM-spill guard; its row is an older reference. Flint's visible-answer TTFT is4.457s. Sage stays text-only; its old GGUF/projector remains removed.
+
+### MoE models with CPU RAM offload
+
+| Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+|---|---|---:|---:|---:|---:|---:|---|
+| Super120B UD-IQ3_XXS · llama.cpp | Oct25 /64GB | 430.4 | 18.426 | 15.58/17.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
+| Ornith122B Q4_K_M · llama.cpp | Oct25 /64GB | 711.2 | 11.518 | 11.27/13.47 | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
+
+### MoE models with SSD streaming
+
+| Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+|---|---|---:|---:|---:|---:|---:|---|
+| Qwen Flash-Next IQ3_XXS · Strata | Oct24 /64GB | 1208.2 | 6.810 | 77.38/50.61 | 262,144 | 128.14 | NVMe `Strata/models`, `Strata/packs`, `Strata/mtp` |
+| GLM Maya-S v2 · Maya | Oct25 /64GB | 539.3 | 11.836 | 19.04/15.52 | 32,768 | 97.42 | NVMe `Maya/Maya-S-v2-IQ2_XXS` |
+| DeepSeek Maya-XS +xs2 · Maya | Oct25 /64GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe `Maya/DeepSeek-V4.1-Flash-1017-GGUF` |
+| DeepSeek Maya-XS +xs2 · Strata | Oct25 /64GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same weights + NVMe `Strata/DeepSeek-V4.1-Flash-1017` metadata |
+
+Older evidence: [October25 records](results/fresh-engine-tests-2026-10-25.json), [Strata production selection](STRATA-TUNING-2026-10-24.md), [SGLang reference](ALL-MODELS-2026-10-23.md), [storage inventory](results/model-storage-2026-10-27.json). Locations are sanitized drive-relative references; System is the models area and NVMe folders are beneath `LLM-Models`. Active associated model storage remains773.95GB; engine environments are excluded.
+
 **NVIDIA-agent notes delivered — October27:** the user requested a
 [NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
 It is published in both NVIDIA repositories and linked from their README/AGENTS;
@@ -17,7 +52,7 @@ Sage INT4 selection/retirement below remains current. Root README/AGENTS and the
 canonical handoff now record the standing takeover-ready documentation requirement.
 Proposed parity changes await the user's choice; no NVIDIA source/runtime changed.
 
-## Current Sage INT4 selection — October27
+## Earlier Sage INT4 activation on dev435 — October27
 
 Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
 same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and

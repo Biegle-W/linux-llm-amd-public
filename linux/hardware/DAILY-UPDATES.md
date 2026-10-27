@@ -1,5 +1,14 @@
 # Daily engine updates
 
+## Conditional vLLM promotion — October27
+
+Qwen/Sage qualify on dev602; Bolt remains explicitly on dev435 after two near255K
+inference-churn stops, despite its earlier successful8K performance gates. The
+updater excludes `manual_runtime_pin` profiles and remains paused. Completed speed
+samples are reused; new installed functionality/mixed routing, all failures and
+188 CPU regressions per checkout are recorded. Guards/contexts remain unchanged.
+[Selected results, qualification and recovery](VLLM-DEV602-PROMOTION-2026-10-27.md).
+
 ## Loading-swap framework/INT4 retry — October27
 
 Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
