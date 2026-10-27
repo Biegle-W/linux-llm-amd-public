@@ -1,5 +1,18 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Current Sage INT4 selection — October27
+
+Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
+same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and
+62,009-token markers pass. Selected benchmark: engine-phase prefill
+4142.6t/s, fresh TTFT2.001s, code/prose148.04/138.33t/s,
+20.33GB SATA1. Native image checks failed on both tested vLLM builds; the replacement is text-only. The slower Sage GGUF and
+exclusive projector are removed (22.61GB reclaimed); all other GGUFs remain.
+Twelve profiles remain; DSH default, remaining engine pins, current swap policy,
+independent guards and paused updater remain. Earlier same-day snapshots below
+retain their original status; this selection supersedes their Sage GGUF state.
+[Comparison, compatibility results and removal](../hardware/SAGE-INT4-REPLACEMENT-2026-10-27.md).
+
 ## Loading-swap framework/INT4 retry — October27
 
 Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;
@@ -40,7 +53,7 @@ The H3 follow-up still waits for a real MemTotal increase and now includes short
 disk-temp guidance. [Full current-RAM record](../hardware/CURRENT-RAM-RETEST-2026-10-27.md).
 
 
-**October27 VRAM engine refresh:** llama.cpp19cce6919992 is selected only for
+**Earlier October27 VRAM engine refresh (Sage GGUF superseded above):** llama.cpp19cce6919992 is selected only for
 Empero/Sage/Flint through source_overrides; global2280f0fd remains for CPU models.
 Source-aware router reuse includes the commit/path; mismatched pins fail before
 unloading. Exact configured source binaries are also registered for owned orphan
@@ -95,7 +108,7 @@ Earlier reasoning-off timings stay separate.
 [Report](../hardware/FLINT-REASONING128-2026-10-27.md) and
 [all trials](../hardware/results/flint-reasoning128-2026-10-27.json).
 
-**October27 VRAM-only defaults / Flint activation:** Empero256K/MTP3/batch512
+**Earlier October27 VRAM-only defaults / Flint activation (Sage now uses native INT4 above):** Empero256K/MTP3/batch512
 and Sage64K/MTP3/projector/batch4096 now keep all weights on both GPUs. Flint is
 selectable as `flint-40b-a2.5b`,32K/noMTP/reasoning-budget128. DIO load, zero CPU
 expert placement/cache, verified4GiB high/5GiB max/no-swap workers and12GiB total/
@@ -213,14 +226,14 @@ change. Nightly updates remain paused.
 | Engine | Production |
 |---|---|
 | llama.cpp default /CPU profiles | `2280f0fd163b` |
-| llama.cpp Empero /Sage /Flint | `19cce6919992` |
+| llama.cpp Empero /Flint | `19cce6919992` |
 | vLLM | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 
-Latest manual VRAM qualification: three llama.cpp profile pins promoted; vLLM held by loading guards; SGLang already current. October25 full-catalog history remains in the ledger.
+Latest manual Sage selection: native INT4 on installed vLLMdev435; GGUF removed. Remaining llama.cpp VRAM pins are Empero/Flint19cce691; CPU source2280f0fd. dev602 benchmark evidence remains isolated; SGLang compatibility blockers are recorded. October25 full-catalog history remains in the ledger.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
@@ -374,7 +387,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Twelve profiles:** five llama.cpp, one SGLang, two vLLM, two Strata, two Maya. Presence in
+- **Twelve profiles:** four llama.cpp, one SGLang, three vLLM, two Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -401,7 +414,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 - Not in the catalog or launchers.
 - [Test](../hardware/ORNITH-122B-TEST-2026-10-21.md).
 
-**Sage (active).**
+**Sage (October21 GGUF activation history; replaced by INT4 above).**
 - `sage-a1.5` is the eleventh llama.cpp profile: 64K, MTP3, with projector.
 - (Removed October 22.) The **Sage** Desktop shortcut ran `dsh/start-sage`. That loads Sage through the
   admitted router, then opens llama.cpp's built-in Chat with Sage preselected.

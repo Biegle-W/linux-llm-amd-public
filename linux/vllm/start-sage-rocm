@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Sage-A1.5 AutoRound W4A16, selected vLLM runtime, TP2, BF16 KV, text-only (native image quality failed).
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+export VLLM_ENGINE_READY_TIMEOUT_S=1800
+exec "$ROOT/vllm/run-rocm" serve /mnt/shared/SATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound \
+ --host 127.0.0.1 --port 30011 --served-model-name sage-a1.5 \
+ --tensor-parallel-size 2 --disable-custom-all-reduce --dtype bfloat16 \
+ --max-model-len 65536 --max-num-seqs 1 --max-num-batched-tokens 2048 \
+ --gpu-memory-utilization 0.82 --kv-cache-memory-bytes 6442450944 \
+ --kv-cache-dtype bfloat16 --attention-backend TRITON_ATTN \
+ --mamba-cache-dtype bfloat16 --mamba-ssm-cache-dtype bfloat16 \
+ --compilation-config '{"mode":3,"cudagraph_mode":"FULL_DECODE_ONLY"}' \
+ --cudagraph-capture-sizes 1 4 \
+ --language-model-only \
+ --enable-auto-tool-choice --reasoning-parser qwen3 --tool-call-parser qwen3_coder \
+ --default-chat-template-kwargs '{"enable_thinking":false}' "$@"

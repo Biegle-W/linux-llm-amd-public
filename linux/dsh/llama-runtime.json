@@ -3,7 +3,6 @@
   "models": [
     "empero-qwen3.8-35b-a3b",
     "nemotron-3.5-super-iq3",
-    "sage-a1.5",
     "ornith-1.5-122b",
     "flint-40b-a2.5b"
   ],
@@ -11,10 +10,6 @@
   "runtime_overrides": {},
   "source_overrides": {
     "empero-qwen3.8-35b-a3b": {
-      "path": "/opt/local-llm/llm-tools/llama-vram-19cce691",
-      "source_commit": "19cce6919992fdffd92e0ac152caaf1e2b8f254e"
-    },
-    "sage-a1.5": {
       "path": "/opt/local-llm/llm-tools/llama-vram-19cce691",
       "source_commit": "19cce6919992fdffd92e0ac152caaf1e2b8f254e"
     },

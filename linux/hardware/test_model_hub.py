@@ -38,7 +38,7 @@ class HubTests(unittest.TestCase):
     def test_catalog_maps_every_active_model_to_its_backend(self):
         models = mh.catalog()
         self.assertEqual(models['nemotron-3.5-bolt-vllm']['backend'], 'vllm')
-        self.assertEqual(models['sage-a1.5']['backend'], 'llama')
+        self.assertEqual(models['sage-a1.5']['backend'], 'vllm')
         self.assertEqual(models['qwen3.8-flash-next-iq3_xxs']['backend'], 'strata')
         self.assertNotIn('nemotron-3.5-bolt', models)
         self.assertNotIn('qwen3.8-27b-q4', models)
@@ -46,14 +46,14 @@ class HubTests(unittest.TestCase):
     def test_serving_backend_is_used_without_launching(self):
         fake = FakeBackends(running={'llama'})
         hub = mh.Hub(serving=fake.serving, launch=fake.launch, sleep=lambda _: None)
-        hub.acquire('llama', 'sage-a1.5'); hub.release()
+        hub.acquire('llama', 'empero-qwen3.8-35b-a3b'); hub.release()
         self.assertEqual(fake.launches, [])
         self.assertEqual(hub.active, 'llama')
 
     def test_switch_waits_for_inflight_reply_then_launches(self):
         fake = FakeBackends(running={'llama'})
         hub = mh.Hub(serving=fake.serving, launch=fake.launch, sleep=lambda _: None)
-        hub.acquire('llama', 'sage-a1.5')
+        hub.acquire('llama', 'empero-qwen3.8-35b-a3b')
         done = threading.Event()
         def other():
             hub.acquire('vllm', 'qwen3.8-27b-vllm'); done.set()
@@ -73,7 +73,7 @@ class HubTests(unittest.TestCase):
         with patch.object(mh, 'gpu_lock_owner', return_value='Codex-Test'):
             hub.acquire('vllm', 'qwen3.8-27b-vllm'); hub.release()
             with self.assertRaises(mh.HubError) as raised:
-                hub.acquire('llama', 'sage-a1.5')
+                hub.acquire('llama', 'empero-qwen3.8-35b-a3b')
         self.assertEqual(raised.exception.code, 'gpu_reserved')
         self.assertEqual(fake.launches, [])
         self.assertFalse(hub.switching)

@@ -58,29 +58,6 @@
       "tensor_split": "21,19",
       "mtp_draft_experts_on_gpu": false
     },
-    "sage-a1.5": {
-      "backend": "hip-amd",
-      "context": 65536,
-      "minimum_host_ram_gib": 12,
-      "cpu_expert_layers": [],
-      "host_expert_bytes": 0,
-      "gpu_expert_cache_mib": 0,
-      "kv_cache": "q8_0",
-      "load_mode": "dio",
-      "mtp_draft_experts_on_gpu": true,
-      "validation": "Passed normal launcher/authenticated API/tools/JSON/SSE/long markers/history/continuous inference with strict4/5GiB no-swap scope; hardware/results/vram-defaults-2026-10-27.json",
-      "memory_placement": "vram_only",
-      "minimum_available_ram_gib": 7,
-      "worker_memory_limits": {
-        "memory.high": 4294967296,
-        "memory.max": 5368709120,
-        "memory.swap.max": "max"
-      },
-      "batch_size": 4096,
-      "ubatch_size": 4096,
-      "min_free_vram_gib": 3,
-      "min_start_vram_gib": 21
-    },
     "ornith-1.5-122b": {
       "backend": "hip-amd",
       "context": 32768,

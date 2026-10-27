@@ -24,5 +24,22 @@
     "min_free_vram_gib": 22.0,
     "kv_cache_dtype": "bfloat16",
     "context_validation": "Fresh 254,994-input three-marker retrieval and 255,034-token full-history follow-up at 262,144; arithmetic/SSE; both cards, zero owned swap/spill (October 21)"
+  },
+  "sage-a1.5": {
+    "name": "Sage-A1.5 W4A16 INT4 (64K, dual AMD vLLM, MTP3, text-only)",
+    "context": 65536,
+    "mtp": true,
+    "mtp_steps": 3,
+    "memory_fraction": 0.82,
+    "kv_cache_bytes": 6442450944,
+    "runtime": "rocm",
+    "launcher": "/opt/local-llm/vllm/start-sage-rocm",
+    "model_path": "/mnt/shared/SATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound",
+    "min_free_vram_gib": 21.0,
+    "kv_cache_dtype": "bfloat16",
+    "vision_enabled": false,
+    "memory_category": "vram_only",
+    "context_validation": "October27 native replacement validation; see hardware/SAGE-INT4-REPLACEMENT-2026-10-27.md. The configured64K limit is distinguished from actual tested input.",
+    "vision_limitation": "Native image check failed on both dev435 and dev602; language-only runtime. GGUF/projector retired at user request."
   }
 }

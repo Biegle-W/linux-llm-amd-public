@@ -1,5 +1,18 @@
 # Current benchmark results
 
+## Current Sage INT4 selection — October27
+
+Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
+same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and
+62,009-token markers pass. Selected benchmark: engine-phase prefill
+4142.6t/s, fresh TTFT2.001s, code/prose148.04/138.33t/s,
+20.33GB SATA1. Native image checks failed on both tested vLLM builds; the replacement is text-only. The slower Sage GGUF and
+exclusive projector are removed (22.61GB reclaimed); all other GGUFs remain.
+Twelve profiles remain; DSH default, remaining engine pins, current swap policy,
+independent guards and paused updater remain. Earlier same-day snapshots below
+retain their original status; this selection supersedes their Sage GGUF state.
+[Comparison, compatibility results and removal](../SAGE-INT4-REPLACEMENT-2026-10-27.md).
+
 ## Loading-swap framework/INT4 retry — October27
 
 Recorded 13 model/kernel attempts on 14.83 GiB RAM with loading swap allowed;

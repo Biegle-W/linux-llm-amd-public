@@ -54,7 +54,7 @@ def configure(default_provider=None):
     # Retired llama.cpp IDs move to their faster vLLM replacements (October 21).
     replacements = {'nemotron-3.5-lightning': 'nemotron-3.5-bolt-vllm', 'gpt-oss-20b': 'nemotron-3.5-bolt-vllm',
                     'gpt-oss-120b': 'nemotron-3.5-bolt-vllm', 'nemotron-3.5-bolt': 'nemotron-3.5-bolt-vllm',
-                    'qwen3.8-27b-q4': 'qwen3.8-27b-vllm'}
+                    'qwen3.8-27b-q4': 'qwen3.8-27b-vllm', 'sage-a1.5':'sage-a1.5'}
     if selection.get('provider') == 'llama-local' and selection.get('model') in replacements:
         settings['agent-default-model'] = selection = {'provider':'vllm-local', 'model':replacements[selection['model']]}
     # Qwen3.6-35B-A3B was retired October 23 at the user's request; Empero is its llama.cpp successor.

@@ -41,6 +41,23 @@ class ConfigureLocalTests(unittest.TestCase):
                 self.assertIn(retained, ids); self.assertNotIn(retired, ids)
                 self.assertEqual(actual['llm-pi-ai']['providers']['external-test'], self.provider)
 
+    def test_sage_migration_preserves_id_and_other_providers(self):
+        path = self.home / 'settings.yaml'
+        settings = dict(self.settings, **{'agent-default-model': {'provider': 'llama-local', 'model': 'sage-a1.5'}})
+        path.write_text(yaml.safe_dump(settings))
+        self.module.configure()
+        actual = yaml.safe_load(path.read_text())
+        self.assertEqual(actual['agent-default-model'], {'provider': 'vllm-local', 'model': 'sage-a1.5'})
+        providers = actual['llm-pi-ai']['providers']
+        self.assertEqual(providers['external-test'], self.provider)
+        self.assertNotIn('sage-a1.5', {m['id'] for m in providers['llama-local']['models']})
+        sage = next(m for m in providers['vllm-local']['models'] if m['id'] == 'sage-a1.5')
+        self.assertEqual(sage['contextWindow'], 65536)
+        self.assertEqual(sage['input'], ['text'])
+        first = path.read_text()
+        self.module.configure()
+        self.assertEqual(path.read_text(), first)
+
     def test_legacy_preserves_selection_and_unrelated_settings(self):
         path = self.home / 'settings.yaml'
         self.settings['ui-onboarding'] = {'welcomeNoticeVersion': 7}

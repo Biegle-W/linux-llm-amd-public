@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'dsh'),str(ROOT/'hardware')]
 import moe_memory
 GIB=1024**3
-IDS=('empero-qwen3.8-35b-a3b','sage-a1.5','flint-40b-a2.5b')
+IDS=('empero-qwen3.8-35b-a3b','flint-40b-a2.5b')
 
 class VramDefaults(unittest.TestCase):
     def setUp(self):
@@ -74,9 +74,9 @@ class VramDefaults(unittest.TestCase):
 
     def test_compatible_gpu_switch_keeps_bounded_worker(self):
         m=self.router();m.native=Mock();m.native.poll.return_value=None;m.active_mode='hip-amd';m.active_limits=moe_memory.vram_worker_limits(self.plan)
-        m.active_runtime=m.runtime_identity('hip-amd','sage-a1.5')
+        m.active_runtime=m.runtime_identity('hip-amd','flint-40b-a2.5b')
         with patch.object(moe_memory,'host_memory',return_value=(14*GIB,8*GIB)):
-            m.activate_native.__wrapped__('hip-amd',model='sage-a1.5')
+            m.activate_native.__wrapped__('hip-amd',model='flint-40b-a2.5b')
         m.stop_process.assert_not_called();m.swap_guard.spawn.assert_not_called()
 
     def test_gpu_spawn_carries_and_requires_exact_limits(self):

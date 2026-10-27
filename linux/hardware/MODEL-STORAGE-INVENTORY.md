@@ -1,6 +1,6 @@
 # Model categories and disk storage — October 27, 2026
 
-Earlier same-day Flint [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. The latest engine refresh is in [the October27 report](VRAM-ENGINE-UPDATE-2026-10-27.md); active allocations below are retained and new INT4 candidates are listed separately.
+Earlier same-day Flint [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. The latest engine refresh is in [the October27 report](VRAM-ENGINE-UPDATE-2026-10-27.md); current allocations below include the later Sage INT4 replacement, with the remaining Flint alternative listed separately.
 
 Standing benchmark listing format (October 27): every future benchmark listing,
 inventory with performance, and model comparison must group all model/engine
@@ -25,7 +25,7 @@ The current catalog has **12 profiles / 10 model weight sets**. Empero and Sage
 now default to their tested VRAM-only placements; Flint is selectable as
 `flint-40b-a2.5b` at32K. Both AMD cards remain required. Existing CPU/SSD profiles
 retain their physical-RAM admission and other guards; DSH's saved default stays
-Strata Q3. Quantizations, contexts and active model-storage paths are retained;
+Strata Q3. Except for the explicitly recorded Sage INT4 replacement below, contexts and active model-storage paths are retained;
 qualified engine changes are documented in the report below.
 [Activation and normal-launch checks](VRAM-DEFAULTS-2026-10-27.md).
 
@@ -47,24 +47,19 @@ excluded. [Exact byte counts](results/model-storage-2026-10-27.json).
 | Qwen3.8-27B W4A16 | 21.34 | System `Qwen3.8-27B-W4A16-AutoRound-GPTQ`; System `drafts/Qwen3.8-27B-DFlash2-W4A16` |
 | Nemotron 3.5 Bolt 74B-A9B W4A16 | 43.65 | SATA `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
 | Empero Qwen3.8-35B-A3B IQ4_XS | 19.63 | SATA `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
-| Sage-A1.5 Q4_K_M | 22.61 | SATA `GGUF-Models/Sage-A1.5-GGUF` |
+| Sage-A1.5 W4A16 AutoRound · vLLM | 20.33 | SATA `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
 | Flint-40B-A2.5B UD-Q4_K_XL | 25.06 | SATA `GGUF-Models/Flint-40B-A2.5B` |
 
-Category total: **132.29 GB**.
+Category total: **130.00 GB**.
 
-### Download-only native INT4 candidates — October27
+### Native INT4 selection and remaining alternative — October27
 
-These are **unqualified VRAM-only candidates**, retained alongside the working GGUFs.
-No production model selection changed. Runtime loading hit the unchanged host-memory/
-swap guards before generation; prefill, TTFT and decode are **not measured**.
-Test contexts: Sage65,536, Flint32,768. [Attempts and source pins](VRAM-ENGINE-UPDATE-2026-10-27.md).
-
-| Candidate | Allocated GB | Storage location |
-|---|---:|---|
-| Sage-A1.5 W4A16 AutoRound | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
-| Flint AWQ INT4 | 22.42 | SATA1 `vLLM-Models/Flint-AWQ` |
-
-Candidate allocated total: **42.75GB**; these are excluded from the active VRAM category total.
+Sage native INT4 is now selected in vLLM; its slower GGUF/projector was removed,
+reclaiming22.61GB. Native Sage uses20.33GB, already stored before migration.
+[Benchmark comparison, compatibility limits and removal](SAGE-INT4-REPLACEMENT-2026-10-27.md).
+Flint AWQ remains a22.42GB experimental alternative at SATA1 `vLLM-Models/Flint-AWQ`;
+its diagnostic/matched-partial results are in [the retry report](LOADING-SWAP-RETRY-2026-10-27.md).
+It is excluded from the active VRAM category total.
 
 ## MoE models with CPU RAM offload
 
@@ -97,7 +92,7 @@ Historical checksums/results remain; the S24 manifest is non-installable.
 [Cleanup and isolated trial history](STORAGE-VRAM-2026-10-27.md).
 
 
-Candidate allocated total: **42.75GB** (42.74GB logical); active assets remain
-**776.24GB**. Combined model-associated storage is **818.98GB**, including the
-small Hugging Face module cache. Candidate files were measured separately from
-the earlier active-assets scan. Nightly updates remain paused.
+Additional experimental assets: **22.42GB**; active assets **773.95GB**.
+Combined model-associated storage is **796.37GB**, including the small module
+cache. Exact bytes retain unchanged earlier scans and the verified Sage migration.
+Nightly updates remain paused.

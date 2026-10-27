@@ -1,5 +1,18 @@
 # Linux LLM AMD — public reference
 
+## Current Sage INT4 selection — October27
+
+Sage now uses native W4A16 INT4 on the installed vLLMdev435 runtime under the
+same `sage-a1.5` ID,64K/TP2/MTP3. Normal API/tools/JSON/SSE/history and
+62,009-token markers pass. Selected benchmark: engine-phase prefill
+4142.6t/s, fresh TTFT2.001s, code/prose148.04/138.33t/s,
+20.33GB SATA1. Native image checks failed on both tested vLLM builds; the replacement is text-only. The slower Sage GGUF and
+exclusive projector are removed (22.61GB reclaimed); all other GGUFs remain.
+Twelve profiles remain; DSH default, remaining engine pins, current swap policy,
+independent guards and paused updater remain. Earlier same-day snapshots below
+retain their original status; this selection supersedes their Sage GGUF state.
+[Comparison, compatibility results and removal](linux/hardware/SAGE-INT4-REPLACEMENT-2026-10-27.md).
+
 **Standing user instruction — October 27: loading swap is allowed.**
 Allow swap while loading models, and allow parked swap pages afterward. Do not
 reject loading because swap is nonzero, resident swap exceeds 4 GiB, or cumulative
@@ -132,7 +145,7 @@ had 11 profiles. GLM Maya-S is unchanged; the current reduced-RAM holds,
 paused updater, runtime pins and inference guards remain.
 [Retirement details and verification](linux/hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
 
-**October27 VRAM defaults:** Empero256K/MTP3/batch512 and Sage64K/MTP3/projector/
+**Earlier October27 VRAM-default activation (Sage GGUF since replaced above):** Empero256K/MTP3/batch512 and Sage64K/MTP3/projector/
 batch4096 now use all-GPU weights by default. Flint is selectable as
 `flint-40b-a2.5b` at32K, MTP off/reasoning-budget128. All three use both AMD cards,
 DIO loading and a verified4GiB high/5GiB max RAM scope; loading swap is allowed by the current policy above. Physical
