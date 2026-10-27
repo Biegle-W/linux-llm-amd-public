@@ -83,7 +83,7 @@
   },
   "minimum_host_ram_gib": 60,
   "validation_status": "Reference: passed: source8183c6b6/HIP7.2.3, matchinggfx1100hipBLASLt100202 table, prefill2048, bothAMD/split26/native256K/13.5GiB/allguards; repeated controls/confirmation and normal near258K/history/UI/authenticatedhostself API, zero owned swap/spill; see linux/hardware/STRATA-TUNING-2026-10-24.md; requires exact SDK and local validation.",
-  "worker_swap_max_bytes": 0,
+  "worker_swap_max_bytes": null,
   "runtime_validation": {
     "status": "validated_reference_requires_local_validation",
     "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",

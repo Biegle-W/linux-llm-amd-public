@@ -47,7 +47,7 @@
   "engine_ready_s": 900,
   "idle_unload_s": 0,
   "open_browser": false,
-  "worker_swap_max_bytes": 0,
+  "worker_swap_max_bytes": null,
   "startup_free_vram_gib": 6,
   "mcp_servers": {},
   "installer": {

@@ -19,7 +19,7 @@
       "worker_memory_limits": {
         "memory.high": 4294967296,
         "memory.max": 5368709120,
-        "memory.swap.max": 0
+        "memory.swap.max": "max"
       },
       "batch_size": 512,
       "ubatch_size": 512,
@@ -74,7 +74,7 @@
       "worker_memory_limits": {
         "memory.high": 4294967296,
         "memory.max": 5368709120,
-        "memory.swap.max": 0
+        "memory.swap.max": "max"
       },
       "batch_size": 4096,
       "ubatch_size": 4096,
@@ -141,7 +141,7 @@
       "worker_memory_limits": {
         "memory.high": 4294967296,
         "memory.max": 5368709120,
-        "memory.swap.max": 0
+        "memory.swap.max": "max"
       },
       "batch_size": 4096,
       "ubatch_size": 4096,

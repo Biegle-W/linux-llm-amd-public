@@ -47,8 +47,8 @@ def check_config(cfg, total, available, *, check_available=True):
     if (cfg.get('backend') != 'hip' or cfg.get('gpu') != [0, 1]
             or cfg.get('split_skip_if_fits') or cfg.get('parallel') != 1):
         raise RuntimeError('Strata requires the dual-AMD HIP profile with one session and no single-card fallback.')
-    if cfg.get('worker_swap_max_bytes') != 0:
-        raise RuntimeError('Strata must retain its worker-only no-swap policy.')
+    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None:
+        raise RuntimeError('Strata uses phase-aware swap without a fixed resident-byte cap.')
     args = cfg['args']
     reserve = int(args[args.index('--vram-reserve-mib') + 1]) if '--vram-reserve-mib' in args else 0
     later = int(args[args.index('--vram-reserve-later-mib') + 1]) if '--vram-reserve-later-mib' in args else reserve

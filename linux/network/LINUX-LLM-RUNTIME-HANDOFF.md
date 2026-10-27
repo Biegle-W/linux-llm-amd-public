@@ -1,5 +1,17 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**Standing user instruction — October 27: loading swap is allowed.**
+Allow swap while loading models, and allow parked swap pages afterward. Do not
+reject loading because swap is nonzero, resident swap exceeds 4 GiB, or cumulative
+loading swapout exceeds 4 GiB. Prohibit sustained aggressive swap churn during
+inference that risks excessive SSD writes or slows inference. The default is
+`loading-swap-v2`; older zero-swap, 64/256 MiB and 4 GiB rules are historical or
+explicit legacy validation modes, and must not silently override this instruction.
+Keep physical-RAM admission, RAM caps, GPU reserves, zero dedicated-VRAM spill,
+ownership containment, thermal monitoring and quality/performance gates.
+[Current policy, implementation and validation](../hardware/LOADING-SWAP-POLICY-2026-10-27.md).
+
+
 
 **Current-RAM retry — October27:** no additional OS-visible RAM (still14.83GiB).
 Ten inactive HIP compiler temp directories were retained with SHA-256-verified
@@ -174,23 +186,13 @@ reboot, SATA2 is no longer detected; its obsolete boot entry still needs
 administrator `/etc/fstab` cleanup.
 [Migration evidence and removal steps](../hardware/BOLT-STORAGE-MOVE-2026-10-26.md).
 
-**Default low-churn inference swap (October26, later user authorization):**
-`low-churn-v1` is now the default, with at most 4 GiB aggregate worker swap,
-4 GiB cumulative host swapout per monitored lifecycle, at most 1 MiB/s swapout
-and 8 MiB/s combined swap I/O over continuous sampled inference windows of at
-least 30 seconds. Three consecutive <2 GiB available-RAM or >10% full-memory PSI
-samples reject; dedicated VRAM spill remains zero. Existing stricter no-swap
-engine scopes, guards, physical-RAM/VRAM admission and performance gates remain.
-Host swap I/O is conservatively system-wide, not worker-attributed. These are
-sampled bounds, not SSD-lifetime or no-slowdown guarantees. Global swap capacity,
-swappiness, model profiles and runtime pins are unchanged. Nightly updates remain
-paused; no new reduced-16-GB GPU test was run or candidate promoted.
-Normal workers are gated in unique user-systemd cgroups before payload exec;
-writable `cgroup.kill` containment and refreshed empty verification are required.
-Unsupported ownership fails closed. All five managed routers are covered; strict
-existing engine no-swap scopes still take precedence. CPU-only verification:
-241 tests per checkout, including real orphan/fork cleanup and safe parent reaping.
-[Detailed policy](../hardware/daily-update/README.md#default-low-churn-policy--october-26).
+**October26 swap deployment history, superseded October27:** old trials used
+`low-churn-v1` and fixed 4 GiB worker/cumulative-write caps, with stricter engine
+no-swap scopes. They remain historical evidence. Current loading-swap permission
+and `loading-swap-v2` take precedence; use the standing instruction above.
+Owned cgroup containment, pinned `cgroup.kill`, fail-closed telemetry and selective
+cleanup remain required. No engine was promoted or benchmark rerun for this policy
+change. Nightly updates remain paused.
 
 <!-- daily-update:begin -->
 **Current engine versions after the 2026-10-27 VRAM tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):

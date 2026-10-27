@@ -86,7 +86,7 @@ class VramDefaults(unittest.TestCase):
         args=m.swap_guard.spawn.call_args.args[0];kwargs=m.swap_guard.spawn.call_args.kwargs
         self.assertIn('--property=MemoryHigh='+str(4*GIB),args)
         self.assertIn('--property=MemoryMax='+str(5*GIB),args)
-        self.assertIn('--property=MemorySwapMax=0',args)
+        self.assertIn('--property=MemorySwapMax=max',args)
         self.assertEqual(kwargs['expected_memory_limits'],moe_memory.vram_worker_limits(self.plan))
 
 if __name__=='__main__':unittest.main()

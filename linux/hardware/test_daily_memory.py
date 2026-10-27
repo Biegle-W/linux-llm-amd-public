@@ -119,7 +119,8 @@ class Comparator(BoundedPolicyCase):
 
     def test_default_prints_effective_limit_and_accepts_demonstrated_settled_swap(self):
         candidate = record()
-        activity = mem.SwapActivity()
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'loading-swap-v2'}):
+            activity = mem.SwapActivity()
         for timestamp in (0, 30):
             activity.observe(dict(timestamp=timestamp, swapin_bytes=0, swapout_bytes=0,
                                   available_bytes=8 * 1024**3, memory_full_psi_avg10=0.0),
@@ -130,7 +131,7 @@ class Comparator(BoundedPolicyCase):
             os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
             result = self.compare(candidate, True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn(f'worker_swap_limit_bytes | | {4 * 1024**3}', result.stdout)
+        self.assertIn('worker_swap_limit_bytes | | rate-only', result.stdout)
 
     def test_minor_swap_including_limit_passes_per_model_and_lifecycle(self):
         for value in (1, 4096, 33 * 1024**2, mem.WORKER_SWAP_LIMIT_BYTES):

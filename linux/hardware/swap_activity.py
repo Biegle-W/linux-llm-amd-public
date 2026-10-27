@@ -1,4 +1,4 @@
-"""Conservative low-churn swap defaults, not SSD lifetime guarantees.
+"""Allow loading/parked swap; guard inference churn, not SSD lifetime guarantees.
 
 Host swap counters bound system-wide I/O; they do not attribute it to workers.
 No sampling loop, process inspection, service changes, or dependencies.
@@ -10,7 +10,16 @@ import os
 import time
 from typing import Any
 
-POLICY_NAME = 'low-churn-v1'
+POLICY_NAME = 'loading-swap-v2'
+LEGACY_POLICY_NAME = 'low-churn-v1'
+
+def selected_policy():
+    value = os.environ.get('LOCAL_LLM_SWAP_POLICY', POLICY_NAME)
+    if value not in (POLICY_NAME, LEGACY_POLICY_NAME, 'bounded-64mib'):
+        raise ValueError('Unknown inference swap policy')
+    return value
+
+# Legacy validation constants only; v2 has no occupancy or cumulative-write cap.
 WORKER_SWAP_LIMIT_BYTES = 4 * 1024**3
 SWAPOUT_BUDGET_BYTES = 4 * 1024**3
 INFERENCE_SWAPOUT_RATE_LIMIT_BYTES = 1 * 1024**2
@@ -85,18 +94,20 @@ class SwapActivity:
     inference_window_samples counts evaluated windows, not raw observations.
     """
     def __init__(self):
+        self.policy = selected_policy()
+        self.legacy = self.policy != POLICY_NAME
         self._first = self._last = None
         self._failures = []
         self._pressure_runs = [0, 0]
         self._phase = None
         self._window = deque()
-        self._data: dict[str, Any] = dict(policy=POLICY_NAME, samples=0, sampling_errors=0,
+        self._data: dict[str, Any] = dict(policy=self.policy, samples=0, sampling_errors=0,
                           elapsed_seconds=0.0, worker_swap_peak_bytes=0,
                           total_swapin_bytes=0, total_swapout_bytes=0,
                           inference_window_samples=0,
                           max_inference_swapout_bytes_per_second=0.0,
                           max_inference_swap_io_bytes_per_second=0.0,
-                          min_available_bytes=None, max_memory_full_psi_avg10=None,
+                          min_available_bytes=None, max_memory_full_psi_avg10=None if self.legacy else 0.0,
                           max_low_memory_consecutive_samples=0,
                           max_full_psi_consecutive_samples=0)
 
@@ -112,6 +123,8 @@ class SwapActivity:
         """
         if phase != self._phase:
             self._window.clear()
+            if not self.legacy:
+                self._pressure_runs[1] = 0
             self._phase = phase
 
     def observe(self, reading, phase='loading', worker_swap_bytes=0):
@@ -159,21 +172,26 @@ class SwapActivity:
         for direction in ('swapin', 'swapout'):
             data['total_' + direction + '_bytes'] = (
                 reading[direction + '_bytes'] - self._first[direction + '_bytes'])
-        if data['worker_swap_peak_bytes'] > WORKER_SWAP_LIMIT_BYTES:
+        if self.legacy and data['worker_swap_peak_bytes'] > WORKER_SWAP_LIMIT_BYTES:
             self._fail('worker_swap_limit')
-        if data['total_swapout_bytes'] > SWAPOUT_BUDGET_BYTES:
+        if self.legacy and data['total_swapout_bytes'] > SWAPOUT_BUDGET_BYTES:
             self._fail('swapout_budget')
         previous = data['min_available_bytes']
         data['min_available_bytes'] = (reading['available_bytes'] if previous is None else
                                        min(previous, reading['available_bytes']))
+        self.set_phase(phase)
+        # v2 pressure associated with swap thrashing is an inference check.
+        # Lifecycle RAM availability remains an independent host safety check.
+        inference_pressure = self.legacy or phase == 'inference'
         previous = data['max_memory_full_psi_avg10']
-        data['max_memory_full_psi_avg10'] = (reading['memory_full_psi_avg10']
-                                           if previous is None else
-                                           max(previous, reading['memory_full_psi_avg10']))
+        if inference_pressure:
+            data['max_memory_full_psi_avg10'] = (reading['memory_full_psi_avg10']
+                                               if previous is None else
+                                               max(previous, reading['memory_full_psi_avg10']))
         for index, (bad, peak, failure) in enumerate([
                 (reading['available_bytes'] < MIN_AVAILABLE_BYTES,
                  'max_low_memory_consecutive_samples', 'low_host_memory'),
-                (reading['memory_full_psi_avg10'] > MEMORY_FULL_PSI_AVG10_LIMIT,
+                (inference_pressure and reading['memory_full_psi_avg10'] > MEMORY_FULL_PSI_AVG10_LIMIT,
                  'max_full_psi_consecutive_samples', 'memory_full_psi')]):
             self._pressure_runs[index] = self._pressure_runs[index] + 1 if bad else 0
             data[peak] = max(data[peak], self._pressure_runs[index])
@@ -210,7 +228,7 @@ class SwapActivity:
 
 
 def validate_summary(summary, require_inference=False):
-    """Return reasons to reject absent, malformed or failing low-churn evidence.
+    """Validate evidence for the selected policy; never reinterpret old versions.
 
     Pressure run peaks are required in addition to extrema so that transient
     pressure is not mistaken for a sustained violation. No raw samples needed.
@@ -220,7 +238,7 @@ def validate_summary(summary, require_inference=False):
     if not isinstance(summary, dict):
         return ['summary_missing']
     errors = []
-    if summary.get('policy') != POLICY_NAME:
+    if summary.get('policy') != selected_policy():
         errors.append('invalid_policy')
     integer_fields = ('samples', 'sampling_errors', 'worker_swap_peak_bytes',
                       'total_swapin_bytes', 'total_swapout_bytes', 'inference_window_samples',
@@ -279,7 +297,7 @@ def validate_summary(summary, require_inference=False):
              'inference_swapout_rate'),
             ('max_inference_swap_io_bytes_per_second', INFERENCE_IO_RATE_LIMIT_BYTES,
              'inference_swap_io_rate')]:
-        if summary[field] > limit:
+        if (summary.get('policy') != POLICY_NAME or field.startswith('max_inference_')) and summary[field] > limit:
             errors.append(failure)
     for field, failure in [('max_low_memory_consecutive_samples', 'low_host_memory'),
                            ('max_full_psi_consecutive_samples', 'memory_full_psi')]:

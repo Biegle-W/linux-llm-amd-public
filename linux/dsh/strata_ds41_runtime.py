@@ -48,8 +48,8 @@ def check_settings(cfg):
     if (env.get('STRATA_DS4_PROMPT_SKIP')!='0' or env.get('DS4_YOCO')!='0'
             or env.get('STRATA_DS4_SLOT_KEEP')!='0' or env.get('STRATA_DS4_DISK_SKIP_W','0')!='0'):
         raise RuntimeError('Prompt skipping and unvalidated slot reuse must remain disabled.')
-    if cfg.get('worker_swap_max_bytes')!=0 or cfg.get('startup_free_vram_gib')!=6:
-        raise RuntimeError('Strata DeepSeek requires zero worker swap and 6GiB actual startup headroom.')
+    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None or cfg.get('startup_free_vram_gib')!=6:
+        raise RuntimeError('Strata DeepSeek requires phase-aware swap and 6GiB actual startup headroom.')
 
 
 def require_profile(cfg,before_handover=False):

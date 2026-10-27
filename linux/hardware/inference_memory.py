@@ -4,25 +4,25 @@ import os
 import sys
 import threading
 from swap_activity import (SwapActivity, read_host_activity, validate_summary,
-                           POLICY_NAME, WORKER_SWAP_LIMIT_BYTES as RELAXED_SWAP_LIMIT_BYTES)
+                           POLICY_NAME, LEGACY_POLICY_NAME, selected_policy,
+                           WORKER_SWAP_LIMIT_BYTES as RELAXED_SWAP_LIMIT_BYTES)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
 from backend_switch import processes, is_inference
 
-# Explicit legacy bounded-64mib override. The default low-churn policy also
+# Explicit legacy bounded-64mib override. The default loading-swap policy also
 # requires host activity/pressure evidence and a complete inference window.
 WORKER_SWAP_LIMIT_BYTES = 64 * 1024**2
 
 
 def swap_policy():
-    policy = os.environ.get('LOCAL_LLM_SWAP_POLICY', POLICY_NAME)
-    if policy not in ('bounded-64mib', POLICY_NAME):
-        raise ValueError('Unknown inference swap policy')
-    return policy
+    return selected_policy()
 
 
 def worker_swap_limit_bytes():
-    return RELAXED_SWAP_LIMIT_BYTES if swap_policy() == POLICY_NAME else WORKER_SWAP_LIMIT_BYTES
+    policy = swap_policy()
+    return (None if policy == POLICY_NAME else RELAXED_SWAP_LIMIT_BYTES
+            if policy == LEGACY_POLICY_NAME else WORKER_SWAP_LIMIT_BYTES)
 
 
 def sample_memory(snapshot=None, proc_root=Path('/proc')):
@@ -101,9 +101,9 @@ def memory_failures(memory):
         value = memory.get(field)
         if type(value) is not int or value < 0:
             failures.append(name + '_telemetry_invalid')
-        elif value > limit:
+        elif limit is not None and value > limit:
             failures.append(name)
-    if policy == POLICY_NAME:
+    if policy != 'bounded-64mib':
         activity = memory.get('swap_activity')
         failures += ['swap_activity_' + reason for reason in validate_summary(activity, require_inference=True)]
         if isinstance(activity, dict) and activity.get('worker_swap_peak_bytes') != memory.get('max_worker_swap_bytes'):
@@ -136,7 +136,7 @@ class MemoryMonitor:
         self.interval = interval
         self._lock = threading.Lock()
         self.phase = 'loading'
-        self.activity = SwapActivity() if swap_policy() == POLICY_NAME else None
+        self.activity = SwapActivity() if swap_policy() != 'bounded-64mib' else None
         self.on_violation = on_violation
         self.notified = False
         self.done = threading.Event()

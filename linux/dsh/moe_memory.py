@@ -15,9 +15,9 @@ def vram_worker_limits(profile):
     if placement != 'vram_only':
         return None
     limits = profile.get('worker_memory_limits', {})
-    expected = {'memory.high': 4*GIB, 'memory.max': 5*GIB, 'memory.swap.max': 0}
-    if limits != expected or any(type(v) is not int for v in limits.values()):
-        raise RuntimeError('VRAM-only worker limits must match the validated 4/5 GiB no-swap scope.')
+    expected = {'memory.high': 4*GIB, 'memory.max': 5*GIB, 'memory.swap.max': 'max'}
+    if limits != expected or any(type(limits.get(k)) is not int for k in ('memory.high', 'memory.max')):
+        raise RuntimeError('VRAM-only worker limits must match the validated 4/5 GiB RAM scope with phase-aware swap.')
     if (profile.get('host_expert_bytes') != 0 or profile.get('cpu_expert_layers') != [] or
             profile.get('gpu_expert_cache_mib') != 0 or
             profile.get('backend') != 'hip-amd' or
@@ -230,8 +230,8 @@ def watch_worker(proc, active_model, stop):
             if profile.get('memory_placement') == 'vram_only':
                 try:
                     reason = gpu_guard.check(available, swap, spill, vram_snapshot())
-                    if swap or spill:
-                        reason = 'VRAM-only worker swap or dedicated-VRAM spill'
+                    if spill:
+                        reason = 'VRAM-only dedicated-VRAM spill'
                 except Exception as error:
                     reason = 'VRAM-only telemetry unavailable: '+type(error).__name__
                 if reason:
@@ -242,7 +242,7 @@ def watch_worker(proc, active_model, stop):
             vram_reason = vram_headroom_reason(profile)
             low = low + 1 if available < 3*GIB or vram_reason else 0
             spill_count = spill_count + 1 if spill > 256*1024**2 else 0
-            if low >= 3 or swap > 256*1024**2 or spill_count >= 3:
+            if low >= 3 or spill_count >= 3:
                 print(f'MoE memory guard: available={available/GIB:.2f} GiB, '
                       f'owned swap={swap/1024**2:.0f} MiB, dedicated VRAM spill={spill/1024**2:.0f} MiB. '
                       f'{vram_reason or ""} '

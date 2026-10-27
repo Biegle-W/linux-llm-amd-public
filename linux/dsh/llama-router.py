@@ -95,19 +95,44 @@ def activate_native(mode, spec=None, model=None):
         '--host', '127.0.0.1', '--port', str(native_port)]
     if enabled is not None:
         args = ['systemd-run', '--user', '--scope', '--quiet',
-                '--property=MemorySwapMax=0', *args]
+                '--property=MemorySwapMax=max', *args]
     if limits:
         args[4:4] = ['--property=MemoryHigh='+str(limits['memory.high']),
                      '--property=MemoryMax='+str(limits['memory.max'])]
     native = swap_guard.spawn(args, env=env, start_new_session=True,
                               **({'expected_memory_limits':limits} if limits else {}))
     ready(native, native_port)
-    swap_guard.ready(native)
+    swap_guard.ready(native, phase='idle')
     active_mode = mode
     active_runtime = identity
     active_limits = limits
     memory_watch = watch_worker(native, lambda: active_model, stop_process)
     print(f'llama.cpp native runtime selected: {mode}', flush=True)
+
+
+def ensure_loaded(model):
+    """Keep lazy weight loading outside the continuous inference rate window."""
+    rows = call(native_port, '/v1/models')['data']
+    status = next((r.get('status', {}).get('value') for r in rows if r['id'] == model), None)
+    if status == 'loaded':
+        swap_guard.ready(native)
+        return
+    swap_guard.ready(native, phase='loading')
+    if status != 'loading':
+        call(native_port, '/models/load', {'model': model}, timeout=600)
+    for _ in range(600):
+        swap_guard.check()
+        if native.poll() is not None:
+            raise RuntimeError('Native worker exited during model loading')
+        rows = call(native_port, '/v1/models')['data']
+        status = next((r.get('status', {}).get('value') for r in rows if r['id'] == model), None)
+        if status == 'loaded':
+            swap_guard.ready(native)
+            return
+        if status == 'failed':
+            raise RuntimeError('Native model loading failed')
+        time.sleep(1)
+    raise TimeoutError('Native model loading exceeded 10 minutes')
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -159,7 +184,19 @@ class Handler(BaseHTTPRequestHandler):
                 activate_native(backend_for_model(model), model=model)
                 admit_model(model, call, native_port)
                 active_model = model
-                self.proxy(native_port, 'POST', body)
+                path = urllib.parse.urlsplit(self.path).path
+                if path == '/models/unload':
+                    swap_guard.ready(native, phase='idle')
+                else:
+                    ensure_loaded(model)
+                    if path == '/models/load':
+                        swap_guard.ready(native, phase='idle')
+                        return self.respond(200, {'success': True})
+                if path == '/models/unload':
+                    self.proxy(native_port, 'POST', body)
+                else:
+                    with swap_guard.inference(native):
+                        self.proxy(native_port, 'POST', body)
         except (BrokenPipeError, ConnectionResetError):
             self.close_connection = True
         except Exception as error:

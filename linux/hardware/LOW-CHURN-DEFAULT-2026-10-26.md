@@ -1,5 +1,11 @@
 # Default low-churn inference swap — October 26, 2026
 
+**Superseded October27:** the current user instruction allows loading swap and
+parked pages, without the 4 GiB byte caps or blanket no-swap precedence below.
+This report preserves the earlier deployment and validation history.
+[Current policy](LOADING-SWAP-POLICY-2026-10-27.md).
+
+
 The user authorized the existing `low-churn-v1` policy as the default, conditional
 on bounded swap activity rather than using SSD swap as model/expert RAM. This is
 a policy/runtime-guard change, not a runtime upgrade or real-model qualification.

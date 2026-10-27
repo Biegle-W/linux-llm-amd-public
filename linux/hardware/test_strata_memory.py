@@ -82,7 +82,7 @@ class StrataGuardTests(unittest.TestCase):
         self.assertIn('telemetry', guard.check(10*GIB, 0, 0, None))
 
     def test_owned_swap_and_spill_trigger(self):
-        self.assertIn('unsafe', self.sample(MemoryGuard(), swap=257*1024**2))
+        self.assertIsNone(self.sample(MemoryGuard(), swap=12*GIB))
         self.assertIn('unsafe', self.sample(MemoryGuard(), spill=257*1024**2))
 
     def test_router_stops_only_its_worker_and_latches_reload(self):

@@ -13,7 +13,7 @@ class Settings(unittest.TestCase):
         self.cfg={'arch':'deepseek41','backend':'hip','gpu':[0,1],'parallel':1,
             'args':['--max-context','32768','--cpu-threads','24','--tp','2','--reserve-mib','8192','--ssd-cache','0','--dspark','on'],
             'installer':{'quant':'Maya-XS'},'env':{'STRATA_DS4_PROMPT_SKIP':'0','DS4_YOCO':'0','STRATA_DS4_SLOT_KEEP':'0'},
-            'worker_swap_max_bytes':0,'startup_free_vram_gib':6}
+            'worker_swap_max_bytes':None,'startup_free_vram_gib':6}
 
     def test_retained_s_and_xs_choices(self):
         check_settings(self.cfg)

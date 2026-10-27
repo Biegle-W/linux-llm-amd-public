@@ -1,5 +1,13 @@
 # Current-RAM retest after compiler-temp cleanup — October 27, 2026
 
+**October27 policy correction:** these attempts used earlier strict loading
+swap rules. The current policy allows loading swap and parked pages; a 4 GiB
+loading-swapout stop does not prove the model cannot run under that policy.
+Results remain historical; no new performance is inferred. Independent RAM/
+VRAM failures and the Sage Marlin compile error retain their actual causes.
+[Current loading-swap policy](LOADING-SWAP-POLICY-2026-10-27.md).
+
+
 **No models, model files, engines or workflows were retired during this retry.** Existing production settings and selected pins remain. The user authorized both H3 and the blocked LLM tests on the current RAM, with other apps closable. No large ordinary apps or open browser tabs were found to close; the controlling app/runtime were retained.
 
 Linux still exposes **14.83 GiB RAM**. Ten inactive HIP compiler temporary directories occupied **3.63 GiB** of allocated tmpfs storage. Their creators were gone and there were no live user-process file/mapping references. Every file was copied to the system disk, SHA-256 checked against its source, and retained before redundant RAM-backed copies were removed. No user data was discarded and no pre-existing user app was stopped.

@@ -48,8 +48,8 @@ def watch_memory():
         except (OSError, ValueError, RuntimeError):
             readings = None
         reason = guard.check(available, swap, spill, readings)
-        if getattr(proc, 'deepseek41', False) and (swap or spill):
-            reason=f'Strata DeepSeek requires zero owned swap/spill; observed {swap}/{spill} bytes'
+        if getattr(proc, 'deepseek41', False) and spill:
+            reason=f'Strata DeepSeek requires zero dedicated-VRAM spill; observed {swap}/{spill} bytes'
         if reason:
             with lifecycle:
                 if worker is proc:
@@ -102,7 +102,7 @@ def ensure_worker(model):
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
                                    '--property=MemoryMax=52G',
-                                   '--property=MemorySwapMax=0', str(ROOT / script),
+                                   '--property=MemorySwapMax=max', str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
         setattr(worker, 'deepseek41', profile.get('family') == 'deepseek41')
@@ -134,7 +134,7 @@ def ensure_worker(model):
             with lifecycle:
                 if stopping.is_set():
                     raise RuntimeError('Strata is shutting down')
-                swap_guard.ready(proc)
+                swap_guard.ready(proc, phase='idle')
                 active = model
                 startup_free_vram = [r['free'] for r in readings]
             return
@@ -203,18 +203,19 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send_json(200, {'success': True})
                 if PROFILES[model].get('family')!='deepseek41':
                     data = add_document_prefix(data)
-                connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)
-                connection.request('POST', self.path, json.dumps(data), {'Content-Type': 'application/json'})
-                response = connection.getresponse()
-                self.send_response(response.status)
-                self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
-                self.send_header('Connection', 'close')
-                self.end_headers()
-                started = True
-                while chunk := response.read1(65536):
-                    self.wfile.write(chunk)
-                    self.wfile.flush()
-                self.close_connection = True
+                with swap_guard.inference(worker):
+                    connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)
+                    connection.request('POST', self.path, json.dumps(data), {'Content-Type': 'application/json'})
+                    response = connection.getresponse()
+                    self.send_response(response.status)
+                    self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
+                    self.send_header('Connection', 'close')
+                    self.end_headers()
+                    started = True
+                    while chunk := response.read1(65536):
+                        self.wfile.write(chunk)
+                        self.wfile.flush()
+                    self.close_connection = True
         except (BrokenPipeError, ConnectionResetError):
             self.close_connection = True
         except Exception as error:

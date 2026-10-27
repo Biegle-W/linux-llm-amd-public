@@ -1,5 +1,13 @@
 # VRAM engine updates and native INT4 trials — October 27, 2026
 
+**October27 policy correction:** these attempts used earlier strict loading
+swap rules. The current policy allows loading swap and parked pages; a 4 GiB
+loading-swapout stop does not prove the model cannot run under that policy.
+Results remain historical; no new performance is inferred. Independent RAM/
+VRAM failures and the Sage Marlin compile error retain their actual causes.
+[Current loading-swap policy](LOADING-SWAP-POLICY-2026-10-27.md).
+
+
 Later October27: the [current-RAM retry](CURRENT-RAM-RETEST-2026-10-27.md) reclaimed inactive tmpfs compiler storage and repeated framework/native INT4 loading. Guards still blocked inference; Sage auto-Marlin also failed HIP compilation. The qualified llama medians below remain the earlier session; no model or runtime was retired.
 
 

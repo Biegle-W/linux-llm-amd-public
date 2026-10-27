@@ -82,5 +82,5 @@
   },
   "minimum_host_ram_gib": 60,
   "validation_status": "inactive: native 256K with 20 GiB expert budget; requires >=60 GiB OS-visible RAM and fresh validation",
-  "worker_swap_max_bytes": 0
+  "worker_swap_max_bytes": null
 }

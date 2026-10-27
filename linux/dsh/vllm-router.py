@@ -102,7 +102,7 @@ def ensure_worker(model):
         if not capacities or min(capacities) < cfg['context']:
             stop_worker()
             raise RuntimeError('Worker context does not match profile: ' + str(capacities))
-        swap_guard.ready(worker)
+        swap_guard.ready(worker, phase='idle')
         active = model
         return
     stop_worker()
@@ -143,18 +143,19 @@ class Handler(BaseHTTPRequestHandler):
         try:
             with lock:
                 ensure_worker(model)
-                connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)
-                connection.request('POST', self.path, json.dumps(data), {'Content-Type': 'application/json'})
-                response = connection.getresponse()
-                self.send_response(response.status)
-                self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
-                self.send_header('Connection', 'close')
-                self.end_headers()
-                started = True
-                while chunk := response.read1(65536):
-                    self.wfile.write(chunk)
-                    self.wfile.flush()
-                self.close_connection = True
+                with swap_guard.inference(worker):
+                    connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)
+                    connection.request('POST', self.path, json.dumps(data), {'Content-Type': 'application/json'})
+                    response = connection.getresponse()
+                    self.send_response(response.status)
+                    self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
+                    self.send_header('Connection', 'close')
+                    self.end_headers()
+                    started = True
+                    while chunk := response.read1(65536):
+                        self.wfile.write(chunk)
+                        self.wfile.flush()
+                    self.close_connection = True
         except (BrokenPipeError, ConnectionResetError):
             self.close_connection = True
         except Exception as error:

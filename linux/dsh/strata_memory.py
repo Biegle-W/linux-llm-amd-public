@@ -47,7 +47,7 @@ class MemoryGuard:
         self.low_ram = self.low_ram + 1 if available < 3*GIB else 0
         if free < 1.5*GIB or self.low_vram >= 2:
             return f'Desktop VRAM headroom low: minimum {free/GIB:.2f} GiB free'
-        if self.low_ram >= 3 or swap > 256*1024**2 or spill > 256*1024**2:
+        if self.low_ram >= 3 or spill > 256*1024**2:
             return (f'Worker memory unsafe: available={available/GIB:.2f} GiB, '
                     f'owned swap={swap/1024**2:.0f} MiB, VRAM spill={spill/1024**2:.0f} MiB')
         return None

@@ -1,5 +1,16 @@
 # Linux LLM AMD — public reference
 
+**Standing user instruction — October 27: loading swap is allowed.**
+Allow swap while loading models, and allow parked swap pages afterward. Do not
+reject loading because swap is nonzero, resident swap exceeds 4 GiB, or cumulative
+loading swapout exceeds 4 GiB. Prohibit sustained aggressive swap churn during
+inference that risks excessive SSD writes or slows inference. The default is
+`loading-swap-v2`; older zero-swap, 64/256 MiB and 4 GiB rules are historical or
+explicit legacy validation modes, and must not silently override this instruction.
+Keep physical-RAM admission, RAM caps, GPU reserves, zero dedicated-VRAM spill,
+ownership containment, thermal monitoring and quality/performance gates.
+[Current policy, implementation and validation](linux/hardware/LOADING-SWAP-POLICY-2026-10-27.md).
+
 October27: [Current-RAM H3 and LLM retries after compiler-temp cleanup](linux/hardware/CURRENT-RAM-RETEST-2026-10-27.md). Nothing was retired or promoted; all memory/VRAM guards remain.
 
 
@@ -209,27 +220,13 @@ only after all gates pass, including bounded low-churn swap and zero VRAM spill
 with valid launch-through-shutdown telemetry. Updates remain paused. ROCm 7.2.3 is retained. See the
 [updater method](linux/hardware/daily-update/README.md).
 
-## Inference swap policy — October 26
+## Inference swap policy — current October 27 instruction
 
-User-authorized default: **`low-churn-v1`**, not unrestricted swap. Permit up to
-4 GiB aggregate owned-worker swap only while the low-churn checks pass: at most
-4 GiB cumulative host swapout per monitored lifecycle, at most 1 MiB/s swapout and
-8 MiB/s combined swap I/O over sampled continuous-inference windows of at least
-30 seconds. Three consecutive samples below 2 GiB available host RAM or above
-10% full-memory PSI reject; dedicated VRAM spill remains zero.
-
-Normal managed inference and benchmark/update validation use the same low-churn
-bounds. Existing stricter engine-specific no-swap cgroups, worker guards and
-physical-RAM/VRAM admission rules remain in force. Swap is not extra expert RAM.
-`LOCAL_LLM_SWAP_POLICY=bounded-64mib` retains the explicit stricter validation
-option. Unknown policy values fail closed.
-
-These sampled guardrails reduce permitted swap churn; they cannot guarantee SSD
-lifespan, eliminate every transient or prove that inference is unaffected.
-Performance/quality promotion gates remain. No swap partition, swappiness, model
-profile, runtime pin or update schedule is changed; nightly updates stay paused.
-No new reduced-16-GB inference trial is authorized by this policy change.
-[Policy and limits](linux/hardware/daily-update/README.md#default-low-churn-policy--october-26).
+Loading swap and parked swap pages are allowed. Use the prominent standing
+instruction above and `loading-swap-v2`; the October26 fixed byte caps and
+blanket engine no-swap precedence are superseded. Legacy trial results retain
+their original guard settings and do not prove a model fails the new policy.
+[Policy and operational limits](linux/hardware/LOADING-SWAP-POLICY-2026-10-27.md).
 
 ## Model storage — October 26
 

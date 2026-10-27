@@ -3,13 +3,18 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
+import os
 
 DSH = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(DSH))
 
 
 class OwnedWatchTests(unittest.TestCase):
+    def setUp(self):
+        scope=patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'low-churn-v1'})
+        scope.start(); self.addCleanup(scope.stop)
+
     def test_settled_swap_at_inclusive_policy_bounds_is_allowed(self):
         spec = importlib.util.find_spec('inference_swap')
         self.assertIsNotNone(spec, 'Owned-worker low-churn enforcement is missing')
@@ -719,6 +724,7 @@ class RouterIntegrationTests(unittest.TestCase):
                 stack.enter_context(patch.object(module.time, 'sleep'))
                 if name == 'llama':
                     module.require_amd_headroom = Mock()
+                    module.runtime_identity = Mock(return_value=('hip-amd','/fake/source','a'*40))
                     module.watch_worker = Mock(return_value=Mock())
                     module.call = Mock(return_value={'status':'ok'})
                     ensure = lambda: module.activate_native.__wrapped__('hip-amd',
@@ -750,7 +756,7 @@ class RouterIntegrationTests(unittest.TestCase):
                 ensure()
                 guard.check.assert_called()
                 guard.spawn.assert_called_once()
-                guard.ready.assert_called_once_with(proc)
+                guard.ready.assert_called_once_with(proc, phase='idle')
                 self.assertIs(module.native if name == 'llama' else module.worker, proc)
                 guard.check.side_effect = RuntimeError('latched guard fault')
                 with self.assertRaisesRegex(RuntimeError, 'latched guard fault'):

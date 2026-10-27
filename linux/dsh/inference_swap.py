@@ -1,7 +1,7 @@
 """Low-churn watch for one explicitly owned worker; never a global process guard.
 
-Additional ceiling, not permission to relax engine no-swap cgroups, 256 MiB
-watchdogs, RAM/VRAM admission, or sealed profile fingerprints. Host swap I/O is
+Loading swap and parked pages are allowed by default. Sustained inference
+churn is guarded independently of RAM/VRAM admission. Host swap I/O is
 system-wide and conservative, not worker attribution or an SSD-life guarantee.
 """
 from pathlib import Path
@@ -14,6 +14,7 @@ import os
 import errno
 import time
 import uuid
+from contextlib import contextmanager
 
 
 class OwnedScope:
@@ -260,9 +261,9 @@ class OwnedWorkerWatch:
         self.thread.start()
         return self
 
-    def ready(self):
+    def ready(self, phase='inference'):
         with self.lock:
-            self.phase = 'inference'
+            self.phase = phase
             self.activity.set_phase(self.phase)
 
     def sample(self):
@@ -327,7 +328,7 @@ class WorkerSwapGuard:
             self.check()
             if self.watch is not None:
                 raise RuntimeError('Previous owned-worker watch must be stopped before switching')
-            # Baseline before Popen: loading writes belong to the same budget.
+            # Baseline before Popen: record loading writes without a v2 byte cap.
             try:
                 baseline = self.host_reader()
                 activity = SwapActivity()
@@ -376,14 +377,27 @@ class WorkerSwapGuard:
                 print('Low-churn guard: ' + self.fault +
                       '; owned-worker shutdown requested; router restart required.', flush=True)
 
-    def ready(self, proc):
+    def ready(self, proc, phase='inference'):
         with self.lock:
             self.check()
             if self.watch is None or self.watch.proc is not proc:
                 raise RuntimeError('Owned worker changed before readiness')
-            self.watch.ready()
+            self.watch.ready(phase)
             self.watch.sample()
             self.check()
+
+    @contextmanager
+    def inference(self, proc):
+        """Measure active requests, excluding idle residency and weight loading."""
+        self.ready(proc)
+        try:
+            yield
+        finally:
+            with self.lock:
+                if self.watch is not None and self.watch.proc is proc and not self.fault:
+                    self.watch.sample()
+                    self.check()
+                    self.watch.ready('idle')
 
     def stop(self, proc):
         with self.lock:

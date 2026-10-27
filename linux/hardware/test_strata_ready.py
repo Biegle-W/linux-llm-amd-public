@@ -42,7 +42,7 @@ class StrataMemoryTests(unittest.TestCase):
         self.assertAlmostEqual(strata_runtime.kv_backing_gib(cfg),3.890625)
 
     def test_profile_cannot_remove_desktop_vram_reserve(self):
-        cfg = {'backend':'hip','gpu':[0,1],'parallel':1,'worker_swap_max_bytes':0,
+        cfg = {'backend':'hip','gpu':[0,1],'parallel':1,'worker_swap_max_bytes':None,
                'minimum_host_ram_gib':29,
                'args':['--resident-cpu-experts','--resident-budget-gib','10',
                        '--vram-reserve-mib','3072']}

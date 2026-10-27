@@ -54,44 +54,19 @@ rolls back before releasing the lock. If the machine loses power instead,
 
 ## Memory promotion policy
 
-### Default low-churn policy — October 26
+### Default loading-swap policy — October 27
 
-[Deployment, collector integration, CPU verification and limitations](../LOW-CHURN-DEFAULT-2026-10-26.md).
+**Loading swap is allowed. Parked swap pages are allowed.** Use
+`loading-swap-v2`; fixed resident-byte and cumulative-loading-write caps no
+longer reject the default. Enforce sustained active-inference churn, pressure
+and performance/quality gates. Physical-RAM admission, RAM caps, VRAM reserves,
+zero dedicated-VRAM spill, ownership/telemetry checks and updater holds remain.
+[Current policy, thresholds, evidence and historical harness limitations](../LOADING-SWAP-POLICY-2026-10-27.md).
 
-The user authorized `low-churn-v1` as the default for managed inference and
-benchmark/update validation, conditional on bounded swap activity. The explicit
-`LOCAL_LLM_SWAP_POLICY=bounded-64mib` validation override remains available; invalid
-values fail closed. The policy change does not resume the paused updater, start
-inference, admit RAM-offloaded models on insufficient physical RAM, or authorize
-more reduced-16-GB GPU trials. Early October26 trials used this policy opt-in;
-their unsuccessful outcomes and experimental worker caps remain historical.
-
-The default gate allows aggregate settled owned-worker swap up to 4 GiB,
-with a cumulative **system-wide** swapout budget of 4 GiB per trial. System-wide
-I/O is a conservative bound, not per-worker attribution. During continuous
-inference, rolling sampled windows of at least 30 seconds must stay at or below
-1 MiB/s swapout and 8 MiB/s combined swap I/O. Three consecutive readings below
-2 GiB host MemAvailable, or above 10% full-memory PSI avg10, reject the trial.
-Dedicated VRAM spill remains zero; existing quality/performance checks remain.
-These are sampled conservative bounds, not guarantees of SSD longevity or zero
-slowdown. A 30-second rate window can miss shorter bursts, and enforcement can
-overshoot between samples. Host swap I/O includes unrelated tasks and is used as
-a conservative stop signal, not falsely attributed to the inference worker.
-Existing engine-specific stricter no-swap cgroups/guards and physical-RAM/VRAM
-admission checks take precedence. No global swap or swappiness change is made.
-
-Qualification evidence must include complete inference windows with valid owned
-worker observations, as well as launch/load/shutdown coverage. Phase changes are
-serialized with both telemetry readers and reset rate history even between
-samples. Missing inference workers invalidate evidence; absence before launch
-and after shutdown is allowed. Violation callback exceptions latch a permanent
-validation error; enforcement retries once, then records terminal failure while
-sampling continues. No exception message or private process text is published.
-
-Current CPU verification and independent-review outcomes are recorded in the
-linked deployment report. Earlier opt-in validation comprised 28 swap/activity/
-monitor tests and 18 accounting/comparator/updater regressions. CPU tests are not
-real-model qualification. Original 64 GB results retain their date and hardware.
+October26 `low-churn-v1` deployment, its fixed 4 GiB caps and stricter no-swap
+precedence are superseded. [Historical deployment](../LOW-CHURN-DEFAULT-2026-10-26.md).
+Only explicit legacy validation modes reproduce those caps. Old trial results
+retain their original settings and are not automatically qualified under v2.
 
 ### Minor worker swap allowance — October 25
 

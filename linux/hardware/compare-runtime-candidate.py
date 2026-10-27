@@ -53,7 +53,7 @@ def main():
         parser.error('Baseline contains no model profiles; cannot establish promotion evidence')
     failed = False
     print('| Model | Metric | Baseline | Candidate | Change |\n|---|---|---:|---:|---:|')
-    print(f'| policy | worker_swap_limit_bytes | | {worker_swap_limit_bytes()} | |')
+    print(f'| policy | worker_swap_limit_bytes | | {worker_swap_limit_bytes() if worker_swap_limit_bytes() is not None else 'rate-only'} | |')
     for path in options.candidates:
         record = json.loads(path.read_text())
         if options.require_lifecycle_memory:

@@ -1,4 +1,4 @@
-"""CPU-only tests for the default low-churn swap policy and strict override."""
+"""CPU-only historical low-churn-v1 regressions and strict validation override."""
 import os
 from pathlib import Path
 import sys
@@ -37,11 +37,11 @@ class RelaxedSwap(unittest.TestCase):
         policy = patch.dict(os.environ)
         policy.start()
         self.addCleanup(policy.stop)
-        os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+        os.environ['LOCAL_LLM_SWAP_POLICY'] = 'low-churn-v1'
 
     def test_default_monitor_demonstrates_settled_swap_and_enforces_low_churn_evidence(self):
         with patch.dict(os.environ):
-            os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+            os.environ['LOCAL_LLM_SWAP_POLICY'] = 'low-churn-v1'
             monitor = mem.MemoryMonitor()
             with patch.object(mem, 'sample_memory', return_value=dict(swap=GIB, spill=0)), \
                  patch.object(mem, 'read_host_activity', side_effect=[
