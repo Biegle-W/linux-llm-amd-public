@@ -4,7 +4,8 @@
     "empero-qwen3.8-35b-a3b",
     "nemotron-3.5-super-iq3",
     "sage-a1.5",
-    "ornith-1.5-122b"
+    "ornith-1.5-122b",
+    "flint-40b-a2.5b"
   ],
   "source_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
   "runtime_overrides": {}

@@ -1,5 +1,6 @@
 # Current benchmark results
 
+- [VRAM-only defaults and selectable Flint](vram-defaults-2026-10-27.json), [report](../VRAM-DEFAULTS-2026-10-27.md): normal launch/auth API, tools, long markers/history and Sage vision; strict owned staging caps; 12 profiles, default preserved.
 - [October27 backup cleanup and all-VRAM candidates](storage-vram-2026-10-27.json), [report](../STORAGE-VRAM-2026-10-27.md): 156.47GB reclaimed; Strata Qwen reclassified SSD stream; Empero/Sage/Flint isolated GPU-only text probes pass, production profiles unchanged.
 - [October27 model storage inventory](model-storage-2026-10-27.json): three user-requested categories, per-model allocated/logical bytes, shared assets and extra copies.
 - [DeepSeek-S removal and retained XS dependencies](deepseek-s-retirement-2026-10-26.json), [report](../DEEPSEEK-S-RETIREMENT-2026-10-26.md): 186.18 GB reclaimed, shared Engram retained; storage/CPU/API validation only, no inference.

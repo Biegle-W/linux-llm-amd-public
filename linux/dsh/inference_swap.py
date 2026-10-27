@@ -114,7 +114,7 @@ class OwnedScope:
             self.closed = True
 
 
-def spawn_owned(args, **kwargs):
+def spawn_owned(args, *, expected_memory_limits=None, **kwargs):
     """Start a gated command in a unique cgroup or refuse before exec.
 
     Preserve the existing engine-specific scope properties verbatim. Never
@@ -164,6 +164,12 @@ def spawn_owned(args, **kwargs):
             if proc.poll() is not None or time.monotonic() >= deadline:
                 raise RuntimeError('Owned worker cgroup unavailable; command not released')
             time.sleep(.02)
+        if expected_memory_limits is not None:
+            for name, expected in expected_memory_limits.items():
+                if name not in ('memory.high', 'memory.max', 'memory.swap.max'):
+                    raise RuntimeError('Unknown required worker memory limit')
+                if (scope.directory/name).read_text().strip() != str(expected):
+                    raise RuntimeError('Owned worker '+name+' differs from the required limit; command not released')
         os.write(write_fd, b'1')
         return proc, scope
     except BaseException:

@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from llama_runtime import launch_spec, require_amd_headroom
-from moe_memory import admit_model, watch_worker
+from moe_memory import admit_model, watch_worker, worker_limits_for_model, require_model_capacity
 
 ROOT = Path(__file__).resolve().parent
 CATALOG = json.loads((ROOT / 'models.json').read_text())
@@ -24,6 +24,7 @@ native = None
 native_port = 0
 active_model = None
 active_mode = None
+active_limits = None
 memory_watch = None
 swap_guard = WorkerSwapGuard()
 
@@ -68,11 +69,16 @@ def backend_for_model(model):
 
 
 @inference_request
-def activate_native(mode, spec=None):
+def activate_native(mode, spec=None, model=None):
     """Switch only this router's native worker; preserve the frontend and API port."""
-    global native, active_mode, active_model, memory_watch
+    global native, active_mode, active_model, active_limits, memory_watch
     swap_guard.check()
-    if native is not None and native.poll() is None and active_mode == mode:
+    if model is not None:
+        require_model_capacity(model)
+    limits = worker_limits_for_model(model)
+    if limits and mode != 'hip-amd':
+        raise RuntimeError('Validated VRAM-only profiles require HIP AMD; no worker was changed.')
+    if native is not None and native.poll() is None and active_mode == mode and active_limits == limits:
         return
     # Verify the requested binary/devices before unloading a working model.
     binary, preset, env, enabled = spec or launch_spec(mode)
@@ -88,10 +94,15 @@ def activate_native(mode, spec=None):
     if enabled is not None:
         args = ['systemd-run', '--user', '--scope', '--quiet',
                 '--property=MemorySwapMax=0', *args]
-    native = swap_guard.spawn(args, env=env, start_new_session=True)
+    if limits:
+        args[4:4] = ['--property=MemoryHigh='+str(limits['memory.high']),
+                     '--property=MemoryMax='+str(limits['memory.max'])]
+    native = swap_guard.spawn(args, env=env, start_new_session=True,
+                              **({'expected_memory_limits':limits} if limits else {}))
     ready(native, native_port)
     swap_guard.ready(native)
     active_mode = mode
+    active_limits = limits
     memory_watch = watch_worker(native, lambda: active_model, stop_process)
     print(f'llama.cpp native runtime selected: {mode}', flush=True)
 
@@ -142,7 +153,7 @@ class Handler(BaseHTTPRequestHandler):
             if model not in {m['id'] for m in CATALOG}:
                 return self.respond(400, {'error': {'message': 'Select an activated model from /v1/models; other hardware profiles are still deferred.'}})
             with lock:
-                activate_native(backend_for_model(model))
+                activate_native(backend_for_model(model), model=model)
                 admit_model(model, call, native_port)
                 active_model = model
                 self.proxy(native_port, 'POST', body)

@@ -1,5 +1,17 @@
 # LLM benchmark and context history
 
+## October27 — VRAM-only defaults and selectable Flint
+
+User-authorized Empero/Sage all-GPU default promotion and Flint catalog addition:
+normal launcher/authenticated API, tools/JSON/SSE, near258K/62K/30K markers and
+history, plus Sage vision pass with strict4/5GiB/no-swap workers and all guards.
+Flint selects bounded reasoning128 after zero-reasoning history probes failed
+both cached and uncached. Same retained llama2280f0fd/ROCm7.2.3, unchanged model
+paths and saved Strata Q3 default. Twelve profiles/ten weight sets; no new model
+copy/download or scheduled-update activation. Prior non-thinking timing trials
+remain dated experiments. [Report](VRAM-DEFAULTS-2026-10-27.md),
+[data](results/vram-defaults-2026-10-27.json).
+
 ## October27 — backup cleanup, corrected storage category and all-VRAM experiments
 
 User-requested Super SATA backup/GLM S24 rollback retirement reclaimed156.47GB;

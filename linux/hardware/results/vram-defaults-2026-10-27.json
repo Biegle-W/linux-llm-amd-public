@@ -1,0 +1,392 @@
+{
+  "date": "2026-10-27",
+  "source_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
+  "rocm": "7.2.3",
+  "hardware": {
+    "os_visible_ram": "14.83GiB",
+    "gpu": "2 x RX7900XTX24GB"
+  },
+  "scope": "User-authorized production default changes to VRAM-only Empero/Sage and selectable Flint; normal launch and authenticated API qualification",
+  "catalog_profiles": 12,
+  "unique_model_weight_sets": 10,
+  "normal_integration_passed": true,
+  "profiles": [
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "context": 262144,
+      "status": "passed",
+      "arithmetic": true,
+      "context_confirmed": true,
+      "json": true,
+      "tool_roundtrip": true,
+      "authenticated_sse": true,
+      "long_prompt_tokens": 257996,
+      "long_markers": true,
+      "full_history_followup": true,
+      "history_prompt_tokens": 258044,
+      "continuous_request_seconds": 35.7543031539999,
+      "continuous_requests": 8,
+      "one_loaded_model": true,
+      "vram": [
+        {
+          "device": "0000:03:00.0",
+          "total": 25753026560,
+          "used": 12878782464,
+          "free": 12874244096
+        },
+        {
+          "device": "0000:06:00.0",
+          "total": 25753026560,
+          "used": 14346743808,
+          "free": 11406282752
+        }
+      ],
+      "worker_cgroup_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "native_processes_checked_before": 2,
+      "native_processes_checked_after": 2,
+      "maximum_cgroup_memory_peak_bytes": 2188066816,
+      "memory_placement": "vram_only",
+      "batch_size": 512,
+      "ubatch_size": 512,
+      "load_mode": "dio",
+      "mtp": true,
+      "reasoning_budget_tokens": 0
+    },
+    {
+      "model": "sage-a1.5",
+      "context": 65536,
+      "status": "passed",
+      "arithmetic": true,
+      "context_confirmed": true,
+      "json": true,
+      "tool_roundtrip": true,
+      "authenticated_sse": true,
+      "long_prompt_tokens": 62009,
+      "long_markers": true,
+      "full_history_followup": true,
+      "history_prompt_tokens": 62057,
+      "synthetic_vision": true,
+      "vision_answer_sha256": "644b4020676f4ce2a250c86bac458a2daa15d6d039aee491c2be1d00ffc999c5",
+      "continuous_request_seconds": 36.049945622999985,
+      "continuous_requests": 6,
+      "one_loaded_model": true,
+      "vram": [
+        {
+          "device": "0000:03:00.0",
+          "total": 25753026560,
+          "used": 15044784128,
+          "free": 10708242432
+        },
+        {
+          "device": "0000:06:00.0",
+          "total": 25753026560,
+          "used": 14850314240,
+          "free": 10902712320
+        }
+      ],
+      "worker_cgroup_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "native_processes_checked_before": 2,
+      "native_processes_checked_after": 2,
+      "maximum_cgroup_memory_peak_bytes": 3382083584,
+      "memory_placement": "vram_only",
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "load_mode": "dio",
+      "mtp": true,
+      "reasoning_budget_tokens": 0
+    },
+    {
+      "model": "flint-40b-a2.5b",
+      "context": 32768,
+      "status": "passed",
+      "arithmetic": true,
+      "context_confirmed": true,
+      "json": true,
+      "tool_roundtrip": true,
+      "authenticated_sse": true,
+      "long_prompt_tokens": 29986,
+      "long_markers": true,
+      "full_history_followup": true,
+      "history_prompt_tokens": 30015,
+      "continuous_request_seconds": 44.18491920999986,
+      "continuous_requests": 4,
+      "one_loaded_model": true,
+      "vram": [
+        {
+          "device": "0000:03:00.0",
+          "total": 25753026560,
+          "used": 15404408832,
+          "free": 10348617728
+        },
+        {
+          "device": "0000:06:00.0",
+          "total": 25753026560,
+          "used": 13735284736,
+          "free": 12017741824
+        }
+      ],
+      "worker_cgroup_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "native_processes_checked_before": 2,
+      "native_processes_checked_after": 2,
+      "maximum_cgroup_memory_peak_bytes": 1385017344,
+      "memory_placement": "vram_only",
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "load_mode": "dio",
+      "mtp": false,
+      "reasoning_budget_tokens": 128
+    }
+  ],
+  "lifecycle_memories": [
+    {
+      "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+      "interval_seconds": 0.5,
+      "worker_samples": 997,
+      "sampling_errors": 0,
+      "enforcement_attempts": 0,
+      "enforcement_errors": 0,
+      "enforcement_state": "not_attempted",
+      "max_worker_swap_bytes": 0,
+      "max_nonresident_vram_bytes": 0,
+      "swap_activity": {
+        "policy": "low-churn-v1",
+        "samples": 998,
+        "sampling_errors": 0,
+        "elapsed_seconds": 511.6280979719995,
+        "worker_swap_peak_bytes": 0,
+        "total_swapin_bytes": 160985088,
+        "total_swapout_bytes": 249856,
+        "inference_window_samples": 589,
+        "max_inference_swapout_bytes_per_second": 3111.5882546620605,
+        "max_inference_swap_io_bytes_per_second": 2455215.494279879,
+        "min_available_bytes": 6799196160,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": []
+      }
+    },
+    {
+      "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+      "interval_seconds": 0.5,
+      "worker_samples": 223,
+      "sampling_errors": 0,
+      "enforcement_attempts": 0,
+      "enforcement_errors": 0,
+      "enforcement_state": "not_attempted",
+      "max_worker_swap_bytes": 0,
+      "max_nonresident_vram_bytes": 0,
+      "swap_activity": {
+        "policy": "low-churn-v1",
+        "samples": 224,
+        "sampling_errors": 0,
+        "elapsed_seconds": 114.35779784900024,
+        "worker_swap_peak_bytes": 0,
+        "total_swapin_bytes": 389120,
+        "total_swapout_bytes": 0,
+        "inference_window_samples": 63,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 7038.85946325044,
+        "min_available_bytes": 8313356288,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": []
+      }
+    }
+  ],
+  "memory_failures": [],
+  "thermal": {
+    "status": "complete",
+    "samples": 116,
+    "sample_errors": 0,
+    "cpu_peak_package_c": {
+      "Package id 0": 60.0
+    },
+    "cards": [
+      {
+        "gpu_index": 0,
+        "samples": 116,
+        "sensor_samples": {
+          "mem": 116,
+          "edge": 116,
+          "junction": 116
+        },
+        "peak_temperature_c": {
+          "mem": 44.0,
+          "edge": 40.0,
+          "junction": 60.0
+        },
+        "thermal_limit_samples": 63,
+        "hotspot_limit_samples": 63
+      },
+      {
+        "gpu_index": 1,
+        "samples": 116,
+        "sensor_samples": {
+          "mem": 116,
+          "edge": 116,
+          "junction": 116
+        },
+        "peak_temperature_c": {
+          "mem": 54.0,
+          "edge": 36.0,
+          "junction": 57.0
+        },
+        "thermal_limit_samples": 69,
+        "hotspot_limit_samples": 69
+      }
+    ]
+  },
+  "cpu_model_refused_before_unload": true,
+  "working_gpu_model_preserved_after_refusal": true,
+  "native_ui_http_200": true,
+  "native_ui_selector_models": [
+    "empero-qwen3.8-35b-a3b",
+    "flint-40b-a2.5b",
+    "nemotron-3.5-super-iq3",
+    "ornith-1.5-122b",
+    "sage-a1.5"
+  ],
+  "native_ui_browser_gzip_headers": true,
+  "dsh_default_preserved": true,
+  "shutdown_verified": true,
+  "initial_shell_shutdown_check": false,
+  "asynchronous_shutdown_followup_verified": true,
+  "worker_limits_verified_before_exec": true,
+  "cpu_regressions_per_checkout": 65,
+  "swap_policy_changed": false,
+  "engine_versions_changed": false,
+  "nightly_updates_resumed": false,
+  "weights_downloaded_or_copied": false,
+  "limitations": [
+    "Long retrieval/history and synthetic tools/vision are functional probes, not a general quality assessment or sustained full-window benchmark.",
+    "Native UI was served and its model catalog was checked; no new pixel-based browser automation claim.",
+    "API tests are authenticated host-self access, not a separate remote-peer qualification.",
+    "Earlier isolated timing medians are retained separately; this activation does not claim a new CPU-offload A/B performance comparison."
+  ],
+  "rejected_flint_setting": {
+    "reasoning_budget_tokens": 0,
+    "initial30K_markers_passed": true,
+    "middle_marker_history_followup_passed": false,
+    "same_error_cached_and_uncached": true,
+    "selected_reasoning_budget_tokens": 128,
+    "selected_original_history_question_passed": true
+  },
+  "thermal_sessions": [
+    {
+      "scope": "Empero/Sage qualification and rejected Flint zero-reasoning trial",
+      "status": "complete",
+      "samples": 512,
+      "sample_errors": 0,
+      "cpu_peak_package_c": {
+        "Package id 0": 71.0
+      },
+      "cards": [
+        {
+          "gpu_index": 0,
+          "samples": 512,
+          "sensor_samples": {
+            "mem": 512,
+            "edge": 512,
+            "junction": 512
+          },
+          "peak_temperature_c": {
+            "mem": 62.0,
+            "edge": 57.0,
+            "junction": 81.0
+          },
+          "thermal_limit_samples": 391,
+          "hotspot_limit_samples": 391
+        },
+        {
+          "gpu_index": 1,
+          "samples": 512,
+          "sensor_samples": {
+            "mem": 512,
+            "edge": 512,
+            "junction": 512
+          },
+          "peak_temperature_c": {
+            "mem": 64.0,
+            "edge": 45.0,
+            "junction": 70.0
+          },
+          "thermal_limit_samples": 413,
+          "hotspot_limit_samples": 413
+        }
+      ]
+    },
+    {
+      "scope": "Selected Flint bounded-reasoning trial",
+      "status": "complete",
+      "samples": 116,
+      "sample_errors": 0,
+      "cpu_peak_package_c": {
+        "Package id 0": 60.0
+      },
+      "cards": [
+        {
+          "gpu_index": 0,
+          "samples": 116,
+          "sensor_samples": {
+            "mem": 116,
+            "edge": 116,
+            "junction": 116
+          },
+          "peak_temperature_c": {
+            "mem": 44.0,
+            "edge": 40.0,
+            "junction": 60.0
+          },
+          "thermal_limit_samples": 63,
+          "hotspot_limit_samples": 63
+        },
+        {
+          "gpu_index": 1,
+          "samples": 116,
+          "sensor_samples": {
+            "mem": 116,
+            "edge": 116,
+            "junction": 116
+          },
+          "peak_temperature_c": {
+            "mem": 54.0,
+            "edge": 36.0,
+            "junction": 57.0
+          },
+          "thermal_limit_samples": 69,
+          "hotspot_limit_samples": 69
+        }
+      ]
+    }
+  ],
+  "host_self_catalog_routes": {
+    "loopback": {
+      "reachable": true,
+      "catalog_count": 12,
+      "flint_present": true
+    },
+    "lan": {
+      "reachable": false,
+      "error_type": "URLError"
+    },
+    "tailscale": {
+      "reachable": true,
+      "catalog_count": 12,
+      "flint_present": true
+    }
+  }
+}

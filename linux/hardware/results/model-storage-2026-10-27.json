@@ -1,5 +1,5 @@
 {
-  "measured_at": "2026-10-27T02:18:12.701060-04:00",
+  "measured_at": "2026-10-27T02:58:47.896582-04:00",
   "method": "Read-only file metadata scan; allocated bytes = st_blocks * 512; files counted once by device/inode; no symlinks or duplicate inodes found. Directory entries excluded; no weights read or inference started.",
   "scope": "Installed model files under configured system/SATA/shared-NVMe roots, including associated packs, drafts, backups and rollback artifacts; excludes engine binaries, environments, unrelated filesystem contents and runtime-local routing profiles.",
   "categories": {
@@ -44,7 +44,7 @@
       "components": [
         {
           "label": "Weights and configuration",
-          "path": "/mnt/shared-sata1/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
+          "path": "/mnt/shared/vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16",
           "file_count": 33,
           "logical_bytes": 43645320930,
           "allocated_bytes": 43651956736
@@ -56,14 +56,14 @@
     },
     {
       "name": "Empero Qwen3.8-35B-A3B IQ4_XS",
-      "category": "cpu_ram_moe",
+      "category": "vram_only",
       "profile_ids": [
         "empero-qwen3.8-35b-a3b"
       ],
       "components": [
         {
           "label": "GGUF and associated files",
-          "path": "/mnt/shared-sata1/GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill",
+          "path": "/mnt/shared/GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill",
           "file_count": 2,
           "logical_bytes": 19627788438,
           "allocated_bytes": 19628294144
@@ -71,13 +71,7 @@
       ],
       "logical_bytes": 19627788438,
       "allocated_bytes": 19628294144,
-      "note": "",
-      "experimental_vram_only_candidate": {
-        "status": "passed isolated text probes on both GPUs",
-        "context": 262144,
-        "production_profile_changed": false,
-        "evidence": "hardware/results/storage-vram-2026-10-27.json"
-      }
+      "note": "VRAM-only is the selected production default on both GPUs. Empero retains256K/MTP3/batch512; Sage retains64K/MTP3/projector/batch4096. Strict4/5GiB no-swap host staging scope; CPU expert offload disabled."
     },
     {
       "name": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
@@ -100,14 +94,14 @@
     },
     {
       "name": "Sage-A1.5 Q4_K_M",
-      "category": "cpu_ram_moe",
+      "category": "vram_only",
       "profile_ids": [
         "sage-a1.5"
       ],
       "components": [
         {
           "label": "GGUF and vision projector",
-          "path": "/mnt/shared-sata1/GGUF-Models/Sage-A1.5-GGUF",
+          "path": "/mnt/shared/GGUF-Models/Sage-A1.5-GGUF",
           "file_count": 2,
           "logical_bytes": 22612746400,
           "allocated_bytes": 22613065728
@@ -115,13 +109,7 @@
       ],
       "logical_bytes": 22612746400,
       "allocated_bytes": 22613065728,
-      "note": "",
-      "experimental_vram_only_candidate": {
-        "status": "passed isolated text probes on both GPUs",
-        "context": 65536,
-        "production_profile_changed": false,
-        "evidence": "hardware/results/storage-vram-2026-10-27.json"
-      }
+      "note": "VRAM-only is the selected production default on both GPUs. Empero retains256K/MTP3/batch512; Sage retains64K/MTP3/projector/batch4096. Strict4/5GiB no-swap host staging scope; CPU expert offload disabled."
     },
     {
       "name": "Ornith-1.5-122B Q4_K_M",
@@ -132,7 +120,7 @@
       "components": [
         {
           "label": "GGUF and vision projector",
-          "path": "/mnt/shared-sata1/GGUF-Models/Ornith-1.5-122B-GGUF",
+          "path": "/mnt/shared/GGUF-Models/Ornith-1.5-122B-GGUF",
           "file_count": 2,
           "logical_bytes": 76756174848,
           "allocated_bytes": 76756549632
@@ -220,34 +208,41 @@
       "logical_bytes": 281866295003,
       "allocated_bytes": 281868369920,
       "note": "Both engines share one weight set. Includes shared S Engram shards5/6; S-only assets remain retired. Category describes the oversized file-backed cold tier, not a request to enable DS4_STREAM or change any flags."
-    }
-  ],
-  "additional_stored_assets": [
+    },
     {
-      "kind": "download_only",
-      "model": "Flint-40B-A2.5B UD-Q4_K_XL",
+      "name": "Flint-40B-A2.5B UD-Q4_K_XL",
       "category": "vram_only",
-      "label": "Downloaded model with no enabled profile",
-      "path": "/mnt/shared-sata1/GGUF-Models/Flint-40B-A2.5B",
-      "file_count": 10,
+      "profile_ids": [
+        "flint-40b-a2.5b"
+      ],
+      "components": [
+        {
+          "label": "Weights, tokenizer metadata and associated download files",
+          "path": "/mnt/shared/GGUF-Models/Flint-40B-A2.5B",
+          "file_count": 10,
+          "logical_bytes": 25054701439,
+          "allocated_bytes": 25056772096
+        }
+      ],
       "logical_bytes": 25054701439,
       "allocated_bytes": 25056772096,
-      "isolated_trial_status": "passed dual-GPU VRAM-only32K text probes; not an enabled production profile"
+      "note": "Selectable llama.cpp VRAM-only32K on both GPUs, MTP off, bounded reasoning128; uses existing download, no copied weights."
     }
   ],
+  "additional_stored_assets": [],
   "category_allocated_bytes": {
-    "vram_only": 64987553792,
-    "cpu_ram_moe": 178762416128,
+    "vram_only": 132285685760,
+    "cpu_ram_moe": 136521056256,
     "ssd_stream": 507430305792
   },
-  "active_model_assets_allocated_bytes": 751180275712,
-  "additional_assets_allocated_bytes": 25056772096,
+  "active_model_assets_allocated_bytes": 776237047808,
+  "additional_assets_allocated_bytes": 0,
   "other_huggingface_module_cache_allocated_bytes": 176128,
   "all_scanned_allocated_bytes": 776237223936,
   "all_scanned_logical_bytes": 776219497528,
-  "profile_count": 11,
-  "unique_active_model_count": 9,
-  "runtime_changed": false,
+  "profile_count": 12,
+  "unique_active_model_count": 10,
+  "runtime_changed": true,
   "previous_measurement_at": "2026-10-27T01:56:24.412783-04:00",
   "classification_correction": "Strata Qwen IQ3_XXS belongs to SSD stream: bounded RAM/GPU tiers and an active SSD-backed cold/PLE path.",
   "removed_additional_stored_assets": [
@@ -256,7 +251,7 @@
       "model": "Nemotron 3.5 Super 120B UD-IQ3_XXS",
       "category": "cpu_ram_moe",
       "label": "SATA backup",
-      "path": "/mnt/shared-sata1/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF",
+      "path": "/mnt/shared/GGUF-Models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF",
       "file_count": 5,
       "logical_bytes": 59764212808,
       "allocated_bytes": 59765161984
@@ -271,5 +266,7 @@
       "logical_bytes": 96700893377,
       "allocated_bytes": 96702431232
     }
-  ]
+  ],
+  "engine_versions_changed": false,
+  "activation_evidence": "hardware/results/vram-defaults-2026-10-27.json"
 }

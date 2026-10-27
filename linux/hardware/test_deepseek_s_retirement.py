@@ -10,7 +10,8 @@ from model_catalog import catalog
 class Retirement(unittest.TestCase):
     def test_both_xs_aliases_remain_and_retired_s_cannot_be_selected(self):
         models = catalog(ROOT)
-        self.assertEqual(len(models), 11)
+        self.assertEqual(len(models), 12)
+        self.assertIn('flint-40b-a2.5b', models)
         self.assertIn('deepseek-v4.1-flash-1017-maya', models)
         self.assertIn('deepseek-v4.1-flash-1017-strata-xs', models)
         for model in ['deepseek-v4.1-flash-1017-maya-s', 'deepseek-v4.1-flash-1017-strata-s']:

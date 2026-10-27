@@ -1,4 +1,4 @@
-"""Admit CPU expert storage and monitor only the managed llama.cpp worker tree."""
+"""Admit explicit CPU-backed or VRAM-only profiles and watch their owned workers."""
 import json
 from pathlib import Path
 import threading
@@ -6,6 +6,42 @@ import time
 
 ROOT = Path(__file__).resolve().parent
 GIB = 1024**3
+
+
+def vram_worker_limits(profile):
+    placement = profile.get('memory_placement', 'cpu_ram_moe')
+    if placement not in ('cpu_ram_moe', 'vram_only'):
+        raise RuntimeError('Unknown MoE memory placement; no worker was changed.')
+    if placement != 'vram_only':
+        return None
+    limits = profile.get('worker_memory_limits', {})
+    expected = {'memory.high': 4*GIB, 'memory.max': 5*GIB, 'memory.swap.max': 0}
+    if limits != expected or any(type(v) is not int for v in limits.values()):
+        raise RuntimeError('VRAM-only worker limits must match the validated 4/5 GiB no-swap scope.')
+    if (profile.get('host_expert_bytes') != 0 or profile.get('cpu_expert_layers') != [] or
+            profile.get('gpu_expert_cache_mib') != 0 or
+            profile.get('backend') != 'hip-amd' or
+            profile.get('minimum_host_ram_gib', 0) < 12 or
+            profile.get('minimum_available_ram_gib', 0) < 7 or
+            profile.get('min_start_vram_gib', 0) < 21 or
+            profile.get('min_free_vram_gib', 0) < 3):
+        raise RuntimeError('VRAM-only placement must retain zero CPU experts and physical staging headroom.')
+    return dict(limits)
+
+
+def worker_limits_for_model(model):
+    if model is None:
+        return None  # An unloaded bootstrap router has no model placement yet.
+    return vram_worker_limits(profiles().get(model, {}))
+
+
+def require_model_capacity(model):
+    """Reject a physically incompatible target before replacing a usable worker."""
+    profile = profiles().get(model)
+    if profile:
+        total, available = host_memory()
+        if total < profile.get('minimum_host_ram_gib', 28)*GIB:
+            raise RuntimeError(memory_reason(profile, total, available))
 
 
 def host_memory():
@@ -18,9 +54,12 @@ def memory_reason(profile, total, available, already_loaded=False):
     minimum = profile.get('minimum_host_ram_gib', 28) * GIB
     if total < minimum:
         return f'MoE profile requires at least {minimum/GIB:g} GiB OS-visible RAM; found {total/GIB:.1f} GiB.'
-    reserve = 3 * GIB if already_loaded else profile['host_expert_bytes'] + 4 * GIB
+    gpu = vram_worker_limits(profile) is not None
+    reserve = (3*GIB if already_loaded else profile['minimum_available_ram_gib']*GIB) if gpu else (
+        3*GIB if already_loaded else profile['host_expert_bytes'] + 4*GIB)
     if available < reserve:
-        return (f'MoE CPU expert storage requires {reserve/GIB:.1f} GiB available RAM '
+        purpose = 'VRAM-only loading/staging' if gpu else 'MoE CPU expert storage'
+        return (f'{purpose} requires {reserve/GIB:.1f} GiB available RAM '
                 f'({available/GIB:.1f} GiB available). Close memory-heavy applications and retry; '
                 'swap is not counted as expert capacity.')
     return None
@@ -32,7 +71,7 @@ def profiles():
 
 
 def validate_profiles(root=None):
-    """Reject catalogued MoE entries that silently lost CPU backing or their cache."""
+    """Reject implicit placement changes; GPU-only needs its own bounded plan."""
     import configparser
     root = ROOT if root is None else Path(root)
     catalog = root/'models.json'
@@ -45,8 +84,11 @@ def validate_profiles(root=None):
         if not model.get('enabled', True) or not model.get('expert_count', 0):
             continue
         plan = plans.get(model['id'])
-        if not plan or not plan.get('cpu_expert_layers') or plan.get('gpu_expert_cache_mib', 0) <= 0:
+        if not plan:
             raise RuntimeError(f"MoE {model['id']} requires explicit CPU expert backing and a GPU expert cache; no backend was stopped.")
+        mode = plan.get('memory_placement', 'cpu_ram_moe')
+        if mode not in ('cpu_ram_moe', 'vram_only'):
+            raise RuntimeError('Unknown MoE memory placement; no backend was stopped.')
         name = 'models-hip.ini' if plan['backend'] == 'hip-amd' else 'models-amd.ini'
         text = (root/name).read_text()
         cfg = configparser.ConfigParser(interpolation=None)
@@ -54,6 +96,28 @@ def validate_profiles(root=None):
         section = cfg[model['id']]
         cache = int(section.get('moe-cache-mib', cfg['*'].get('moe-cache-mib', '0')))
         placement = section.get('override-tensor', '')
+        if mode == 'vram_only':
+            vram_worker_limits(plan)
+            required = {'device':'ROCm0,ROCm1', 'split-mode':'layer', 'tensor-split':'1,1',
+                        'n-gpu-layers':'99', 'fit':'off', 'n-cpu-moe':'0', 'load-mode':'dio',
+                        'ctx-size':str(model['context']), 'batch-size':str(plan['batch_size']),
+                        'ubatch-size':str(plan['ubatch_size']),
+                        'spec-type':'draft-mtp' if model.get('mtp') else 'none'}
+            if model.get('mtp'):
+                required['spec-draft-n-max'] = '3'
+            if 'reasoning_budget_tokens' in plan:
+                budget = plan['reasoning_budget_tokens']
+                if type(budget) is not int or not 0 <= budget <= 128 or model.get('reasoning_budget') != budget:
+                    raise RuntimeError('VRAM-only reasoning budget differs from the bounded model plan.')
+                required.update({'reasoning-budget':str(budget), 'reasoning':'on' if budget else 'off'})
+            effective = lambda key: section.get(key, cfg['*'].get(key, ''))
+            if (cache != 0 or 'CPU' in placement or placement != 'token_embd.*=ROCm0' or
+                    model.get('memory_category') != 'vram_only' or plan['context'] != model['context'] or
+                    any(effective(k) != v for k,v in required.items())):
+                raise RuntimeError(f"MoE {model['id']} VRAM-only preset no longer matches its bounded placement plan.")
+            continue
+        if not plan.get('cpu_expert_layers') or plan.get('gpu_expert_cache_mib', 0) <= 0:
+            raise RuntimeError(f"MoE {model['id']} requires explicit CPU expert backing and a GPU expert cache; no backend was stopped.")
         if cache != plan['gpu_expert_cache_mib'] or '=CPU' not in placement:
             raise RuntimeError(f"MoE {model['id']} preset no longer matches its CPU/cache policy; no backend was stopped.")
 
@@ -152,6 +216,8 @@ def watch_worker(proc, active_model, stop):
 
     def monitor():
         low = spill_count = 0
+        from strata_memory import MemoryGuard, vram_snapshot
+        gpu_guard = MemoryGuard()
         while not done.wait(1):
             if proc.poll() is not None:
                 return
@@ -161,6 +227,18 @@ def watch_worker(proc, active_model, stop):
                 continue
             _, available = host_memory()
             swap, spill = worker_memory(proc.pid)
+            if profile.get('memory_placement') == 'vram_only':
+                try:
+                    reason = gpu_guard.check(available, swap, spill, vram_snapshot())
+                    if swap or spill:
+                        reason = 'VRAM-only worker swap or dedicated-VRAM spill'
+                except Exception as error:
+                    reason = 'VRAM-only telemetry unavailable: '+type(error).__name__
+                if reason:
+                    print('VRAM-only memory guard: '+reason+'; stopping only the owned worker.', flush=True)
+                    stop(proc)
+                    return
+                continue
             vram_reason = vram_headroom_reason(profile)
             low = low + 1 if available < 3*GIB or vram_reason else 0
             spill_count = spill_count + 1 if spill > 256*1024**2 else 0

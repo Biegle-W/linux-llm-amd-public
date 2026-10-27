@@ -1,5 +1,10 @@
 # Backup cleanup, model categories and all-VRAM trials — October 27, 2026
 
+**Later October27 activation:** Empero/Sage VRAM-only defaults and selectable
+Flint supersede the production-state statements below. The experiments and
+measurements here retain their original scope.
+[Current activation](VRAM-DEFAULTS-2026-10-27.md).
+
 The user requested removal of the Super IQ3 SATA backup and old GLM Maya-S24
 rollback, correction of Strata Qwen's category, and VRAM-only experiments for
 Empero, Sage and Flint. **Both copies are removed; all three models pass the

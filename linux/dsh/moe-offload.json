@@ -1,40 +1,30 @@
 {
-  "updated": "2026-10-18",
-  "strategy": "CPU expert backing plus bounded GPU hot-expert caching on both RX 7900 XTX cards; dense models stay on Vulkan.",
+  "updated": "2026-10-27",
+  "strategy": "Explicit per-model VRAM-only or CPU-RAM MoE placement on both AMD cards; GPU-only workers keep validated physical staging limits and zero swap.",
   "minimum_host_ram_gib": 28,
   "models": {
     "empero-qwen3.8-35b-a3b": {
       "backend": "hip-amd",
       "context": 262144,
-      "minimum_host_ram_gib": 28,
-      "cpu_expert_layers": [
-        0,
-        2,
-        4,
-        6,
-        8,
-        10,
-        12,
-        14,
-        16,
-        18,
-        20,
-        22,
-        24,
-        26,
-        28,
-        30,
-        32,
-        34,
-        36,
-        38
-      ],
-      "host_expert_bytes": 8556380160,
-      "gpu_expert_cache_mib": 12288,
+      "minimum_host_ram_gib": 12,
+      "cpu_expert_layers": [],
+      "host_expert_bytes": 0,
+      "gpu_expert_cache_mib": 0,
       "kv_cache": "q8_0",
-      "load_mode": "none",
+      "load_mode": "dio",
       "mtp_draft_experts_on_gpu": true,
-      "validation": "256K allocated; approximately 64K actual retrieval plus tools/JSON/arithmetic; full-window quality/speed not established"
+      "validation": "Passed normal launcher/authenticated API/tools/JSON/SSE/long markers/history/continuous inference with strict4/5GiB no-swap scope; hardware/results/vram-defaults-2026-10-27.json",
+      "memory_placement": "vram_only",
+      "minimum_available_ram_gib": 7,
+      "worker_memory_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "batch_size": 512,
+      "ubatch_size": 512,
+      "min_free_vram_gib": 3,
+      "min_start_vram_gib": 21
     },
     "nemotron-3.5-super-iq3": {
       "backend": "hip-amd",
@@ -71,35 +61,25 @@
     "sage-a1.5": {
       "backend": "hip-amd",
       "context": 65536,
-      "minimum_host_ram_gib": 28,
-      "cpu_expert_layers": [
-        0,
-        2,
-        4,
-        6,
-        8,
-        10,
-        12,
-        14,
-        16,
-        18,
-        20,
-        22,
-        24,
-        26,
-        28,
-        30,
-        32,
-        34,
-        36,
-        38
-      ],
-      "host_expert_bytes": 9751756800,
-      "gpu_expert_cache_mib": 12288,
+      "minimum_host_ram_gib": 12,
+      "cpu_expert_layers": [],
+      "host_expert_bytes": 0,
+      "gpu_expert_cache_mib": 0,
       "kv_cache": "q8_0",
-      "load_mode": "none",
+      "load_mode": "dio",
       "mtp_draft_experts_on_gpu": true,
-      "validation": "64K allocated; 61,999-input three-marker retrieval and 62,047-input full-history follow-up passed; tools/JSON/arithmetic/SSE; MTP3 selected (code/prose +55.7%/+25.6% vs MTP off). Text/tools profile; vision projector not loaded."
+      "validation": "Passed normal launcher/authenticated API/tools/JSON/SSE/long markers/history/continuous inference with strict4/5GiB no-swap scope; hardware/results/vram-defaults-2026-10-27.json",
+      "memory_placement": "vram_only",
+      "minimum_available_ram_gib": 7,
+      "worker_memory_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "min_free_vram_gib": 3,
+      "min_start_vram_gib": 21
     },
     "ornith-1.5-122b": {
       "backend": "hip-amd",
@@ -146,6 +126,30 @@
       "tensor_split": "1,1",
       "mtp_draft_experts_on_gpu": false,
       "validation": "Tested October 21-22 (Codex/Claude): official Q4_K_M, 32K, MTP off; tools/JSON/code fixture, 30,988-token retrieval + cached follow-up, synthetic vision; 11.4/13.3 t/s decode, 52.7 t/s prefill; zero swap/spill. MTP3 rejected (-27%)."
+    },
+    "flint-40b-a2.5b": {
+      "backend": "hip-amd",
+      "context": 32768,
+      "memory_placement": "vram_only",
+      "minimum_host_ram_gib": 12,
+      "minimum_available_ram_gib": 7,
+      "host_expert_bytes": 0,
+      "cpu_expert_layers": [],
+      "gpu_expert_cache_mib": 0,
+      "kv_cache": "q8_0",
+      "load_mode": "dio",
+      "worker_memory_limits": {
+        "memory.high": 4294967296,
+        "memory.max": 5368709120,
+        "memory.swap.max": 0
+      },
+      "batch_size": 4096,
+      "ubatch_size": 4096,
+      "min_free_vram_gib": 3,
+      "min_start_vram_gib": 21,
+      "mtp_draft_experts_on_gpu": false,
+      "validation": "Passed normal launcher/authenticated API/tools/JSON/SSE/long markers/history/continuous inference with strict4/5GiB no-swap scope; hardware/results/vram-defaults-2026-10-27.json",
+      "reasoning_budget_tokens": 128
     }
   }
 }

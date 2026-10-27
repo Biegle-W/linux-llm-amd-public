@@ -466,7 +466,8 @@ class ContainmentTests(unittest.TestCase):
         import inference_swap as swap
         proc, scope = swap.spawn_owned(['systemd-run', '--user', '--scope', '--quiet',
                                       '-p', 'MemoryMax=64M', '--property=MemorySwapMax=0',
-                                      '/usr/bin/sleep', '60'], start_new_session=True)
+                                      '/usr/bin/sleep', '60'], start_new_session=True,
+                                      expected_memory_limits={'memory.max':64*1024**2, 'memory.swap.max':0})
         try:
             self.assertEqual((scope.directory/'memory.max').read_text().strip(), str(64*1024**2))
             self.assertEqual((scope.directory/'memory.swap.max').read_text().strip(), '0')
@@ -476,6 +477,19 @@ class ContainmentTests(unittest.TestCase):
             proc.wait(timeout=5)
             self.assertFalse(scope.populated())
             scope.close()
+
+    def test_required_limit_mismatch_never_releases_payload(self):
+        import inference_swap as swap
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            marker = Path(tmp)/'must-not-run'
+            with self.assertRaisesRegex(RuntimeError, 'differs from the required limit'):
+                swap.spawn_owned(['systemd-run', '--user', '--scope', '--quiet',
+                    '--property=MemoryMax=64M', '--property=MemorySwapMax=0',
+                    sys.executable, '-c', 'from pathlib import Path; import sys; Path(sys.argv[1]).touch()',
+                    str(marker)], start_new_session=True,
+                    expected_memory_limits={'memory.max':128*1024**2, 'memory.swap.max':0})
+            self.assertFalse(marker.exists(), 'A mismatched worker limit still executed the payload')
 
     def test_gate_accepts_explicit_command_without_arguments(self):
         import inference_swap as swap

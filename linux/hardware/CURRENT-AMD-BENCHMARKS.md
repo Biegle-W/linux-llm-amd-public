@@ -1,5 +1,17 @@
 # Current dual-AMD benchmarks — October 25, 2026
 
+## VRAM-only production defaults and Flint — October27
+
+Empero256K/MTP3/batch512 and Sage64K/MTP3/projector/batch4096 now default to
+VRAM-only on both GPUs. Flint is selectable at32K with a128-token reasoning
+budget. Normal launcher/authenticated API, tools/JSON/SSE, long markers/history
+(Empero257,996 input, Sage62,009, Flint29,986) and Sage vision pass; verified
+4GiB high/5GiB max/no-swap workers retain all existing guards. The zero-reasoning
+Flint history failure is recorded; the selected bounded setting passes the same
+question. Earlier isolated timing medians are not a new production A/B speedup
+claim. [Activation report](VRAM-DEFAULTS-2026-10-27.md) and
+[numeric evidence](results/vram-defaults-2026-10-27.json).
+
 ## Backup cleanup and all-VRAM candidates — October27
 
 Super's SATA backup and the old GLM S24 rollback are removed (156.47GB reclaimed);

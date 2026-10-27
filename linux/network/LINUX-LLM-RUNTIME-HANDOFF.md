@@ -26,6 +26,15 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
 This scope takes precedence over legacy cross-platform maintenance wording.
 Work on other repositories requires a new explicit user instruction.
 
+**October27 VRAM-only defaults / Flint activation:** Empero256K/MTP3/batch512
+and Sage64K/MTP3/projector/batch4096 now keep all weights on both GPUs. Flint is
+selectable as `flint-40b-a2.5b`,32K/noMTP/reasoning-budget128. DIO load, zero CPU
+expert placement/cache, verified4GiB high/5GiB max/no-swap workers and12GiB total/
+7GiB available host admission are explicit. Existing headroom/low-churn guards
+remain; CPU/SSD RAM rules stay intact. Twelve profiles: five llama.cpp, one
+SGLang, two vLLM, two Strata, two Maya. Saved DSH default remains Strata Q3.
+[Normal-launch activation evidence](../hardware/VRAM-DEFAULTS-2026-10-27.md).
+
 **October27 backup cleanup / all-VRAM trials:** removed only the Super SATA
 backup and GLM Maya-S24 rollback, reclaiming156.47GB. Active Super NVMe, GLM v2
 and all shared DeepSeek-XS dependencies remain. Strata Qwen is SSD stream;
@@ -35,8 +44,8 @@ production contexts and paused updater remain.
 [Storage removal and trial evidence](../hardware/STORAGE-VRAM-2026-10-27.md).
 
 **Model grouping (October27, standing preference):** use three categories in
-future inventories/comparisons: VRAM only (Qwen27B SGLang/vLLM, Bolt); CPU RAM MoE
-(Empero, Super IQ3, Sage, Ornith); SSD stream (Strata Qwen Q3, GLM Maya, DeepSeek XS
+future inventories/comparisons: VRAM only (Empero, Sage, Flint, Qwen27B
+SGLang/vLLM, Bolt); CPU RAM MoE (Super IQ3, Ornith); SSD stream (Strata Qwen Q3, GLM Maya, DeepSeek XS
 in Maya/Strata). Classification follows the selected loading profile; Strata Qwen
 uses an SSD cold tier with bounded RAM/GPU caches. This metadata inventory changes no
 runtime flags, guards or holds. Count shared weights once and list backups and
@@ -44,7 +53,7 @@ rollback/download-only files separately.
 [Measured storage inventory and locations](../hardware/MODEL-STORAGE-INVENTORY.md).
 
 **DeepSeek-S retired (October26):** S model IDs and profiles are removed from
-Maya/Strata. Eleven profiles remain: four llama.cpp, one SGLang, two vLLM,
+Maya/Strata. At that retirement, eleven profiles remained: four llama.cpp, one SGLang, two vLLM,
 two Strata and two Maya. S-only shards1–4, its old drafter, S metadata and routing
 seeds were deleted; Shared NVMe gained186.18 GB. Keep S Engram shards5/6 in place:
 XS in both engines requires their161.28 GB payload. The matching xs2 drafter,
@@ -62,7 +71,7 @@ canonical handoff is synchronized to the existing Shared location on the AMD hos
 
 Updated **October 26, 2026**. The benchmark-reference hardware is i9-13900KS,
 64 GB RAM and two RX 7900 XTX 24 GB; the live OS currently exposes **14.83 GiB RAM**.
-Eleven catalog profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
+Twelve catalog profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
 **Nightly engine updates are paused**, not automatically resumed by qualification.
 The retained versions are in the block below.
 Fresh i9 benchmarks, normal-launcher proofs and the corrected-NVMe Strata pool
@@ -283,15 +292,16 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 
 ## Current status and hardware
 
-- Intel **i9-13900KS (24 cores /32 threads)**, **64 GB installed RAM (61.51 GiB OS-visible)**,
+- Intel **i9-13900KS (24 cores /32 threads)**. Historical benchmark RAM is64GB
+  (61.51GiB OS-visible); the live host currently exposes **14.83GiB**.
   MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**. Both GPUs use CPU PCIe 4.0 x8 links.
   The PEX88096 switch remains purchased but not installed or P2P-validated.
-- Every active profile uses both cards. Dense llama.cpp weights remain on GPU;
-  HIP MoEs use CPU expert backing plus GPU hot-expert caches. Strata streams PLE
+- Every active profile uses both cards. Empero, Sage and Flint keep all model
+  weights on GPUs; Super and Ornith retain CPU expert backing plus GPU caches. Strata streams PLE
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
   host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
   and custom all-reduce disabled. No direct P2P claim is made.
-- **Eleven profiles:** four llama.cpp, one SGLang, two vLLM, two Strata, two Maya. Presence in
+- **Twelve profiles:** five llama.cpp, one SGLang, two vLLM, two Strata, two Maya. Presence in
   the authenticated catalog does not mean weights are loaded. Only one managed
   model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
 - The saved DSH default/provider is preserved. Super IQ3 remains selectable;
@@ -572,7 +582,7 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **11 enabled profiles**: four llama.cpp, one SGLang, two vLLM, two Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
+The current catalog has **12 enabled profiles**: five llama.cpp, one SGLang, two vLLM, two Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
 Earlier runtime/placement checks remain in their dated reports and must not
 replace the catalog and settings below.
 
@@ -583,9 +593,10 @@ not guarantees of full-window speed or general long-context accuracy.
 | Backend / placement | Exact API model ID | Total context | Target quantization | Speculation |
 |---|---|---:|---|---|
 | llama.cpp / HIP, CPU experts + cache | `nemotron-3.5-super-iq3` | 32,768 | UD-IQ3_XXS, three shards | Off |
-| llama.cpp / HIP, CPU experts + cache | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
-| llama.cpp / HIP, CPU experts + cache | `sage-a1.5` | 65,536 | Q4_K_M + vision projector | MTP3 |
+| llama.cpp / HIP, VRAM-only | `empero-qwen3.8-35b-a3b` | 262,144* | IQ4_XS | MTP3 |
+| llama.cpp / HIP, VRAM-only | `sage-a1.5` | 65,536 | Q4_K_M + vision projector | MTP3 |
 | llama.cpp / HIP, CPU experts + cache | `ornith-1.5-122b` | 32,768 | Q4_K_M + vision projector | Off |
+| llama.cpp / HIP, VRAM-only | `flint-40b-a2.5b` | 32,768 | UD-Q4_K_XL | Off; reasoning-budget128 |
 | SGLang / ROCm TP2 | `qwen3.8-27b-sglang-dflash2` | 163,840 | GPTQ INT4/group64 | DFlash2, 8 draft tokens; BF16 KV |
 | vLLM / ROCm TP2 | `qwen3.8-27b-vllm` | 163,840 | GPTQ INT4/group64 | MTP3; bfloat16 KV |
 | vLLM / ROCm TP2 | `nemotron-3.5-bolt-vllm` | 262,144 | AutoRound W4A16 (GPTQ int4/group128) | Off; bfloat16 KV |
@@ -595,8 +606,9 @@ not guarantees of full-window speed or general long-context accuracy.
 | Maya / HIP dual-card layer groups | `deepseek-v4.1-flash-1017-maya` | 32,768 | Maya-XS IQ1_S / Q6_K Engram | Matching dspark-xs2 |
 
 All active llama.cpp profiles use both cards and HIP, Q8_0 K/V and flash attention.
-Empero, Sage and Ornith override batch/ubatch to4096/4096; Super uses2048/1024.
-They retain their model-specific CPU expert backing and GPU hot caches. Dense
+Empero uses512/512, Sage and Flint4096/4096, Ornith4096/4096 and Super2048/1024.
+Empero/Sage/Flint are VRAM-only with DIO load and bounded no-swap host staging;
+Super/Ornith retain their CPU expert backing and GPU hot caches. Dense
 Qwen27B remains GPU-resident on SGLang/vLLM; Bolt uses vLLM W4A16. The old
 llama.cpp Bolt/Qwen Q4 and Vulkan profiles are retired. Effective settings come
 from the maintained model catalog, `dsh/models-hip.ini`, `dsh/moe-offload.json`
@@ -1116,9 +1128,10 @@ speed screen failed. Neither is active. No general full-window quality guarantee
 or sustained long-context decode result is inferred from short marker outputs.
 
 Earlier normal API proofs covered authenticated host self-access on
-loopback/LAN/Tailscale, not a remote peer. Current catalog has eleven IDs; the
-retired IDs must be removed from client selectors. The three smaller llama.cpp
-MoEs retain older ~64K retrieval evidence, not fresh full 256K quality claims.
+loopback/LAN/Tailscale, not a remote peer. The current catalog has twelve IDs; the
+retired IDs must be removed from client selectors. The October27 VRAM defaults add near258K Empero,62K Sage and30K Flint
+marker/history evidence; these functional checks are not general quality claims.
+[Activation evidence](../hardware/VRAM-DEFAULTS-2026-10-27.md).
 Maya's [initial numeric record](../hardware/results/maya-dual-amd-2026-10-20.json)
 preserves original17 controls; [current19/SDK tests](../hardware/results/maya-rocm10-2026-10-20.json) retain new trials, thermals and failed10 arms. The purchased
 PCIe switch is still pending installation and P2P/RCCL validation.

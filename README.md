@@ -29,11 +29,13 @@ settings, model weights, installed runtimes, raw private logs and private histor
 The local Ubuntu checkout names remain unchanged for installed launcher and daily
 publisher compatibility. GitHub repository names identify the system and hardware.
 
-**October 26 qualification status:** the live OS currently exposes **14.83 GiB RAM**;
+**October 26 qualification history:** the live OS currently exposes **14.83 GiB RAM**;
 the 64 GB measurements below retain their original hardware attribution. Nightly
-engine updates are paused. Only Qwen27B/vLLM, Bolt/vLLM and Qwen27B/SGLang DFlash2
-are authorized for guarded GPU-resident qualification; RAM-offloaded profiles stay
-held. All three reviewed loading trials were guard-stopped at the 4 GiB cumulative
+engine updates are paused. That qualification scope covered Qwen27B/vLLM,
+Bolt/vLLM and Qwen27B/SGLang DFlash2; CPU/SSD RAM-offloaded profiles stay held.
+The newer October27 Empero/Sage/Flint VRAM-only defaults are documented below.
+
+The three October26 loading trials were guard-stopped at the 4 GiB cumulative
 system swapout budget under a 7 GiB soft / 8 GiB hard worker RAM cap; none qualified.
 Production pins and contexts are unchanged. Those early trials used opt-in low-churn;
 the later October26 user instruction makes low-churn the default (see below).
@@ -75,7 +77,7 @@ This public tree is a hardware-specific reference. Adapt example paths, install 
 
 | Command | Purpose | Loopback port |
 |---|---|---:|
-| `llm-llama` | Empero, Super IQ3, Sage and Ornith | 8080 |
+| `llm-llama` | Empero, Sage, Flint, Super IQ3 and Ornith | 8080 |
 | `llm-sglang` | Qwen27B DFlash2 / TP2 | 30000 |
 | `llm-vllm` | Qwen27B MTP3 / TP2 and Bolt | 30010 |
 | `llm-strata` | Strata Qwen Q3 and DeepSeek XS | 30020 |
@@ -95,10 +97,19 @@ cgroup limits and latched guards remain.
 
 DeepSeek-S and its unused drafter were removed from Maya and Strata at the user's
 request, freeing **186.18 GB** on Shared NVMe. The two XS profiles retain shared S
-Engram shards5/6, matching xs2 drafter and all original XS metadata. The catalog
-now has 11 profiles. GLM Maya-S is unchanged; the current reduced-RAM holds,
+Engram shards5/6, matching xs2 drafter and all original XS metadata. At that retirement, the catalog
+had 11 profiles. GLM Maya-S is unchanged; the current reduced-RAM holds,
 paused updater, runtime pins and inference guards remain.
 [Retirement details and verification](linux/hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).
+
+**October27 VRAM defaults:** Empero256K/MTP3/batch512 and Sage64K/MTP3/projector/
+batch4096 now use all-GPU weights by default. Flint is selectable as
+`flint-40b-a2.5b` at32K, MTP off/reasoning-budget128. All three use both AMD cards,
+DIO loading and a verified4GiB high/5GiB max/zero-swap worker scope. Physical
+loading/staging admission remains12GiB total/7GiB available, with existing
+continuous guards. CPU-backed Super/Ornith and SSD profiles retain their RAM
+requirements. Twelve profiles are catalogued; DSH default remains Strata Q3.
+[Activation evidence](linux/hardware/VRAM-DEFAULTS-2026-10-27.md).
 
 **October27 storage and VRAM tests:** the Super SATA backup and old GLM S24
 rollback are removed; active Super/GLM v2 and shared XS dependencies remain.
@@ -111,8 +122,8 @@ RAM/VRAM/swap/pressure guards; no broader update hold is lifted.
 
 Standing user preference: from now on, group model inventories and comparisons
 into **VRAM only models**, **CPU RAM MoE models**, and **SSD stream models**,
-according to the selected loading profile. VRAM only: Qwen27B (SGLang/vLLM), Bolt.
-CPU RAM MoE: Empero, Super IQ3, Sage and Ornith. SSD stream: Strata Qwen Q3,
+according to the selected loading profile. VRAM only: Empero, Sage, Flint,
+Qwen27B (SGLang/vLLM) and Bolt. CPU RAM MoE: Super IQ3 and Ornith. SSD stream: Strata Qwen Q3,
 GLM Maya and DeepSeek XS (Maya/Strata). Strata Qwen uses an SSD cold tier with
 bounded RAM/GPU caches; its RAM expert pool does not make it a RAM-only profile;
 these categories do not change runtime flags or memory guards. Shared weights
@@ -127,6 +138,7 @@ count once; backups/rollback/download-only assets are listed separately.
 | `nemotron-3.5-super-iq3` | llama | 32,768 |
 | `sage-a1.5` | llama | 65,536 |
 | `ornith-1.5-122b` | llama | 32,768 |
+| `flint-40b-a2.5b` | llama | 32,768 |
 | `qwen3.8-27b-sglang-dflash2` | sglang | 163,840 |
 | `qwen3.8-27b-vllm` | vllm | 163,840 |
 | `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
@@ -280,9 +292,10 @@ See `linux/hardware/Z690-2026-10-17.md`. Dense-model weights remain GPU-resident
 
 ### Current CPU/RAM and profiles — October 20
 
-Intel i9-13900KS and 64 GB RAM (61.51 GiB OS-visible) are installed. Both RX 7900 XTX cards
+The benchmark-reference hardware used i9-13900KS and64GB RAM (61.51GiB visible);
+the live OS currently exposes14.83GiB RAM. Both RX 7900 XTX cards
 remain on CPU PCIe 4.0 x8/x8; the purchased switch is not installed/validated.
-Eleven profiles remain after the October26 S retirement: four llama.cpp (Empero, Super IQ3, Sage-A1.5 and Ornith-1.5-122B), one SGLang, two vLLM, two Strata and two Maya. Qwen3.6-35B-A3B was retired October 23. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
+Twelve profiles remain after October27 Flint activation: five llama.cpp (Empero, Sage-A1.5, Flint, Super IQ3 and Ornith-1.5-122B), one SGLang, two vLLM, two Strata and two Maya. Qwen3.6-35B-A3B was retired October 23. User instruction (October 21): Bolt runs on vLLM (`nemotron-3.5-bolt-vllm`, AutoRound W4A16) and the slower llama.cpp `nemotron-3.5-bolt` and `qwen3.8-27b-q4` profiles are retired; Qwen3.8-27B uses SGLang/vLLM. llama.cpp defaults to HIP with no Vulkan profile. Their GGUF files were deleted at the user's request (October 22).
 Super IQ3 remains selectable at 32K and loads from its verified shared-NVMe copy; the SATA backup was removed at the user's request October27. mmap SSD streaming was rejected (`linux/hardware/SUPER-NVME-LOAD-2026-10-20.md`). Muse Q4 and Super Q4_K_XL are retired at the user's request, with active setup and four weights removed; keep their dated results and non-installable regression fixture. SGLang retains only TP2 DFlash2. The user's saved
 DSH default remains unchanged. Strata keeps IQ3_XXS, 13.5 GiB expert budget,
 native 256K with INT8 KV /32K GPU residency, both GPUs and latched guards.
