@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 27, 2026
 
+## RAM configuration after reboot — October 28
+
+Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.83 GiB and earlier 64 GB measurements; none is a fresh post-upgrade LLM speed result. [H3 comparison and limitations](../graphics/H3-POST-UPGRADE-2026-10-28.md) are separate diffusion evidence.
+
 ## Current selected profiles — October27 conditional vLLM update
 
 Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-prefill failures. Five profiles have completed October27 speed samples on14.83GiB RAM. Seven older references below retain their64GB hardware attribution; they are not fresh current-RAM passes. Prefill N=native,E=engine phase. Decode is code/prose. TTFT excludes loading; context is configured capacity. Sizes are decimal allocated associated-file GB, shared sets counted once. [Qualification and retained failures](VLLM-DEV602-PROMOTION-2026-10-27.md).

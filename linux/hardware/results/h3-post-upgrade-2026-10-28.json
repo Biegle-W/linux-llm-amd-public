@@ -1,0 +1,529 @@
+{
+  "date": "2026-10-28",
+  "prior_os_ram_bytes": 15924535296,
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "gpus": "2 x RX 7900 XTX 24 GB / gfx1100",
+    "os_ram_bytes": 32811171840
+  },
+  "status": "completed_attempt",
+  "source": {
+    "core_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+    "plugin_commit": "ebf3953f6385360ef211d93e4ecf23696599eaa3",
+    "adapter_patch_sha256": "7203c6be05b88687dcfd7dc48b52b1b90f21bdb096026f66d2cb5f16b70765c3",
+    "instrumentation_sha256": "64db13bbd72ebc03cd1d0e574b6841859f939f299ffb8a358a1d1671cf95f7b3",
+    "plugin_variant": "isolated ComfyUI0.42 plain-T2VA compatibility pilot; original SP2 algorithm and 8GiB activation reserve retained"
+  },
+  "guards": {
+    "free_vram_bytes": 2147483648,
+    "hard_free_vram_bytes": 1610612736,
+    "low_vram_samples": 4,
+    "minimum_available_ram_bytes": 3221225472,
+    "host_floor_immediate": true,
+    "sampling_seconds": 1,
+    "policy": "loading-swap-v2",
+    "worker_swap_limit_bytes": null,
+    "worker_spill_limit_bytes": 0,
+    "scope_memory_max_bytes": 32811171840,
+    "scope_swap_max_bytes": "max",
+    "inference_window_seconds": 30,
+    "inference_swapout_MiBps": 1,
+    "inference_combined_io_MiBps": 8,
+    "inference_full_psi_limit": 10,
+    "inference_full_psi_samples": 3,
+    "activation_reserve_gib": 8
+  },
+  "method": {
+    "workflow": "minimax-h3-base-api.json",
+    "resolution": [
+      608,
+      352
+    ],
+    "frames": 39,
+    "fps": 24,
+    "steps": 20,
+    "seed": 42,
+    "sampler": "res_multistep",
+    "scheduler": "simple",
+    "batch": 1,
+    "warmups": 1,
+    "timed_trials": 3,
+    "phase_instrumentation": "nested CLIP encode, denoising and VAE decode active; load_models_gpu overrides nested loading; source-only observer custom node",
+    "placement": "control denoiser GPU0 and encoder/VAEs GPU1; candidate changes only diffusion loader to SP2",
+    "timing": "server execution and submission-to-history external time; cold/full warmup separate",
+    "host_guard": "same 3 GiB floor; enforce immediately instead of historical four low samples on reduced-RAM host"
+  },
+  "transport": {
+    "NCCL_P2P_DISABLE": "1",
+    "HSA_ENABLE_SDMA": "0",
+    "NCCL_PROTO": "Simple"
+  },
+  "arms": [
+    {
+      "tag": "control",
+      "status": "guard_stopped",
+      "available_before_bytes": 24330457088,
+      "available_after_bytes": 27661172736,
+      "guard_faults": [
+        "swap_activity_inference_swap_io_rate"
+      ],
+      "memory": {
+        "samples": 631,
+        "sampling_errors": 0,
+        "min_available_bytes": 3354918912,
+        "min_free_vram_bytes": [
+          3610058752,
+          7411904512
+        ],
+        "max_worker_swap_bytes": 7132930048,
+        "max_worker_spill_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "loading-swap-v2",
+        "samples": 631,
+        "sampling_errors": 0,
+        "elapsed_seconds": 636.137739363,
+        "worker_swap_peak_bytes": 7132930048,
+        "total_swapin_bytes": 35571015680,
+        "total_swapout_bytes": 42960302080,
+        "inference_window_samples": 1,
+        "max_inference_swapout_bytes_per_second": 1623.937690370099,
+        "max_inference_swap_io_bytes_per_second": 15596703.562737023,
+        "min_available_bytes": 3463745536,
+        "max_memory_full_psi_avg10": 1.62,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": [
+          "inference_swap_io_rate"
+        ]
+      },
+      "scope_observation": {
+        "memory.max": "32811171840",
+        "memory.swap.max": "max",
+        "memory.peak": "28547764224",
+        "memory.current": "7159885824",
+        "memory.swap.current": "8526290944",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 121"
+      },
+      "elapsed_lifecycle_seconds": 636.533757783,
+      "shutdown_verified": true,
+      "thermal": {
+        "schema": 1,
+        "label": "h3-sp2-control",
+        "status": "complete",
+        "interval_seconds": 1.0,
+        "samples": 635,
+        "sample_errors": 0,
+        "raw_samples_dropped": 0,
+        "raw_limit_bytes": 67108864,
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 635,
+            "busy_samples": 150,
+            "sensor_samples": {
+              "mem": 635,
+              "edge": 635,
+              "junction": 635
+            },
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 53.0,
+              "junction": 75.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 54.0,
+              "edge": 53.0,
+              "junction": 75.0
+            },
+            "throttle_samples_available": 635,
+            "thermal_limit_samples": 382,
+            "hotspot_limit_samples": 382,
+            "power_limit_samples": 86,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 3604.0,
+            "peak_power_average_w": 308.0,
+            "peak_gfx_clock_mhz": 3097.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 635,
+            "busy_samples": 63,
+            "sensor_samples": {
+              "mem": 635,
+              "edge": 635,
+              "junction": 635
+            },
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 34.0,
+              "junction": 57.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 54.0,
+              "edge": 34.0,
+              "junction": 57.0
+            },
+            "throttle_samples_available": 635,
+            "thermal_limit_samples": 378,
+            "hotspot_limit_samples": 378,
+            "power_limit_samples": 9,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2303.0,
+            "peak_power_average_w": 316.0,
+            "peak_gfx_clock_mhz": 3140.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          }
+        },
+        "cpu_peak_package_c": {
+          "Package id 0": 78.0
+        },
+        "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+        "started_utc": "2026-10-28T03:46:33.194936+00:00",
+        "last_sample_utc": "2026-10-28T03:57:09.726076+00:00"
+      },
+      "graph_sha256": "b67e943c21205251b5752fa1e5dbda28c5b1ddb3729646717b8a7cdc627b7ed1",
+      "phase_event_count": 40,
+      "swap_evidence_validation": [
+        "inference_swap_io_rate"
+      ],
+      "runs": [
+        {
+          "trial": 0,
+          "excluded_warmup": true,
+          "external_seconds": 198.78457118,
+          "server_seconds": 196.228,
+          "success": true
+        },
+        {
+          "trial": 1,
+          "excluded_warmup": false,
+          "external_seconds": 212.71898559500005,
+          "server_seconds": 210.098,
+          "success": true
+        }
+      ],
+      "closed_phase_durations_seconds": {
+        "instrumentation-ready": 19.976421750000043,
+        "text-encode": 7.942384215999937,
+        "load-models-gpu": 450.50400470200003,
+        "ready": 51.8402560290001,
+        "denoising": 57.91398447399996,
+        "vae-decode": 6.492379830000004
+      },
+      "phase_span_seconds": {
+        "text-encode": [
+          54.770638058999964,
+          53.44312892900001,
+          69.44366536199993
+        ],
+        "denoising": [
+          29.589531851000004,
+          28.324452622999956
+        ],
+        "vae-decode": [
+          3.2951062729999876,
+          21.094279389000008,
+          1.7189753900000824,
+          16.781223811000018
+        ]
+      },
+      "last_recorded_phase": {
+        "phase": "inference",
+        "label": "denoising"
+      },
+      "history_poll_errors": 0,
+      "completed_generation_count": 2
+    },
+    {
+      "tag": "sp2",
+      "status": "guard_stopped",
+      "available_before_bytes": 26797707264,
+      "available_after_bytes": 12589408256,
+      "guard_faults": [
+        "host_available_below_3GiB"
+      ],
+      "memory": {
+        "samples": 139,
+        "sampling_errors": 0,
+        "min_available_bytes": 2869751808,
+        "min_free_vram_bytes": [
+          25476820992,
+          7571697664
+        ],
+        "max_worker_swap_bytes": 6751760384,
+        "max_worker_spill_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "loading-swap-v2",
+        "samples": 139,
+        "sampling_errors": 0,
+        "elapsed_seconds": 139.356050429,
+        "worker_swap_peak_bytes": 6751760384,
+        "total_swapin_bytes": 4114092032,
+        "total_swapout_bytes": 11509592064,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 2831675392,
+        "max_memory_full_psi_avg10": 0.13,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": []
+      },
+      "scope_observation": {
+        "memory.max": "32811171840",
+        "memory.swap.max": "max",
+        "memory.peak": "28246478848",
+        "memory.current": "28223819776",
+        "memory.swap.current": "7172362240",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 42"
+      },
+      "elapsed_lifecycle_seconds": 142.16705748200002,
+      "shutdown_verified": true,
+      "thermal": {
+        "schema": 1,
+        "label": "h3-sp2-sp2",
+        "status": "complete",
+        "interval_seconds": 1.0,
+        "samples": 143,
+        "sample_errors": 0,
+        "raw_samples_dropped": 0,
+        "raw_limit_bytes": 67108864,
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 143,
+            "busy_samples": 0,
+            "sensor_samples": {
+              "mem": 143,
+              "edge": 143,
+              "junction": 143
+            },
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 31.0,
+              "junction": 37.0
+            },
+            "peak_busy_temperature_c": {},
+            "throttle_samples_available": 143,
+            "thermal_limit_samples": 54,
+            "hotspot_limit_samples": 54,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1959.0,
+            "peak_power_average_w": 84.0,
+            "peak_gfx_clock_mhz": 23.0,
+            "peak_memory_clock_mhz": 96.0,
+            "peak_busy_percent": 2.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 143,
+            "busy_samples": 26,
+            "sensor_samples": {
+              "mem": 143,
+              "edge": 143,
+              "junction": 143
+            },
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 34.0,
+              "junction": 53.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 54.0,
+              "edge": 34.0,
+              "junction": 53.0
+            },
+            "throttle_samples_available": 143,
+            "thermal_limit_samples": 83,
+            "hotspot_limit_samples": 83,
+            "power_limit_samples": 2,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2123.0,
+            "peak_power_average_w": 334.0,
+            "peak_gfx_clock_mhz": 3133.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          }
+        },
+        "cpu_peak_package_c": {
+          "Package id 0": 82.0
+        },
+        "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+        "started_utc": "2026-10-28T03:59:01.753453+00:00",
+        "last_sample_utc": "2026-10-28T04:01:23.922942+00:00"
+      },
+      "graph_sha256": "c01b904f64ea24cd72df650e412b05e46e1c8a047832cc732ab0a5ef65720555",
+      "phase_event_count": 5,
+      "swap_evidence_validation": [
+        "no_inference_window"
+      ],
+      "runs": [],
+      "closed_phase_durations_seconds": {
+        "instrumentation-ready": 18.110063408000087,
+        "text-encode": 3.786901705999753,
+        "load-models-gpu": 81.13703930700012
+      },
+      "phase_span_seconds": {
+        "text-encode": [
+          84.92394101299988
+        ]
+      },
+      "last_recorded_phase": {
+        "phase": "idle",
+        "label": "ready"
+      },
+      "history_poll_errors": 0,
+      "completed_generation_count": 0
+    }
+  ],
+  "production_fingerprints_unchanged": true,
+  "shutdown_verified": true,
+  "gpu_lock_released": true,
+  "notes": [
+    "Lifecycle failure time is not completed-generation latency. LLM performance values retain their original RAM/build/date.",
+    "Host swap counters cover the whole system; they do not attribute every byte to a worker.",
+    "Phase observers wrap active text encoding, denoising and VAE decoding; nested model loading resets the inference window.",
+    "No runtime promotion is authorized by this comparison."
+  ],
+  "run_timestamps": {
+    "initial_started": "2026-10-27T23:46:33.122966-04:00",
+    "retry_started": "2026-10-27T23:59:01.648555-04:00",
+    "retry_finished": "2026-10-28T00:01:23.946753-04:00"
+  },
+  "runtime_versions": {
+    "comfyui_version": "0.42.0",
+    "python_version": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]",
+    "pytorch_version": "2.15.0.dev20260827+rocm7.2",
+    "required_frontend_version": "1.55.18"
+  },
+  "earlier_attempts": [
+    {
+      "tag": "sp2",
+      "status": "failed",
+      "error": "TimeoutError: timed out",
+      "guard_faults": [],
+      "memory": {
+        "samples": 66,
+        "sampling_errors": 0,
+        "min_available_bytes": 14295257088,
+        "min_free_vram_bytes": [
+          10063417344,
+          13754773504
+        ],
+        "max_worker_swap_bytes": 7708164096,
+        "max_worker_spill_bytes": 0
+      },
+      "swap_activity": {
+        "policy": "loading-swap-v2",
+        "samples": 66,
+        "sampling_errors": 0,
+        "elapsed_seconds": 65.5990536700001,
+        "worker_swap_peak_bytes": 7708164096,
+        "total_swapin_bytes": 3646078976,
+        "total_swapout_bytes": 10870292480,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 14295257088,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "failures": []
+      },
+      "shutdown_verified": true,
+      "elapsed_lifecycle_seconds": 66.36845143799997,
+      "classification": "client polling timeout during loading; not model or throughput failure"
+    }
+  ],
+  "retry_method": "SP2 only; status polling tolerates transient request errors within original 1800-second workflow deadline; all memory thresholds unchanged",
+  "isolated_core_tree_check": {
+    "matching_files": 1303,
+    "different": [],
+    "missing": []
+  },
+  "cpu_validation": {
+    "maintained_swap_policy_tests_passed": 20,
+    "instrumentation_nested_phase_check": "passed",
+    "initial_readonly_test_attempt": "Repository-local test temp writes were blocked by filesystem sandbox; exact test/module copies passed in writable scratch."
+  },
+  "media_validation": {
+    "outputs": [
+      {
+        "output": "control/trial-0_00001_.mp4",
+        "bytes": 104693,
+        "sha256": "a244bde26ef46a384f02ade7fb69fc68fcb807ec0d669f3071e341399309e68c",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "avg_frame_rate": "24/1",
+          "nb_read_frames": "39",
+          "duration": "1.625000"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "1.625000",
+          "finite_decoded_samples": 104448,
+          "peak": 0.10115980356931686,
+          "rms": 0.013227998431799731
+        },
+        "full_av_decode": "passed",
+        "audio_semantic_listening": "not assessed"
+      },
+      {
+        "output": "control/trial-1_00001_.mp4",
+        "bytes": 105437,
+        "sha256": "49544ad917d39a31979b208810e07214cc00f8ef21428394a7384e4ba81ffbce",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "avg_frame_rate": "24/1",
+          "nb_read_frames": "39",
+          "duration": "1.625000"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "1.625000",
+          "finite_decoded_samples": 104448,
+          "peak": 0.09027574956417084,
+          "rms": 0.011276360195825685
+        },
+        "full_av_decode": "passed",
+        "audio_semantic_listening": "not assessed"
+      }
+    ]
+  },
+  "visual_review": {
+    "control": {
+      "files": [
+        "control/trial-0_00001_.mp4",
+        "control/trial-1_00001_.mp4"
+      ],
+      "sampled_frames_per_file": [
+        0,
+        19,
+        38
+      ],
+      "result": "Requested red teapot, wooden table, steam and plant visible; stable scene and moving steam with no obvious sampled visual corruption. This is sampled frame inspection, not full perceptual equivalence."
+    },
+    "sp2": {
+      "result": "not assessed; no completed generation"
+    }
+  },
+  "decision": "The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed."
+}

@@ -34,3 +34,5 @@ Respect `manual_runtime_pin`; the updater excludes held models. Unpin only after
 qualification, updating both launcher and metadata together. Keep loading-swap-v2,
 all independent guards and the paused updater. Current versions/results belong
 in the canonical handoff/report; the API version omits the wheel packaging suffix.
+
+Post-upgrade H3 evidence is in [the dated comparison](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). Read its current RAM attribution and failures before retrying; added RAM alone does not qualify held profiles.

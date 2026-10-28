@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+## Post-upgrade H3 comparison — October 28
+
+Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Results and limitations](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). LLM pins and the paused updater remain; previous LLM timings retain their measured RAM configuration.
+
 ## Current vLLM selection — October27
 
 **Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on

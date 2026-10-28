@@ -1,5 +1,9 @@
 # LLM benchmark and context history
 
+## Post-upgrade H3 record — October 28
+
+Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Report](../graphics/H3-POST-UPGRADE-2026-10-28.md). LLM selections and historical speeds are unchanged.
+
 October27 reporting correction: current tables now include exact selected engine versions and use the [October25 Strata Qwen promoted-build samples](results/strata-qwen-selected-2026-10-25.json). Older October24 tuning evidence is preserved; no GPU test or runtime setting changed.
 
 ## Conditional vLLM promotion — October27

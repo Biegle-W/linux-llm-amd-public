@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Post-upgrade H3 takeover — October 28
+
+Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Report](../graphics/H3-POST-UPGRADE-2026-10-28.md). Control completed a 196.228 s warmup and one 210.098 s timed request; active combined swap I/O of 14.874 MiB/s stopped the next request. SP2 reached worker startup but stopped at 2.673 GiB available RAM before denoising. The earlier client timeout is retained separately. No three-trial median or SP2 speedup is established. The next action is to address the recorded physical-RAM/active-paging blockers while retaining the guards. All owned scopes stopped; GPU-LOCK released; configuration fingerprints unchanged. H3 follow-up and engine updater remain paused. No unfinished task-owned job remains. LLM runtime pins and dated benchmark attribution are unchanged.
+
 ## Current vLLM selection — October27
 
 **Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on
