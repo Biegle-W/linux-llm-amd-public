@@ -1,4 +1,4 @@
-"""CPU-only regression tests for the user-authorized loading swap policy."""
+"""Historical v2 CPU regressions; current v3 behavior is in test_swap_user_policy."""
 import importlib.util
 import os
 from pathlib import Path
@@ -19,11 +19,12 @@ def reading(t, incoming=0, outgoing=0, available=8*G, psi=0):
     return dict(timestamp=float(t),swapin_bytes=incoming,swapout_bytes=outgoing,
                 available_bytes=available,memory_full_psi_avg10=psi)
 
-class LoadingSwap(unittest.TestCase):
+class HistoricalLoadingSwapV2(unittest.TestCase):
     def setUp(self):
         env=patch.dict(os.environ)
         env.start(); self.addCleanup(env.stop)
-        os.environ.pop('LOCAL_LLM_SWAP_POLICY',None)
+        os.environ['LOCAL_LLM_SWAP_POLICY']='loading-swap-v2'
+        os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1'
 
     def test_loading_large_swap_and_pressure_then_parked_inference_pass(self):
         activity=SwapActivity()

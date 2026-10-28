@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-28",
+  "policy": "loading-swap-v3",
+  "status": "installed_verified",
+  "default_write_budget_bytes_per_second": null,
+  "default_swap_automatic_stop_enabled": false,
+  "loading_swap_allowed": true,
+  "parked_swap_allowed": true,
+  "swap_reads_allowed": true,
+  "fixed_occupancy_or_loading_write_cap": null,
+  "rate_and_psi_observations": "advisory only; not SSD wear or measured task slowdown",
+  "optional_write_stop": {
+    "explicit_operator_write_budget_required": true,
+    "matched_workload_and_baseline_ids_required": true,
+    "continuous_inference_window_seconds": 30,
+    "throughput_below_baseline_fraction": 0.95,
+    "write_rate_above_configured_budget_required": true,
+    "reads_alone_never_trigger": true
+  },
+  "legacy_validation": {
+    "requires_both": [
+      "LOCAL_LLM_SWAP_POLICY=<historical-mode>",
+      "LOCAL_LLM_LEGACY_SWAP_VALIDATION=1"
+    ],
+    "old_environment_alone": "uses v3"
+  },
+  "validation": {
+    "staged_cpu_tests": 212,
+    "suites": [
+      {
+        "folder": "hardware",
+        "pattern": "test*swap*.py",
+        "count": 68,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_daily_memory.py",
+        "count": 27,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_benchmark_memory.py",
+        "count": 6,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_vram_defaults.py",
+        "count": 7,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_llama_source_selection.py",
+        "count": 11,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_strata*.py",
+        "count": 23,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_maya*.py",
+        "count": 21,
+        "exit_code": 0
+      },
+      {
+        "folder": "dsh/tests",
+        "pattern": "test_inference_swap.py",
+        "count": 31,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_model_hub.py",
+        "count": 9,
+        "exit_code": 0
+      },
+      {
+        "folder": "dsh/tests",
+        "pattern": "test_configure_local.py",
+        "count": 4,
+        "exit_code": 0
+      },
+      {
+        "folder": "hardware",
+        "pattern": "test_vllm_runtime_pin.py",
+        "count": 5,
+        "exit_code": 0
+      }
+    ],
+    "new_current_policy_tests": 24,
+    "read_heavy_h3_counter_replay": "continued without swap stop; synthetic counters, no real-model throughput claim",
+    "maintained_checkouts": {
+      "private": {
+        "tests": 212,
+        "passed": true
+      },
+      "public": {
+        "tests": 212,
+        "passed": true
+      }
+    }
+  },
+  "scope_audit": {
+    "active_normal_llm_scopes": "MemorySwapMax=infinity / memory.swap.max=max",
+    "normal_parked_swap_caps": "none found in maintained launchers",
+    "independent_protections": "physical RAM admission/floors, worker RAM caps, dedicated-VRAM spill, VRAM headroom, ownership containment and telemetry/thermal protections unchanged"
+  },
+  "deployment": {
+    "active_managed_inference_at_precheck": 0,
+    "gpu_lock_present_at_precheck": false,
+    "router_restart_required": false,
+    "running_user_tasks_stopped": false,
+    "os_swap_configuration_changed": false,
+    "applied_to_both_checkouts": true,
+    "os_swap_enabled_at_verification": true
+  },
+  "historical_h3_read_stop": {
+    "policy": "loading-swap-v2",
+    "combined_MiB_per_second": 14.874,
+    "swapout_KiB_per_second_approx": 1.6,
+    "interpretation": "historical automatic policy stop; not proof of SSD damage or a v3 failure"
+  },
+  "source_files": [
+    "dsh/inference_swap.py",
+    "dsh/tests/test_inference_swap.py",
+    "hardware/compare-runtime-candidate.py",
+    "hardware/daily-update/publish.py",
+    "hardware/inference_memory.py",
+    "hardware/swap_activity.py",
+    "hardware/test_benchmark_memory.py",
+    "hardware/test_daily_memory.py",
+    "hardware/test_loading_swap.py",
+    "hardware/test_relaxed_swap.py",
+    "hardware/test_swap_activity.py",
+    "hardware/test_vllm_runtime_pin.py",
+    "hardware/test_swap_user_policy.py"
+  ],
+  "limitations": [
+    "No matched per-request progress baseline or deployment write budget is configured in the generic managed routers; write/rate/pressure telemetry therefore remains advisory.",
+    "No SSD endurance or lifetime measurement is claimed.",
+    "Earlier benchmarks keep their original policy, hardware and build attribution; no runtime is automatically promoted or unpinned."
+  ]
+}

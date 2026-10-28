@@ -4,7 +4,7 @@ import os
 import sys
 import threading
 from swap_activity import (SwapActivity, read_host_activity, validate_summary,
-                           POLICY_NAME, LEGACY_POLICY_NAME, selected_policy,
+                           POLICY_NAME, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, selected_policy,
                            WORKER_SWAP_LIMIT_BYTES as RELAXED_SWAP_LIMIT_BYTES)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
@@ -21,7 +21,7 @@ def swap_policy():
 
 def worker_swap_limit_bytes():
     policy = swap_policy()
-    return (None if policy == POLICY_NAME else RELAXED_SWAP_LIMIT_BYTES
+    return (None if policy in (POLICY_NAME, RATE_LIMIT_POLICY_NAME) else RELAXED_SWAP_LIMIT_BYTES
             if policy == LEGACY_POLICY_NAME else WORKER_SWAP_LIMIT_BYTES)
 
 
@@ -132,11 +132,11 @@ class MemoryMonitor:
     """
     MAX_ENFORCEMENT_ATTEMPTS = 2
 
-    def __init__(self, interval=0.5, on_violation=None):
+    def __init__(self, interval=0.5, on_violation=None, *, write_budget_bytes_per_second=None):
         self.interval = interval
         self._lock = threading.Lock()
         self.phase = 'loading'
-        self.activity = SwapActivity() if swap_policy() != 'bounded-64mib' else None
+        self.activity = SwapActivity(write_budget_bytes_per_second=write_budget_bytes_per_second) if swap_policy() != 'bounded-64mib' else None
         self.on_violation = on_violation
         self.notified = False
         self.done = threading.Event()
@@ -195,7 +195,8 @@ class MemoryMonitor:
                 # of a zero-swap worker or a qualifying inference endpoint.
                 host = read_host_activity()
                 self.activity.observe(None if reading is None and self.phase == 'inference' else host,
-                                      self.phase, reading['swap'] if reading else 0)
+                                      self.phase, reading['swap'] if reading else 0,
+                                      progress=reading.get('progress') if reading else None)
             except Exception:
                 self.activity.observe(None, self.phase)
             self.summary['swap_activity'] = self.activity.summary()

@@ -20,7 +20,7 @@ def reading(t=0, sin=0, sout=0, available=8*GiB, psi=0.0):
 
 class SwapPolicyTests(unittest.TestCase):
     def setUp(self):
-        scope=patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'low-churn-v1'})
+        scope=patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION':'1'})
         scope.start(); self.addCleanup(scope.stop)
 
     def test_read_host_activity_converts_pages_and_reads_full_psi(self):
@@ -444,7 +444,7 @@ class SwapPolicyTests(unittest.TestCase):
 
     def test_policy_constants(self):
         self.assertIsNotNone(policy, 'swap_activity module is missing')
-        expected = dict(POLICY_NAME='loading-swap-v2',
+        expected = dict(POLICY_NAME='loading-swap-v3',
                         WORKER_SWAP_LIMIT_BYTES=4*GiB,
                         SWAPOUT_BUDGET_BYTES=4*GiB,
                         INFERENCE_SWAPOUT_RATE_LIMIT_BYTES=MiB,

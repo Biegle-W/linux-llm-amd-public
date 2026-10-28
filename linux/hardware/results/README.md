@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## October28 policy and compatibility records
+
+[Swap continuity numeric evidence](swap-task-continuity-2026-10-28.json) and [policy report](../SWAP-TASK-CONTINUITY-2026-10-28.md); [Radiance preflight numeric evidence](radiance-h3-preflight-2026-10-28.json) and [report](../../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md). CPU/compiler checks only, with no new GPU performance claim.
+
 ## Post-upgrade H3 record — October 28
 
 Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Report](../../graphics/H3-POST-UPGRADE-2026-10-28.md). LLM selections and historical speeds are unchanged.

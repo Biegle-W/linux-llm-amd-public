@@ -1,5 +1,9 @@
 # MiniMax H3 multi-GPU methods — October 27, 2026
 
+## Later Radiance source verification — October28
+
+The [fresh gfx1100 preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md) confirms the H3 fork and current upstream build only the gfx12 accelerated plugin. A same-source FP8 instruction probe fails for gfx1100 and compiles for gfx1201; no GPU execution or memory failure is implied. The user-corrected [swap policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) governs future attempts; older RAM and v2 notes below retain their dates.
+
 Research for the dual RX 7900 XTX / gfx1100 workstation. This review changes no
 ComfyUI environment, workflow, model, attention backend, driver or GPU topology.
 Sources were checked October 27, including the user-supplied topics below.

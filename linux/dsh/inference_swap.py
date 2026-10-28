@@ -1,8 +1,8 @@
 """Low-churn watch for one explicitly owned worker; never a global process guard.
 
-Loading swap and parked pages are allowed by default. Sustained inference
-churn is guarded independently of RAM/VRAM admission. Host swap I/O is
-system-wide and conservative, not worker attribution or an SSD-life guarantee.
+Loading/parked swap and reads are allowed. Rates and pressure are advisory by
+default; a swap stop needs an explicit write budget and matched measured slowdown.
+Host I/O is system-wide telemetry, not worker attribution or SSD damage evidence.
 """
 from pathlib import Path
 import sys
@@ -240,15 +240,17 @@ class OwnedWorkerWatch:
     owner: Process | OwnedScope
 
     def __init__(self, proc, on_fault, *, host_reader=read_host_activity,
-                 memory_reader, interval=.5):
+                 memory_reader, interval=.5, write_budget_bytes_per_second=None):
         self.proc = proc
         self.on_fault = on_fault
         self.host_reader = host_reader
         self.memory_reader = memory_reader
         self.interval = interval
-        self.activity = SwapActivity()
+        self.activity = SwapActivity(write_budget_bytes_per_second=write_budget_bytes_per_second)
         self.phase = 'loading'
         self.fault = None
+        self.reported_advisories = set()
+        self.advisory_log_errors = 0
         self.done = threading.Event()
         self.lock = threading.RLock()
         self.thread = None
@@ -284,8 +286,17 @@ class OwnedWorkerWatch:
                         raise ValueError('invalid worker telemetry')
                 if not reading['processes']:
                     raise ValueError('no owned worker telemetry')
-                self.activity.observe(self.host_reader(), self.phase, reading['swap'])
+                self.activity.observe(self.host_reader(), self.phase, reading['swap'],
+                                      progress=reading.get('progress'))
                 failures.extend(self.activity.failures())
+                new = set(self.activity.summary().get('advisories', [])) - self.reported_advisories
+                if new:
+                    try:
+                        print('Swap telemetry observations: '+', '.join(sorted(new)), flush=True)
+                    except Exception:
+                        # A closed diagnostic stream is never a reason to kill inference.
+                        self.advisory_log_errors += 1
+                    self.reported_advisories.update(new)
                 if reading['spill']:
                     failures.append('vram_spill')
             except Exception as error:
@@ -310,10 +321,12 @@ class WorkerSwapGuard:
     stop() invalidates the generation without joining a callback thread.
     """
     def __init__(self, *, host_reader=read_host_activity,
-                 memory_reader=sample_owned_memory, terminator=stop_owned_worker):
+                 memory_reader=sample_owned_memory, terminator=stop_owned_worker,
+                 write_budget_bytes_per_second=None):
         self.host_reader = host_reader
         self.memory_reader = memory_reader
         self.terminator = terminator
+        self.write_budget = write_budget_bytes_per_second
         self.lock = threading.RLock()
         self.watch = None
         self.fault = None
@@ -328,10 +341,10 @@ class WorkerSwapGuard:
             self.check()
             if self.watch is not None:
                 raise RuntimeError('Previous owned-worker watch must be stopped before switching')
-            # Baseline before Popen: record loading writes without a v2 byte cap.
+            # Baseline before Popen: record loading writes without a fixed byte cap.
             try:
                 baseline = self.host_reader()
-                activity = SwapActivity()
+                activity = SwapActivity(write_budget_bytes_per_second=self.write_budget)
                 activity.observe(baseline, 'loading')
                 if activity.failures():
                     raise ValueError('invalid host baseline')
@@ -344,7 +357,8 @@ class WorkerSwapGuard:
                 self.fault = 'owned_worker_containment_error:' + type(error).__name__
                 raise RuntimeError('Low-churn guard: ' + self.fault + '; router restart required') from error
             watch = OwnedWorkerWatch(proc, self._violation, host_reader=self.host_reader,
-                                     memory_reader=lambda: self.memory_reader(owner))
+                                     memory_reader=lambda: self.memory_reader(owner),
+                                     write_budget_bytes_per_second=self.write_budget)
             self.watch = watch
             watch.owner = owner
             watch.activity = activity

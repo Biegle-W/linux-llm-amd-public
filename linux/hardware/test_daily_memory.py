@@ -33,7 +33,7 @@ def record():
 class BoundedPolicyCase(unittest.TestCase):
     """Retain the explicit legacy 64 MiB policy for strict regression fixtures."""
     def setUp(self):
-        policy = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib'})
+        policy = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'})
         policy.start()
         self.addCleanup(policy.stop)
 
@@ -119,7 +119,7 @@ class Comparator(BoundedPolicyCase):
 
     def test_default_prints_effective_limit_and_accepts_demonstrated_settled_swap(self):
         candidate = record()
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'loading-swap-v2'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'loading-swap-v3'}):
             activity = mem.SwapActivity()
         for timestamp in (0, 30):
             activity.observe(dict(timestamp=timestamp, swapin_bytes=0, swapout_bytes=0,
@@ -131,7 +131,8 @@ class Comparator(BoundedPolicyCase):
             os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
             result = self.compare(candidate, True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn('worker_swap_limit_bytes | | rate-only', result.stdout)
+        self.assertIn('worker_swap_limit_bytes | | uncapped', result.stdout)
+        self.assertIn('swap_policy | | loading-swap-v3', result.stdout)
 
     def test_minor_swap_including_limit_passes_per_model_and_lifecycle(self):
         for value in (1, 4096, 33 * 1024**2, mem.WORKER_SWAP_LIMIT_BYTES):
@@ -380,7 +381,7 @@ class LauncherCollector(unittest.TestCase):
             sample()
 
         with tempfile.TemporaryDirectory() as directory, \
-             patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}), \
+             patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}), \
              patch.object(mem.MemoryMonitor, '_run', return_value=None), \
              patch.object(mem, 'sample_memory', side_effect=lambda: dict(swap=1024**3, spill=0)
                           if state['live'] else None), \
@@ -412,7 +413,7 @@ class LauncherCollector(unittest.TestCase):
         self.assertIn(('benchmark', 'first', 'inference'), events)
         self.assertIn(('shutdown', 'shutdown'), events)
         self.assertEqual(events[-1], 'monitor-stop')
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertEqual(mem.lifecycle_failures(result), [])
         memory = result['lifecycle_memory']
         self.assertEqual(memory['swap_activity']['inference_window_samples'], 1)
@@ -427,7 +428,7 @@ class LauncherCollector(unittest.TestCase):
                     self.assertIn(('prewarm', model, 'loading'), events)
                     self.assertIn(('benchmark', model, 'inference'), events)
                 self.assertTrue(all(e[1] == 'loading' for e in events if isinstance(e, tuple) and e[0] == 'ready'))
-                with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+                with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
                     self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
                 self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
                 self.assertGreater(result['lifecycle_memory']['swap_activity']['elapsed_seconds'], 30)
@@ -449,7 +450,7 @@ class LauncherCollector(unittest.TestCase):
         result, events, error = self.exercise(duration=29)
         self.assertIsNone(error)
         self.assertIn(('benchmark', 'first', 'inference'), events)
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
         self.assertEqual(result['lifecycle_memory']['swap_activity']['inference_window_samples'], 0)
 
@@ -459,7 +460,7 @@ class LauncherCollector(unittest.TestCase):
         self.assertFalse(any(isinstance(e, tuple) and e[0] == 'benchmark' for e in events))
         self.assertNotIn('inference', events)
         self.assertIn(('shutdown', 'shutdown'), events)
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertIn('swap_activity_no_inference_window', mem.lifecycle_failures(result))
 
 

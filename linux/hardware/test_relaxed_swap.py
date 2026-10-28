@@ -38,8 +38,9 @@ class RelaxedSwap(unittest.TestCase):
         policy.start()
         self.addCleanup(policy.stop)
         os.environ['LOCAL_LLM_SWAP_POLICY'] = 'low-churn-v1'
+        os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION'] = '1'
 
-    def test_default_monitor_demonstrates_settled_swap_and_enforces_low_churn_evidence(self):
+    def test_legacy_monitor_demonstrates_settled_swap_and_enforces_low_churn_evidence(self):
         with patch.dict(os.environ):
             os.environ['LOCAL_LLM_SWAP_POLICY'] = 'low-churn-v1'
             monitor = mem.MemoryMonitor()
@@ -58,17 +59,17 @@ class RelaxedSwap(unittest.TestCase):
 
     def test_explicit_low_churn_and_bounded_overrides_are_preserved(self):
         memory = evidence()
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertEqual(mem.memory_failures(memory), [])
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'bounded-64mib', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertEqual(mem.worker_swap_limit_bytes(), 64 * 1024**2)
             self.assertIsNone(mem.MemoryMonitor().activity)
             self.assertIn('worker_swap', mem.memory_failures(memory))
 
-    def test_default_rejects_worker_swap_above_four_gib(self):
+    def test_legacy_rejects_worker_swap_above_four_gib(self):
         self.assertIn('worker_swap', mem.memory_failures(evidence(4 * GIB + 1)))
 
-    def test_default_rejects_churn_budget_and_sustained_pressure(self):
+    def test_legacy_rejects_churn_budget_and_sustained_pressure(self):
         cases = [
             ({'total_swapout_bytes': 4 * GIB + 1}, 'swapout_budget'),
             ({'max_inference_swapout_bytes_per_second': 1024**2 + 1,
@@ -85,7 +86,7 @@ class RelaxedSwap(unittest.TestCase):
                 memory['swap_activity'].update(update)
                 self.assertIn('swap_activity_' + reason, mem.memory_failures(memory))
 
-    def test_default_rejects_missing_invalid_or_incomplete_activity_even_with_zero_swap(self):
+    def test_legacy_rejects_missing_invalid_or_incomplete_activity_even_with_zero_swap(self):
         for activity in (None, {}, {'sampling_errors': 1}):
             with self.subTest(activity=activity):
                 memory = evidence(0)
@@ -101,7 +102,7 @@ class RelaxedSwap(unittest.TestCase):
         memory['swap_activity']['worker_swap_peak_bytes'] = 0
         self.assertIn('swap_activity_worker_peak_mismatch', mem.memory_failures(memory))
 
-    def test_default_still_rejects_any_vram_spill(self):
+    def test_legacy_still_rejects_any_vram_spill(self):
         memory = evidence()
         memory['max_nonresident_vram_bytes'] = 1
         self.assertIn('vram_spill', mem.memory_failures(memory))
@@ -123,7 +124,7 @@ def host_reading(t, sout=0):
 
 class MonitorRegressions(unittest.TestCase):
     def setUp(self):
-        self.policy = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'})
+        self.policy = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'})
         self.policy.start()
         self.addCleanup(self.policy.stop)
 

@@ -24,6 +24,10 @@ SCRATCH = Path(tempfile.gettempdir())
 
 
 class BenchmarkCollector(unittest.TestCase):
+    def setUp(self):
+        env=patch.dict(os.environ, {'LOCAL_LLM_LEGACY_SWAP_VALIDATION':'1'})
+        env.start();self.addCleanup(env.stop)
+
     def compare(self, result):
         with tempfile.TemporaryDirectory(dir=SCRATCH) as directory:
             path = Path(directory)/'controlled-collector-fixture.json'
@@ -133,7 +137,7 @@ class BenchmarkCollector(unittest.TestCase):
             self.assertEqual(memory[field], monitor.stopped[field])
         self.assertEqual(memory['max_worker_swap_bytes'], GIB)
         self.assertEqual(memory['swap_activity']['worker_swap_peak_bytes'], GIB)
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertEqual(mem.memory_failures(memory), [])
         self.assertEqual(profile['status'], 'passed')
         self.assertEqual([len(profile['short'][task]['trials']) for task in ('code', 'prose')], [3, 3])
@@ -163,7 +167,7 @@ class BenchmarkCollector(unittest.TestCase):
         self.assertEqual(exit_code, 0)  # Workload quality success is not swap qualification.
         self.assertEqual(len(monitors), 2)
         self.assertIsNot(monitors[0], monitors[1])
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             for profile, monitor in zip(result['profiles'], monitors):
                 memory = profile['memory']
                 self.assertEqual(memory['swap_activity']['inference_window_samples'], 0)
@@ -202,7 +206,7 @@ class BenchmarkCollector(unittest.TestCase):
         self.assertEqual(events[-1], 'thermal-stop')
         self.assertTrue(monitors[0].done.is_set())
         self.assertFalse(monitors[0].thread.is_alive())
-        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1'}):
+        with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             self.assertIn('swap_activity_no_inference_window', mem.memory_failures(memory))
 
     def test_dedicated_spill_from_the_activity_monitor_still_rejects_profile(self):

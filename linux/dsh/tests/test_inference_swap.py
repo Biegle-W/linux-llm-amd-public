@@ -12,7 +12,7 @@ sys.path.insert(0, str(DSH))
 
 class OwnedWatchTests(unittest.TestCase):
     def setUp(self):
-        scope=patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'low-churn-v1'})
+        scope=patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION':'1'})
         scope.start(); self.addCleanup(scope.stop)
 
     def test_settled_swap_at_inclusive_policy_bounds_is_allowed(self):

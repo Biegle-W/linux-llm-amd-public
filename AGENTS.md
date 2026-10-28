@@ -31,8 +31,10 @@ this documentation delivery did not change runtimes or schedules.
 October27 conditional vLLM qualification: [Qwen/Sage dev602 and Bolt dev435 hold](linux/hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
 The installed global wheel and Bolt's explicit launcher override are separate.
 Respect `manual_runtime_pin`; the updater excludes held models. Unpin only after
-qualification, updating both launcher and metadata together. Keep loading-swap-v2,
+qualification, updating both launcher and metadata together. Keep loading-swap-v3,
 all independent guards and the paused updater. Current versions/results belong
 in the canonical handoff/report; the API version omits the wheel packaging suffix.
 
 Post-upgrade H3 evidence is in [the dated comparison](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). Read its current RAM attribution and failures before retrying; added RAM alone does not qualify held profiles.
+
+The [October28 user correction](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) supersedes arbitrary swap-rate stops. Never stop a task for loading/parked swap, reads, rate or PSI alone. Legacy validation needs its explicit second opt-in; frozen strict harnesses are historical. An optional write-related stop needs an explicit write budget and matched measured slowdown. Radiance gfx1100 [preflight](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) is a software compatibility blocker, not a swap failure.

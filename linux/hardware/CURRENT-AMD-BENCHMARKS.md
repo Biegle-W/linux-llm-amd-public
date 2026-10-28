@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 27, 2026
 
+## Current policy and pending GPU compatibility — October 28
+
+**Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy evidence](SWAP-TASK-CONTINUITY-2026-10-28.md). [Radiance H3](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) has no compatible gfx1100 accelerated kernel target; no GPU video or speedup was measured. Existing benchmark values keep their original hardware, build and policy. Earlier v2 guard stops remain historical and do not prove SSD damage or a v3 failure.
+
 ## RAM configuration after reboot — October 28
 
 Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.83 GiB and earlier 64 GB measurements; none is a fresh post-upgrade LLM speed result. [H3 comparison and limitations](../graphics/H3-POST-UPGRADE-2026-10-28.md) are separate diffusion evidence.

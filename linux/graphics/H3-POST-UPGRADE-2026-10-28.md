@@ -1,5 +1,9 @@
 # H3 comparison after the RAM upgrade — October 28, 2026
 
+## Later swap-policy correction
+
+The [current v3 policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) supersedes the v2 rate/PSI automatic stop rules used in this experiment. Its read-heavy stop is preserved as history, not evidence of SSD damage, actual matched slowdown or a current-policy failure. No new generation or retrospective qualification is claimed. [Radiance preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md) is separately blocked before GPU execution by missing gfx1100 device kernels.
+
 Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed.
 
 ## Workload and results

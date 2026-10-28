@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-28",
+  "status": "blocked_before_gpu_launch",
+  "engine": "Radiance H3 Full-Ref experimental fork 1.12.0",
+  "source_commit": "a0653376c3f816cbd06f715fa56040c0407fc869",
+  "source_url": "https://codeberg.org/Bunsei/radiance-h3-fullref",
+  "target_hardware": {
+    "gpus": "2 x RX 7900 XTX 24 GB",
+    "architecture": "gfx1100 / RDNA3",
+    "os_ram_bytes": 32811171840
+  },
+  "configuration": {
+    "hip": "enabled",
+    "RAD_GPU_TARGETS": "gfx1100",
+    "CMAKE_HIP_ARCHITECTURES": "gfx1100",
+    "ROCm_SDK": "retained 7.2.3",
+    "configure_exit": 0,
+    "FFmpeg": "disabled for kernel availability preflight; not a generation-ready build"
+  },
+  "blocker": "The shipped accelerated libr4d device-kernel plugin is restricted to gfx12/RDNA4 and is not built for gfx1100.",
+  "configure_message": "libr4d: RDNA4 (gfx12xx) only, and this build targets gfx1100 -- not built",
+  "device_kernel_library_target_present": false,
+  "compiler_checks": [
+    {
+      "target": "gfx1100",
+      "exit_code": 1,
+      "device_execution": false,
+      "diagnostic": "FP8 WMMA builtin requires gfx12-insts,wavefrontsize32"
+    },
+    {
+      "target": "gfx1201",
+      "exit_code": 0,
+      "device_execution": false,
+      "diagnostic": "same probe compiles"
+    }
+  ],
+  "probe_source_sha256": "21be114c2deffde9eecb018e664cd9a2cb6435a92317dbbe681ba4a2cdfbc473",
+  "upstream_check": {
+    "date": "2026-10-28",
+    "repository": "https://codeberg.org/StillDeadcode/radiance",
+    "main_build_files": "also restrict libr4d to gfx12; no alternative accelerated RDNA3 plugin is declared",
+    "raw_file_sha256": {
+      "root": "37851b91d8aadd60e8b14f48410a57eb77a1f958a2be263923f6ec9511475e0d",
+      "r4d": "6f19462ef99916ef0d9db04e71fd1d25286665c94ca0a96ab55f8c7db0844d04"
+    }
+  },
+  "gpu_launches": 0,
+  "memory_guard_triggers": 0,
+  "generated_outputs": 0,
+  "sampling_seconds": null,
+  "full_request_seconds": null,
+  "matched_speedup": null,
+  "setup_attempts": [
+    {
+      "attempt": 1,
+      "outcome": "HIP compiler setup failed because the private SDK host-library path was missing"
+    },
+    {
+      "attempt": 2,
+      "outcome": "same retained SDK host libraries restored to the local build environment; configure succeeds and explicitly excludes libr4d for gfx1100"
+    }
+  ],
+  "comparison": {
+    "current_one_card_control": {
+      "date": "2026-10-28",
+      "full_server_seconds": 210.098,
+      "sampler_span_seconds": 28.324,
+      "measured_successful_trials": 1,
+      "excluded_warmup_full_seconds": 196.228,
+      "policy": "loading-swap-v2",
+      "ram_GiB": 30.56
+    },
+    "older_one_card_denoiser_reference": {
+      "date": "2026-10-21",
+      "ram_GiB": 61.51,
+      "three_trial_median_server_seconds": 83.831
+    },
+    "radiance": "not measured; no compatible device kernel library",
+    "workload_mismatch": "Published full-ref path uses Ref2VA FP8 RAD and admits at least124 frames; existing control uses FL2VA INT8 ConvRot and39 frames. They are not a matched precision/model/workload comparison."
+  },
+  "production_changes": "none from Radiance preflight; swap-policy correction is separately documented",
+  "next_action": "An implemented and validated gfx1100 device-kernel path is required before a genuine dual-card Radiance benchmark. More RAM or a lower VRAM margin does not supply that implementation."
+}

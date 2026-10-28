@@ -1,5 +1,9 @@
 # LLM benchmark and context history
 
+## Swap continuity and Radiance preflight — October 28
+
+[Current v3 swap behavior](SWAP-TASK-CONTINUITY-2026-10-28.md) is CPU-validated; the earlier read-heavy H3 stop is retained without treating it as harmful writes. [Radiance source/compiler checks](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) find no gfx1100 accelerated library. No new inference/video timing or promotion.
+
 ## Post-upgrade H3 record — October 28
 
 Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Report](../graphics/H3-POST-UPGRADE-2026-10-28.md). LLM selections and historical speeds are unchanged.

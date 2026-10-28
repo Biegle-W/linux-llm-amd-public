@@ -1,5 +1,7 @@
 # Graphics model collection
 
+[October28 Radiance H3 preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md): no gfx1100 accelerated kernel plugin is built; no GPU generation or speedup result. [Current swap policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) lets work continue through swap activity unless an explicit write budget and measured matched slowdown support a stop.
+
 [October 27 guarded H3 SP2 trial](H3-SP2-2026-10-27.md): stock-loader API incompatibility and reduced-RAM guard stops are recorded; no completed matched speedup or production change.
 
 [October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) now includes a firsthand dual-XTX ComfyUI SP2 report, the Kaihui AMD SP implementation and Bunsei’s separate R9700 Radiance TP2 fork. It distinguishes these from locally validated component placement, DisTorch2 and Dual-Sage. Research only; no runtime/workflow change or new graphics benchmark.

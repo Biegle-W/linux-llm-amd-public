@@ -10,7 +10,7 @@ import argparse
 import json
 from pathlib import Path
 import statistics
-from inference_memory import worker_swap_limit_bytes, memory_failures, lifecycle_failures
+from inference_memory import worker_swap_limit_bytes, memory_failures, lifecycle_failures, swap_policy
 
 
 def prefill(profile):
@@ -53,7 +53,8 @@ def main():
         parser.error('Baseline contains no model profiles; cannot establish promotion evidence')
     failed = False
     print('| Model | Metric | Baseline | Candidate | Change |\n|---|---|---:|---:|---:|')
-    print(f'| policy | worker_swap_limit_bytes | | {worker_swap_limit_bytes() if worker_swap_limit_bytes() is not None else 'rate-only'} | |')
+    print(f'| policy | swap_policy | | {swap_policy()} | |')
+    print(f'| policy | worker_swap_limit_bytes | | {worker_swap_limit_bytes() if worker_swap_limit_bytes() is not None else 'uncapped'} | |')
     for path in options.candidates:
         record = json.loads(path.read_text())
         if options.require_lifecycle_memory:

@@ -1,5 +1,9 @@
 # Daily engine update
 
+## Current user swap policy — October28
+
+Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and this documentation does not resume the paused updater.
+
 October27: VRAM-only llama profiles can carry separately qualified source_overrides. A full-catalog provisional install clears them so candidate gates use the new global source; rollback restores the saved JSON/pins. The timer remains paused. [Manual qualification](../VRAM-ENGINE-UPDATE-2026-10-27.md).
 
 

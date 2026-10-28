@@ -1,5 +1,9 @@
 # Loading swap is allowed — October 27, 2026
 
+## Superseded by the October28 user correction
+
+The [current v3 policy](SWAP-TASK-CONTINUITY-2026-10-28.md) allows loading, parked swap and reads. Fixed I/O/PSI levels are advisory, not automatic stop rules. An optional swap stop requires an explicit deployment write budget plus matched measured slowdown. The v2 implementation and thresholds below are historical; do not reuse them as current instructions.
+
 **Standing user instruction: allow swap during model loading. Prohibit sustained
 aggressive swapping during inference when it creates excessive SSD write churn
 or slows inference. Parked swap pages are allowed.** This supersedes previous
