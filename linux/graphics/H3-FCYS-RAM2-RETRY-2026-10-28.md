@@ -1,5 +1,7 @@
 # Actual fcys TP2 retry with a 2 GiB host-RAM floor — October 28, 2026
 
+**Later conditioning repair:** [the corrected actual TP2 and one-card 39-frame controls](H3-FCYS-QUALITY-FIX-2026-10-28.md) identify all-NaN conditioning from the opt-in Triton NVFP4 path. Encoder-only Triton disablement restores finite conditioning and sampled red-teapot output; corrected preprocessing/TP2 retain at least 11.286 GiB host RAM available. Earlier failures and measurements below remain historical. No production promotion or new speedup.
+
 **Later low-RAM result:** [the user-authorized 1 GiB retry and staged design](H3-FCYS-LOWRAM-2026-10-28.md) completed the actual TP2 five-frame canary after removing duplicate encoder/decoder residency. Minimum available RAM was 10.829 GiB across the successful stages; prompt compliance still failed. Earlier settings/results below remain historical.
 
 The user-authorized rerun lowered the isolated test's immediate host-available RAM floor from **3 GiB to 2 GiB**, after the user freed more RAM. It still stopped during concurrent text-encoder loading: available RAM reached **1.848 GiB**. Neither rank reached DiT denoising, and no video/audio or speed comparison was produced.

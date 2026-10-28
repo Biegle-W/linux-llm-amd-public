@@ -1,6 +1,6 @@
 # Graphics model collection
 
-[Staged fcys low-RAM canary](H3-FCYS-LOWRAM-2026-10-28.md): the unchanged aligned 1 GiB retry still stopped while loading both encoders. One GPU encoder process, shared conditioning and rank-0-only AV decoding then completed actual TP2's 20-step/five-frame canary with at least 10.829 GiB host RAM available. Media decodes but fails the teapot prompt; no matched timing or promotion. Both isolated host checks use the requested 1 GiB floor; other guards and production settings remain.
+[H3 conditioning repair and corrected TP2](H3-FCYS-QUALITY-FIX-2026-10-28.md): Fixed the off-prompt output by disabling the failing Triton NVFP4 dequantization path only during GPU encoder preprocessing. Finite shared conditioning restored red-teapot output in actual RCCL TP2 and a matched one-card 39-frame control; both passed sampled visual/technical AV checks. Corrected preprocessing/TP2 retained at least 11.286 GiB host RAM available. Both private host floors remain 1 GiB; other guards, production pins and paused schedules remain. No new speedup or promotion.
 
 ## Fresh H3 one-card versus two-card test — October28
 

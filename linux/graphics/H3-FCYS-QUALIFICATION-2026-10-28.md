@@ -1,5 +1,7 @@
 # Actual fcys RCCL TP2 + CK qualification — October 28, 2026
 
+**Later conditioning repair:** [the corrected actual TP2 and one-card 39-frame controls](H3-FCYS-QUALITY-FIX-2026-10-28.md) identify all-NaN conditioning from the opt-in Triton NVFP4 path. Encoder-only Triton disablement restores finite conditioning and sampled red-teapot output; corrected preprocessing/TP2 retain at least 11.286 GiB host RAM available. Earlier failures and measurements below remain historical. No production promotion or new speedup.
+
 **Later low-RAM result:** [the user-authorized 1 GiB retry and staged design](H3-FCYS-LOWRAM-2026-10-28.md) completed the actual TP2 five-frame canary after removing duplicate encoder/decoder residency. Minimum available RAM was 10.829 GiB across the successful stages; prompt compliance still failed. Earlier settings/results below remain historical.
 
 **Later user-authorized retry:** the [2 GiB host-floor rerun](H3-FCYS-RAM2-RETRY-2026-10-28.md) after freeing RAM also stopped during text-encoder loading. Its explicitly lowered isolated guard supersedes the earlier 3 GiB limit for that retry only; earlier results below retain their original settings.

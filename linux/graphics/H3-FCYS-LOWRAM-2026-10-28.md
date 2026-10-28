@@ -1,5 +1,7 @@
 # Actual fcys TP2 low-RAM staged canary — October 28, 2026
 
+**Later conditioning repair:** [the corrected actual TP2 and one-card 39-frame controls](H3-FCYS-QUALITY-FIX-2026-10-28.md) identify all-NaN conditioning from the opt-in Triton NVFP4 path. Encoder-only Triton disablement restores finite conditioning and sampled red-teapot output; corrected preprocessing/TP2 retain at least 11.286 GiB host RAM available. Earlier failures and measurements below remain historical. No production promotion or new speedup.
+
 **The memory optimization works for the tested five-frame canary.** The unchanged full workflow with aligned 1 GiB host guards still stopped at 0.974 GiB during duplicate text-encoder loading. A staged design then completed actual two-rank fcys RCCL sampling, all 20 steps, and rank-0 audio/video export while retaining at least **10.829 GiB available system RAM** across its two stages.
 
 The export is decodable and the rank-1 latents are finite, but visual prompt compliance fails: two small wild canids in grass instead of the requested red ceramic teapot. This is the same qualitative symptom as the earlier five-frame one-card control. The candidate therefore has a functional/memory pass, not a full quality or production qualification. No matched timed benchmark or new speedup is claimed.
