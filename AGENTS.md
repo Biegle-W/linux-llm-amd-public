@@ -1,6 +1,6 @@
 # Agent entry point
 
-[H3 conditioning repair and corrected TP2](linux/graphics/H3-FCYS-QUALITY-FIX-2026-10-28.md): Fixed the off-prompt output by disabling the failing Triton NVFP4 dequantization path only during GPU encoder preprocessing. Finite shared conditioning restored red-teapot output in actual RCCL TP2 and a matched one-card 39-frame control; both passed sampled visual/technical AV checks. Corrected preprocessing/TP2 retained at least 11.286 GiB host RAM available. Both private host floors remain 1 GiB; other guards, production pins and paused schedules remain. No new speedup or promotion.
+[AMD H3 encoder-format comparison](linux/graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): matched format/execution, memory and quality evidence is current. Keep the tested candidate isolated; use the dated report for results, limits and preserved state.
 
 Read [README.md](README.md) first. It is the canonical maintenance policy for
 this AMD repository; this file is the discovery entry point, not a duplicate

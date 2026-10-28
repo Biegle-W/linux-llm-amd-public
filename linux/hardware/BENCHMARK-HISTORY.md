@@ -1,6 +1,6 @@
 # LLM benchmark and context history
 
-[H3 conditioning repair and corrected TP2](../graphics/H3-FCYS-QUALITY-FIX-2026-10-28.md): Fixed the off-prompt output by disabling the failing Triton NVFP4 dequantization path only during GPU encoder preprocessing. Finite shared conditioning restored red-teapot output in actual RCCL TP2 and a matched one-card 39-frame control; both passed sampled visual/technical AV checks. Corrected preprocessing/TP2 retained at least 11.286 GiB host RAM available. Both private host floors remain 1 GiB; other guards, production pins and paused schedules remain. No new speedup or promotion.
+[AMD H3 encoder-format comparison](../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 ## Fresh H3 one-card versus two-card test — October28
 

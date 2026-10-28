@@ -1,8 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-[H3 conditioning repair and corrected TP2](../graphics/H3-FCYS-QUALITY-FIX-2026-10-28.md): Fixed the off-prompt output by disabling the failing Triton NVFP4 dequantization path only during GPU encoder preprocessing. Finite shared conditioning restored red-teapot output in actual RCCL TP2 and a matched one-card 39-frame control; both passed sampled visual/technical AV checks. Corrected preprocessing/TP2 retained at least 11.286 GiB host RAM available. Both private host floors remain 1 GiB; other guards, production pins and paused schedules remain. No new speedup or promotion.
+[AMD H3 encoder-format comparison](../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
-Current candidate: corrected finite conditioning and actual fcys RCCL TP2 + CK pass the 39-frame sampled teapot/technical AV gate. All diagnostic jobs are complete and no task-owned GPU lock remains. Production selection and paused schedules remain. Further timing or production qualification requires its own matched protocol; do not repeat these diagnostics merely to refresh documentation.
+Current candidate: W4A8 default and native HIP integer encoder paths have matched speed/memory and paired TP2 quality evidence. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. All comparison jobs are complete and no task-owned GPU lock remains. Production selection and paused schedules remain; no automatic promotion. Preserve completed evidence rather than rerunning these tests for documentation.
 
 ## Fresh H3 one-card versus two-card test — October28
 

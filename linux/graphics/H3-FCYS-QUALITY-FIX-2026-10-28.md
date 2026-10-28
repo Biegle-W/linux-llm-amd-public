@@ -1,5 +1,7 @@
 # H3 off-prompt conditioning fixed — October 28, 2026
 
+**Later AMD encoder-format comparison:** [W4A8 default/native HIP INT8 versus corrected NVFP4](H3-AMD-ENCODER-FORMATS-2026-10-28.md) records three fresh timed trials per path and nine paired TP2 quality clips. Encoder-stage speed, loading variance, memory and quality limits are separated. Production remains unchanged; earlier results below stay historical.
+
 The saved text conditioning was entirely NaN. Opting into the Triton backend routed NVFP4 weight dequantization to a failing path on this gfx1100/ROCm stack. Disabling Triton **in the encoder preprocessing process** restored finite conditioning while keeping GPU initialization. The optimized actual fcys RCCL TP2 run then completed 20 steps and exported a 39-frame red-teapot clip. A matched true one-card control also passed sampled visual and technical AV checks. No production promotion or new speedup is claimed.
 
 ## Evidence for the cause

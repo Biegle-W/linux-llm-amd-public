@@ -1,6 +1,6 @@
 # Graphics model collection
 
-[H3 conditioning repair and corrected TP2](H3-FCYS-QUALITY-FIX-2026-10-28.md): Fixed the off-prompt output by disabling the failing Triton NVFP4 dequantization path only during GPU encoder preprocessing. Finite shared conditioning restored red-teapot output in actual RCCL TP2 and a matched one-card 39-frame control; both passed sampled visual/technical AV checks. Corrected preprocessing/TP2 retained at least 11.286 GiB host RAM available. Both private host floors remain 1 GiB; other guards, production pins and paused schedules remain. No new speedup or promotion.
+[AMD H3 encoder-format comparison](H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 ## Fresh H3 one-card versus two-card test — October28
 
@@ -30,7 +30,7 @@ normal startup with the official Ubuntu sandbox passed October21;
 | Qwen encoder | `text_encoders/qwen3vl_8b_bf16.safetensors` | Lossless merge and key mapping of existing BF16 shards |
 | Qwen VAE | `vae/qwen_image_2.1_vae_fp32.safetensors` | Existing FP32 tensors mapped to Comfy/Wan layout, with singleton shape changes only |
 | H3 first/last-frame base | `diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors` | New native Comfy INT8 replacement for the removed Q2 |
-| H3 encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | New matching native compact encoder |
+| H3 encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | Retained NVFP4 storage baseline, with eager dequantization on gfx1100 |
 | H3 video VAE | `vae/minimax_h3_video_vae_fp16.safetensors` | Existing downloaded file, moved intact |
 | H3 audio VAE | `vae/minimax_h3_audio_vae_fp32.safetensors` | Existing downloaded file, moved intact |
 | FLUX 3 Image Klein (distilled) | `diffusion_models/flux3-image-klein-bf16.safetensors` | Official BFL ComfyUI release, BF16 (October 23) |

@@ -1,5 +1,7 @@
 # Actual fcys TP2 low-RAM staged canary — October 28, 2026
 
+**Later AMD encoder-format comparison:** [W4A8 default/native HIP INT8 versus corrected NVFP4](H3-AMD-ENCODER-FORMATS-2026-10-28.md) records three fresh timed trials per path and nine paired TP2 quality clips. Encoder-stage speed, loading variance, memory and quality limits are separated. Production remains unchanged; earlier results below stay historical.
+
 **Later conditioning repair:** [the corrected actual TP2 and one-card 39-frame controls](H3-FCYS-QUALITY-FIX-2026-10-28.md) identify all-NaN conditioning from the opt-in Triton NVFP4 path. Encoder-only Triton disablement restores finite conditioning and sampled red-teapot output; corrected preprocessing/TP2 retain at least 11.286 GiB host RAM available. Earlier failures and measurements below remain historical. No production promotion or new speedup.
 
 **The memory optimization works for the tested five-frame canary.** The unchanged full workflow with aligned 1 GiB host guards still stopped at 0.974 GiB during duplicate text-encoder loading. A staged design then completed actual two-rank fcys RCCL sampling, all 20 steps, and rank-0 audio/video export while retaining at least **10.829 GiB available system RAM** across its two stages.
