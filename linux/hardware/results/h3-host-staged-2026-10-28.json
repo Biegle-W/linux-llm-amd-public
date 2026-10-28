@@ -1,0 +1,1244 @@
+{
+  "date": "2026-10-28",
+  "status": "candidate_passed_control_repetition_blocked_by_ram_floor",
+  "summary": "The isolated host-staged H3 candidate passed its five-frame canary and all four 39-frame requests, with a 121.332 s timed median and 56.762 s sampler median. Both fresh one-card attempts completed only their excluded warmups, then stopped at the unchanged 3 GiB RAM floor during the first timed DiT load, including a standard-cleanup retry. No fresh three-trial control median or matched speedup is established. Loading-swap-v3 and all independent RAM, VRAM and ownership guards remained active. This is an isolated experiment; no production profile was promoted.",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "gpu_count": 2,
+    "gpu_model": "RX 7900 XTX",
+    "architecture": "gfx1100",
+    "os_ram_bytes": 32811163648
+  },
+  "source": {
+    "davoddino_revision": "b1454c54410fe990640928183a04329944c75784",
+    "candidate_comfy_base": "344b43989e8c56b5bb4a66cf028c834192ab59dd",
+    "torch": "2.15.0.dev20260827+rocm7.2",
+    "comfy_kitchen": "0.2.39",
+    "native_kilo_backend_used": false,
+    "fcys_source_deployed": false
+  },
+  "transport_correctness": {
+    "peer_capability": [
+      false,
+      false
+    ],
+    "cases": [
+      {
+        "dtype": "torch.int8",
+        "elements": 17,
+        "bytes": 17,
+        "roundtrip_seconds": 0.06084022799768718,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.int8",
+        "elements": 67108883,
+        "bytes": 67108883,
+        "roundtrip_seconds": 0.08490251500188606,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.float16",
+        "elements": 17,
+        "bytes": 34,
+        "roundtrip_seconds": 0.004997743999410886,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.float16",
+        "elements": 33554451,
+        "bytes": 67108902,
+        "roundtrip_seconds": 0.07003662799979793,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "elements": 17,
+        "bytes": 34,
+        "roundtrip_seconds": 0.0104016440018313,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.bfloat16",
+        "elements": 33554451,
+        "bytes": 67108902,
+        "roundtrip_seconds": 0.0730765429980238,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.float32",
+        "elements": 17,
+        "bytes": 68,
+        "roundtrip_seconds": 0.010428544999740552,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.float32",
+        "elements": 16777235,
+        "bytes": 67108940,
+        "roundtrip_seconds": 0.07028565200016601,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.complex64",
+        "elements": 17,
+        "bytes": 136,
+        "roundtrip_seconds": 0.010255102999508381,
+        "bit_equal": true
+      },
+      {
+        "dtype": "torch.complex64",
+        "elements": 8388627,
+        "bytes": 67109016,
+        "roundtrip_seconds": 0.07373483500123257,
+        "bit_equal": true
+      },
+      {
+        "source_reader": "both physical owners",
+        "bytes_per_owner": 262161,
+        "bit_equal": true
+      }
+    ],
+    "reduction": "bit_equal",
+    "backend": {
+      "copies": 21,
+      "copy_bytes": 671155404,
+      "source_read_bytes": 524322,
+      "d2h_bytes": 671155404,
+      "h2d_bytes": 671679726,
+      "staging_bytes": 67108864,
+      "poisoned": false,
+      "unacknowledged": 0
+    },
+    "status": "passed"
+  },
+  "cpu_fault_ownership_tests_passed": 12,
+  "comparison": {
+    "date": "2026-10-28",
+    "arms": [
+      {
+        "tag": "smoke-r6",
+        "status": "passed",
+        "guard_faults": [],
+        "memory": {
+          "samples": 116,
+          "sampling_errors": 0,
+          "min_available_bytes": 21123354624,
+          "min_free_vram_bytes": [
+            7600267264,
+            15190134784
+          ],
+          "max_worker_swap_bytes": 0,
+          "max_worker_spill_bytes": 0
+        },
+        "swap_activity": {
+          "policy": "loading-swap-v3",
+          "samples": 116,
+          "sampling_errors": 0,
+          "elapsed_seconds": 116.11481566099974,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 0,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 21122715648,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": null,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "failures": [],
+          "advisories": []
+        },
+        "elapsed_lifecycle_seconds": 116.13969699299923,
+        "shutdown_verified": true,
+        "phase_event_count": 19,
+        "median_server_seconds": null,
+        "median_external_seconds": null,
+        "median_server_plus_cleanup_seconds": null,
+        "scope_observation": {
+          "memory.max": "32811163648",
+          "memory.swap.max": "max",
+          "memory.peak": "19428585472",
+          "memory.current": "17206427648",
+          "memory.swap.current": "0",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+        },
+        "available_before_bytes": 22517370880,
+        "available_after_bytes": 22973444096,
+        "graph_sha256": null,
+        "thermal": {
+          "schema": 1,
+          "label": "h3-smoke-r6",
+          "status": "complete",
+          "interval_seconds": 1.0,
+          "samples": 117,
+          "sample_errors": 0,
+          "raw_samples_dropped": 0,
+          "raw_limit_bytes": 67108864,
+          "cards": {
+            "0000:03:00.0": {
+              "gpu_index": 0,
+              "samples": 117,
+              "busy_samples": 33,
+              "sensor_samples": {
+                "mem": 117,
+                "edge": 117,
+                "junction": 117
+              },
+              "peak_temperature_c": {
+                "mem": 44.0,
+                "edge": 40.0,
+                "junction": 60.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 44.0,
+                "edge": 40.0,
+                "junction": 60.0
+              },
+              "throttle_samples_available": 117,
+              "thermal_limit_samples": 110,
+              "hotspot_limit_samples": 110,
+              "power_limit_samples": 4,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 2436.0,
+              "peak_power_average_w": 311.0,
+              "peak_gfx_clock_mhz": 2824.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            },
+            "0000:06:00.0": {
+              "gpu_index": 1,
+              "samples": 117,
+              "busy_samples": 32,
+              "sensor_samples": {
+                "mem": 117,
+                "edge": 117,
+                "junction": 117
+              },
+              "peak_temperature_c": {
+                "mem": 48.0,
+                "edge": 26.0,
+                "junction": 37.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 48.0,
+                "edge": 26.0,
+                "junction": 37.0
+              },
+              "throttle_samples_available": 117,
+              "thermal_limit_samples": 117,
+              "hotspot_limit_samples": 117,
+              "power_limit_samples": 0,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 1533.0,
+              "peak_power_average_w": 68.0,
+              "peak_gfx_clock_mhz": 1477.0,
+              "peak_memory_clock_mhz": 772.0,
+              "peak_busy_percent": 40.0,
+              "last_throttle_status": "available"
+            }
+          },
+          "cpu_peak_package_c": {
+            "Package id 0": 61.0
+          },
+          "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+          "started_utc": "2026-10-28T15:04:17.546498+00:00",
+          "last_sample_utc": "2026-10-28T15:06:13.686698+00:00"
+        },
+        "cleanup": {
+          "production_fingerprints_unchanged": true,
+          "shutdown_verified": true,
+          "gpu_lock_released": true
+        },
+        "method": {
+          "candidate": "Davoddino-derived explicit bounded host transport/source reader",
+          "source_base": "344b43989e8c56b5bb4a66cf028c834192ab59dd",
+          "frames": 5,
+          "width": 608,
+          "height": 352,
+          "steps": 20,
+          "seed": 42,
+          "status": "smoke only; no performance comparison yet",
+          "transport_pinned_host_bytes": 67108864,
+          "source_loading": "bounded preadv/H2D; no nativeKILO backend"
+        },
+        "runtime": {
+          "comfyui_version": "0.30.0",
+          "pytorch_version": "2.15.0.dev20260827+rocm7.2"
+        },
+        "runs": [
+          {
+            "trial": 0,
+            "excluded_warmup": null,
+            "external_seconds": 110.51735983300023,
+            "server_seconds": 110.391,
+            "smoke": true,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          }
+        ],
+        "observer_phase_spans_seconds": {
+          "denoising": [
+            22.16832830399653
+          ],
+          "vae-decode": [
+            0.35211772399634356
+          ]
+        },
+        "candidate_phase_spans_seconds": {
+          "PREFLIGHT": [
+            0.003942702001950238
+          ],
+          "ENCODER": [
+            34.29533724999783
+          ],
+          "DIT_BUILD": [
+            38.21171794499969
+          ],
+          "DIT_SAMPLE": [
+            22.56323020900163
+          ],
+          "VAE_DECODE": [
+            15.239015448998543
+          ]
+        },
+        "candidate_backend_runs": [
+          {
+            "frames": 5,
+            "elapsed_seconds": 110.31335616699653,
+            "backend": {
+              "copies": 4041,
+              "copy_bytes": 21938001408,
+              "source_read_bytes": 42560395496,
+              "d2h_bytes": 21938001408,
+              "h2d_bytes": 64498396904,
+              "staging_bytes": 67108864,
+              "poisoned": false,
+              "unacknowledged": 0
+            }
+          }
+        ],
+        "completed_generation_count": 1
+      },
+      {
+        "tag": "benchmark-candidate",
+        "status": "passed",
+        "guard_faults": [],
+        "memory": {
+          "samples": 491,
+          "sampling_errors": 0,
+          "min_available_bytes": 20035706880,
+          "min_free_vram_bytes": [
+            7477530624,
+            14932168704
+          ],
+          "max_worker_swap_bytes": 0,
+          "max_worker_spill_bytes": 0
+        },
+        "swap_activity": {
+          "policy": "loading-swap-v3",
+          "samples": 491,
+          "sampling_errors": 0,
+          "elapsed_seconds": 494.7848344640006,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 0,
+          "total_swapout_bytes": 0,
+          "inference_window_samples": 105,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 20035706880,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": null,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "failures": [],
+          "advisories": []
+        },
+        "elapsed_lifecycle_seconds": 495.148524283999,
+        "shutdown_verified": true,
+        "phase_event_count": 73,
+        "median_server_seconds": 121.332,
+        "median_external_seconds": 121.73747057499713,
+        "median_server_plus_cleanup_seconds": null,
+        "scope_observation": {
+          "memory.max": "32811163648",
+          "memory.swap.max": "max",
+          "memory.peak": "19415318528",
+          "memory.current": "18713423872",
+          "memory.swap.current": "0",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
+        },
+        "available_before_bytes": 22946668544,
+        "available_after_bytes": 22899236864,
+        "graph_sha256": "405894cdb7cfa2c6c85cab428488bedd78467f42b13184908c3cb8f7ae187495",
+        "thermal": {
+          "schema": 1,
+          "label": "h3-benchmark-candidate",
+          "status": "complete",
+          "interval_seconds": 1.0,
+          "samples": 496,
+          "sample_errors": 0,
+          "raw_samples_dropped": 0,
+          "raw_limit_bytes": 67108864,
+          "cards": {
+            "0000:03:00.0": {
+              "gpu_index": 0,
+              "samples": 496,
+              "busy_samples": 292,
+              "sensor_samples": {
+                "mem": 496,
+                "edge": 496,
+                "junction": 496
+              },
+              "peak_temperature_c": {
+                "mem": 49.0,
+                "edge": 47.0,
+                "junction": 67.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 49.0,
+                "edge": 47.0,
+                "junction": 67.0
+              },
+              "throttle_samples_available": 496,
+              "thermal_limit_samples": 462,
+              "hotspot_limit_samples": 462,
+              "power_limit_samples": 25,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 3136.0,
+              "peak_power_average_w": 315.0,
+              "peak_gfx_clock_mhz": 2845.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            },
+            "0000:06:00.0": {
+              "gpu_index": 1,
+              "samples": 496,
+              "busy_samples": 266,
+              "sensor_samples": {
+                "mem": 496,
+                "edge": 496,
+                "junction": 496
+              },
+              "peak_temperature_c": {
+                "mem": 52.0,
+                "edge": 30.0,
+                "junction": 42.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 52.0,
+                "edge": 30.0,
+                "junction": 42.0
+              },
+              "throttle_samples_available": 496,
+              "thermal_limit_samples": 467,
+              "hotspot_limit_samples": 467,
+              "power_limit_samples": 4,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 1758.0,
+              "peak_power_average_w": 101.0,
+              "peak_gfx_clock_mhz": 1886.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 63.0,
+              "last_throttle_status": "available"
+            }
+          },
+          "cpu_peak_package_c": {
+            "Package id 0": 68.0
+          },
+          "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+          "started_utc": "2026-10-28T15:06:37.726926+00:00",
+          "last_sample_utc": "2026-10-28T15:14:52.875717+00:00"
+        },
+        "cleanup": {
+          "production_fingerprints_unchanged": true,
+          "shutdown_verified": true,
+          "gpu_lock_released": true
+        },
+        "method": {
+          "width": 608,
+          "height": 352,
+          "frames": 39,
+          "fps": 24,
+          "steps": 20,
+          "seed": 42,
+          "sampler": "res_multistep",
+          "scheduler": "simple",
+          "warmups": 1,
+          "timed_trials": 3,
+          "arm": "candidate",
+          "candidate": "davoddino-derived bounded host-staged TP2; retained Torch2.15/kitchen0.2.39",
+          "control": "saved component-placement workflow, one-card DiT, isolated retained Comfy0.42 snapshot",
+          "limitations": "candidate native GPU noise and phase-reloading lifecycle differ from saved CPU noise/standard loader; end-to-end workflow comparison, not transport-only or pixel-identity claim",
+          "source_base": "344b43989e8c56b5bb4a66cf028c834192ab59dd"
+        },
+        "runtime": {
+          "comfyui_version": "0.30.0",
+          "pytorch_version": "2.15.0.dev20260827+rocm7.2"
+        },
+        "runs": [
+          {
+            "trial": 0,
+            "excluded_warmup": true,
+            "external_seconds": 124.26026451300277,
+            "server_seconds": 123.815,
+            "smoke": null,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          },
+          {
+            "trial": 1,
+            "excluded_warmup": false,
+            "external_seconds": 121.76222099200095,
+            "server_seconds": 121.644,
+            "smoke": null,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          },
+          {
+            "trial": 2,
+            "excluded_warmup": false,
+            "external_seconds": 121.73747057499713,
+            "server_seconds": 121.253,
+            "smoke": null,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          },
+          {
+            "trial": 3,
+            "excluded_warmup": false,
+            "external_seconds": 121.72683025000151,
+            "server_seconds": 121.332,
+            "smoke": null,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          }
+        ],
+        "observer_phase_spans_seconds": {
+          "denoising": [
+            57.57143736299622,
+            56.90088829899469,
+            56.762005081996904,
+            56.739489797000715
+          ],
+          "vae-decode": [
+            0.411182561001624,
+            0.12311136100470321,
+            0.1186324450027314,
+            0.11779205499624368
+          ]
+        },
+        "candidate_phase_spans_seconds": {
+          "PREFLIGHT": [
+            0.003852610992908012,
+            0.0012538779992610216,
+            0.0012684839966823347,
+            0.0011848279973492026
+          ],
+          "ENCODER": [
+            32.9885040030058,
+            32.60631812000065,
+            32.463417917002516,
+            32.52402482400066
+          ],
+          "DIT_BUILD": [
+            16.171009623998543,
+            15.68953241300187,
+            15.559457752999151,
+            15.627099869998347
+          ],
+          "DIT_SAMPLE": [
+            57.96628580400284,
+            57.03625081299833,
+            56.9013312820025,
+            56.88056103400595
+          ],
+          "VAE_DECODE": [
+            16.51824263099843,
+            16.19718873799866,
+            16.211971923999954,
+            16.19131514599576
+          ]
+        },
+        "candidate_backend_runs": [
+          {
+            "frames": 39,
+            "elapsed_seconds": 123.64803817600477,
+            "backend": {
+              "copies": 4041,
+              "copy_bytes": 116744574720,
+              "source_read_bytes": 42560395496,
+              "d2h_bytes": 116744574720,
+              "h2d_bytes": 159304970216,
+              "staging_bytes": 67108864,
+              "poisoned": false,
+              "unacknowledged": 0
+            }
+          },
+          {
+            "frames": 39,
+            "elapsed_seconds": 121.53069368199795,
+            "backend": {
+              "copies": 8082,
+              "copy_bytes": 233489149440,
+              "source_read_bytes": 85120790992,
+              "d2h_bytes": 233489149440,
+              "h2d_bytes": 318609940432,
+              "staging_bytes": 67108864,
+              "poisoned": false,
+              "unacknowledged": 0
+            }
+          },
+          {
+            "frames": 39,
+            "elapsed_seconds": 121.13754154199705,
+            "backend": {
+              "copies": 12123,
+              "copy_bytes": 350233724160,
+              "source_read_bytes": 127681186488,
+              "d2h_bytes": 350233724160,
+              "h2d_bytes": 477914910648,
+              "staging_bytes": 67108864,
+              "poisoned": false,
+              "unacknowledged": 0
+            }
+          },
+          {
+            "frames": 39,
+            "elapsed_seconds": 121.22439390500222,
+            "backend": {
+              "copies": 16164,
+              "copy_bytes": 466978298880,
+              "source_read_bytes": 170241581984,
+              "d2h_bytes": 466978298880,
+              "h2d_bytes": 637219880864,
+              "staging_bytes": 67108864,
+              "poisoned": false,
+              "unacknowledged": 0
+            }
+          }
+        ],
+        "completed_generation_count": 4
+      },
+      {
+        "tag": "benchmark-control",
+        "status": "guard_stopped",
+        "guard_faults": [
+          "host_available_below_3GiB"
+        ],
+        "memory": {
+          "samples": 372,
+          "sampling_errors": 0,
+          "min_available_bytes": 3145764864,
+          "min_free_vram_bytes": [
+            3614367744,
+            7413276672
+          ],
+          "max_worker_swap_bytes": 6891806720,
+          "max_worker_spill_bytes": 0
+        },
+        "swap_activity": {
+          "policy": "loading-swap-v3",
+          "samples": 372,
+          "sampling_errors": 0,
+          "elapsed_seconds": 374.78486045700265,
+          "worker_swap_peak_bytes": 6891806720,
+          "total_swapin_bytes": 23424360448,
+          "total_swapout_bytes": 33422503936,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 3142557696,
+          "max_memory_full_psi_avg10": 0.84,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": null,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "failures": [],
+          "advisories": []
+        },
+        "elapsed_lifecycle_seconds": 375.8555041889995,
+        "shutdown_verified": true,
+        "phase_event_count": 22,
+        "median_server_seconds": null,
+        "median_external_seconds": null,
+        "median_server_plus_cleanup_seconds": null,
+        "scope_observation": {
+          "memory.max": "32811163648",
+          "memory.swap.max": "max",
+          "memory.peak": "27238543360",
+          "memory.current": "26948935680",
+          "memory.swap.current": "12749623296",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 100"
+        },
+        "available_before_bytes": 22545711104,
+        "available_after_bytes": 27232129024,
+        "graph_sha256": "b67e943c21205251b5752fa1e5dbda28c5b1ddb3729646717b8a7cdc627b7ed1",
+        "thermal": {
+          "schema": 1,
+          "label": "h3-benchmark-control",
+          "status": "complete",
+          "interval_seconds": 1.0,
+          "samples": 376,
+          "sample_errors": 0,
+          "raw_samples_dropped": 0,
+          "raw_limit_bytes": 67108864,
+          "cards": {
+            "0000:03:00.0": {
+              "gpu_index": 0,
+              "samples": 376,
+              "busy_samples": 79,
+              "sensor_samples": {
+                "mem": 376,
+                "edge": 376,
+                "junction": 376
+              },
+              "peak_temperature_c": {
+                "mem": 56.0,
+                "edge": 53.0,
+                "junction": 76.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 56.0,
+                "edge": 53.0,
+                "junction": 76.0
+              },
+              "throttle_samples_available": 376,
+              "thermal_limit_samples": 353,
+              "hotspot_limit_samples": 353,
+              "power_limit_samples": 27,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 3625.0,
+              "peak_power_average_w": 358.0,
+              "peak_gfx_clock_mhz": 3096.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            },
+            "0000:06:00.0": {
+              "gpu_index": 1,
+              "samples": 376,
+              "busy_samples": 26,
+              "sensor_samples": {
+                "mem": 376,
+                "edge": 376,
+                "junction": 376
+              },
+              "peak_temperature_c": {
+                "mem": 54.0,
+                "edge": 35.0,
+                "junction": 58.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 54.0,
+                "edge": 35.0,
+                "junction": 58.0
+              },
+              "throttle_samples_available": 376,
+              "thermal_limit_samples": 339,
+              "hotspot_limit_samples": 339,
+              "power_limit_samples": 6,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 2445.0,
+              "peak_power_average_w": 303.0,
+              "peak_gfx_clock_mhz": 3117.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            }
+          },
+          "cpu_peak_package_c": {
+            "Package id 0": 72.0
+          },
+          "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+          "started_utc": "2026-10-28T15:15:11.657232+00:00",
+          "last_sample_utc": "2026-10-28T15:21:27.505372+00:00"
+        },
+        "cleanup": {
+          "production_fingerprints_unchanged": true,
+          "shutdown_verified": true,
+          "gpu_lock_released": true
+        },
+        "method": {
+          "width": 608,
+          "height": 352,
+          "frames": 39,
+          "fps": 24,
+          "steps": 20,
+          "seed": 42,
+          "sampler": "res_multistep",
+          "scheduler": "simple",
+          "warmups": 1,
+          "timed_trials": 3,
+          "arm": "control",
+          "candidate": "davoddino-derived bounded host-staged TP2; retained Torch2.15/kitchen0.2.39",
+          "control": "saved component-placement workflow, one-card DiT, isolated retained Comfy0.42 snapshot",
+          "limitations": "candidate native GPU noise and phase-reloading lifecycle differ from saved CPU noise/standard loader; end-to-end workflow comparison, not transport-only or pixel-identity claim",
+          "source_base": "8f04fd6ecf4a548937971e840af2a985529fab76"
+        },
+        "runtime": {
+          "comfyui_version": "0.42.0",
+          "pytorch_version": "2.15.0.dev20260827+rocm7.2"
+        },
+        "runs": [
+          {
+            "trial": 0,
+            "excluded_warmup": true,
+            "external_seconds": 191.25409271499666,
+            "server_seconds": 188.829,
+            "smoke": null,
+            "cleanup_seconds": null,
+            "server_plus_cleanup_seconds": null,
+            "available_after_cleanup_bytes": null,
+            "success": true
+          }
+        ],
+        "observer_phase_spans_seconds": {
+          "text-encode": [
+            49.66976185699605,
+            55.21431505199871
+          ],
+          "denoising": [
+            29.656201558005705
+          ],
+          "vae-decode": [
+            3.128328135004267,
+            21.086736823999672
+          ]
+        },
+        "candidate_phase_spans_seconds": {},
+        "completed_generation_count": 1
+      },
+      {
+        "tag": "benchmark-control-r2",
+        "status": "guard_stopped",
+        "guard_faults": [
+          "host_available_below_3GiB"
+        ],
+        "memory": {
+          "samples": 475,
+          "sampling_errors": 0,
+          "min_available_bytes": 3210752000,
+          "min_free_vram_bytes": [
+            3614371840,
+            7412408320
+          ],
+          "max_worker_swap_bytes": 6837313536,
+          "max_worker_spill_bytes": 0
+        },
+        "swap_activity": {
+          "policy": "loading-swap-v3",
+          "samples": 475,
+          "sampling_errors": 0,
+          "elapsed_seconds": 478.8454150739999,
+          "worker_swap_peak_bytes": 6837313536,
+          "total_swapin_bytes": 19398320128,
+          "total_swapout_bytes": 24953204736,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 3205890048,
+          "max_memory_full_psi_avg10": 1.27,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": null,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "failures": [],
+          "advisories": []
+        },
+        "elapsed_lifecycle_seconds": 479.88447136600007,
+        "shutdown_verified": true,
+        "phase_event_count": 22,
+        "median_server_seconds": null,
+        "median_external_seconds": null,
+        "median_server_plus_cleanup_seconds": null,
+        "scope_observation": {
+          "memory.max": "32811163648",
+          "memory.swap.max": "max",
+          "memory.peak": "27383926784",
+          "memory.current": "26849914880",
+          "memory.swap.current": "12823764992",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 104"
+        },
+        "available_before_bytes": 26973315072,
+        "available_after_bytes": 27090309120,
+        "graph_sha256": "b67e943c21205251b5752fa1e5dbda28c5b1ddb3729646717b8a7cdc627b7ed1",
+        "thermal": {
+          "schema": 1,
+          "label": "h3-benchmark-control-r2",
+          "status": "complete",
+          "interval_seconds": 1.0,
+          "samples": 480,
+          "sample_errors": 0,
+          "raw_samples_dropped": 0,
+          "raw_limit_bytes": 67108864,
+          "cards": {
+            "0000:03:00.0": {
+              "gpu_index": 0,
+              "samples": 480,
+              "busy_samples": 82,
+              "sensor_samples": {
+                "mem": 480,
+                "edge": 480,
+                "junction": 480
+              },
+              "peak_temperature_c": {
+                "mem": 52.0,
+                "edge": 51.0,
+                "junction": 73.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 52.0,
+                "edge": 51.0,
+                "junction": 73.0
+              },
+              "throttle_samples_available": 480,
+              "thermal_limit_samples": 433,
+              "hotspot_limit_samples": 433,
+              "power_limit_samples": 29,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 3529.0,
+              "peak_power_average_w": 304.0,
+              "peak_gfx_clock_mhz": 3096.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            },
+            "0000:06:00.0": {
+              "gpu_index": 1,
+              "samples": 480,
+              "busy_samples": 60,
+              "sensor_samples": {
+                "mem": 480,
+                "edge": 480,
+                "junction": 480
+              },
+              "peak_temperature_c": {
+                "mem": 52.0,
+                "edge": 34.0,
+                "junction": 57.0
+              },
+              "peak_busy_temperature_c": {
+                "mem": 52.0,
+                "edge": 34.0,
+                "junction": 57.0
+              },
+              "throttle_samples_available": 480,
+              "thermal_limit_samples": 430,
+              "hotspot_limit_samples": 430,
+              "power_limit_samples": 6,
+              "current_limit_samples": 0,
+              "peak_fan_rpm": 2354.0,
+              "peak_power_average_w": 303.0,
+              "peak_gfx_clock_mhz": 3139.0,
+              "peak_memory_clock_mhz": 1249.0,
+              "peak_busy_percent": 100.0,
+              "last_throttle_status": "available"
+            }
+          },
+          "cpu_peak_package_c": {
+            "Package id 0": 67.0
+          },
+          "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+          "started_utc": "2026-10-28T15:23:38.692138+00:00",
+          "last_sample_utc": "2026-10-28T15:31:38.572570+00:00"
+        },
+        "cleanup": {
+          "production_fingerprints_unchanged": true,
+          "shutdown_verified": true,
+          "gpu_lock_released": true
+        },
+        "method": {
+          "width": 608,
+          "height": 352,
+          "frames": 39,
+          "fps": 24,
+          "steps": 20,
+          "seed": 42,
+          "sampler": "res_multistep",
+          "scheduler": "simple",
+          "warmups": 1,
+          "timed_trials": 3,
+          "arm": "control",
+          "candidate": "davoddino-derived bounded host-staged TP2; retained Torch2.15/kitchen0.2.39",
+          "control": "saved component-placement workflow, one-card DiT, isolated retained Comfy0.42 snapshot",
+          "limitations": "candidate native GPU noise and phase-reloading lifecycle differ from saved CPU noise/standard loader; end-to-end workflow comparison, not transport-only or pixel-identity claim",
+          "source_base": "8f04fd6ecf4a548937971e840af2a985529fab76",
+          "between_request_cleanup": "owned server /free unload_models+free_memory, measured separately after every request"
+        },
+        "runtime": {
+          "comfyui_version": "0.42.0",
+          "pytorch_version": "2.15.0.dev20260827+rocm7.2"
+        },
+        "runs": [
+          {
+            "trial": 0,
+            "excluded_warmup": true,
+            "external_seconds": 218.584954209,
+            "server_seconds": 216.083,
+            "smoke": null,
+            "cleanup_seconds": 1.2550433939977665,
+            "server_plus_cleanup_seconds": 217.33804339399776,
+            "available_after_cleanup_bytes": 23077736448,
+            "success": true
+          }
+        ],
+        "observer_phase_spans_seconds": {
+          "text-encode": [
+            64.05262104999565,
+            104.20409028200083
+          ],
+          "denoising": [
+            29.652609217002464
+          ],
+          "vae-decode": [
+            3.1671567059966037,
+            21.084340616995178
+          ]
+        },
+        "candidate_phase_spans_seconds": {},
+        "completed_generation_count": 1
+      }
+    ]
+  },
+  "request_latency_ratio_control_over_candidate": null,
+  "control_median_server_plus_cleanup_seconds": null,
+  "benchmark_order": [
+    "candidate",
+    "control"
+  ],
+  "media": [
+    {
+      "tag": "host-stage-smoke",
+      "output": "trial-0_00001_.mp4",
+      "bytes": 22287,
+      "sha256": "5b8ad52b8946372312e79ea10dc90b45048327fdf5f8bef7da48e765b4a14862",
+      "decoded_video_framemd5_sha256": "a9d9bfe2754aa3e9abaacd1f48ec4cdd5007dcc83641db99dd00c1ef4d36d408",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "5",
+        "duration": "0.208333"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "0.200000",
+        "finite_decoded_samples": 14336,
+        "decoded_pcm_sha256": "6697790af9da9ba1ee7d35c09d7b693fdbcb7a6c271d18279ee05f7e301a6886",
+        "peak": 0.00019223317212890834,
+        "rms": 2.211392263808893e-05
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-candidate",
+      "output": "trial-0_00001_.mp4",
+      "bytes": 68364,
+      "sha256": "6cae8357b57872970da910335585e6fd168ef4d27c8c77769b92426f2bb85bb9",
+      "decoded_video_framemd5_sha256": "71de5fb5d3875a436c3958e0d1012191e6916960cb285a7a507624a846a72ad3",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "b43b6c6426eb11c3bb983a461db82cfc50422748308dba0c12d6101e2ee6a2c3",
+        "peak": 0.08589190989732742,
+        "rms": 0.009057387722464862
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-candidate",
+      "output": "trial-1_00001_.mp4",
+      "bytes": 68395,
+      "sha256": "f42a4d5eb8e3372489329ebe4afbaddc4613f46721a68ecf86c61206c557a89c",
+      "decoded_video_framemd5_sha256": "c8d7de86cec4394f00a05165fa9963fc8486bf272adb6cfad0226e7798432519",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "25b4789c3cd182204fd6c4c37b1b797eab9096797274edd5085b08d6d614ea6f",
+        "peak": 0.08309602737426758,
+        "rms": 0.009175455558482466
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-candidate",
+      "output": "trial-2_00001_.mp4",
+      "bytes": 67855,
+      "sha256": "a4394f0026ba3fa9207c71a57f74127ace3942f10d922a28578fb57b41de0053",
+      "decoded_video_framemd5_sha256": "60a9153dde69d74ef1d43a2888fc6f3fc602446d648afa0c12d89abd0eea9eaf",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "e0a0d1510f42658010cf96ae16e9b2273fcdd4095c9b09c80063ac9a86ec1957",
+        "peak": 0.09310828894376755,
+        "rms": 0.01130464528811772
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-candidate",
+      "output": "trial-3_00001_.mp4",
+      "bytes": 67635,
+      "sha256": "5c3f09642052949b7149ffd07ea5f42d1d39b37141092bab88bd99373c491922",
+      "decoded_video_framemd5_sha256": "d39e42cb511ffa1845c9fc1ec70522e3195a86c634c1448c7af2a4eb583bc134",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "9fa00e9afe3e10c4bebe3464ffbf4bbe92b87d905bff6e24f0ef42ace5cc701f",
+        "peak": 0.10817797482013702,
+        "rms": 0.01162127122315759
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-control",
+      "output": "trial-0_00001_.mp4",
+      "bytes": 104908,
+      "sha256": "b3ce15c8d60ea18ab361853ad83125d7235a2ec16616ac8703e0e10fd7446e16",
+      "decoded_video_framemd5_sha256": "0eb13afa9016b50455cec8cfd90def56a96e59d5e60e19d9b4062748ca02e4f9",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "cc9ba0840c43693e1bec15ac74e747377275a0fa528aa70a802f1c407cb9fb50",
+        "peak": 0.10680954158306122,
+        "rms": 0.013079185646745487
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    },
+    {
+      "tag": "benchmark-control-r2",
+      "output": "trial-0_00001_.mp4",
+      "bytes": 105014,
+      "sha256": "e55214e697354a03a8410be32f9e81c7cd215c02f4b9fe5f25cfeda75c1a7490",
+      "decoded_video_framemd5_sha256": "e3c3a91a3238f2ac3382bc4456b4d49cc846d5b816bf155e3657545ddeb415b8",
+      "video": {
+        "codec_name": "h264",
+        "width": 608,
+        "height": 352,
+        "avg_frame_rate": "24/1",
+        "nb_read_frames": "39",
+        "duration": "1.625000"
+      },
+      "audio": {
+        "codec_name": "aac",
+        "sample_rate": "32000",
+        "channels": 2,
+        "duration": "1.625000",
+        "finite_decoded_samples": 104448,
+        "decoded_pcm_sha256": "eed2e64c72d95909a60eadbfb1f708612f3bbbd25b345f1f19557f5adcd1e880",
+        "peak": 0.09291394054889679,
+        "rms": 0.011825464671161265
+      },
+      "full_av_decode": "passed",
+      "audio_semantics": "not assessed"
+    }
+  ],
+  "next_action": "Profile the standard one-card loader CPU/RAM peak during a second request after normal cleanup; make a concrete lifecycle repair before another matched retry, keeping every guard. Investigate candidate fixed-seed output variability before production qualification.",
+  "saved_reference": {
+    "server_seconds": 210.098,
+    "sampler_span_seconds": 28.324,
+    "excluded_warmup_seconds": 196.228,
+    "timed_count": 1,
+    "policy": "historical v2; not a fresh matched median"
+  },
+  "limits": [
+    "The control retry explicitly clears owned-server model/executor state after each request; cleanup is separately timed and included in the additional server-plus-cleanup metric.",
+    "Cache-none forces computation on every request; results describe this benchmark workflow and do not characterize cached production reruns.",
+    "End-to-end workflow comparison: candidate has native GPU noise and explicit phase destruction/reloading; baseline has saved CPU noise and standard loader lifecycle. Same seed does not imply identical noise or pixels.",
+    "Two fixed source snapshots on the retained installed runtime; not an isolated transport-only ablation.",
+    "Complete decoding and sampled visual checks do not establish semantic audio quality, exhaustive motion quality or whole-model bitwise determinism; fixed-seed candidate audio metrics vary.",
+    "No production promotion, runtime/profile/pin/schedule change, OS swap change, or interruption of existing work."
+  ]
+}

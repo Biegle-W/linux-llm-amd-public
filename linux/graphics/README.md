@@ -1,8 +1,10 @@
 # Graphics model collection
 
-## Davoddino H3 admission and linked forum review — October28
+## H3 host-staged transport and comparison — October28
 
-Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](H3-DAVODDINO-2026-10-28.md).
+The isolated host-staged H3 candidate passed its five-frame canary and all four 39-frame requests, with a 121.332 s timed median and 56.762 s sampler median. Both fresh one-card attempts completed only their excluded warmups, then stopped at the unchanged 3 GiB RAM floor during the first timed DiT load, including a standard-cleanup retry. No fresh three-trial control median or matched speedup is established. Loading-swap-v3 and all independent RAM, VRAM and ownership guards remained active. This is an isolated experiment; no production profile was promoted. [Full result and attribution limits](H3-HOST-STAGED-2026-10-28.md).
+
+Later fcys reply 17 now supplies source code; the earlier no-source observation is superseded. Community W7900 timings remain external evidence.
 
 [October28 Radiance H3 preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md): no gfx1100 accelerated kernel plugin is built; no GPU generation or speedup result. [Current swap policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) lets work continue through swap activity unless an explicit write budget and measured matched slowdown support a stop.
 
@@ -61,10 +63,11 @@ future choices, not duplicate model quants to retain now.
 
 ## Hardware placement and limits
 
-Current hardware is two 24 GB gfx1100 GPUs; the live host exposes 14.83 GiB
-RAM, below the earlier 61.51 GiB normal configuration. Generation timings below
-retain their October 18 32 GB hardware attribution; they do not qualify loading
-on the current reduced-RAM host. The validated
+Current hardware is two 24 GB gfx1100 GPUs; the live host exposes 30.56 GiB
+RAM after the October28 reboot, up from the preceding 14.83 GiB state. Earlier
+generation timings below retain their October18 32 GB hardware attribution. The
+new host-staged trial and current control RAM-floor failures are recorded above.
+The saved validated
 workflows use the denoiser on GPU 0 and encoder/VAEs on GPU 1. Direct loaders set
 the target at construction to avoid native retargeting's second encoder copy.
 This is staged component placement, not TP or a combined 48 GB allocation.
@@ -72,8 +75,9 @@ This is staged component placement, not TP or a combined 48 GB allocation.
 Qwen passed 512x512 / 40 steps in 100.9 seconds total (about 13 seconds denoising).
 H3 passed 608x352 / 39 frames / 20 steps in 232.4 seconds total (about 29 seconds
 denoising), with coherent video and finite stereo audio. The 32 GB host swapped
-while staging; larger sizes and maximum capacity remain untested. Model files
-stay on Shared SATA without additional quants or NVMe model copies. See the
+while staging; larger sizes and maximum capacity remain untested. Original model payloads
+stay on Shared SATA. The isolated host-staged trial retains 21.06 GB of derived
+rank shards on the system disk; production model placement is unchanged. See the
 [validation report](VALIDATION-2026-10-18.md) for sampling and timing limits.
 
 ## Provenance and reproduction

@@ -1,10 +1,12 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-## Davoddino H3 admission and linked forum review — October28
+## H3 host-staged transport and comparison — October28
 
-Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](../graphics/H3-DAVODDINO-2026-10-28.md).
+The isolated host-staged H3 candidate passed its five-frame canary and all four 39-frame requests, with a 121.332 s timed median and 56.762 s sampler median. Both fresh one-card attempts completed only their excluded warmups, then stopped at the unchanged 3 GiB RAM floor during the first timed DiT load, including a standard-cleanup retry. No fresh three-trial control median or matched speedup is established. Loading-swap-v3 and all independent RAM, VRAM and ownership guards remained active. This is an isolated experiment; no production profile was promoted. [Full result and attribution limits](../graphics/H3-HOST-STAGED-2026-10-28.md).
 
-No task-owned job or GPU lock remains. The next step needs a qualified host-staged H3 transport or a validated P2P host; do not bypass the peer requirement. The one-card reference remains210.098s full request/28.324s sampler span; candidate timing is unavailable.
+Later fcys reply 17 now supplies source code; the earlier no-source observation is superseded. Community W7900 timings remain external evidence.
+
+No task-owned GPU worker or lock remains after verified cleanup. Keep the saved production workflow; this trial does not promote the candidate. Next diagnose the standard loader CPU/RAM peak after normal cleanup, repair its lifecycle before another matched retry, and investigate candidate fixed-seed output variation. Never lower the floor or relabel a warmup as a timed control.
 
 ## Swap instruction corrected; Radiance compatibility established — October28
 

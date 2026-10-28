@@ -1,5 +1,7 @@
 # H3 davoddino trial and linked forum review — October 28, 2026
 
+Follow-up: [explicit host-staged implementation and tested comparison](H3-HOST-STAGED-2026-10-28.md) supersedes the current-status interpretation below. The original unmodified-source failure remains valid historical evidence; later fcys reply 17 now provides source.
+
 The requested davoddino candidate cannot reach generation on this host unchanged.
 Its real H3 coordinator admission constructor raises **`H3 TP requires bidirectional P2P`**.
 Both physical RX 7900 XTX cards enumerate as gfx1100, but live Torch/HIP peer queries
