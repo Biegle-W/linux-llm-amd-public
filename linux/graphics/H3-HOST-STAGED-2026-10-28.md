@@ -1,5 +1,7 @@
 # H3 host-staged transport and comparison — October 28, 2026
 
+Follow-up: [fresh true-one-card versus two-card tests](H3-ONE-VS-TWO-2026-10-28.md) now establish a fresh cold-workflow comparison. The original repeated-request failures below remain historical evidence for their different lifecycle.
+
 The isolated host-staged H3 candidate passed its five-frame canary and all four 39-frame requests, with a 121.332 s timed median and 56.762 s sampler median. Both fresh one-card attempts completed only their excluded warmups, then stopped at the unchanged 3 GiB RAM floor during the first timed DiT load, including a standard-cleanup retry. No fresh three-trial control median or matched speedup is established. Loading-swap-v3 and all independent RAM, VRAM and ownership guards remained active. This is an isolated experiment; no production profile was promoted.
 
 ## Implementation and admission

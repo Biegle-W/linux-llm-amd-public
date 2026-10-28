@@ -1,12 +1,10 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-## H3 host-staged transport and comparison — October28
+## Fresh H3 one-card versus two-card test — October28
 
-The isolated host-staged H3 candidate passed its five-frame canary and all four 39-frame requests, with a 121.332 s timed median and 56.762 s sampler median. Both fresh one-card attempts completed only their excluded warmups, then stopped at the unchanged 3 GiB RAM floor during the first timed DiT load, including a standard-cleanup retry. No fresh three-trial control median or matched speedup is established. Loading-swap-v3 and all independent RAM, VRAM and ownership guards remained active. This is an isolated experiment; no production profile was promoted. [Full result and attribution limits](../graphics/H3-HOST-STAGED-2026-10-28.md).
+Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one excluded warmup plus three timed 39-frame generations per arm, with a new isolated server for every generation. Full-request medians are 270.098 s on one card and 146.603 s on two (45.7% shorter on the two-card path). Sampler medians are 30.237/59.749 s. This establishes the measured fresh-server workflow result; loader/storage/noise/source differences limit attribution to GPU count alone. All independent guards and loading-swap-v3 remained. No production promotion or native Radiance run. [Fresh protocol, individual samples and limits](../graphics/H3-ONE-VS-TWO-2026-10-28.md).
 
-Later fcys reply 17 now supplies source code; the earlier no-source observation is superseded. Community W7900 timings remain external evidence.
-
-No task-owned GPU worker or lock remains after verified cleanup. Keep the saved production workflow; this trial does not promote the candidate. Next diagnose the standard loader CPU/RAM peak after normal cleanup, repair its lifecycle before another matched retry, and investigate candidate fixed-seed output variation. Never lower the floor or relabel a warmup as a timed control.
+No task-owned GPU worker or lock remains. Completed fresh trials are preserved; do not repeat them for documentation. Production selection remains. Further qualification must address output repeatability and isolate loader/noise/source differences before claiming GPU-count-only scaling.
 
 ## Swap instruction corrected; Radiance compatibility established — October28
 
