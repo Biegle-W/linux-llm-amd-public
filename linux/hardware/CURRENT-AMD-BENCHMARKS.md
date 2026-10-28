@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks — October 27, 2026
 
+[Community TP2 source review](../graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md#community-tp2-evidence-and-source-distinction--october28): 2643 now supplies the actual fcys RCCL code; 2664 reports faster sampling on a peer-capable XTX host. Our completed measurements used a different host-staged implementation. No new local GPU result or Radiance support is established. Follow the source/attention/precision admission notes before another candidate.
+
 ## Fresh H3 one-card versus two-card test — October28
 
 Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one excluded warmup plus three timed 39-frame generations per arm, with a new isolated server for every generation. Full-request medians are 270.098 s on one card and 146.603 s on two (45.7% shorter on the two-card path). Sampler medians are 30.237/59.749 s. This establishes the measured fresh-server workflow result; loader/storage/noise/source differences limit attribution to GPU count alone. All independent guards and loading-swap-v3 remained. No production promotion or native Radiance run. [Fresh protocol, individual samples and limits](../graphics/H3-ONE-VS-TWO-2026-10-28.md).

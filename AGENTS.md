@@ -1,5 +1,7 @@
 # Agent entry point
 
+[Community TP2 source review](linux/graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md#community-tp2-evidence-and-source-distinction--october28): 2643 now supplies the actual fcys RCCL code; 2664 reports faster sampling on a peer-capable XTX host. Our completed measurements used a different host-staged implementation. No new local GPU result or Radiance support is established. Follow the source/attention/precision admission notes before another candidate.
+
 Read [README.md](README.md) first. It is the canonical maintenance policy for
 this AMD repository; this file is the discovery entry point, not a duplicate
 runtime or benchmark registry.

@@ -1,5 +1,27 @@
 # MiniMax H3 multi-GPU methods — October 27, 2026
 
+## Community TP2 evidence and source distinction — October28
+
+New review of [2643](https://lcz.me/topic/2643) and [2664](https://lcz.me/topic/2664) changes the next candidate to investigate, not the completed local timings. Both describe ComfyUI INT8 tensor parallelism, not native Radiance.
+
+| External report | Hardware | Sampling step, one/two s | Full request, one/two s |
+|---|---|---:|---:|
+| fcys 2643 | W7900; XTX applicability inferred | 18.6  / 8.3, SDPA | 201.3  / 134.1 |
+| 2664 | Actual 7900XTX pair; 96 GiB RAM | 21.16  / 13.35, SDPA | 312.08  / 262.14 |
+
+These are author-reported 832×480/124-frame/8-step cases, not reproductions on this host. 2664 reports bidirectional peer capability; our live probes were false both ways. Its later capacity update includes short 1–2-step sampling probes, so successful sampling limits must not be presented as fully validated long-video limits. 2643 reports a separate CK case of 12.8 / 7.7 s per step and supplies four complete TP2 source files in [reply 17](https://lcz.me/topic/2643/17). Their normalized contents match the four private copies previously inspected. No source or assumed redistribution license is published here.
+
+Local static checks establish:
+
+- Our measured candidate is the davoddino-derived bounded host-staging port, not fcys's two-process RCCL implementation. The previous timings therefore do not measure the published fcys code.
+- The local port constructs and enforces 28 attention heads per rank, with 10752×5376 QKV and 5376×3584 output-projection shards and half FFNs. The discussion's warning about retaining 56 heads does not explain this code as written.
+- The installed/newer Comfy path and frozen single-card snapshot expose CK attention. The frozen two-card Comfy 0.30 snapshot lacks that switch. The installed HIP INT8-attention availability code uses a WMMA gate; that source check is not a new kernel correctness/performance test for H3. Copying the flag alone into the old port is insufficient.
+- The fcys code explicitly shares activation scales across ranks and requests FP32 row-parallel outputs. The local coordinator's reduction uses rank0.add_ without enforcing an FP32 upcast itself. Prior transport fixtures prove byte-copy correctness, not full-model numerical equivalence. Runtime operand dtypes and the complete quantized math need qualification; this is an audit item, not a confirmed numerical bug.
+
+The next useful isolated candidate is the actual published RCCL TP2 code with a compatible attention path. It needs explicit no-P2P transport admission on this host, bounded loading suitable for 30.56 GiB RAM, quantized-operator checks and matched backend/noise/input storage before a new one/two-card benchmark. Larger workloads can follow within the existing independent guards; do not reproduce external near-OOM probes by reducing our reserves. Native Radiance's missing gfx1100 accelerated plugin remains separate.
+
+No GPU trial, runtime selection, production setting, guard, swap permission or schedule changed during this review. The latest local fresh-server comparison remains 270.098 / 146.603 s full request and 30.237 / 59.749 s sampler, one/two cards. All external numbers stay separate from local benchmark evidence.
+
 ## Fresh H3 one-card versus two-card test — October28
 
 Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one excluded warmup plus three timed 39-frame generations per arm, with a new isolated server for every generation. Full-request medians are 270.098 s on one card and 146.603 s on two (45.7% shorter on the two-card path). Sampler medians are 30.237/59.749 s. This establishes the measured fresh-server workflow result; loader/storage/noise/source differences limit attribution to GPU count alone. All independent guards and loading-swap-v3 remained. No production promotion or native Radiance run. [Fresh protocol, individual samples and limits](H3-ONE-VS-TWO-2026-10-28.md).

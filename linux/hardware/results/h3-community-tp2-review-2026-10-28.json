@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-28",
+  "kind": "external_forum_review_and_local_static_audit",
+  "new_gpu_runs": false,
+  "local_benchmark_changed": false,
+  "sources": [
+    {
+      "url": "https://lcz.me/topic/2643",
+      "kind": "self_reported_W7900_test",
+      "gpu": "2 x W7900 gfx1100; XTX applicability inferred by author",
+      "workload": {
+        "width": 832,
+        "height": 480,
+        "frames": 124,
+        "fps": 24,
+        "steps": 8,
+        "seed": 145
+      },
+      "sdpa_step_seconds": [
+        18.6,
+        8.3
+      ],
+      "full_request_seconds": [
+        201.3,
+        134.1
+      ],
+      "ck_step_seconds": [
+        12.8,
+        7.7
+      ],
+      "ck_two_card_request_seconds": 128,
+      "reported_all_reduce_GBps": 12.93,
+      "posted_code": "https://lcz.me/topic/2643/17",
+      "code_version": "tp2-comfy1.0.0",
+      "code_deployed_locally": false
+    },
+    {
+      "url": "https://lcz.me/topic/2664",
+      "kind": "self_reported_7900XTX_test",
+      "gpu": "2 x RX7900XTX",
+      "ram_GiB": 96,
+      "peer_access": "author reports true in both directions; not verified locally",
+      "pcie": "author reports PCIe4x16 on both cards",
+      "workload": {
+        "width": 832,
+        "height": 480,
+        "frames": 124,
+        "fps": 24,
+        "steps": 8,
+        "sampler": "Euler",
+        "scheduler": "simple",
+        "seed": 145,
+        "conditioning": "same first frame and prompt"
+      },
+      "stable_step_seconds": [
+        21.16,
+        13.35
+      ],
+      "full_request_seconds": [
+        312.08,
+        262.14
+      ],
+      "sampling_peak_vram_GiB": {
+        "one": [
+          23.51,
+          0.03
+        ],
+        "two": [
+          18.91,
+          13.07
+        ]
+      },
+      "capacity_update": "https://lcz.me/topic/2664/17",
+      "capacity_limit": "many probes only1-2samplingsteps; not all full video validations"
+    }
+  ],
+  "local_findings": {
+    "prototype": "davoddino-derived bounded serialized host staging; not fcys RCCL code",
+    "local_peer_access": [
+      false,
+      false
+    ],
+    "local_tested_ram_GiB": 30.56,
+    "rank_heads": "28 enforced for each rank; qkv/out/FFN shard shapes checked",
+    "precision_audit": "fcys source explicitly shares activation scales via MAX reduction and requests FP32 row outputs; local coordinator does not itself upcast rank0.add_. Runtime reduction operand dtypes and full-model numerical equivalence remain unqualified. This static observation is not a confirmed numerical bug.",
+    "attention": "single-card frozen snapshot/current installed stack have CK flag and HIP INT8 attention source; two-card frozen Comfy0.30 snapshot has no CK flag. Kernel applicability/performance for this H3 port not newly GPU-tested."
+  },
+  "next_candidate": "Privately qualify the actual fcys RCCL TP2 implementation and compatible CK attention, matching both arms for backend, input storage, noise and workload. No-P2P host fallback and30.56GiB RAM require admission/transport/numeric checks first. Keep all existing guards and v3 swap permission.",
+  "source_redistributed": false
+}
