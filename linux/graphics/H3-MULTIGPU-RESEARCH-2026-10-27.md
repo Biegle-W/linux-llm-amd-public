@@ -1,5 +1,9 @@
 # MiniMax H3 multi-GPU methods — October 27, 2026
 
+## Davoddino H3 admission and linked forum review — October28
+
+Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](H3-DAVODDINO-2026-10-28.md).
+
 ## Later Radiance source verification — October28
 
 The [fresh gfx1100 preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md) confirms the H3 fork and current upstream build only the gfx12 accelerated plugin. A same-source FP8 instruction probe fails for gfx1100 and compiles for gfx1201; no GPU execution or memory failure is implied. The user-corrected [swap policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) governs future attempts; older RAM and v2 notes below retain their dates.

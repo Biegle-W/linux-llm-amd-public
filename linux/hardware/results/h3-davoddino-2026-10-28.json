@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-28",
+  "status": "blocked_at_source_admission_before_inference",
+  "candidate": {
+    "repository": "https://github.com/davoddino/minimax-h3-rocm-dual-gpu",
+    "commit": "b1454c54410fe990640928183a04329944c75784",
+    "comfyui_base_commit": "344b43989e8c56b5bb4a66cf028c834192ab59dd",
+    "patch_sha256": "14494b632232001875ca0d23b8e9d8e9ba228aacbea2ab4c63e1392d4a2946b2",
+    "coordinator_sha256": "a03285d15dcfc9778439bd539de24c97592b7e8b47f3a4431e75efa0d9589260"
+  },
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "gpu_count": 2,
+    "gpu_model": "RX 7900 XTX",
+    "architecture": "gfx1100",
+    "os_ram_bytes": 32811163648
+  },
+  "attempt": {
+    "started": "2026-10-28T01:13:07.069422-04:00",
+    "finished": "2026-10-28T01:13:26.293421-04:00",
+    "method": "Unmodified H3TPExecution class AST; real Torch, 50 empty Module owners/rank; no weights or inference",
+    "torch": "2.15.0.dev20260827+rocm7.2",
+    "hip": "7.2.53211",
+    "peer_capability": [
+      {
+        "from": 0,
+        "to": 1,
+        "peer_access": false
+      },
+      {
+        "from": 1,
+        "to": 0,
+        "peer_access": false
+      }
+    ],
+    "source_constructor": {
+      "status": "rejected",
+      "error_type": "RuntimeError",
+      "error": "H3 TP requires bidirectional P2P"
+    },
+    "native_kilo48_extension_built": false,
+    "author_exact_environment_reproduced": false,
+    "models_loaded": false,
+    "generated_outputs": 0,
+    "completed_generation_seconds": null,
+    "speedup_vs_one_card": null,
+    "reason_not_building_full_runtime": "The unchanged coordinator and direct loader require bidirectional peer access. Live prerequisite failed before weights or native Kilo48 backend were needed; a full build would not remove the driver/topology requirement."
+  },
+  "memory": {
+    "available_before_bytes": 24403374080,
+    "minimum_available_bytes": 23731249152,
+    "minimum_free_vram_bytes": [
+      25691860992,
+      25725009920
+    ],
+    "scope": {
+      "memory.max": "32811163648",
+      "memory.swap.max": "max"
+    },
+    "guard_faults": [],
+    "swap_activity": {
+      "policy": "loading-swap-v3",
+      "samples": 19,
+      "sampling_errors": 0,
+      "elapsed_seconds": 18.158463055000027,
+      "worker_swap_peak_bytes": 0,
+      "total_swapin_bytes": 0,
+      "total_swapout_bytes": 0,
+      "inference_window_samples": 0,
+      "max_inference_swapout_bytes_per_second": 0.0,
+      "max_inference_swap_io_bytes_per_second": 0.0,
+      "min_available_bytes": 23732604928,
+      "max_memory_full_psi_avg10": 0.0,
+      "max_low_memory_consecutive_samples": 0,
+      "max_full_psi_consecutive_samples": 0,
+      "write_budget_bytes_per_second": null,
+      "progress_samples": 0,
+      "measured_slowdown_windows": 0,
+      "confirmed_write_slowdown_windows": 0,
+      "last_confirmed_write_slowdown": null,
+      "failures": [],
+      "advisories": []
+    },
+    "guards": "3 GiB physical available RAM; 2 GiB free VRAM four samples/hard1.5 GiB; host-sized scope RAM cap; zero owned dedicated VRAM spill; current v3 swap permission; thermal telemetry. No Kaihui8GiB activation reserve imposed."
+  },
+  "cpu_validation": {
+    "bundle_integrity": "passed under python -O",
+    "seedvr2_self_check": "passed under python -O; no upscale runtime run",
+    "comfy_patch_clean_apply": "passed",
+    "result_hashes_matched": 19,
+    "initial_patch_verifier_attempt": "Cross-device hardlink EXDEV in temporary clone; corrected by same-filesystem TMPDIR and clean checkout. Frozen patch/source unchanged."
+  },
+  "comparison": {
+    "reference_date": "2026-10-28",
+    "workflow": {
+      "model": "FL2VA INT8 ConvRot",
+      "resolution": [
+        608,
+        352
+      ],
+      "frames": 39,
+      "fps": 24,
+      "steps": 20,
+      "seed": 42,
+      "sampler": "res_multistep",
+      "scheduler": "simple"
+    },
+    "one_card_denoiser": {
+      "server_full_request_seconds": 210.098,
+      "sampler_span_seconds": 28.324,
+      "sample_count": 1,
+      "excluded_warmup_seconds": 196.228,
+      "placement": "DiT GPU0; encoder and VAEs GPU1; component placement, not parallel DiT"
+    },
+    "candidate_full_request_seconds": null,
+    "candidate_sampler_seconds": null,
+    "speedup": null,
+    "matched_comparison_complete": false,
+    "note": "Historical one-card result only; not rerun because the candidate cannot pass its prerequisite. Sampler span includes its call boundary and is not pure kernel time. No three-trial median."
+  },
+  "thermal": {
+    "schema": 1,
+    "label": "h3-davoddino-admission",
+    "status": "complete",
+    "interval_seconds": 1.0,
+    "samples": 21,
+    "sample_errors": 0,
+    "raw_samples_dropped": 0,
+    "raw_limit_bytes": 67108864,
+    "cards": [
+      {
+        "gpu_index": 0,
+        "samples": 21,
+        "busy_samples": 0,
+        "sensor_samples": {
+          "mem": 21,
+          "edge": 21,
+          "junction": 21
+        },
+        "peak_temperature_c": {
+          "mem": 32.0,
+          "edge": 30.0,
+          "junction": 36.0
+        },
+        "peak_busy_temperature_c": {},
+        "throttle_samples_available": 21,
+        "thermal_limit_samples": 14,
+        "hotspot_limit_samples": 14,
+        "power_limit_samples": 0,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 1863.0,
+        "peak_power_average_w": 14.0,
+        "peak_gfx_clock_mhz": 0.0,
+        "peak_memory_clock_mhz": 96.0,
+        "peak_busy_percent": 0.0,
+        "last_throttle_status": "available"
+      },
+      {
+        "gpu_index": 1,
+        "samples": 21,
+        "busy_samples": 0,
+        "sensor_samples": {
+          "mem": 21,
+          "edge": 21,
+          "junction": 21
+        },
+        "peak_temperature_c": {
+          "mem": 48.0,
+          "edge": 25.0,
+          "junction": 35.0
+        },
+        "peak_busy_temperature_c": {},
+        "throttle_samples_available": 21,
+        "thermal_limit_samples": 19,
+        "hotspot_limit_samples": 19,
+        "power_limit_samples": 0,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 1497.0,
+        "peak_power_average_w": 22.0,
+        "peak_gfx_clock_mhz": 9.0,
+        "peak_memory_clock_mhz": 96.0,
+        "peak_busy_percent": 0.0,
+        "last_throttle_status": "available"
+      }
+    ],
+    "cpu_peak_package_c": {
+      "Package id 0": 62.0
+    },
+    "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+    "started_utc": "2026-10-28T05:13:07.119451+00:00",
+    "last_sample_utc": "2026-10-28T05:13:26.291135+00:00"
+  },
+  "sources": [
+    {
+      "url": "https://lcz.me/topic/2582/50",
+      "review": "Earlier linked discussion and later replies read in browser; leads to separate W7900 INT8 TP2 report, not a native Radiance gfx1100 plugin."
+    },
+    {
+      "url": "https://lcz.me/post/28082",
+      "author": "J I",
+      "review": "Dual-XTX SP2 success report, 480p/8\u201310 seconds; roughly 1.8x is recalled, with no exact source revision or matched timing log."
+    },
+    {
+      "url": "https://lcz.me/topic/2594",
+      "review": "Opening post requests XTX validation; its R9700 Radiance demonstration is not XTX qualification."
+    },
+    {
+      "url": "https://lcz.me/topic/2643",
+      "author": "fcys",
+      "review": "New separate ComfyUI INT8/RCCL TP2 implementation on two W7900 gfx1100 cards; XTX applicability inferred by author, not tested. No source repository linked in the nine replies read.",
+      "external_reported": {
+        "resolution": [
+          832,
+          480
+        ],
+        "frames": 124,
+        "fps": 24,
+        "steps": 8,
+        "seed": 145,
+        "sdpa_step_seconds_one_card": 18.6,
+        "sdpa_step_seconds_tp2": 8.3,
+        "full_request_seconds_one_card": 201.3,
+        "full_request_seconds_tp2": 134.1,
+        "sdpa_vram_GiB_one_card": 23.5,
+        "sdpa_vram_GiB_tp2": [
+          12.9,
+          13.2
+        ],
+        "ck_step_seconds_one_card": 12.8,
+        "ck_step_seconds_tp2": 7.7,
+        "ck_full_request_seconds_tp2": 128,
+        "psnr_vs_one_card_dB": 25.5
+      },
+      "limits": "Different GPUs, workflow, frame count, sampler steps and model path; not local measurements or a speed prediction. Matching two-rank MP4 hashes are not single-card pixel equality."
+    },
+    {
+      "url": "https://lcz.me/topic/1532",
+      "review": "SGLang gfx1100 text-model kernels, not H3. No LLM deployment or retuning in this task."
+    },
+    {
+      "url": "https://lcz.me/topic/2626",
+      "review": "Strata 0.1.45 IQ3_S/96GB/262K prefill and layer splitting; not an H3 implementation."
+    },
+    {
+      "url": "https://lcz.me/topic/2550/16",
+      "review": "Strata text prefill/decode comparison and single-card tuning caveats; not an H3 implementation."
+    },
+    {
+      "url": "https://github.com/davoddino/minimax-h3-rocm-dual-gpu",
+      "revision": "b1454c54410fe990640928183a04329944c75784",
+      "review": "Frozen research source, omitted private canary, exact Torch2.12/ROCm7.14 build open upstream, explicit bidirectional P2P requirement."
+    }
+  ],
+  "continuity": {
+    "running_tasks_interrupted": false,
+    "os_swap_settings_changed": false,
+    "swap_still_enabled": true,
+    "production_fingerprints_unchanged": true,
+    "owned_process_exited": true,
+    "owned_scope_inactive": true,
+    "kfd_clients_after": 0,
+    "gpu_lock_released": true,
+    "production_profile_promoted": false,
+    "paused_schedules_resumed": false
+  },
+  "next_action": "An unchanged davoddino run requires a validated bidirectional P2P host. On this host, review/implement and qualify an explicit host-staged transport or obtain the fcys INT8/RCCL implementation; do not bypass the peer check or launch unsupported weights."
+}

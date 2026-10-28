@@ -1,5 +1,9 @@
 # LLM benchmark and context history
 
+## Davoddino H3 admission and linked forum review — October28
+
+Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](../graphics/H3-DAVODDINO-2026-10-28.md).
+
 ## Swap continuity and Radiance preflight — October 28
 
 [Current v3 swap behavior](SWAP-TASK-CONTINUITY-2026-10-28.md) is CPU-validated; the earlier read-heavy H3 stop is retained without treating it as harmful writes. [Radiance source/compiler checks](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) find no gfx1100 accelerated library. No new inference/video timing or promotion.

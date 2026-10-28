@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+## Davoddino H3 admission and linked forum review — October28
+
+Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](linux/graphics/H3-DAVODDINO-2026-10-28.md).
+
 ## User swap correction and Radiance preflight — October 28
 
 **Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Implementation and verification](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). Radiance H3 preflight is blocked by the missing gfx1100 accelerated kernel plugin before any GPU run or memory guard; [source/build evidence](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md). Existing pins, independent physical/VRAM protections and paused schedules remain.

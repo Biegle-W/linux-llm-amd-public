@@ -1,5 +1,9 @@
 # Graphics model collection
 
+## Davoddino H3 admission and linked forum review — October28
+
+Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](H3-DAVODDINO-2026-10-28.md).
+
 [October28 Radiance H3 preflight](RADIANCE-H3-PREFLIGHT-2026-10-28.md): no gfx1100 accelerated kernel plugin is built; no GPU generation or speedup result. [Current swap policy](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) lets work continue through swap activity unless an explicit write budget and measured matched slowdown support a stop.
 
 [October 27 guarded H3 SP2 trial](H3-SP2-2026-10-27.md): stock-loader API incompatibility and reduced-RAM guard stops are recorded; no completed matched speedup or production change.

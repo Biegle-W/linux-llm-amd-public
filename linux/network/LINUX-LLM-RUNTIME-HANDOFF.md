@@ -1,5 +1,11 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Davoddino H3 admission and linked forum review — October28
+
+Davoddino H3 trial verified the frozen patch and all19 hashes, then its unmodified coordinator rejected the live XTX pair: bidirectional P2P is unavailable. No model or generation ran and no speedup is measured. Current loading-swap-v3 and unlimited swap occupancy remained; no memory guard fired or existing task was stopped. Linked lcz.me posts were rechecked; the new W7900 INT8/RCCL report is separate from Radiance and has no source link in the reviewed replies. Existing selections and paused schedules remain. [Full attempt and comparison limits](../graphics/H3-DAVODDINO-2026-10-28.md).
+
+No task-owned job or GPU lock remains. The next step needs a qualified host-staged H3 transport or a validated P2P host; do not bypass the peer requirement. The one-card reference remains210.098s full request/28.324s sampler span; candidate timing is unavailable.
+
 ## Swap instruction corrected; Radiance compatibility established — October28
 
 **Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy report](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). No matched per-request baseline or SSD write budget is configured in generic routers, so their swap telemetry is advisory. [Radiance H3 preflight](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) reaches successful gfx1100 CMake configuration but excludes the gfx12-only plugin; the compiler confirms its FP8 instruction mismatch. No model or user task was stopped during this correction, no OS swap setting or engine pin changed, and no new GPU inference/benchmark result exists. No active managed worker required a router restart. H3 follow-up and nightly updater remain paused. Next GPU work needs a validated gfx1100 kernel path and a genuinely matched workload; do not repeat strict v2 stops or relabel historical results. No task GPU lock, worker or compile job remains.
