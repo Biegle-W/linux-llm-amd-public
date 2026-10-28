@@ -1,6 +1,6 @@
 {
   "date": "2026-10-28",
-  "status": "source validated; running production coordinators preserved",
+  "status": "active in production; idle restart and authenticated health verified",
   "reference_commit": "06819c56bae8cbd70768d8376464681e191fffd1",
   "admission": {
     "enabled_profiles": 12,
@@ -61,13 +61,53 @@
     "unchanged_profile_guard_lifecycle_fingerprints": 16,
     "profile_engine_context_cache_precision_changes": false,
     "native_execution_limit_changes": false,
-    "production_coordinator_restarts": 0,
+    "production_coordinator_restarts": 2,
     "schedules_changed": false,
-    "api_only": true
+    "api_only": true,
+    "initial_validation_production_coordinator_restarts": 0
   },
   "deployment": {
-    "running_production_coordinators": "previous code preserved per request; validated source is installed for next authorized restart",
-    "remaining_action": "At an authorized idle maintenance boundary, restart hub/gateway and verify health without repeating inference benchmarks."
+    "status": "active",
+    "user_authorized_idle_restart": true,
+    "completed_at": "2026-10-28T19:01:11.086766-04:00",
+    "coordinators_restarted": [
+      "local-llm-hub.service",
+      "local-llm-api.service"
+    ],
+    "authenticated_health_checked_bindings": 3,
+    "valid_key_statuses": [
+      200,
+      200,
+      200
+    ],
+    "missing_key_statuses": [
+      401,
+      401,
+      401
+    ],
+    "wrong_key_statuses": [
+      401,
+      401,
+      401
+    ],
+    "health_matches_hub": true,
+    "catalog_count_per_binding": 12,
+    "inflight": 0,
+    "queued": 0,
+    "queued_bytes": 0,
+    "idle_timeout_seconds": 600,
+    "max_inflight": 1,
+    "max_queued": 12,
+    "max_queued_bytes": 33554432,
+    "backend_loaded": false,
+    "guard_profile_access_credential_unit_hashes_checked": 20,
+    "hashes_unchanged": true,
+    "health_catalog_activity_timestamp_unchanged": true,
+    "inference_requests_during_activation": 0,
+    "schedules_changed": false,
+    "updater_active": false,
+    "updater_timer_installed": false,
+    "remaining_action": null
   },
   "source_sha256": {
     "dsh/model_hub.py": "23ab3117e82cf696d3bc3d24c5731fe4e7220a9b98c8f4a3f5765278e958e73f",

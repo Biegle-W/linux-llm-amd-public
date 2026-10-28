@@ -14,9 +14,10 @@ remain supported.
 
 The [router admission report](../hardware/ROUTER-ADMISSION-2026-10-28.md) describes
 validated FIFO admission, pending count/body bounds, consistent health and preserved
-HTTP/SSE errors. New source is installed; production coordinators retain their prior
-in-memory code until an authorized idle restart. Native capacity, access policy,
-worker ownership and 600-second inference-aware idle release remain unchanged.
+HTTP/SSE errors. The user-authorized idle production restart is complete and
+new router code is active; authenticated health is verified on all configured
+bindings. Native capacity, access policy, worker ownership and 600-second
+inference-aware idle release remain unchanged.
 
 Credentials and live addresses stay in ignored `dsh/data/` configuration.
 Public documentation uses example paths and addresses. Never place an actual

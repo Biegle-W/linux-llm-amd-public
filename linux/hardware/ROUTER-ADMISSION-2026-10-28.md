@@ -1,10 +1,10 @@
 # AMD router admission, health and transport — October 28, 2026
 
 Implemented and validated the requested AMD adaptation of the pinned NVIDIA
-router work. The new source is installed. The running production hub/gateway were
-preserved, so they retain their previous in-memory code until an authorized idle
-maintenance restart. Validation used temporary authenticated loopback coordinators,
-then removed only those temporary processes. No production coordinator was restarted.
+router work. The code is now active in the production hub/gateway after the
+user-authorized idle restart. Earlier validation used temporary authenticated
+loopback coordinators and preserved production processes; this activation was
+performed separately after the user's explicit restart request.
 
 ## Admission and AMD capacity
 
@@ -109,6 +109,23 @@ AMD uses its own 12-profile/32 MiB pending policy; NVIDIA's eight-waiter setting
 desktop controls and host runtime settings were not imported. NVIDIA's reported
 tests are reference evidence, not AMD qualification.
 
-Next: at an authorized idle maintenance boundary, restart the production hub and
-gateway to adopt the validated installed source, then inspect authenticated health.
-Do not repeat the successful smoke/benchmarks merely to refresh documentation.
+## Production activation
+
+Completed at 2026-10-28 19:01:11 EDT after the user authorized an idle-only
+restart. Both services were idle: no in-flight/queued work, established API client,
+GPU reservation, backend owner or KFD client. The existing request/start locks
+protected the drain boundary. Gateway ingress was stopped briefly, hub restarted,
+then gateway started. Both services are active with new process identities.
+
+Authenticated health returned 200 and matched the hub on all three configured
+bindings; missing and invalid bearer keys returned 401 on each. These are host-side
+connections to configured bindings, not a new remote-device connectivity test.
+All three authenticated catalogs list 12 models. Health/catalog reads leave the
+inference activity timestamp unchanged and do not load a model. Live state is
+0 in-flight, 0 queued/bytes, no active/loading backend, 1 execution slot, 12 pending
+positions, 32 MiB aggregate queued-body limit and 600-second idle timeout.
+
+All 20 checked profile/guard/lifecycle/access/credential/service-file fingerprints
+match before and after. Updater service remains inactive; its timer is not installed
+and no schedule was changed. No inference or GPU test was rerun for activation.
+No router activation work remains; keep the qualified settings and all guards.

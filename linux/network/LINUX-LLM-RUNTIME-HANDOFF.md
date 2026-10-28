@@ -5,17 +5,22 @@
 AMD router admission is implemented in source and validated: fair FIFO, bounded
 pending count/bytes, consistent sanitized health and preserved backend HTTP/SSE
 errors. **71 CPU regressions per checkout** and two 32-token Sage JSON/SSE smokes
-pass. Production coordinators were preserved; installed source awaits an authorized
-idle restart. Profiles, guards, pins and paused schedules remain.
+pass. The user-authorized idle hub/gateway restart is complete; the new router
+code is active and authenticated health passes. Profiles, guards, pins and paused
+schedules remain unchanged.
 Effective inference capacity stays one across all five serial backend routers.
 The shared FIFO has 12 pending positions from the enabled catalog and a 32 MiB
 aggregate pending-body budget; full admission yields retryable 429. Final smoke
-health is 0 in-flight/queued. Temporary coordinators are removed; the normal
-launcher-owned Sage worker is left to inference-aware idle release (600 seconds).
-No task-owned GPU reservation or pending inference remains. The running production
-hub/gateway keep their prior code; do not describe the new admission behavior as
-live on production until an authorized idle restart adopts it. Next action: that
-maintenance restart and authenticated health inspection; no repeat GPU benchmark.
+health is 0 in-flight/queued. Temporary coordinators are removed; the smoke's
+launcher-owned Sage worker has completed inference-aware idle release (600 seconds).
+No task-owned GPU reservation or pending inference remains. The user-authorized
+production restart is now complete at 2026-10-28 19:01:11 EDT. Authenticated
+health matches the hub on all three configured bindings; missing/wrong credentials
+return 401. Health/catalog reads did not update inference activity. Queue is empty,
+backend unloaded, idle timeout 600 seconds, capacity one, pending bound 12/32 MiB.
+All 20 checked guard/profile/access/credential/unit-file hashes are unchanged.
+Updater service remains inactive with no installed active timer; no schedule changed.
+No router activation work remains and no GPU benchmark was repeated.
 [Validation and numeric evidence](../hardware/ROUTER-ADMISSION-2026-10-28.md).
 
 [AMD H3 encoder-format comparison](../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.

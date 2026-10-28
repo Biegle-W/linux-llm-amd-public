@@ -6,9 +6,9 @@ while keeping AMD API-only and preserving every existing guard.
 
 Status: implemented and validated in AMD source. See
 [AMD admission/health/transport report](../hardware/ROUTER-ADMISSION-2026-10-28.md)
-and its numeric evidence. Production coordinators were preserved; new source
-awaits an authorized idle restart. The requirements below record the original
-request and remain the implementation constraints.
+and its numeric evidence. The user-authorized idle production restart is now
+complete; new router code is active and authenticated health passes. The
+requirements below record the original request and implementation constraints.
 
 ## Requested implementation
 
@@ -79,6 +79,6 @@ privately. The user explicitly authorized relevant maintenance, tests/docs,
 commits and normal non-force pushes for the Linux AMD pair, Linux NVIDIA pair
 and private retired-llm-setting archive without repeated per-commit confirmation.
 
-Next action: at an authorized idle maintenance boundary, restart production hub
-and gateway to adopt the validated installed source, then inspect authenticated
-health. Do not rerun completed GPU smoke/benchmark work solely for documentation.
+Activation is complete; no router work remains. Keep current guards, capacity,
+access policy and schedules unchanged. Do not rerun completed GPU smoke/benchmark
+work solely for documentation.
