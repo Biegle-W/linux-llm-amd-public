@@ -1,6 +1,6 @@
 # Linux LLM AMD — public reference
 
-[Community TP2 source review](linux/graphics/H3-MULTIGPU-RESEARCH-2026-10-27.md#community-tp2-evidence-and-source-distinction--october28): 2643 now supplies the actual fcys RCCL code; 2664 reports faster sampling on a peer-capable XTX host. Our completed measurements used a different host-staged implementation. No new local GPU result or Radiance support is established. Follow the source/attention/precision admission notes before another candidate.
+[Actual fcys RCCL/CK qualification](linux/graphics/H3-FCYS-QUALIFICATION-2026-10-28.md): CK and no-P2P RCCL/operator fixtures passed; the five-frame TP2 workflow stopped at the host 3 GiB floor during duplicate text-encoder loading. No dual denoising or matched timing is qualified; the one-card AV export failed prompt compliance. `TP_WIRE` defaults BF16; FP32 is opt-in. Preserve the tested loading blocker, all guards and the prior prototype timings as separate evidence.
 
 ## Fresh H3 one-card versus two-card test — October28
 

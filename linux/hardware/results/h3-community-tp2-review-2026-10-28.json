@@ -82,9 +82,11 @@
     ],
     "local_tested_ram_GiB": 30.56,
     "rank_heads": "28 enforced for each rank; qkv/out/FFN shard shapes checked",
-    "precision_audit": "fcys source explicitly shares activation scales via MAX reduction and requests FP32 row outputs; local coordinator does not itself upcast rank0.add_. Runtime reduction operand dtypes and full-model numerical equivalence remain unqualified. This static observation is not a confirmed numerical bug.",
+    "precision_audit": "Correction: TP_WIRE defaults bf16, preserving compute dtype; FP32 is opt-in. Earlier unconditionalFP32 wording was too broad. Later sharedscale and dtype fixtures are in h3-fcys-qualification-2026-10-28.json",
     "attention": "single-card frozen snapshot/current installed stack have CK flag and HIP INT8 attention source; two-card frozen Comfy0.30 snapshot has no CK flag. Kernel applicability/performance for this H3 port not newly GPU-tested."
   },
   "next_candidate": "Privately qualify the actual fcys RCCL TP2 implementation and compatible CK attention, matching both arms for backend, input storage, noise and workload. No-P2P host fallback and30.56GiB RAM require admission/transport/numeric checks first. Keep all existing guards and v3 swap permission.",
-  "source_redistributed": false
+  "source_redistributed": false,
+  "scope": "Earlier static review; later actual-source GPU qualification is recorded separately in h3-fcys-qualification-2026-10-28.json",
+  "later_qualification": "h3-fcys-qualification-2026-10-28.json"
 }

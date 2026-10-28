@@ -1,5 +1,9 @@
 # MiniMax H3 multi-GPU methods — October 27, 2026
 
+## Later actual-source qualification — October28
+
+[Guarded fcys RCCL/CK qualification](H3-FCYS-QUALIFICATION-2026-10-28.md) passed CK, no-P2P SUM/MAX and shared-scale branch fixtures, then stopped the dual full workflow at the host-RAM floor during text-encoder loading. The one-card five-frame AV export failed prompt compliance. No full-model equivalence, accepted AV quality or matched timing is established. The source review below describes its earlier static-only scope.
+
 ## Community TP2 evidence and source distinction — October28
 
 New review of [2643](https://lcz.me/topic/2643) and [2664](https://lcz.me/topic/2664) changes the next candidate to investigate, not the completed local timings. Both describe ComfyUI INT8 tensor parallelism, not native Radiance.
@@ -16,7 +20,7 @@ Local static checks establish:
 - Our measured candidate is the davoddino-derived bounded host-staging port, not fcys's two-process RCCL implementation. The previous timings therefore do not measure the published fcys code.
 - The local port constructs and enforces 28 attention heads per rank, with 10752×5376 QKV and 5376×3584 output-projection shards and half FFNs. The discussion's warning about retaining 56 heads does not explain this code as written.
 - The installed/newer Comfy path and frozen single-card snapshot expose CK attention. The frozen two-card Comfy 0.30 snapshot lacks that switch. The installed HIP INT8-attention availability code uses a WMMA gate; that source check is not a new kernel correctness/performance test for H3. Copying the flag alone into the old port is insufficient.
-- The fcys code explicitly shares activation scales across ranks and requests FP32 row-parallel outputs. The local coordinator's reduction uses rank0.add_ without enforcing an FP32 upcast itself. Prior transport fixtures prove byte-copy correctness, not full-model numerical equivalence. Runtime operand dtypes and the complete quantized math need qualification; this is an audit item, not a confirmed numerical bug.
+- Correction after exact-source inspection: the fcys code explicitly shares activation scales across ranks; TP_WIRE defaults BF16 and selects FP32 compute/output only when opted in. The earlier blanket FP32 wording was too broad. The local coordinator's reduction uses rank0.add_ without enforcing an FP32 upcast itself. Prior transport fixtures prove byte-copy correctness, not full-model numerical equivalence. Runtime operand dtypes and the complete quantized math need qualification; this is an audit item, not a confirmed numerical bug.
 
 The next useful isolated candidate is the actual published RCCL TP2 code with a compatible attention path. It needs explicit no-P2P transport admission on this host, bounded loading suitable for 30.56 GiB RAM, quantized-operator checks and matched backend/noise/input storage before a new one/two-card benchmark. Larger workloads can follow within the existing independent guards; do not reproduce external near-OOM probes by reducing our reserves. Native Radiance's missing gfx1100 accelerated plugin remains separate.
 
