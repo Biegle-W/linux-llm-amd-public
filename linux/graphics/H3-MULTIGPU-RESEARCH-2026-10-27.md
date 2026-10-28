@@ -1,5 +1,7 @@
 # MiniMax H3 multi-GPU methods — October 27, 2026
 
+**Later user-authorized retry:** the [2 GiB host-floor rerun](H3-FCYS-RAM2-RETRY-2026-10-28.md) after freeing RAM also stopped during text-encoder loading. Its explicitly lowered isolated guard supersedes the earlier 3 GiB limit for that retry only; earlier results below retain their original settings.
+
 ## Later actual-source qualification — October28
 
 [Guarded fcys RCCL/CK qualification](H3-FCYS-QUALIFICATION-2026-10-28.md) passed CK, no-P2P SUM/MAX and shared-scale branch fixtures, then stopped the dual full workflow at the host-RAM floor during text-encoder loading. The one-card five-frame AV export failed prompt compliance. No full-model equivalence, accepted AV quality or matched timing is established. The source review below describes its earlier static-only scope.

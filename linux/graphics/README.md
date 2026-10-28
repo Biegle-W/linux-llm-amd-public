@@ -1,6 +1,6 @@
 # Graphics model collection
 
-[Actual fcys RCCL/CK qualification](H3-FCYS-QUALIFICATION-2026-10-28.md): CK and no-P2P RCCL/operator fixtures passed; the five-frame TP2 workflow stopped at the host 3 GiB floor during duplicate text-encoder loading. No dual denoising or matched timing is qualified; the one-card AV export failed prompt compliance. `TP_WIRE` defaults BF16; FP32 is opt-in. Preserve the tested loading blocker, all guards and the prior prototype timings as separate evidence.
+[User-authorized fcys RAM-floor retry](H3-FCYS-RAM2-RETRY-2026-10-28.md): lowering the isolated host-RAM floor from 3 to 2 GiB and freeing more RAM still stopped the same TP2 canary during text-encoder loading, at 1.848 GiB available. Other guards remain; no denoising, media or speedup was established. The earlier no-P2P operator passes and one-card prompt-compliance failure remain separate. Production guards/pins/schedules are unchanged.
 
 ## Fresh H3 one-card versus two-card test — October28
 

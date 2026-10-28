@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-28",
+  "kind": "user_authorized_lower_host_floor_rerun",
+  "started": "2026-10-28T14:48:21.411979-04:00",
+  "finished": "2026-10-28T14:49:48.943982-04:00",
+  "status": "guard_stopped",
+  "stage": "concurrent_text_encoder_loading",
+  "guard_faults": [
+    "host_available_below_2GiB"
+  ],
+  "authorization": "User requested a lower RAM guard and rerun after freeing more RAM. This isolated retry lowers the immediate host-available floor from3to2GiB; no production guard or other test guard changed.",
+  "hardware": {
+    "cpu": "Intel i9-13900KS",
+    "gpus": "2 x RX 7900 XTX 24 GB, gfx1100",
+    "os_visible_ram_GiB": 30.557777404785156
+  },
+  "software": {
+    "comfy_version": "0.42.0",
+    "comfy_source_revision": "8f04fd6ecf4a548937971e840af2a985529fab76",
+    "torch": "2.15.0.dev20260827+rocm7.2",
+    "hip": "7.2.53211",
+    "kitchen_version": "0.2.39",
+    "rccl_version": "2.27.7-HEAD:96a25b5",
+    "int8_plugin_repository": "https://github.com/patientx/ComfyUI-INT8-Fast-ROCM",
+    "int8_plugin_revision": "6b28bf637782d25225a88e316d864a8f551be000",
+    "fcys_source_version": "tp2-comfy 1.0.0",
+    "fcys_source_hashes": {
+      "core.py": "fe16181ae04aaa7a0c81b0e80f1a4b722389690ad8c97650cb888ef10a6e75ec",
+      "tp_boot.py": "ebb618f53706f2e1616964ccfe3a423406505be9d711ab8048ba24e60e0f000a",
+      "tp_linear.py": "18306ef14957bef50b6eabfb596add7c28742c3d6e691ae7eeea9aa4cb452e26",
+      "start_tp2.sh": "1074339f9a7406ef2bd9290dc59d1bf288a911e9a00320e90806faa8ba3ad2fa"
+    }
+  },
+  "workload": {
+    "width": 608,
+    "height": 352,
+    "frames": 5,
+    "fps": 24,
+    "steps": 20,
+    "seed": 42,
+    "noise": "standard Comfy RandomNoise CPU seed42",
+    "sampler": "res_multistep",
+    "scheduler": "simple",
+    "batch": 1,
+    "attention": "CK INT8 HIP",
+    "compute_dtype": "bf16",
+    "model": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+    "text_encoder": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "video_vae": "minimax_h3_video_vae_fp16.safetensors",
+    "audio_vae": "minimax_h3_audio_vae_fp32.safetensors",
+    "storage": "both arms read the same retained files from the same storage; no copied input payloads",
+    "flags": [
+      "reserve-vram2",
+      "disable-pinned-memory",
+      "disable-async-offload",
+      "disable-dynamic-vram",
+      "cache-none",
+      "use-ck-attention",
+      "enable-triton-backend"
+    ],
+    "placement": "one visible card per process, all its components on local cuda0; two rank processes for TP2, one for control"
+  },
+  "transport": {
+    "NCCL_P2P_DISABLE": "1",
+    "HSA_ENABLE_SDMA": "0",
+    "NCCL_PROTO": "Simple",
+    "NCCL_DEBUG": "INFO",
+    "NCCL_BUFFSIZE": "1048576",
+    "NCCL_MIN_NCHANNELS": "1",
+    "NCCL_MAX_NCHANNELS": "1"
+  },
+  "guards": {
+    "policy": "loading-swap-v3",
+    "host_floor_bytes": 2147483648,
+    "vram_soft_bytes": 2147483648,
+    "soft_samples": 4,
+    "vram_hard_bytes": 1610612736,
+    "spill_bytes": 0,
+    "physical_memory_cap_bytes": 32811163648,
+    "scope_swap_max": "max"
+  },
+  "comparison": {
+    "previous_host_floor_GiB": 3,
+    "retry_host_floor_GiB": 2,
+    "previous_available_before_GiB": 23.404094696044922,
+    "retry_available_before_GiB": 24.91057586669922,
+    "previous_minimum_available_GiB": 2.4168968200683594,
+    "retry_minimum_available_GiB": 1.84844970703125,
+    "graph_unchanged_except_output_prefix": true,
+    "causal_limit": "Both available RAM and the floor changed; this is a retry, not an isolated guard-effect ablation."
+  },
+  "memory": {
+    "samples": 86,
+    "sampling_errors": 0,
+    "minimum_available_GiB": 1.84844970703125,
+    "minimum_free_vram_GiB": [
+      11.313678741455078,
+      11.344215393066406
+    ],
+    "maximum_owned_swap_GiB": 13.604625701904297,
+    "maximum_dedicated_spill_bytes": 0
+  },
+  "scope": {
+    "memory.max": "32811163648",
+    "memory.swap.max": "max",
+    "memory.peak": "27313852416",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 14"
+  },
+  "elapsed_lifecycle_seconds": 86.45859994700004,
+  "thermal": {
+    "status": "complete",
+    "samples": 88,
+    "sample_errors": 0,
+    "cards": {
+      "0000:03:00.0": {
+        "gpu_index": 0,
+        "samples": 88,
+        "busy_samples": 15,
+        "sensor_samples": {
+          "mem": 88,
+          "edge": 88,
+          "junction": 88
+        },
+        "peak_temperature_c": {
+          "mem": 36.0,
+          "edge": 34.0,
+          "junction": 40.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 36.0,
+          "edge": 34.0,
+          "junction": 40.0
+        },
+        "throttle_samples_available": 88,
+        "thermal_limit_samples": 61,
+        "hotspot_limit_samples": 61,
+        "power_limit_samples": 0,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 2045.0,
+        "peak_power_average_w": 102.0,
+        "peak_gfx_clock_mhz": 3058.0,
+        "peak_memory_clock_mhz": 456.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      },
+      "0000:06:00.0": {
+        "gpu_index": 1,
+        "samples": 88,
+        "busy_samples": 11,
+        "sensor_samples": {
+          "mem": 88,
+          "edge": 88,
+          "junction": 88
+        },
+        "peak_temperature_c": {
+          "mem": 48.0,
+          "edge": 28.0,
+          "junction": 38.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 48.0,
+          "edge": 28.0,
+          "junction": 38.0
+        },
+        "throttle_samples_available": 88,
+        "thermal_limit_samples": 83,
+        "hotspot_limit_samples": 83,
+        "power_limit_samples": 0,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 1567.0,
+        "peak_power_average_w": 101.0,
+        "peak_gfx_clock_mhz": 3007.0,
+        "peak_memory_clock_mhz": 456.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      }
+    },
+    "cpu_peak_package_c": {
+      "Package id 0": 78.0
+    },
+    "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+  },
+  "denoising_completed": false,
+  "media_outputs": 0,
+  "timed_benchmark_completed": false,
+  "new_speedup": null,
+  "OOM_observed": false,
+  "swap_triggered_stop": false,
+  "source_unchanged": true,
+  "source_redistributed": false,
+  "production_changed": false,
+  "shutdown_verified": true,
+  "gpu_lock_released": true,
+  "active_owned_jobs": [],
+  "active_owned_locks": [],
+  "prior_one_card_quality": "Earlier same-setting five-frame one-card export decoded but failed teapot prompt compliance; not rerun and not repaired by this RAM-floor change.",
+  "next_action": "A bounded common text-conditioning/preprocessing handoff can avoid concurrent duplicate text-encoder loading. Re-admit the actual TP2 DiT/AV canary and resolve prior one-card prompt compliance before timed comparisons; do not infer an OOM or P2P failure from this guard stop."
+}

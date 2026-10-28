@@ -1,5 +1,7 @@
 # Actual fcys RCCL TP2 + CK qualification — October 28, 2026
 
+**Later user-authorized retry:** the [2 GiB host-floor rerun](H3-FCYS-RAM2-RETRY-2026-10-28.md) after freeing RAM also stopped during text-encoder loading. Its explicitly lowered isolated guard supersedes the earlier 3 GiB limit for that retry only; earlier results below retain their original settings.
+
 The actual published fcys transport and quantized row hooks passed bounded operator fixtures on this dual RX7900XTX host. The five-frame TP2 full workflow then stopped at the independent host-RAM floor while both text encoders were loading. **No dual-rank denoising, finished video/audio, matched timed benchmark or new speedup is established.** The candidate stays isolated.
 
 The matched one-visible-card five-frame control completed all 20 denoising steps and exported decodable AV while keeping minimum available RAM 3.792 GiB. Visual inspection of frames 1/3/5 failed prompt compliance: two small wild canids in grass instead of the requested red ceramic teapot. Its guard/function pass is separate from this rejected quality gate; the cause is not isolated to CK, the INT8 plugin or the short frame count. The records below distinguish the control from the dual-rank failure. Earlier host-staged prototype medians belong to a different implementation and remain historical.
