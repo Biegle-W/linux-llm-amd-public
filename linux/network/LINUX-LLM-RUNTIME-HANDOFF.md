@@ -1,6 +1,6 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-[User-authorized fcys RAM-floor retry](../graphics/H3-FCYS-RAM2-RETRY-2026-10-28.md): lowering the isolated host-RAM floor from 3 to 2 GiB and freeing more RAM still stopped the same TP2 canary during text-encoder loading, at 1.848 GiB available. Other guards remain; no denoising, media or speedup was established. The earlier no-P2P operator passes and one-card prompt-compliance failure remain separate. Production guards/pins/schedules are unchanged.
+[Staged fcys low-RAM canary](../graphics/H3-FCYS-LOWRAM-2026-10-28.md): the unchanged aligned 1 GiB retry still stopped while loading both encoders. One GPU encoder process, shared conditioning and rank-0-only AV decoding then completed actual TP2's 20-step/five-frame canary with at least 10.829 GiB host RAM available. Media decodes but fails the teapot prompt; no matched timing or promotion. Both isolated host checks use the requested 1 GiB floor; other guards and production settings remain.
 
 Next: privately qualify the published RCCL/CK candidate under unchanged no-P2P/RAM/VRAM/ownership guards, with matched backend/noise/storage. No trial job or GPU lock is owned by this review. Do not rerun the completed prototype comparison merely to refresh documentation.
 

@@ -1,5 +1,7 @@
 # Actual fcys TP2 retry with a 2 GiB host-RAM floor — October 28, 2026
 
+**Later low-RAM result:** [the user-authorized 1 GiB retry and staged design](H3-FCYS-LOWRAM-2026-10-28.md) completed the actual TP2 five-frame canary after removing duplicate encoder/decoder residency. Minimum available RAM was 10.829 GiB across the successful stages; prompt compliance still failed. Earlier settings/results below remain historical.
+
 The user-authorized rerun lowered the isolated test's immediate host-available RAM floor from **3 GiB to 2 GiB**, after the user freed more RAM. It still stopped during concurrent text-encoder loading: available RAM reached **1.848 GiB**. Neither rank reached DiT denoising, and no video/audio or speed comparison was produced.
 
 This was a safety-reserve stop. No allocator OOM or cgroup OOM event was observed. Free GPU VRAM remained at least 11.314 GiB per card. The result does not establish a P2P or RCCL communication failure; the earlier bounded no-P2P shared-memory SUM/MAX tests passed.
