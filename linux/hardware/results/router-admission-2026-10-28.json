@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-28",
+  "status": "source validated; running production coordinators preserved",
+  "reference_commit": "06819c56bae8cbd70768d8376464681e191fffd1",
+  "admission": {
+    "enabled_profiles": 12,
+    "execution_capacity_by_backend": {
+      "llama": 1,
+      "sglang": 1,
+      "vllm": 1,
+      "strata": 1,
+      "maya": 1
+    },
+    "max_queued": 12,
+    "queue_sizing": "one pending position per enabled catalog profile, shared FIFO",
+    "max_queued_body_bytes": 33554432,
+    "request_body_limit_bytes": 33554432,
+    "queue_wait_timeout_seconds": 900,
+    "backend_start_timeout_seconds": 1800,
+    "retry_after_seconds": 5,
+    "idle_timeout_seconds": 600
+  },
+  "cpu": {
+    "new_router_tests_per_checkout": 45,
+    "existing_hub_tests_per_checkout": 9,
+    "existing_idle_tests_per_checkout": 17,
+    "total_per_checkout": 71,
+    "private_passed": true,
+    "public_passed": true,
+    "total_two_checkouts": 142
+  },
+  "smoke": {
+    "requests": [
+      {
+        "stream": false,
+        "http_status": 200,
+        "elapsed_seconds": 114.305,
+        "output_check": "ROUTER_OK",
+        "response_bytes": 755,
+        "response_sha256": "3029928a0930261fca3871e636c9587594e083423df5df72da7451d34372ed90"
+      },
+      {
+        "stream": true,
+        "http_status": 200,
+        "elapsed_seconds": 0.137,
+        "output_check": "ROUTER_OK",
+        "response_bytes": 884,
+        "response_sha256": "c6289abc87ac0f0662a218b10927b30d80f1e35e92ec688cb42c1af052dd0a71"
+      }
+    ],
+    "model": "sage-a1.5",
+    "max_output_tokens_per_request": 32,
+    "transport": "temporary authenticated loopback gateway -> new hub -> existing guarded vLLM router and worker",
+    "final_inflight": 0,
+    "final_queued": 0,
+    "production_coordinator_identities_preserved": true,
+    "temporary_coordinators_removed": true,
+    "benchmark": false
+  },
+  "preservation": {
+    "unchanged_profile_guard_lifecycle_fingerprints": 16,
+    "profile_engine_context_cache_precision_changes": false,
+    "native_execution_limit_changes": false,
+    "production_coordinator_restarts": 0,
+    "schedules_changed": false,
+    "api_only": true
+  },
+  "deployment": {
+    "running_production_coordinators": "previous code preserved per request; validated source is installed for next authorized restart",
+    "remaining_action": "At an authorized idle maintenance boundary, restart hub/gateway and verify health without repeating inference benchmarks."
+  },
+  "source_sha256": {
+    "dsh/model_hub.py": "23ab3117e82cf696d3bc3d24c5731fe4e7220a9b98c8f4a3f5765278e958e73f",
+    "dsh/hub_transport.py": "62d7fc88ab6c3cc14edc253f93fb46577899f0b4c47f886110707bd9fd2aed91",
+    "network/gateway.py": "dde6fc498e0d82e8362eeaefd8d6c2a0488c61308c7b96a676050fbecf5e0561",
+    "hardware/test_router_admission.py": "f0851acd0ee7c715fbf2e356bfdac7dbf8a27e4f977be3776c545cc9e5806014"
+  },
+  "publication_checks": {
+    "syntax_json_links_diff_check": "passed",
+    "public_credential_identity_address_workflow_scan": "passed",
+    "unchanged_profile_guard_lifecycle_fingerprints": 16,
+    "private_public_source_hashes_match": true
+  }
+}

@@ -11,11 +11,14 @@ After ten minutes of inference inactivity, the guarded idle watcher stops only
 managed inference; DSH/gateway stay up and the next request starts it again.
 """
 import argparse
+from collections import deque
 import http.client
 import json
 import os
 from pathlib import Path
 import signal
+import select
+import socket
 import subprocess
 import sys
 import threading
@@ -28,6 +31,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from model_catalog import BACKENDS, catalog
 from inference_idle import inference_request, IdleUnloader, TIMEOUT
+from hub_transport import clean_text, clean_error_body, error_payload, sse_error, relay_sse
 
 PORT = 30100
 GPU_LOCK = ROOT.parent / 'hardware/generated/GPU-LOCK'
@@ -73,14 +77,35 @@ def launcher_error(kind):
 
 
 class Hub:
-    def __init__(self, serving=serving, launch=None, sleep=time.sleep):
+    def __init__(self, serving=serving, launch=None, sleep=time.sleep,
+                 capacities=None, max_queued=None, max_queued_bytes=MAX_BODY):
         self.cond = threading.Condition()
-        self.active = None      # backend kind the hub currently routes to
-        self.inflight = 0       # proxied requests on self.active
+        # AMD routers hold their request locks through the complete response.
+        # No native execution/concurrency setting is changed here.
+        self.capacities = capacities or {kind: 1 for kind in BACKENDS}
+        self.max_queued = len(catalog()) if max_queued is None else max_queued
+        if self.max_queued < 1 or max_queued_bytes < 1 or any(v < 1 for v in self.capacities.values()):
+            raise ValueError('Admission limits must be positive')
+        self.max_queued_bytes = max_queued_bytes
+        self.waiters = deque()
+        self.queued_bytes = 0
+        self.active = self.active_model = self.loading_model = None
+        self.inflight = 0
         self.switching = False
         self.process = None
         self.serving, self.sleep = serving, sleep
         self.launch = launch or self._launch
+
+    def snapshot(self):
+        with self.cond:
+            return {'status': 'ok', 'active_backend': self.active,
+                    'active_model': self.active_model, 'loading_model': self.loading_model,
+                    'switching': self.switching, 'inflight': self.inflight,
+                    'queued': len(self.waiters), 'queued_bytes': self.queued_bytes,
+                    'max_queued': self.max_queued, 'max_queued_bytes': self.max_queued_bytes,
+                    'max_inflight': self.capacities.get(self.active, 1),
+                    'capacity_by_backend': dict(self.capacities),
+                    'idle_timeout_seconds': TIMEOUT}
 
     def _launch(self, kind, model):
         args = [str(LAUNCHER), kind]
@@ -93,48 +118,80 @@ class Hub:
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                 start_new_session=True)
 
-    def acquire(self, kind, model, progress=lambda: None):
-        """Reserve the backend for one request, starting or switching it if needed."""
-        deadline = time.monotonic() + DRAIN_TIMEOUT
-        with self.cond:
-            while True:
-                if not self.switching and self.active == kind and self.serving(kind, model):
-                    self.inflight += 1
-                    return
-                if not self.switching and self.inflight == 0:
-                    if self.serving(kind, model):
-                        # Started outside the hub (Desktop shortcut or terminal).
-                        self.active = kind
-                        self.inflight += 1
-                        return
-                    self.switching = True
-                    break
-                if time.monotonic() >= deadline:
-                    raise HubError(503, 'Another model is still answering; retry when it finishes.', 'backend_busy')
-                self.cond.wait(KEEPALIVE)
-                progress()
+    def acquire(self, kind, model, progress=lambda: None, body_bytes=0, timeout=DRAIN_TIMEOUT):
+        """FIFO admission; only a contiguous same-model cohort may share capacity."""
+        deadline = time.monotonic() + timeout
+        ticket = object()
+        queued = claimed = granted = False
+        progress()
         try:
-            self._start(kind, model, progress)
-        except BaseException:
             with self.cond:
-                self.switching = False
+                immediate = not self.waiters and not self.switching and (
+                    self.inflight == 0 or (self.active, self.active_model) == (kind, model)
+                    and self.inflight < self.capacities[kind])
+                if not immediate:
+                    if len(self.waiters) >= self.max_queued or self.queued_bytes + body_bytes > self.max_queued_bytes:
+                        raise HubError(429, 'The inference queue is full; retry later.', 'queue_full')
+                self.waiters.append((ticket, body_bytes))
+                self.queued_bytes += body_bytes
+                queued = True
+            while True:
+                progress()  # Socket checks and writes never hold the admission condition.
+                with self.cond:
+                    if time.monotonic() >= deadline:
+                        raise HubError(503, 'Inference queue wait expired; retry later.', 'queue_timeout')
+                    at_head = not queued or self.waiters[0][0] is ticket
+                    compatible = (self.active, self.active_model) == (kind, model)
+                    if at_head and not self.switching and (self.inflight == 0 or
+                            compatible and self.inflight < self.capacities[kind]):
+                        if queued:
+                            self.waiters.popleft()
+                            self.queued_bytes -= body_bytes
+                            queued = False
+                        if self.inflight:
+                            self.inflight += 1
+                            granted = True
+                            self.cond.notify_all()
+                            return
+                        self.switching = claimed = True
+                        self.loading_model = model
+                        break
+                    self.cond.wait(min(.25, max(0, deadline - time.monotonic())))
+            # Readiness probes and guarded launcher waits run outside the condition.
+            self._start(kind, model, progress)
+            progress()
+            with self.cond:
+                self.active, self.active_model = kind, model
+                self.inflight += 1
+                granted = True
+        finally:
+            with self.cond:
+                if queued:
+                    self.waiters.remove((ticket, body_bytes))
+                    self.queued_bytes -= body_bytes
+                if claimed:
+                    self.switching = False
+                    if not granted:
+                        self.loading_model = None
                 self.cond.notify_all()
-            raise
+
+    def response_started(self):
         with self.cond:
-            self.switching = False
-            self.active = kind
-            self.inflight += 1
-            self.cond.notify_all()
+            self.loading_model = None
 
     def release(self):
         with self.cond:
+            if self.inflight <= 0:
+                raise RuntimeError('No inference admission is held')
             self.inflight -= 1
+            if not self.inflight:
+                self.loading_model = None
             self.cond.notify_all()
 
     def unload_idle(self):
         """Called only under the cross-process activity/startup/GPU locks."""
         with self.cond:
-            if self.inflight or self.switching:
+            if self.inflight or self.switching or self.waiters:
                 return False
             self.switching = True
         stopped = False
@@ -146,7 +203,7 @@ class Hub:
         finally:
             with self.cond:
                 if stopped:
-                    self.active = self.process = None
+                    self.active = self.active_model = self.process = None
                 self.switching = False
                 self.cond.notify_all()
 
@@ -155,14 +212,17 @@ class Hub:
             return
         owner = gpu_lock_owner()
         if owner:
-            raise HubError(503, f'GPUs are reserved for a test ({owner}); no backend was started.', 'gpu_reserved')
-        self.process = self.launch(kind, model)
+            raise HubError(503, 'GPUs are reserved; no backend was started.', 'gpu_reserved')
+        try:
+            self.process = self.launch(kind, model)
+        except OSError as error:
+            raise HubError(503, clean_text(str(error)), 'backend_start_failed') from error
         deadline = time.monotonic() + LOAD_TIMEOUT
         while time.monotonic() < deadline:
             if self.serving(kind, model):
                 return
             if self.process is not None and self.process.poll() is not None:
-                detail = launcher_error(kind)
+                detail = clean_text(launcher_error(kind))
                 raise HubError(503, f'{BACKENDS[kind][2]} could not start: {detail or "see its launcher log"}',
                                'backend_start_failed')
             progress()
@@ -187,25 +247,28 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(body)))
+        self.send_header('Cache-Control', 'no-store')
+        if status in (429, 503):
+            self.send_header('Retry-After', '5')
         self.end_headers()
         self.wfile.write(body)
 
     def error_json(self, status, message, code):
-        self.send_json(status, {'error': {'message': message, 'code': code,
+        self.send_json(status, {'error': {'message': clean_text(message), 'code': code,
                                           'type': 'invalid_request_error' if status < 500 else 'backend_error'}})
 
     def do_GET(self):
         path = urlsplit(self.path).path
-        models = catalog()
-        loaded = {kind: kind == hub.active for kind in BACKENDS}
-        for model in models.values():
-            model['loaded'] = hub.serving(model['backend'], model['id']) if loaded[model['backend']] else False
-            model['auto_start'] = True
         if path == '/health':
-            return self.send_json(200, {'status': 'ok', 'active_backend': hub.active,
-                                        'switching': hub.switching, 'gpu_reserved_by': gpu_lock_owner(),
-                                        'inflight': hub.inflight, 'idle_timeout_seconds': TIMEOUT,
-                                        'idle_state': idle.status if idle else 'not started'})
+            state = hub.snapshot()
+            state.update(gpu_reserved=bool(gpu_lock_owner()), idle_state=idle.status if idle else 'not started')
+            return self.send_json(200, state)
+        models = catalog()
+        state = hub.snapshot()
+        for model in models.values():
+            model['loaded'] = (model['backend'] == state['active_backend'] and
+                               model['id'] == state['active_model'])
+            model['auto_start'] = True
         if path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': list(models.values())})
         if path.startswith('/v1/models/'):
@@ -219,14 +282,19 @@ class Handler(BaseHTTPRequestHandler):
         if path not in ('/v1/chat/completions', '/v1/completions'):
             return self.error_json(404, 'Only OpenAI chat/completion endpoints are exposed.', 'not_found')
         try:
+            if self.headers.get('Transfer-Encoding'):
+                raise ValueError
             length = int(self.headers.get('Content-Length', '0'))
             if not 0 < length <= MAX_BODY:
                 return self.error_json(413, 'Request must be between 1 byte and 32 MiB.', 'body_size')
+            self.connection.settimeout(60)
             body = self.rfile.read(length)
+            if len(body) != length:
+                raise ValueError
             data = json.loads(body)
             if not isinstance(data, dict) or not isinstance(data.get('model'), str):
                 raise ValueError
-        except ValueError:
+        except (ValueError, OSError):
             return self.error_json(400, 'Invalid JSON request; a model ID is required.', 'bad_request')
         model = catalog().get(data['model'])
         if model is None:
@@ -238,32 +306,49 @@ class Handler(BaseHTTPRequestHandler):
         if data.get('stream'):
             return self.stream(kind, model['id'], path, body)
         try:
-            hub.acquire(kind, model['id'])
+            hub.acquire(kind, model['id'], self.check_client, body_bytes=len(body))
         except HubError as error:
             return self.error_json(error.status, str(error), error.code)
+        except OSError:
+            return
         try:
             self.forward(kind, path, body)
         finally:
             hub.release()
 
+    def check_client(self):
+        readable, _, _ = select.select([self.connection], [], [], 0)
+        if readable and not self.connection.recv(1, socket.MSG_PEEK):
+            raise ConnectionResetError('Client disconnected')
+
     def forward(self, kind, path, body):
         connection = http.client.HTTPConnection('127.0.0.1', BACKENDS[kind][1], timeout=86400)
+        started = False
         try:
             connection.request('POST', path, body, {'Content-Type': 'application/json'})
             response = connection.getresponse()
+            hub.response_started()
             payload = response.read()
+            if response.status >= 400:
+                payload = clean_error_body(payload)
             self.send_response(response.status)
             self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
             self.send_header('Content-Length', str(len(payload)))
+            if response.getheader('Retry-After'):
+                self.send_header('Retry-After', response.getheader('Retry-After'))
             self.end_headers()
+            started = True
             self.wfile.write(payload)
-        except OSError:
-            self.error_json(503, 'Backend connection failed; see its launcher log.', 'backend_unavailable')
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        except (OSError, http.client.HTTPException):
+            if not started:
+                self.error_json(503, 'Backend connection failed; see its launcher log.', 'backend_unavailable')
         finally:
             connection.close()
 
     def stream(self, kind, model, path, body):
-        # Headers go out at once so clients see progress while a backend loads.
+        # Loading keep-alives require early HTTP headers; later failures use SSE.
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream')
         self.send_header('Cache-Control', 'no-store')
@@ -274,56 +359,51 @@ class Handler(BaseHTTPRequestHandler):
             with lock:
                 self.wfile.write(chunk)
                 self.wfile.flush()
-        def event_error(status, message, code):
-            write(b'data: ' + json.dumps({'error': {'message': message, 'code': code, 'status': status}}).encode()
-                  + b'\n\ndata: [DONE]\n\n')
         last = [time.monotonic()]
         def progress():
+            self.check_client()
             if time.monotonic() - last[0] >= KEEPALIVE:
                 write(f': loading {model}\n\n'.encode())
                 last[0] = time.monotonic()
-        try:
-            hub.acquire(kind, model, progress)
-        except HubError as error:
-            return event_error(error.status, str(error), error.code)
-        except OSError:
-            return
+        acquired = False
         first = threading.Event()
-        def keepalive():
-            # Routers load a model on first request; keep the stream alive until output starts.
-            while not first.wait(KEEPALIVE):
-                try:
-                    write(f': loading {model}\n\n'.encode())
-                except OSError:
-                    return
-        threading.Thread(target=keepalive, daemon=True).start()
-        connection = http.client.HTTPConnection('127.0.0.1', BACKENDS[kind][1], timeout=86400)
+        connection = None
         try:
+            hub.acquire(kind, model, progress, body_bytes=len(body))
+            acquired = True
+            def keepalive():
+                while not first.wait(KEEPALIVE):
+                    try:
+                        write(f': loading {model}\n\n'.encode())
+                    except OSError:
+                        return
+            threading.Thread(target=keepalive, daemon=True).start()
+            connection = http.client.HTTPConnection('127.0.0.1', BACKENDS[kind][1], timeout=86400)
             connection.request('POST', path, body, {'Content-Type': 'application/json'})
             response = connection.getresponse()
-            if response.status != 200:
-                payload = response.read()
+            hub.response_started()
+            if response.status >= 400 or 'text/event-stream' not in response.getheader('Content-Type', ''):
                 first.set()
-                try:
-                    message = json.loads(payload)['error']['message']
-                except (ValueError, KeyError, TypeError):
-                    message = payload.decode(errors='replace')[:500]
-                return event_error(response.status, message, 'backend_error')
-            while chunk := response.read1(65536):
+                return write(sse_error(error_payload(response.read(65536), response.status if response.status >= 400 else 502)))
+            def output(chunk):
                 first.set()
                 write(chunk)
+            relay_sse(response, output)
+        except HubError as error:
+            write(sse_error({'message': str(error), 'code': error.code, 'status': error.status}))
         except (BrokenPipeError, ConnectionResetError):
             pass
-        except OSError:
-            first.set()
+        except (OSError, http.client.HTTPException):
             try:
-                event_error(503, 'Backend connection failed; see its launcher log.', 'backend_unavailable')
+                write(sse_error({'message': 'Backend stream interrupted.', 'code': 'backend_unavailable', 'status': 503}))
             except OSError:
                 pass
         finally:
             first.set()
-            connection.close()
-            hub.release()
+            if connection is not None:
+                connection.close()
+            if acquired:
+                hub.release()
 
 
 def detect_active():

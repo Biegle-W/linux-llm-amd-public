@@ -1,5 +1,7 @@
 # Agent entry point
 
+[AMD router admission and transport](linux/hardware/ROUTER-ADMISSION-2026-10-28.md): validated source is installed; running production coordinators were preserved pending an authorized idle restart. Keep API-only access, capacity and guards.
+
 [AMD H3 encoder-format comparison](linux/graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): matched format/execution, memory and quality evidence is current. Keep the tested candidate isolated; use the dated report for results, limits and preserved state.
 
 Read [README.md](README.md) first. It is the canonical maintenance policy for

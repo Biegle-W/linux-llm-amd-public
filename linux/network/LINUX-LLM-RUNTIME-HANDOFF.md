@@ -1,5 +1,23 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## AMD router admission — October 28
+
+AMD router admission is implemented in source and validated: fair FIFO, bounded
+pending count/bytes, consistent sanitized health and preserved backend HTTP/SSE
+errors. **71 CPU regressions per checkout** and two 32-token Sage JSON/SSE smokes
+pass. Production coordinators were preserved; installed source awaits an authorized
+idle restart. Profiles, guards, pins and paused schedules remain.
+Effective inference capacity stays one across all five serial backend routers.
+The shared FIFO has 12 pending positions from the enabled catalog and a 32 MiB
+aggregate pending-body budget; full admission yields retryable 429. Final smoke
+health is 0 in-flight/queued. Temporary coordinators are removed; the normal
+launcher-owned Sage worker is left to inference-aware idle release (600 seconds).
+No task-owned GPU reservation or pending inference remains. The running production
+hub/gateway keep their prior code; do not describe the new admission behavior as
+live on production until an authorized idle restart adopts it. Next action: that
+maintenance restart and authenticated health inspection; no repeat GPU benchmark.
+[Validation and numeric evidence](../hardware/ROUTER-ADMISSION-2026-10-28.md).
+
 [AMD H3 encoder-format comparison](../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 Current candidate: W4A8 default and native HIP integer encoder paths have matched speed/memory and paired TP2 quality evidence. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. All comparison jobs are complete and no task-owned GPU lock remains. Production selection and paused schedules remain; no automatic promotion. Preserve completed evidence rather than rerunning these tests for documentation.

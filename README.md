@@ -1,5 +1,14 @@
 # Linux LLM AMD — public reference
 
+## AMD router admission — October 28
+
+AMD router admission is implemented in source and validated: fair FIFO, bounded
+pending count/bytes, consistent sanitized health and preserved backend HTTP/SSE
+errors. **71 CPU regressions per checkout** and two 32-token Sage JSON/SSE smokes
+pass. Production coordinators were preserved; installed source awaits an authorized
+idle restart. Profiles, guards, pins and paused schedules remain.
+[Validation, numeric evidence and next action](linux/hardware/ROUTER-ADMISSION-2026-10-28.md).
+
 [AMD H3 encoder-format comparison](linux/graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 ## Fresh H3 one-card versus two-card test — October28

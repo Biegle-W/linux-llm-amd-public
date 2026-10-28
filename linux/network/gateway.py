@@ -6,6 +6,7 @@ import http.client
 import ipaddress
 import json
 import signal
+import select
 import socket
 import sys
 import threading
@@ -19,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'dsh'))
 import model_catalog  # noqa: E402
 from model_catalog import BACKENDS  # noqa: E402
+from hub_transport import clean_error_body, relay_sse, sse_error
 
 HUB_PORT = 30100
 
@@ -82,13 +84,20 @@ class Handler(BaseHTTPRequestHandler):
         if not self.authorized():
             return
         path = urlsplit(self.path).path
+        if path == '/health':
+            connection = http.client.HTTPConnection('127.0.0.1', HUB_PORT, timeout=5)
+            try:
+                connection.request('GET', '/health')
+                response = connection.getresponse()
+                state = json.loads(response.read())
+                # Hub owns the snapshot. No independent backend probes or activity.
+                return self.send_json(response.status, state)
+            except (OSError, ValueError, http.client.HTTPException):
+                return self.error_json(503, 'The local model hub is not reachable.', 'hub_unavailable')
+            finally:
+                connection.close()
         models = catalog()
         online = {backend: backend_models(backend) for backend in BACKENDS}
-        if path == '/health':
-            return self.send_json(200, {'status': 'ok', 'backends': {
-                backend: {'available_models': sorted(ids & set(models))}
-                for backend, ids in online.items()},
-                'note': 'Any listed model can be requested; the local model hub starts or switches its backend.'})
         for model in models.values():
             model['backend_available'] = model['id'] in online[model['backend']]
             model['auto_start'] = True
@@ -130,29 +139,66 @@ class Handler(BaseHTTPRequestHandler):
             return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions.', 'unsupported_endpoint')
         connection = None
         started = False
+        finished = threading.Event()
+        disconnected = threading.Event()
         try:
             # The loopback model hub starts or switches the backend on demand.
             connection = http.client.HTTPConnection('127.0.0.1', HUB_PORT, timeout=86400)
             # External credentials stay at the gateway, never in worker logs/requests.
             connection.request('POST', path, body, {'Content-Type': 'application/json'})
+            upstream = connection.sock
+            def watch_client():
+                # Propagate external disconnects even while waiting for hub headers.
+                while not finished.wait(.25):
+                    try:
+                        readable, _, _ = select.select([self.connection], [], [], 0)
+                        if not readable or self.connection.recv(1, socket.MSG_PEEK):
+                            continue
+                    except OSError:
+                        pass
+                    disconnected.set()
+                    try:
+                        upstream.shutdown(socket.SHUT_RDWR)
+                    except OSError:
+                        pass
+                    return
+            threading.Thread(target=watch_client, daemon=True).start()
             response = connection.getresponse()
             self.send_response(response.status)
             self.send_header('Content-Type', response.getheader('Content-Type', 'application/json'))
             self.send_header('Cache-Control', 'no-store')
+            if response.getheader('Retry-After'):
+                self.send_header('Retry-After', response.getheader('Retry-After'))
             self.send_header('Connection', 'close')
             self.end_headers()
             started = True
-            while chunk := response.read1(65536):
+            secrets = (token.decode(),)
+            def output(chunk):
                 self.wfile.write(chunk)
                 self.wfile.flush()
+            if response.status >= 400:
+                output(clean_error_body(response.read(), secrets))
+            elif 'text/event-stream' in response.getheader('Content-Type', ''):
+                relay_sse(response, output, secrets)
+            else:
+                while chunk := response.read1(65536):
+                    output(chunk)
             self.close_connection = True
         except (BrokenPipeError, ConnectionResetError):
             self.close_connection = True
-        except OSError:
+        except (OSError, http.client.HTTPException):
+            if disconnected.is_set():
+                return
+            if started and data.get('stream'):
+                try:
+                    self.wfile.write(sse_error({'message': 'Hub stream interrupted.', 'status': 503, 'code': 'hub_unavailable'}))
+                except OSError:
+                    pass
             if not started:
                 self.error_json(503, 'The local model hub is not reachable (local-llm-hub.service).', 'hub_unavailable')
             self.close_connection = True
         finally:
+            finished.set()
             if connection is not None:
                 connection.close()
 
