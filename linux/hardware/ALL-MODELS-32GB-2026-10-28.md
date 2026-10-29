@@ -1,5 +1,7 @@
 # All-model benchmarks on actual 32 GB RAM — October 29, 2026
 
+**Owner pause — October 29:** Ornith, DeepSeek XS on Maya and Strata, Qwen Flash Next on Strata, and Qwen27B on SGLang are disabled until the owner reports more RAM is available. Seven working profiles remain enabled; nightly qualification skips the paused routes. No automatic RAM-detection resume. [Paused models and resume rules](MODEL-RAM-PAUSE-2026-10-29.md).
+
 **Complete within the measured scopes below.** Host: i9-13900KS, 30.56 GiB OS-visible physical RAM, two RX 7900 XTX cards. No production profile was changed by this remaining-model series.
 
 Snapshot: 2026-10-29T03:28:19.532436-04:00.

@@ -1,5 +1,7 @@
 # Temporary 32 GB SSD-streaming qualification — October 28, 2026
 
+**Owner pause — October 29:** Ornith, DeepSeek XS on Maya and Strata, Qwen Flash Next on Strata, and Qwen27B on SGLang are disabled until the owner reports more RAM is available. Seven working profiles remain enabled; nightly qualification skips the paused routes. No automatic RAM-detection resume. [Paused models and resume rules](MODEL-RAM-PAUSE-2026-10-29.md).
+
 Native status: **native_tests_complete**. Normal guarded API integration: **complete**.
 
 Activated temporary 32 GB profiles: **Qwen / Strata, GLM / Maya**. Held at the exact prior 64 GB profile: **DeepSeek XS / Maya, DeepSeek XS / Strata**. Each activation passed native safety/functional/performance/near-window/history checks and normal guarded authenticated JSON/SSE/tools/~8K/history checks. The exact 64 GB preimages are retained; restore only after at least 60 GiB physical RAM is visible and inference is idle. All other settings, guards, coordinator services and paused schedules remain.

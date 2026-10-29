@@ -18,7 +18,7 @@ from llama_runtime import launch_spec, require_amd_headroom, runtime_identity
 from moe_memory import admit_model, watch_worker, worker_limits_for_model, require_model_capacity
 
 ROOT = Path(__file__).resolve().parent
-CATALOG = json.loads((ROOT / 'models.json').read_text())
+CATALOG = [m for m in json.loads((ROOT / 'models.json').read_text()) if m.get('enabled', True)]
 lock = threading.Lock()
 native = None
 native_port = 0

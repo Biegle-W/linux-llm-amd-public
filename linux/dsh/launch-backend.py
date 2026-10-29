@@ -34,6 +34,8 @@ if kind == 'maya':
 strata_model=None
 if kind=='strata':
     available={k:v for k,v in json.loads((ROOT/'strata-profiles.json').read_text()).items() if v.get('enabled',True)}
+    if not available:
+        raise SystemExit('All Strata profiles are paused or disabled; waiting for owner-authorized resume. No backend has been stopped.')
     parser=argparse.ArgumentParser(description='Start a guarded Strata Qwen or DeepSeek profile.')
     parser.add_argument('--model',choices=list(available),default=next(iter(available)))
     strata_model=parser.parse_args(sys.argv[2:]).model
@@ -49,6 +51,10 @@ try:
     # Must precede startup_handover: an obsolete profile must not kill a good server.
     llama_spec = launch_spec() if kind == 'llama' else None
     profiles = json.loads((ROOT / (kind + '-profiles.json')).read_text()) if kind in ('sglang', 'vllm') else {}
+    if kind in ('sglang', 'vllm'):
+        profiles = {k: v for k, v in profiles.items() if v.get('enabled', True)}
+        if not profiles:
+            raise RuntimeError('All '+kind+' profiles are paused or disabled; waiting for owner-authorized resume. No backend has been stopped.')
     rocm = bool(profiles) and all(profile.get('runtime') == 'rocm' for profile in profiles.values())
     if rocm:
         require_rocm(kind)

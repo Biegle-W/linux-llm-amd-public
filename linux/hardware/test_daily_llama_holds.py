@@ -44,6 +44,11 @@ class HeldSources(unittest.TestCase):
     def test_only_explicit_valid_hold_is_excluded_and_ordinary_override_is_still_tested(self):
         self.assertEqual(self.engine.models(),['empero','super','flint'])
 
+    def test_owner_paused_unpinned_model_is_excluded_from_qualification(self):
+        self.cfg['paused_models']={'super':'Wait for owner RAM notice'};self.save()
+        self.assertEqual(self.engine.models(),['empero','flint'])
+        self.assertIn('ornith',self.engine.held_sources())
+
     def test_install_preserves_hold_clears_other_overrides_and_rollback_restores_exact_pin(self):
         original=self.pin.read_bytes();stage=self.root/'stage';stage.mkdir()
         self.engine.install(stage,NEW,self.root/'log')

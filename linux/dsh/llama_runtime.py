@@ -83,7 +83,11 @@ def verify_source_pin(source, commit):
 
 def launch_spec(backend=None, model=None):
     config = ROOT / 'llama-runtime.json'
-    mode = backend or (json.loads(config.read_text())['backend'] if config.exists() else 'cuda')
+    settings = json.loads(config.read_text()) if config.exists() else {}
+    paused = settings.get('paused_models', {})
+    if model in paused:
+        raise RuntimeError(paused[model])
+    mode = backend or (settings['backend'] if config.exists() else 'cuda')
     if mode == 'cuda':
         require_current_cuda_pair()
         return ROOT.parent / 'llama.cpp/llama-server', ROOT / 'models.ini', dict(os.environ), None
@@ -124,7 +128,7 @@ def launch_spec(backend=None, model=None):
     presets = ROOT / ('models-hip.ini' if hip else 'models-amd.ini')
     if not settings.get('models') or not presets.is_file():
         raise RuntimeError('No validated AMD model preset is activated.')
-    return binary, presets, env, set(settings['models'])
+    return binary, presets, env, set(settings['models']) - set(settings.get('paused_models', {}))
 
 
 def require_amd_headroom():

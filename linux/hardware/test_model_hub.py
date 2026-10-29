@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import threading
+import tempfile
 import time
 from http.server import ThreadingHTTPServer
 import unittest
@@ -13,6 +14,19 @@ from unittest.mock import Mock, patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'dsh'))
 import model_hub as mh
+
+
+def routing_catalog_fixture():
+    """Exercise all routes without requiring production profiles to be enabled."""
+    from model_catalog import catalog
+    with tempfile.TemporaryDirectory() as tmp:
+        root=Path(tmp); (root/'dsh').mkdir()
+        sources={'models.json':[{'id':'empero','name':'Empero','context':32}],
+                 'vllm-profiles.json':{'nemotron-3.5-bolt-vllm':{'name':'Bolt','context':32},'sage-a1.5':{'name':'Sage','context':32}},
+                 'strata-profiles.json':{'qwen3.8-flash-next-iq3_xxs':{'name':'Qwen Next','context':32}},
+                 'sglang-profiles.json':{'qwen-dflash':{'name':'Qwen','context':32}}}
+        for name,data in sources.items(): (root/'dsh'/name).write_text(json.dumps(data))
+        return catalog(root)
 
 
 class FakeBackends:
@@ -36,7 +50,7 @@ class HubTests(unittest.TestCase):
         patcher.start(); self.addCleanup(patcher.stop)
 
     def test_catalog_maps_every_active_model_to_its_backend(self):
-        models = mh.catalog()
+        models = routing_catalog_fixture()
         self.assertEqual(models['nemotron-3.5-bolt-vllm']['backend'], 'vllm')
         self.assertEqual(models['sage-a1.5']['backend'], 'vllm')
         self.assertEqual(models['qwen3.8-flash-next-iq3_xxs']['backend'], 'strata')
@@ -126,8 +140,9 @@ class HttpTests(unittest.TestCase):
 
     def test_models_list_every_backend_with_auto_start(self):
         connection = http.client.HTTPConnection('127.0.0.1', self.server.server_port, timeout=10)
-        connection.request('GET', '/v1/models')
-        data = json.loads(connection.getresponse().read())['data']
+        with patch.object(mh, 'catalog', return_value=routing_catalog_fixture()):
+            connection.request('GET', '/v1/models')
+            data = json.loads(connection.getresponse().read())['data']
         self.assertEqual({m['backend'] for m in data} >= {'llama', 'vllm', 'sglang', 'strata'}, True)
         self.assertTrue(all(m['auto_start'] for m in data))
 

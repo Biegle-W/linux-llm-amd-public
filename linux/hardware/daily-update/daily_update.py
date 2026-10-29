@@ -353,7 +353,9 @@ class Llama(Engine):
 
     def models(self):
         held = self.held_sources()
-        models = [model for model in json.loads(self.pin.read_text())['models'] if model not in held]
+        settings = json.loads(self.pin.read_text())
+        models = [model for model in settings['models']
+                  if model not in held and model not in settings.get('paused_models', {})]
         if not models:
             raise Step('No unpinned llama models available for global qualification')
         return models
@@ -867,6 +869,9 @@ def main():
     found = []
     for engine in selected:
         try:
+            if not engine.models():
+                print(f'{engine.name}: paused (no enabled model profiles; waiting for owner-authorized resume)')
+                continue
             current, latest = engine.current(), engine.latest()
         except (Step, OSError, subprocess.SubprocessError, ValueError, KeyError) as error:
             print(f'{engine.name}: version check failed: {error}')

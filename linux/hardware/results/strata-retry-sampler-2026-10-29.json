@@ -208,7 +208,7 @@
     "elapsed_seconds": 4398.016651
   },
   "unchanged_profile_manual_pin_comparator_fingerprints": 9,
-  "status": "candidate_and_rollback_load_RAM_blocked",
+  "status": "paused_by_owner_until_RAM_notification",
   "candidate_built": true,
   "candidate_installed": false,
   "candidate_provisionally_installed_during_attempt": true,
@@ -250,5 +250,19 @@
     "total_per_checkout": 218,
     "performance_floor_ratio": 0.95,
     "boundary_results": "0.1% and exactly 5% declines pass; just beyond 5% fails"
+  },
+  "owner_pause": {
+    "date": "2026-10-29",
+    "reason": "Owner requested pause until explicitly reporting more RAM is available",
+    "auto_resume_on_RAM_detection": false,
+    "paused_model_ids": [
+      "ornith-1.5-122b",
+      "qwen3.8-flash-next-iq3_xxs",
+      "deepseek-v4.1-flash-1017-strata-xs",
+      "deepseek-v4.1-flash-1017-maya",
+      "qwen3.8-27b-sglang-dflash2"
+    ],
+    "enabled_profile_count": 7,
+    "qualification_complete": false
   }
 }

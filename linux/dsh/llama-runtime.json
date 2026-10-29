@@ -16,5 +16,8 @@
       "runtime_pin_reason": "Owner-authorized October29 split: retain the normal Ornith profile on its independent old source/build while all unpinned llama models qualify newer global revisions. Normal 60 GiB physical-RAM admission remains; no candidate incompatibility is asserted."
     }
   },
-  "reference_note": "Sanitized example paths; verify each selected source/build locally before loading."
+  "reference_note": "Sanitized example paths; verify each selected source/build locally before loading.",
+  "paused_models": {
+    "ornith-1.5-122b": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume."
+  }
 }

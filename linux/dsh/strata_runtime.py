@@ -70,6 +70,8 @@ def check_config(cfg, total, available, *, check_available=True):
 def require_strata(before_handover=False,model=None):
     profiles = json.loads((ROOT / 'dsh/strata-profiles.json').read_text())
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
+    if not enabled:
+        raise RuntimeError('All Strata profiles are paused or disabled. Wait for owner-authorized resume; no backend has been stopped.')
     if len([p for p in enabled.values() if p.get('family')!='deepseek41'])!=1:
         raise RuntimeError('Exactly one validated Strata Qwen profile must be enabled. No backend has been stopped.')
     selected=model or next(iter(enabled))

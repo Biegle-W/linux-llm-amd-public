@@ -48,7 +48,8 @@ class ProfileTests(unittest.TestCase):
         handler = object.__new__(router.Handler)
         handler.path = '/v1/models'
         handler.send_json = Mock()
-        with patch.dict(router.PROFILES, {'test-blocked': {'enabled': False}}):
+        working = dict(router.PROFILES[router.DEFAULT], enabled=True)
+        with patch.dict(router.PROFILES, {'test-blocked': {'enabled': False}, router.DEFAULT: working}, clear=True):
             handler.do_GET()
         status, payload = handler.send_json.call_args.args
         self.assertEqual(status, 200)
@@ -56,7 +57,7 @@ class ProfileTests(unittest.TestCase):
         self.assertNotIn('test-blocked', ids)
         self.assertNotIn('qwen3.8-27b-sglang', ids)  # Retired; keep only DFlash2.
         self.assertIn(router.DEFAULT, ids)
-        self.assertTrue(router.PROFILES[router.DEFAULT].get('enabled', True))
+        self.assertTrue(working['enabled'])
 
 
 if __name__ == '__main__':
