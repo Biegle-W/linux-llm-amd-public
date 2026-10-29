@@ -2,6 +2,47 @@
 
 ## 2026-10-29
 
+- **llama.cpp** `2280f0fd163b` → `eb4e244be77a`: **promoted**. all gates passed
+
+llama.cpp gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | swap_policy | | loading-swap-v3 | |
+| policy | worker_swap_limit_bytes | | uncapped | |
+| lifecycle | max_worker_swap_bytes | | 5948850176 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| empero-qwen3.8-35b-a3b | prefill_tps | 3421.426 | 3409.690 | -0.3% |
+| empero-qwen3.8-35b-a3b | code_decode_tps | 135.455 | 135.640 | +0.1% |
+| empero-qwen3.8-35b-a3b | prose_decode_tps | 86.061 | 85.392 | -0.8% |
+| empero-qwen3.8-35b-a3b | code_ttft_s | 0.059 | 0.058 | -2.3% |
+| empero-qwen3.8-35b-a3b | prose_ttft_s | 0.058 | 0.057 | -2.7% |
+| empero-qwen3.8-35b-a3b | markers | 3.000 | 3.000 |  |
+| empero-qwen3.8-35b-a3b | max_worker_swap_bytes | | 0 | |
+| empero-qwen3.8-35b-a3b | max_nonresident_vram_bytes | | 0 | |
+| empero-qwen3.8-35b-a3b | verdict | | | pass |
+| nemotron-3.5-super-iq3 | prefill_tps | 428.006 | 425.815 | -0.5% |
+| nemotron-3.5-super-iq3 | code_decode_tps | 15.654 | 15.483 | -1.1% |
+| nemotron-3.5-super-iq3 | prose_decode_tps | 17.175 | 16.941 | -1.4% |
+| nemotron-3.5-super-iq3 | code_ttft_s | 0.951 | 0.962 | +1.1% |
+| nemotron-3.5-super-iq3 | prose_ttft_s | 0.632 | 0.636 | +0.7% |
+| nemotron-3.5-super-iq3 | markers | 3.000 | 3.000 |  |
+| nemotron-3.5-super-iq3 | max_worker_swap_bytes | | 134729728 | |
+| nemotron-3.5-super-iq3 | max_nonresident_vram_bytes | | 0 | |
+| nemotron-3.5-super-iq3 | verdict | | | pass |
+| flint-40b-a2.5b | prefill_tps | 5688.457 | 5726.102 | +0.7% |
+| flint-40b-a2.5b | code_decode_tps | 46.966 | 46.915 | -0.1% |
+| flint-40b-a2.5b | prose_decode_tps | 46.950 | 46.856 | -0.2% |
+| flint-40b-a2.5b | code_ttft_s | 0.081 | 0.082 | +1.2% |
+| flint-40b-a2.5b | prose_ttft_s | 0.072 | 0.071 | -1.7% |
+| flint-40b-a2.5b | markers | 3.000 | 3.000 |  |
+| flint-40b-a2.5b | max_worker_swap_bytes | | 9670656 | |
+| flint-40b-a2.5b | max_nonresident_vram_bytes | | 0 | |
+| flint-40b-a2.5b | verdict | | | pass |
+
+## 2026-10-29
+
 - **vLLM** `0.32.1rc1.dev602+g5d35ce393.rocm72` → `0.33.0rc1.dev229+g3966924d5.rocm72`: **promoted**. all gates passed
 
 vLLM gates (baseline = production the same night):

@@ -2,7 +2,7 @@
 
 ## Split llama.cpp update — qualification follow-up
 
-Ornith retains an explicit independent `2280f0fd163b` source/build hold. The first guarded baseline passed Empero/Super but Flint hit the client’s 64-token marker cap. A repaired-client qualification follow-up is next; no new llama.cpp promotion is claimed yet. The same marker, performance and memory gates remain. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+Ornith retains an explicit independent `2280f0fd163b` source/build hold. The first guarded baseline passed Empero/Super but Flint hit the client’s 64-token marker cap. A repaired-client qualification follow-up is running from 13:45 EDT; no new llama.cpp promotion is claimed yet. Do not duplicate the updater or its GPU reservation. The same marker, performance and memory gates remain. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 ## Nightly updater restored — October 29
 
@@ -333,7 +333,7 @@ change. Nightly updates remain paused.
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `2280f0fd163b` |
+| llama.cpp | `eb4e244be77a` |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
@@ -342,7 +342,7 @@ change. Nightly updates remain paused.
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: llama.cpp skipped (production baseline failed); Strata rejected; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed); vLLM promoted.
+Last run: llama.cpp promoted.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
