@@ -323,20 +323,19 @@ cleanup remain required. No engine was promoted or benchmark rerun for this poli
 change. Nightly updates remain paused.
 
 <!-- daily-update:begin -->
-**Current engine versions after the 2026-10-27 VRAM tests** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-10-29 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp default /CPU profiles | `2280f0fd163b` |
-| llama.cpp Empero /Flint | `19cce6919992` |
-| vLLM global: Qwen/Sage | `0.32.1rc1.dev602+g5d35ce393.rocm72` |
-| vLLM Bolt launcher override | `0.32.1rc1.dev435+gc50aca144.rocm72` |
+| llama.cpp | `2280f0fd163b` |
+| vLLM | `0.32.1rc1.dev602+g5d35ce393.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
+| vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Latest manual selection: Qwen/Sage dev602 qualified; Bolt dev435 held after two dev602 churn stops; Sage GGUF remains removed. Remaining llama.cpp VRAM pins are Empero/Flint19cce691; CPU source2280f0fd. Actual mixed-runtime routing is verified; SGLang compatibility blockers remain recorded. October25 full-catalog history remains in the ledger.
+Last run: llama.cpp skipped (production baseline failed); vLLM skipped (production baseline failed); Strata rejected; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed).
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

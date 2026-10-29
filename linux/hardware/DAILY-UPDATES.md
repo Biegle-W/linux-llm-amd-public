@@ -1,5 +1,32 @@
 # Daily engine updates
 
+## 2026-10-29
+
+- **llama.cpp** `2280f0fd163b` → `0893ec98f5ea`: **skipped (production baseline failed)**. baseline ornith-1.5-122b: prewarm failed
+- **vLLM** `0.32.1rc1.dev602+g5d35ce393.rocm72` → `0.33.0rc1.dev229+g3966924d5.rocm72`: **skipped (production baseline failed)**. sage-a1.5
+- **Strata** `7dd5cf18e68c` → `46c152a1310f`: **rejected**. missed a promotion gate; rollback verified
+- **Maya** `f26d8bab43f9` → `cf6472cc8448`: **skipped (production baseline failed)**. launcher exited (1) before port 30030 answered
+- **Strata DeepSeek** `8183c6b67162` → `46c152a1310f`: **skipped (production baseline failed)**. launcher exited (1) before port 30020 answered
+
+Strata gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | swap_policy | | loading-swap-v3 | |
+| policy | worker_swap_limit_bytes | | uncapped | |
+| lifecycle | max_worker_swap_bytes | | 0 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | FAIL: lifecycle_sampling_errors |
+| qwen3.8-flash-next-iq3_xxs | prefill_tps | 1159.500 | 1160.300 | +0.1% |
+| qwen3.8-flash-next-iq3_xxs | code_decode_tps | 73.233 | 72.770 | -0.6% |
+| qwen3.8-flash-next-iq3_xxs | prose_decode_tps | 54.100 | 53.765 | -0.6% |
+| qwen3.8-flash-next-iq3_xxs | code_ttft_s | 0.247 | 0.250 | +1.5% |
+| qwen3.8-flash-next-iq3_xxs | prose_ttft_s | 0.231 | 0.227 | -1.6% |
+| qwen3.8-flash-next-iq3_xxs | markers | 3.000 | 3.000 |  |
+| qwen3.8-flash-next-iq3_xxs | max_worker_swap_bytes | | 0 | |
+| qwen3.8-flash-next-iq3_xxs | max_nonresident_vram_bytes | | 0 | |
+| qwen3.8-flash-next-iq3_xxs | verdict | | | pass |
+
 ## Nightly schedule restored — October 29
 
 The existing 03:00 timer is enabled and active again; a guarded manual run is in progress. Older updater-pause notes below are historical. Manual runtime pins, other holds and all promotion/rollback gates remain. [Restoration, helper/unit repairs and current status](ENGINE-UPDATER-RESTORED-2026-10-29.md).
