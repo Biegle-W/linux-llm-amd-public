@@ -1,8 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-## Split llama.cpp update — qualification pending
+## Split llama.cpp update — qualification follow-up
 
-Ornith retains an explicit independent `2280f0fd163b` source/build hold. The owner authorized newer global qualification for Empero, Super and Flint; no new llama.cpp promotion is claimed yet. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+Ornith retains an explicit independent `2280f0fd163b` source/build hold. The first guarded baseline passed Empero/Super but Flint hit the client’s 64-token marker cap. A repaired-client qualification follow-up is next; no new llama.cpp promotion is claimed yet. The same marker, performance and memory gates remain. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 ## Nightly updater restored — October 29
 

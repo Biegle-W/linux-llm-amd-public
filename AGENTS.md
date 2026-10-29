@@ -1,6 +1,6 @@
 # Agent entry point
 
-**October 29 split llama.cpp update:** Ornith now has an explicit independent old-source/build hold; newer global qualification for Empero, Super and Flint is next. [Scope, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+**October 29 split llama.cpp update:** Ornith now has an explicit independent old-source/build hold; newer global qualification for Empero, Super and Flint uses the repaired client and unchanged gates. [Scope, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 **October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engines remain selected after baseline holds or verified rejection/rollback. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
 

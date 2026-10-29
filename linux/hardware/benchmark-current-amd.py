@@ -5,6 +5,7 @@ Run one backend group at a time with its normal launcher. Raw output is under
 hardware/generated/; published records contain hashes/counts, never model text.
 """
 import argparse
+import configparser
 from datetime import date
 import hashlib
 import json
@@ -66,7 +67,7 @@ def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=
     before = metrics(native)
     req = urllib.request.Request(f'http://127.0.0.1:{port}/v1/chat/completions',
            json.dumps(body).encode(), {'Content-Type':'application/json'})
-    first = last_content = usage = timing = None
+    first = last_content = usage = timing = finish_reason = None
     text = reasoning = ''
     started = time.monotonic()
     with urllib.request.urlopen(req, timeout=timeout) as res:
@@ -80,6 +81,7 @@ def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=
             usage = item.get('usage') or usage
             timing = item.get('timings') or timing
             for choice in item.get('choices', []):
+                finish_reason = choice.get('finish_reason') or finish_reason
                 delta = choice.get('delta', {})
                 content = delta.get('content') or ''
                 thought = delta.get('reasoning_content') or delta.get('reasoning') or ''
@@ -95,7 +97,8 @@ def stream(kind, model, prompt, limit=256, sampled=True, timeout=1200, messages=
     record = {'usage':usage, 'ttft_seconds':first-started, 'total_seconds':end-started,
               'decode_tps_sse':(usage['completion_tokens']-1)/(end-first),
               'content_sha256':hashlib.sha256(text.encode()).hexdigest(),
-              'reasoning_tokens_present':bool(reasoning), 'native_timings':timing}
+              'reasoning_tokens_present':bool(reasoning), 'native_timings':timing,
+              'visible_content_present':bool(text), 'finish_reason':finish_reason}
     after = metrics(native)
     delta = {k: v-before.get(k,0) for k,v in after.items() if k in before and v-before[k] > 0}
     # Each request is sequential. Keep only numerical phase metrics, no label values.
@@ -131,6 +134,27 @@ def profiles(kind):
     if kind == 'llama':
         return [(m['id'],m['context']) for m in json.loads((ROOT/'dsh/models.json').read_text())]
     return [(k,v['context']) for k,v in json.loads((ROOT/f'dsh/{kind}-profiles.json').read_text()).items() if v.get('enabled', kind != 'maya')]
+
+
+def marker_output_limit(kind, model):
+    """Keep the answer allowance after the selected bounded reasoning budget."""
+    if model == 'muse-glimmer-30b':
+        return 1024
+    if kind != 'llama':
+        return 64
+    settings = json.loads((ROOT/'dsh/llama-runtime.json').read_text())
+    mode = settings.get('runtime_overrides', {}).get(model, settings['backend'])
+    name = {'hip-amd':'models-hip.ini', 'vulkan-amd':'models-amd.ini', 'cuda':'models.ini'}[mode]
+    presets = configparser.ConfigParser(interpolation=None, delimiters=('=',))
+    presets.read_string('[DEFAULT]\n' + (ROOT/'dsh'/name).read_text())
+    profile = dict(presets['*']) if presets.has_section('*') else {}
+    profile.update(presets[model])
+    if profile.get('reasoning', 'off').lower() not in ('on', 'true', '1'):
+        return 64
+    budget = int(profile.get('reasoning-budget', '-1'))
+    if budget < 0:
+        raise ValueError('Marker probe requires a bounded configured reasoning budget')
+    return budget + 64
 
 
 def prefill_prompt(index):
@@ -185,7 +209,7 @@ def main():
     out={'date':args.date,'backend':args.kind,
          'method':{'short_prompts':PROMPTS,'short_output_cap':256,'runs':args.runs,
                    'sampling':{'temperature':.6,'top_p':.95,'seed':42,'thinking':False},
-                   'prefill':'three fresh ~8192-token marker prompts, 64-output cap (Muse 1024), greedy; salt before content defeats prefix reuse',
+                   'prefill':'three fresh ~8192-token marker prompts; 64 answer tokens plus selected bounded llama reasoning budget (Muse 1024); greedy, salted against prefix reuse',
                    'ttft':'monotonic request submission to first content or reasoning SSE delta',
                    'decode':'(completion_tokens-1)/(stream_end-first_output); native timing also retained',
                    'warmup':'excluded short warm-up for each workload; models loaded before timing',
@@ -210,6 +234,7 @@ def main():
                 except (OSError,RuntimeError,ValueError,KeyError):pass
                 done.wait(1)
         try:
+            result['prefill_output_cap'] = marker_output_limit(args.kind, model)
             # Loading/correctness occurs before the timed monitor; loading is not TTFT.
             _,text=stream(args.kind,model,'What is 17 times 19? Reply with only the integer.',limit=128,sampled=False)
             assert re.search(r'\b323\b',text), 'Arithmetic smoke failed'
@@ -232,12 +257,12 @@ def main():
                 result['short'][task]['median_decode_tps']=statistics.median(t['decode_tps_sse'] for t in trials)
                 result['short'][task]['median_ttft_seconds']=statistics.median(t['ttft_seconds'] for t in trials)
             for index in range(args.runs):
-                trial,text=stream(args.kind,model,prefill_prompt(index),limit=1024 if model=='muse-glimmer-30b' else 64,sampled=False)
+                trial,text=stream(args.kind,model,prefill_prompt(index),limit=result['prefill_output_cap'],sampled=False)
                 trial['markers_passed']=all(code in text for code in ['ALPHA-734','BRAVO-915','CHARLIE-268'])
+                result['prefill'].append(trial);save()  # Retain capped/failed evidence before enforcing gates.
                 if not args.allow_marker_failure:assert trial['markers_passed'],'Marker retrieval failed'
                 assert trial['cached_tokens']==0,'Fresh prefill reused cache'
                 if trial.get('native_timings'):assert trial['native_timings'].get('cache_n',0)==0
-                result['prefill'].append(trial);save()
                 print('PREFILL',model,index,trial['usage']['prompt_tokens'],round(trial['ttft_seconds'],3),trial.get('prefill_native_tps'),round(trial.get('prefill_phase_tps',0),2),flush=True)
             result['memory_observation_probes'] = complete_inference_window(args.kind, model, memory_monitor)
             memory_monitor.set_phase('shutdown')
