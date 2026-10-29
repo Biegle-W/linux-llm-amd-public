@@ -2,7 +2,7 @@
 
 ## Super INT4 vLLM preflight — October 29
 
-Super INT4 small-kernel/UVA checks pass, but full-model RAM admission is refused (26.9 GiB required / 23.2 GiB available, before cache/workspace overhead). No full-model benchmark or promotion; working Super IQ3 remains selected. Small single-GPU layer correctness only; no new model throughput or full-window validation. [Record](SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
+Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. Small single-GPU layer correctness only; no new model throughput or full-window validation. [Record](SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
 
 [AMD H3 encoder-format comparison](../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 

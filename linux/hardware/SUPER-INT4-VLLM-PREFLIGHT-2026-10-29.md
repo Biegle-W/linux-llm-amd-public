@@ -34,6 +34,14 @@ The existing `dsh/moe_memory.py` admission function was applied without changing
 
 This is already an optimistic lower bound: it gives the GPU weight allocation no KV/recurrent cache, activation, workspace, TP replication or repacking overhead. The real requirement is higher. The guard reported **26.9 GiB required / 23.2 GiB available** and refused before a full-model worker launched. Swap is not counted as physical expert capacity. The earlier weight-only 44 GiB GPU estimate did not include the retained 3 GiB per-card safety reserves and cannot justify bypassing this check.
 
+## Temporary service-pause retry — October 29
+
+At the user's request, the Hermes gateway and Prometheus/Grafana monitoring containers were temporarily stopped after recording their running states and restart policies. No desktop, network, cooling, inference guard, API/hub or unrelated application was stopped.
+
+Available RAM increased from **23.0458 GiB** to **23.5324 GiB**, a measured gain of **0.4866 GiB**. The same admission function still refused: **26.9243 GiB required**, before any cache/workspace overhead. Thus this retry also stopped before a full-model worker launched; there is no vLLM speed result.
+
+All three stopped services were restored and verified running. The Hermes service enablement and both container restart policies match their pre-test states. No restoration obligation or test GPU lock remains. Guards and the selected llama.cpp profile are unchanged. More available physical RAM is still needed for a fresh guarded attempt.
+
 ## Outcome and next step
 
 No full-model inference, matched post-update llama.cpp comparison, 32K context proof or normal API qualification was run. Existing benchmark speeds keep their original attribution. The conditional replacement criterion was not met; the working llama.cpp profile remains selected. All owned microtest processes exited and the GPU lock is released; the completed download job is inactive. Existing runtime pins, guards, paused routes and other schedules remain unchanged.

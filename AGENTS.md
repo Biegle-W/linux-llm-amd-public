@@ -1,6 +1,6 @@
 # Agent entry point
 
-**October 29 Super INT4 preflight:** full-model loading is blocked by unchanged RAM admission; keep the working IQ3 selection. [Completed checks and pending qualification](linux/hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
+**October 29 Super INT4 preflight:** the service-pause retry also fails unchanged RAM admission; all stopped services are restored. Keep the working IQ3 selection. [Completed checks and pending qualification](linux/hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
 
 **Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](linux/hardware/SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 

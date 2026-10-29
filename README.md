@@ -1,6 +1,6 @@
 # Linux LLM AMD — public reference
 
-**October 29 Super INT4 preflight:** Super INT4 small-kernel/UVA checks pass, but full-model RAM admission is refused (26.9 GiB required / 23.2 GiB available, before cache/workspace overhead). No full-model benchmark or promotion; working Super IQ3 remains selected. [Evidence and limits](linux/hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
+**October 29 Super INT4 preflight:** Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. [Evidence and limits](linux/hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
 
 **Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](linux/hardware/SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 

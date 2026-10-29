@@ -111,5 +111,27 @@
     "Capacity lower bound excludes vision/MTP and ignores KV/recurrent caches, activations/workspace, TP replication and repacking overhead.",
     "Microtest per-run thermal peaks were not captured; no full-run thermal qualification claimed.",
     "Downloaded candidate retained; working IQ3 weights, launchers, catalog, guards, runtime pins and schedules unchanged."
-  ]
+  ],
+  "service_pause_retry": {
+    "checked_at": "2026-10-29T23:06:35.998997+00:00",
+    "before_available_ram_bytes": 24745230336,
+    "paused_available_ram_bytes": 25267724288,
+    "freed_available_ram_bytes": 522493952,
+    "visible_ram_bytes": 32811171840,
+    "core_weight_lower_bound_bytes": 69622358816,
+    "gpu_weight_upper_bound_bytes": 45007605760,
+    "minimum_cpu_weight_bytes": 24614753056,
+    "minimum_available_ram_bytes": 28909720352,
+    "admitted": false,
+    "full_model_launched": false,
+    "production_changed": false,
+    "guards_changed": false,
+    "temporarily_paused": [
+      "Hermes gateway",
+      "Prometheus",
+      "Grafana"
+    ],
+    "all_stopped_services_restored": true,
+    "original_enablement_and_restart_policies_preserved": true
+  }
 }
