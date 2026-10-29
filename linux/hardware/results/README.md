@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## All models on actual 32 GB — October 29
+
+[Grouped report](../ALL-MODELS-32GB-2026-10-28.md) and [numeric trials](all-models-32gb-2026-10-29.json): resident measurements, scoped native/file-backed candidates, reused SSD/H3 results, fresh-server Qwen/FLUX images, memory/thermal summaries and retained failures. Timing scopes, configured context, storage and active versus candidate status remain explicit.
+
 [AMD H3 encoder-format comparison](../../graphics/H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 ## Fresh H3 one-card versus two-card test — October28

@@ -1,8 +1,8 @@
 # Linux LLM AMD — public reference
 
-## Remaining models on 32 GB — running
+## All models on 32 GB — measured October 29
 
-The [remaining-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is running. Qwen-Image and both FLUX workflows are complete: three timed fresh-server trials each, with excluded warmups and SHA-bound image reviews. Median complete requests: **190.720 s Qwen-Image, 170.274 s FLUX text-to-image, 161.970 s FLUX reference edit**, including encoder/upsampler/model loading. All three missing framework prefill/continuous recoveries have passed, reusing completed decode trials. SGLang and native physical-RAM candidates remain active or queued. Preserve their jobs and completed measurements. Current numeric evidence is explicitly in progress; final all-model publication remains pending. Production profiles, pins, contexts, guards, coordinators and paused schedules remain.
+The [all-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is complete within the recorded scopes, including Qwen-Image and FLUX. Fresh-server image request medians: qwen-image 190.720 s; flux-t2i 170.274 s; flux-edit 161.970 s. Current grouped tables distinguish measured selected runtimes, isolated native/SGLang candidates and retained profiles. All owned benchmark work is cleaned up; engine pins, contexts, guards, coordinators and paused schedules remain. No automatic promotion or restoration.
 
 ## Matched H3 on 32 GB — complete
 

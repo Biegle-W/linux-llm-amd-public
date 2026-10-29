@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "in_progress",
+  "status": "complete",
   "date": "2026-10-29",
   "hardware": {
     "CPU": "Intel i9-13900KS",
@@ -29,7 +29,8 @@
     "graphics_soft_samples": 4,
     "graphics_VRAM_hard_GiB": 1.5,
     "dedicated_VRAM_spill_allowed_bytes": 0,
-    "swap_policy": "loading-swap-v3; occupancy, reads, rates and PSI advisory; OS oomd unchanged"
+    "swap_policy": "loading-swap-v3; occupancy, reads, rates and PSI advisory; OS oomd unchanged",
+    "native_placement_guard_scope": "The native VRAM reserve/hard floors apply to Super/Ornith placement experiments. Resident framework profiles retain their separate unchanged launcher/admission/runtime limits."
   },
   "resident": [
     {
@@ -2703,7 +2704,7 @@
       "model": "qwen3.8-27b-sglang-dflash2",
       "engine": "sglang",
       "context": 163840,
-      "status": "graph-disabled candidate did not qualify",
+      "status": "low-buffer candidate did not qualify",
       "original_status": "guard_stopped",
       "original_error": "RemoteDisconnected: Remote end closed connection without response",
       "original_memory_failures": [
@@ -2865,6 +2866,61 @@
             "max_inference_swapout_bytes_per_second": 0.0,
             "max_inference_swap_io_bytes_per_second": 0.0,
             "min_available_bytes": 18326056960,
+            "max_memory_full_psi_avg10": 0.0,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": null,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "failures": [],
+            "advisories": []
+          }
+        },
+        "shutdown_verified": true,
+        "samples": {
+          "short": {
+            "code": [],
+            "prose": []
+          },
+          "prefill": []
+        }
+      },
+      "low-buffer_candidate": {
+        "date": "Oct29",
+        "status": "guard_stopped",
+        "passed": false,
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "faults": [
+          "vram_spill"
+        ],
+        "memory_failures": [
+          "vram_spill",
+          "swap_activity_no_inference_window"
+        ],
+        "lifecycle_memory": {
+          "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+          "interval_seconds": 0.5,
+          "worker_samples": 161,
+          "sampling_errors": 0,
+          "enforcement_attempts": 1,
+          "enforcement_errors": 0,
+          "enforcement_state": "notified",
+          "max_worker_swap_bytes": 4765593600,
+          "max_nonresident_vram_bytes": 127164416,
+          "swap_activity": {
+            "policy": "loading-swap-v3",
+            "samples": 166,
+            "sampling_errors": 0,
+            "elapsed_seconds": 86.77349201600009,
+            "worker_swap_peak_bytes": 4765593600,
+            "total_swapin_bytes": 1621823488,
+            "total_swapout_bytes": 5194383360,
+            "inference_window_samples": 0,
+            "max_inference_swapout_bytes_per_second": 0.0,
+            "max_inference_swap_io_bytes_per_second": 0.0,
+            "min_available_bytes": 18912387072,
             "max_memory_full_psi_avg10": 0.0,
             "max_low_memory_consecutive_samples": 0,
             "max_full_psi_consecutive_samples": 0,
@@ -3221,7 +3277,9 @@
           "inference_swap_io_rate_observed"
         ]
       },
-      "category": "cpu_ram_offload"
+      "category": "cpu_ram_offload",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null
     },
     {
       "model": "ornith-1.5-122b",
@@ -3392,6 +3450,8 @@
         "advisories": []
       },
       "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
       "memory": {
         "minimum_host_available_bytes": 26950950912,
         "maximum_worker_swap_bytes": 167141376,
@@ -3575,6 +3635,8 @@
         "advisories": []
       },
       "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
       "memory": {
         "minimum_host_available_bytes": 27117105152,
         "maximum_worker_swap_bytes": 165793792,
@@ -3918,7 +3980,9 @@
         "failures": [],
         "advisories": []
       },
-      "category": "cpu_ram_offload"
+      "category": "cpu_ram_offload",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null
     },
     {
       "model": "nemotron-3.5-super-iq3",
@@ -4076,6 +4140,8 @@
         "advisories": []
       },
       "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
       "memory": {
         "minimum_host_available_bytes": 26605547520,
         "maximum_worker_swap_bytes": 116400128,
@@ -4246,6 +4312,8 @@
         "advisories": []
       },
       "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
       "memory": {
         "minimum_host_available_bytes": 26670514176,
         "maximum_worker_swap_bytes": 125927424,
@@ -4430,6 +4498,8 @@
         "advisories": []
       },
       "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
       "memory": {
         "minimum_host_available_bytes": 26621571072,
         "maximum_worker_swap_bytes": 174026752,
@@ -4447,8 +4517,8 @@
     {
       "model": "ornith-1.5-122b",
       "arm": "ornith-paged-cache6-20",
-      "status": "running",
-      "error": null,
+      "status": "failed",
+      "error": "timed out",
       "long_quality": null,
       "series": "native_paged",
       "date": "Oct29",
@@ -4466,23 +4536,1011 @@
         "prefill": []
       },
       "thermal": {
-        "samples": null,
-        "sample_errors": null,
-        "cpu_peak_package_c": null,
-        "cards": null
+        "samples": 484,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 96.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 484,
+            "busy_samples": 20,
+            "sensor_samples": {
+              "mem": 484,
+              "edge": 484,
+              "junction": 484
+            },
+            "peak_temperature_c": {
+              "mem": 36.0,
+              "edge": 39.0,
+              "junction": 45.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 36.0,
+              "edge": 39.0,
+              "junction": 45.0
+            },
+            "throttle_samples_available": 484,
+            "thermal_limit_samples": 397,
+            "hotspot_limit_samples": 397,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2200.0,
+            "peak_power_average_w": 93.0,
+            "peak_gfx_clock_mhz": 3095.0,
+            "peak_memory_clock_mhz": 772.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 484,
+            "busy_samples": 0,
+            "sensor_samples": {
+              "mem": 484,
+              "edge": 484,
+              "junction": 484
+            },
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 32.0,
+              "junction": 42.0
+            },
+            "peak_busy_temperature_c": {},
+            "throttle_samples_available": 484,
+            "thermal_limit_samples": 455,
+            "hotspot_limit_samples": 455,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1878.0,
+            "peak_power_average_w": 24.0,
+            "peak_gfx_clock_mhz": 45.0,
+            "peak_memory_clock_mhz": 96.0,
+            "peak_busy_percent": 2.0,
+            "last_throttle_status": "available"
+          }
+        }
       },
-      "owned_cleanup_verified": null,
-      "memory_limits": null,
-      "placement": {},
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.high": 19327352832,
+        "memory.max": 21474836480,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 6144,
+        "CPU_expert_layers": [
+          0,
+          1,
+          3,
+          4,
+          6,
+          8,
+          9,
+          11,
+          12,
+          14,
+          16,
+          17,
+          19,
+          20,
+          22,
+          24,
+          25,
+          27,
+          28,
+          30,
+          32,
+          33,
+          35,
+          36,
+          38,
+          40,
+          41,
+          43,
+          44,
+          46
+        ],
+        "host_expert_weight_bytes": 44090523648,
+        "batch": 1024,
+        "ubatch": 512,
+        "original_quantization": "Q4_K_M",
+        "context": 32768,
+        "classification": "Experimental SSD-paged CPU experts: 41GiB logical backing with bounded real RAM and allowed phase-aware swap; not a fully resident CPU profile"
+      },
+      "load_seconds": null,
+      "quality_status": null,
+      "cgroup_events_before_stop": "low 0\nhigh 156154\nmax 49688\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 67\n",
+      "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "error_type": "TimeoutError",
+      "swap_activity": {
+        "policy": "loading-swap-v3",
+        "samples": 953,
+        "sampling_errors": 0,
+        "elapsed_seconds": 484.9581199759996,
+        "worker_swap_peak_bytes": 12264361984,
+        "total_swapin_bytes": 1454194688,
+        "total_swapout_bytes": 1082261504,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 4260610048,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": null,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "failures": [],
+        "advisories": []
+      },
+      "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
+      "memory": {
+        "minimum_host_available_bytes": 4269572096,
+        "maximum_worker_swap_bytes": 12264361984,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          10642448384,
+          10419834880
+        ],
+        "maximum_scope_memory_current_bytes": 21474836480,
+        "samples": 950,
+        "telemetry_errors": 0
+      },
+      "swap_failures": []
+    },
+    {
+      "model": "ornith-1.5-122b",
+      "arm": "ornith-paged-cache4-20",
+      "status": "failed",
+      "error": "timed out",
+      "long_quality": null,
+      "series": "native_paged",
+      "date": "Oct29",
+      "storage": {
+        "name": "Ornith122B Q4_K_M \u00b7 llama.cpp `2280f0fd163b`",
+        "context": "32,768",
+        "GB": "76.76",
+        "location": "SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF`"
+      },
+      "samples": {
+        "short": {
+          "code": [],
+          "prose": []
+        },
+        "prefill": []
+      },
+      "thermal": {
+        "samples": 437,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 96.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 437,
+            "busy_samples": 1,
+            "sensor_samples": {
+              "mem": 437,
+              "edge": 437,
+              "junction": 437
+            },
+            "peak_temperature_c": {
+              "mem": 36.0,
+              "edge": 32.0,
+              "junction": 39.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 33.0,
+              "edge": 32.0,
+              "junction": 38.0
+            },
+            "throttle_samples_available": 437,
+            "thermal_limit_samples": 163,
+            "hotspot_limit_samples": 163,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1960.0,
+            "peak_power_average_w": 38.0,
+            "peak_gfx_clock_mhz": 1145.0,
+            "peak_memory_clock_mhz": 772.0,
+            "peak_busy_percent": 30.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 437,
+            "busy_samples": 0,
+            "sensor_samples": {
+              "mem": 437,
+              "edge": 437,
+              "junction": 437
+            },
+            "peak_temperature_c": {
+              "mem": 48.0,
+              "edge": 26.0,
+              "junction": 36.0
+            },
+            "peak_busy_temperature_c": {},
+            "throttle_samples_available": 437,
+            "thermal_limit_samples": 398,
+            "hotspot_limit_samples": 398,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1535.0,
+            "peak_power_average_w": 22.0,
+            "peak_gfx_clock_mhz": 24.0,
+            "peak_memory_clock_mhz": 96.0,
+            "peak_busy_percent": 1.0,
+            "last_throttle_status": "available"
+          }
+        }
+      },
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.high": 19327352832,
+        "memory.max": 21474836480,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 4096,
+        "CPU_expert_layers": [
+          0,
+          1,
+          3,
+          4,
+          6,
+          8,
+          9,
+          11,
+          12,
+          14,
+          16,
+          17,
+          19,
+          20,
+          22,
+          24,
+          25,
+          27,
+          28,
+          30,
+          32,
+          33,
+          35,
+          36,
+          38,
+          40,
+          41,
+          43,
+          44,
+          46
+        ],
+        "host_expert_weight_bytes": 44090523648,
+        "batch": 1024,
+        "ubatch": 512,
+        "original_quantization": "Q4_K_M",
+        "context": 32768,
+        "classification": "Experimental SSD-paged CPU experts: 41GiB logical backing with bounded real RAM and allowed phase-aware swap; not a fully resident CPU profile"
+      },
+      "load_seconds": null,
+      "quality_status": null,
+      "cgroup_events_before_stop": "low 0\nhigh 150233\nmax 44310\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 68\n",
+      "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "error_type": "TimeoutError",
+      "swap_activity": {
+        "policy": "loading-swap-v3",
+        "samples": 862,
+        "sampling_errors": 0,
+        "elapsed_seconds": 436.5183099350106,
+        "worker_swap_peak_bytes": 12054761472,
+        "total_swapin_bytes": 748695552,
+        "total_swapout_bytes": 1153024000,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 4361416704,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": null,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "failures": [],
+        "advisories": []
+      },
+      "category": "ssd_streaming",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
+      "memory": {
+        "minimum_host_available_bytes": 4385820672,
+        "maximum_worker_swap_bytes": 12054761472,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          10642444288,
+          10419822592
+        ],
+        "maximum_scope_memory_current_bytes": 21474836480,
+        "samples": 859,
+        "telemetry_errors": 0
+      },
+      "swap_failures": []
+    },
+    {
+      "model": "nemotron-3.5-super-iq3",
+      "arm": "super-balanced-direct-cache4-physical",
+      "status": "failed",
+      "error": "Desktop VRAM headroom low: minimum 2.74 GiB free",
+      "long_quality": null,
+      "series": "native_balanced_direct",
+      "date": "Oct29",
+      "storage": {
+        "name": "Super120B UD-IQ3_XXS \u00b7 llama.cpp `2280f0fd163b`",
+        "context": "32,768",
+        "GB": "59.76",
+        "location": "NVMe `Nemotron-Super`"
+      },
+      "samples": {
+        "short": {
+          "code": [],
+          "prose": []
+        },
+        "prefill": []
+      },
+      "thermal": {
+        "samples": 69,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 70.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 69,
+            "busy_samples": 14,
+            "sensor_samples": {
+              "mem": 69,
+              "edge": 69,
+              "junction": 69
+            },
+            "peak_temperature_c": {
+              "mem": 36.0,
+              "edge": 35.0,
+              "junction": 42.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 34.0,
+              "edge": 35.0,
+              "junction": 42.0
+            },
+            "throttle_samples_available": 69,
+            "thermal_limit_samples": 59,
+            "hotspot_limit_samples": 59,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2065.0,
+            "peak_power_average_w": 91.0,
+            "peak_gfx_clock_mhz": 3062.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 69,
+            "busy_samples": 15,
+            "sensor_samples": {
+              "mem": 69,
+              "edge": 69,
+              "junction": 69
+            },
+            "peak_temperature_c": {
+              "mem": 50.0,
+              "edge": 27.0,
+              "junction": 39.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 50.0,
+              "edge": 27.0,
+              "junction": 37.0
+            },
+            "throttle_samples_available": 69,
+            "thermal_limit_samples": 67,
+            "hotspot_limit_samples": 67,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1584.0,
+            "peak_power_average_w": 42.0,
+            "peak_gfx_clock_mhz": 1289.0,
+            "peak_memory_clock_mhz": 772.0,
+            "peak_busy_percent": 42.0,
+            "last_throttle_status": "available"
+          }
+        }
+      },
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.max": 32811163648,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 4096,
+        "CPU_expert_layers": [
+          3,
+          12,
+          17,
+          21,
+          26,
+          30,
+          34,
+          39,
+          43,
+          48,
+          52,
+          59,
+          65,
+          74,
+          81,
+          85
+        ],
+        "host_expert_weight_bytes": 20533739520,
+        "batch": 2048,
+        "ubatch": 1024,
+        "tensor_split": "1,1",
+        "RAM_scope": "actual physical MemTotal; no artificial MemoryHigh; unchanged 3GiB host guard",
+        "original_quantization": "UD-IQ3_XXS",
+        "context": 32768,
+        "classification": "CPU RAM expert backing"
+      },
       "load_seconds": null,
       "quality_status": null,
       "cgroup_events_before_stop": null,
       "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
-      "error_type": null,
+      "error_type": "RuntimeError",
       "swap_activity": null,
-      "category": "ssd_streaming",
-      "memory": null,
+      "category": "cpu_ram_offload",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
+      "memory": {
+        "minimum_host_available_bytes": 5991559168,
+        "maximum_worker_swap_bytes": 4167667712,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          4889886720,
+          2945413120
+        ],
+        "maximum_scope_memory_current_bytes": 26780782592,
+        "samples": 134,
+        "telemetry_errors": 1
+      },
       "swap_failures": null
+    },
+    {
+      "model": "nemotron-3.5-super-iq3",
+      "arm": "super-balanced-direct-cache3-physical",
+      "status": "failed",
+      "error": "Desktop VRAM headroom low: minimum 2.96 GiB free",
+      "long_quality": null,
+      "series": "native_balanced_direct",
+      "date": "Oct29",
+      "storage": {
+        "name": "Super120B UD-IQ3_XXS \u00b7 llama.cpp `2280f0fd163b`",
+        "context": "32,768",
+        "GB": "59.76",
+        "location": "NVMe `Nemotron-Super`"
+      },
+      "samples": {
+        "short": {
+          "code": [],
+          "prose": []
+        },
+        "prefill": []
+      },
+      "thermal": {
+        "samples": 117,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 79.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 117,
+            "busy_samples": 22,
+            "sensor_samples": {
+              "mem": 117,
+              "edge": 117,
+              "junction": 117
+            },
+            "peak_temperature_c": {
+              "mem": 38.0,
+              "edge": 35.0,
+              "junction": 43.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 38.0,
+              "edge": 35.0,
+              "junction": 43.0
+            },
+            "throttle_samples_available": 117,
+            "thermal_limit_samples": 94,
+            "hotspot_limit_samples": 94,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2101.0,
+            "peak_power_average_w": 109.0,
+            "peak_gfx_clock_mhz": 3093.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 117,
+            "busy_samples": 22,
+            "sensor_samples": {
+              "mem": 117,
+              "edge": 117,
+              "junction": 117
+            },
+            "peak_temperature_c": {
+              "mem": 50.0,
+              "edge": 28.0,
+              "junction": 40.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 50.0,
+              "edge": 28.0,
+              "junction": 40.0
+            },
+            "throttle_samples_available": 117,
+            "thermal_limit_samples": 112,
+            "hotspot_limit_samples": 112,
+            "power_limit_samples": 1,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1666.0,
+            "peak_power_average_w": 91.0,
+            "peak_gfx_clock_mhz": 3031.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          }
+        }
+      },
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.max": 32811163648,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 3072,
+        "CPU_expert_layers": [
+          3,
+          12,
+          17,
+          21,
+          26,
+          30,
+          34,
+          39,
+          43,
+          48,
+          52,
+          59,
+          65,
+          74,
+          81,
+          85
+        ],
+        "host_expert_weight_bytes": 20533739520,
+        "batch": 2048,
+        "ubatch": 1024,
+        "tensor_split": "1,1",
+        "RAM_scope": "actual physical MemTotal; no artificial MemoryHigh; unchanged 3GiB host guard",
+        "original_quantization": "UD-IQ3_XXS",
+        "context": 32768,
+        "classification": "CPU RAM expert backing"
+      },
+      "load_seconds": 112.84239403301035,
+      "quality_status": null,
+      "cgroup_events_before_stop": null,
+      "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "error_type": "RuntimeError",
+      "swap_activity": null,
+      "category": "cpu_ram_offload",
+      "client_poll_recovery_for": null,
+      "readiness_poll_timeouts": null,
+      "memory": {
+        "minimum_host_available_bytes": 5434736640,
+        "maximum_worker_swap_bytes": 7156166656,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          5116882944,
+          3176783872
+        ],
+        "maximum_scope_memory_current_bytes": 26774736896,
+        "samples": 229,
+        "telemetry_errors": 1
+      },
+      "swap_failures": null
+    },
+    {
+      "model": "ornith-1.5-122b",
+      "arm": "ornith-poll-recovery-cache6-20",
+      "status": "failed",
+      "error": "Native model loading",
+      "long_quality": null,
+      "series": "native_paged_recovery",
+      "date": "Oct29",
+      "storage": {
+        "name": "Ornith122B Q4_K_M \u00b7 llama.cpp `2280f0fd163b`",
+        "context": "32,768",
+        "GB": "76.76",
+        "location": "SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF`"
+      },
+      "samples": {
+        "short": {
+          "code": [],
+          "prose": []
+        },
+        "prefill": []
+      },
+      "thermal": {
+        "samples": 899,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 100.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 899,
+            "busy_samples": 10,
+            "sensor_samples": {
+              "mem": 899,
+              "edge": 899,
+              "junction": 899
+            },
+            "peak_temperature_c": {
+              "mem": 36.0,
+              "edge": 36.0,
+              "junction": 43.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 34.0,
+              "edge": 36.0,
+              "junction": 43.0
+            },
+            "throttle_samples_available": 899,
+            "thermal_limit_samples": 348,
+            "hotspot_limit_samples": 348,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2144.0,
+            "peak_power_average_w": 91.0,
+            "peak_gfx_clock_mhz": 3062.0,
+            "peak_memory_clock_mhz": 772.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 899,
+            "busy_samples": 0,
+            "sensor_samples": {
+              "mem": 899,
+              "edge": 899,
+              "junction": 899
+            },
+            "peak_temperature_c": {
+              "mem": 49.0,
+              "edge": 27.0,
+              "junction": 37.0
+            },
+            "peak_busy_temperature_c": {},
+            "throttle_samples_available": 899,
+            "thermal_limit_samples": 848,
+            "hotspot_limit_samples": 848,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1608.0,
+            "peak_power_average_w": 22.0,
+            "peak_gfx_clock_mhz": 10.0,
+            "peak_memory_clock_mhz": 96.0,
+            "peak_busy_percent": 0.0,
+            "last_throttle_status": "available"
+          }
+        }
+      },
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.high": 19327352832,
+        "memory.max": 21474836480,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 6144,
+        "CPU_expert_layers": [
+          0,
+          1,
+          3,
+          4,
+          6,
+          8,
+          9,
+          11,
+          12,
+          14,
+          16,
+          17,
+          19,
+          20,
+          22,
+          24,
+          25,
+          27,
+          28,
+          30,
+          32,
+          33,
+          35,
+          36,
+          38,
+          40,
+          41,
+          43,
+          44,
+          46
+        ],
+        "host_expert_weight_bytes": 44090523648,
+        "batch": 1024,
+        "ubatch": 512,
+        "original_quantization": "Q4_K_M",
+        "context": 32768,
+        "classification": "Experimental SSD-paged CPU experts: 41GiB logical backing with bounded real RAM and allowed phase-aware swap; not a fully resident CPU profile"
+      },
+      "load_seconds": null,
+      "quality_status": null,
+      "cgroup_events_before_stop": "low 0\nhigh 375418\nmax 77511\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 115\n",
+      "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "error_type": "TimeoutError",
+      "swap_activity": {
+        "policy": "loading-swap-v3",
+        "samples": 1777,
+        "sampling_errors": 0,
+        "elapsed_seconds": 899.7428588220064,
+        "worker_swap_peak_bytes": 11456565248,
+        "total_swapin_bytes": 783417344,
+        "total_swapout_bytes": 531238912,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 4093493248,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": null,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "failures": [],
+        "advisories": []
+      },
+      "category": "ssd_streaming",
+      "client_poll_recovery_for": "ornith-paged-cache6-20",
+      "readiness_poll_timeouts": 117,
+      "memory": {
+        "minimum_host_available_bytes": 4042760192,
+        "maximum_worker_swap_bytes": 11456565248,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          10642448384,
+          10419834880
+        ],
+        "maximum_scope_memory_current_bytes": 21474836480,
+        "samples": 1773,
+        "telemetry_errors": 0
+      },
+      "swap_failures": []
+    },
+    {
+      "model": "ornith-1.5-122b",
+      "arm": "ornith-poll-recovery-cache4-20",
+      "status": "failed",
+      "error": "Native model loading",
+      "long_quality": null,
+      "series": "native_paged_recovery",
+      "date": "Oct29",
+      "storage": {
+        "name": "Ornith122B Q4_K_M \u00b7 llama.cpp `2280f0fd163b`",
+        "context": "32,768",
+        "GB": "76.76",
+        "location": "SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF`"
+      },
+      "samples": {
+        "short": {
+          "code": [],
+          "prose": []
+        },
+        "prefill": []
+      },
+      "thermal": {
+        "samples": 900,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 96.0
+        },
+        "cards": {
+          "0000:03:00.0": {
+            "gpu_index": 0,
+            "samples": 900,
+            "busy_samples": 200,
+            "sensor_samples": {
+              "mem": 900,
+              "edge": 900,
+              "junction": 900
+            },
+            "peak_temperature_c": {
+              "mem": 42.0,
+              "edge": 44.0,
+              "junction": 51.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 42.0,
+              "edge": 44.0,
+              "junction": 51.0
+            },
+            "throttle_samples_available": 900,
+            "thermal_limit_samples": 622,
+            "hotspot_limit_samples": 622,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2416.0,
+            "peak_power_average_w": 97.0,
+            "peak_gfx_clock_mhz": 3099.0,
+            "peak_memory_clock_mhz": 772.0,
+            "peak_busy_percent": 100.0,
+            "last_throttle_status": "available"
+          },
+          "0000:06:00.0": {
+            "gpu_index": 1,
+            "samples": 900,
+            "busy_samples": 1,
+            "sensor_samples": {
+              "mem": 900,
+              "edge": 900,
+              "junction": 900
+            },
+            "peak_temperature_c": {
+              "mem": 49.0,
+              "edge": 27.0,
+              "junction": 37.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 49.0,
+              "edge": 27.0,
+              "junction": 37.0
+            },
+            "throttle_samples_available": 900,
+            "thermal_limit_samples": 847,
+            "hotspot_limit_samples": 847,
+            "power_limit_samples": 0,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1536.0,
+            "peak_power_average_w": 62.0,
+            "peak_gfx_clock_mhz": 1275.0,
+            "peak_memory_clock_mhz": 96.0,
+            "peak_busy_percent": 27.0,
+            "last_throttle_status": "available"
+          }
+        }
+      },
+      "owned_cleanup_verified": true,
+      "memory_limits": {
+        "memory.high": 19327352832,
+        "memory.max": 21474836480,
+        "memory.swap.max": "max"
+      },
+      "placement": {
+        "load_mode": "none",
+        "GPU_expert_cache_MiB": 4096,
+        "CPU_expert_layers": [
+          0,
+          1,
+          3,
+          4,
+          6,
+          8,
+          9,
+          11,
+          12,
+          14,
+          16,
+          17,
+          19,
+          20,
+          22,
+          24,
+          25,
+          27,
+          28,
+          30,
+          32,
+          33,
+          35,
+          36,
+          38,
+          40,
+          41,
+          43,
+          44,
+          46
+        ],
+        "host_expert_weight_bytes": 44090523648,
+        "batch": 1024,
+        "ubatch": 512,
+        "original_quantization": "Q4_K_M",
+        "context": 32768,
+        "classification": "Experimental SSD-paged CPU experts: 41GiB logical backing with bounded real RAM and allowed phase-aware swap; not a fully resident CPU profile"
+      },
+      "load_seconds": null,
+      "quality_status": null,
+      "cgroup_events_before_stop": "low 0\nhigh 361223\nmax 80144\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 187\n",
+      "runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "error_type": "TimeoutError",
+      "swap_activity": {
+        "policy": "loading-swap-v3",
+        "samples": 1750,
+        "sampling_errors": 0,
+        "elapsed_seconds": 899.6021427669912,
+        "worker_swap_peak_bytes": 11318906880,
+        "total_swapin_bytes": 489074688,
+        "total_swapout_bytes": 692310016,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 4152016896,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": null,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "failures": [],
+        "advisories": []
+      },
+      "category": "ssd_streaming",
+      "client_poll_recovery_for": "ornith-paged-cache4-20",
+      "readiness_poll_timeouts": 86,
+      "memory": {
+        "minimum_host_available_bytes": 4146536448,
+        "maximum_worker_swap_bytes": 11384565760,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          10642448384,
+          10419818496
+        ],
+        "maximum_scope_memory_current_bytes": 21474836480,
+        "samples": 1746,
+        "telemetry_errors": 0
+      },
+      "swap_failures": []
     }
   ],
   "SSD": [
@@ -5552,7 +6610,7 @@
           },
           "visual_review": {
             "sha256": "951a4c306c179908ff233bd09f2f458d181f5f342ecc5e31e0f70bff96dde3a4",
-            "review": "Reviewed lighthouse scene with rocky coast/dusk and clearly legible LOCAL LLM. Decoded RGB pixels are exactly identical to visually accepted trial1; PNG differs in metadata. No obvious corruption; sampled prompt adherence only.",
+            "review": "Decoded RGBA pixels exactly match visually accepted trial1: coherent rocky coast lighthouse at dusk with clearly legible LOCAL LLM. Alpha is uniformly opaque; PNG metadata differs. Sampled prompt adherence only.",
             "pixel_identical_to": "flux-t2i-trial1"
           },
           "guard_faults": [],
@@ -6344,15 +7402,16 @@
   ],
   "H3_source": "h3-matched-32gb-2026-10-28.json",
   "source_sha256": {
+    "ornith-poll-recovery": "78561a24fc38a4da863786f8d28ccb379b1a8d0ff6a015aa9aa20e45a60cfe49",
     "engine-benchmarks": "f4d7c3281b37a839649c89d3116c70b9c11a1f83cc3a2e29f6fcee8ff5c345ac",
     "sglang-graph-disabled": "07747f524dcbbc9d787655c900baa93b0684605cb8a03ef302753d7c556d3069",
     "graphics-benchmarks": "508650a41564f349ba795973a103036d879d880009b2aee2d7e074e8f50ada88",
-    "sglang-lowbuffer": "d9b01f8e19627cc4e378d3f18b32b2abb3401d5da8671096156c47a084cf5080",
+    "sglang-lowbuffer": "e0cdb10c2294c15a948319ebacc4e155def7b3880185854346438dda98b8134d",
     "cpu-fullphysical": "f286f5c2959192844c9be2b69846cc87f3a7601deb20941b4e135f24ab32cb97",
-    "cpu-super-balanced-direct": "0302dea319ad1352e901e148e7e3fce5e9bef63d03f6c875b4ef45039104eda1",
+    "cpu-super-balanced-direct": "754eb70642b4cb832314d8a6b8a7dc501a1fdda7c0d58adcb660953f24098524",
     "prefill-recovery-r2": "910288106b85329210bf6c06641ce2a9dfa21f1ce5ed98d87057a1650d34fbc8",
     "cpu-benchmarks": "188c4e3c7ee59ebd7d1c78c5bcadd014fa5f2c174f7ec37cf456a748dda84610",
-    "ornith-paged": "b7a1634fcbedf7710c6ce17e3b8d7285f8bef7a58dd59b96ccaecf719ad9cab5"
+    "ornith-paged": "d4e69d17166260527e8f609e8f0355ecf5e7ed460a9e1c27fa15751f1d9707a8"
   },
   "stages": {
     "engine-benchmarks.private.json": "completed",
@@ -6360,10 +7419,11 @@
     "cpu-benchmarks.private.json": "complete",
     "graphics-benchmarks.private.json": "complete",
     "sglang-graph-disabled.private.json": "completed",
-    "sglang-lowbuffer.private.json": "waiting_for_native_pipeline",
-    "cpu-super-balanced-direct.private.json": "waiting_for_sglang_lowbuffer",
+    "sglang-lowbuffer.private.json": "completed",
+    "ornith-poll-recovery.private.json": "complete",
+    "cpu-super-balanced-direct.private.json": "complete",
     "cpu-fullphysical.private.json": "complete",
-    "ornith-paged.private.json": "running"
+    "ornith-paged.private.json": "complete"
   },
   "production_profiles_changed": false,
   "reused_SSD_source": "ssd-streaming-32gb-2026-10-28.json",
@@ -6710,5 +7770,5 @@
     "custom_nodes/allmodels_gpu_init/__init__.py": "3eb2fccf46ad6797c544d721480cdc3acb278e9b8fcd671868efc021296f2f73",
     "custom_nodes/allmodels_phase/__init__.py": "ae81fa94f1d49cc7584f9c62f6ca7237904336a5abdc2b11794327718aa5c0d0"
   },
-  "generated_at": "2026-10-29T02:36:30.998039-04:00"
+  "generated_at": "2026-10-29T03:28:19.532436-04:00"
 }

@@ -1,6 +1,6 @@
 # Agent entry point
 
-The [remaining-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is active. Read its checkpoint before GPU work; preserve active reservations, completed measurements and all guards. Do not repeat completed trials. Final all-model results and publication remain pending.
+The [all-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is complete within recorded scopes. Read its current grouped results, candidate limits and retained failures. All owned benchmark jobs/locks are cleaned up. Preserve completed evidence, runtime selections and guards; do not repeat GPU tests for documentation.
 
 The [matched newer H3 comparison](linux/graphics/H3-MATCHED-32GB-2026-10-28.md) is complete on the actual 32 GB host. Read its request/sampler medians, common-input protocol, memory and sampled-quality limits. All owned work is cleaned up; preserve completed evidence, guards and the isolated candidate. No production promotion or remaining benchmark job.
 

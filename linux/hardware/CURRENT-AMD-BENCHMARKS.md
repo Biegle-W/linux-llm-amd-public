@@ -1,8 +1,8 @@
 # Current dual-AMD benchmarks — October 28, 2026
 
-## Remaining models on 32 GB — running
+## All models on 32 GB — measured October 29
 
-The [remaining-model 32 GB benchmark](ALL-MODELS-32GB-2026-10-28.md) is running. Qwen-Image and both FLUX workflows are complete: three timed fresh-server trials each, with excluded warmups and SHA-bound image reviews. Median complete requests: **190.720 s Qwen-Image, 170.274 s FLUX text-to-image, 161.970 s FLUX reference edit**, including encoder/upsampler/model loading. All three missing framework prefill/continuous recoveries have passed, reusing completed decode trials. SGLang and native physical-RAM candidates remain active or queued. Preserve their jobs and completed measurements. Current numeric evidence is explicitly in progress; final all-model publication remains pending. Production profiles, pins, contexts, guards, coordinators and paused schedules remain.
+The [all-model 32 GB benchmark](ALL-MODELS-32GB-2026-10-28.md) is complete within the recorded scopes, including Qwen-Image and FLUX. Fresh-server image request medians: qwen-image 190.720 s; flux-t2i 170.274 s; flux-edit 161.970 s. Current grouped tables distinguish measured selected runtimes, isolated native/SGLang candidates and retained profiles. All owned benchmark work is cleaned up; engine pins, contexts, guards, coordinators and paused schedules remain. No automatic promotion or restoration.
 
 ## Matched H3 on 32 GB — complete
 
@@ -36,42 +36,97 @@ Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one ex
 
 Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.83 GiB and earlier 64 GB measurements; the new 32 GB SSD-streaming section above supplies fresh October28 LLM results; the other historical rows keep their original RAM attribution. [H3 comparison and limitations](../graphics/H3-POST-UPGRADE-2026-10-28.md) are separate diffusion evidence.
 
-## Current selected profiles — October28; retained October27 vLLM pins
+## Current 32 GB results — October 28–29
 
-Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-prefill failures. Five profiles have completed October27 speed samples on14.83GiB RAM. The temporary SSD-streaming rows now carry their own October28/32GB attribution; the other older references keep their original RAM and measurement dates. Prefill N=native,E=engine phase. Decode is code/prose. TTFT excludes loading; context is configured capacity. Sizes are decimal allocated associated-file GB, shared sets counted once. [Qualification and retained failures](VLLM-DEV602-PROMOTION-2026-10-27.md).
+Latest measurements on 30.56 GiB physical RAM; selected production profiles and isolated candidates are explicitly distinguished. N=native prefill; E=engine-phase prefill; fresh TTFT excludes model loading. See the [all-model report](ALL-MODELS-32GB-2026-10-28.md) and [numeric samples](results/all-models-32gb-2026-10-29.json) for memory, individual trials, exclusions and qualification limits. Historical 64 GB results remain in dated reports.
 
 ### VRAM only models
 
-| Model / selected engine | Date | Prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct27 | 3406.8 N | 2.410 | 132.83/83.51 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
-| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct27 | 6030.6 N | 1.394 | 46.73/46.82 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
-| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct27 | 1372.5 E | 6.008 | 140.97/77.73 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
-| Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct27 | 2642.4 E | 3.026 | 37.88/37.98 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
-| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct27 | 5091.7 E | 1.619 | 148.64/139.62 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
-| Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct23 reference | 1468.8 E | 5.585 | 206.18/71.08 | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
+| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct28 / measured selected runtime | 3,402.9 N | 2.416 | 132.46 / 83.76 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
+| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct28 / measured selected runtime | 6,031.9 N | 1.398 | 46.89 / 46.94 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
+| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 5,075.2 E | 1.657 | 120.11 / 111.20 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 1,403.6 E | 5.865 | 142.01 / 78.15 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
+| Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct28 / Oct29 / measured selected runtime | 2,787.9 E | 2.906 | 38.04 / 37.88 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
+| Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct29 / low-buffer candidate did not qualify | — | — | — / — | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
 
-SGLang's latest retry failed the VRAM-spill guard; its row is an older reference. Flint's visible-answer TTFT is4.457s. Sage stays text-only; its old GGUF/projector remains removed.
+Sage, Qwen vLLM and Bolt retain their valid original short trials; their missing prefill/continuous stages are measured in separate client sessions after repairing the client tokenizer dependency. Engine versions, quantization, contexts and pins remain. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
+
+The LLM series measures text inference. Sage remains text-only; this series does not requalify vision support or change its retained capability limits.
+
+A second isolated graph-disabled candidate reduces the temporary prefill chunk and maximum-prefill token caps from 2,048 to 1,024 after the first eager attempt spilled 121 MiB. Context, actual KV-capacity requirement, weights, quantization, DFlash settings, Mamba cache and all guards remain. Its result is reported separately; no production promotion.
+
+Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2: **low-buffer candidate did not qualify**. Dedicated-VRAM-spill guard stopped startup before a valid timing series. Owned cleanup and unchanged configuration fingerprints are verified.
 
 ### MoE models with CPU RAM offload
 
-| Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct25 /64GB | 430.4 | 18.426 | 15.58/17.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
-| Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct25 /64GB | 711.2 | 11.518 | 11.27/13.47 | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
+| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-cache2; isolated | 371.2 N | 22.130 | 11.22 / 12.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
+| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-physical; isolated | 434.6 N | 18.876 | 15.61 / 17.18 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
+| Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct29 / retained CPU profile held; see file/paged attempts | — | — | — / — | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
+
+Native placements are isolated from the retained Super/Ornith production profiles. The bounded Super arm used experimental MemoryHigh/Max 20/22 GiB. The later physical-RAM series uses actual MemTotal for MemoryMax and no artificial MemoryHigh. RAM expert backing may page under the allowed swap policy; it is not a fully resident capacity claim. File-backed mmap candidates explicitly depend on SSD reads. Super’s passed near 31K/history checks and Ornith’s actual exercised scope are recorded per arm.
+
+Metadata-only inventory finds 55.65 GiB of Super tensor weights and 70.62 GiB of Ornith weights. Both exceed the combined physical VRAM before KV, compute and reserve requirements. Increased GPU expert caches are tested within the existing floors; CPU or file/paged backing remains necessary at these fixed quantizations.
 
 ### MoE models with SSD streaming
 
-| Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
+#### Native file-backed or swap-paged candidates
+
+No completed valid native file-backed measurement in this class.
+
+These isolated candidates use mmap file reads or explicit swap-paged CPU buffers. They do not replace the normal streaming-engine profiles below and are not fully resident RAM capacity claims.
+
+#### Streaming engine profiles and compared tiers
+
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 /32GB temporary | 1155.8 | 7.104 | 70.15/50.95 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
-| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 /32GB temporary | 440.9 | 18.922 | 5.76/5.66 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
-| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB; held on32GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
-| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct25 /64GB; held on32GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
+| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-small; native candidate, held | 1,013.6 N | 8.098 | 36.42 / 37.35 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
+| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-large; active temporary 32 GB | 1,155.8 N | 7.104 | 70.15 / 50.95 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
+| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-small; active temporary 32 GB | 440.9 N | 18.922 | 5.76 / 5.66 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
+| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-large; native candidate, held | 464.6 N | 17.771 | 6.42 / 6.68 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
+| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-large; native candidate, held | 684.1 N | 11.993 | 2.76 / 2.12 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
+| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-small-retry1; native candidate, held | 691.1 N | 11.834 | 2.91 / 1.72 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
+| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-small; native candidate, held | 185.6 N | 44.067 | 2.95 / 1.86 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
+| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-large-retry1; native candidate, held | 185.2 N | 44.159 | 3.29 / 1.66 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
 
-Three timed samples/task, one excluded warmup, three fresh ~8K prefill probes; normal API canaries are separate transport checks. DeepSeek storage is shared. Retained-build historical64GB comparisons, individual samples, exclusions and limits are in the [qualification report](SSD-STREAMING-32GB-2026-10-28.md) and [numeric evidence](results/ssd-streaming-32gb-2026-10-28.json).
+Qwen/Strata large and GLM/Maya small are the previously activated temporary 32 GB profiles. Both DeepSeek engines retain their prior production profiles: their native 32 GB rows are valid measurements, with mixed performance and incomplete activation qualification. GLM’s larger tier passed native tests but failed normal RAM admission; the smaller qualified tier remains selected. These completed October 28 tests were reused. The DeepSeek storage set is shared. [Qualification and exclusions](SSD-STREAMING-32GB-2026-10-28.md).
 
-Older evidence: [October25 records](results/fresh-engine-tests-2026-10-25.json), [Strata production selection](STRATA-TUNING-2026-10-24.md), [SGLang reference](ALL-MODELS-2026-10-23.md), [storage inventory](results/model-storage-2026-10-27.json). Locations are sanitized drive-relative references; System is the models area and NVMe folders are beneath `LLM-Models`. Active associated model storage remains773.95GB; engine environments are excluded.
+### Images and video
+
+| Workflow | Timed trials | Fresh request median s | Range s | Encoder costs | Status |
+|---|---:|---:|---:|---|---|
+| qwen-image | 3 | 190.720 | 171.490–210.335 | included | passed; visual review complete |
+| flux-t2i | 3 | 170.274 | 156.815–185.506 | included | passed; visual review complete |
+| flux-edit | 3 | 161.970 | 161.705–196.266 | included | passed; visual review complete |
+| H3 single GPU, reused Oct28 | 3 | 179.209 | 171.416–220.722 | excluded | passed within sampled scope |
+| H3 actual RCCL TP2, reused Oct28 | 3 | 153.773 | 130.983–180.981 | excluded | passed within sampled scope |
+
+Qwen/FLUX retain the saved staged component placement: transformer on GPU0, encoder/upsampler and VAE stages on GPU1. The H3 rows separately compare one-card execution with actual RCCL TP2.
+
+Qwen-Image: 512×512, 40 steps. FLUX text-to-image: 1024×1024, 16 steps. FLUX reference edit: 1248×832. Each image workflow uses an excluded fresh-server warmup and three timed fresh servers; complete request times include encoder/upsampler/model reads, sample, decode and save. Server readiness is separate. Older warm-server Qwen timings are not comparable to these requests. H3 uses the completed matched 32 GB 608×352/39-frame test and excludes encoder cost; its sampler medians are 33.980/44.263 s single/TP2. [H3 scope and quality limits](../graphics/H3-MATCHED-32GB-2026-10-28.md).
+
+| Image component set | Allocated GB | Storage |
+|---|---:|---|
+| qwen-image | 33.12 | SATA1 `Graphics-Models/diffusion_models`, `text_encoders`, `vae` |
+| flux-t2i | 30.06 | SATA1 `Graphics-Models/diffusion_models`, `text_encoders`, `vae` |
+| flux-edit | 30.06 | SATA1 `Graphics-Models/diffusion_models`, `text_encoders`, `vae` |
+
+Image sizes include the workflow’s transformer, encoder(s), prompt upsampler where used, and VAE; metadata-only file stats measured October 29. FLUX text-to-image and edit share the same components and must not be added together. Video component storage remains in its dated report.
+
+Reviewed qwen-image output, from the trial with the median request time:
+
+![qwen-image reviewed sample](results/media/qwen-image.png)
+
+Reviewed flux-t2i output, from the trial with the median request time:
+
+![flux-t2i reviewed sample](results/media/flux-t2i.png)
+
+Reviewed flux-edit output, from the trial with the median request time:
+
+![flux-edit reviewed sample](results/media/flux-edit.png)
 
 **NVIDIA-agent notes delivered — October27:** the user requested a
 [NVIDIA-server handoff](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/AMD-PARITY-HANDOFF-20261027.md) for agents there to address the gap queue.
