@@ -177,7 +177,7 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
   histories, copy their active trees here or delete their historical records.
 - Keep the existing AMD checkout, installed engine/environment and model-storage
   paths unchanged. Repository renaming is not permission to relocate live assets.
-- Reaffirmed October28: always keep both maintained AMD repositories updated. Routine reviewed updates and normal non-force pushes are standing user authorization; do not request repeated per-change approval. Preserve sanitization, unrelated work, runtime guards and existing holds.
+- Reaffirmed October 29: automatically keep both maintained AMD repositories updated after relevant authorized work. Routine reviewed commits and normal non-force pushes to both repositories have standing user authorization; do not request repeated per-change approval. Preserve sanitization, unrelated work, runtime guards and existing holds.
 - Keep both AMD repositories current after authorized AMD changes. Publish only
   reviewed, sanitized files to the public repository; never copy private history,
   credentials, personal settings, raw logs or model weights.

@@ -28,6 +28,11 @@ Review public sanitization, commit/push intended changes to both AMD repositorie
 and verify synchronization; report any exact outstanding publication step.
 Do not rerun completed GPU tests just to refresh documentation.
 
+Reaffirmed October 29: reviewed commits and normal non-force pushes to both
+maintained AMD repositories are automatically authorized after relevant work.
+Follow the README maintenance and public sanitization rules without asking
+for repeated per-change approval.
+
 Keep private paths, credentials, logs and client state out of public exports.
 Preserve unrelated user changes and existing hardware/memory/ownership guards.
 The [cross-repository audit](linux/hardware/AMD-NVIDIA-GAP-AUDIT-2026-10-27.md) is read-only:
