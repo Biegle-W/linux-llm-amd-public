@@ -2,11 +2,11 @@
 
 ## Nightly updater restored — October 29
 
-The 03:00 daily engine updater is enabled; a manual guarded update run is in progress. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. Do not duplicate `llm-daily-update.service` or its GPU reservation. [Current restoration/run status](ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
+The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
 
 ## Ornith maximum-VRAM 32 GB test / updater audit — October 29
 
-Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; a read-only upstream check found five newer configured components and SGLang current on its AMD fork. [Version/coverage audit](ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; production hashes, guards and paused schedules remain.
+Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](ORNITH-VRAM-32GB-2026-10-29.md). The pre-restoration read-only check found five newer configured components and SGLang current; the timer is now restored and final outcomes are recorded above. [Version/coverage audit](ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; guards, held profiles and unrelated paused schedules remain. The selected vLLM wheel is updated as recorded above.
 
 ## All models on 32 GB — measured October 29
 
@@ -46,7 +46,7 @@ Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.
 
 ## Current 32 GB results — October 28–29
 
-Latest measurements on 30.56 GiB physical RAM; selected production profiles and isolated candidates are explicitly distinguished. N=native prefill; E=engine-phase prefill; fresh TTFT excludes model loading. See the [all-model report](ALL-MODELS-32GB-2026-10-28.md) and [numeric samples](results/all-models-32gb-2026-10-29.json) for memory, individual trials, exclusions and qualification limits. Historical 64 GB results remain in dated reports.
+Latest measurements on 30.56 GiB physical RAM; Qwen/Sage rows use the October29 nightly promotion comparison in [curated results](results/engine-updater-restored-2026-10-29.json), while other rows retain their original evidence; selected production profiles and isolated candidates are explicitly distinguished. N=native prefill; E=engine-phase prefill; fresh TTFT excludes model loading. See the [all-model report](ALL-MODELS-32GB-2026-10-28.md) and [numeric samples](results/all-models-32gb-2026-10-29.json) for memory, individual trials, exclusions and qualification limits. Historical 64 GB results remain in dated reports.
 
 ### VRAM only models
 
@@ -54,12 +54,12 @@ Latest measurements on 30.56 GiB physical RAM; selected production profiles and 
 |---|---|---:|---:|---:|---:|---:|---|
 | Empero IQ4_XS · llama.cpp `19cce6919992` | Oct28 / measured selected runtime | 3,402.9 N | 2.416 | 132.46 / 83.76 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
 | Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct28 / measured selected runtime | 6,031.9 N | 1.398 | 46.89 / 46.94 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
-| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 5,075.2 E | 1.657 | 120.11 / 111.20 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
-| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 1,403.6 E | 5.865 | 142.01 / 78.15 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
+| Sage-A1.5 W4A16 AutoRound · vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` | Oct29 / nightly promoted | 5,324.5 E | 1.559 | 148.76 / 139.70 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+| Qwen3.8-27B W4A16 · vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` | Oct29 / nightly promoted | 1,471.7 E | 5.614 | 142.51 / 75.84 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
 | Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct28 / Oct29 / measured selected runtime | 2,787.9 E | 2.906 | 38.04 / 37.88 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
 | Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct29 / low-buffer candidate did not qualify | — | — | — / — | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
 
-Sage, Qwen vLLM and Bolt retain their valid original short trials; their missing prefill/continuous stages are measured in separate client sessions after repairing the client tokenizer dependency. Engine versions, quantization, contexts and pins remain. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
+Qwen/Sage now show the successful same-night updater comparison; their previous dev602 measurements remain in the dated all-model report. Bolt retains its original dev435 trials and manual pin. The updater measured short text/~8K markers and memory lifecycle, without new full-context or vision qualification; contexts and quantization remain. Additional real observation probes are excluded from timed medians. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
 
 The LLM series measures text inference. Sage remains text-only; this series does not requalify vision support or change its retained capability limits.
 

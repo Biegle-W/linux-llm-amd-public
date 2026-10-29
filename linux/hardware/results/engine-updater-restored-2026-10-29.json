@@ -1,0 +1,354 @@
+{
+  "date": "2026-10-29",
+  "physical_ram_gib": 30.56,
+  "engine_from": "0.32.1rc1.dev602+g5d35ce393.rocm72",
+  "engine_selected": "0.33.0rc1.dev229+g3966924d5.rocm72",
+  "result": "promoted",
+  "scope": "Same-night normal-launcher updater comparison; short text generation, ~8K prefill, arithmetic and three retrieval markers. Configured contexts retained; no fresh full-context, tools, JSON/SSE integration or vision qualification.",
+  "policy": "loading-swap-v3",
+  "engine_outcomes": [
+    {
+      "engine": "llama.cpp",
+      "kind": "llama",
+      "from": "2280f0fd163b03d4331d49e08460f66502e35854",
+      "to": "0893ec98f5eafad36a43a72cd1c3723d72b0d03a",
+      "result": "skipped (production baseline failed)",
+      "detail": "baseline ornith-1.5-122b: prewarm failed"
+    },
+    {
+      "engine": "Strata",
+      "kind": "strata",
+      "from": "7dd5cf18e68c639a8773e096c5c79f971ea2a9f5",
+      "to": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
+      "result": "rejected",
+      "detail": "missed a promotion gate; rollback verified",
+      "gates": "| Model | Metric | Baseline | Candidate | Change |\n|---|---|---:|---:|---:|\n| policy | swap_policy | | loading-swap-v3 | |\n| policy | worker_swap_limit_bytes | | uncapped | |\n| lifecycle | max_worker_swap_bytes | | 0 | |\n| lifecycle | max_nonresident_vram_bytes | | 0 | |\n| lifecycle | verdict | | | FAIL: lifecycle_sampling_errors |\n| qwen3.8-flash-next-iq3_xxs | prefill_tps | 1159.500 | 1160.300 | +0.1% |\n| qwen3.8-flash-next-iq3_xxs | code_decode_tps | 73.233 | 72.770 | -0.6% |\n| qwen3.8-flash-next-iq3_xxs | prose_decode_tps | 54.100 | 53.765 | -0.6% |\n| qwen3.8-flash-next-iq3_xxs | code_ttft_s | 0.247 | 0.250 | +1.5% |\n| qwen3.8-flash-next-iq3_xxs | prose_ttft_s | 0.231 | 0.227 | -1.6% |\n| qwen3.8-flash-next-iq3_xxs | markers | 3.000 | 3.000 |  |\n| qwen3.8-flash-next-iq3_xxs | max_worker_swap_bytes | | 0 | |\n| qwen3.8-flash-next-iq3_xxs | max_nonresident_vram_bytes | | 0 | |\n| qwen3.8-flash-next-iq3_xxs | verdict | | | pass |\n"
+    },
+    {
+      "engine": "Maya",
+      "kind": "maya",
+      "from": "f26d8bab43f9b10f0475986b541dc46ada45285e",
+      "to": "cf6472cc84489765791ad97bb55b395e8f442088",
+      "result": "skipped (production baseline failed)",
+      "detail": "launcher exited (1) before port 30030 answered"
+    },
+    {
+      "engine": "Strata DeepSeek",
+      "kind": "strata-dsv41",
+      "from": "8183c6b67162340c09b67360860177c577a65f2e",
+      "to": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
+      "result": "skipped (production baseline failed)",
+      "detail": "launcher exited (1) before port 30020 answered"
+    },
+    {
+      "engine": "vLLM",
+      "kind": "vllm",
+      "from": "0.32.1rc1.dev602+g5d35ce393.rocm72",
+      "to": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "result": "promoted",
+      "detail": "all gates passed",
+      "gates": "| Model | Metric | Baseline | Candidate | Change |\n|---|---|---:|---:|---:|\n| policy | swap_policy | | loading-swap-v3 | |\n| policy | worker_swap_limit_bytes | | uncapped | |\n| lifecycle | max_worker_swap_bytes | | 3232501760 | |\n| lifecycle | max_nonresident_vram_bytes | | 0 | |\n| lifecycle | verdict | | | pass |\n| qwen3.8-27b-vllm | prefill_tps | 1457.002 | 1471.737 | +1.0% |\n| qwen3.8-27b-vllm | code_decode_tps | 142.751 | 142.510 | -0.2% |\n| qwen3.8-27b-vllm | prose_decode_tps | 78.444 | 75.836 | -3.3% |\n| qwen3.8-27b-vllm | code_ttft_s | 0.078 | 0.076 | -2.1% |\n| qwen3.8-27b-vllm | prose_ttft_s | 0.071 | 0.074 | +4.9% |\n| qwen3.8-27b-vllm | markers | 3.000 | 3.000 |  |\n| qwen3.8-27b-vllm | max_worker_swap_bytes | | 2326487040 | |\n| qwen3.8-27b-vllm | max_nonresident_vram_bytes | | 0 | |\n| qwen3.8-27b-vllm | verdict | | | pass |\n| sage-a1.5 | prefill_tps | 5276.474 | 5324.545 | +0.9% |\n| sage-a1.5 | code_decode_tps | 148.483 | 148.756 | +0.2% |\n| sage-a1.5 | prose_decode_tps | 139.600 | 139.700 | +0.1% |\n| sage-a1.5 | code_ttft_s | 0.070 | 0.066 | -6.6% |\n| sage-a1.5 | prose_ttft_s | 0.066 | 0.071 | +7.8% |\n| sage-a1.5 | markers | 3.000 | 3.000 |  |\n| sage-a1.5 | max_worker_swap_bytes | | 9879552 | |\n| sage-a1.5 | max_nonresident_vram_bytes | | 0 | |\n| sage-a1.5 | verdict | | | pass |\n"
+    }
+  ],
+  "measurements": {
+    "baseline": {
+      "lifecycle": {
+        "worker_samples": 471,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 3967967232,
+        "max_nonresident_vram_bytes": 0
+      },
+      "profiles": [
+        {
+          "model": "qwen3.8-27b-vllm",
+          "context": 163840,
+          "status": "passed",
+          "prefill_tps": 1457.0019328135245,
+          "fresh_prefill_ttft_seconds": 5.6805712259956636,
+          "short": {
+            "code": {
+              "median_decode_tps": 142.75066349722397,
+              "median_ttft_seconds": 0.0777690410031937
+            },
+            "prose": {
+              "median_decode_tps": 78.44363523451662,
+              "median_ttft_seconds": 0.07097399000485893
+            }
+          },
+          "markers": 3,
+          "untimed_observation_probes": 0,
+          "memory": {
+            "worker_samples": 39,
+            "sampling_errors": 0,
+            "max_worker_swap_bytes": 2865385472,
+            "max_nonresident_vram_bytes": 0,
+            "minimum_available_gib": 20.093,
+            "peak_vram_gib": [
+              16.795,
+              16.764
+            ]
+          },
+          "swap_activity": {
+            "policy": "loading-swap-v3",
+            "samples": 39,
+            "sampling_errors": 0,
+            "elapsed_seconds": 39.4038701190002,
+            "worker_swap_peak_bytes": 2865385472,
+            "total_swapin_bytes": 387674112,
+            "total_swapout_bytes": 44138496,
+            "inference_window_samples": 9,
+            "max_inference_swapout_bytes_per_second": 1468313.869631464,
+            "max_inference_swap_io_bytes_per_second": 14172675.078423537,
+            "min_available_bytes": 21572603904,
+            "max_memory_full_psi_avg10": 2.29,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": null,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "failures": [],
+            "advisories": [
+              "inference_swapout_rate_observed",
+              "inference_swap_io_rate_observed"
+            ]
+          },
+          "sampled_request_thermal_peaks": {
+            "0000:03:00.0": {
+              "peak_temperature_c": {
+                "mem": 56.0,
+                "edge": 56.0,
+                "junction": 78.0
+              }
+            },
+            "0000:06:00.0": {
+              "peak_temperature_c": {
+                "mem": 61.0,
+                "edge": 47.0,
+                "junction": 73.0
+              }
+            }
+          }
+        },
+        {
+          "model": "sage-a1.5",
+          "context": 65536,
+          "status": "passed",
+          "prefill_tps": 5276.474132276482,
+          "fresh_prefill_ttft_seconds": 1.5737614610115997,
+          "short": {
+            "code": {
+              "median_decode_tps": 148.48285235051128,
+              "median_ttft_seconds": 0.07041706900054123
+            },
+            "prose": {
+              "median_decode_tps": 139.5996936516412,
+              "median_ttft_seconds": 0.06616569799371064
+            }
+          },
+          "markers": 3,
+          "untimed_observation_probes": 9,
+          "memory": {
+            "worker_samples": 39,
+            "sampling_errors": 0,
+            "max_worker_swap_bytes": 2175807488,
+            "max_nonresident_vram_bytes": 0,
+            "minimum_available_gib": 19.218,
+            "peak_vram_gib": [
+              17.039,
+              17.008
+            ]
+          },
+          "swap_activity": {
+            "policy": "loading-swap-v3",
+            "samples": 39,
+            "sampling_errors": 0,
+            "elapsed_seconds": 30.633150942012435,
+            "worker_swap_peak_bytes": 2175807488,
+            "total_swapin_bytes": 149364736,
+            "total_swapout_bytes": 585728,
+            "inference_window_samples": 2,
+            "max_inference_swapout_bytes_per_second": 19301.077799776518,
+            "max_inference_swap_io_bytes_per_second": 4941075.916742789,
+            "min_available_bytes": 20635348992,
+            "max_memory_full_psi_avg10": 0.24,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": null,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "failures": [],
+            "advisories": []
+          },
+          "sampled_request_thermal_peaks": {
+            "0000:03:00.0": {
+              "peak_temperature_c": {
+                "mem": 53.0,
+                "edge": 52.0,
+                "junction": 71.0
+              }
+            },
+            "0000:06:00.0": {
+              "peak_temperature_c": {
+                "mem": 58.0,
+                "edge": 43.0,
+                "junction": 65.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "candidate": {
+      "lifecycle": {
+        "worker_samples": 896,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 3232501760,
+        "max_nonresident_vram_bytes": 0
+      },
+      "profiles": [
+        {
+          "model": "qwen3.8-27b-vllm",
+          "context": 163840,
+          "status": "passed",
+          "prefill_tps": 1471.736756810511,
+          "fresh_prefill_ttft_seconds": 5.6139219049946405,
+          "short": {
+            "code": {
+              "median_decode_tps": 142.5102686322112,
+              "median_ttft_seconds": 0.07613437800318934
+            },
+            "prose": {
+              "median_decode_tps": 75.83641629632587,
+              "median_ttft_seconds": 0.07444098399719223
+            }
+          },
+          "markers": 3,
+          "untimed_observation_probes": 0,
+          "memory": {
+            "worker_samples": 40,
+            "sampling_errors": 0,
+            "max_worker_swap_bytes": 2326487040,
+            "max_nonresident_vram_bytes": 0,
+            "minimum_available_gib": 19.049,
+            "peak_vram_gib": [
+              16.872,
+              16.841
+            ]
+          },
+          "swap_activity": {
+            "policy": "loading-swap-v3",
+            "samples": 40,
+            "sampling_errors": 0,
+            "elapsed_seconds": 40.59176383000158,
+            "worker_swap_peak_bytes": 2326487040,
+            "total_swapin_bytes": 31092736,
+            "total_swapout_bytes": 4947968,
+            "inference_window_samples": 11,
+            "max_inference_swapout_bytes_per_second": 163867.96403010638,
+            "max_inference_swap_io_bytes_per_second": 1179859.9181607866,
+            "min_available_bytes": 20456161280,
+            "max_memory_full_psi_avg10": 0.0,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": null,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "failures": [],
+            "advisories": []
+          },
+          "sampled_request_thermal_peaks": {
+            "0000:03:00.0": {
+              "peak_temperature_c": {
+                "mem": 62.0,
+                "edge": 59.0,
+                "junction": 83.0
+              }
+            },
+            "0000:06:00.0": {
+              "peak_temperature_c": {
+                "mem": 64.0,
+                "edge": 49.0,
+                "junction": 77.0
+              }
+            }
+          }
+        },
+        {
+          "model": "sage-a1.5",
+          "context": 65536,
+          "status": "passed",
+          "prefill_tps": 5324.545206607243,
+          "fresh_prefill_ttft_seconds": 1.5594935660046758,
+          "short": {
+            "code": {
+              "median_decode_tps": 148.7564917212888,
+              "median_ttft_seconds": 0.06576518500514794
+            },
+            "prose": {
+              "median_decode_tps": 139.7002375095676,
+              "median_ttft_seconds": 0.07132398399699014
+            }
+          },
+          "markers": 3,
+          "untimed_observation_probes": 8,
+          "memory": {
+            "worker_samples": 37,
+            "sampling_errors": 0,
+            "max_worker_swap_bytes": 9879552,
+            "max_nonresident_vram_bytes": 0,
+            "minimum_available_gib": 16.244,
+            "peak_vram_gib": [
+              17.21,
+              17.179
+            ]
+          },
+          "swap_activity": {
+            "policy": "loading-swap-v3",
+            "samples": 37,
+            "sampling_errors": 0,
+            "elapsed_seconds": 30.256506684992928,
+            "worker_swap_peak_bytes": 9879552,
+            "total_swapin_bytes": 16928768,
+            "total_swapout_bytes": 978944,
+            "inference_window_samples": 1,
+            "max_inference_swapout_bytes_per_second": 32354.825697229324,
+            "max_inference_swap_io_bytes_per_second": 591863.1713317431,
+            "min_available_bytes": 17442316288,
+            "max_memory_full_psi_avg10": 0.14,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": null,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "failures": [],
+            "advisories": []
+          },
+          "sampled_request_thermal_peaks": {
+            "0000:03:00.0": {
+              "peak_temperature_c": {
+                "mem": 54.0,
+                "edge": 53.0,
+                "junction": 72.0
+              }
+            },
+            "0000:06:00.0": {
+              "peak_temperature_c": {
+                "mem": 58.0,
+                "edge": 43.0,
+                "junction": 64.0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

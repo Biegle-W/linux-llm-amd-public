@@ -1,8 +1,8 @@
 # Linux LLM AMD — public reference
 
-**October 29 updater restoration:** The 03:00 nightly engine updater is enabled again and a guarded manual update run is in progress. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
+**October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engines remain selected after baseline holds or verified rejection/rollback. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
 
-**October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; five configured components have newer upstreams, while SGLang matches its AMD fork. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Production selections, guards and paused schedules remain.
+**October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The pre-restoration audit found five newer configured components and SGLang current; the timer is now restored and final outcomes are recorded above. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Other production selections, guards and unrelated paused schedules remain.
 
 ## All models on 32 GB — measured October 29
 
@@ -40,7 +40,9 @@ Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one ex
 
 Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Results and limitations](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). LLM pins and the paused updater remain; previous LLM timings retain their measured RAM configuration.
 
-## Current vLLM selection — October27
+## October27 vLLM qualification history
+
+Historical selection below; the October29 updater result above supersedes the Qwen/Sage wheel and nightly pause. Bolt retains its explicit dev435 pin.
 
 **Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on
 `0.32.1rc1.dev435+gc50aca144.rocm72`.** Qwen/Sage pass performance gates and new

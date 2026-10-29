@@ -2,11 +2,11 @@
 
 ## Nightly updater restored — October 29
 
-The 03:00 daily engine updater is enabled; a manual guarded update run is in progress. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. Do not duplicate `llm-daily-update.service` or its GPU reservation. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
+The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
 
 ## Ornith maximum-VRAM 32 GB test / updater audit — October 29
 
-Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](../hardware/ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; a read-only upstream check found five newer configured components and SGLang current on its AMD fork. [Version/coverage audit](../hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; production hashes, guards and paused schedules remain.
+Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](../hardware/ORNITH-VRAM-32GB-2026-10-29.md). The pre-restoration read-only check found five newer configured components and SGLang current; the timer is now restored and final outcomes are recorded above. [Version/coverage audit](../hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; guards, held profiles and unrelated paused schedules remain. The selected vLLM wheel is updated as recorded above.
 
 ## All models on 32 GB — measured October 29
 
@@ -61,7 +61,9 @@ No task-owned GPU worker or lock remains. Completed fresh trials are preserved; 
 
 Linux now exposes **30.56 GiB RAM**, up from **14.83 GiB** before the reboot. This is a physical MemTotal increase; the prior measurements retain their original hardware attribution. The full matched comparison did not complete. Keep the saved production workflow. Partial successful generations and failed attempts are retained; no SP2 speedup or production qualification is claimed. [Report](../graphics/H3-POST-UPGRADE-2026-10-28.md). Control completed a 196.228 s warmup and one 210.098 s timed request; active combined swap I/O of 14.874 MiB/s stopped the next request. SP2 reached worker startup but stopped at 2.673 GiB available RAM before denoising. The earlier client timeout is retained separately. No three-trial median or SP2 speedup is established. The next action is to address the recorded physical-RAM/active-paging blockers while retaining the guards. All owned scopes stopped; GPU-LOCK released; configuration fingerprints unchanged. H3 follow-up and engine updater remain paused. No unfinished task-owned job remains. LLM runtime pins and dated benchmark attribution are unchanged.
 
-## Current vLLM selection — October27
+## October27 vLLM qualification history
+
+Historical selection below; the October29 updater result above supersedes the Qwen/Sage wheel and nightly pause. Bolt retains its explicit dev435 pin.
 
 **Qwen and Sage use `0.32.1rc1.dev602+g5d35ce393.rocm72`; Bolt remains on
 `0.32.1rc1.dev435+gc50aca144.rocm72`.** Qwen/Sage pass performance gates and new

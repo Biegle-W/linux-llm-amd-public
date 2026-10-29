@@ -1,31 +1,40 @@
 # Overnight engine updater restored — October 29, 2026
 
-The owner restored the existing 03:00 local daily engine updater and requested a current update run. This supersedes earlier updater-pause notes; other holds and manual model/runtime pins remain.
+The 03:00 local nightly updater is restored and the requested current-source update is complete. The full registry remains scheduled for **October 30 at 03:00 EDT**; recovery is enabled. The final service exited successfully at 13:21, provisional state is clear and its GPU reservation is released. Hub and gateway retained their existing processes.
 
-- `llm-daily-update.timer`: enabled and active; next scheduled run October 30 at 03:00 local.
-- `llm-daily-update.service`: manual guarded run started October 29; qualification is in progress.
-- `llm-daily-update-recover.service`: remains enabled for interrupted provisional-install recovery.
-- Latest-source check: newer llama.cpp, vLLM, Strata Qwen, Maya and Strata DeepSeek candidates; the configured SGLang AMD fork matches upstream.
+## Final engine selections
 
-New builds are prepared in isolation. Production baselines, model coverage, correctness, performance, memory and rollback gates remain mandatory before promotion. RAM-held normal profiles can block a shared-engine promotion. The isolated Ornith 32 GB result does not change its normal profile admission or qualify a new engine build.
+| Component | Outcome | Selected version / reason |
+|---|---|---|
+| vLLM, Qwen and Sage | **Promoted** | `0.33.0rc1.dev229+g3966924d5.rocm72`; all standard same-night gates passed |
+| Bolt vLLM | Manual pin retained | `0.32.1rc1.dev435+gc50aca144.rocm72`; excluded from global comparison |
+| llama.cpp | Baseline blocked | Global `2280f0fd163b`; VRAM-only overrides `19cce6919992` retained; normal Ornith requires 60 GiB physical RAM |
+| SGLang AMD fork | Already current | `f84475ccf593` |
+| Strata Qwen | Rejected, rollback verified | `7dd5cf18e68c`; candidate `46c152a1310f` passed speed/markers but failed lifecycle telemetry with one KeyError |
+| Maya | Baseline blocked | `f26d8bab43f9`; normal DeepSeek profile remains RAM-held |
+| Strata DeepSeek | Baseline blocked | `8183c6b67162`; normal DeepSeek profile remains RAM-held |
+
+All five available candidates built. The initial pass promoted none; after repairing fast-profile observation evidence, the targeted vLLM follow-up promoted only vLLM. Prior skipped/rejected outcomes remain in the ledger. Graphics/ComfyUI/H3 are outside this six-component registry. The isolated Ornith 32 GB proof does not change normal-profile admission.
+
+## vLLM same-night measurements
+
+Normal launcher, unchanged profiles, 30.56 GiB physical RAM. Prefill is engine-phase throughput; fresh prefill TTFT excludes model loading. Code/prose are three-trial median decode rates; extra observation probes are excluded.
+
+| Model | Prefill t/s, baseline → selected | Fresh prefill TTFT s, baseline → selected | Code t/s | Prose t/s | Context tokens |
+|---|---:|---:|---:|---:|---:|
+| Qwen3.8-27B | 1457.00 → 1471.74 | 5.681 → 5.614 | 142.75 → 142.51 | 78.44 → 75.84 | 163,840 |
+| Sage-A1.5 | 5276.47 → 5324.55 | 1.574 → 1.559 | 148.48 → 148.76 | 139.60 → 139.70 | 65,536 |
+
+Both retained all three retrieval markers and passed arithmetic, complete model coverage, performance and valid per-model plus launch-through-shutdown memory gates. Qwen prose is 3.3% slower and remains within the unchanged 95% performance floor; no broad speedup is claimed. Dedicated-VRAM spill and lifecycle sampling errors are zero. Candidate lifecycle sampled worker swap peaked at 3,232,501,760 bytes; v3 allows loading/parked swap and reads, with rates/pressure advisory. This pass does not assert zero swap or add a swap-rate stop.
+
+The run tests short text and ~8K prefill; it retains configured context limits and earlier capability evidence. It does not add full-context, tools, JSON/SSE integration or vision qualification for the new wheel. Sage remains text-only. [Curated numeric results](results/engine-updater-restored-2026-10-29.json), [daily ledger](DAILY-UPDATES.md) and canonical runtime handoff retain the gates and exact versions.
 
 ## Restoration repairs and verification
 
-The benchmark helper environment had tokenizers 0.23.3 but lacked regex. The CPU-only helper environment now has pinned `tokenizers==0.23.3` and `regex==2026.9.29`, recorded in [requirements.txt](daily-update/requirements.txt). Imports and the actual benchmark's 8,174-token, three-marker prefill fixture passed without GPU/model initialization. Engine environments were not changed by this repair.
+The benchmark helper environment had tokenizers 0.23.3 but lacked regex. Its separate CPU-only environment now pins `tokenizers==0.23.3` and `regex==2026.9.29` in [requirements.txt](daily-update/requirements.txt). Imports and the actual 8,174-token, three-marker prefill fixture passed without GPU initialization.
 
-`RuntimeMaxSec` is ignored for `Type=oneshot`; the unit now uses `TimeoutStartSec=10h`, retaining its existing graceful stop/rollback window. Unit configuration was reloaded without restarting the active process, and the live service reports the ten-hour timeout. The unit explicitly selects `loading-swap-v3`: loading/parked swap and reads remain allowed; rates/PSI alone remain advisory. Existing independent guards, manual pins and qualification gates remain.
+`RuntimeMaxSec` is ignored for `Type=oneshot`; the unit now uses `TimeoutStartSec=10h`, retaining the graceful rollback stop window. Reloading the unit preserved the running job. `loading-swap-v3` is explicit; independent RAM, VRAM, ownership and thermal protections remain.
 
-The six registered components are llama.cpp, vLLM ROCm nightly, the SGLang gfx1100-support fork, Strata Qwen, Maya and Strata DeepSeek. Graphics/ComfyUI/H3 are outside this updater. [Pre-restoration source audit](ENGINE-UPDATE-AUDIT-2026-10-29.md) records the selected/candidate versions at the earlier snapshot.
+Fast profiles previously finished before the required complete 30-second inference-observation window (Sage 21.1 s, Empero 28.7 s). The benchmark now appends **real, untimed generation** until that existing window closes. Separate probe records are excluded from performance medians. Four CPU regressions pass in each checkout, covering the real policy window, already-complete evidence, invalid telemetry and bounded missing evidence. Missing/invalid readings still fail closed. Sage used nine baseline and eight candidate observation probes in the successful follow-up.
 
-## First pass and targeted follow-up
-
-The first standard pass finished and published its ledger. All five available candidates built; no version was promoted in that pass:
-
-- llama.cpp: production coverage blocked by the normal Ornith profile's 60 GiB physical-RAM admission.
-- vLLM: functional profiles passed, but Sage's 21.1-second test lacked the required complete 30-second inference-observation window. The same issue affected the 28.7-second Empero evidence.
-- Strata: performance and marker checks passed, but one lifecycle sample failed with KeyError. The candidate was rejected and rollback verified; that rejection remains.
-- Maya and Strata DeepSeek: normal DeepSeek profiles remain RAM-held, blocking complete production baseline coverage.
-
-A targeted vLLM-only follow-up is running after the benchmark client repair. Fast profiles now perform additional **real, untimed generation** after the timed requests until the existing observation window closes. Those probes are recorded separately and excluded from performance medians. The 30-second window, invalid-telemetry rejection, model coverage, performance and rollback gates are unchanged. Four CPU regressions pass in each checkout, covering the real policy window, already-complete evidence, invalid telemetry and bounded missing evidence.
-
-The targeted manual scope is temporary: the next 03:00 timer still checks the full engine registry. First-pass raw measurements and logs were preserved before rebuilding the vLLM stage. Final per-engine outcomes and selected versions are recorded in the [daily ledger](DAILY-UPDATES.md) and canonical runtime handoff. Do not duplicate the active updater or its GPU reservation.
+The temporary vLLM-only manual scope was removed from systemd; the next timer checks the full registry. First-pass raw evidence was retained before the follow-up. The recovery service, manual runtime pins, other holds and all qualification/rollback gates remain. No completed Ornith or other benchmark was repeated for documentation. [Pre-restoration source audit](ENGINE-UPDATE-AUDIT-2026-10-29.md) is a historical snapshot.

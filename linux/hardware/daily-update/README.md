@@ -2,7 +2,7 @@
 
 ## Live status — October 29
 
-The 03:00 local timer is enabled and active again at the owner's request; next scheduled run is October 30 at 03:00 local. A guarded manual updater run is in progress. This supersedes older pause notes below; manual runtime pins, other holds and all qualification/rollback gates remain. [Restoration and current-run status](../ENGINE-UPDATER-RESTORED-2026-10-29.md).
+The 03:00 local timer is enabled and active again at the owner's request; next scheduled run is October 30 at 03:00 local. The manual run completed successfully: vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` promoted for Qwen/Sage; Bolt remains pinned to dev435. Other candidates remain blocked or rejected with verified rollback. Provisional state and the GPU reservation are clear. This supersedes older pause notes below; manual runtime pins, other holds and all qualification/rollback gates remain. [Restoration and current-run status](../ENGINE-UPDATER-RESTORED-2026-10-29.md).
 
 The registry includes six components; graphics/ComfyUI/H3 are not included. Manual vLLM runtime pins remain excluded from global comparisons.
 
@@ -21,7 +21,7 @@ These dependencies do not replace an engine environment. The service uses `Timeo
 
 Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and the October 29 owner-authorized restoration changes only the updater schedule hold.
 
-October27: VRAM-only llama profiles can carry separately qualified source_overrides. A full-catalog provisional install clears them so candidate gates use the new global source; rollback restores the saved JSON/pins. The timer remains paused. [Manual qualification](../VRAM-ENGINE-UPDATE-2026-10-27.md).
+October27: VRAM-only llama profiles can carry separately qualified source_overrides. A full-catalog provisional install clears them so candidate gates use the new global source; rollback restores the saved JSON/pins. That historical timer pause is superseded by the October29 restoration. [Manual qualification](../VRAM-ENGINE-UPDATE-2026-10-27.md).
 
 
 **Historical status (October 26):** scheduled updates were disabled. Reduced-RAM

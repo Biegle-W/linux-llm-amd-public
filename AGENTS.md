@@ -1,8 +1,8 @@
 # Agent entry point
 
-**October 29 updater restoration:** The 03:00 nightly engine updater is enabled again and a guarded manual update run is in progress. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
+**October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engines remain selected after baseline holds or verified rejection/rollback. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
 
-**October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; five configured components have newer upstreams, while SGLang matches its AMD fork. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Production selections, guards and paused schedules remain.
+**October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The pre-restoration audit found five newer configured components and SGLang current; the timer is now restored and final outcomes are recorded above. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Other production selections, guards and unrelated paused schedules remain.
 
 The [all-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is complete within recorded scopes. Read its current grouped results, candidate limits and retained failures. All owned benchmark jobs/locks are cleaned up. Preserve completed evidence, runtime selections and guards; do not repeat GPU tests for documentation.
 
@@ -50,8 +50,8 @@ this documentation delivery did not change runtimes or schedules.
 October27 conditional vLLM qualification: [Qwen/Sage dev602 and Bolt dev435 hold](linux/hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
 The installed global wheel and Bolt's explicit launcher override are separate.
 Respect `manual_runtime_pin`; the updater excludes held models. Unpin only after
-qualification, updating both launcher and metadata together. Keep loading-swap-v3,
-all independent guards and the paused updater. Current versions/results belong
+qualification, updating both launcher and metadata together. Keep loading-swap-v3 and
+all independent guards; the October29 restoration supersedes the updater pause. Current versions/results belong
 in the canonical handoff/report; the API version omits the wheel packaging suffix.
 
 Post-upgrade H3 evidence is in [the dated comparison](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). Read its current RAM attribution and failures before retrying; added RAM alone does not qualify held profiles.
