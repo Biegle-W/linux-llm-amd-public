@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Nightly updater restored — October 29
+
+The 03:00 daily engine updater is enabled; a manual guarded update run is in progress. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. Do not duplicate `llm-daily-update.service` or its GPU reservation. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
+
 ## Ornith maximum-VRAM 32 GB test / updater audit — October 29
 
 Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](../hardware/ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; a read-only upstream check found five newer configured components and SGLang current on its AMD fork. [Version/coverage audit](../hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; production hashes, guards and paused schedules remain.

@@ -2,16 +2,29 @@
 
 ## Live status — October 29
 
-The configured 03:00 timer is absent/inactive and the service inactive. A read-only check found newer llama.cpp, vLLM, Strata Qwen, Maya and Strata DeepSeek sources; the selected SGLang AMD fork is current. The registry includes six components; graphics/ComfyUI/H3 are not included. Manual vLLM runtime pins remain excluded from global comparisons. [Audit and exact selected/upstream references](../ENGINE-UPDATE-AUDIT-2026-10-29.md). No update or schedule activation occurred.
+The 03:00 local timer is enabled and active again at the owner's request; next scheduled run is October 30 at 03:00 local. A guarded manual updater run is in progress. This supersedes older pause notes below; manual runtime pins, other holds and all qualification/rollback gates remain. [Restoration and current-run status](../ENGINE-UPDATER-RESTORED-2026-10-29.md).
+
+The registry includes six components; graphics/ComfyUI/H3 are not included. Manual vLLM runtime pins remain excluded from global comparisons.
+
+## CPU-only benchmark helpers
+
+The updater uses its separate `.venv` for benchmark/tokenization helpers. From the installed runtime root, create that environment once for a fresh installation, then install the pinned helper dependencies:
+
+```bash
+uv venv hardware/daily-update/.venv
+uv pip install --python hardware/daily-update/.venv/bin/python -r hardware/daily-update/requirements.txt
+```
+
+These dependencies do not replace an engine environment. The service uses `TimeoutStartSec=10h` for its oneshot run and retains the existing graceful rollback stop window; `RuntimeMaxSec` does not bound a oneshot. `loading-swap-v3` is explicit in the service environment.
 
 ## Current user swap policy — October28
 
-Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and this documentation does not resume the paused updater.
+Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and the October 29 owner-authorized restoration changes only the updater schedule hold.
 
 October27: VRAM-only llama profiles can carry separately qualified source_overrides. A full-catalog provisional install clears them so candidate gates use the new global source; rollback restores the saved JSON/pins. The timer remains paused. [Manual qualification](../VRAM-ENGINE-UPDATE-2026-10-27.md).
 
 
-**Current status (October 26):** scheduled updates are disabled. Reduced-RAM
+**Historical status (October 26):** scheduled updates were disabled. Reduced-RAM
 GPU-resident baseline qualification is separate and does not resume this updater.
 
 User request (October 23): keep every inference engine on its newest upstream version and
@@ -47,7 +60,7 @@ rolled back and reported.
 8. Keep it only if `hardware/compare-runtime-candidate.py` passes for every model:
    prefill and code/prose decode at least 95% of production; short time to first token at
    most max(1.25 × production, production + 0.05 s); no fewer retrieval markers;
-   the default low-churn swap limits below and zero VRAM spill, with complete
+   the current loading-swap-v3 policy and zero VRAM spill, with complete
    worker/host swap-activity evidence. Settled swap alone cannot establish a pass.
    Missing/invalid readings, sampling errors, no worker samples or incomplete
    model coverage also block promotion. Otherwise roll back and check that the
@@ -63,13 +76,13 @@ rolls back before releasing the lock. If the machine loses power instead,
 
 ## Memory promotion policy
 
-### Default loading-swap policy — October 27
+### Historical loading-swap policy — October 27 (superseded by v3)
 
-**Loading swap is allowed. Parked swap pages are allowed.** Use
-`loading-swap-v2`; fixed resident-byte and cumulative-loading-write caps no
-longer reject the default. Enforce sustained active-inference churn, pressure
-and performance/quality gates. Physical-RAM admission, RAM caps, VRAM reserves,
-zero dedicated-VRAM spill, ownership/telemetry checks and updater holds remain.
+The October 27 `loading-swap-v2` policy allowed loading and parked swap but
+still applied active-churn and pressure stop rules. Those rules are superseded
+by the current `loading-swap-v3` policy above. Physical-RAM admission, RAM caps,
+VRAM reserves, zero dedicated-VRAM spill, ownership/telemetry and performance/
+quality gates remain independent; historical results retain their original policy.
 [Current policy, thresholds, evidence and historical harness limitations](../LOADING-SWAP-POLICY-2026-10-27.md).
 
 October26 `low-churn-v1` deployment, its fixed 4 GiB caps and stricter no-swap

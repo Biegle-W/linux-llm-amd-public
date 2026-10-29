@@ -1,5 +1,7 @@
 # Agent entry point
 
+**October 29 updater restoration:** The 03:00 nightly engine updater is enabled again and a guarded manual update run is in progress. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
+
 **October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; five configured components have newer upstreams, while SGLang matches its AMD fork. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Production selections, guards and paused schedules remain.
 
 The [all-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is complete within recorded scopes. Read its current grouped results, candidate limits and retained failures. All owned benchmark jobs/locks are cleaned up. Preserve completed evidence, runtime selections and guards; do not repeat GPU tests for documentation.

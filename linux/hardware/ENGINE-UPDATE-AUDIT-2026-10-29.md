@@ -1,5 +1,7 @@
 # Backend update audit — October 29, 2026
 
+> Historical snapshot before restoration: the owner subsequently restored the nightly timer and started a guarded update run. See [restoration status](ENGINE-UPDATER-RESTORED-2026-10-29.md). The version comparison below retains its original observation time.
+
 Read-only upstream check completed at 2026-10-29T12:14:45.128616-04:00. The live `llm-daily-update.timer` is absent/inactive; its service is loaded but inactive. The configured 03:00 policy is not running. No engine build, install, promotion or schedule activation was performed.
 
 | Component | Selected | Configured upstream | Result |
