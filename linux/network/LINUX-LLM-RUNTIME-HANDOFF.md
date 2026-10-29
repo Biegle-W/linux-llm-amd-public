@@ -346,7 +346,7 @@ change. Nightly updates remain paused.
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: Strata skipped (production baseline failed).
+Last run: Strata rejected.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

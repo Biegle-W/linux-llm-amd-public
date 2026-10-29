@@ -13,6 +13,10 @@ Anything else is rolled back. Newest entries first. Method: [daily-update/README
 
 ## 2026-10-29
 
+- **Strata** `7dd5cf18e68c` → `46c152a1310f`: **rejected**. Step: launcher exited (1) before port 30020 answered; rollback NEEDS ATTENTION
+
+## 2026-10-29
+
 - **Strata** `7dd5cf18e68c` → `46c152a1310f`: **skipped (production baseline failed)**. Isolated build passed; normal 32 GB Strata loader needs 25 GiB available RAM, latest observed 24.849 GiB. Baseline stopped before loading; no candidate installation. Original source remains 7dd5cf18e68c. Performance tolerance unchanged. See hardware/STRATA-RETRY-SAMPLER-2026-10-29.md.
 
 ## 2026-10-29
