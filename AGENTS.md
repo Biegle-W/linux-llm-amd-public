@@ -1,6 +1,6 @@
 # Agent entry point
 
-**October 29 Strata retry / current swap policy:** Sampler diagnostics are improved; 217 CPU regressions pass per checkout. The default is `loading-swap-v4`: sustained inference ceilings 128 MiB/s writes / 160 MiB/s combined over 30 seconds, with loading/parked swap allowed. A guarded Strata Qwen retry is next; performance tolerance and other guards/pins remain. [Policy, diagnostics, SSD evidence and retry status](linux/hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+**October 29 Strata retry / current swap policy:** Sampler diagnostics are improved; 217 CPU regressions pass per checkout. The default is `loading-swap-v4`: sustained inference ceilings 128 MiB/s writes / 160 MiB/s combined over 30 seconds, with loading/parked swap allowed. The Strata retry built successfully but is blocked before loading by its 25 GiB available-RAM guard (latest 24.85 GiB); no candidate is installed and source 7dd5cf18e68c remains; performance tolerance and other guards/pins remain. [Policy, diagnostics, SSD evidence and retry status](linux/hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 **October 29 split llama.cpp update:** Empero, Super and Flint now use `eb4e244be77a` after standard gates. Ornith alone retains the independent old `2280f0fd163b` source/build pin; normal RAM admission remains. [Results, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
@@ -54,12 +54,12 @@ this documentation delivery did not change runtimes or schedules.
 October27 conditional vLLM qualification: [Qwen/Sage dev602 and Bolt dev435 hold](linux/hardware/VLLM-DEV602-PROMOTION-2026-10-27.md).
 The installed global wheel and Bolt's explicit launcher override are separate.
 Respect `manual_runtime_pin`; the updater excludes held models. Unpin only after
-qualification, updating both launcher and metadata together. Keep loading-swap-v3 and
+qualification, updating both launcher and metadata together. Keep the current owner-requested swap policy above and
 all independent guards; the October29 restoration supersedes the updater pause. Current versions/results belong
 in the canonical handoff/report; the API version omits the wheel packaging suffix.
 
 Post-upgrade H3 evidence is in [the dated comparison](linux/graphics/H3-POST-UPGRADE-2026-10-28.md). Read its current RAM attribution and failures before retrying; added RAM alone does not qualify held profiles.
 
-The [October28 user correction](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) supersedes arbitrary swap-rate stops. Never stop a task for loading/parked swap, reads, rate or PSI alone. Legacy validation needs its explicit second opt-in; frozen strict harnesses are historical. An optional write-related stop needs an explicit write budget and matched measured slowdown. Radiance gfx1100 [preflight](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) is a software compatibility blocker, not a swap failure.
+The [October28 correction](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md) records historical v3 behavior. The explicit October29 owner-requested v4 ceilings above supersede its rate behavior: sustained inference writes 128 MiB/s / combined 160 MiB/s over 30 seconds. Loading/parked swap remains allowed; PSI alone is advisory. Historical policy replay requires the second legacy-validation opt-in; never silently restore older rules. Radiance gfx1100 [preflight](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) is a software compatibility blocker, not a swap failure.
 
 The [fresh H3 one-card/two-card comparison](linux/graphics/H3-ONE-VS-TWO-2026-10-28.md) uses a true one-visible-GPU workflow and fresh servers per generation. Read its medians, phase timings, quality checks and attribution limits. Preserve earlier failures as historical evidence, keep this candidate isolated from production and native Radiance, and never lower guards for a comparison.

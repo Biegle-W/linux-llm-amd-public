@@ -1,6 +1,6 @@
 # Linux LLM AMD — public reference
 
-**October 29 Strata retry / current swap policy:** Sampler diagnostics are improved; 217 CPU regressions pass per checkout. The default is `loading-swap-v4`: sustained inference ceilings 128 MiB/s writes / 160 MiB/s combined over 30 seconds, with loading/parked swap allowed. A guarded Strata Qwen retry is next; performance tolerance and other guards/pins remain. [Policy, diagnostics, SSD evidence and retry status](linux/hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+**October 29 Strata retry / current swap policy:** Sampler diagnostics are improved; 217 CPU regressions pass per checkout. The default is `loading-swap-v4`: sustained inference ceilings 128 MiB/s writes / 160 MiB/s combined over 30 seconds, with loading/parked swap allowed. The Strata retry built successfully but is blocked before loading by its 25 GiB available-RAM guard (latest 24.85 GiB); no candidate is installed and source 7dd5cf18e68c remains; performance tolerance and other guards/pins remain. [Policy, diagnostics, SSD evidence and retry status](linux/hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 **October 29 split llama.cpp update:** Empero, Super and Flint now use `eb4e244be77a` after standard gates. Ornith alone retains the independent old `2280f0fd163b` source/build pin; normal RAM admission remains. [Results, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
@@ -38,7 +38,7 @@ Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one ex
 
 ## User swap correction and Radiance preflight — October 28
 
-**Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Implementation and verification](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). Radiance H3 preflight is blocked by the missing gfx1100 accelerated kernel plugin before any GPU run or memory guard; [source/build evidence](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md). Existing pins, independent physical/VRAM protections and paused schedules remain.
+**Historical October28 swap policy: loading-swap-v3, superseded by the October29 v4 ceilings above.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Implementation and verification](linux/hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). Radiance H3 preflight is blocked by the missing gfx1100 accelerated kernel plugin before any GPU run or memory guard; [source/build evidence](linux/graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md). Existing pins, independent physical/VRAM protections and paused schedules remain.
 
 ## Post-upgrade H3 comparison — October 28
 

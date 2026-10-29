@@ -2,7 +2,7 @@
 
 ## Strata retry and current swap ceilings — October 29
 
-The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the guarded Strata Qwen retry is next. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](../hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the isolated build passed, but the retry stopped before loading at the unchanged 25 GiB available-RAM guard (latest 24.85 GiB). The service is inactive, provisional state/owned GPU lock are clear, and source 7dd5cf18e68c remains selected. Qualification awaits additional available RAM. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](../hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 ## Split llama.cpp update — complete
 
@@ -63,7 +63,7 @@ No task-owned GPU worker or lock remains. Completed fresh trials are preserved; 
 
 ## Swap instruction corrected; Radiance compatibility established — October28
 
-**Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy report](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). No matched per-request baseline or SSD write budget is configured in generic routers, so their swap telemetry is advisory. [Radiance H3 preflight](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) reaches successful gfx1100 CMake configuration but excludes the gfx12-only plugin; the compiler confirms its FP8 instruction mismatch. No model or user task was stopped during this correction, no OS swap setting or engine pin changed, and no new GPU inference/benchmark result exists. No active managed worker required a router restart. H3 follow-up and nightly updater remain paused. Next GPU work needs a validated gfx1100 kernel path and a genuinely matched workload; do not repeat strict v2 stops or relabel historical results. No task GPU lock, worker or compile job remains.
+**Historical October28 swap policy: loading-swap-v3, superseded by the October29 v4 ceilings above.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy report](../hardware/SWAP-TASK-CONTINUITY-2026-10-28.md). No matched per-request baseline or SSD write budget is configured in generic routers, so their swap telemetry is advisory. [Radiance H3 preflight](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) reaches successful gfx1100 CMake configuration but excludes the gfx12-only plugin; the compiler confirms its FP8 instruction mismatch. No model or user task was stopped during this correction, no OS swap setting or engine pin changed, and no new GPU inference/benchmark result exists. No active managed worker required a router restart. H3 follow-up and nightly updater remain paused. Next GPU work needs a validated gfx1100 kernel path and a genuinely matched workload; do not repeat strict v2 stops or relabel historical results. No task GPU lock, worker or compile job remains.
 
 ## Post-upgrade H3 takeover — October 28
 
@@ -346,7 +346,7 @@ change. Nightly updates remain paused.
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: llama.cpp promoted.
+Last run: Strata skipped (production baseline failed).
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

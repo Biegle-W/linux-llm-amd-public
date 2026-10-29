@@ -2,7 +2,7 @@
 
 ## Strata retry and current swap ceilings — October 29
 
-The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the guarded Strata Qwen retry is next. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](STRATA-RETRY-SAMPLER-2026-10-29.md).
+The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the isolated build passed, but the retry stopped before loading at the unchanged 25 GiB available-RAM guard (latest 24.85 GiB). The service is inactive, provisional state/owned GPU lock are clear, and source 7dd5cf18e68c remains selected. Qualification awaits additional available RAM. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 ## Split llama.cpp update — complete
 
@@ -46,7 +46,7 @@ Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one ex
 
 ## Current policy and pending GPU compatibility — October 28
 
-**Current swap policy: loading-swap-v3.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy evidence](SWAP-TASK-CONTINUITY-2026-10-28.md). [Radiance H3](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) has no compatible gfx1100 accelerated kernel target; no GPU video or speedup was measured. Existing benchmark values keep their original hardware, build and policy. Earlier v2 guard stops remain historical and do not prove SSD damage or a v3 failure.
+**Historical October28 swap policy: loading-swap-v3, superseded by the October29 v4 ceilings above.** Loading, parked swap and reads are allowed. Rates/pressure are advisory; there is no default automatic swap-rate stop. An optional stop needs an explicit write budget plus matched measured inference slowdown. Old policy settings alone cannot restore historical stop rules. [Policy evidence](SWAP-TASK-CONTINUITY-2026-10-28.md). [Radiance H3](../graphics/RADIANCE-H3-PREFLIGHT-2026-10-28.md) has no compatible gfx1100 accelerated kernel target; no GPU video or speedup was measured. Existing benchmark values keep their original hardware, build and policy. Earlier v2 guard stops remain historical and do not prove SSD damage or a v3 failure.
 
 ## RAM configuration after reboot — October 28
 

@@ -178,6 +178,17 @@ class Comparator(BoundedPolicyCase):
         candidate.pop('lifecycle_memory')
         self.assertNotEqual(self.compare(candidate, True).returncode, 0)
 
+    def test_small_regression_and_exact_performance_floor_pass_but_below_floor_fails(self):
+        for ratio, passes in ((.999, True), (.95, True), (.94999, False)):
+            with self.subTest(ratio=ratio):
+                candidate = record()
+                profile = candidate['profiles'][0]
+                profile['summary']['prefill_tps'] = 100 * ratio
+                for task in ('code', 'prose'):
+                    profile['short'][task]['median_decode_tps'] = 100 * ratio
+                result = self.compare(candidate, True)
+                self.assertEqual(result.returncode == 0, passes, result.stdout + result.stderr)
+
     def test_spill_performance_regression_and_missing_model_still_reject(self):
         for change in ['spill', 'speed', 'missing', 'duplicate']:
             with self.subTest(change=change):

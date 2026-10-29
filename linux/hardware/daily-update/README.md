@@ -2,7 +2,7 @@
 
 ## Current policy / Strata retry — October 29
 
-`loading-swap-v4` is the owner-requested default: 128 MiB/s swap writes / 160 MiB/s combined reads+writes during complete 30-second inference windows. Loading/parked swap remains allowed; PSI alone is advisory. Missing/invalid evidence still blocks promotion, and the performance floor remains 95%. Sampler failures now record bounded, sanitized missing-key/process/phase/sample/trace context. 217 CPU checks pass per checkout; Strata Qwen will be retried under standard gates. [Policy and retry evidence](../STRATA-RETRY-SAMPLER-2026-10-29.md).
+`loading-swap-v4` is the owner-requested default: 128 MiB/s swap writes / 160 MiB/s combined reads+writes during complete 30-second inference windows. Loading/parked swap remains allowed; PSI alone is advisory. Missing/invalid evidence still blocks promotion, and the performance floor remains 95%. Sampler failures now record bounded, sanitized missing-key/process/phase/sample/trace context. 217 CPU checks pass per checkout; The Strata retry built successfully but stopped before loading at its 25 GiB available-RAM guard (latest 24.85 GiB). No candidate was installed; source 7dd5cf18e68c remains. Qualification is pending additional available RAM. [Policy and retry evidence](../STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 ## Live status — October 29
 

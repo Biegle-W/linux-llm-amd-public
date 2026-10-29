@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-29",
+  "physical_ram_gib": 30.56,
+  "engine": "Strata Qwen",
+  "result": {
+    "engine": "Strata",
+    "kind": "strata",
+    "from": "7dd5cf18e68c639a8773e096c5c79f971ea2a9f5",
+    "to": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
+    "result": "skipped (production baseline failed)",
+    "detail": "launcher exited (1) before port 30020 answered"
+  },
+  "policy": "loading-swap-v4",
+  "limits": {
+    "write_MiB_s": 128,
+    "combined_MiB_s": 160,
+    "rolling_inference_window_seconds": 30
+  },
+  "performance_floor_ratio": 0.95,
+  "scope": "Attempted normal-launcher baseline stopped at available-RAM admission before inference or candidate installation. No fresh performance or marker qualification was completed.",
+  "measurements": {
+    "baseline": {
+      "lifecycle": {
+        "worker_samples": 0,
+        "sampling_errors": 0,
+        "sample_attempts": 4,
+        "sampling_error_details_dropped": 0,
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "lifecycle_swap_activity": {
+        "policy": "loading-swap-v4",
+        "samples": 4,
+        "sampling_errors": 0,
+        "elapsed_seconds": 1.5395626459794585,
+        "worker_swap_peak_bytes": 0,
+        "total_swapin_bytes": 0,
+        "total_swapout_bytes": 0,
+        "inference_window_samples": 0,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 0.0,
+        "min_available_bytes": 26526396416,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": 134217728,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "inference_write_limit_bytes_per_second": 134217728,
+        "inference_io_limit_bytes_per_second": 167772160,
+        "rate_window_seconds": 30,
+        "failures": [],
+        "advisories": []
+      },
+      "diagnostic_error_summary": [],
+      "profiles": []
+    }
+  },
+  "SSD": {
+    "model": "CT1000P3PSSD8",
+    "rated_TBW": 220,
+    "rated_TBW_source": "https://www.crucial.com/content/dam/crucial/ssd-products/p3-plus/flyers/b2c/crucial-p3plus-productflyer-consumer.pdf",
+    "health_interface_source": "https://storaged.org/udisks/docs/gdbus-org.freedesktop.UDisks2.NVMe.Controller.html",
+    "attribution": "Whole swap-backing device host writes during the measurement interval, including unrelated activity, implementation publication and the isolated build; not Strata-only NAND writes. SMART wear percentages are coarse vendor estimates, not lifetime guarantees.",
+    "before": {
+      "checked_at_utc": "2026-10-29T18:45:18.282591+00:00",
+      "refresh_succeeded": true,
+      "percent_used": 3,
+      "host_written_bytes": 7993646592000,
+      "media_errors": 0,
+      "controller_error_log_entries": 66051,
+      "critical_warnings": [],
+      "temperature_kelvin": 305
+    },
+    "after": {
+      "checked_at_utc": "2026-10-29T19:17:01.667301+00:00",
+      "refresh_succeeded": true,
+      "percent_used": 3,
+      "host_written_bytes": 7995123712000,
+      "media_errors": 0,
+      "controller_error_log_entries": 66051,
+      "critical_warnings": [],
+      "temperature_kelvin": 304
+    },
+    "SMART_host_written_delta_bytes": 1477120000,
+    "kernel_host_written_delta_bytes": 1477259264,
+    "elapsed_seconds": 1903.38471
+  },
+  "unchanged_profile_manual_pin_comparator_fingerprints": 9,
+  "RAM_admission": {
+    "checked_at_utc": "2026-10-29T19:17:18.937559+00:00",
+    "available_GiB": 24.84878158569336,
+    "required_available_GiB": 25,
+    "requirement_met": false
+  },
+  "status": "qualification_waiting_for_available_RAM",
+  "candidate_built": true,
+  "candidate_installed": false,
+  "model_loaded": false,
+  "qualification_complete": false
+}
