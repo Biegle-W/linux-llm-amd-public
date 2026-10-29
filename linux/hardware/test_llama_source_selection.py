@@ -95,7 +95,7 @@ class Updater(unittest.TestCase):
         updater = Path(os.environ.get('LLAMA_TEST_UPDATER', ROOT / 'hardware/daily-update/daily_update.py'))
         tree = ast.parse(updater.read_text())
         cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Llama')
-        functions = [n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name in ('install','rollback')]
+        functions = [n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name in ('held_sources','install','rollback')]
         import shutil
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); source = root / 'source'; source.mkdir()
@@ -103,9 +103,10 @@ class Updater(unittest.TestCase):
             original = json.dumps({'source_commit':'a'*40,'source_overrides':{'sage':{'path':'/qualified','source_commit':'b'*40}}})
             pin.write_text(original)
             stage = root / 'stage'; stage.mkdir()
-            ns = dict(ROOT=root,shutil=shutil,json=json,os=os,sh=Mock(),out=Mock(return_value='a'*40),BUILD_JOBS='2')
+            ns = dict(ROOT=root,shutil=shutil,json=json,os=os,sh=Mock(),out=Mock(return_value='a'*40),BUILD_JOBS='2',re=__import__('re'),Step=RuntimeError)
             exec(compile(ast.fix_missing_locations(ast.Module(body=functions,type_ignores=[])),str(updater),'exec'),ns)
             engine = types.SimpleNamespace(src=source,pin=pin)
+            engine.held_sources = lambda: ns['held_sources'](engine)
             ns['install'](engine,stage,'c'*40,root/'log')
             self.assertEqual(json.loads(pin.read_text()),{'source_commit':'c'*40})
             ns['rollback'](engine,stage,root/'log')

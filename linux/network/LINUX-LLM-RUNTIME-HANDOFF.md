@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Split llama.cpp update — qualification pending
+
+Ornith retains an explicit independent `2280f0fd163b` source/build hold. The owner authorized newer global qualification for Empero, Super and Flint; no new llama.cpp promotion is claimed yet. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+
 ## Nightly updater restored — October 29
 
 The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
@@ -335,9 +339,10 @@ change. Nightly updates remain paused.
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
+| llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: vLLM promoted.
+Last run: llama.cpp skipped (production baseline failed); Strata rejected; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed); vLLM promoted.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

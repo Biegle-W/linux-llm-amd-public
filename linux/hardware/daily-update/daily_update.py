@@ -332,8 +332,31 @@ class Llama(Engine):
     src = ROOT/'llama.cpp'
     pin = ROOT/'dsh/llama-runtime.json'
 
+    def held_sources(self):
+        """Only explicit, valid manual source pins are excluded from global qualification."""
+        settings = json.loads(self.pin.read_text())
+        held = {}
+        for model, selected in settings.get('source_overrides', {}).items():
+            if 'manual_runtime_pin' not in selected:
+                continue
+            commit = selected['manual_runtime_pin']
+            source = Path(selected.get('path', ''))
+            if (model not in settings['models'] or not isinstance(commit, str)
+                    or not re.fullmatch(r'[0-9a-f]{40}', commit)
+                    or selected.get('source_commit') != commit or not source.is_absolute()
+                    or not (source/'build-hip/bin/llama-server').is_file()):
+                raise Step(f'Invalid manual llama source pin for {model}; refusing update')
+            if out(['git', '-C', str(source), 'rev-parse', 'HEAD']) != commit:
+                raise Step(f'Manual llama source changed for {model}; refusing update')
+            held[model] = selected
+        return held
+
     def models(self):
-        return json.loads(self.pin.read_text())['models']
+        held = self.held_sources()
+        models = [model for model in json.loads(self.pin.read_text())['models'] if model not in held]
+        if not models:
+            raise Step('No unpinned llama models available for global qualification')
+        return models
 
     def current(self):
         return json.loads(self.pin.read_text())['source_commit']
@@ -349,6 +372,7 @@ class Llama(Engine):
            env={**os.environ, 'LLAMA_SRC': str(stage/'llama.cpp'), 'BUILD_JOBS': BUILD_JOBS})
 
     def install(self, stage, rev, logfile):
+        held = self.held_sources()  # Validate the retained independent build before changing production.
         rollback = stage/'rollback'
         rollback.mkdir()
         (rollback/'source_commit').write_text(out(['git', '-C', str(self.src), 'rev-parse', 'HEAD']))
@@ -358,9 +382,12 @@ class Llama(Engine):
         sh(['bash', str(ROOT/'hardware/build-llama-hip.sh')], logfile, env={**os.environ, 'BUILD_JOBS': BUILD_JOBS})
         pin = json.loads(self.pin.read_text())
         pin['source_commit'] = rev
-        # Full-catalog candidate gates must exercise the new global source.
-        # Rollback restores the saved per-model pins with the entire JSON file.
-        pin.pop('source_overrides', None)
+        # Every unpinned model must exercise the new global source. Explicit manual
+        # holds retain their independent old build; rollback restores the entire JSON.
+        if held:
+            pin['source_overrides'] = held
+        else:
+            pin.pop('source_overrides', None)
         self.pin.write_text(json.dumps(pin, indent=2) + '\n')
 
     def rollback(self, stage, logfile):

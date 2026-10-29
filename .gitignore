@@ -63,3 +63,6 @@ linux/maya/rocwmma-7.2.3/
 
 # Locally installed versioned llama runtime bundles
 /linux/llm-tools/llama-vram-*/
+
+# Independent manually held Ornith source/build; runtime assets stay local.
+/linux/llm-tools/llama-ornith-*/

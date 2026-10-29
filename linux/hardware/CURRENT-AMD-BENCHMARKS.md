@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 29, 2026
 
+## Split llama.cpp update — qualification pending
+
+Ornith retains an explicit independent `2280f0fd163b` source/build hold. The owner authorized newer global qualification for Empero, Super and Flint; no new llama.cpp promotion is claimed yet. Normal Ornith RAM admission and all guards remain. [Durable split and checks](LLAMA-SPLIT-UPDATE-2026-10-29.md).
+
 ## Nightly updater restored — October 29
 
 The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.

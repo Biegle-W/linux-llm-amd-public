@@ -72,6 +72,11 @@ def versions():
             rows.append(f'| {engine.name} | `{short(engine.current())}` |')
         except Exception as error:
             rows.append(f'| {engine.name} | unknown ({type(error).__name__}) |')
+    # Global source promotion leaves explicitly held llama models on independent builds.
+    llama = ENGINES.get('llama')
+    if llama is not None:
+        for model, cfg in llama.held_sources().items():
+            rows.append(f'| llama.cpp {model} (manual source pin) | `{short(cfg["source_commit"])}` |')
     # A global wheel does not replace a separately held model runtime.
     for model, cfg in json.loads((ROOT/'dsh/vllm-profiles.json').read_text()).items():
         if cfg.get('enabled', True) and cfg.get('manual_runtime_pin'):
@@ -131,6 +136,23 @@ def commit(repo, paths, message, logfile):
     return f'{head} pushed' if push.returncode == 0 else f'{head} committed locally; push failed'
 
 
+def public_llama_pin():
+    """Export selected and held sources as sanitized examples, never workstation paths."""
+    name = 'dsh/llama-runtime.json'
+    source = ROOT/name
+    if not source.exists():
+        return []
+    text = source.read_text().replace(str(ROOT), '/opt/local-llm')
+    if PRIVATE.search(text):
+        raise RuntimeError('llama reference contains private workstation information')
+    cfg = json.loads(text)
+    cfg['reference_note'] = 'Sanitized example paths; verify each selected source/build locally before loading.'
+    dest = PUBLIC/'linux'/name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(cfg, indent=2) + '\n')
+    return ['linux/' + name]
+
+
 def public_deepseek_pins():
     """Publish example paths and require a new local proof after sanitizing a profile."""
     from shared_storage import STREAM_SHARED
@@ -167,7 +189,7 @@ def publish(run, results, logfile):
         if public_handoff.exists() and BEGIN in public_handoff.read_text():   # the block holds no private paths
             public_handoff.write_text(re.sub(re.escape(BEGIN) + '.*?' + re.escape(END), lambda _: handoff_block(results),
                                              public_handoff.read_text(), flags=re.S))
-        references=public_deepseek_pins()
+        references=public_deepseek_pins() + public_llama_pin()
         log('public repository: ' + commit(PUBLIC, ['linux/' + LEDGER, 'linux/network/LINUX-LLM-RUNTIME-HANDOFF.md',*references],
                                            message, logfile), logfile)
     (run/'published.json').write_text(json.dumps({'message': message}, indent=2) + '\n')

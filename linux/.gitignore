@@ -107,3 +107,6 @@ llm-tools/rccl-nohostcall/
 
 # Isolated Radeon vLLM optimization source; never vendor its Git history
 /llm-tools/vllm-rdna3-src/
+
+# Independent manually held Ornith source/build; runtime assets stay local.
+/llm-tools/llama-ornith-*/
