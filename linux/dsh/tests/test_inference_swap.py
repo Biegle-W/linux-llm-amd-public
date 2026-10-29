@@ -602,8 +602,12 @@ class RouterIntegrationTests(unittest.TestCase):
         def fixture_config(path, *args, **kwargs):
             # Installed launcher roots are host-specific; load the real checkout
             # catalogs for this CPU-only test, including sanitized public copies.
-            if path.name in ('vllm-profiles.json', 'sglang-profiles.json'):
-                path = DSH / path.name
+            if path.name in ('vllm-profiles.json', 'sglang-profiles.json', 'strata-profiles.json', 'maya-profiles.json'):
+                import json
+                data = json.loads(read_text(DSH / path.name, *args, **kwargs))
+                for row in data.values():
+                    row['enabled'] = True
+                return json.dumps(data)
             return read_text(path, *args, **kwargs)
 
         with patch.object(Path, 'read_text', fixture_config):

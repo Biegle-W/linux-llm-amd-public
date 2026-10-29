@@ -257,12 +257,11 @@
     "auto_resume_on_RAM_detection": false,
     "paused_model_ids": [
       "ornith-1.5-122b",
-      "qwen3.8-flash-next-iq3_xxs",
-      "deepseek-v4.1-flash-1017-strata-xs",
       "deepseek-v4.1-flash-1017-maya",
-      "qwen3.8-27b-sglang-dflash2"
+      "deepseek-v4.1-flash-1017-strata-xs",
+      "qwen3.8-flash-next-iq3_xxs"
     ],
-    "enabled_profile_count": 7,
+    "enabled_profile_count": 8,
     "qualification_complete": false
   }
 }

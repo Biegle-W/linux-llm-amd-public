@@ -11,6 +11,10 @@ GPU headroom, ownership and thermal protections remain. Manually pinned model
 runtimes are excluded from global update comparisons and reported separately.
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
+## 2026-10-29 — SGLang guard and ROCm fix
+
+Qwen27B/SGLang is qualified and enabled on unchanged upstream `f84475ccf593` plus a replayable ROCm multicast dispatch fix. The original graph-enabled 160K DFlash2 profile passed isolated and normal API qualification with zero eviction; actual spill protection remains strict. Four RAM-blocked routes remain paused. [Fix and verification](SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
+
 ## 2026-10-29 — owner model pause
 
 Five blocked routes are disabled until the owner reports more RAM is available: Ornith/llama.cpp, DeepSeek XS/Maya, DeepSeek XS/Strata, Qwen Flash Next/Strata and Qwen27B/SGLang. Seven working profiles remain available. Paused engines skip nightly qualification; timer/recovery, guards and runtime pins remain. [Pause and verification](MODEL-RAM-PAUSE-2026-10-29.md).

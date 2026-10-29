@@ -1,6 +1,6 @@
 # Overnight engine updater restored — October 29, 2026
 
-**Owner pause — October 29:** Ornith, DeepSeek XS on Maya and Strata, Qwen Flash Next on Strata, and Qwen27B on SGLang are disabled until the owner reports more RAM is available. Seven working profiles remain enabled; nightly qualification skips the paused routes. No automatic RAM-detection resume. [Paused models and resume rules](MODEL-RAM-PAUSE-2026-10-29.md).
+**Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 
 The 03:00 local nightly updater is restored and the requested current-source update is complete. The full registry remains scheduled for **October 30 at 03:00 EDT**; recovery is enabled. The vLLM follow-up finished at 13:21; the later llama.cpp follow-up finished at 14:05 EDT. Both runs completed successfully, cleared provisional state and released their GPU reservations. Hub and gateway retained their existing processes.
 

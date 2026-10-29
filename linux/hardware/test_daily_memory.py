@@ -57,7 +57,9 @@ class Accounting(BoundedPolicyCase):
             (background / 'status').write_text('VmSwap:\t1000000000 kB\n')
             # This background task's swap must not affect the inference reading.
             sample = mem.sample_memory(snapshot, root)
-            self.assertEqual(sample, {'swap': sum(range(1, 13)) * 1024, 'spill': 2048, 'processes': 12})
+            self.assertEqual({k: sample[k] for k in ('swap', 'spill', 'processes')},
+                             {'swap': sum(range(1, 13)) * 1024, 'spill': 2048, 'processes': 12})
+            self.assertEqual(sample['vram_accounting']['legacy_fallback_clients'], 1)
 
     def test_missing_swap_counter_is_not_zero(self):
         with tempfile.TemporaryDirectory() as directory:

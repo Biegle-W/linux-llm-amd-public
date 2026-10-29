@@ -9,6 +9,15 @@ assert subprocess.check_output(['git','-C',str(base),'rev-parse','HEAD'],text=Tr
 def one(s, old, new):
     assert s.count(old) == 1, 'Review changed source: ' + old[:80]
     return s.replace(old, new, 1)
+def rocm_multimem_fallback(s):
+    """Select the existing NCCL fallback before unsupported NVLink allocation."""
+    marker = '# ROCm has no NVLink multicast; do not allocate a probe buffer.'
+    if marker in s:
+        return s
+    return one(s, '        self._state = self._UNINIT if enabled else None',
+               marker.join(('        ', '\n')) +
+               '        self._state = self._UNINIT if enabled and torch.version.hip is None else None')
+
 def qwen(s):
  s=one(s,'        self.embed_tokens = self._build_embed_tokens(config)', '''        if is_nextn and get_bool_env_var("SGLANG_LOCAL_SHARE_QWEN_MTP") and get_parallel().pp_size == 1:
             with torch.device("meta"):
@@ -135,3 +144,11 @@ if 'MASK_PARTIAL_Q_ROWS' not in source:
     compile(source, str(unified), 'exec')
     unified.write_text(source)
 print('Opt-in partial-GQA query-row masking repair is available.')
+
+# The upstream multimem path is CUDA/NVLink PTX. Its lazy unsupported probe
+# allocated a 128-token full-vocabulary buffer on ROCm before falling back.
+multimem_path = base / 'srt/distributed/device_communicators/triton_symm_mem_ag.py'
+multimem_source = rocm_multimem_fallback(multimem_path.read_text())
+compile(multimem_source, str(multimem_path), 'exec')
+multimem_path.write_text(multimem_source)
+print('ROCm skips unsupported NVLink multimem allocation and retains the NCCL fallback.')

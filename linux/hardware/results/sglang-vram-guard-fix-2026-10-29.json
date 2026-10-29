@@ -1,0 +1,523 @@
+{
+  "date": "2026-10-29",
+  "model": "qwen3.8-27b-sglang-dflash2",
+  "upstream_commit": "f84475ccf593087df3d1da13c9e675eadee12352",
+  "context": 163840,
+  "policy": "loading-swap-v4",
+  "inference_swap_limits": {
+    "write_MiB_s": 128,
+    "combined_MiB_s": 160,
+    "rolling_window_seconds": 30
+  },
+  "guard": {
+    "method": "amd-eviction-v1",
+    "actual_eviction_limit_bytes": 0,
+    "fallback": "Conservative total-minus-resident rule on older drivers; malformed counters fail closed.",
+    "legacy_record_field": "max_nonresident_vram_bytes remains the compatibility name for the enforced spill value; requested-minus-resident is separately diagnostic. Historical records are not reinterpreted.",
+    "kernel_sources": [
+      "https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c",
+      "https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c"
+    ]
+  },
+  "root_cause": {
+    "component": "CUDA/NVLink multimem logits-gather probe attempted on ROCm before fallback",
+    "buffer_tokens": 128,
+    "vocab_size": 248320,
+    "dtype_bytes": 2,
+    "buffer_payload_bytes": 63569920,
+    "driver_eviction_observed_bytes": 63582208,
+    "additional_bytes": 12288,
+    "fix": "Choose existing NCCL fallback on ROCm before symmetric-memory allocation; original graph, DFlash2, model, quantization, context, cache and prefill settings retained.",
+    "patch_script": "sglang/apply-rocm-fixes.py"
+  },
+  "CPU_checks_per_checkout": 118,
+  "attempts": [
+    {
+      "label": "original profile; first exact-counter trial",
+      "started": "2026-10-29T16:37:59.760668-04:00",
+      "finished": "2026-10-29T16:39:02.054859-04:00",
+      "status": "failed",
+      "passed": false,
+      "faults": [],
+      "error": "HTTPError: HTTP Error 503: Service Unavailable",
+      "lifecycle": {
+        "worker_samples": 116,
+        "sample_attempts": 120,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "vram_accounting": {
+          "schema": "amd-eviction-v1",
+          "explicit_counter_samples": 108,
+          "legacy_fallback_samples": 0,
+          "max_requested_nonresident_vram_bytes": 0,
+          "max_explicit_evicted_vram_bytes": 0
+        }
+      },
+      "memory_failures": [
+        "swap_activity_no_inference_window"
+      ],
+      "shutdown_verified": true,
+      "fingerprints_unchanged": true,
+      "owned_guard_vram_spill_reported": true
+    },
+    {
+      "label": "original profile; explicit eviction observed",
+      "started": "2026-10-29T16:40:46.890200-04:00",
+      "finished": "2026-10-29T16:41:47.731184-04:00",
+      "status": "guard_stopped",
+      "passed": false,
+      "faults": [
+        "vram_spill"
+      ],
+      "error": "RemoteDisconnected: Remote end closed connection without response",
+      "lifecycle": {
+        "worker_samples": 113,
+        "sample_attempts": 116,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 4094889984,
+        "max_nonresident_vram_bytes": 63582208,
+        "vram_accounting": {
+          "schema": "amd-eviction-v1",
+          "explicit_counter_samples": 109,
+          "legacy_fallback_samples": 0,
+          "max_requested_nonresident_vram_bytes": 63582208,
+          "max_explicit_evicted_vram_bytes": 63582208
+        }
+      },
+      "memory_failures": [
+        "vram_spill",
+        "swap_activity_no_inference_window"
+      ],
+      "shutdown_verified": true,
+      "fingerprints_unchanged": true,
+      "owned_guard_vram_spill_reported": false
+    },
+    {
+      "label": "isolated graph-disabled probe",
+      "started": "2026-10-29T16:43:27.356278-04:00",
+      "finished": "2026-10-29T16:44:35.755813-04:00",
+      "status": "guard_stopped",
+      "passed": false,
+      "faults": [
+        "vram_spill"
+      ],
+      "error": "RemoteDisconnected: Remote end closed connection without response",
+      "lifecycle": {
+        "worker_samples": 128,
+        "sample_attempts": 131,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 63582208,
+        "vram_accounting": {
+          "schema": "amd-eviction-v1",
+          "explicit_counter_samples": 122,
+          "legacy_fallback_samples": 0,
+          "max_requested_nonresident_vram_bytes": 63582208,
+          "max_explicit_evicted_vram_bytes": 63582208
+        }
+      },
+      "memory_failures": [
+        "vram_spill",
+        "swap_activity_no_inference_window"
+      ],
+      "shutdown_verified": true,
+      "fingerprints_unchanged": true,
+      "owned_guard_vram_spill_reported": false
+    },
+    {
+      "label": "platform fix; private wrapper failure",
+      "started": "2026-10-29T16:50:50.942595-04:00",
+      "finished": "2026-10-29T16:51:57.683693-04:00",
+      "status": "failed",
+      "passed": false,
+      "faults": [],
+      "error": "UnboundLocalError: cannot access local variable 'first_visible' where it is not associated with a value",
+      "lifecycle": {
+        "worker_samples": 125,
+        "sample_attempts": 129,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0,
+        "vram_accounting": {
+          "schema": "amd-eviction-v1",
+          "explicit_counter_samples": 121,
+          "legacy_fallback_samples": 0,
+          "max_requested_nonresident_vram_bytes": 0,
+          "max_explicit_evicted_vram_bytes": 0
+        }
+      },
+      "memory_failures": [
+        "swap_activity_no_inference_window"
+      ],
+      "shutdown_verified": true,
+      "fingerprints_unchanged": true,
+      "owned_guard_vram_spill_reported": false
+    },
+    {
+      "label": "platform fix; original profile full qualification",
+      "started": "2026-10-29T16:52:45.367682-04:00",
+      "finished": "2026-10-29T16:59:30.523601-04:00",
+      "status": "completed_benchmark",
+      "passed": true,
+      "faults": [],
+      "error": null,
+      "lifecycle": {
+        "worker_samples": 756,
+        "sample_attempts": 759,
+        "sampling_errors": 0,
+        "max_worker_swap_bytes": 23659208704,
+        "max_nonresident_vram_bytes": 0,
+        "vram_accounting": {
+          "schema": "amd-eviction-v1",
+          "explicit_counter_samples": 754,
+          "legacy_fallback_samples": 0,
+          "max_requested_nonresident_vram_bytes": 0,
+          "max_explicit_evicted_vram_bytes": 0
+        }
+      },
+      "memory_failures": [],
+      "shutdown_verified": true,
+      "fingerprints_unchanged": true,
+      "owned_guard_vram_spill_reported": false
+    }
+  ],
+  "qualification": {
+    "status": "passed isolated original-profile qualification",
+    "arithmetic": true,
+    "functional_quality": {
+      "status": "passed",
+      "tests": {
+        "arithmetic": {
+          "passed": true,
+          "answer_sha256": "3949ac1596ec77106a709a618bf5adcb19b77537ce8bcbdf54ff830169cdd084",
+          "usage": {
+            "prompt_tokens": 28,
+            "total_tokens": 32,
+            "completion_tokens": 4,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          }
+        },
+        "logic": {
+          "passed": true,
+          "answer_sha256": "4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8",
+          "usage": {
+            "prompt_tokens": 42,
+            "total_tokens": 45,
+            "completion_tokens": 3,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          }
+        },
+        "records": {
+          "passed": true,
+          "answer_sha256": "030d756286e59f22a464c36e1fbff606a795dfc70aaf0108bd86f2aa193d05f4",
+          "usage": {
+            "prompt_tokens": 46,
+            "total_tokens": 48,
+            "completion_tokens": 2,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          }
+        },
+        "json": {
+          "passed": true
+        },
+        "tool_roundtrip": {
+          "passed": true
+        },
+        "code": {
+          "passed": true,
+          "answer_sha256": "08de3d4b0d472c4d7857fb20436c08f651b546289f8501b66ec7835b4e5df975",
+          "unit_cases": 4
+        }
+      }
+    },
+    "short": {
+      "code": {
+        "median_decode_tps": 193.31751770551793,
+        "median_ttft_seconds": 0.10873972502304241,
+        "completion_tokens": [
+          256,
+          256,
+          256
+        ]
+      },
+      "prose": {
+        "median_decode_tps": 73.91021940115614,
+        "median_ttft_seconds": 0.1185986070195213,
+        "completion_tokens": [
+          256,
+          256,
+          256
+        ]
+      }
+    },
+    "prefill": [
+      {
+        "usage": {
+          "prompt_tokens": 8188,
+          "total_tokens": 8210,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 5.619696615001885,
+        "prefill_native_tps": null,
+        "prefill_phase_tps": 1473.8314135120484,
+        "prefill_phase_seconds": 5.5555879220191855,
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "cached_tokens": 0,
+        "markers_passed": true
+      },
+      {
+        "usage": {
+          "prompt_tokens": 8187,
+          "total_tokens": 8209,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 5.602957182010869,
+        "prefill_native_tps": null,
+        "prefill_phase_tps": 1480.0004668045303,
+        "prefill_phase_seconds": 5.531755011994392,
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "cached_tokens": 0,
+        "markers_passed": true
+      },
+      {
+        "usage": {
+          "prompt_tokens": 8189,
+          "total_tokens": 8211,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 5.630723272013711,
+        "prefill_native_tps": null,
+        "prefill_phase_tps": 1466.2448586670243,
+        "prefill_phase_seconds": 5.585015321004903,
+        "prefill_phase_source": "sglang:per_stage_req_latency_seconds_sum stage=prefill_forward, maximum rank",
+        "cached_tokens": 0,
+        "markers_passed": true
+      }
+    ],
+    "lifecycle_memory": {
+      "scope": "managed inference: launch, load, warmup, benchmark, shutdown",
+      "interval_seconds": 0.5,
+      "worker_samples": 756,
+      "sampling_errors": 0,
+      "sample_attempts": 759,
+      "sampling_error_details": [],
+      "sampling_error_details_dropped": 0,
+      "enforcement_attempts": 0,
+      "enforcement_errors": 0,
+      "enforcement_state": "not_attempted",
+      "max_worker_swap_bytes": 23659208704,
+      "max_nonresident_vram_bytes": 0,
+      "swap_activity": {
+        "policy": "loading-swap-v4",
+        "samples": 759,
+        "sampling_errors": 0,
+        "elapsed_seconds": 404.71459376599523,
+        "worker_swap_peak_bytes": 23659208704,
+        "total_swapin_bytes": 1845956608,
+        "total_swapout_bytes": 6220570624,
+        "inference_window_samples": 565,
+        "max_inference_swapout_bytes_per_second": 42564580.58468907,
+        "max_inference_swap_io_bytes_per_second": 52213632.79128381,
+        "min_available_bytes": 18959777792,
+        "max_memory_full_psi_avg10": 0.6,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": 134217728,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "inference_write_limit_bytes_per_second": 134217728,
+        "inference_io_limit_bytes_per_second": 167772160,
+        "rate_window_seconds": 30,
+        "failures": [],
+        "advisories": []
+      },
+      "vram_accounting": {
+        "schema": "amd-eviction-v1",
+        "explicit_counter_samples": 754,
+        "legacy_fallback_samples": 0,
+        "max_requested_nonresident_vram_bytes": 0,
+        "max_explicit_evicted_vram_bytes": 0
+      }
+    },
+    "minimum_available_GiB": 19.245159149169922,
+    "minimum_free_vram_GiB": [
+      4.439628601074219,
+      4.470512390136719
+    ],
+    "continuous_loop_seconds": 35.12305670900969,
+    "continuous_request_count": 8,
+    "shutdown_verified": true,
+    "fingerprints_unchanged": true,
+    "median_prefill_tps": 1473.8314135120484,
+    "median_fresh_prefill_ttft_seconds": 5.619696615001885,
+    "near_window": {
+      "status": "passed; three markers present in fresh request and full-history follow-up",
+      "fresh": {
+        "usage": {
+          "prompt_tokens": 159986,
+          "total_tokens": 160008,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 246.22252742000273,
+        "cached_tokens": 0,
+        "prefill_phase_tps": 650.9529045095792
+      },
+      "full_history_follow_up": {
+        "usage": {
+          "prompt_tokens": 160033,
+          "total_tokens": 160055,
+          "completion_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 160000
+          },
+          "reasoning_tokens": 0
+        },
+        "ttft_seconds": 0.8203009459830355,
+        "cached_tokens": 160000,
+        "prefill_phase_tps": null
+      }
+    },
+    "observed_KV_capacity_tokens": [
+      163840
+    ],
+    "sampled_thermal": {
+      "0000:03:00.0": {
+        "peak_temperature_c": {
+          "mem": 92.0,
+          "edge": 80.0,
+          "junction": 100.0
+        },
+        "sensor_samples": {
+          "mem": 399,
+          "edge": 399,
+          "junction": 399
+        }
+      },
+      "0000:06:00.0": {
+        "peak_temperature_c": {
+          "mem": 74.0,
+          "edge": 56.0,
+          "junction": 80.0
+        },
+        "sensor_samples": {
+          "mem": 399,
+          "edge": 399,
+          "junction": 399
+        }
+      }
+    },
+    "lifecycle_minimum_available_GiB": 17.657669067382812
+  },
+  "source_patch": {
+    "upstream_commit": "f84475ccf593087df3d1da13c9e675eadee12352",
+    "source_file_relative": "python/sglang/srt/distributed/device_communicators/triton_symm_mem_ag.py",
+    "before_sha256": "d0c9fa8c2cc521128d371cb73dc5a0f3590297e9d2991dd0f4613d27e30269b8",
+    "after_sha256": "d187684d5afaef78c29f1aa329d38f6b3a424f5331ce137b9cb8952331ea4d1a",
+    "buffer_explanation": {
+      "max_tokens": 128,
+      "vocab_size": 248320,
+      "dtype_bytes": 2,
+      "payload_bytes": 63569920,
+      "observed_eviction_bytes": 63582208,
+      "difference_bytes": 12288
+    },
+    "settings_changed": false,
+    "fallback": "existing NCCL all-gather; ROCm only",
+    "graph_capture": "unchanged original enabled setting"
+  },
+  "runtime_availability": "SGLang enabled after isolated and normal authenticated API qualification; other four RAM-blocked routes remain paused",
+  "other_paused_routes": [
+    "ornith-1.5-122b",
+    "deepseek-v4.1-flash-1017-maya",
+    "deepseek-v4.1-flash-1017-strata-xs",
+    "qwen3.8-flash-next-iq3_xxs"
+  ],
+  "limits": "Synthetic functional/code/tool/marker checks and one near-window pair; not exhaustive quality, vision or a matched historical performance comparison. No engine revision or performance threshold changed.",
+  "API_integration": {
+    "started_at": "2026-10-29T17:02:45.556319-04:00",
+    "model": "qwen3.8-27b-sglang-dflash2",
+    "checks": {
+      "hub_catalog": {
+        "passed": true,
+        "enabled_count": 8,
+        "other_four_paused": true
+      },
+      "gateway_catalog": {
+        "passed": true,
+        "enabled_count": 8,
+        "other_four_paused": true
+      },
+      "JSON_arithmetic": {
+        "passed": true,
+        "usage": {
+          "prompt_tokens": 28,
+          "total_tokens": 32,
+          "completion_tokens": 4,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        }
+      },
+      "SSE_arithmetic": {
+        "passed": true,
+        "done_event": true
+      },
+      "tool_round_trip": {
+        "passed": true
+      },
+      "ordered_markers_and_history": {
+        "passed": true,
+        "fresh_usage": {
+          "prompt_tokens": 8187,
+          "total_tokens": 8209,
+          "completion_tokens": 22,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "full_history_usage": {
+          "prompt_tokens": 8234,
+          "total_tokens": 8256,
+          "completion_tokens": 22,
+          "prompt_tokens_details": {
+            "cached_tokens": 8192
+          },
+          "reasoning_tokens": 0
+        }
+      }
+    },
+    "passed": true,
+    "normal_idle_timeout_seconds": 600,
+    "runtime": "normal hub-managed SGLang worker; existing inference-aware 600-second idle release",
+    "finished_at": "2026-10-29T17:02:52.869151-04:00",
+    "guard_verification": {
+      "method": "amd-eviction-v1",
+      "actual_eviction_bytes": 0,
+      "worker_swap_bytes": 2178592768,
+      "explicit_counter_used": true,
+      "legacy_fallback_clients": 0
+    }
+  },
+  "SSD_after": {
+    "checked_at_utc": "2026-10-29T21:03:10.824804+00:00",
+    "refresh_succeeded": true,
+    "percent_used": 3,
+    "media_errors": 0,
+    "controller_error_log_entries": 66051,
+    "critical_warnings": [],
+    "temperature_c": 41.85000000000002,
+    "scope": "Read-only SMART refresh; no disk benchmark or self-test; no lifetime safety guarantee."
+  }
+}

@@ -16,6 +16,18 @@ sys.path.insert(0, str(ROOT/'dsh'))
 from strata_memory import MemoryGuard, GIB, startup_vram_blocker
 
 
+def load_router_fixture(spec,module):
+    """Keep guard tests independent of owner-paused production catalogs."""
+    original=Path.read_text
+    def read(path,*args,**kwargs):
+        if path.name=='strata-profiles.json':
+            data=json.loads(original(ROOT/'dsh'/path.name,*args,**kwargs))
+            for row in data.values():row['enabled']=True
+            return json.dumps(data)
+        return original(path,*args,**kwargs)
+    with patch.object(Path,'read_text',read):spec.loader.exec_module(module)
+
+
 class StrataGuardTests(unittest.TestCase):
     def test_loaded_startup_accepts_five_gib_on_both_cards(self):
         self.assertIsNone(startup_vram_blocker([{'free':5*GIB}, {'free':5*GIB}]))
@@ -35,7 +47,7 @@ class StrataGuardTests(unittest.TestCase):
         for free,accepted in (([5*GIB,5*GIB],True),([5*GIB-1,6*GIB],False),([6*GIB,5*GIB-1],False)):
             with self.subTest(free=free), tempfile.TemporaryDirectory() as folder:
                 spec=importlib.util.spec_from_file_location('strata_startup',ROOT/'dsh/strata-router.py')
-                router=importlib.util.module_from_spec(spec);spec.loader.exec_module(router)
+                router=importlib.util.module_from_spec(spec);load_router_fixture(spec,router)
                 root=Path(folder);(root/'logs').mkdir()
                 config_name=router.PROFILES[router.DEFAULT]['config']
                 (root/config_name).write_bytes((ROOT/'dsh'/config_name).read_bytes())
@@ -90,7 +102,7 @@ class StrataGuardTests(unittest.TestCase):
     def test_router_stops_only_its_worker_and_latches_reload(self):
         spec = importlib.util.spec_from_file_location('strata_router', ROOT/'dsh/strata-router.py')
         router = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(router)
+        load_router_fixture(spec,router)
         proc = Mock(); proc.poll.return_value = None
         router.worker = proc
         router.stopping = Mock(); router.stopping.wait.side_effect = [False, True]
@@ -108,7 +120,7 @@ class StrataGuardTests(unittest.TestCase):
     def test_emergency_stop_signals_only_the_owned_group(self):
         spec = importlib.util.spec_from_file_location('strata_router_stop', ROOT/'dsh/strata-router.py')
         router = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(router)
+        load_router_fixture(spec,router)
         proc=Mock();proc.pid=1234;proc.poll.return_value=None
         proc.wait.side_effect=[subprocess.TimeoutExpired('owned worker',3),None]
         router.worker=proc

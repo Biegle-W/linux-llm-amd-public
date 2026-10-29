@@ -112,8 +112,17 @@ def watch_memory():
         if proc is None or proc.poll() is not None:
             guard = MemoryGuard()
             continue
-        _, available = host_memory()
-        swap, spill = worker_memory(proc.pid)
+        try:
+            _, available = host_memory()
+            swap, spill = worker_memory(proc.pid)
+        except Exception as error:
+            with lifecycle:
+                if worker is proc:
+                    memory_fault = 'Worker memory telemetry unavailable: '+type(error).__name__
+                    print(memory_fault+'; unloading only the owned worker.', flush=True)
+                    stop_worker(timeout=3)
+            guard = MemoryGuard()
+            continue
         try:
             readings = vram_snapshot()
         except (OSError, ValueError, RuntimeError):

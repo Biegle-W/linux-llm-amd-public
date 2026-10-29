@@ -2959,7 +2959,15 @@
         "kernel_counter_definitions": "https://docs.kernel.org/gpu/drm-usage-stats.html#memory",
         "new_GPU_trials": false,
         "guard_changed": false,
-        "owner_pause_retained": true
+        "owner_pause_retained": true,
+        "subsequent_resolution": "Fresh driver counter caught explicit eviction from unsupported ROCm CUDA/NVLink probe allocation. Source dispatch fixed before allocation; original graph-enabled profile now qualifies with zero eviction."
+      },
+      "subsequent_qualification": {
+        "date": "2026-10-29",
+        "status": "original-profile SGLang qualified and enabled after ROCm multicast fix",
+        "evidence": "sglang-vram-guard-fix-2026-10-29.json",
+        "actual_eviction_bytes": 0,
+        "historical_attempts_retained": true
       }
     }
   ],

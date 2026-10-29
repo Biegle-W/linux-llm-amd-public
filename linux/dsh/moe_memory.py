@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import threading
 import time
+from amd_memory import vram_accounting
 
 ROOT = Path(__file__).resolve().parent
 GIB = 1024**3
@@ -153,10 +154,10 @@ def admit_model(model, call, port):
         raise RuntimeError(reason)
 
 
-def worker_memory(pid):
+def worker_memory(pid, *, proc_root=Path('/proc')):
     """Read swap and dedicated-VRAM residency for this parent and its descendants."""
     parents = {}
-    for path in Path('/proc').iterdir():
+    for path in proc_root.iterdir():
         if not path.name.isdigit():
             continue
         try:
@@ -173,7 +174,7 @@ def worker_memory(pid):
     swap = nonresident = 0
     clients = set()
     for child in owned:
-        base = Path('/proc') / str(child)
+        base = proc_root / str(child)
         try:
             for line in (base/'status').read_text().splitlines():
                 if line.startswith('VmSwap:'):
@@ -186,10 +187,8 @@ def worker_memory(pid):
                 if client in clients:
                     continue
                 clients.add(client)
-                total = int(fields.get('drm-total-vram', '0').split()[0]) * 1024
-                resident = int(fields.get('drm-resident-vram', '0').split()[0]) * 1024
-                nonresident += max(0, total-resident)
-        except (OSError, ValueError, IndexError):
+                nonresident += vram_accounting(fields)['spill']
+        except OSError:
             continue
     return swap, nonresident
 
@@ -225,8 +224,13 @@ def watch_worker(proc, active_model, stop):
             if not profile:
                 low = 0
                 continue
-            _, available = host_memory()
-            swap, spill = worker_memory(proc.pid)
+            try:
+                _, available = host_memory()
+                swap, spill = worker_memory(proc.pid)
+            except Exception as error:
+                print('MoE worker memory telemetry unavailable: '+type(error).__name__+'; stopping only the owned worker.', flush=True)
+                stop(proc)
+                return
             if profile.get('memory_placement') == 'vram_only':
                 try:
                     reason = gpu_guard.check(available, swap, spill, vram_snapshot())

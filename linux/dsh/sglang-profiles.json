@@ -30,8 +30,6 @@
     "rdna_verify": true,
     "rdna_verify_walk_fix": true,
     "context_validation": "Fresh160861 input/22 output, cached160832-token full-history follow-up; arithmetic/JSON/tools/SSE; both cards, zero owned swap/spill",
-    "enabled": false,
-    "disabled_reason": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume.",
-    "resume_requires_owner_instruction": true
+    "enabled": true
   }
 }

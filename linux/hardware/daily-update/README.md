@@ -1,6 +1,6 @@
 # Daily engine update
 
-**Owner pause — October 29:** Ornith, DeepSeek XS on Maya and Strata, Qwen Flash Next on Strata, and Qwen27B on SGLang are disabled until the owner reports more RAM is available. Seven working profiles remain enabled; nightly qualification skips the paused routes. No automatic RAM-detection resume. [Paused models and resume rules](../MODEL-RAM-PAUSE-2026-10-29.md).
+**Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](../SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 
 ## Current policy / Strata retry — October 29
 

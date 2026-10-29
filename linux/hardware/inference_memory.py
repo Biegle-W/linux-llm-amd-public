@@ -13,6 +13,7 @@ from swap_activity import (SwapActivity, read_host_activity, validate_summary,
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
 from backend_switch import processes, is_inference
+from amd_memory import vram_accounting
 
 # Explicit legacy bounded-64mib override. The default loading-swap policy also
 # requires host activity/pressure evidence and a complete inference window.
@@ -40,6 +41,9 @@ def sample_memory(snapshot=None, proc_root=Path('/proc')):
         owned |= children
     swap = spill = counted = 0
     clients = set()
+    vram = {"schema": "amd-eviction-v1", "explicit_eviction_clients": 0, "legacy_fallback_clients": 0,
+            "requested_vram_bytes": 0, "resident_vram_bytes": 0,
+            "requested_nonresident_vram_bytes": 0, "explicit_evicted_vram_bytes": 0}
     for pid in sorted(owned):
         stage, fd = 'process_snapshot', None
         try:
@@ -78,15 +82,21 @@ def sample_memory(snapshot=None, proc_root=Path('/proc')):
                 if client in clients:
                     continue
                 clients.add(client)
-                total = int(values['drm-total-vram'].split()[0]) * 1024
-                resident = int(values['drm-resident-vram'].split()[0]) * 1024
-                if total < 0 or not 0 <= resident <= total:
-                    raise ValueError('Invalid DRM residency counter')
-                spill += max(0, total - resident)
+                row = vram_accounting(values)
+                spill += row['spill']
+                vram['explicit_eviction_clients' if row['explicit'] else 'legacy_fallback_clients'] += 1
+                for dest, source in [('requested_vram_bytes', 'requested'), ('resident_vram_bytes', 'resident'),
+                                     ('requested_nonresident_vram_bytes', 'requested_nonresident')]:
+                    vram[dest] += row[source]
+                if row['evicted'] is not None:
+                    vram['explicit_evicted_vram_bytes'] += row['evicted']
         except Exception as error:
             error.sampler_context = {'reader': stage, 'pid': pid, 'fd': fd}
             raise
-    return {'swap': swap, 'spill': spill, 'processes': counted} if counted else None
+    if not counted:
+        return None
+    return {'swap': swap, 'spill': spill, 'processes': counted,
+            **({'vram_accounting': vram} if clients else {})}
 
 
 def memory_failures(memory):
@@ -139,7 +149,7 @@ class MemoryMonitor:
     MAX_ENFORCEMENT_ATTEMPTS = 2
     MAX_ERROR_DETAILS = 8
     SAFE_COUNTER_NAMES = frozenset(('VmSwap', 'drm-pdev', 'drm-client-id',
-                                    'drm-total-vram', 'drm-resident-vram',
+                                    'drm-total-vram', 'drm-resident-vram', 'amd-evicted-vram',
                                     'swap', 'spill', 'processes'))
 
     def __init__(self, interval=0.5, on_violation=None, *, write_budget_bytes_per_second=None):
@@ -203,7 +213,7 @@ class MemoryMonitor:
         if missing is not None and (not isinstance(missing, str) or missing not in self.SAFE_COUNTER_NAMES):
             missing = '<redacted>'
         frames = [{'file': Path(frame.filename).name if Path(frame.filename).name in
-                   ('inference_memory.py', 'backend_switch.py', 'swap_activity.py') else '<external>',
+                   ('inference_memory.py', 'backend_switch.py', 'swap_activity.py', 'amd_memory.py') else '<external>',
                    'function': frame.name[:80], 'line': frame.lineno}
                   for frame in traceback.extract_tb(error.__traceback__)[-6:]]
         details.append({'sample_index': self.summary['sample_attempts'],
@@ -226,6 +236,16 @@ class MemoryMonitor:
                 for field, source in [('max_worker_swap_bytes', 'swap'),
                                       ('max_nonresident_vram_bytes', 'spill')]:
                     self.summary[field] = max(self.summary[field], reading[source])
+                if 'vram_accounting' in reading:
+                    stats = reading['vram_accounting']
+                    target = self.summary.setdefault('vram_accounting', {'schema': 'amd-eviction-v1',
+                        'explicit_counter_samples': 0, 'legacy_fallback_samples': 0,
+                        'max_requested_nonresident_vram_bytes': 0, 'max_explicit_evicted_vram_bytes': 0})
+                    target['explicit_counter_samples'] += int(stats['explicit_eviction_clients'] > 0)
+                    target['legacy_fallback_samples'] += int(stats['legacy_fallback_clients'] > 0)
+                    for dest, source in [('max_requested_nonresident_vram_bytes', 'requested_nonresident_vram_bytes'),
+                                         ('max_explicit_evicted_vram_bytes', 'explicit_evicted_vram_bytes')]:
+                        target[dest] = max(target[dest], stats[source])
         except Exception as error:
             # A sampler bug must not kill this thread and leave a false zero.
             self._record_error(error)

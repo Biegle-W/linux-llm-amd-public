@@ -15,6 +15,7 @@ import os
 import errno
 import time
 import uuid
+import json
 from contextlib import contextmanager
 
 
@@ -250,6 +251,7 @@ class OwnedWorkerWatch:
         self.activity = SwapActivity(write_budget_bytes_per_second=write_budget_bytes_per_second)
         self.phase = 'loading'
         self.fault = None
+        self.last_reading = None
         self.reported_advisories = set()
         self.advisory_log_errors = 0
         self.done = threading.Event()
@@ -274,6 +276,7 @@ class OwnedWorkerWatch:
             if self.done.is_set() or self.fault:
                 return
             failures = []
+            self.last_reading = None
             try:
                 if self.proc.poll() is not None:
                     # Parent exit is not proof that its ranks exited. Retain
@@ -287,6 +290,14 @@ class OwnedWorkerWatch:
                         raise ValueError('invalid worker telemetry')
                 if not reading['processes']:
                     raise ValueError('no owned worker telemetry')
+                self.last_reading = {key: reading[key] for key in ('swap', 'spill', 'processes')}
+                self.last_reading.update(phase=self.phase, monotonic=time.monotonic())
+                stats = reading.get('vram_accounting')
+                if isinstance(stats, dict):
+                    self.last_reading['vram_accounting'] = {key: stats[key] for key in (
+                        'explicit_eviction_clients', 'legacy_fallback_clients', 'requested_vram_bytes',
+                        'resident_vram_bytes', 'requested_nonresident_vram_bytes', 'explicit_evicted_vram_bytes')
+                        if type(stats.get(key)) is int and stats[key] >= 0}
                 self.activity.observe(self.host_reader(), self.phase, reading['swap'],
                                       progress=reading.get('progress'))
                 failures.extend(self.activity.failures())
@@ -389,6 +400,10 @@ class WorkerSwapGuard:
                 self.fault += '; termination_error:' + type(error).__name__
                 raise
             finally:
+                try:
+                    print('Owned-worker fault sample: ' + json.dumps(watch.last_reading, sort_keys=True), flush=True)
+                except Exception:
+                    pass  # Diagnostic output never bypasses or undoes owned termination.
                 print('Low-churn guard: ' + self.fault +
                       '; owned-worker shutdown requested; router restart required.', flush=True)
 

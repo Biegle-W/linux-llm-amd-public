@@ -58,20 +58,25 @@ def terminate(proc):
 
 
 def amd_residency(pid):
-    seen, total, resident = set(), 0, 0
+    sys.path.insert(0, str(ROOT / 'dsh'))
+    from amd_memory import vram_accounting
+    seen, total, resident, spill, gap = set(), 0, 0, 0, 0
     for path in (Path('/proc') / str(pid) / 'fdinfo').glob('*'):
         try:
             fields = dict(line.split(':', 1) for line in path.read_text().splitlines() if ':' in line)
         except OSError:
             continue
-        client = fields.get('drm-client-id')
+        client = (fields.get('drm-pdev'), fields.get('drm-client-id'))
         if fields.get('drm-driver', '').strip() != 'amdgpu' or client in seen:
             continue
         seen.add(client)
-        total += int(fields.get('drm-total-vram', '0').split()[0]) * 1024
-        resident += int(fields.get('drm-resident-vram', '0').split()[0]) * 1024
+        row = vram_accounting(fields)
+        total += row['requested']
+        resident += row['resident']
+        spill += row['spill']
+        gap += row['requested_nonresident']
     return {'allocated_vram_bytes': total, 'resident_vram_bytes': resident,
-            'nonresident_vram_bytes': max(0, total - resident)}
+            'nonresident_vram_bytes': spill, 'requested_nonresident_vram_bytes': gap}
 
 
 def run(case, long_only=False, no_host_visible=False, model_path=None, backend='vulkan'):
