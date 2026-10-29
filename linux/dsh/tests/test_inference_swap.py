@@ -727,7 +727,11 @@ class RouterIntegrationTests(unittest.TestCase):
         import io
         import json
         from unittest.mock import patch
-        for name in ('llama', 'vllm', 'sglang', 'strata', 'maya'):
+        cases=[(name,{}) for name in ('llama','vllm','sglang','strata','maya')]
+        cases += [(name,{'host_ram_profile':'32gb-v1','worker_memory_limits':{
+            'memory.high':(cap-2)*1024**3,'memory.max':cap*1024**3,'memory.swap.max':'max'}})
+            for name in ('strata','maya') for cap in (20,22)]
+        for name,scope_cfg in cases:
             with self.subTest(router=name), ExitStack() as stack:
                 module = self.load_router(name)
                 self.assertTrue(hasattr(module, 'swap_guard'), name + ' lacks runtime swap enforcement')
@@ -762,6 +766,7 @@ class RouterIntegrationTests(unittest.TestCase):
                             socket = stack.enter_context(patch.object(module.socket, 'socket'))
                             socket.return_value.__enter__.return_value.connect_ex.return_value = 1
                     else:
+                        stack.enter_context(patch.object(Path,'read_text',return_value=json.dumps(scope_cfg)))
                         stack.enter_context(patch('hardware_guard.require_strata'))
                         if name == 'maya':
                             module.require_maya = Mock()
@@ -774,6 +779,9 @@ class RouterIntegrationTests(unittest.TestCase):
                 ensure()
                 guard.check.assert_called()
                 guard.spawn.assert_called_once()
+                if name in ('strata','maya'):
+                    from streaming_memory import scope_limits
+                    self.assertEqual(guard.spawn.call_args.kwargs['expected_memory_limits'],scope_limits(scope_cfg))
                 guard.ready.assert_called_once_with(proc, phase='idle')
                 self.assertIs(module.native if name == 'llama' else module.worker, proc)
                 guard.check.side_effect = RuntimeError('latched guard fault')

@@ -1,4 +1,8 @@
-# Current dual-AMD benchmarks — October 27, 2026
+# Current dual-AMD benchmarks — October 28, 2026
+
+## Temporary 32 GB SSD-streaming profiles — October 28
+
+Activated temporary 32 GB profiles: **Qwen / Strata, GLM / Maya**. Held at the exact prior 64 GB profile: **DeepSeek XS / Maya, DeepSeek XS / Strata**. Each activation passed native safety/functional/performance/near-window/history checks and normal guarded authenticated JSON/SSE/tools/~8K/history checks. The exact 64 GB preimages are retained; restore only after at least 60 GiB physical RAM is visible and inference is idle. All other settings, guards, coordinator services and paused schedules remain. [Qualification, comparisons and limits](SSD-STREAMING-32GB-2026-10-28.md).
 
 ## Router validation — October 28
 
@@ -22,11 +26,11 @@ Fresh tests completed on one physical 7900 XTX and on two 7900 XTX cards: one ex
 
 ## RAM configuration after reboot — October 28
 
-Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.83 GiB and earlier 64 GB measurements; none is a fresh post-upgrade LLM speed result. [H3 comparison and limitations](../graphics/H3-POST-UPGRADE-2026-10-28.md) are separate diffusion evidence.
+Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.83 GiB and earlier 64 GB measurements; the new 32 GB SSD-streaming section above supplies fresh October28 LLM results; the other historical rows keep their original RAM attribution. [H3 comparison and limitations](../graphics/H3-POST-UPGRADE-2026-10-28.md) are separate diffusion evidence.
 
-## Current selected profiles — October27 conditional vLLM update
+## Current selected profiles — October28; retained October27 vLLM pins
 
-Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-prefill failures. Five profiles have completed October27 speed samples on14.83GiB RAM. Seven older references below retain their64GB hardware attribution; they are not fresh current-RAM passes. Prefill N=native,E=engine phase. Decode is code/prose. TTFT excludes loading; context is configured capacity. Sizes are decimal allocated associated-file GB, shared sets counted once. [Qualification and retained failures](VLLM-DEV602-PROMOTION-2026-10-27.md).
+Qwen/Sage use dev602; Bolt is explicitly held on dev435 after two guarded long-prefill failures. Five profiles have completed October27 speed samples on14.83GiB RAM. The temporary SSD-streaming rows now carry their own October28/32GB attribution; the other older references keep their original RAM and measurement dates. Prefill N=native,E=engine phase. Decode is code/prose. TTFT excludes loading; context is configured capacity. Sizes are decimal allocated associated-file GB, shared sets counted once. [Qualification and retained failures](VLLM-DEV602-PROMOTION-2026-10-27.md).
 
 ### VRAM only models
 
@@ -52,12 +56,12 @@ SGLang's latest retry failed the VRAM-spill guard; its row is an older reference
 
 | Model / engine | Date | Native prefill t/s | TTFT s | Decode code/prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Qwen Flash-Next IQ3_XXS · Strata `0.1.49.2/7dd5cf18e68c` | Oct25 /64GB | 1206.2 | 6.824 | 75.52/47.44 | 262,144 | 128.14 | NVMe `Strata/models`, `Strata/packs`, `Strata/mtp` |
-| GLM Maya-S v2 · Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB | 539.3 | 11.836 | 19.04/15.52 | 32,768 | 97.42 | NVMe `Maya/Maya-S-v2-IQ2_XXS` |
-| DeepSeek Maya-XS +xs2 · Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe `Maya/DeepSeek-V4.1-Flash-1017-GGUF` |
-| DeepSeek Maya-XS +xs2 · Strata DeepSeek `0.1.49.1/8183c6b67162` | Oct25 /64GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same weights + NVMe `Strata/DeepSeek-V4.1-Flash-1017` metadata |
+| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 /32GB temporary | 1155.8 | 7.104 | 70.15/50.95 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
+| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 /32GB temporary | 440.9 | 18.922 | 5.76/5.66 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
+| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct25 /64GB; held on32GB | 634.1 | 9.951 | 22.59/13.31 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
+| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct25 /64GB; held on32GB | 184.9 | 34.084 | 18.67/13.59 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
 
-The Strata Qwen row is corrected to its actual selected October25 build; the October24 tuning report remains historical. [Recovered selected-build samples](results/strata-qwen-selected-2026-10-25.json). No new inference test or runtime change occurred.
+Three timed samples/task, one excluded warmup, three fresh ~8K prefill probes; normal API canaries are separate transport checks. DeepSeek storage is shared. Retained-build historical64GB comparisons, individual samples, exclusions and limits are in the [qualification report](SSD-STREAMING-32GB-2026-10-28.md) and [numeric evidence](results/ssd-streaming-32gb-2026-10-28.json).
 
 Older evidence: [October25 records](results/fresh-engine-tests-2026-10-25.json), [Strata production selection](STRATA-TUNING-2026-10-24.md), [SGLang reference](ALL-MODELS-2026-10-23.md), [storage inventory](results/model-storage-2026-10-27.json). Locations are sanitized drive-relative references; System is the models area and NVMe folders are beneath `LLM-Models`. Active associated model storage remains773.95GB; engine environments are excluded.
 

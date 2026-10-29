@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+## Temporary 32 GB SSD-streaming profiles — October 28
+
+Activated temporary 32 GB profiles: **Qwen / Strata, GLM / Maya**. Held at the exact prior 64 GB profile: **DeepSeek XS / Maya, DeepSeek XS / Strata**. Each activation passed native safety/functional/performance/near-window/history checks and normal guarded authenticated JSON/SSE/tools/~8K/history checks. The exact 64 GB preimages are retained; restore only after at least 60 GiB physical RAM is visible and inference is idle. All other settings, guards, coordinator services and paused schedules remain. [Qualification, comparisons and limits](linux/hardware/SSD-STREAMING-32GB-2026-10-28.md).
+
 ## AMD router admission — October 28
 
 AMD router admission is implemented in source and validated: fair FIFO, bounded
@@ -165,6 +169,7 @@ maintains only `Biegle-W/linux-llm-amd` (private) and
   histories, copy their active trees here or delete their historical records.
 - Keep the existing AMD checkout, installed engine/environment and model-storage
   paths unchanged. Repository renaming is not permission to relocate live assets.
+- Reaffirmed October28: always keep both maintained AMD repositories updated. Routine reviewed updates and normal non-force pushes are standing user authorization; do not request repeated per-change approval. Preserve sanitization, unrelated work, runtime guards and existing holds.
 - Keep both AMD repositories current after authorized AMD changes. Publish only
   reviewed, sanitized files to the public repository; never copy private history,
   credentials, personal settings, raw logs or model weights.

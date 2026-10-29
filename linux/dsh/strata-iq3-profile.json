@@ -44,7 +44,7 @@
     "--pool-workers",
     "6",
     "--resident-budget-gib",
-    "13.5",
+    "12",
     "--ple-io",
     "mmap",
     "--trim-stage-weights",
@@ -81,16 +81,16 @@
     "STRATA_SPLIT_OVERLAP": "1",
     "STRATA_HIPBLASLT_TUNING": "/opt/local-llm/strata/tools/hip/gfx1100-hipblaslt-100202.txt"
   },
-  "minimum_host_ram_gib": 60,
-  "validation_status": "Reference: passed: source8183c6b6/HIP7.2.3, matchinggfx1100hipBLASLt100202 table, prefill2048, bothAMD/split26/native256K/13.5GiB/allguards; repeated controls/confirmation and normal near258K/history/UI/authenticatedhostself API, zero owned swap/spill; see linux/hardware/STRATA-TUNING-2026-10-24.md; requires exact SDK and local validation.",
+  "minimum_host_ram_gib": 29,
+  "validation_status": "passed: source8183c6b6/HIP7.2.3, matchinggfx1100hipBLASLt100202 table, prefill2048, bothAMD/split26/native256K/13.5GiB/allguards; repeated controls/confirmation and normal near258K/history/UI/authenticatedhostself API, zero owned swap/spill; see hardware/STRATA-TUNING-2026-10-24.md",
   "worker_swap_max_bytes": null,
   "runtime_validation": {
-    "status": "validated_reference_requires_local_validation",
+    "status": "passed",
     "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
     "version": "0.1.46.1",
     "binary_sha256": "c6706bc192c1afb09357e7d1eca9570c35c04562cde5265bd4404fe453848478",
     "actual_startup_minimum_gib": 5,
-    "evidence": "linux/hardware/results/strata-startup5-2026-10-20.json",
+    "evidence": "hardware/results/strata-startup5-2026-10-20.json",
     "normal_integration_status": "passed",
     "validated_utc": "2026-10-20T18:18:51.059915+00:00"
   },
@@ -99,7 +99,26 @@
     "binary_sha256": "3e214bbf98e416164a7a97e41a5657dbb2bd6561d5e57ea4fa5d30cad0b82871",
     "prefill_chunk": 2048,
     "hipblaslt_table_sha256": "a594869223200c62019d3c997345e89664d5126fcbd089a44f4f95a267ad2ff3",
-    "evidence": "linux/hardware/results/strata-tuning-2026-10-24.json",
-    "status": "validated_reference_requires_local_validation"
+    "evidence": "hardware/results/strata-tuning-2026-10-24.json",
+    "status": "passed"
+  },
+  "host_ram_profile": "32gb-v1",
+  "worker_memory_limits": {
+    "memory.high": 21474836480,
+    "memory.max": 23622320128,
+    "memory.swap.max": "max"
+  },
+  "local_validation": {
+    "status": "requires-local-validation",
+    "native_validation": "passed",
+    "normal_integration_status": "passed",
+    "validated_utc": "2026-10-29T02:02:46.601506+00:00",
+    "scope": "32GB native performance/quality/near-window/history and normal guarded authenticated API integration passed",
+    "evidence": "hardware/results/ssd-streaming-32gb-2026-10-28.json",
+    "candidate_tag": "strata-iq3-profile-large",
+    "source_commit": "7dd5cf18e68c639a8773e096c5c79f971ea2a9f5",
+    "binary_sha256": "e2734244e6389ac6c549abff76a1ee96529c7f91398503fb7b4e8c909b001f6d",
+    "normal_validated_utc": "2026-10-29T02:04:32.602393+00:00",
+    "note": "Sanitized reference paths and recorded host results; qualify the local binary, assets, profile, memory tier and normal API before use."
   }
 }

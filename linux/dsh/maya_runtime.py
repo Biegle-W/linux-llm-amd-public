@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 from amd_device import amd_devices
 from moe_memory import host_memory
+from streaming_memory import check_32gb
 from shared_storage import STREAM_MODELS, ensure_streaming_models
 from llama_runtime import require_worker_scope
 
@@ -93,7 +94,8 @@ def check_config(cfg, before_handover=False, require_validated=True):
         if not 0<cap<=40:
             raise RuntimeError('Use an explicit bounded whole-machine GLM expert RAM tier, at most 40 GiB.')
     total,available=host_memory()
-    if total<60*GIB or (not before_handover and available<52*GIB):
+    bounded = check_32gb(cfg,total,available,'glm' if glm else 'deepseek',check_available=not before_handover)
+    if not bounded and (total<60*GIB or (not before_handover and available<52*GIB)):
         raise RuntimeError('Maya needs 60 GiB physical / 52 GiB available RAM before loading; swap is not capacity.')
     if len(amd_devices())!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in amd_devices()):
         raise RuntimeError('Maya requires both 24 GB AMD cards.')

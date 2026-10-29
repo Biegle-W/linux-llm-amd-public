@@ -8,6 +8,7 @@ import subprocess
 from amd_device import amd_devices
 from llama_runtime import require_worker_scope
 from moe_memory import host_memory
+from streaming_memory import check_32gb
 from shared_storage import STREAM_MODELS, ensure_streaming_models
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -52,7 +53,7 @@ def check_settings(cfg):
         raise RuntimeError('Strata DeepSeek requires phase-aware swap and 6GiB actual startup headroom.')
 
 
-def require_profile(cfg,before_handover=False):
+def require_profile(cfg,before_handover=False,*,require_validated=True):
     check_settings(cfg)
     pin=json.loads(PIN.read_text())
     revision=subprocess.check_output(['git','-C',str(SOURCE),'rev-parse','HEAD'],text=True).strip()
@@ -65,7 +66,7 @@ def require_profile(cfg,before_handover=False):
     valid=cfg.get('local_validation',{})
     if (valid.get('status')!='passed' or valid.get('source_commit')!=revision
             or valid.get('binary_sha256')!=hashlib.sha256(exe.read_bytes()).hexdigest()
-            or valid.get('config_sha256')!=config_fingerprint(cfg)):
+            or (require_validated and valid.get('config_sha256')!=config_fingerprint(cfg))):
         raise RuntimeError('Strata DeepSeek source/binary/config validation fingerprint does not match.')
     ensure_streaming_models()
     args=cfg['args'];pack=Path(args[args.index('--pack')+1])
@@ -74,7 +75,8 @@ def require_profile(cfg,before_handover=False):
             or Path(cfg['tokenizer'])!=pack/'tokenizer'):
         raise RuntimeError('Strata DeepSeek pack/tokenizer differs from the validated shared-weight pack.')
     total,available=host_memory()
-    if total<60*GIB or (not before_handover and available<52*GIB):
+    bounded=check_32gb(cfg,total,available,'deepseek',check_available=not before_handover)
+    if not bounded and (total<60*GIB or (not before_handover and available<52*GIB)):
         raise RuntimeError('Strata DeepSeek needs 60GiB physical / 52GiB available RAM; swap is not capacity.')
     devices=amd_devices()
     if len(devices)!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in devices):

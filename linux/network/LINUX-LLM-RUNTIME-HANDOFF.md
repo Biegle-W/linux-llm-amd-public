@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Temporary 32 GB SSD-streaming profiles — October 28
+
+Activated temporary 32 GB profiles: **Qwen / Strata, GLM / Maya**. Held at the exact prior 64 GB profile: **DeepSeek XS / Maya, DeepSeek XS / Strata**. Each activation passed native safety/functional/performance/near-window/history checks and normal guarded authenticated JSON/SSE/tools/~8K/history checks. The exact 64 GB preimages are retained; restore only after at least 60 GiB physical RAM is visible and inference is idle. All other settings, guards, coordinator services and paused schedules remain. [Qualification, comparisons and limits](../hardware/SSD-STREAMING-32GB-2026-10-28.md).
+
 ## AMD router admission — October 28
 
 AMD router admission is implemented in source and validated: fair FIFO, bounded

@@ -24,12 +24,13 @@ ports = [(8080, 'llama.cpp'), (8081, 'llama.cpp'),
 open_frontend = kind in ('strata', 'maya') and '--no-browser' not in sys.argv[2:]
 if kind in ('strata', 'maya'):
     sys.argv = sys.argv[:2] + [arg for arg in sys.argv[2:] if arg != '--no-browser']
+maya_model=None
 if kind == 'maya':
     # Invalid selections and --help must not hand over a working backend.
     parser = argparse.ArgumentParser(description='Start guarded dual-AMD Maya with its native Chat/Monitor; DSH is optional.')
     parser.add_argument('--model', choices=list(maya_profiles()))
     parser.add_argument('--no-browser', action='store_true', help='Keep serving without opening the native web frontend.')
-    parser.parse_args(sys.argv[2:])
+    maya_model=parser.parse_args(sys.argv[2:]).model or next(iter(maya_profiles()))
 strata_model=None
 if kind=='strata':
     available={k:v for k,v in json.loads((ROOT/'strata-profiles.json').read_text()).items() if v.get('enabled',True)}
@@ -60,7 +61,7 @@ try:
         require_strata(before_handover=True,model=strata_model)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'maya':
-        require_maya(before_handover=True)
+        require_maya(maya_model,before_handover=True)
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind != 'llama':
         require_current_cuda_pair()
@@ -102,7 +103,7 @@ try:
             require_strata(model=strata_model)
             require_rocm_headroom(16)
         if kind == 'maya':
-            require_maya()
+            require_maya(maya_model)
         monitor = start_monitor(paths)
         print(f'{names[kind]} backend' + (' with native Chat/Monitor.' if kind in ('strata','maya') else ' only.') + ' Launch dsh separately if wanted. Ctrl+C stops this backend.', flush=True)
         print(f'Loading the selected {names[kind]} model from its configured model volume now. Cold loads may take a few minutes.' if kind in ('strata', 'maya')

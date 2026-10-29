@@ -15,6 +15,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
 from inference_swap import WorkerSwapGuard
+from streaming_memory import scope_properties, scope_limits
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, vram_snapshot
 
@@ -165,12 +166,14 @@ def ensure_worker(model):
         require_maya(model)
         profile = PROFILES[model]
         config = ROOT / profile['config']
+        cfg = json.loads(config.read_text())
         logfile = (ROOT / 'logs' / ('maya-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Maya weights are unloaded.', flush=True)
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
-                                   '--property=MemorySwapMax=infinity', '--property=MemoryMax=52G', str(ROOT / 'run-maya-backend'),
+                                   *scope_properties(cfg), str(ROOT / 'run-maya-backend'),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
-                                  stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
+                                  stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True,
+                                  expected_memory_limits=scope_limits(cfg))
         proc = worker
     try:
         for _ in range(1200):
@@ -297,7 +300,10 @@ def interrupted(*_):
 if __name__ == '__main__':
     from maya_runtime import require_maya
     try:
-        require_maya()
+        selection=argparse.ArgumentParser(add_help=False)
+        selection.add_argument('--model',choices=list(PROFILES),default=DEFAULT)
+        selected,_=selection.parse_known_args()
+        require_maya(selected.model)
     except RuntimeError as error:
         raise SystemExit(str(error))
     parser = argparse.ArgumentParser(description=__doc__)

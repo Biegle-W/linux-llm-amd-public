@@ -41,7 +41,7 @@
     "MAYA_GLM_PREFILL_SUB": "1024",
     "MAYA_GLM_PREFILL_MB": "4096",
     "MAYA_HIPBLASLT_TUNING": "/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100202.txt:/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100500.txt",
-    "MAYA_GLM_RAM_GB": "40",
+    "MAYA_GLM_RAM_GB": "8",
     "MAYA_GLM_RESERVE_LATER_MB": "8192",
     "MAYA_GLM_PREFILL_FUSED": "0"
   },
@@ -64,15 +64,21 @@
   "local_validation": {
     "status": "requires-local-validation",
     "native_validation": "passed",
-    "normal_integration_status": "requires-local-validation",
-    "validated_utc": "2026-10-23T08:08:11.231397+00:00",
-    "binary_sha256": "4ed17ade56259fdfeed1a2a8411a00d39553c63cf6ea91ddde3014e486516269",
-    "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
-    "evidence": "hardware/results/maya-update-2026-10-23.json",
-    "candidate_tag": "glm-candidate24",
-    "scope": "Exact tested source25deec5/SDK7.2.3 binary; retained Maya-S32K/bothAMD/reserves/52Gno-swap; near31.5K/history/JSON/tools/SSE and actualDesktop/Ptyxis/original browserUI/selector/authgateway/GLM-DS-GLM passed. GLM failed gfx1100 fused path explicitlyoff; mixedDS4 formats remain excluded. Host-self routes are not remote-peer tests.",
-    "normal_validated_utc": "2026-10-23T08:21:36.033997+00:00",
-    "reference_config_sha256": "4eb65267282859f6ba905e50abb5f8b7b27a5c561d5a256da4aef94b0b1774bb",
-    "note": "Sanitized reference paths differ from the measured workstation; validate the installed source/binary/profile locally."
+    "normal_integration_status": "passed",
+    "validated_utc": "2026-10-29T02:12:25.365637+00:00",
+    "binary_sha256": "67a964d31b5a947f23d9d3019e25026cbc05e71f55067620a2c766c44b619f6e",
+    "source_commit": "f26d8bab43f9b10f0475986b541dc46ada45285e",
+    "evidence": "hardware/results/ssd-streaming-32gb-2026-10-28.json",
+    "candidate_tag": "maya-glm-profile-small",
+    "scope": "32GB native performance/quality/near-window/history and normal guarded authenticated API integration passed",
+    "normal_validated_utc": "2026-10-29T02:15:52.561376+00:00",
+    "reference_config_sha256": "883dadf62e8f7c91fdf72259af5c9ac278d858a8d5e1532b09c5149815799379",
+    "note": "Sanitized reference paths and recorded host results; qualify the local binary, assets, profile, memory tier and normal API before use."
+  },
+  "host_ram_profile": "32gb-v1",
+  "worker_memory_limits": {
+    "memory.high": 19327352832,
+    "memory.max": 21474836480,
+    "memory.swap.max": "max"
   }
 }

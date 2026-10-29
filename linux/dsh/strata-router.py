@@ -13,6 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from inference_idle import inference_request
 from inference_swap import WorkerSwapGuard
+from streaming_memory import scope_properties, scope_limits
 from strata_prefix import add_document_prefix
 from moe_memory import host_memory, worker_memory
 from strata_memory import MemoryGuard, startup_vram_blocker, vram_snapshot
@@ -91,8 +92,10 @@ def ensure_worker(model):
             raise RuntimeError(memory_fault + '; use /models/load explicitly or restart after freeing GPU memory')
         if active == model and worker is not None and worker.poll() is None:
             return
-        stop_worker()
         from hardware_guard import require_strata
+        # Reject a held/incompatible sibling before disturbing an idle good worker.
+        require_strata(before_handover=True,model=model)
+        stop_worker()
         require_strata(model=model)
         profile = PROFILES[model]
         override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family')!='deepseek41' else None
@@ -100,11 +103,12 @@ def ensure_worker(model):
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
+        cfg=json.loads(config.read_text())
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
-                                   '--property=MemoryMax=52G',
-                                   '--property=MemorySwapMax=infinity', str(ROOT / script),
+                                   *scope_properties(cfg), str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
-                                  stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True)
+                                  stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True,
+                                  expected_memory_limits=scope_limits(cfg))
         setattr(worker, 'deepseek41', profile.get('family') == 'deepseek41')
         startup_free_vram = None
         proc = worker

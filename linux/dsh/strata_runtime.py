@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 from amd_device import amd_devices
 from moe_memory import host_memory
+from streaming_memory import check_32gb
 
 ROOT = Path(__file__).resolve().parent.parent
 GIB = 1024**3
@@ -59,6 +60,7 @@ def check_config(cfg, total, available, *, check_available=True):
     budget = float(args[args.index('--resident-budget-gib') + 1])
     if not 0 < budget <= 24:
         raise RuntimeError('Unexpected Strata expert RAM budget.')
+    check_32gb(cfg, total, available, 'qwen', check_available=check_available)
     problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], budget,
                                check_available=check_available, kv_gib=kv_backing_gib(cfg))
     if problems:
