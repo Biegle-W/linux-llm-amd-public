@@ -328,14 +328,14 @@ change. Nightly updates remain paused.
 | Engine | Production |
 |---|---|
 | llama.cpp | `2280f0fd163b` |
-| vLLM | `0.32.1rc1.dev602+g5d35ce393.rocm72` |
+| vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
 | Maya | `f26d8bab43f9` |
 | Strata DeepSeek | `8183c6b67162` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: llama.cpp skipped (production baseline failed); vLLM skipped (production baseline failed); Strata rejected; Maya skipped (production baseline failed); Strata DeepSeek skipped (production baseline failed).
+Last run: vLLM promoted.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

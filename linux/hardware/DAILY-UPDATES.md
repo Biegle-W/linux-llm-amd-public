@@ -2,6 +2,38 @@
 
 ## 2026-10-29
 
+- **vLLM** `0.32.1rc1.dev602+g5d35ce393.rocm72` → `0.33.0rc1.dev229+g3966924d5.rocm72`: **promoted**. all gates passed
+
+vLLM gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | swap_policy | | loading-swap-v3 | |
+| policy | worker_swap_limit_bytes | | uncapped | |
+| lifecycle | max_worker_swap_bytes | | 3232501760 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| qwen3.8-27b-vllm | prefill_tps | 1457.002 | 1471.737 | +1.0% |
+| qwen3.8-27b-vllm | code_decode_tps | 142.751 | 142.510 | -0.2% |
+| qwen3.8-27b-vllm | prose_decode_tps | 78.444 | 75.836 | -3.3% |
+| qwen3.8-27b-vllm | code_ttft_s | 0.078 | 0.076 | -2.1% |
+| qwen3.8-27b-vllm | prose_ttft_s | 0.071 | 0.074 | +4.9% |
+| qwen3.8-27b-vllm | markers | 3.000 | 3.000 |  |
+| qwen3.8-27b-vllm | max_worker_swap_bytes | | 2326487040 | |
+| qwen3.8-27b-vllm | max_nonresident_vram_bytes | | 0 | |
+| qwen3.8-27b-vllm | verdict | | | pass |
+| sage-a1.5 | prefill_tps | 5276.474 | 5324.545 | +0.9% |
+| sage-a1.5 | code_decode_tps | 148.483 | 148.756 | +0.2% |
+| sage-a1.5 | prose_decode_tps | 139.600 | 139.700 | +0.1% |
+| sage-a1.5 | code_ttft_s | 0.070 | 0.066 | -6.6% |
+| sage-a1.5 | prose_ttft_s | 0.066 | 0.071 | +7.8% |
+| sage-a1.5 | markers | 3.000 | 3.000 |  |
+| sage-a1.5 | max_worker_swap_bytes | | 9879552 | |
+| sage-a1.5 | max_nonresident_vram_bytes | | 0 | |
+| sage-a1.5 | verdict | | | pass |
+
+## 2026-10-29
+
 - **llama.cpp** `2280f0fd163b` → `0893ec98f5ea`: **skipped (production baseline failed)**. baseline ornith-1.5-122b: prewarm failed
 - **vLLM** `0.32.1rc1.dev602+g5d35ce393.rocm72` → `0.33.0rc1.dev229+g3966924d5.rocm72`: **skipped (production baseline failed)**. sage-a1.5
 - **Strata** `7dd5cf18e68c` → `46c152a1310f`: **rejected**. missed a promotion gate; rollback verified
