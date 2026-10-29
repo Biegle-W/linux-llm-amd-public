@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+## Remaining models on 32 GB — running
+
+The [remaining-model 32 GB benchmark](linux/hardware/ALL-MODELS-32GB-2026-10-28.md) is running, including Qwen-Image and FLUX. Preserve active owned jobs and completed trials. Quantization, context, pins and independent guards remain; GPU-heavy/file-backed candidates are isolated. See the report for stages, client dependency repair and pending final publication.
+
 ## Matched H3 on 32 GB — complete
 
 The [matched newer H3 comparison](linux/graphics/H3-MATCHED-32GB-2026-10-28.md) is complete on real 32 GB RAM: three timed fresh-server trials per arm plus excluded warmups. Median request: **179.209 s single-GPU / 153.773 s actual fcys RCCL TP2** (14.2% shorter with TP2); both-ready sampler: **33.980 / 44.263 s**. Encoder costs are excluded. All eight AV/guard/cleanup checks passed; owned reservation released. Sampled visual limits remain; no production promotion.
