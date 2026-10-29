@@ -44,6 +44,8 @@ A second isolated graph-disabled candidate reduces the temporary prefill chunk a
 
 Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2: **low-buffer candidate did not qualify**. Dedicated-VRAM-spill guard stopped startup before a valid timing series. Owned cleanup and unchanged configuration fingerprints are verified.
 
+**SGLang residency clarification — October 29:** The two graph-disabled attempts were terminated by the monitor's `vram_spill` rule after `drm-total-vram - drm-resident-vram` reached **121.273 MiB**. Both worker logs reported **6.00 GB available GPU memory** and completed application startup, before health/qualification finished. The graph-disabled and smaller-buffer attempts retained at least **17.07 / 17.61 GiB available host RAM**. These are guard stops; the saved evidence does not establish a physical-RAM admission failure or GPU out-of-memory failure. The [kernel counter definitions](https://docs.kernel.org/gpu/drm-usage-stats.html#memory) allow total buffers to include backing storage that is not yet instantiated, so this difference alone does not prove GPU-to-host eviction. Actual eviction versus transient/lazy-allocation accounting remains unresolved; the identical difference across both retries is a reason to audit the residency check, not proof of its cause. Additional system RAM is not an established fix. Original failure flags remain unchanged, no guard was relaxed, and no GPU trial was repeated. The owner pause remains in effect.
+
 ## MoE models with CPU RAM offload
 
 | Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |

@@ -2941,6 +2941,25 @@
           },
           "prefill": []
         }
+      },
+      "residency_interpretation": {
+        "review_date": "2026-10-29",
+        "guard_computation": "max(0, drm-total-vram - drm-resident-vram)",
+        "observed_difference_bytes_each_graph_disabled_retry": 127164416,
+        "worker_log_available_gpu_mem_GB_each_rank": 6.0,
+        "application_startup_complete": true,
+        "minimum_host_available_GiB": [
+          17.06747055053711,
+          17.61353302001953
+        ],
+        "physical_RAM_admission_failure_established": false,
+        "GPU_out_of_memory_failure_established": false,
+        "actual_GPU_to_host_eviction_established": false,
+        "cause": "Unresolved: actual nonresidency versus transient/lazy-allocation accounting; the gap alone cannot distinguish them.",
+        "kernel_counter_definitions": "https://docs.kernel.org/gpu/drm-usage-stats.html#memory",
+        "new_GPU_trials": false,
+        "guard_changed": false,
+        "owner_pause_retained": true
       }
     }
   ],
