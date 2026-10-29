@@ -17,6 +17,15 @@ The benchmark helper environment had tokenizers 0.23.3 but lacked regex. The CPU
 
 The six registered components are llama.cpp, vLLM ROCm nightly, the SGLang gfx1100-support fork, Strata Qwen, Maya and Strata DeepSeek. Graphics/ComfyUI/H3 are outside this updater. [Pre-restoration source audit](ENGINE-UPDATE-AUDIT-2026-10-29.md) records the selected/candidate versions at the earlier snapshot.
 
-## Current run
+## First pass and targeted follow-up
 
-The standard updater is running. No promotion outcome is claimed by this start-status record. Final per-engine results and selected versions belong in the [daily ledger](DAILY-UPDATES.md) and canonical runtime handoff after the gates and any rollback complete. Do not start a duplicate updater or GPU workload while its maintenance reservation is held.
+The first standard pass finished and published its ledger. All five available candidates built; no version was promoted in that pass:
+
+- llama.cpp: production coverage blocked by the normal Ornith profile's 60 GiB physical-RAM admission.
+- vLLM: functional profiles passed, but Sage's 21.1-second test lacked the required complete 30-second inference-observation window. The same issue affected the 28.7-second Empero evidence.
+- Strata: performance and marker checks passed, but one lifecycle sample failed with KeyError. The candidate was rejected and rollback verified; that rejection remains.
+- Maya and Strata DeepSeek: normal DeepSeek profiles remain RAM-held, blocking complete production baseline coverage.
+
+A targeted vLLM-only follow-up is running after the benchmark client repair. Fast profiles now perform additional **real, untimed generation** after the timed requests until the existing observation window closes. Those probes are recorded separately and excluded from performance medians. The 30-second window, invalid-telemetry rejection, model coverage, performance and rollback gates are unchanged. Four CPU regressions pass in each checkout, covering the real policy window, already-complete evidence, invalid telemetry and bounded missing evidence.
+
+The targeted manual scope is temporary: the next 03:00 timer still checks the full engine registry. First-pass raw measurements and logs were preserved before rebuilding the vLLM stage. Final per-engine outcomes and selected versions are recorded in the [daily ledger](DAILY-UPDATES.md) and canonical runtime handoff. Do not duplicate the active updater or its GPU reservation.

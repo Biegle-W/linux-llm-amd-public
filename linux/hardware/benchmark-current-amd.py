@@ -22,6 +22,7 @@ sys.path.insert(0, str(ROOT / 'dsh'))
 from amd_device import amd_devices
 from moe_memory import host_memory
 from inference_memory import MemoryMonitor
+from swap_activity import RATE_WINDOW_SECONDS
 from strata_memory import vram_snapshot
 from gpu_telemetry import ThermalRecorder, record_request
 
@@ -149,6 +150,23 @@ def prefill_prompt(index):
     return make(low)
 
 
+def complete_inference_window(kind, model, monitor):
+    """Collect real, untimed work until the existing evidence window closes."""
+    probes = []
+    if monitor.activity is None:
+        return probes
+    deadline = time.monotonic() + 2*RATE_WINDOW_SECONDS + 10
+    while monitor.activity.summary().get('inference_window_samples', 0) == 0:
+        assert not monitor.activity.failures(), 'Invalid swap telemetry during inference observation'
+        assert time.monotonic() < deadline, 'No complete inference observation window'
+        measurement, _ = stream(kind, model, PROMPTS['prose'], limit=128)
+        assert measurement['usage']['completion_tokens'] > 0, 'No output during inference observation'
+        probes.append(measurement)
+        monitor.sample()
+        print('OBSERVE', model, len(probes), measurement['usage']['completion_tokens'], flush=True)
+    return probes
+
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--kind',choices=PORTS,required=True)
@@ -221,11 +239,12 @@ def main():
                 if trial.get('native_timings'):assert trial['native_timings'].get('cache_n',0)==0
                 result['prefill'].append(trial);save()
                 print('PREFILL',model,index,trial['usage']['prompt_tokens'],round(trial['ttft_seconds'],3),trial.get('prefill_native_tps'),round(trial.get('prefill_phase_tps',0),2),flush=True)
+            result['memory_observation_probes'] = complete_inference_window(args.kind, model, memory_monitor)
             memory_monitor.set_phase('shutdown')
             memory=memory_monitor.stop();memory_started=False
             assert readings,'No memory telemetry'
             result['memory']={**memory,
-                             'scope':'managed inference: post-readiness workload warmups and timed benchmark',
+                             'scope':'managed inference: workload warmups, timed benchmark and untimed real-work observation',
                              'minimum_available_gib':round(min(r['available'] for r in readings)/1024**3,3),
                              'peak_vram_gib':[round(max(r['vram'][i]['used'] for r in readings)/1024**3,3) for i in range(2)]}
             assert memory['worker_samples']>0,'No managed inference process memory telemetry'
