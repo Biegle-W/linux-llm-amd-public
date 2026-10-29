@@ -1,8 +1,8 @@
 # Linux LLM AMD — public reference
 
-**October 29 split llama.cpp update:** Ornith now has an explicit independent old-source/build hold; newer global qualification for Empero, Super and Flint uses the repaired client and unchanged gates. [Scope, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+**October 29 split llama.cpp update:** Empero, Super and Flint now use `eb4e244be77a` after standard gates. Ornith alone retains the independent old `2280f0fd163b` source/build pin; normal RAM admission remains. [Results, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
-**October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engines remain selected after baseline holds or verified rejection/rollback. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
+**October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. The llama.cpp split is recorded above; Strata rollback and remaining RAM-held engine selections remain. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).
 
 **October 29 Ornith / updater audit:** Ornith has a scoped working isolated 32 GB placement; production remains held. [Placement results and limits](linux/hardware/ORNITH-VRAM-32GB-2026-10-29.md). The pre-restoration audit found five newer configured components and SGLang current; the timer is now restored and final outcomes are recorded above. [Read-only version audit](linux/hardware/ENGINE-UPDATE-AUDIT-2026-10-29.md). Other production selections, guards and unrelated paused schedules remain.
 

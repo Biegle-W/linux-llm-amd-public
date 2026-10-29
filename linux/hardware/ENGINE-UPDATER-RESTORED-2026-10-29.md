@@ -1,6 +1,6 @@
 # Overnight engine updater restored — October 29, 2026
 
-The 03:00 local nightly updater is restored and the requested current-source update is complete. The full registry remains scheduled for **October 30 at 03:00 EDT**; recovery is enabled. The final service exited successfully at 13:21, provisional state is clear and its GPU reservation is released. Hub and gateway retained their existing processes.
+The 03:00 local nightly updater is restored and the requested current-source update is complete. The full registry remains scheduled for **October 30 at 03:00 EDT**; recovery is enabled. The vLLM follow-up finished at 13:21; the later llama.cpp follow-up finished at 14:05 EDT. Both runs completed successfully, cleared provisional state and released their GPU reservations. Hub and gateway retained their existing processes.
 
 ## Final engine selections
 
@@ -8,13 +8,13 @@ The 03:00 local nightly updater is restored and the requested current-source upd
 |---|---|---|
 | vLLM, Qwen and Sage | **Promoted** | `0.33.0rc1.dev229+g3966924d5.rocm72`; all standard same-night gates passed |
 | Bolt vLLM | Manual pin retained | `0.32.1rc1.dev435+gc50aca144.rocm72`; excluded from global comparison |
-| llama.cpp | Baseline blocked | Global `2280f0fd163b`; VRAM-only overrides `19cce6919992` retained; normal Ornith requires 60 GiB physical RAM |
+| llama.cpp | **Split promotion complete** | Global `eb4e244be77a` for Empero/Super/Flint; Ornith alone retains independent `2280f0fd163b` manual source/build hold and 60 GiB admission |
 | SGLang AMD fork | Already current | `f84475ccf593` |
 | Strata Qwen | Rejected, rollback verified | `7dd5cf18e68c`; candidate `46c152a1310f` passed speed/markers but failed lifecycle telemetry with one KeyError |
 | Maya | Baseline blocked | `f26d8bab43f9`; normal DeepSeek profile remains RAM-held |
 | Strata DeepSeek | Baseline blocked | `8183c6b67162`; normal DeepSeek profile remains RAM-held |
 
-All five available candidates built. The initial pass promoted none; after repairing fast-profile observation evidence, the targeted vLLM follow-up promoted only vLLM. Prior skipped/rejected outcomes remain in the ledger. Graphics/ComfyUI/H3 are outside this six-component registry. The isolated Ornith 32 GB proof does not change normal-profile admission.
+All five available candidates built. The initial pass promoted none; after repairing fast-profile observation evidence, the targeted vLLM follow-up promoted vLLM. The later owner-authorized split follow-up promoted llama.cpp `eb4e244be77a` for its three unpinned models; [split results and preserved client failure](LLAMA-SPLIT-UPDATE-2026-10-29.md). Prior skipped/rejected outcomes remain in the ledger. Graphics/ComfyUI/H3 are outside this six-component registry. The isolated Ornith 32 GB proof does not change normal-profile admission.
 
 ## vLLM same-night measurements
 

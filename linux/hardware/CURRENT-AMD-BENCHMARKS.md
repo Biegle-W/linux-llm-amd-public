@@ -1,12 +1,12 @@
 # Current dual-AMD benchmarks — October 29, 2026
 
-## Split llama.cpp update — qualification follow-up
+## Split llama.cpp update — complete
 
-Ornith retains an explicit independent `2280f0fd163b` source/build hold. The first guarded baseline passed Empero/Super but Flint hit the client’s 64-token marker cap. A repaired-client qualification follow-up is next; no new llama.cpp promotion is claimed yet. The same marker, performance and memory gates remain. Normal Ornith RAM admission and all guards remain. [Durable split and checks](LLAMA-SPLIT-UPDATE-2026-10-29.md).
+Empero, Super and Flint now use `eb4e244be77a906a183cd4a00fd51d9ad3200955` after all standard gates; Ornith alone retains the independent `2280f0fd163b` manual source/build hold and unchanged 60 GiB admission. The final run completed at 14:05 EDT; provisional state and its GPU reservation are clear. The next full-registry timer remains October 30 at 03:00 EDT. [Results and durable split](LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 ## Nightly updater restored — October 29
 
-The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
+The 03:00 daily engine updater is enabled; the vLLM follow-up completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. The later llama.cpp split is recorded above; Strata rollback and remaining RAM-held selections remain. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
 
 ## Ornith maximum-VRAM 32 GB test / updater audit — October 29
 
@@ -50,20 +50,20 @@ Linux now exposes **30.56 GiB**. The LLM tables below retain their October27 14.
 
 ## Current 32 GB results — October 28–29
 
-Latest measurements on 30.56 GiB physical RAM; Qwen/Sage rows use the October29 nightly promotion comparison in [curated results](results/engine-updater-restored-2026-10-29.json), while other rows retain their original evidence; selected production profiles and isolated candidates are explicitly distinguished. N=native prefill; E=engine-phase prefill; fresh TTFT excludes model loading. See the [all-model report](ALL-MODELS-32GB-2026-10-28.md) and [numeric samples](results/all-models-32gb-2026-10-29.json) for memory, individual trials, exclusions and qualification limits. Historical 64 GB results remain in dated reports.
+Latest measurements on 30.56 GiB physical RAM; Empero/Flint and the new normal Super row use the [llama split comparison](results/llama-split-update-2026-10-29.json); Qwen/Sage rows use the October29 nightly promotion comparison in [curated results](results/engine-updater-restored-2026-10-29.json), while other rows retain their original evidence; selected production profiles and isolated candidates are explicitly distinguished. N=native prefill; E=engine-phase prefill; fresh TTFT excludes model loading. See the [all-model report](ALL-MODELS-32GB-2026-10-28.md) and [numeric samples](results/all-models-32gb-2026-10-29.json) for memory, individual trials, exclusions and qualification limits. Historical 64 GB results remain in dated reports.
 
 ### VRAM only models
 
 | Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
-| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct28 / measured selected runtime | 3,402.9 N | 2.416 | 132.46 / 83.76 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
-| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct28 / measured selected runtime | 6,031.9 N | 1.398 | 46.89 / 46.94 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
+| Empero IQ4_XS · llama.cpp `eb4e244be77a` | Oct29 / nightly promoted | 3,409.7 N | 2.413 | 135.64 / 85.39 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
+| Flint UD-Q4_K_XL · llama.cpp `eb4e244be77a`, reasoning128 | Oct29 / nightly promoted | 5,726.1 N | 1.091 | 46.92 / 46.86 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
 | Sage-A1.5 W4A16 AutoRound · vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` | Oct29 / nightly promoted | 5,324.5 E | 1.559 | 148.76 / 139.70 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
 | Qwen3.8-27B W4A16 · vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` | Oct29 / nightly promoted | 1,471.7 E | 5.614 | 142.51 / 75.84 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
 | Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct28 / Oct29 / measured selected runtime | 2,787.9 E | 2.906 | 38.04 / 37.88 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
 | Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct29 / low-buffer candidate did not qualify | — | — | — / — | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
 
-Qwen/Sage now show the successful same-night updater comparison; their previous dev602 measurements remain in the dated all-model report. Bolt retains its original dev435 trials and manual pin. The updater measured short text/~8K markers and memory lifecycle, without new full-context or vision qualification; contexts and quantization remain. Additional real observation probes are excluded from timed medians. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
+Empero/Flint now show the successful llama split comparison; Flint retains reasoning128 and the client allows 192 output tokens for markers (actual input 6,022–6,026). Their older 19cce measurements remain in the dated all-model report. Qwen/Sage now show the successful same-night updater comparison; their previous dev602 measurements remain in the dated all-model report. Bolt retains its original dev435 trials and manual pin. The updater measured short text/~8K markers and memory lifecycle, without new full-context or vision qualification; contexts and quantization remain. Additional real observation probes are excluded from timed medians. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
 
 The LLM series measures text inference. Sage remains text-only; this series does not requalify vision support or change its retained capability limits.
 
@@ -75,11 +75,12 @@ Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2: **low-buffer candidate did not 
 
 | Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
 |---|---|---:|---:|---:|---:|---:|---|
+| Super120B UD-IQ3_XXS · llama.cpp `eb4e244be77a` | Oct29 / normal profile; nightly promoted | 425.8 N | 18.631 | 15.48 / 16.94 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
 | Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-cache2; isolated | 371.2 N | 22.130 | 11.22 / 12.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
 | Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-physical; isolated | 434.6 N | 18.876 | 15.61 / 17.18 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
 | Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct29 / retained CPU profile held; see file/paged attempts | — | — | — / — | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
 
-Native placements are isolated from the retained Super/Ornith production profiles. The bounded Super arm used experimental MemoryHigh/Max 20/22 GiB. The later physical-RAM series uses actual MemTotal for MemoryMax and no artificial MemoryHigh. RAM expert backing may page under the allowed swap policy; it is not a fully resident capacity claim. File-backed mmap candidates explicitly depend on SSD reads. Super’s passed near 31K/history checks and Ornith’s actual exercised scope are recorded per arm.
+The two earlier Super comparison arms remain isolated; the new normal-profile row above is the selected global-build measurement. Ornith retains its explicit old-source hold. Other native placements remain isolated from production profiles. The bounded Super arm used experimental MemoryHigh/Max 20/22 GiB. The later physical-RAM series uses actual MemTotal for MemoryMax and no artificial MemoryHigh. RAM expert backing may page under the allowed swap policy; it is not a fully resident capacity claim. File-backed mmap candidates explicitly depend on SSD reads. Super’s passed near 31K/history checks and Ornith’s actual exercised scope are recorded per arm.
 
 Metadata-only inventory finds 55.65 GiB of Super tensor weights and 70.62 GiB of Ornith weights. Both exceed the combined physical VRAM before KV, compute and reserve requirements. Increased GPU expert caches are tested within the existing floors; CPU or file/paged backing remains necessary at these fixed quantizations.
 

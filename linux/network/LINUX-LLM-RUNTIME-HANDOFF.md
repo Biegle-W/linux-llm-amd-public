@@ -1,12 +1,12 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-## Split llama.cpp update — qualification follow-up
+## Split llama.cpp update — complete
 
-Ornith retains an explicit independent `2280f0fd163b` source/build hold. The first guarded baseline passed Empero/Super but Flint hit the client’s 64-token marker cap. A repaired-client qualification follow-up is running from 13:45 EDT; no new llama.cpp promotion is claimed yet. Do not duplicate the updater or its GPU reservation. The same marker, performance and memory gates remain. Normal Ornith RAM admission and all guards remain. [Durable split and checks](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
+Empero, Super and Flint now use `eb4e244be77a906a183cd4a00fd51d9ad3200955` after all standard gates; Ornith alone retains the independent `2280f0fd163b` manual source/build hold and unchanged 60 GiB admission. The final run completed at 14:05 EDT; provisional state and its GPU reservation are clear. The next full-registry timer remains October 30 at 03:00 EDT. [Results and durable split](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 ## Nightly updater restored — October 29
 
-The 03:00 daily engine updater is enabled; the manual update completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. Other engine selections remain after baseline holds or verified rejection/rollback. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
+The 03:00 daily engine updater is enabled; the vLLM follow-up completed successfully at 13:21 EDT. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. The later llama.cpp split is recorded above; Strata rollback and remaining RAM-held selections remain. This supersedes earlier updater-pause notes only. All existing manual runtime pins, other holds and qualification/safety gates remain. The service is inactive, provisional state is clear and its GPU reservation is released; next full-registry run is October 30 at 03:00 EDT. [Current restoration/run status](../hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md); final promotion or rollback results are recorded in the daily ledger.
 
 ## Ornith maximum-VRAM 32 GB test / updater audit — October 29
 
