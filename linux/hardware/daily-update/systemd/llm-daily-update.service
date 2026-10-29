@@ -5,7 +5,7 @@ After=local-llm-mounts.service
 [Service]
 Type=oneshot
 WorkingDirectory=/opt/local-llm
-Environment=PYTHONUNBUFFERED=1 BUILD_JOBS=8 LOCAL_LLM_SWAP_POLICY=loading-swap-v3
+Environment=PYTHONUNBUFFERED=1 BUILD_JOBS=8 LOCAL_LLM_SWAP_POLICY=loading-swap-v4
 ExecStart=/usr/bin/python3 /opt/local-llm/hardware/daily-update/daily_update.py
 # A stop (shutdown, timeout) rolls back any provisional build and releases the GPU lock.
 KillSignal=SIGTERM

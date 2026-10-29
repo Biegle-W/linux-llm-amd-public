@@ -1,7 +1,8 @@
 """Low-churn watch for one explicitly owned worker; never a global process guard.
 
-Loading/parked swap and reads are allowed. Rates and pressure are advisory by
-default; a swap stop needs an explicit write budget and matched measured slowdown.
+Loading/parked swap is allowed. The owner-requested default uses 30-second
+inference ceilings: 128 MiB/s swap writes and 160 MiB/s combined reads+writes.
+Pressure remains advisory; historical v3 retains its matched-slowdown semantics.
 Host I/O is system-wide telemetry, not worker attribution or SSD damage evidence.
 """
 from pathlib import Path

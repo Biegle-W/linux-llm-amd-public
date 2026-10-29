@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Strata retry and current swap ceilings — October 29
+
+The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the guarded Strata Qwen retry is next. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](../hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+
 ## Split llama.cpp update — complete
 
 Empero, Super and Flint now use `eb4e244be77a906a183cd4a00fd51d9ad3200955` after all standard gates; Ornith alone retains the independent `2280f0fd163b` manual source/build hold and unchanged 60 GiB admission. The final run completed at 14:05 EDT; provisional state and its GPU reservation are clear. The next full-registry timer remains October 30 at 03:00 EDT. [Results and durable split](../hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).

@@ -1,5 +1,7 @@
 # Swap must not interrupt work without evidence — October 28, 2026
 
+> Historical October28 v3 implementation. The October29 owner-requested [v4 ceilings and Strata retry](STRATA-RETRY-SAMPLER-2026-10-29.md) supersede its default rate behavior; the evidence below retains its original policy.
+
 **Standing user instruction: allow swap while loading and computing. Do not stop a task merely because swap is used, reads are high, pages remain parked, or an arbitrary rate threshold is crossed. Only genuinely excessive SSD writes with measured inference slowdown justify a swap-related intervention.**
 
 The earlier implementation applied that instruction too strictly. H3's 14.874 MiB/s combined-I/O stop was mostly reads, with only about 1.6 KiB/s swapout; it did not establish damaging SSD writes or quantify a matched slowdown. The original failure record remains historical evidence, not a current policy requirement.

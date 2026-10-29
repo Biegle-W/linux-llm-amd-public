@@ -31,7 +31,7 @@ class Monitor:
 
 class EvidenceWindowTests(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'loading-swap-v3'})
+        self.env = patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'loading-swap-v4'})
         self.env.start()
         self.addCleanup(self.env.stop)
 

@@ -30,5 +30,5 @@ class RuntimePin(unittest.TestCase):
     rows=m.versions();self.assertTrue(any('`new`' in v for v in rows));self.assertTrue(any('held (manual runtime pin)' in v and '`old`' in v for v in rows))
  def test_publisher_header_retains_current_swap_policy(self):
   spec=importlib.util.spec_from_file_location('runtime_pin_publish_header',ROOT/'hardware/daily-update/publish.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
-  self.assertIn('loading-swap-v3',m.HEADER);self.assertIn('loading/parked swap is allowed',m.HEADER);self.assertNotIn('64 MiB',m.HEADER)
+  self.assertIn('loading-swap-v4',m.HEADER);self.assertIn('loading/parked swap is allowed',m.HEADER);self.assertNotIn('64 MiB',m.HEADER)
 if __name__=='__main__':unittest.main()

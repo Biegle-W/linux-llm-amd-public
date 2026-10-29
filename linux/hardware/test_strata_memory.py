@@ -37,6 +37,8 @@ class StrataGuardTests(unittest.TestCase):
                 spec=importlib.util.spec_from_file_location('strata_startup',ROOT/'dsh/strata-router.py')
                 router=importlib.util.module_from_spec(spec);spec.loader.exec_module(router)
                 root=Path(folder);(root/'logs').mkdir()
+                config_name=router.PROFILES[router.DEFAULT]['config']
+                (root/config_name).write_bytes((ROOT/'dsh'/config_name).read_bytes())
                 proc=Mock();proc.pid=1234;proc.poll.return_value=None
                 health={'loaded':True,'model':router.DEFAULT,'max_context':router.PROFILES[router.DEFAULT]['context']}
                 with patch.object(router,'ROOT',root), \

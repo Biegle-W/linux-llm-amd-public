@@ -1,5 +1,9 @@
 # Daily engine update
 
+## Current policy / Strata retry — October 29
+
+`loading-swap-v4` is the owner-requested default: 128 MiB/s swap writes / 160 MiB/s combined reads+writes during complete 30-second inference windows. Loading/parked swap remains allowed; PSI alone is advisory. Missing/invalid evidence still blocks promotion, and the performance floor remains 95%. Sampler failures now record bounded, sanitized missing-key/process/phase/sample/trace context. 217 CPU checks pass per checkout; Strata Qwen will be retried under standard gates. [Policy and retry evidence](../STRATA-RETRY-SAMPLER-2026-10-29.md).
+
 ## Live status — October 29
 
 The 03:00 local timer is enabled and active again at the owner's request; next scheduled run is October 30 at 03:00 local. The manual run completed successfully: vLLM `0.33.0rc1.dev229+g3966924d5.rocm72` promoted for Qwen/Sage; Bolt remains pinned to dev435. The authorized split follow-up also promoted llama.cpp `eb4e244be77a` for Empero/Super/Flint while preserving Ornith’s independent old-source manual hold. Remaining candidates stay blocked or rejected with verified rollback. Provisional state and the GPU reservation are clear. This supersedes older pause notes below; manual runtime pins, other holds and all qualification/rollback gates remain. [Restoration and current-run status](../ENGINE-UPDATER-RESTORED-2026-10-29.md).
@@ -15,9 +19,9 @@ uv venv hardware/daily-update/.venv
 uv pip install --python hardware/daily-update/.venv/bin/python -r hardware/daily-update/requirements.txt
 ```
 
-These dependencies do not replace an engine environment. The service uses `TimeoutStartSec=10h` for its oneshot run and retains the existing graceful rollback stop window; `RuntimeMaxSec` does not bound a oneshot. `loading-swap-v3` is explicit in the service environment.
+These dependencies do not replace an engine environment. The service uses `TimeoutStartSec=10h` for its oneshot run and retains the existing graceful rollback stop window; `RuntimeMaxSec` does not bound a oneshot. `loading-swap-v4` is explicit in the service environment.
 
-## Current user swap policy — October28
+## Historical user swap policy — October28 (superseded by v4 above)
 
 Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and the October 29 owner-authorized restoration changes only the updater schedule hold.
 
@@ -60,7 +64,7 @@ rolled back and reported.
 8. Keep it only if `hardware/compare-runtime-candidate.py` passes for every model:
    prefill and code/prose decode at least 95% of production; short time to first token at
    most max(1.25 × production, production + 0.05 s); no fewer retrieval markers;
-   the current loading-swap-v3 policy and zero VRAM spill, with complete
+   the current loading-swap-v4 ceilings and zero VRAM spill, with complete
    worker/host swap-activity evidence. Settled swap alone cannot establish a pass.
    Missing/invalid readings, sampling errors, no worker samples or incomplete
    model coverage also block promotion. Otherwise roll back and check that the

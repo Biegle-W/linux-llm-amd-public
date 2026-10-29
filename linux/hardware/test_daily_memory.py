@@ -117,7 +117,7 @@ class Comparator(BoundedPolicyCase):
         result = self.compare(record(), True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def test_default_prints_effective_limit_and_accepts_demonstrated_settled_swap(self):
+    def test_historical_v3_prints_effective_limit_and_accepts_demonstrated_settled_swap(self):
         candidate = record()
         with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY':'loading-swap-v3'}):
             activity = mem.SwapActivity()
@@ -128,7 +128,7 @@ class Comparator(BoundedPolicyCase):
         for memory in (candidate['profiles'][0]['memory'], candidate['lifecycle_memory']):
             memory.update(max_worker_swap_bytes=4 * 1024**3, swap_activity=activity.summary())
         with patch.dict(os.environ):
-            os.environ.pop('LOCAL_LLM_SWAP_POLICY', None)
+            os.environ['LOCAL_LLM_SWAP_POLICY'] = 'loading-swap-v3'
             result = self.compare(candidate, True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn('worker_swap_limit_bytes | | uncapped', result.stdout)

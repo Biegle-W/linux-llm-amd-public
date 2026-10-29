@@ -34,9 +34,10 @@ HEADER = '''# Daily engine updates
 The configured updater checks candidate engine builds in isolation. Its timer/hold
 status is recorded in the canonical runtime handoff; this text does not enable it.
 Promotion retains fixed performance/marker/quality gates and valid lifecycle
-memory evidence under loading-swap-v3: loading/parked swap is allowed. Swap reads,
-rates and pressure alone do not stop work; a swap stop requires an explicit write
-budget plus matched measured slowdown. Dedicated-VRAM spill remains guarded. Independent RAM,
+memory evidence under loading-swap-v4: loading/parked swap is allowed. Sustained
+inference swap writes are limited to 128 MiB/s and combined reads+writes to 160 MiB/s
+over 30-second windows. Pressure alone does not stop work. These are operational
+ceilings, not SSD endurance guarantees. Dedicated-VRAM spill remains guarded. Independent RAM,
 GPU headroom, ownership and thermal protections remain. Manually pinned model
 runtimes are excluded from global update comparisons and reported separately.
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).

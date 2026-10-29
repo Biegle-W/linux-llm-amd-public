@@ -1,4 +1,4 @@
-"""Current user policy: swap telemetry alone must not terminate work."""
+"""Historical v3 semantics stay replayable; current v4 limits have separate tests."""
 import os
 from pathlib import Path
 import sys
@@ -15,7 +15,7 @@ def progress(n,**kw):return dict(dict(completed_units=n,baseline_units_per_secon
 class UserSwapPolicy(unittest.TestCase):
  def setUp(self):
   env=patch.dict(os.environ);env.start();self.addCleanup(env.stop)
-  os.environ.pop('LOCAL_LLM_SWAP_POLICY',None);os.environ.pop('LOCAL_LLM_LEGACY_SWAP_VALIDATION',None)
+  os.environ['LOCAL_LLM_SWAP_POLICY']='loading-swap-v3';os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1'
  def window(self,si=0,so=0,end=None,budget=None):
   a=p.SwapActivity(write_budget_bytes_per_second=budget)
   a.observe(host(),phase='inference',worker_swap_bytes=20*G,progress=progress(0) if end is not None else None)
@@ -24,9 +24,10 @@ class UserSwapPolicy(unittest.TestCase):
  def allowed(self,a):
   self.assertEqual(a.failures(),[]);self.assertEqual(p.validate_summary(a.summary(),True),[])
  def test_default_and_inherited_old_modes(self):
-  self.assertEqual(p.selected_policy(),'loading-swap-v3')
-  for old in ['loading-swap-v2','low-churn-v1','bounded-64mib']:
-   os.environ['LOCAL_LLM_SWAP_POLICY']=old;self.assertEqual(p.selected_policy(),'loading-swap-v3');self.assertIsNone(memory.worker_swap_limit_bytes())
+  os.environ.pop('LOCAL_LLM_SWAP_POLICY',None);os.environ.pop('LOCAL_LLM_LEGACY_SWAP_VALIDATION',None)
+  self.assertEqual(p.selected_policy(),'loading-swap-v4')
+  for old in ['loading-swap-v3','loading-swap-v2','low-churn-v1','bounded-64mib']:
+   os.environ['LOCAL_LLM_SWAP_POLICY']=old;self.assertEqual(p.selected_policy(),'loading-swap-v4');self.assertIsNone(memory.worker_swap_limit_bytes())
   os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1';self.assertEqual(p.selected_policy(),'bounded-64mib')
  def test_loading_then_parked_swap(self):
   a=p.SwapActivity();a.observe(host())

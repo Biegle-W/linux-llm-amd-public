@@ -162,25 +162,27 @@ class BenchmarkCollector(unittest.TestCase):
                 self.assertEqual(result['profiles'][0]['memory']['worker_samples'], 0)
                 self.assertIn(('memory-stop', 'shutdown'), events)
 
-    def test_short_profiles_keep_incomplete_windows_fail_closed_without_padding(self):
+    def test_short_profiles_use_real_untimed_observation_and_preserve_timed_trials(self):
         result, monitors, events, calls, exit_code = self.exercise(models=('first', 'second'), step=2)
-        self.assertEqual(exit_code, 0)  # Workload quality success is not swap qualification.
+        self.assertEqual(exit_code, 0)  # Real untimed requests now close the existing observation window.
         self.assertEqual(len(monitors), 2)
         self.assertIsNot(monitors[0], monitors[1])
         with patch.dict(os.environ, {'LOCAL_LLM_SWAP_POLICY': 'low-churn-v1', 'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '1'}):
             for profile, monitor in zip(result['profiles'], monitors):
                 memory = profile['memory']
-                self.assertEqual(memory['swap_activity']['inference_window_samples'], 0)
-                self.assertLess(memory['swap_activity']['elapsed_seconds'], 30)
-                self.assertIn('swap_activity_no_inference_window', mem.memory_failures(memory))
+                self.assertGreaterEqual(memory['swap_activity']['inference_window_samples'], 1)
+                self.assertGreaterEqual(memory['swap_activity']['elapsed_seconds'], 30)
+                self.assertEqual(mem.memory_failures(memory), [])
+                self.assertTrue(profile['memory_observation_probes'])
+                self.assertEqual([len(profile['short'][task]['trials'])for task in ('code','prose')],[3,3])
+                self.assertEqual(len(profile['prefill']),3)
                 self.assertEqual(memory['swap_activity'], monitor.stopped['swap_activity'])
         requests = [e for e in events if isinstance(e, tuple) and e[0] == 'request']
         self.assertTrue(all(e[3] == 'loading' for e in requests if e[2] == 'smoke'))
         self.assertTrue(all(e[3] == 'inference' for e in requests if e[2] == 'observation'))
-        self.assertEqual(len(calls), 24)
+        self.assertEqual(len(calls),24+sum(len(profile['memory_observation_probes'])for profile in result['profiles']))
         comparison = self.compare(result)
-        self.assertNotEqual(comparison.returncode, 0)
-        self.assertIn('swap_activity_no_inference_window', comparison.stdout)
+        self.assertEqual(comparison.returncode,0,comparison.stdout+comparison.stderr)
 
     def test_failed_arithmetic_readiness_never_starts_inference_observation(self):
         result, monitors, events, calls, exit_code = self.exercise(smoke_text='wrong')

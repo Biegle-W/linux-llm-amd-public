@@ -3,8 +3,12 @@ from pathlib import Path
 import os
 import sys
 import threading
+import copy
+from datetime import datetime, timezone
+import time
+import traceback
 from swap_activity import (SwapActivity, read_host_activity, validate_summary,
-                           POLICY_NAME, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, selected_policy,
+                           POLICY_NAME, MODERN_POLICIES, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, selected_policy,
                            WORKER_SWAP_LIMIT_BYTES as RELAXED_SWAP_LIMIT_BYTES)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'dsh'))
@@ -21,16 +25,12 @@ def swap_policy():
 
 def worker_swap_limit_bytes():
     policy = swap_policy()
-    return (None if policy in (POLICY_NAME, RATE_LIMIT_POLICY_NAME) else RELAXED_SWAP_LIMIT_BYTES
+    return (None if policy in (*MODERN_POLICIES, RATE_LIMIT_POLICY_NAME) else RELAXED_SWAP_LIMIT_BYTES
             if policy == LEGACY_POLICY_NAME else WORKER_SWAP_LIMIT_BYTES)
 
 
 def sample_memory(snapshot=None, proc_root=Path('/proc')):
-    """Count each managed PID and shared DRM client once, excluding other apps.
-
-    Process exits are normal; unreadable live-process counters fail the sample.
-    This never signals a process or changes system/worker swap settings.
-    """
+    """Sample owned workers; tag unreadable live counters without hiding failures."""
     snapshot = processes() if snapshot is None else snapshot
     owned = {p.pid for p in snapshot.values() if is_inference(p)}
     while True:
@@ -41,45 +41,51 @@ def sample_memory(snapshot=None, proc_root=Path('/proc')):
     swap = spill = counted = 0
     clients = set()
     for pid in sorted(owned):
-        if snapshot[pid].state == 'Z':
-            continue
-        base = proc_root / str(pid)
+        stage, fd = 'process_snapshot', None
         try:
-            status = (base / 'status').read_text()
-        except (FileNotFoundError, ProcessLookupError):
-            continue
-        fields = dict(line.split(':', 1) for line in status.splitlines() if ':' in line)
-        # The worker can exit after the process snapshot but before status is
-        # read. A confirmed zombie/dead task has no VmSwap counter to sample.
-        if fields.get('State', '').strip()[:1] in ('Z', 'X'):
-            continue
-        # Missing VmSwap is unknown, never evidence of zero swap.
-        amount, unit = fields['VmSwap'].split()
-        amount = int(amount)
-        if amount < 0 or unit != 'kB':
-            raise ValueError('Invalid VmSwap counter')
-        swap += amount * 1024
-        counted += 1
-        try:
-            files = list((base / 'fdinfo').iterdir())
-        except (FileNotFoundError, ProcessLookupError):
-            continue
-        for file in files:
+            if snapshot[pid].state == 'Z':
+                continue
+            base = proc_root / str(pid)
+            stage = 'proc_status'
             try:
-                values = dict(line.split(':', 1) for line in file.read_text().splitlines() if ':' in line)
+                status = (base/'status').read_text()
             except (FileNotFoundError, ProcessLookupError):
                 continue
-            if values.get('drm-driver', '').strip() != 'amdgpu':
+            fields = dict(line.split(':', 1) for line in status.splitlines() if ':' in line)
+            if fields.get('State', '').strip()[:1] in ('Z', 'X'):
                 continue
-            client = (values['drm-pdev'].strip(), values['drm-client-id'].strip())
-            if client in clients:
+            amount, unit = fields['VmSwap'].split()
+            amount = int(amount)
+            if amount < 0 or unit != 'kB':
+                raise ValueError('Invalid VmSwap counter')
+            swap += amount * 1024
+            counted += 1
+            stage = 'fdinfo_inventory'
+            try:
+                files = list((base/'fdinfo').iterdir())
+            except (FileNotFoundError, ProcessLookupError):
                 continue
-            clients.add(client)
-            total = int(values['drm-total-vram'].split()[0]) * 1024
-            resident = int(values['drm-resident-vram'].split()[0]) * 1024
-            if total < 0 or not 0 <= resident <= total:
-                raise ValueError('Invalid DRM residency counter')
-            spill += max(0, total - resident)
+            for file in files:
+                stage = 'drm_fdinfo'
+                fd = int(file.name) if file.name.isdecimal() else None
+                try:
+                    values = dict(line.split(':', 1) for line in file.read_text().splitlines() if ':' in line)
+                except (FileNotFoundError, ProcessLookupError):
+                    continue
+                if values.get('drm-driver', '').strip() != 'amdgpu':
+                    continue
+                client = (values['drm-pdev'].strip(), values['drm-client-id'].strip())
+                if client in clients:
+                    continue
+                clients.add(client)
+                total = int(values['drm-total-vram'].split()[0]) * 1024
+                resident = int(values['drm-resident-vram'].split()[0]) * 1024
+                if total < 0 or not 0 <= resident <= total:
+                    raise ValueError('Invalid DRM residency counter')
+                spill += max(0, total - resident)
+        except Exception as error:
+            error.sampler_context = {'reader': stage, 'pid': pid, 'fd': fd}
+            raise
     return {'swap': swap, 'spill': spill, 'processes': counted} if counted else None
 
 
@@ -131,6 +137,10 @@ class MemoryMonitor:
     failed. Sampling continues; callback errors permanently fail validation.
     """
     MAX_ENFORCEMENT_ATTEMPTS = 2
+    MAX_ERROR_DETAILS = 8
+    SAFE_COUNTER_NAMES = frozenset(('VmSwap', 'drm-pdev', 'drm-client-id',
+                                    'drm-total-vram', 'drm-resident-vram',
+                                    'swap', 'spill', 'processes'))
 
     def __init__(self, interval=0.5, on_violation=None, *, write_budget_bytes_per_second=None):
         self.interval = interval
@@ -143,6 +153,8 @@ class MemoryMonitor:
         self.thread = threading.Thread(target=self._run, daemon=True)
         self.summary = {'scope': 'managed inference: launch, load, warmup, benchmark, shutdown',
                         'interval_seconds': interval, 'worker_samples': 0, 'sampling_errors': 0,
+                        'sample_attempts': 0, 'sampling_error_details': [],
+                        'sampling_error_details_dropped': 0,
                         'enforcement_attempts': 0, 'enforcement_errors': 0,
                         'enforcement_state': 'not_attempted',
                         'max_worker_swap_bytes': 0, 'max_nonresident_vram_bytes': 0}
@@ -173,7 +185,37 @@ class MemoryMonitor:
                 self.notified = True
                 self.summary['enforcement_state'] = 'notified'
 
+    def _record_error(self, error, component='worker_memory'):
+        if component != 'host_activity':
+            self.summary['sampling_errors'] += 1
+            self.summary.setdefault('first_error_type', type(error).__name__)
+        details = self.summary['sampling_error_details']
+        if len(details) >= self.MAX_ERROR_DETAILS:
+            self.summary['sampling_error_details_dropped'] += 1
+            return
+        context = getattr(error, 'sampler_context', {})
+        context = context if isinstance(context, dict) else {}
+        pid, fd = context.get('pid'), context.get('fd')
+        reader = context.get('reader', 'aggregate_reading')
+        if reader not in ('process_snapshot', 'proc_status', 'fdinfo_inventory', 'drm_fdinfo', 'aggregate_reading'):
+            reader = 'unknown'
+        missing = error.args[0] if isinstance(error, KeyError) and error.args else None
+        if missing is not None and (not isinstance(missing, str) or missing not in self.SAFE_COUNTER_NAMES):
+            missing = '<redacted>'
+        frames = [{'file': Path(frame.filename).name if Path(frame.filename).name in
+                   ('inference_memory.py', 'backend_switch.py', 'swap_activity.py') else '<external>',
+                   'function': frame.name[:80], 'line': frame.lineno}
+                  for frame in traceback.extract_tb(error.__traceback__)[-6:]]
+        details.append({'sample_index': self.summary['sample_attempts'],
+                        'timestamp_utc': datetime.now(timezone.utc).isoformat(),
+                        'monotonic_seconds': time.monotonic(), 'phase': self.phase,
+                        'component': component, 'error_type': type(error).__name__,
+                        'reader': reader, 'pid': pid if type(pid) is int and pid > 0 else None,
+                        'fd': fd if type(fd) is int and fd >= 0 else None,
+                        'missing_key': missing, 'frames': frames})
+
     def _sample_locked(self):
+        self.summary['sample_attempts'] += 1
         reading = None
         try:
             reading = sample_memory()
@@ -186,9 +228,7 @@ class MemoryMonitor:
                     self.summary[field] = max(self.summary[field], reading[source])
         except Exception as error:
             # A sampler bug must not kill this thread and leave a false zero.
-            self.summary['sampling_errors'] += 1
-            # Do not print process data or private paths in curated results.
-            self.summary.setdefault('first_error_type', type(error).__name__)
+            self._record_error(error)
         if self.activity is not None:
             try:
                 # Absence is normal before launch/after shutdown, never proof
@@ -197,7 +237,8 @@ class MemoryMonitor:
                 self.activity.observe(None if reading is None and self.phase == 'inference' else host,
                                       self.phase, reading['swap'] if reading else 0,
                                       progress=reading.get('progress') if reading else None)
-            except Exception:
+            except Exception as error:
+                self._record_error(error, 'host_activity')
                 self.activity.observe(None, self.phase)
             self.summary['swap_activity'] = self.activity.summary()
             failures = self.activity.failures()
@@ -231,4 +272,4 @@ class MemoryMonitor:
             self.summary.setdefault('first_error_type', 'MonitorStopTimeout')
         if self.activity is not None:
             self.summary['swap_activity'] = self.activity.summary()
-        return dict(self.summary)
+        return copy.deepcopy(self.summary)

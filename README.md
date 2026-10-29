@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**October 29 Strata retry / current swap policy:** Sampler diagnostics are improved; 217 CPU regressions pass per checkout. The default is `loading-swap-v4`: sustained inference ceilings 128 MiB/s writes / 160 MiB/s combined over 30 seconds, with loading/parked swap allowed. A guarded Strata Qwen retry is next; performance tolerance and other guards/pins remain. [Policy, diagnostics, SSD evidence and retry status](linux/hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+
 **October 29 split llama.cpp update:** Empero, Super and Flint now use `eb4e244be77a` after standard gates. Ornith alone retains the independent old `2280f0fd163b` source/build pin; normal RAM admission remains. [Results, durable pin and validation](linux/hardware/LLAMA-SPLIT-UPDATE-2026-10-29.md).
 
 **October 29 updater restoration:** The 03:00 nightly engine updater is enabled; the current update is complete. Qwen/Sage now use vLLM `0.33.0rc1.dev229+g3966924d5.rocm72`; Bolt retains dev435. The llama.cpp split is recorded above; Strata rollback and remaining RAM-held engine selections remain. Earlier updater-pause notes are superseded; manual runtime pins, other holds and safety gates remain. [Restoration status and repairs](linux/hardware/ENGINE-UPDATER-RESTORED-2026-10-29.md).

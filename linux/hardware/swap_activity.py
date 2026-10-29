@@ -1,8 +1,9 @@
 """Allow loading/parked swap; guard inference churn, not SSD lifetime guarantees.
 
 Host swap counters measure system-wide I/O; they do not attribute it to workers.
-The default observes rates; only an explicit write budget plus matched measured
-slowdown can request a swap-related stop. Reads and PSI alone never do.
+The current owner-requested policy caps sustained inference swap writes at
+128 MiB/s and combined reads+writes at 160 MiB/s over 30-second windows.
+Loading/parked swap remains allowed. PSI is advisory; SSD lifetime is not inferred.
 No sampling loop, process inspection, service changes, or dependencies.
 """
 from pathlib import Path
@@ -17,15 +18,20 @@ from typing import Any
 POLICY_NAME = 'loading-swap-v3'
 RATE_LIMIT_POLICY_NAME = 'loading-swap-v2'
 LEGACY_POLICY_NAME = 'low-churn-v1'
+BOUNDED_RATE_POLICY_NAME = 'loading-swap-v4'
+DEFAULT_POLICY_NAME = BOUNDED_RATE_POLICY_NAME
+MODERN_POLICIES = (POLICY_NAME, BOUNDED_RATE_POLICY_NAME)
+USER_INFERENCE_WRITE_LIMIT_BYTES = 128 * 1024**2
+USER_INFERENCE_IO_LIMIT_BYTES = 160 * 1024**2
 
 def selected_policy():
-    value = os.environ.get('LOCAL_LLM_SWAP_POLICY', POLICY_NAME)
-    if value not in (POLICY_NAME, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, 'bounded-64mib'):
+    value = os.environ.get('LOCAL_LLM_SWAP_POLICY', DEFAULT_POLICY_NAME)
+    if value not in (*MODERN_POLICIES, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, 'bounded-64mib'):
         raise ValueError('Unknown inference swap policy')
     # Historical validation requires a second explicit opt-in. An old inherited
     # environment or frozen harness must not restore the superseded stop rules.
-    if value != POLICY_NAME and os.environ.get('LOCAL_LLM_LEGACY_SWAP_VALIDATION') != '1':
-        return POLICY_NAME
+    if value != BOUNDED_RATE_POLICY_NAME and os.environ.get('LOCAL_LLM_LEGACY_SWAP_VALIDATION') != '1':
+        return DEFAULT_POLICY_NAME
     return value
 
 # Historical limits and current advisory levels. In v3 none is an automatic
@@ -39,6 +45,12 @@ RATE_WINDOW_SECONDS = 30
 MIN_AVAILABLE_BYTES = 2 * 1024**3
 MIN_PRESSURE_SAMPLES = 3
 MEMORY_FULL_PSI_AVG10_LIMIT = 10.0
+
+
+def _rate_limits(policy):
+    if policy == BOUNDED_RATE_POLICY_NAME:
+        return USER_INFERENCE_WRITE_LIMIT_BYTES, USER_INFERENCE_IO_LIMIT_BYTES
+    return INFERENCE_SWAPOUT_RATE_LIMIT_BYTES, INFERENCE_IO_RATE_LIMIT_BYTES
 
 
 def _uint(value):
@@ -113,6 +125,8 @@ class SwapActivity:
                 raise ValueError('write budget must be positive or None')
         self.write_budget = write_budget_bytes_per_second
         self.policy = selected_policy()
+        if self.policy == BOUNDED_RATE_POLICY_NAME and self.write_budget is None:
+            self.write_budget = USER_INFERENCE_WRITE_LIMIT_BYTES
         self.legacy = self.policy in (LEGACY_POLICY_NAME, 'bounded-64mib')
         self._first = self._last = None
         self._failures = []
@@ -131,11 +145,15 @@ class SwapActivity:
                           min_available_bytes=None, max_memory_full_psi_avg10=None if self.legacy else 0.0,
                           max_low_memory_consecutive_samples=0,
                           max_full_psi_consecutive_samples=0)
-        if self.policy == POLICY_NAME:
+        if self.policy in MODERN_POLICIES:
             self._data.update(write_budget_bytes_per_second=self.write_budget,
                               progress_samples=0, measured_slowdown_windows=0,
                               confirmed_write_slowdown_windows=0,
                               last_confirmed_write_slowdown=None)
+        if self.policy == BOUNDED_RATE_POLICY_NAME:
+            self._data.update(inference_write_limit_bytes_per_second=USER_INFERENCE_WRITE_LIMIT_BYTES,
+                              inference_io_limit_bytes_per_second=USER_INFERENCE_IO_LIMIT_BYTES,
+                              rate_window_seconds=RATE_WINDOW_SECONDS)
 
 
     def _fail(self, name):
@@ -249,14 +267,14 @@ class SwapActivity:
             self._pressure_runs[index] = self._pressure_runs[index] + 1 if bad else 0
             data[peak] = max(data[peak], self._pressure_runs[index])
             if data[peak] >= MIN_PRESSURE_SAMPLES:
-                if self.policy == POLICY_NAME and failure == 'memory_full_psi':
+                if self.policy in MODERN_POLICIES and failure == 'memory_full_psi':
                     self._advise('active_memory_pressure_observed')
                 else:
                     self._fail(failure)
         self.set_phase(phase)
         if phase == 'inference':
             endpoint = dict(reading)
-            if self.policy == POLICY_NAME:
+            if self.policy in MODERN_POLICIES:
                 endpoint['progress'] = self._progress(progress)
                 current, prior = endpoint['progress'], self._last_progress
                 keys = ('workload_id', 'baseline_id', 'baseline_workload_id', 'baseline_units_per_second')
@@ -279,19 +297,20 @@ class SwapActivity:
                 incoming = reading['swapin_bytes'] - start['swapin_bytes']
                 numerator, denominator = elapsed.as_integer_ratio()
                 data['inference_window_samples'] += 1
+                write_limit, io_limit = _rate_limits(self.policy)
                 for key, rate, limit, failure in [
                         ('max_inference_swapout_bytes_per_second', out / elapsed,
-                         INFERENCE_SWAPOUT_RATE_LIMIT_BYTES, 'inference_swapout_rate'),
+                         write_limit, 'inference_swapout_rate'),
                         ('max_inference_swap_io_bytes_per_second',
                          (out + incoming) * denominator / numerator,
-                         INFERENCE_IO_RATE_LIMIT_BYTES, 'inference_swap_io_rate')]:
+                         io_limit, 'inference_swap_io_rate')]:
                     data[key] = max(data[key], rate)
                     if rate > limit:
                         if self.policy == POLICY_NAME:
                             self._advise(failure + '_observed')
                         else:
                             self._fail(failure)
-                if self.policy == POLICY_NAME:
+                if self.policy in MODERN_POLICIES:
                     first, last = start.get('progress'), endpoint.get('progress')
                     comparable = (first is not None and last is not None and
                                   start.get('progress_epoch') == endpoint.get('progress_epoch') and
@@ -318,7 +337,7 @@ class SwapActivity:
 
     def summary(self):
         result = dict(self._data, failures=self.failures())
-        if self.policy == POLICY_NAME:
+        if self.policy in MODERN_POLICIES:
             result['advisories'] = list(self._advisories)
         return copy.deepcopy(result)
 
@@ -389,12 +408,13 @@ def validate_summary(summary, require_inference=False):
         errors.append('inconsistent_evidence')
     if require_inference and windows == 0:
         errors.append('no_inference_window')
+    write_limit, io_limit = _rate_limits(summary.get('policy'))
     for field, limit, failure in [
             ('worker_swap_peak_bytes', WORKER_SWAP_LIMIT_BYTES, 'worker_swap_limit'),
             ('total_swapout_bytes', SWAPOUT_BUDGET_BYTES, 'swapout_budget'),
-            ('max_inference_swapout_bytes_per_second', INFERENCE_SWAPOUT_RATE_LIMIT_BYTES,
+            ('max_inference_swapout_bytes_per_second', write_limit,
              'inference_swapout_rate'),
-            ('max_inference_swap_io_bytes_per_second', INFERENCE_IO_RATE_LIMIT_BYTES,
+            ('max_inference_swap_io_bytes_per_second', io_limit,
              'inference_swap_io_rate')]:
         occupancy = field in ('worker_swap_peak_bytes', 'total_swapout_bytes')
         applies = (summary.get('policy') in (LEGACY_POLICY_NAME, 'bounded-64mib') if occupancy
@@ -404,10 +424,16 @@ def validate_summary(summary, require_inference=False):
     for field, failure in [('max_low_memory_consecutive_samples', 'low_host_memory'),
                            ('max_full_psi_consecutive_samples', 'memory_full_psi')]:
         if summary[field] >= MIN_PRESSURE_SAMPLES:
-            if failure != 'memory_full_psi' or summary.get('policy') != POLICY_NAME:
+            if failure != 'memory_full_psi' or summary.get('policy') not in MODERN_POLICIES:
                 errors.append(failure)
-    if summary.get('policy') == POLICY_NAME:
+    if summary.get('policy') in MODERN_POLICIES:
         errors.extend(_validate_v3_evidence(summary))
+    if summary.get('policy') == BOUNDED_RATE_POLICY_NAME:
+        for field, expected in [('inference_write_limit_bytes_per_second', USER_INFERENCE_WRITE_LIMIT_BYTES),
+                                ('inference_io_limit_bytes_per_second', USER_INFERENCE_IO_LIMIT_BYTES),
+                                ('rate_window_seconds', RATE_WINDOW_SECONDS)]:
+            if type(summary.get(field)) is not int or summary[field] != expected:
+                errors.append('invalid_' + field)
     return list(dict.fromkeys(errors))
 
 
