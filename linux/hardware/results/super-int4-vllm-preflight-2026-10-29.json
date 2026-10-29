@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-29",
+  "status": "blocked_before_full_model_load",
+  "selected_profile": "nemotron-3.5-super-iq3",
+  "production_changed": false,
+  "hardware": {
+    "gpu_count": 2,
+    "gpu": "AMD Radeon RX 7900 XTX",
+    "kernel": "7.0.0-42-generic",
+    "visible_ram_bytes": 32811171840
+  },
+  "candidate": {
+    "repo": "halt95/Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin",
+    "revision": "835d4cc7c9cc95f6dff9b1e4db2d5c520e847148",
+    "weight_files_bytes": 72888191872,
+    "download_verified_bytes": 72920009562,
+    "download_verified_files": 84,
+    "quantization": "compressed-tensors; symmetric INT4 group128 experts, INT8 per-channel Mamba projections, remaining main attention/shared/vision BF16"
+  },
+  "runtime": {
+    "vllm_version": "0.33.0rc1.dev229+g3966924d5",
+    "torch_version": "2.13.0+git733fca1",
+    "hip": "7.2.53211"
+  },
+  "kernel_correctness": {
+    "shape": {
+      "K": 128,
+      "N": 128,
+      "M": 4
+    },
+    "dtype": "bfloat16",
+    "tests": [
+      {
+        "bits": 4,
+        "strategy": "group",
+        "group_size": 128,
+        "kernel": "RDNA3W4A16LinearKernel",
+        "max_abs_error": 0.0078125,
+        "relative_l2": 0.003232753137126565,
+        "finite": true,
+        "pass": true
+      },
+      {
+        "bits": 8,
+        "strategy": "channel",
+        "group_size": null,
+        "kernel": "ConchLinearKernel",
+        "max_abs_error": 0.125,
+        "relative_l2": 0.0050172265619039536,
+        "finite": true,
+        "pass": true
+      }
+    ]
+  },
+  "cpu_offload_correctness": {
+    "shape": {
+      "K": 128,
+      "N": 128,
+      "M": 4
+    },
+    "tests": [
+      {
+        "bits": 4,
+        "strategy": "group",
+        "group_size": 128,
+        "kernel": "RDNA3W4A16LinearKernel",
+        "max_abs_error": 0.0078125,
+        "relative_l2": 0.003232753137126565,
+        "finite": true,
+        "cpu_offloaded_bytes": 8528,
+        "uva": true,
+        "pinned": true,
+        "offload_max_abs_error": 0.0,
+        "offload_parameter_markers": 4,
+        "pass": true
+      },
+      {
+        "bits": 8,
+        "strategy": "channel",
+        "group_size": null,
+        "kernel": "ConchLinearKernel",
+        "max_abs_error": 0.125,
+        "relative_l2": 0.0050172265619039536,
+        "finite": true,
+        "cpu_offloaded_bytes": 16656,
+        "uva": true,
+        "pinned": true,
+        "offload_max_abs_error": 0.0,
+        "offload_parameter_markers": 3,
+        "pass": true
+      }
+    ]
+  },
+  "capacity_admission": {
+    "kind": "unchanged_moe_startup_admission",
+    "core_weight_lower_bound_bytes": 69622358816,
+    "optional_mtp_and_vision_removed": true,
+    "per_gpu_vram_floor_gib": 3,
+    "gpu_weight_upper_bound_bytes": 45007605760,
+    "minimum_cpu_weight_bytes": 24614753056,
+    "host_startup_reserve_gib": 4,
+    "minimum_available_ram_bytes": 28909720352,
+    "actual_memtotal_bytes": 32811171840,
+    "actual_available_ram_bytes": 24890183680,
+    "admitted": false,
+    "production_changed": false
+  },
+  "limits": [
+    "Small single-GPU layer checks only: not a dual-GPU full-model load or quality/performance qualification.",
+    "No full-model load, inference, 32K context validation, baseline speed comparison, or promotion.",
+    "Capacity lower bound excludes vision/MTP and ignores KV/recurrent caches, activations/workspace, TP replication and repacking overhead.",
+    "Microtest per-run thermal peaks were not captured; no full-run thermal qualification claimed.",
+    "Downloaded candidate retained; working IQ3 weights, launchers, catalog, guards, runtime pins and schedules unchanged."
+  ]
+}

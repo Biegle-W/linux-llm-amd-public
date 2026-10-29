@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## Super INT4 preflight — October 29
+
+Super INT4 small-kernel/UVA checks pass, but full-model RAM admission is refused (26.9 GiB required / 23.2 GiB available, before cache/workspace overhead). No full-model benchmark or promotion; working Super IQ3 remains selected. [Report](../SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md) and [numeric preflight evidence](super-int4-vllm-preflight-2026-10-29.json).
+
 ## All models on actual 32 GB — October 29
 
 [Grouped report](../ALL-MODELS-32GB-2026-10-28.md) and [numeric trials](all-models-32gb-2026-10-29.json): resident measurements, scoped native/file-backed candidates, reused SSD/H3 results, fresh-server Qwen/FLUX images, memory/thermal summaries and retained failures. Timing scopes, configured context, storage and active versus candidate status remain explicit.

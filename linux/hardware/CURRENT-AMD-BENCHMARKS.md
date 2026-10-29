@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 29, 2026
 
+## Super INT4 vLLM preflight — October 29
+
+Super INT4 small-kernel/UVA checks pass, but full-model RAM admission is refused (26.9 GiB required / 23.2 GiB available, before cache/workspace overhead). No full-model benchmark or promotion; working Super IQ3 remains selected. [Completed checks and admission evidence](SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
+
 **Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 
 ## Strata retry and current swap ceilings — October 29

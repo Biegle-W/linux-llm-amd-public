@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Super INT4 vLLM preflight — October 29
+
+Super INT4 small-kernel/UVA checks pass, but full-model RAM admission is refused (26.9 GiB required / 23.2 GiB available, before cache/workspace overhead). No full-model benchmark or promotion; working Super IQ3 remains selected. Download retained; no full-model worker launched and no task GPU lock remains. Further testing needs sufficient available physical RAM and a fresh guarded admission. [Report](../hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).
+
 **Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](../hardware/SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 
 **SGLang resolution:** Unsupported CUDA/NVLink multicast probing on ROCm allocated a redundant logits buffer before falling back. The replayable AMD fix selects the same NCCL fallback first; the original graph-enabled 160K profile now passes isolated and normal API qualification with zero eviction. See [fresh evidence](../hardware/SGLANG-VRAM-GUARD-FIX-2026-10-29.md). The four RAM-blocked routes remain paused.
