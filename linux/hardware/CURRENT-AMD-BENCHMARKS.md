@@ -1,4 +1,8 @@
-# Current dual-AMD benchmarks — October 28, 2026
+# Current dual-AMD benchmarks — October 29, 2026
+
+## Ornith maximum-VRAM 32 GB test / updater audit — October 29
+
+Ornith has a scoped working isolated 32 GB placement; production remains held. [Measured attempts and limits](ORNITH-VRAM-32GB-2026-10-29.md). The overnight updater timer is absent/inactive; a read-only upstream check found five newer configured components and SGLang current on its AMD fork. [Version/coverage audit](ENGINE-UPDATE-AUDIT-2026-10-29.md). All owned experiment work is cleaned up; production hashes, guards and paused schedules remain.
 
 ## All models on 32 GB — measured October 29
 

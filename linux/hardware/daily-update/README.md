@@ -1,5 +1,9 @@
 # Daily engine update
 
+## Live status — October 29
+
+The configured 03:00 timer is absent/inactive and the service inactive. A read-only check found newer llama.cpp, vLLM, Strata Qwen, Maya and Strata DeepSeek sources; the selected SGLang AMD fork is current. The registry includes six components; graphics/ComfyUI/H3 are not included. Manual vLLM runtime pins remain excluded from global comparisons. [Audit and exact selected/upstream references](../ENGINE-UPDATE-AUDIT-2026-10-29.md). No update or schedule activation occurred.
+
 ## Current user swap policy — October28
 
 Use [loading-swap-v3](../SWAP-TASK-CONTINUITY-2026-10-28.md). Loading/parked swap and reads are allowed. Rates and PSI are advisory by default. An optional swap stop requires an explicit write budget plus matched measured slowdown; legacy validation needs its second opt-in. Do not copy older fixed-rate or zero-swap harness rules into a new test. Existing performance/quality, physical-RAM/VRAM and ownership gates remain, and this documentation does not resume the paused updater.
@@ -22,6 +26,7 @@ rolled back and reported.
 | SGLang | `StevenChenSE/sglang` `gfx1100-support` | `sglang/rocm-src` + `sglang/.venv-rocm` | New fork commit swapped in with a copied environment; `sglang/apply-rocm-fixes.py` (refuses changed code), editable install and AOT kernels rebuilt at the production paths |
 | Strata | `Niko1221/Strata` | `strata/` + `strata/build-hip` | Isolated clone and HIP build; the tracked source tree (the managed UI server runs it) and both binaries replaced together |
 | Maya | `mw00/project-maya` | `maya/upstream` + `build-hip` | Isolated clone and HIP build with tests; 18 kernel parity tests on **each** GPU before install; source checkout, binaries, `maya/runtime.json` and the retained profiles' validation records updated |
+| Strata DeepSeek | `Niko1221/Strata` (separate DeepSeek component) | `strata-dsv41/` | Isolated build and tests of the separate DeepSeek component; its profile validation, runtime pin and normal-launcher gates remain separate from Qwen |
 
 ## Each night
 

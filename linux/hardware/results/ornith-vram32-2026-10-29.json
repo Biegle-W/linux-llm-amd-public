@@ -1,0 +1,1148 @@
+{
+  "date": "2026-10-29",
+  "model": "Ornith-1.5-122B Q4_K_M",
+  "engine": "llama.cpp",
+  "engine_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
+  "physical_ram_gib": 30.558,
+  "gpus": "two RX 7900 XTX, 24 GB each",
+  "outcome": "An isolated per-tensor placement passed loading, arithmetic, three short generations and a roughly 1K-token marker retrieval. Its 32K context was allocated; full-window, vision, tools and production integration remain unqualified.",
+  "production_profile_changed": false,
+  "guards": {
+    "host_available_gib": 3,
+    "host_low_samples": 3,
+    "vram_soft_free_gib": 3,
+    "vram_low_samples": 2,
+    "vram_hard_free_gib": 1.5,
+    "allowed_vram_spill_bytes": 0,
+    "swap_policy": "loading-swap-v3",
+    "swap_occupancy_rate_or_reads_alone_stop": false
+  },
+  "metadata_caveat": "Weight estimates include inactive MTP tensors ignored by the loader, and exclude projector/KV/compute/desktop overhead; actual whole-card telemetry is reported separately.",
+  "trials": [
+    {
+      "tag": "ornith-static-max7-mmap32",
+      "status": "failed",
+      "cause": "loading deadline; no readiness",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        33,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 32.2031,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        19.5682
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 36.9026,
+      "load_mode": "mmap",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": null,
+      "memory_max_gib": 30.5578,
+      "minimum_available_host_gib": 23.816,
+      "minimum_free_vram_gib": [
+        4.812,
+        5.6722
+      ],
+      "peak_scope_ram_gib": 26.0683,
+      "peak_worker_swap_gib": 0.1148,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 548,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 73.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 34.0,
+              "edge": 33.0,
+              "junction": 39.0
+            },
+            "samples": 911
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 54.0,
+              "edge": 35.0,
+              "junction": 44.0
+            },
+            "samples": 911
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      },
+      "cleanup_note": "Initial short termination wait reported the scope populated; later exact PID/scope/KFD audit confirmed shutdown before reservation release."
+    },
+    {
+      "tag": "ornith-static-max8-dio-paged24",
+      "status": "failed",
+      "cause": "startup available-RAM admission; no worker launched",
+      "worker_launched": false,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 30.9375,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": null,
+      "estimated_active_gpu_model_weight_gib": null,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": 24.0,
+      "memory_max_gib": 30.5578,
+      "minimum_available_host_gib": 25.4025,
+      "minimum_free_vram_gib": null,
+      "peak_scope_ram_gib": 0.0,
+      "peak_worker_swap_gib": 0.0,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 0,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": null,
+        "cards": [],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-static-max8-dio-paged22",
+      "status": "failed",
+      "cause": "available-host-RAM floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 30.9375,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 38.1683,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": 22.0,
+      "memory_max_gib": 30.5578,
+      "minimum_available_host_gib": 1.1482,
+      "minimum_free_vram_gib": [
+        4.8491,
+        4.6417
+      ],
+      "peak_scope_ram_gib": 25.0088,
+      "peak_worker_swap_gib": 8.2339,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 36,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 60.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 29.0,
+              "junction": 36.0
+            },
+            "samples": 26
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 23.0,
+              "junction": 33.0
+            },
+            "samples": 26
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-static-max9-dio-bounded22",
+      "status": "failed",
+      "cause": "available-host-RAM floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        9,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 29.6719,
+      "metadata_gpu_weight_gib": [
+        20.1192,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 39.4339,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": 20.0,
+      "memory_max_gib": 22.0,
+      "minimum_available_host_gib": 2.9059,
+      "minimum_free_vram_gib": [
+        3.5834,
+        4.6417
+      ],
+      "peak_scope_ram_gib": 22.0,
+      "peak_worker_swap_gib": 9.2791,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 112,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 84.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 31.0,
+              "edge": 29.0,
+              "junction": 35.0
+            },
+            "samples": 64
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 23.0,
+              "junction": 33.0
+            },
+            "samples": 64
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-static-max8-dio-bounded22",
+      "status": "failed",
+      "cause": "available-host-RAM floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 30.9375,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 38.1683,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": 20.0,
+      "memory_max_gib": 22.0,
+      "minimum_available_host_gib": 2.9648,
+      "minimum_free_vram_gib": [
+        4.8491,
+        4.6417
+      ],
+      "peak_scope_ram_gib": 21.9994,
+      "peak_worker_swap_gib": 6.9928,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 40,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 67.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 29.0,
+              "junction": 36.0
+            },
+            "samples": 27
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 23.0,
+              "junction": 33.0
+            },
+            "samples": 27
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      },
+      "harness_note": "A broad fallback condition matched VRAM spill=0 inside a RAM error. This is a RAM-triggered fallback, not a VRAM failure; later harness corrected the classification."
+    },
+    {
+      "tag": "ornith-static-max9-dio-bounded21",
+      "status": "stopped_diagnostic_before_readiness",
+      "cause": "diagnostic stop before readiness; test pageable buffers next",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        9,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 29.6719,
+      "metadata_gpu_weight_gib": [
+        20.1192,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 39.4339,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "default GPU-host-buffer preference",
+      "projector_device": "ROCm0 default",
+      "memory_high_gib": 19.0,
+      "memory_max_gib": 21.0,
+      "minimum_available_host_gib": 3.2829,
+      "minimum_free_vram_gib": [
+        3.5834,
+        4.6417
+      ],
+      "peak_scope_ram_gib": 21.0,
+      "peak_worker_swap_gib": 9.7436,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 1031,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {
+        "low": 0,
+        "high": 207810,
+        "max": 35079,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 162
+      },
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 99.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 34.0,
+              "junction": 41.0
+            },
+            "samples": 534
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 23.0,
+              "junction": 33.0
+            },
+            "samples": 534
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-static-max9-dio-pageable21-gpu1proj",
+      "status": "failed",
+      "cause": "VRAM headroom floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        9,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 29.6719,
+      "metadata_gpu_weight_gib": [
+        20.1192,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 39.4339,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "pageable (--no-host)",
+      "projector_device": "ROCm1",
+      "memory_high_gib": 19.0,
+      "memory_max_gib": 21.0,
+      "minimum_available_host_gib": 6.2695,
+      "minimum_free_vram_gib": [
+        2.4884,
+        3.9092
+      ],
+      "peak_scope_ram_gib": 19.0001,
+      "peak_worker_swap_gib": 11.3839,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 326,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 58.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 33.0,
+              "edge": 29.0,
+              "junction": 36.0
+            },
+            "samples": 165
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 24.0,
+              "junction": 36.0
+            },
+            "samples": 165
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-static-max8-dio-pageable21-gpu1proj",
+      "status": "failed",
+      "cause": "VRAM headroom floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [],
+      "cpu_expert_weight_gib": 30.9375,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        20.8338
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 38.1683,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "pageable (--no-host)",
+      "projector_device": "ROCm1",
+      "memory_high_gib": 19.0,
+      "memory_max_gib": 21.0,
+      "minimum_available_host_gib": 6.1591,
+      "minimum_free_vram_gib": [
+        3.666,
+        2.6772
+      ],
+      "peak_scope_ram_gib": 19.0005,
+      "peak_worker_swap_gib": 13.8293,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 371,
+      "loading_seconds": null,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 58.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 34.0,
+              "edge": 30.0,
+              "junction": 37.0
+            },
+            "samples": 188
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 47.0,
+              "edge": 24.0,
+              "junction": 37.0
+            },
+            "samples": 188
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-matrix-balanced-dio-pageable21",
+      "status": "failed",
+      "cause": "VRAM headroom floor",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [
+        {
+          "name": "blk.9.ffn_down_exps.weight",
+          "bytes": 452984832,
+          "card": 0
+        }
+      ],
+      "partial_cpu_tensors": [
+        {
+          "name": "blk.33.ffn_down_exps.weight",
+          "bytes": 452984832,
+          "card": 1
+        }
+      ],
+      "cpu_expert_weight_gib": 30.9375,
+      "metadata_gpu_weight_gib": [
+        19.2755,
+        20.4119
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 38.1683,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "pageable (--no-host)",
+      "projector_device": "ROCm1",
+      "memory_high_gib": 19.0,
+      "memory_max_gib": 21.0,
+      "minimum_available_host_gib": 6.3148,
+      "minimum_free_vram_gib": [
+        3.0693,
+        2.9225
+      ],
+      "peak_scope_ram_gib": 19.0002,
+      "peak_worker_swap_gib": 13.1733,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 353,
+      "loading_seconds": 170.8864103530068,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": null,
+      "short_median_ttft_seconds": null,
+      "arithmetic_passed": null,
+      "marker_1k_passed": null,
+      "short_trials": [],
+      "marker_1k_measure": null,
+      "cgroup_memory_events": {},
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 61.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 34.0,
+              "edge": 30.0,
+              "junction": 38.0
+            },
+            "samples": 179
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 46.0,
+              "edge": 25.0,
+              "junction": 37.0
+            },
+            "samples": 179
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    },
+    {
+      "tag": "ornith-matrix-safe-dio-pageable21",
+      "status": "passed_scoped_loading_and_short_inference",
+      "cause": "passed scoped checks",
+      "worker_launched": true,
+      "extra_static_gpu_layers": [
+        6,
+        12,
+        19,
+        24,
+        25,
+        30,
+        33,
+        36
+      ],
+      "gpu_expert_cache_mib": 0,
+      "cpu_expert_layers": [
+        0,
+        1,
+        3,
+        4,
+        8,
+        9,
+        11,
+        14,
+        16,
+        17,
+        20,
+        22,
+        27,
+        28,
+        32,
+        35,
+        38,
+        40,
+        41,
+        43,
+        44,
+        46
+      ],
+      "batch_size": 1024,
+      "ubatch_size": 512,
+      "partial_gpu_tensors": [],
+      "partial_cpu_tensors": [
+        {
+          "name": "blk.33.ffn_down_exps.weight",
+          "bytes": 452984832,
+          "card": 1
+        },
+        {
+          "name": "blk.33.ffn_up_exps.weight",
+          "bytes": 452984832,
+          "card": 1
+        }
+      ],
+      "cpu_expert_weight_gib": 31.7812,
+      "metadata_gpu_weight_gib": [
+        18.8536,
+        19.99
+      ],
+      "ignored_mtp_weight_gib": 1.5191,
+      "estimated_active_gpu_model_weight_gib": 37.3245,
+      "load_mode": "dio",
+      "context_allocation": 32768,
+      "cpu_buffer_policy": "pageable (--no-host)",
+      "projector_device": "ROCm1",
+      "memory_high_gib": 19.0,
+      "memory_max_gib": 21.0,
+      "minimum_available_host_gib": 6.0946,
+      "minimum_free_vram_gib": [
+        3.3762,
+        3.2403
+      ],
+      "peak_scope_ram_gib": 19.0535,
+      "peak_worker_swap_gib": 14.3244,
+      "peak_vram_spill_bytes": 0,
+      "memory_samples": 899,
+      "loading_seconds": 168.8793158519984,
+      "owned_cleanup_verified": true,
+      "short_median_decode_tps": 4.946967658684215,
+      "short_median_ttft_seconds": 4.447340503989835,
+      "arithmetic_passed": true,
+      "marker_1k_passed": true,
+      "short_trials": [
+        {
+          "usage": {
+            "completion_tokens": 96,
+            "prompt_tokens": 25,
+            "total_tokens": 121,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 6.993850319006015,
+          "total_seconds": 29.98091104500054,
+          "decode_tps_sse": 4.132759778746784,
+          "content_sha256": "cb71f702877b4aa18ed91a6dae9fe796e77cf4c3dafb54ca57ee3a38dd6042ed",
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 25,
+            "prompt_ms": 6971.34,
+            "prompt_per_token_ms": 278.85360000000003,
+            "prompt_per_second": 3.586111135018519,
+            "predicted_n": 96,
+            "predicted_ms": 22986.763,
+            "predicted_per_token_ms": 241.96592631578946,
+            "predicted_per_second": 4.13281330651036
+          }
+        },
+        {
+          "usage": {
+            "completion_tokens": 96,
+            "prompt_tokens": 25,
+            "total_tokens": 121,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 4.204087568999967,
+          "total_seconds": 23.40777082600107,
+          "decode_tps_sse": 4.946967658684215,
+          "content_sha256": "3ad2e28f5b484149ac2a88b550e4d7c9a306315eee8b03ef8c025b743d7af50f",
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 25,
+            "prompt_ms": 4182.366,
+            "prompt_per_token_ms": 167.29464,
+            "prompt_per_second": 5.977477819970802,
+            "predicted_n": 96,
+            "predicted_ms": 19202.722,
+            "predicted_per_token_ms": 202.1339157894737,
+            "predicted_per_second": 4.947215295831497
+          }
+        },
+        {
+          "usage": {
+            "completion_tokens": 96,
+            "prompt_tokens": 25,
+            "total_tokens": 121,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "ttft_seconds": 4.447340503989835,
+          "total_seconds": 22.304544904996874,
+          "decode_tps_sse": 5.319981664915174,
+          "content_sha256": "86f69edcc9642b7772be13e7ef2260ae6ffdcbd83f827d39579f99baec5aeaf0",
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 25,
+            "prompt_ms": 4431.074,
+            "prompt_per_token_ms": 177.24295999999998,
+            "prompt_per_second": 5.641973029563488,
+            "predicted_n": 96,
+            "predicted_ms": 17857.634,
+            "predicted_per_token_ms": 187.9750947368421,
+            "predicted_per_second": 5.31985368274431
+          }
+        }
+      ],
+      "marker_1k_measure": {
+        "prompt_tokens": 1027,
+        "completion_tokens": 22,
+        "cached_tokens": 0,
+        "ttft_seconds": 191.16859670399572,
+        "total_seconds": 212.51107318600407,
+        "decode_tps_sse": 0.983953292285595,
+        "native_prefill_tps": 5.3726704745595075,
+        "content_sha256": "0524dad23045a175c1e94f383a670245969b1d3afc380fba98de1dab59b8c436"
+      },
+      "cgroup_memory_events": {
+        "low": 0,
+        "high": 50001,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 113
+      },
+      "thermal": {
+        "cpu_peak_package_c": {
+          "Package id 0": 65.0
+        },
+        "cards": [
+          {
+            "gpu_index": 0,
+            "peak_temperature_c": {
+              "mem": 40.0,
+              "edge": 36.0,
+              "junction": 44.0
+            },
+            "samples": 468
+          },
+          {
+            "gpu_index": 1,
+            "peak_temperature_c": {
+              "mem": 50.0,
+              "edge": 28.0,
+              "junction": 41.0
+            },
+            "samples": 468
+          }
+        ],
+        "scope": "Sampled lifecycle peaks, not guaranteed transient maxima; includes unrelated whole-card activity."
+      }
+    }
+  ],
+  "all_owned_work_cleaned_up": true,
+  "production_hashes_unchanged": true,
+  "limits": "No quantization change, new engine build, production promotion, updater activation, broad throughput comparison or full-window qualification."
+}

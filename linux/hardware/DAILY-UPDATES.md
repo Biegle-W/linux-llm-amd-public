@@ -1,5 +1,9 @@
 # Daily engine updates
 
+## Live read-only audit — October 29
+
+The timer is absent/inactive and its service inactive. Five configured components have newer upstreams; SGLang matches its configured gfx1100-support fork. No builds, promotions or schedule changes were made. [Selected/upstream revisions, coverage and exclusions](ENGINE-UPDATE-AUDIT-2026-10-29.md). The updater remains paused.
+
 The configured updater checks candidate engine builds in isolation. Its timer/hold
 status is recorded in the canonical runtime handoff; this text does not enable it.
 Promotion retains fixed performance/marker/quality gates and valid lifecycle
