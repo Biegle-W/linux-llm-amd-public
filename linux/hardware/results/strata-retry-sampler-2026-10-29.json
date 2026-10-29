@@ -7,8 +7,9 @@
     "kind": "strata",
     "from": "7dd5cf18e68c639a8773e096c5c79f971ea2a9f5",
     "to": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
-    "result": "skipped (production baseline failed)",
-    "detail": "launcher exited (1) before port 30020 answered"
+    "result": "rejected",
+    "detail": "Step: launcher exited (1) before port 30020 answered; rollback NEEDS ATTENTION",
+    "gates": ""
   },
   "policy": "loading-swap-v4",
   "limits": {
@@ -17,9 +18,127 @@
     "rolling_inference_window_seconds": 30
   },
   "performance_floor_ratio": 0.95,
-  "scope": "Attempted normal-launcher baseline stopped at available-RAM admission before inference or candidate installation. No fresh performance or marker qualification was completed.",
+  "scope": "Production baseline passed. Candidate launch and restored-build load smoke hit the unchanged 25 GiB available-RAM guard; no candidate inference/performance verdict exists.",
   "measurements": {
     "baseline": {
+      "lifecycle": {
+        "worker_samples": 187,
+        "sampling_errors": 0,
+        "sample_attempts": 192,
+        "sampling_error_details_dropped": 0,
+        "max_worker_swap_bytes": 0,
+        "max_nonresident_vram_bytes": 0
+      },
+      "lifecycle_swap_activity": {
+        "policy": "loading-swap-v4",
+        "samples": 192,
+        "sampling_errors": 0,
+        "elapsed_seconds": 98.18607205999433,
+        "worker_swap_peak_bytes": 0,
+        "total_swapin_bytes": 7700480,
+        "total_swapout_bytes": 0,
+        "inference_window_samples": 60,
+        "max_inference_swapout_bytes_per_second": 0.0,
+        "max_inference_swap_io_bytes_per_second": 252249.81313842384,
+        "min_available_bytes": 6197260288,
+        "max_memory_full_psi_avg10": 0.0,
+        "max_low_memory_consecutive_samples": 0,
+        "max_full_psi_consecutive_samples": 0,
+        "write_budget_bytes_per_second": 134217728,
+        "progress_samples": 0,
+        "measured_slowdown_windows": 0,
+        "confirmed_write_slowdown_windows": 0,
+        "last_confirmed_write_slowdown": null,
+        "inference_write_limit_bytes_per_second": 134217728,
+        "inference_io_limit_bytes_per_second": 167772160,
+        "rate_window_seconds": 30,
+        "failures": [],
+        "advisories": []
+      },
+      "diagnostic_error_summary": [],
+      "profiles": [
+        {
+          "model": "qwen3.8-flash-next-iq3_xxs",
+          "context": 262144,
+          "status": "passed",
+          "prefill_tps": 1175.6,
+          "fresh_prefill_ttft_seconds": 7.004836252017412,
+          "actual_prefill_input_tokens": [
+            8187,
+            8189,
+            8189
+          ],
+          "short": {
+            "code": {
+              "median_decode_tps": 70.48529564179069,
+              "median_ttft_seconds": 0.24997093301499262
+            },
+            "prose": {
+              "median_decode_tps": 51.40734782461013,
+              "median_ttft_seconds": 0.23253025198937394
+            }
+          },
+          "markers": 3,
+          "prefill_output_cap": 64,
+          "memory": {
+            "worker_samples": 59,
+            "sampling_errors": 0,
+            "sample_attempts": 59,
+            "sampling_error_details_dropped": 0,
+            "max_worker_swap_bytes": 0,
+            "max_nonresident_vram_bytes": 0,
+            "minimum_available_gib": 5.772,
+            "peak_vram_gib": [
+              18.76,
+              17.833
+            ]
+          },
+          "swap_activity": {
+            "policy": "loading-swap-v4",
+            "samples": 59,
+            "sampling_errors": 0,
+            "elapsed_seconds": 59.80255118801142,
+            "worker_swap_peak_bytes": 0,
+            "total_swapin_bytes": 7667712,
+            "total_swapout_bytes": 0,
+            "inference_window_samples": 29,
+            "max_inference_swapout_bytes_per_second": 0.0,
+            "max_inference_swap_io_bytes_per_second": 252281.95429104936,
+            "min_available_bytes": 6201118720,
+            "max_memory_full_psi_avg10": 0.0,
+            "max_low_memory_consecutive_samples": 0,
+            "max_full_psi_consecutive_samples": 0,
+            "write_budget_bytes_per_second": 134217728,
+            "progress_samples": 0,
+            "measured_slowdown_windows": 0,
+            "confirmed_write_slowdown_windows": 0,
+            "last_confirmed_write_slowdown": null,
+            "inference_write_limit_bytes_per_second": 134217728,
+            "inference_io_limit_bytes_per_second": 167772160,
+            "rate_window_seconds": 30,
+            "failures": [],
+            "advisories": []
+          },
+          "sampled_request_thermal_peaks": {
+            "0000:03:00.0": {
+              "peak_temperature_c": {
+                "mem": 46.0,
+                "edge": 47.0,
+                "junction": 70.0
+              }
+            },
+            "0000:06:00.0": {
+              "peak_temperature_c": {
+                "mem": 58.0,
+                "edge": 43.0,
+                "junction": 67.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "candidate": {
       "lifecycle": {
         "worker_samples": 0,
         "sampling_errors": 0,
@@ -32,14 +151,14 @@
         "policy": "loading-swap-v4",
         "samples": 4,
         "sampling_errors": 0,
-        "elapsed_seconds": 1.5395626459794585,
+        "elapsed_seconds": 1.536991022003349,
         "worker_swap_peak_bytes": 0,
         "total_swapin_bytes": 0,
         "total_swapout_bytes": 0,
         "inference_window_samples": 0,
         "max_inference_swapout_bytes_per_second": 0.0,
         "max_inference_swap_io_bytes_per_second": 0.0,
-        "min_available_bytes": 26526396416,
+        "min_available_bytes": 26773929984,
         "max_memory_full_psi_avg10": 0.0,
         "max_low_memory_consecutive_samples": 0,
         "max_full_psi_consecutive_samples": 0,
@@ -75,29 +194,61 @@
       "temperature_kelvin": 305
     },
     "after": {
-      "checked_at_utc": "2026-10-29T19:17:01.667301+00:00",
+      "checked_at_utc": "2026-10-29T19:58:36.299242+00:00",
       "refresh_succeeded": true,
       "percent_used": 3,
-      "host_written_bytes": 7995123712000,
+      "host_written_bytes": 7997149184000,
       "media_errors": 0,
       "controller_error_log_entries": 66051,
       "critical_warnings": [],
-      "temperature_kelvin": 304
+      "temperature_kelvin": 305
     },
-    "SMART_host_written_delta_bytes": 1477120000,
-    "kernel_host_written_delta_bytes": 1477259264,
-    "elapsed_seconds": 1903.38471
+    "SMART_host_written_delta_bytes": 3502592000,
+    "kernel_host_written_delta_bytes": 3502485504,
+    "elapsed_seconds": 4398.016651
   },
   "unchanged_profile_manual_pin_comparator_fingerprints": 9,
-  "RAM_admission": {
-    "checked_at_utc": "2026-10-29T19:17:18.937559+00:00",
-    "available_GiB": 24.84878158569336,
-    "required_available_GiB": 25,
-    "requirement_met": false
-  },
-  "status": "qualification_waiting_for_available_RAM",
+  "status": "candidate_and_rollback_load_RAM_blocked",
   "candidate_built": true,
   "candidate_installed": false,
-  "model_loaded": false,
-  "qualification_complete": false
+  "candidate_provisionally_installed_during_attempt": true,
+  "model_loaded": true,
+  "model_loaded_scope": "production baseline only",
+  "qualification_complete": false,
+  "RAM_admission": {
+    "required_available_GiB": 25,
+    "candidate_lifecycle_min_available_GiB": 24.935165405273438,
+    "candidate_guard_blocked": true,
+    "rollback_load_guard_blocked": true,
+    "approved_pause_probe": {
+      "sample_count": 25,
+      "sample_interval_seconds": 5,
+      "elapsed_seconds": 125,
+      "min_available_GiB": 24.48894500732422,
+      "max_available_GiB": 24.705307006835938,
+      "available_GiB_after_restore": 24.58935546875,
+      "checked_at": "2026-10-29T16:00:32.324727-04:00",
+      "services_restored_and_verified": true
+    },
+    "inference_worker_remaining_after_attempt": false,
+    "attribution_limit": "No surviving Strata worker was observed. Host process and kernel usage changed; precise cause of the small baseline-to-candidate admission loss was not sampled."
+  },
+  "rollback": {
+    "selected_source": "7dd5cf18e68c",
+    "restored_files_byte_match_rollback": [
+      "strata",
+      "strata-device",
+      "local-build.json"
+    ],
+    "fresh_load_smoke_passed": false,
+    "reason": "unchanged 25 GiB available-RAM guard blocked smoke",
+    "source_and_files_restored": true
+  },
+  "cpu_checks": {
+    "focused_suite_per_checkout": 217,
+    "additional_performance_boundary_case_per_checkout": 1,
+    "total_per_checkout": 218,
+    "performance_floor_ratio": 0.95,
+    "boundary_results": "0.1% and exactly 5% declines pass; just beyond 5% fails"
+  }
 }

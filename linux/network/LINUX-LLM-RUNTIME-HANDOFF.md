@@ -2,7 +2,7 @@
 
 ## Strata retry and current swap ceilings — October 29
 
-The default is now `loading-swap-v4`: sustained inference writes ≤128 MiB/s and combined reads+writes ≤160 MiB/s over complete 30-second windows; loading/parked swap is allowed and PSI remains advisory. Detailed sampler errors are retained privately. 217 CPU checks pass per checkout; the isolated build passed, but the retry stopped before loading at the unchanged 25 GiB available-RAM guard (latest 24.85 GiB). The service is inactive, provisional state/owned GPU lock are clear, and source 7dd5cf18e68c remains selected. Qualification awaits additional available RAM. The performance comparator and all other guard/profile/manual-pin settings remain. [Evidence and retry status](../hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
+Diagnostics and `loading-swap-v4` are deployed: 128 MiB/s writes / 160 MiB/s combined over complete 30-second inference windows; loading/parked swap remains allowed. All 218 CPU checks per checkout pass, including the unchanged 95% performance boundary. The Strata build and production baseline passed with zero sampler errors. Candidate launch and the restored-build load smoke hit the unchanged 25 GiB available-RAM guard; no candidate performance verdict exists. Source 7dd5cf18e68c and all three restored build files match the rollback copies. Fresh rollback loading remains unverified. The approved temporary service pause has been restored and verified; the updater is inactive with no provisional state or task GPU reservation. [Evidence and retry status](../hardware/STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 ## Split llama.cpp update — complete
 

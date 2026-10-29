@@ -10,7 +10,7 @@ The 03:00 local nightly updater is restored and the requested current-source upd
 | Bolt vLLM | Manual pin retained | `0.32.1rc1.dev435+gc50aca144.rocm72`; excluded from global comparison |
 | llama.cpp | **Split promotion complete** | Global `eb4e244be77a` for Empero/Super/Flint; Ornith alone retains independent `2280f0fd163b` manual source/build hold and 60 GiB admission |
 | SGLang AMD fork | Already current | `f84475ccf593` |
-| Strata Qwen | Rejected, rollback verified | `7dd5cf18e68c`; candidate `46c152a1310f` passed speed/markers but failed lifecycle telemetry with one KeyError |
+| Strata Qwen | Retry RAM-blocked; restored files verified, fresh load pending | `7dd5cf18e68c`; latest baseline passed with zero sampler errors, candidate and rollback load checks hit 25 GiB RAM admission. Earlier one-KeyError rejection remains historical. See [retry status](STRATA-RETRY-SAMPLER-2026-10-29.md). |
 | Maya | Baseline blocked | `f26d8bab43f9`; normal DeepSeek profile remains RAM-held |
 | Strata DeepSeek | Baseline blocked | `8183c6b67162`; normal DeepSeek profile remains RAM-held |
 

@@ -2,7 +2,7 @@
 
 ## Current policy / Strata retry — October 29
 
-`loading-swap-v4` is the owner-requested default: 128 MiB/s swap writes / 160 MiB/s combined reads+writes during complete 30-second inference windows. Loading/parked swap remains allowed; PSI alone is advisory. Missing/invalid evidence still blocks promotion, and the performance floor remains 95%. Sampler failures now record bounded, sanitized missing-key/process/phase/sample/trace context. 217 CPU checks pass per checkout; The Strata retry built successfully but stopped before loading at its 25 GiB available-RAM guard (latest 24.85 GiB). No candidate was installed; source 7dd5cf18e68c remains. Qualification is pending additional available RAM. [Policy and retry evidence](../STRATA-RETRY-SAMPLER-2026-10-29.md).
+Diagnostics and `loading-swap-v4` are deployed: 128 MiB/s writes / 160 MiB/s combined over complete 30-second inference windows; loading/parked swap remains allowed. All 218 CPU checks per checkout pass, including the unchanged 95% performance boundary. The Strata build and production baseline passed with zero sampler errors. Candidate launch and the restored-build load smoke hit the unchanged 25 GiB available-RAM guard; no candidate performance verdict exists. Source 7dd5cf18e68c and all three restored build files match the rollback copies. Fresh rollback loading remains unverified. The approved temporary service pause has been restored and verified; the updater is inactive with no provisional state or task GPU reservation. [Policy and retry evidence](../STRATA-RETRY-SAMPLER-2026-10-29.md).
 
 ## Live status — October 29
 
@@ -84,7 +84,7 @@ rolls back before releasing the lock. If the machine loses power instead,
 
 The October 27 `loading-swap-v2` policy allowed loading and parked swap but
 still applied active-churn and pressure stop rules. Those rules are superseded
-by the current `loading-swap-v3` policy above. Physical-RAM admission, RAM caps,
+by v3 historically; the current `loading-swap-v4` ceilings are stated above. Physical-RAM admission, RAM caps,
 VRAM reserves, zero dedicated-VRAM spill, ownership/telemetry and performance/
 quality gates remain independent; historical results retain their original policy.
 [Current policy, thresholds, evidence and historical harness limitations](../LOADING-SWAP-POLICY-2026-10-27.md).
