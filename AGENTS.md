@@ -1,5 +1,7 @@
 # Agent entry point
 
+The [matched newer H3 comparison](linux/graphics/H3-MATCHED-32GB-2026-10-28.md) is complete on the actual 32 GB host. Read its request/sampler medians, common-input protocol, memory and sampled-quality limits. All owned work is cleaned up; preserve completed evidence, guards and the isolated candidate. No production promotion or remaining benchmark job.
+
 [Temporary 32 GB streaming profiles](linux/hardware/SSD-STREAMING-32GB-2026-10-28.md): qualification and guarded normal API integration are complete. Read selected versus held results before changing profiles; retain exact 64 GB restoration preimages and all guards.
 
 [AMD router admission and transport](linux/hardware/ROUTER-ADMISSION-2026-10-28.md): validated router code is active after the user-authorized idle hub/gateway restart; authenticated health passes. Keep API-only access, qualified capacity, all guards and paused schedules unchanged. See the report for verification; no activation work remains.

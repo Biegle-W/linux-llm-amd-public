@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Matched H3 on 32 GB — complete
+
+The [matched newer H3 comparison](../graphics/H3-MATCHED-32GB-2026-10-28.md) is complete on real 32 GB RAM: three timed fresh-server trials per arm plus excluded warmups. Median request: **179.209 s single-GPU / 153.773 s actual fcys RCCL TP2** (14.2% shorter with TP2); both-ready sampler: **33.980 / 44.263 s**. Encoder costs are excluded. All eight AV/guard/cleanup checks passed; owned reservation released. Sampled visual limits remain; no production promotion.
+
 ## Temporary 32 GB SSD-streaming profiles — October 28
 
 Activated temporary 32 GB profiles: **Qwen / Strata, GLM / Maya**. Held at the exact prior 64 GB profile: **DeepSeek XS / Maya, DeepSeek XS / Strata**. Each activation passed native safety/functional/performance/near-window/history checks and normal guarded authenticated JSON/SSE/tools/~8K/history checks. The exact 64 GB preimages are retained; restore only after at least 60 GiB physical RAM is visible and inference is idle. All other settings, guards, coordinator services and paused schedules remain. [Qualification, comparisons and limits](../hardware/SSD-STREAMING-32GB-2026-10-28.md).
