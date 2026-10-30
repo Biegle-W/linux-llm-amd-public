@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Free OpenCat search service — October 30
+
+The owner requested a free service after an unsuccessful iPhone retry. Search-enabled Responses now use self-hosted SearXNG on loopback10001, with verified keyless Bing/Brave engines and no paid API fallback. The pinned container uses one CPU / 384 MiB maximum, no GPU, no container swap or persistent query logs, and restarts unless stopped. Live vLLM JSON/SSE searches/citations, prior-refusal recovery, history and native Responses pass; 39 focused checks pass per checkout. Only the idle API was restarted; the hub and guards, pins, other holds and schedules are preserved. No active task GPU reservation or trial job. Start a fresh OpenCat conversation after activation to avoid stale response IDs, using the same `/v1` URL/key and enabled web search. A retry with this free service remains unconfirmed. [Setup, verification and limits](OPENCAT-FREE-SEARCH-2026-10-30.md).
+
 ## OpenCat Responses web-search execution — October 30
 
 Search-enabled requests now execute real queries through the configured DSH DeepSeek Search API and feed numbered results to the selected local model. JSON/SSE search, genuine citations, ephemeral history and plain Responses pass on Qwen/vLLM; 90 relevant checks pass per checkout. Same `/v1` URL/key; enable web search in OpenCat. Text-search scope, bounded buffering/cache and unsupported tool modes are documented. iPhone retry remains unconfirmed. Guards, pins, other model holds and schedules remain; no recurring task or GPU reservation. [Verification and limits](OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md).

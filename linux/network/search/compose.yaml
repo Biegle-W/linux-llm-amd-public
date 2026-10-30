@@ -1,0 +1,30 @@
+name: local-llm-search
+services:
+  search:
+    image: ghcr.io/searxng/searxng@sha256:f1bbc31c7bef7a7d8dd2b105c8397eb7dea1eeb7eceebdd45c0c29aef38c0c91
+    container_name: local-llm-search
+    restart: unless-stopped
+    user: "${LOCAL_LLM_SEARCH_UID}:${LOCAL_LLM_SEARCH_GID}"
+    ports:
+      - "127.0.0.1:10001:8080"
+    environment:
+      FORCE_OWNERSHIP: "false"
+      GRANIAN_HOST: "0.0.0.0"
+      GRANIAN_WORKERS: "1"
+      GRANIAN_BLOCKING_THREADS: "4"
+      GRANIAN_LOG_LEVEL: "error"
+    volumes:
+      - "${LOCAL_LLM_SEARCH_DATA}/config:/etc/searxng:ro"
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+      - /var/cache/searxng:size=32m,mode=1777
+    mem_limit: 384m
+    memswap_limit: 384m
+    cpus: 1.0
+    pids_limit: 128
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: none

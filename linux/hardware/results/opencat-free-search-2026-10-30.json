@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-30",
+  "scope": "Keyless free search for OpenCat Responses through the unchanged guarded local model hub",
+  "provider": "Self-hosted SearXNG",
+  "api_key_required_for_search": false,
+  "paid_fallback": false,
+  "gateway_authentication_preserved": true,
+  "image": "ghcr.io/searxng/searxng@sha256:f1bbc31c7bef7a7d8dd2b105c8397eb7dea1eeb7eceebdd45c0c29aef38c0c91",
+  "engines": [
+    "bing",
+    "brave"
+  ],
+  "excluded_probe_engines": {
+    "google": "access denied",
+    "duckduckgo": "CAPTCHA"
+  },
+  "service": {
+    "bind": "127.0.0.1:10001",
+    "cpu_limit": 1,
+    "memory_limit_MiB": 384,
+    "container_swap": false,
+    "observed_memory_MiB": 80.21,
+    "persistent_query_logs": false,
+    "restart_policy": "unless-stopped"
+  },
+  "tests": {
+    "search_contracts": 26,
+    "native_responses": 13,
+    "focused_per_checkout": 39,
+    "private_pass": true,
+    "public_pass": true
+  },
+  "model": "qwen3.8-27b-vllm",
+  "SDK": "3.31.0",
+  "live_checks": [
+    {
+      "kind": "free_search_JSON",
+      "status": "completed",
+      "search_calls": 1,
+      "citation_hosts": [
+        "docs.python.org",
+        "www.python.org"
+      ],
+      "text_chars": 255,
+      "seconds": 83.349,
+      "strict_SDK_schema": true
+    },
+    {
+      "kind": "free_search_SSE_auto_after_prior_refusal",
+      "status": "completed",
+      "events": {
+        "response.created": 1,
+        "response.in_progress": 1,
+        "response.output_item.added": 3,
+        "response.web_search_call.in_progress": 2,
+        "response.web_search_call.searching": 2,
+        "response.web_search_call.completed": 2,
+        "response.output_item.done": 3,
+        "response.content_part.added": 1,
+        "response.output_text.delta": 5,
+        "response.output_text.annotation.added": 5,
+        "response.output_text.done": 1,
+        "response.content_part.done": 1,
+        "response.completed": 1
+      },
+      "citation_hosts": [
+        "dalf.github.io",
+        "docs.searxng.org"
+      ],
+      "text_chars": 1028,
+      "seconds": 7.836,
+      "strict_SDK_schema": true
+    },
+    {
+      "kind": "free_search_history_without_new_query",
+      "status": "completed",
+      "text_chars": 125
+    },
+    {
+      "kind": "plain_native_Responses",
+      "status": "completed",
+      "text_chars": 5
+    }
+  ],
+  "timing_scope": "First JSON request includes normal on-demand model loading; functional observations only, not a benchmark",
+  "activation": {
+    "idle_gateway_only_restart": true,
+    "hub_preserved": true
+  },
+  "iphone_retry_with_new_free_service_confirmed": false,
+  "prior_iphone_attempt": "Reached earlier search branch but did not log completion; exact original cause not established",
+  "bounds": {
+    "provider_timeout_seconds": 15,
+    "max_searches_per_request": 3,
+    "concurrent_bridge_requests": 2,
+    "history_TTL_seconds": 3600,
+    "history_serialized_MiB": 16,
+    "history_entries": 128
+  },
+  "preserved": [
+    "Authentication/source-network checks",
+    "Guarded hub admission and model ownership",
+    "RAM/VRAM/swap protections",
+    "Engine pins, profile holds and schedules",
+    "Unrelated client settings and credentials"
+  ],
+  "limits": [
+    "Free public engines may rate-limit or become unavailable",
+    "Search text/snippets only; no arbitrary page fetching",
+    "Search final text buffered before typed events",
+    "Ephemeral history resets on gateway restart; use a fresh OpenCat conversation after activation",
+    "Other hosted/mixed tools, images, background/Conversations/cache-only mode remain explicitly unsupported"
+  ],
+  "bootstrap_preserves_existing_config_and_container": true
+}

@@ -1,0 +1,29 @@
+use_default_settings:
+  engines:
+    keep_only:
+      - bing
+      - brave
+general:
+  debug: false
+  instance_name: Local LLM Search
+  enable_metrics: false
+search:
+  formats:
+    - html
+    - json
+  autocomplete: ""
+  safe_search: 1
+server:
+  secret_key: GENERATE_LOCAL_SECRET
+  limiter: false
+  public_instance: false
+  image_proxy: false
+  method: POST
+outgoing:
+  request_timeout: 6.0
+  max_request_timeout: 8.0
+engines:
+  - name: bing
+    disabled: false
+  - name: brave
+    disabled: false

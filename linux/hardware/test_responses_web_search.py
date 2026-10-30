@@ -99,14 +99,30 @@ class Contracts(unittest.TestCase):
  def test_provider_sends_only_query_and_filters_unsafe_or_outside_urls(self):
   from unittest.mock import MagicMock
   response=MagicMock();response.__enter__.return_value=response
-  response.read.return_value=json.dumps({'results':[SOURCE,{**SOURCE,'url':'http://127.0.0.1/private'},{**SOURCE,'url':'https://other.example/page'}]}).encode()
+  row={**SOURCE,'content':'<b>Official</b> &amp; free search','publishedDate':'2025-10-07'}
+  response.read.return_value=json.dumps({'results':[row,{**row,'url':'http://127.0.0.1/private'},{**row,'url':'https://other.example/page'}]}).encode()
   opener=Mock();opener.open.return_value=response
   options=w.settings(request(tools=[{'type':'web_search','filters':{'allowed_domains':['python.org']}}]))
-  with patch.dict(w.os.environ,{'DEEPSEEK_API_KEY':'fixture-provider-key'}),patch.object(w.urllib.request,'build_opener',return_value=opener):
+  with patch.object(w.urllib.request,'build_opener',return_value=opener) as builder:
    results=w.provider_search('Python release',options)
   self.assertEqual([x['url'] for x in results],[SOURCE['url']])
-  sent=opener.open.call_args.args[0];self.assertEqual(sent.full_url,'https://api.deepseek.com/v1/tools/search')
-  body=json.loads(sent.data);self.assertEqual(set(body),{'query','count','need_content'});self.assertIn('site:python.org',body['query']);self.assertNotIn('fixture-provider-key',str(body))
+  sent=opener.open.call_args.args[0];self.assertEqual(sent.full_url,'http://127.0.0.1:10001/search')
+  body=w.urllib.parse.parse_qs(sent.data.decode());self.assertEqual(set(body),{'q','format','categories','language','safesearch'});self.assertIn('site:python.org',body['q'][0]);self.assertEqual(body['format'],['json'])
+  self.assertNotIn('Authorization',sent.headers);self.assertEqual(builder.call_args.args[0].proxies,{})
+  self.assertEqual(results[0]['snippet'],'Official & free search');self.assertEqual(results[0]['date'],'2025-10-07')
+ def test_free_provider_redirects_are_never_followed(self):
+  with self.assertRaises(w.SearchError):w.NoRedirect().redirect_request(None,None,302,'redirect',{},'https://paid.example/')
+ def test_free_provider_failure_is_explicit_and_never_uses_a_paid_fallback(self):
+  opener=Mock();opener.open.side_effect=OSError('fixture-private-error')
+  with patch.object(w.urllib.request,'build_opener',return_value=opener):
+   with self.assertRaises(w.SearchError) as error:w.provider_search('query',w.settings(request()))
+  self.assertEqual(error.exception.code,'web_search_provider_error');self.assertNotIn('fixture-private-error',str(error.exception));opener.open.assert_called_once()
+ def test_free_provider_rejects_oversized_and_malformed_results(self):
+  from unittest.mock import MagicMock
+  for raw in [b'x'*(2*1024**2+1),b'not JSON',b'{"results":null}']:
+   response=MagicMock();response.__enter__.return_value=response;response.read.return_value=raw
+   opener=Mock();opener.open.return_value=response
+   with patch.object(w.urllib.request,'build_opener',return_value=opener),self.assertRaises(w.SearchError):w.provider_search('query',w.settings(request()))
  def test_provider_error_is_not_relabelled_as_a_completed_search(self):
   s=w.Session(request(),lambda _:reply([call()]),Mock(side_effect=w.SearchError(503,'Providerfailed')))
   with self.assertRaises(w.SearchError):s.run()

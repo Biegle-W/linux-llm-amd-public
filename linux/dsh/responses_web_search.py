@@ -1,16 +1,14 @@
-"""Bounded local Responses web search, using the configured DSH provider.
+"""Bounded local Responses web search, using keyless loopback SearXNG.
 
 Model requests still pass through the guarded loopback hub. Only model-selected
 queries leave the host. No prompt/query/result/credential is written to logs.
 """
 from collections import OrderedDict
 from copy import deepcopy
-from pathlib import Path
 import html
 import http.client
 import ipaddress
 import json
-import os
 import re
 import select
 import socket
@@ -21,7 +19,7 @@ import urllib.parse
 import urllib.request
 import uuid
 
-ROOT = Path(__file__).resolve().parents[1]
+SEARCH_URL = 'http://127.0.0.1:10001/search'
 WEB_TYPES = frozenset(('web_search', 'web_search_2025_08_26', 'web_search_preview', 'web_search_preview_2025_03_11'))
 FUNCTION = 'local_web_search'
 PREFIX = 'resp_localws_'
@@ -53,7 +51,7 @@ class History:
         with self.lock:
             self.prune()
             if key not in self.rows:
-                raise SearchError(404, 'Previous local search response expired or is unavailable; resend the conversation.', 'response_not_found')
+                raise SearchError(404, 'Previous local search response expired or is unavailable; start a new chat or resend the conversation.', 'response_not_found')
             return deepcopy(self.rows[key][2])
 
     def put(self, key, value):
@@ -158,24 +156,19 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 def provider_search(query, options):
-    """Fixed external endpoint; the existing key never enters model context."""
-    key = os.environ.get('DEEPSEEK_API_KEY', '').strip()
-    if not key:
-        try:
-            import yaml
-            value = yaml.safe_load((ROOT/'dsh/data/.credentials.yaml').read_text())
-            key = value.get('refs', {}).get('DEEPSEEK_API_KEY', '')
-        except Exception:
-            key = ''
-    if not isinstance(key, str) or not key:
-        raise SearchError(503, 'Configure the existing DSH DeepSeek search key to enable local API web search.', 'web_search_not_configured')
+    """Only the selected query reaches the local, free search aggregator.
+
+    No credential lookup, external API, proxy inheritance or paid fallback.
+    SearXNG sends the query to its configured keyless public search engines.
+    """
     if options['domains']:
         query += ' ('+' OR '.join('site:'+d for d in options['domains'])+')'
-    request = urllib.request.Request('https://api.deepseek.com/v1/tools/search',
-        data=json.dumps({'query': query, 'count': options['count'], 'need_content': False}).encode(),
-        headers={'Authorization': 'Bearer '+key, 'Content-Type': 'application/json'})
+    request = urllib.request.Request(SEARCH_URL,
+        data=urllib.parse.urlencode({'q': query, 'format': 'json', 'categories': 'general',
+                                     'language': 'auto', 'safesearch': '1'}).encode(),
+        headers={'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'})
     try:
-        with urllib.request.build_opener(NoRedirect()).open(request, timeout=25) as response:
+        with urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect()).open(request, timeout=15) as response:
             raw = response.read(2*1024**2+1)
             if len(raw) > 2*1024**2:
                 raise ValueError()
@@ -183,9 +176,9 @@ def provider_search(query, options):
         if not isinstance(data, dict) or not isinstance(data.get('results'), list):
             raise ValueError()
     except urllib.error.HTTPError as error:
-        raise SearchError(503, 'The configured search provider returned HTTP '+str(error.code)+'.', 'web_search_provider_error') from None
+        raise SearchError(503, 'The local free search service returned HTTP '+str(error.code)+'.', 'web_search_provider_error') from None
     except (OSError, ValueError, http.client.HTTPException):
-        raise SearchError(503, 'The configured search provider did not return usable results.', 'web_search_provider_error') from None
+        raise SearchError(503, 'The local free search service is unavailable or returned unusable results.', 'web_search_provider_error') from None
     results = []
     for row in data['results']:
         if not isinstance(row, dict) or not public_url(row.get('url')):
@@ -195,9 +188,9 @@ def provider_search(query, options):
             continue
         def text(name, bound):
             value = row.get(name)
-            return html.unescape(re.sub(r'<[^>]+>', ' ', value))[:bound] if isinstance(value, str) else ''
-        results.append({'url': row['url'], 'title': text('title', 300), 'snippet': text('snippet', options['snippet']),
-                        'date': text('date', 80)})
+            return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', value))).strip()[:bound] if isinstance(value, str) else ''
+        results.append({'url': row['url'], 'title': text('title', 300), 'snippet': text('content', options['snippet']),
+                        'date': text('publishedDate', 80)})
         if len(results) >= options['count']:
             break
     return results
@@ -480,6 +473,8 @@ def serve(handler, data, hub_port):
     except (BrokenPipeError, ConnectionResetError):
         pass
     except SearchError as error:
+        # Codes/status only: never log prompts, queries, credentials or sources.
+        print('Responses search failed:', error.code, 'HTTP', error.status, flush=True)
         if streaming and started:
             try:
                 session.event('error', code=error.code, message=str(error), param=None)

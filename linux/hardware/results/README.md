@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## Free OpenCat search service — October 30
+
+[Keyless service verification](../../network/OPENCAT-FREE-SEARCH-2026-10-30.md) and [curated checks](opencat-free-search-2026-10-30.json): 39 focused checks per checkout and live vLLM JSON/SSE/citation/history checks pass. A new iPhone retry remains unconfirmed.
+
 ## OpenCat Responses web search — October 30
 
 [Executed search/citation verification](../../network/OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md) and [curated checks](opencat-responses-web-search-2026-10-30.json): live JSON/SSE and history pass on Qwen/vLLM, 90 CPU/HTTP/SDK checks per checkout. No confirmed iPhone retry.

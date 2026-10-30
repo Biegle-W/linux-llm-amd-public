@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 30, 2026
 
+## Free OpenCat search service — October 30
+
+Self-hosted keyless SearXNG is active. Live vLLM JSON/SSE search with citations, prior-refusal recovery, history and native Responses pass; 39 focused CPU/HTTP/SDK checks per checkout. No new performance qualification or held-model trial. [Setup and evidence](../network/OPENCAT-FREE-SEARCH-2026-10-30.md).
+
 ## OpenCat executable Responses web search — October 30
 
 Functional API/tool verification: real JSON/SSE search with citations, history and native Responses pass on selected Qwen/vLLM; 90 relevant checks pass per checkout. No new model performance qualification or held-model trial. [Report](../network/OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md).
