@@ -2,7 +2,7 @@
 
 ## OpenCat mixed tools and dated news — October 30
 
-[Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 69 focused checks per checkout; exact current-news streaming answer with dated sources passes. Final iPhone confirmation is pending.
+[Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 69 focused checks per checkout; exact current-news streaming answer with dated sources passes. The owner confirms the iPhone now answers with sources; actual searched responses completed with citation annotations and no refusal parts.
 
 ## Free OpenCat search service — October 30
 

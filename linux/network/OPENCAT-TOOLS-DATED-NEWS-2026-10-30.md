@@ -2,7 +2,7 @@
 
 The iPhone logs identified a concrete request failure: OpenCat declared two client function tools alongside `web_search`, while the local bridge accepted only one standalone web tool. It returned HTTP 400 `unsupported_web_tools`; a later request without search reached the model, which could then say it could not browse. The mixed-tool request is now accepted and its client function definitions are preserved.
 
-The user then reported that search executed but the model said the tool was not returning dated information. The original question was “what is the news today”. A neutral date-filtered general-search probe returned no results and a Brave rate-limit error. A public news RSS probe returned dated items. The local service now has a separate dated-news path, and the exact question produces a complete dated answer in the functional test. Final iPhone confirmation is pending.
+The user then reported that search executed but the model said the tool was not returning dated information. The original question was “what is the news today”. A neutral date-filtered general-search probe returned no results and a Brave rate-limit error. A public news RSS probe returned dated items. The local service now has a separate dated-news path, and the exact question produces a complete dated answer in the functional test. The owner has now confirmed that OpenCat on the iPhone answers with sources.
 
 ## Tool compatibility
 
@@ -12,7 +12,7 @@ Auto, none, required and named web/function choices retain their meanings. A req
 
 Diagnostics record only bounded tool-type counts, choice kind, search/source counts, status and answer-shape counts. They exclude tool names, descriptions, arguments, prompts, answer text, URLs and credentials. The protocol metadata was sufficient to identify the actual iPhone tool combination.
 
-Later phone attempts reported HTTP code0 while the gateway recorded `unexpected_tool_call` (502) during the stream. The recovery above covers the rejected model-output patterns. Unrecoverable streamed failures now use the typed `response.failed` terminal event, with a standard error object and human-readable message; a separate generic SSE error no longer aborts SDK iteration before that terminal message is read. Query-free logs retain the specific failure code. Final phone confirmation of this recovery remains pending.
+Later phone attempts reported HTTP code0 while the gateway recorded `unexpected_tool_call` (502) during the stream. The recovery above covers the rejected model-output patterns. Unrecoverable streamed failures now use the typed `response.failed` terminal event, with a standard error object and human-readable message; a separate generic SSE error no longer aborts SDK iteration before that terminal message is read. Query-free logs retain the specific failure code. The owner subsequently confirmed an answer with sources on the iPhone. The gateway recorded two completed searched answers with nine and five citation annotations, zero client handoffs and no refusal parts. No prompt or answer text was logged.
 
 ## Dated information without a paid API
 

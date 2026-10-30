@@ -118,7 +118,7 @@
     "news_rss_sources": 10
   },
   "retained_failure": "Initial general-search mixed streaming fixture completed but did not meet citation assertion; focused retry passed before dated-news update",
-  "iphone_final_dated_answer_confirmed": false,
+  "iphone_final_dated_answer_confirmed": true,
   "date_provenance": "RSS item pubDate; missing/invalid dates skipped, never replaced by retrieval time",
   "bounds": {
     "RSS_bytes": 1048576,
@@ -223,5 +223,30 @@
     "text_chars": 1078,
     "strict_SDK_schema": true,
     "seconds": 5.078
+  },
+  "iphone_final_confirmation": {
+    "date": "2026-10-30",
+    "user_result": "It answers with sources",
+    "model": "qwen3.8-27b-sglang-dflash2",
+    "observed_searched_answers": [
+      {
+        "status": "completed",
+        "search_calls": 2,
+        "sources": 10,
+        "text_chars": 1321,
+        "citation_annotations": 9,
+        "client_calls": 0,
+        "refusal_parts": 0
+      },
+      {
+        "status": "completed",
+        "search_calls": 1,
+        "sources": 5,
+        "text_chars": 860,
+        "citation_annotations": 5,
+        "client_calls": 0,
+        "refusal_parts": 0
+      }
+    ]
   }
 }
