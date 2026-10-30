@@ -1,4 +1,8 @@
-# Current dual-AMD benchmarks — October 29, 2026
+# Current dual-AMD benchmarks — October 30, 2026
+
+## Strata RDNA3 fork / current 32 GB — October 30
+
+The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. Individual short tuned-mode code/prose samples: 28.8/43.6 tokens/s. Read the retained 8K failure and final conservative checks; no matched speedup, full 256K result or production promotion. [Evidence](STRATA-RDNA3-32GB-TRIAL-2026-10-30.md).
 
 ## OpenCat native Responses routing — October 30
 

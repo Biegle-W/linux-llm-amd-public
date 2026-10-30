@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Isolated Strata RDNA3 trial on 32 GB — October 30
+
+The owner explicitly authorized this one-off trial with current 32 GB. The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. All owned scopes stopped and reservation released; production Strata remains paused, with existing source/build, pins, guards and other RAM-held tests preserved. Normal API/hub/DSH services and schedules remain. [Build, 32 GB profile, failed attempts and verification limits](../hardware/STRATA-RDNA3-32GB-TRIAL-2026-10-30.md). The previous `qwen3.8-27b-vllm` route is restored and returns authenticated HTTP 200 with nonempty output. No remaining trial job or automatic retry queue.
+
 ## OpenCat iPhone Responses routing — October 30
 
 The same API URL/key now accepts native `POST /v1/responses` as well as Chat Completions. The earlier iPhone `not_found` came from the gateway allowlist. Real Responses JSON, SDK-assembled streaming/history and Chat Completions pass on SGLang; 67 CPU routing checks pass per checkout. Only idle gateway/hub services were restarted. iPhone retry remains unverified. All guards, model holds, pins and schedules remain. [Scope and verification](OPENCAT-RESPONSES-ROUTING-2026-10-30.md).

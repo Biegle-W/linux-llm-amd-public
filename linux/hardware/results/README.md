@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## Strata RDNA3/32 GB trial — October 30
+
+[Scoped trial and retained failures](../STRATA-RDNA3-32GB-TRIAL-2026-10-30.md) and [curated results](strata-rdna3-32gb-trial-2026-10-30.json). The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. No production promotion or new held-model queue.
+
 ## OpenCat native Responses routing — October 30
 
 [Endpoint repair](../../network/OPENCAT-RESPONSES-ROUTING-2026-10-30.md) and [curated verification](opencat-responses-routing-2026-10-30.json): SDK JSON/stream/history plus Chat Completions on enabled SGLang, 67 CPU checks per checkout. iPhone retry remains unverified.

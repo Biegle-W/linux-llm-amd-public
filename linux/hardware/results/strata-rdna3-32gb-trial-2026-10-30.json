@@ -1,0 +1,240 @@
+{
+  "date": "2026-10-30",
+  "scope": "Explicit owner-authorized isolated RDNA3 fork trial on current32GB; no production promotion",
+  "outcome": "The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified.",
+  "hardware": {
+    "RAM_OS_visible_bytes": 32811171840,
+    "GPU": "2xRX7900XTX24GB",
+    "CPU": "IntelCorei9-13900KS;AVX2,noAVX512"
+  },
+  "source": {
+    "repository": "https://github.com/nicejunjie/Strata-rdna3",
+    "branch": "rdna3",
+    "commit": "fc8f82334239199cd3cfcfa5ab5b8ac09827d19b",
+    "engine_version": "0.1.43",
+    "AVX2_fix_PR": "https://github.com/nicejunjie/Strata-rdna3/pull/1",
+    "patch_sha256": "014e918ee40bf200df80de90d07dc8bbd3aa0a90f60845f5e335f48eddef4e74",
+    "binary_sha256": "ede6fdaa4c8bafeb6e2ef87438c488e17c5164548cf32c1837602d87f7deecfb",
+    "ROCm": "7.2.3",
+    "GCC": "14.4.0",
+    "rocWMMA": "7.2.3",
+    "ggml_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d"
+  },
+  "profile": {
+    "model": "Qwen3.8-Flash-NextIQ3_XXS",
+    "expert_budget_GiB": 8,
+    "worker_memory_high_GiB": 18,
+    "worker_memory_max_GiB": 20,
+    "context": 262144,
+    "kv_resident_tokens": 32768,
+    "kv_format": "int8",
+    "gpus": [
+      0,
+      1
+    ],
+    "layer_split": 26,
+    "VRAM_reserve_MiB_final": [
+      8192,
+      8192
+    ],
+    "max_parallel": 1,
+    "prefill_chunk": 2048,
+    "stage_trim": true,
+    "DP_prefill": "disabled by retained stage-trim layout; source-confirmed",
+    "production_profile_enabled": false,
+    "final_environment": {
+      "STRATA_PREFILL_MMQ": "1",
+      "STRATA_NO_ARENA_THP": "1",
+      "STRATA_IO_STATS": "1",
+      "STRATA_SPLIT_OVERLAP": "1",
+      "STRATA_HIPBLASLT_TUNING": "gfx1100-hipblaslt-100202.txt",
+      "STRATA_GR_RDNA": "1",
+      "STRATA_GR_RDNA_Q8": "1",
+      "STRATA_RDNA_Q6K": "1",
+      "STRATA_GR_RDNA_A8": "1"
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "error": "Strata startup needs at least 5 GiB free on each GPU; found 4.682/6.145 GiB",
+      "load_seconds": null,
+      "startup_free_vram_bytes": null,
+      "memory": {
+        "minimum_host_available_bytes": 18971426816,
+        "maximum_worker_swap_bytes": 0,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          5219381248,
+          6793261056
+        ],
+        "maximum_scope_memory_current_bytes": 19327569920,
+        "samples": 79,
+        "telemetry_errors": 0
+      },
+      "cgroup_events": {
+        "low": 0,
+        "high": 3178,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "checks": [],
+      "owned_cleanup_verified": true,
+      "reservation_released": true
+    },
+    {
+      "attempt": 2,
+      "status": "failed",
+      "error": "Inference SSE error",
+      "load_seconds": 39.070858071994735,
+      "startup_free_vram_bytes": [
+        6101647360,
+        6598205440
+      ],
+      "memory": {
+        "minimum_host_available_bytes": 17775484928,
+        "maximum_worker_swap_bytes": 679530496,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          6025248768,
+          6522109952
+        ],
+        "maximum_scope_memory_current_bytes": 19819405312,
+        "samples": 247,
+        "telemetry_errors": 0
+      },
+      "cgroup_events": {
+        "low": 0,
+        "high": 8862,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "checks": [
+        {
+          "kind": "warmup",
+          "prompt_tokens": 23,
+          "output_tokens": 64,
+          "ttft_seconds": 1.0405317960030516,
+          "total_seconds": 3.1145030800034874,
+          "decode_tps_sse": 30.37650544441519,
+          "native_prefill_tps": 23.6,
+          "native_decode_tps": 30.4,
+          "finish_reason": "length",
+          "markers_passed": null,
+          "code_cases_passed": null
+        },
+        {
+          "kind": "code",
+          "prompt_tokens": 36,
+          "output_tokens": 129,
+          "ttft_seconds": 0.5820521209971048,
+          "total_seconds": 5.047875889998977,
+          "decode_tps_sse": 28.662125202627166,
+          "native_prefill_tps": 69.3,
+          "native_decode_tps": 28.8,
+          "finish_reason": "stop",
+          "markers_passed": null,
+          "code_cases_passed": 4
+        },
+        {
+          "kind": "prose",
+          "prompt_tokens": 27,
+          "output_tokens": 192,
+          "ttft_seconds": 0.4949165770012769,
+          "total_seconds": 4.887274756998522,
+          "decode_tps_sse": 43.48461399842392,
+          "native_prefill_tps": 58.4,
+          "native_decode_tps": 43.6,
+          "finish_reason": "length",
+          "markers_passed": null,
+          "code_cases_passed": null
+        }
+      ],
+      "owned_cleanup_verified": true,
+      "reservation_released": true
+    },
+    {
+      "attempt": 3,
+      "status": "failed",
+      "error": "Inference SSE error",
+      "load_seconds": 37.56680328999937,
+      "startup_free_vram_bytes": [
+        6159667200,
+        6704193536
+      ],
+      "memory": {
+        "minimum_host_available_bytes": 17295978496,
+        "maximum_worker_swap_bytes": 639807488,
+        "maximum_vram_spill_bytes": 0,
+        "minimum_free_vram_bytes": [
+          6057480192,
+          6626942976
+        ],
+        "maximum_scope_memory_current_bytes": 19633905664,
+        "samples": 813,
+        "telemetry_errors": 0
+      },
+      "cgroup_events": {
+        "low": 0,
+        "high": 16857,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 4
+      },
+      "checks": [
+        {
+          "kind": "warmup",
+          "prompt_tokens": 23,
+          "output_tokens": 64,
+          "ttft_seconds": 1.0245739669990144,
+          "total_seconds": 3.1304965220042504,
+          "decode_tps_sse": 29.91563001700381,
+          "native_prefill_tps": 24.0,
+          "native_decode_tps": 29.9,
+          "finish_reason": "length",
+          "markers_passed": null,
+          "code_cases_passed": null
+        },
+        {
+          "kind": "8k_retrieval",
+          "prompt_tokens": 8168,
+          "output_tokens": 22,
+          "ttft_seconds": 324.9531304999982,
+          "total_seconds": 335.9408551419983,
+          "decode_tps_sse": 1.9112237232200384,
+          "native_prefill_tps": 25.2,
+          "native_decode_tps": 1.8,
+          "finish_reason": "stop",
+          "markers_passed": true,
+          "code_cases_passed": null
+        }
+      ],
+      "owned_cleanup_verified": true,
+      "reservation_released": true,
+      "failure_stage": "Native watchdog: history prefill, layer44, prompt chunk0; prior8168token recall passed"
+    }
+  ],
+  "limits": [
+    "No same-run production performance baseline or speedup claim",
+    "No full 256K qualification or model promotion",
+    "Author128GB/IQ3_S numbers do not transfer to this32GB/IQ3_XXS configuration; this build uses the existing ROCm7.2.3 toolchain rather than the published pinned SDK setup",
+    "Tuned8K/layer39 and conservative history/layer44 watchdog stalls both retained; an isolated initial8K recall success does not qualify history"
+  ],
+  "other_holds": "Other owner-held model tests and schedules unchanged",
+  "production_restored": {
+    "model": "qwen3.8-27b-vllm",
+    "http_status": 200,
+    "finish_reason": "stop",
+    "text_chars": 5,
+    "seconds": 77.232
+  }
+}
