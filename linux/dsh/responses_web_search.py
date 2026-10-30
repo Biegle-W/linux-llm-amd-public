@@ -386,11 +386,32 @@ class Session:
         return response
 
     def run(self):
-        response = None
-        for _ in range(self.options['limit']+1):
+        response, history_added, repairs = None, False, 0
+        # One protocol-correction round is allowed without increasing the
+        # search/provider budget or executing an undeclared client function.
+        for _ in range(self.options['limit']+2):
             allow = self.options['enabled'] and len(self.web) < self.options['limit']
-            response = self.model(allow, self.options['forced'] and not self.web)
+            response = deepcopy(self.model(allow, self.options['forced'] and not self.web))
+            history_added = False
             calls = [x for x in response['output'] if x.get('type') == 'function_call']
+            if any(not isinstance(x.get('call_id'), str) or not x['call_id'] for x in calls):
+                raise SearchError(502, 'The model returned a tool call without a valid call identifier.', 'local_response_error')
+            normalized = 0
+            for call in calls:
+                name = call.get('name')
+                if isinstance(name, str) and name not in self.options['function_names']+[FUNCTION]:
+                    plain = name
+                    for prefix in ('functions.', 'tools.', 'tool.'):
+                        if name.startswith(prefix):
+                            plain = name[len(prefix):]
+                            break
+                    if plain in self.options['function_names'] or plain == FUNCTION:
+                        call['name'] = plain
+                    elif plain in WEB_TYPES and allow:
+                        call['name'] = FUNCTION
+                    normalized += call.get('name') != name
+            if normalized:
+                print('Responses tool names normalized:', normalized, flush=True)
             if not calls:
                 if self.options['forced'] and not self.web:
                     raise SearchError(502, 'The selected model did not issue the required search call.', 'required_search_not_called')
@@ -399,17 +420,35 @@ class Session:
                 break
             search_calls = [x for x in calls if x.get('name') == FUNCTION]
             client_calls = [x for x in calls if x.get('name') in self.options['function_names']]
-            if (len(search_calls)+len(client_calls) != len(calls) or search_calls and not allow
-                    or client_calls and self.options['choice'] == 'none'):
-                raise SearchError(502, 'The model requested an unavailable tool.', 'unexpected_tool_call')
-            if client_calls:
-                if search_calls or self.options['forced'] and not self.web:
-                    raise SearchError(502, 'The model mixed a server search with a client tool handoff despite sequential tool mode.', 'unexpected_tool_call')
+            invalid = (len(search_calls)+len(client_calls) != len(calls) or search_calls and not allow
+                       or client_calls and self.options['choice'] == 'none'
+                       or client_calls and not search_calls and self.options['forced'] and not self.web)
+            if invalid:
+                print('Responses invalid tool shape:', json.dumps({
+                    'search_calls': len(search_calls), 'client_calls': len(client_calls),
+                    'unknown_calls': len(calls)-len(search_calls)-len(client_calls),
+                    'search_allowed': bool(allow), 'searches_used': len(self.web),
+                    'repair_used': bool(repairs)}), flush=True)
+                if repairs or any(not isinstance(x.get('call_id'), str) or not x['call_id'] for x in calls):
+                    raise SearchError(502, 'The model repeated an unavailable tool call after correction.', 'unexpected_tool_call')
+                if self.remaining <= 0:
+                    raise SearchError(422, 'Output budget exhausted before tool correction.', 'web_search_limit')
+                repairs += 1
+                self.items.extend(native_items(response['output']))
+                message = ('This batch was not executed. Use only the declared tools and their flat names. '
+                           'When no search tool remains, answer from the numbered sources already returned. '
+                           'Do not substitute another tool for exhausted search. Never invent a tool result.')
+                for call in calls:
+                    self.items.append({'type': 'function_call_output', 'call_id': call['call_id'],
+                                       'output': json.dumps({'error': 'tool_not_available', 'message': message})})
+                continue
+            if client_calls and not search_calls:
                 # Return real function calls to the client. This server never
                 # executes arbitrary client code or invents a tool result.
                 break
             self.items.extend(native_items(response['output']))
-            for call in calls:
+            history_added = True
+            for call in search_calls:
                 if len(self.web) >= self.options['limit'] or self.remaining <= 0:
                     raise SearchError(422, 'Search or output budget exhausted before an answer.', 'web_search_limit')
                 query = query_args(call.get('arguments'))
@@ -435,6 +474,13 @@ class Session:
                 self.event('response.output_item.done', output_index=index, item=item)
                 self.items.append({'type': 'function_call_output', 'call_id': call['call_id'],
                                    'output': json.dumps({'query': query, 'sources': numbered})})
+            if client_calls:
+                # Some models emit a mixed batch despite sequential mode.
+                # Execute only server-owned searches, then yield the untouched
+                # client calls. Their real results arrive in the next request.
+                response['output'] = [x for x in response['output'] if x not in search_calls]
+                print('Responses mixed tool handoff:', len(search_calls), 'server searches;', len(client_calls), 'client calls', flush=True)
+                break
             if self.remaining <= 0:
                 raise SearchError(422, 'Increase max_output_tokens to leave room for the search answer.', 'web_search_limit')
         else:
@@ -450,7 +496,8 @@ class Session:
         if final['status'] not in ('completed', 'incomplete'):
             raise SearchError(502, 'The local model could not finish its answer.', 'local_response_error')
         if final['store']:
-            final['store'] = HISTORY.put(self.id, {'input': self.items+native_items(response['output']), 'sources': self.sources, 'upstream_previous': self.upstream_previous})
+            tail = [] if history_added else native_items(response['output'])
+            final['store'] = HISTORY.put(self.id, {'input': self.items+tail, 'sources': self.sources, 'upstream_previous': self.upstream_previous})
         return final, output
 
     def finish(self, final, output):
@@ -585,7 +632,9 @@ def serve(handler, data, hub_port):
         print('Responses search failed:', error.code, 'HTTP', error.status, flush=True)
         if streaming and started:
             try:
-                session.event('error', code=error.code, message=str(error), param=None)
+                # HTTP 200 headers are already sent. Keep the failure on the
+                # typed Responses lifecycle, so a generic SSE `error` does not
+                # abort SDK iteration before response.failed can be read.
                 failed = {**session.base, 'status': 'failed', 'error': {'code': 'server_error', 'message': str(error)},
                           'output': session.web, 'usage': session.usage}
                 session.event('response.failed', response=failed)

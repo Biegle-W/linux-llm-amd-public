@@ -9,8 +9,8 @@
   "server_after_mixed_fix": "Actual iPhone searches completed; user reported insufficient dated-information answer",
   "original_question": "what is the news today",
   "tests": {
-    "focused_each_checkout": 64,
-    "search_news_client_contracts": 51,
+    "focused_each_checkout": 69,
+    "search_news_client_contracts": 56,
     "native_responses": 13,
     "private_pass": true,
     "public_pass": true
@@ -178,5 +178,50 @@
     "client_cancellation_logged": true,
     "cold_model_reload_for_test": false,
     "actual_phone_cold_load_cancellation_cause_confirmed": false
+  },
+  "later_observed_phone_failure": "HTTP code0 reported; gateway unexpected_tool_call502 before recovery build",
+  "tool_recovery": {
+    "mixed_batch": "Only server searches execute; client calls yielded with correct cached history",
+    "known_aliases_normalized_to_supported_names": true,
+    "invalid_call_correction_rounds": 1,
+    "undeclared_function_execution": false,
+    "provider_search_budget_unchanged": 3,
+    "typed_terminal_failure": "response.failed; no prior generic SSE error"
+  },
+  "final_selected_SGLang_question": {
+    "status": "completed",
+    "seconds": 3.944,
+    "events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 2,
+      "response.web_search_call.in_progress": 1,
+      "response.web_search_call.searching": 1,
+      "response.web_search_call.completed": 1,
+      "response.output_item.done": 2,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 3,
+      "response.output_text.annotation.added": 3,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.completed": 1
+    },
+    "text_chars": 521,
+    "citations": 3,
+    "has_date_in_answer": true,
+    "client_calls": 0,
+    "strict_SDK_schema": true,
+    "news_rss_sources": 5
+  },
+  "synthetic_first_call_native_backend_recovery_test": {
+    "test": "synthetic_invalid_call_then_real_guarded_SGLang_recovery",
+    "first_call_is_fixture_not_user_or_model_output": true,
+    "status": "completed",
+    "real_guarded_model_rounds": 2,
+    "provider_searches": 1,
+    "citations": 5,
+    "text_chars": 1078,
+    "strict_SDK_schema": true,
+    "seconds": 5.078
   }
 }

@@ -2,7 +2,7 @@
 
 ## OpenCat mixed tools and dated news — October 30
 
-[Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 64 focused checks per checkout; exact current-news streaming answer with dated sources passes. Final iPhone confirmation is pending.
+[Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 69 focused checks per checkout; exact current-news streaming answer with dated sources passes. Final iPhone confirmation is pending.
 
 ## Free OpenCat search service — October 30
 

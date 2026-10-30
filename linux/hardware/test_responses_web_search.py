@@ -93,10 +93,32 @@ class Contracts(unittest.TestCase):
  def test_reserved_duplicate_or_invalid_client_function_name_is_rejected(self):
   for tools in [[{'type':'web_search'},{**mixed_tools()[0],'name':w.FUNCTION}],mixed_tools()+mixed_tools()[:1],[{'type':'web_search'},{'type':'function','name':'bad name'}]]:
    with self.subTest(tools=tools),self.assertRaises(w.SearchError):w.Session(request(tools=tools),Mock(),Mock())
- def test_server_and_client_calls_cannot_be_executed_as_a_parallel_batch(self):
-  provider=Mock();s=w.Session(request(tools=mixed_tools()),lambda _:reply([call(),client_call()]),provider)
-  with self.assertRaises(w.SearchError):s.run()
-  provider.assert_not_called()
+ def test_mixed_batch_executes_only_server_search_and_yields_client_call(self):
+  provider=Mock(return_value=[SOURCE]);s=w.Session(request(tools=mixed_tools()),lambda _:reply([call(),client_call()]),provider)
+  final,output=s.run();provider.assert_called_once();validate_response(final)
+  self.assertEqual(output,[client_call()]);self.assertEqual([x['type'] for x in final['output']],['web_search_call','function_call'])
+  history=w.HISTORY.get(final['id'])['input'];self.assertEqual(sum(x.get('call_id')=='client1' and x.get('type')=='function_call' for x in history),1)
+  backend=Mock(return_value=reply([answer()]));w.Session(request(tools=mixed_tools(),previous_response_id=final['id'],input=[{'type':'function_call_output','call_id':'client1','output':'Real client result'}]),backend).run()
+  self.assertEqual(sum(x.get('call_id')=='client1' and x.get('type')=='function_call' for x in backend.call_args.args[0]['input']),1)
+ def test_mixed_batch_stream_has_search_and_client_arguments_with_valid_final(self):
+  events=[];s=w.Session(request(tools=mixed_tools()),lambda _:reply([call(),client_call()]),lambda *_:[SOURCE],emit=lambda k,v:events.append((k,v)))
+  s.start();final,output=s.run();s.finish(final,output);validate_response(events[-1][1],event=True)
+  self.assertIn('response.web_search_call.completed',[k for k,_ in events]);self.assertIn('response.function_call_arguments.done',[k for k,_ in events])
+ def test_namespaced_declared_tools_and_builtin_web_alias_are_normalized(self):
+  for name in ['functions.'+w.FUNCTION,'tools.'+w.FUNCTION,'web_search']:
+   item={**call(),'name':name};provider=Mock(return_value=[SOURCE]);s=w.Session(request(),Mock(side_effect=[reply([item]),reply([answer()])]),provider)
+   final,_=s.run();provider.assert_called_once();validate_response(final)
+  item={**client_call(),'name':'functions.client_lookup'};s=w.Session(request(tools=mixed_tools()),lambda _:reply([item]));final,_=s.run();self.assertEqual(final['output'][0]['name'],'client_lookup')
+ def test_unknown_tool_gets_one_error_feedback_without_being_executed(self):
+  bad={**call(),'name':'undeclared_tool'};responses=iter([reply([bad]),reply([call()]),reply([answer()])]);snapshots=[]
+  def invoke(payload):snapshots.append(deepcopy(payload));return next(responses)
+  backend=Mock(side_effect=invoke);provider=Mock(return_value=[SOURCE])
+  final,_=w.Session(request(),backend,provider).run();provider.assert_called_once();self.assertEqual(backend.call_count,3);validate_response(final)
+  feedback=snapshots[1]['input'][-1];self.assertEqual(json.loads(feedback['output'])['error'],'tool_not_available')
+ def test_repeated_unknown_tool_is_bounded_and_never_executed(self):
+  bad={**call(),'name':'undeclared_tool'};backend=Mock(return_value=reply([bad]));provider=Mock()
+  with self.assertRaises(w.SearchError) as error:w.Session(request(),backend,provider).run()
+  self.assertEqual(error.exception.code,'unexpected_tool_call');self.assertEqual(backend.call_count,2);provider.assert_not_called()
  def test_tool_diagnostics_omit_custom_names_descriptions_and_input(self):
   tool={**mixed_tools()[0],'name':'private_function_name','description':'private description'}
   with patch('builtins.print') as log:w.Session(request(tools=[tool,{'type':'web_search'}],input='private prompt'),Mock())
@@ -158,10 +180,10 @@ class Contracts(unittest.TestCase):
   clock=[0];h=w.History(limit=256,ttl=1,clock=lambda:clock[0]);self.assertTrue(h.put('a',{'v':'one'}));x=h.get('a');x['v']='changed';self.assertEqual(h.get('a')['v'],'one')
   self.assertFalse(h.put('big',{'v':'x'*500}));clock[0]=2
   with self.assertRaises(w.SearchError):h.get('a')
- def test_search_round_limit_does_not_make_extra_provider_calls(self):
-  b=Mock(side_effect=[reply([call()]),reply([call()])]);p=Mock(return_value=[SOURCE]);s=w.Session(request(max_tool_calls=1),b,p)
-  with self.assertRaises(w.SearchError):s.run()
-  p.assert_called_once();self.assertEqual(b.call_args.args[0]['tool_choice'],'none')
+ def test_search_round_limit_corrects_extra_call_without_an_extra_provider_query(self):
+  b=Mock(side_effect=[reply([call()]),reply([{**call(),'call_id':'c2'}]),reply([answer()])]);p=Mock(return_value=[SOURCE]);s=w.Session(request(max_tool_calls=1),b,p)
+  final,_=s.run();validate_response(final)
+  p.assert_called_once();self.assertEqual(b.call_args.args[0]['tool_choice'],'none');self.assertEqual(b.call_count,3)
  def test_unsupported_controls_fail_before_query(self):
   for tool in [{'type':'web_search','external_web_access':False},{'type':'web_search','search_content_types':['image']},{'type':'web_search','filters':{'allowed_domains':['https://bad/']}}]:
    with self.subTest(tool=tool),self.assertRaises(w.SearchError):w.Session(request(tools=[tool]),Mock(),Mock())
@@ -298,5 +320,13 @@ class HTTP(unittest.TestCase):
   with patch.object(w,'provider_search',side_effect=w.SearchError(503,'Providerunavailable','web_search_provider_error')):
    status,_,body=self.request(path='/v1/responses',data=request(stream=True))
   self.assertEqual(status,200);self.assertIn(b'response.failed',body);self.assertNotIn(b'event: response.completed',body)
+ def test_sdk_receives_typed_stream_failure_instead_of_a_generic_sse_exception(self):
+  if Response is None:self.skipTest('Optional OpenAI SDK not installed')
+  import openai
+  self.prepare()
+  with patch.object(w,'provider_search',side_effect=w.SearchError(503,'Provider unavailable','web_search_provider_error')):
+   with openai.OpenAI(api_key='fixture-external-secret',base_url=f'http://127.0.0.1:{self.gateway.server_port}/v1',timeout=5,max_retries=0) as client:
+    with client.responses.stream(**request()) as stream:events=list(stream)
+  self.assertEqual(events[-1].type,'response.failed');self.assertEqual(events[-1].response.error.message,'Provider unavailable');self.assertNotIn('error',[e.type for e in events]);self.assertNotIn('response.completed',[e.type for e in events])
 
 if __name__=='__main__':unittest.main()
