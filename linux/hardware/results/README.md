@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## DSH stream activity repair — October 30
+
+GPU-free client adapter and transport validation only. [Report](../../network/API-STREAM-ACTIVITY-FIX-2026-10-30.md) and [curated checks](api-stream-activity-fix-2026-10-30.json). The original real conversation remains unverified.
+
 ## Super INT4 preflight — October 29
 
 Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. [Report](../SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md) and [numeric preflight evidence](super-int4-vllm-preflight-2026-10-29.json).

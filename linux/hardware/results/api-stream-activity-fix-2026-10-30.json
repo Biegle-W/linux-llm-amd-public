@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-30",
+  "status": "repair_active_original_conversation_not_replayed",
+  "runtime": {
+    "dsh": "0.2.1-rc.2",
+    "pi_ai": "1.3.0",
+    "node": "24.21.0"
+  },
+  "reported_timeout_ms": 300000,
+  "composed_local_profile_timeout_ms": 86400000,
+  "original_provider_model_route_confirmed": false,
+  "cold_bolt_log": {
+    "weight_load_seconds": 874.3,
+    "engine_initialization_seconds": 97.9,
+    "causal_storage_failure_established": false
+  },
+  "adapter_reproduction": {
+    "synthetic_idle_timeout_ms": 500,
+    "keepalive_interval_ms": 50,
+    "completion_delay_ms": 1400,
+    "original_outcome": "idle_timeout",
+    "original_elapsed_ms": 504,
+    "repaired_installed_outcome": "completed",
+    "repaired_elapsed_ms": 1417,
+    "repaired_chunks": [
+      "block-start",
+      "text-delta",
+      "block-end",
+      "usage",
+      "finish"
+    ]
+  },
+  "transport_regression_checks_passed": 4,
+  "existing_frontend_cpu_regressions_passed": 5,
+  "authenticated_frontend_status": 200,
+  "gateway_health_status": 200,
+  "gateway_catalog_status": 200,
+  "enabled_profiles": 8,
+  "timeout_values_changed": false,
+  "inference_guards_changed": false,
+  "engine_profiles_changed": false,
+  "model_tests_run": false,
+  "source_checksums": {
+    "original_sha256": "99b5c20830a52f69641df8a18a39206079b0c725201958cce2c4a934f1d4f7cd",
+    "patched_sha256": "b9c4de3167a5cd395bdb1c21e16aa86506af4dee2c1e0cd74b18972918a08f3a"
+  },
+  "limitations": [
+    "Synthetic adapter/SDK validation; original real conversation not replayed.",
+    "Selected failing provider/model route still unconfirmed.",
+    "No new GPU performance or memory qualification."
+  ]
+}

@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## DSH stream activity repair — October 30
+
+The DSH pi-ai HTTP adapter now counts incoming SSE activity, including loading comments, before SDK parsing. Delayed-stream, silence/cancellation/error regressions and authenticated frontend readiness pass. Timeout values and inference guards are unchanged; the original failing provider/model request still needs confirmation. No model worker or test GPU lock was created. [Record](API-STREAM-ACTIVITY-FIX-2026-10-30.md).
+
 ## Super INT4 vLLM preflight — October 29
 
 Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. Download retained; no full-model worker launched and no task GPU lock remains. Further testing needs sufficient available physical RAM and a fresh guarded admission. [Report](../hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).

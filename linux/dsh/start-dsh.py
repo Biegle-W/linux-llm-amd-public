@@ -15,6 +15,7 @@ for sig in (signal.SIGTERM, signal.SIGHUP):
 try:
     if reuse_existing():
         raise SystemExit(0)
+    subprocess.run([sys.executable, str(ROOT / 'apply-stream-activity.py')], check=True)
     configure()
     print('Choose a local provider/model in DSH; the model hub starts its backend on your first message.', flush=True)
     print('Closing this terminal stops DSH; the backend stays running in its own terminal.', flush=True)
