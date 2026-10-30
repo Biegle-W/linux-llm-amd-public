@@ -11,6 +11,30 @@ GPU headroom, ownership and thermal protections remain. Manually pinned model
 runtimes are excluded from global update comparisons and reported separately.
 Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
 
+## 2026-10-30
+
+- **llama.cpp** `eb4e244be77a` → `e0f142d5ddc1`: **skipped (production baseline failed)**. nemotron-3.5-super-iq3
+- **Maya** `f26d8bab43f9` → `cbaaec5d70fd`: **promoted**. all gates passed
+
+Maya gates (baseline = production the same night):
+
+| Model | Metric | Baseline | Candidate | Change |
+|---|---|---:|---:|---:|
+| policy | swap_policy | | loading-swap-v4 | |
+| policy | worker_swap_limit_bytes | | uncapped | |
+| lifecycle | max_worker_swap_bytes | | 0 | |
+| lifecycle | max_nonresident_vram_bytes | | 0 | |
+| lifecycle | verdict | | | pass |
+| glm-5.3-flash-maya | prefill_tps | 360.700 | 368.200 | +2.1% |
+| glm-5.3-flash-maya | code_decode_tps | 5.849 | 6.407 | +9.5% |
+| glm-5.3-flash-maya | prose_decode_tps | 5.598 | 6.477 | +15.7% |
+| glm-5.3-flash-maya | code_ttft_s | 0.277 | 0.216 | -22.0% |
+| glm-5.3-flash-maya | prose_ttft_s | 0.426 | 0.352 | -17.4% |
+| glm-5.3-flash-maya | markers | 3.000 | 3.000 |  |
+| glm-5.3-flash-maya | max_worker_swap_bytes | | 0 | |
+| glm-5.3-flash-maya | max_nonresident_vram_bytes | | 0 | |
+| glm-5.3-flash-maya | verdict | | | pass |
+
 ## 2026-10-29 — SGLang guard and ROCm fix
 
 Qwen27B/SGLang is qualified and enabled on unchanged upstream `f84475ccf593` plus a replayable ROCm multicast dispatch fix. The original graph-enabled 160K DFlash2 profile passed isolated and normal API qualification with zero eviction; actual spill protection remains strict. Four RAM-blocked routes remain paused. [Fix and verification](SGLANG-VRAM-GUARD-FIX-2026-10-29.md).

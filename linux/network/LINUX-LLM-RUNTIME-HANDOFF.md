@@ -349,7 +349,7 @@ cleanup remain required. No engine was promoted or benchmark rerun for this poli
 change. Nightly updates remain paused.
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-29 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-10-30 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
@@ -357,12 +357,12 @@ change. Nightly updates remain paused.
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
-| Maya | `f26d8bab43f9` |
+| Maya | `cbaaec5d70fd` |
 | Strata DeepSeek | `8183c6b67162` |
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: Strata rejected.
+Last run: llama.cpp skipped (production baseline failed); Maya promoted.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
