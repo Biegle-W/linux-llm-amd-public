@@ -1,5 +1,7 @@
 # OpenCat Responses: executable web search — October 30, 2026
 
+**Compatibility update:** [Mixed client functions and dated news](OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md) expands the original tool-list scope and adds actual RSS publication dates. The earlier results below remain historical evidence.
+
 **Provider update:** the later [free SearXNG service](OPENCAT-FREE-SEARCH-2026-10-30.md) replaces the paid-provider path below. The original verification remains historical evidence.
 
 The authenticated local API now executes `web_search`/`web_search_preview` requests using the existing configured DSH DeepSeek Search API provider. Live JSON and SSE requests on Qwen27B/vLLM return real search activity and URL citations. Search-history continuation and ordinary Responses also pass. Both checkouts pass 90 relevant CPU/HTTP/SDK checks. A successful retry in the iPhone app itself remains unconfirmed.

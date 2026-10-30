@@ -1,0 +1,33 @@
+# OpenCat mixed tools and dated news — October 30, 2026
+
+The iPhone logs identified a concrete request failure: OpenCat declared two client function tools alongside `web_search`, while the local bridge accepted only one standalone web tool. It returned HTTP 400 `unsupported_web_tools`; a later request without search reached the model, which could then say it could not browse. The mixed-tool request is now accepted and its client function definitions are preserved.
+
+The user then reported that search executed but the model said the tool was not returning dated information. The original question was “what is the news today”. A neutral date-filtered general-search probe returned no results and a Brave rate-limit error. A public news RSS probe returned dated items. The local service now has a separate dated-news path, and the exact question produces a complete dated answer in the functional test. Final iPhone confirmation is pending.
+
+## Tool compatibility
+
+The bridge exposes its internal free web-search function together with the declared client functions. Search calls execute through SearXNG and the unchanged guarded model hub. Client function calls are returned to OpenCat with typed argument delta/done events; the server never executes arbitrary client functions or fabricates their results. A subsequent real client result can continue through the bounded ephemeral response cache.
+
+Auto, none, required and named web/function choices retain their meanings. A required mixed-tool request can hand off a declared client function; a specifically required web search still cannot silently become an unsearched answer. Function names must be valid, unique and distinct from the internal search name. Equivalent preview/current search aliases can share one executor; conflicting restrictions remain an explicit error. Other hosted tools remain unsupported. Sequential search mode rejects a model output that mixes a server search and client handoff in one batch.
+
+Diagnostics record only bounded tool-type counts, choice kind, search/source counts, status and answer-shape counts. They exclude tool names, descriptions, arguments, prompts, answer text, URLs and credentials. The protocol metadata was sufficient to identify the actual iPhone tool combination.
+
+## Dated information without a paid API
+
+The existing loopback SearXNG service keeps its keyless general engines and adds `local_news_rss.py`, mounted read-only into the pinned official image. This engine searches the public Google News RSS feed. It sends only the selected query, date-range operator and feed locale parameters; no conversation or API credential is sent. No paid fallback is configured.
+
+The local model may select `general` or `news`, and an optional day/month/year range. RSS `pubDate` becomes the result's publication date and is also included in its snippet. Missing/invalid dates are skipped; retrieval time is never substituted for publication time. Parsing is bounded to 1 MiB and 50 items, and returned links must belong to the feed host. The bridge still limits the number and size of results supplied to the model. News citations use the real RSS article links, which may open through the news aggregator.
+
+The answer guidance asks the model to use dated news for current events, answer supported findings with dates/citations, and state evidence gaps without refusing the whole request. News RSS supplies headlines, publication metadata and short descriptions; it does not prove an article's complete contents or independent accuracy. General engines may rate-limit or return undated pages. Source dates, dates mentioned in a story and retrieval dates remain different concepts.
+
+Run `python3 network/search/start-search.py` from this checkout for a fresh setup. The tracked template includes the news engine. Existing private settings are preserved by the bootstrap; upgrades need the new engine stanza and `keep_only` entry merged into the existing settings, as completed on this host. The mounted engine file and Compose definition must also be current. The generated local secret is preserved and stays under ignored `dsh/data/search/`.
+
+## Verification and preserved state
+
+Sixty focused CPU/HTTP/SDK checks pass per checkout: 47 search/news/client-tool contracts and 13 native Responses checks. They cover the observed two-function-plus-web combination, client handoff/history/events, required/none behavior, conflicting aliases, privacy, publication-date parsing, date controls, response bounds, authentication and existing guard rejections.
+
+Live checks verify mixed-tool JSON search, streaming search with citations, client-function handoff without server execution, and its real-result continuation. An initial general-search streaming run did not meet its citation assertion; a focused retry passed and the initial failure is retained in private diagnostics. After the dated-news update, a prior-refusal reproduction returns a complete dated answer. The exact “what is the news today” streaming request completes with two searches, ten RSS source links, ten citation annotations, a dated answer, zero client handoffs and strict SDK schema validation. These are functional observations, not performance qualification.
+
+Only idle API gateways and the owned CPU search container were refreshed. Hub ownership, model workers, API authentication, RAM/VRAM/swap protections, engine pins, held profiles, other services and schedules remain. Search is still free and local-service mediated, with no search key or paid API. The container retains its loopback-only port10001, one CPU / 384 MiB ceiling, no GPU or container swap, no persistent query logging and restart-unless-stopped policy. No trial job or task GPU reservation remains.
+
+[Curated evidence](../hardware/results/opencat-tools-dated-news-2026-10-30.json). Earlier [free-service setup](OPENCAT-FREE-SEARCH-2026-10-30.md) and [original bridge evidence](OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md) remain historical. The mixed-tool implementation follows the [official OpenAI function-calling contract](https://developers.openai.com/api/docs/guides/function-calling).

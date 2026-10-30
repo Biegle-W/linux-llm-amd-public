@@ -1,6 +1,6 @@
 # Linux LLM AMD — public reference
 
-**October 30 free OpenCat web search:** self-hosted SearXNG replaces the paid search API. Live vLLM JSON/SSE searches with citations, prior-refusal recovery, history and native Responses pass; 39 focused checks pass per checkout. Retry OpenCat in a fresh conversation. [Setup, verification and limits](linux/network/OPENCAT-FREE-SEARCH-2026-10-30.md).
+**October 30 OpenCat search compatibility and dated news:** the actual two-function-plus-web request no longer fails HTTP400. Free RSS search supplies publication dates; the exact current-news question returns a dated answer with citations, and 60 focused checks pass per checkout. Final iPhone confirmation is pending. [Fix, evidence and limits](linux/network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).
 
 **October 30 Strata RDNA3/32 GB trial:** The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. The isolated candidate and all three attempts are preserved; production selection and other RAM holds remain. [Measured scope and cleanup](linux/hardware/STRATA-RDNA3-32GB-TRIAL-2026-10-30.md).
 

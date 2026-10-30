@@ -15,6 +15,7 @@ services:
       GRANIAN_LOG_LEVEL: "error"
     volumes:
       - "${LOCAL_LLM_SEARCH_DATA}/config:/etc/searxng:ro"
+      - "./local_news_rss.py:/usr/local/searxng/searx/engines/local_news_rss.py:ro"
     tmpfs:
       - /tmp:size=32m,mode=1777
       - /var/cache/searxng:size=32m,mode=1777

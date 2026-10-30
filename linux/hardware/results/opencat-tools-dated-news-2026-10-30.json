@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-30",
+  "scope": "OpenCat mixed client functions plus free web search and dated-news answers",
+  "observed_client_tool_types": {
+    "function": 2,
+    "web_search": 1
+  },
+  "observed_pre_fix_error": "HTTP400 unsupported_web_tools, followed by no-search fallback",
+  "server_after_mixed_fix": "Actual iPhone searches completed; user reported insufficient dated-information answer",
+  "original_question": "what is the news today",
+  "tests": {
+    "focused_each_checkout": 60,
+    "search_news_client_contracts": 47,
+    "native_responses": 13,
+    "private_pass": true,
+    "public_pass": true
+  },
+  "provider": "Loopback SearXNG; keyless general search and public Google News RSS",
+  "search_api_key_required": false,
+  "paid_fallback": false,
+  "dated_probe": {
+    "HTTP": 200,
+    "results": 34,
+    "dated_results": 34,
+    "unresponsive_engines": []
+  },
+  "live_mixed_tool_contracts": [
+    {
+      "kind": "mixed_function_plus_search_SSE_auto",
+      "status": "completed",
+      "events": {
+        "response.created": 1,
+        "response.in_progress": 1,
+        "response.output_item.added": 4,
+        "response.web_search_call.in_progress": 3,
+        "response.web_search_call.searching": 3,
+        "response.web_search_call.completed": 3,
+        "response.output_item.done": 4,
+        "response.content_part.added": 1,
+        "response.output_text.delta": 6,
+        "response.output_text.annotation.added": 7,
+        "response.output_text.done": 1,
+        "response.content_part.done": 1,
+        "response.completed": 1
+      },
+      "seconds": 8.632,
+      "strict_SDK_schema": true
+    },
+    {
+      "kind": "client_function_SSE_handoff_without_server_execution",
+      "status": "completed",
+      "events": {
+        "response.created": 1,
+        "response.in_progress": 1,
+        "response.output_item.added": 1,
+        "response.function_call_arguments.delta": 1,
+        "response.function_call_arguments.done": 1,
+        "response.output_item.done": 1,
+        "response.completed": 1
+      },
+      "search_calls": 0,
+      "strict_SDK_schema": true
+    },
+    {
+      "kind": "client_function_result_history",
+      "status": "completed",
+      "text_chars": 48,
+      "search_calls": 0
+    }
+  ],
+  "dated_prior_refusal_reproduction": {
+    "status": "completed",
+    "seconds": 7.034,
+    "events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 2,
+      "response.web_search_call.in_progress": 1,
+      "response.web_search_call.searching": 1,
+      "response.web_search_call.completed": 1,
+      "response.output_item.done": 2,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 6,
+      "response.output_text.annotation.added": 5,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.completed": 1
+    },
+    "text_chars": 1488,
+    "citations": 5,
+    "has_date_in_answer": true,
+    "client_calls": 0,
+    "strict_SDK_schema": true
+  },
+  "exact_today_news_question": {
+    "status": "completed",
+    "seconds": 7.643,
+    "events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 3,
+      "response.web_search_call.in_progress": 2,
+      "response.web_search_call.searching": 2,
+      "response.web_search_call.completed": 2,
+      "response.output_item.done": 3,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 5,
+      "response.output_text.annotation.added": 10,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.completed": 1
+    },
+    "text_chars": 1210,
+    "citations": 10,
+    "has_date_in_answer": true,
+    "client_calls": 0,
+    "strict_SDK_schema": true,
+    "news_rss_sources": 10
+  },
+  "retained_failure": "Initial general-search mixed streaming fixture completed but did not meet citation assertion; focused retry passed before dated-news update",
+  "iphone_final_dated_answer_confirmed": false,
+  "date_provenance": "RSS item pubDate; missing/invalid dates skipped, never replaced by retrieval time",
+  "bounds": {
+    "RSS_bytes": 1048576,
+    "RSS_items": 50,
+    "tool_definitions": 64,
+    "searches_per_request": 3,
+    "concurrent_bridge_requests": 2,
+    "container_memory_MiB": 384,
+    "container_cpus": 1
+  },
+  "preserved": [
+    "Authentication and source-network restrictions",
+    "Guarded hub admission/worker ownership",
+    "All RAM/VRAM/swap protections",
+    "Pins, model holds, unrelated services and schedules",
+    "Free provider with no paid fallback"
+  ],
+  "limits": [
+    "News results are headline/publication metadata and short descriptions, not full-article verification",
+    "General engines may rate-limit or omit dates",
+    "News citations may open through aggregator links",
+    "Other hosted tools remain unsupported",
+    "Client functions execute only at the client",
+    "History remains ephemeral and bounded"
+  ]
+}

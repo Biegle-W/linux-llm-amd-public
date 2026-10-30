@@ -1,5 +1,7 @@
 # OpenCat free web search — October 30, 2026
 
+**Compatibility update:** [Mixed client functions and dated news](OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md) expands the original tool-list scope and adds actual RSS publication dates. The earlier results below remain historical evidence.
+
 The owner reported that OpenCat still said it could not browse and requested a free search service without a paid API. Search-enabled Responses now use self-hosted SearXNG on loopback. The bridge performs no search credential lookup and has no paid fallback. The authenticated gateway continues to require the existing local API key.
 
 ## Service and request path

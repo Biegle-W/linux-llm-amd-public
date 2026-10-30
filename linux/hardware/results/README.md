@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## OpenCat mixed tools and dated news — October 30
+
+[Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 60 focused checks per checkout; exact current-news streaming answer with dated sources passes. Final iPhone confirmation is pending.
+
 ## Free OpenCat search service — October 30
 
 [Keyless service verification](../../network/OPENCAT-FREE-SEARCH-2026-10-30.md) and [curated checks](opencat-free-search-2026-10-30.json): 39 focused checks per checkout and live vLLM JSON/SSE/citation/history checks pass. A new iPhone retry remains unconfirmed.

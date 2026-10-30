@@ -7,8 +7,9 @@ import sys
 import unittest
 from unittest.mock import Mock, patch
 ROOT=Path(__file__).resolve().parents[1]
-sys.path[:0]=[str(ROOT/'dsh'),str(ROOT/'hardware')]
+sys.path[:0]=[str(ROOT/'dsh'),str(ROOT/'hardware'),str(ROOT/'network/search')]
 import responses_web_search as w
+import local_news_rss as news
 import test_router_admission as fixture
 try:
  from openai.types.responses import Response, ResponseCompletedEvent
@@ -30,6 +31,12 @@ def answer():
  return {'id':'msg1','type':'message','role':'assistant','status':'completed','content':[{'type':'output_text','text':'It was released October7,2025.[1]','annotations':[],'logprobs':[]}]}
 def request(**values):
  return {'model':'sage-a1.5','input':'Search the official Python release date.','tools':[{'type':'web_search'}],'max_output_tokens':256,**values}
+def mixed_tools():
+ return [{'type':'function','name':'client_lookup','description':'Executed by the client.',
+          'parameters':{'type':'object','properties':{},'additionalProperties':False},'strict':False},
+         {'type':'web_search_preview'}]
+def client_call():
+ return {**call(),'name':'client_lookup','arguments':'{}','call_id':'client1','id':'fc_client1'}
 
 class Contracts(unittest.TestCase):
  def setUp(self):
@@ -45,6 +52,70 @@ class Contracts(unittest.TestCase):
  def test_forced_web_choice_normalizes_to_sdk_compatible_required(self):
   s=w.Session(request(tool_choice={'type':'web_search'}),Mock(side_effect=[reply([call()]),reply([answer()])]),lambda *_:[SOURCE])
   final,_=s.run();self.assertEqual(final['tool_choice'],'required');validate_response(final)
+ def test_search_accepts_client_functions_without_dropping_them(self):
+  backend=Mock(side_effect=[reply([call()]),reply([answer()])]);provider=Mock(return_value=[SOURCE])
+  s=w.Session(request(tools=mixed_tools()),backend,provider);final,_=s.run();validate_response(final)
+  provider.assert_called_once();self.assertEqual(backend.call_args_list[0].args[0]['tools'][0],mixed_tools()[0]);self.assertEqual(final['tools'],mixed_tools())
+ def test_equivalent_preview_and_current_search_declarations_use_one_executor(self):
+  provider=Mock(return_value=[SOURCE]);tools=[{'type':'web_search'},{'type':'web_search_preview','search_context_size':'medium'}]
+  s=w.Session(request(tools=tools),Mock(side_effect=[reply([call()]),reply([answer()])]),provider);final,_=s.run();validate_response(final)
+  provider.assert_called_once();self.assertEqual(sum(x['type']=='web_search_call' for x in final['output']),1)
+ def test_conflicting_duplicate_search_filters_are_not_weakened(self):
+  tools=[{'type':'web_search','filters':{'allowed_domains':['python.org']}},{'type':'web_search_preview'}]
+  with self.assertRaises(w.SearchError) as error:w.Session(request(tools=tools),Mock(),Mock())
+  self.assertEqual(error.exception.code,'conflicting_search_tools')
+ def test_client_function_is_returned_without_server_execution_or_fake_search(self):
+  backend=Mock(return_value=reply([client_call()]));provider=Mock()
+  s=w.Session(request(tools=mixed_tools()),backend,provider);final,output=s.run();validate_response(final)
+  provider.assert_not_called();self.assertEqual(final['output'],[client_call()]);self.assertEqual(output,[client_call()]);self.assertEqual(backend.call_count,1)
+ def test_client_function_history_accepts_its_real_result(self):
+  s=w.Session(request(tools=mixed_tools()),lambda _:reply([client_call()]));final,_=s.run()
+  backend=Mock(return_value=reply([answer()]));provider=Mock()
+  w.Session(request(tools=mixed_tools(),previous_response_id=final['id'],input=[{'type':'function_call_output','call_id':'client1','output':'Client result'}]),backend,provider).run()
+  items=backend.call_args.args[0]['input'];self.assertEqual(sum(x.get('call_id')=='client1' and x.get('type')=='function_call' for x in items),1)
+  self.assertEqual(items[-1]['output'],'Client result');provider.assert_not_called()
+ def test_client_function_stream_emits_real_arguments_and_sdk_final(self):
+  events=[];s=w.Session(request(tools=mixed_tools()),lambda _:reply([client_call()]),emit=lambda k,v:events.append((k,v)))
+  s.start();final,output=s.run();s.finish(final,output);validate_response(events[-1][1],event=True)
+  self.assertIn(('response.function_call_arguments.delta','{}'),[(k,v.get('delta')) for k,v in events])
+  self.assertEqual([v['arguments'] for k,v in events if k=='response.function_call_arguments.done'],['{}'])
+  self.assertNotIn('response.web_search_call.completed',[k for k,_ in events])
+ def test_mixed_required_choice_can_handoff_a_client_function(self):
+  backend=Mock(return_value=reply([client_call()]));s=w.Session(request(tools=mixed_tools(),tool_choice='required'),backend)
+  final,_=s.run();self.assertEqual(backend.call_args.args[0]['tool_choice'],'required');validate_response(final)
+ def test_forced_client_function_does_not_search(self):
+  backend=Mock(return_value=reply([client_call()]));provider=Mock();choice={'type':'function','name':'client_lookup'}
+  s=w.Session(request(tools=mixed_tools(),tool_choice=choice),backend,provider);s.run();provider.assert_not_called()
+  self.assertEqual(backend.call_args.args[0]['tool_choice'],choice);self.assertEqual(backend.call_args.args[0]['tools'],mixed_tools()[:1])
+ def test_none_disables_search_and_client_functions(self):
+  backend=Mock(return_value=reply([answer()]));provider=Mock()
+  w.Session(request(tools=mixed_tools(),tool_choice='none'),backend,provider).run();provider.assert_not_called();self.assertEqual(backend.call_args.args[0]['tools'],[])
+ def test_reserved_duplicate_or_invalid_client_function_name_is_rejected(self):
+  for tools in [[{'type':'web_search'},{**mixed_tools()[0],'name':w.FUNCTION}],mixed_tools()+mixed_tools()[:1],[{'type':'web_search'},{'type':'function','name':'bad name'}]]:
+   with self.subTest(tools=tools),self.assertRaises(w.SearchError):w.Session(request(tools=tools),Mock(),Mock())
+ def test_server_and_client_calls_cannot_be_executed_as_a_parallel_batch(self):
+  provider=Mock();s=w.Session(request(tools=mixed_tools()),lambda _:reply([call(),client_call()]),provider)
+  with self.assertRaises(w.SearchError):s.run()
+  provider.assert_not_called()
+ def test_tool_diagnostics_omit_custom_names_descriptions_and_input(self):
+  tool={**mixed_tools()[0],'name':'private_function_name','description':'private description'}
+  with patch('builtins.print') as log:w.Session(request(tools=[tool,{'type':'web_search'}],input='private prompt'),Mock())
+  self.assertIn('function',str(log.call_args));self.assertNotIn('private_',str(log.call_args));self.assertNotIn('private prompt',str(log.call_args));self.assertNotIn('private description',str(log.call_args))
+ def test_model_can_select_dated_news_controls(self):
+  item=call();item['arguments']=json.dumps({'query':'Current release news','category':'news','time_range':'month'})
+  backend=Mock(side_effect=[reply([item]),reply([answer()])]);provider=Mock(return_value=[SOURCE])
+  w.Session(request(),backend,provider).run();self.assertEqual(provider.call_args.args[1]['category'],'news');self.assertEqual(provider.call_args.args[1]['time_range'],'month')
+ def test_invalid_model_search_controls_never_reach_provider(self):
+  for values in [{'category':'private'},{'time_range':'unbounded'}]:
+   item=call();item['arguments']=json.dumps({'query':'query',**values});provider=Mock()
+   with self.assertRaises(w.SearchError):w.Session(request(),lambda _:reply([item]),provider).run()
+   provider.assert_not_called()
+ def test_dated_news_controls_are_sent_only_to_loopback_search(self):
+  from unittest.mock import MagicMock
+  response=MagicMock();response.__enter__.return_value=response;response.read.return_value=b'{"results":[]}'
+  opener=Mock();opener.open.return_value=response
+  with patch.object(w.urllib.request,'build_opener',return_value=opener):w.provider_search('query',{**w.settings(request()),'category':'news','time_range':'day'})
+  form=w.urllib.parse.parse_qs(opener.open.call_args.args[0].data.decode());self.assertEqual(form['categories'],['news']);self.assertEqual(form['time_range'],['day'])
  def test_stream_events_form_sdk_final_with_increasing_sequence_and_no_fake_done(self):
   events=[];s=w.Session(request(),Mock(side_effect=[reply([call()]),reply([answer()])]),lambda *_:[SOURCE],emit=lambda k,v:events.append((k,v)))
   s.start();final,output=s.run();s.finish(final,output)
@@ -132,6 +203,23 @@ class Contracts(unittest.TestCase):
    self.assertFalse(w.public_url(value),value)
   self.assertTrue(w.public_url(SOURCE['url']))
 
+class News(unittest.TestCase):
+ def test_public_rss_request_is_keyless_and_date_range_is_a_query_option(self):
+  params={'headers':{},'time_range':'day'};news.request('topic & url=https://private.example/',params)
+  url=w.urllib.parse.urlsplit(params['url']);self.assertEqual(url.hostname,'news.google.com');self.assertEqual(url.path,'/rss/search')
+  self.assertEqual(w.urllib.parse.parse_qs(url.query)['q'],['topic & url=https://private.example/ when:1d']);self.assertNotIn('Authorization',params['headers'])
+ def test_actual_publication_date_is_preserved_without_retrieval_time_substitution(self):
+  raw=b'<rss><channel><item><title>Release</title><link>https://news.google.com/rss/articles/example</link><pubDate>Fri, 09 Oct 2026 07:00:00 GMT</pubDate><source>Publisher</source><description>Real dated announcement</description></item></channel></rss>'
+  result=news.response(Mock(content=raw))[0];self.assertEqual(result['publishedDate'].isoformat(),'2026-10-09T07:00:00+00:00');self.assertIn('2026-10-09',result['content']);self.assertIn('Publisher',result['content'])
+ def test_missing_or_invalid_dates_and_nonfeed_links_are_not_invented(self):
+  for date,url in [('', 'https://news.google.com/rss/articles/example'),('not a date','https://news.google.com/rss/articles/example'),('Fri, 09 Oct 2026 07:00:00 GMT','http://127.0.0.1/private')]:
+   raw=f'<rss><channel><item><title>Title</title><link>{url}</link><pubDate>{date}</pubDate></item></channel></rss>'.encode()
+   self.assertEqual(news.response(Mock(content=raw)),[])
+ def test_news_response_bytes_and_result_count_are_bounded(self):
+  with self.assertRaises(ValueError):news.response(Mock(content=b'x'*(1024*1024+1)))
+  row='<item><title>Title</title><link>https://news.google.com/rss/articles/example</link><pubDate>Fri, 09 Oct 2026 07:00:00 GMT</pubDate></item>'
+  self.assertEqual(len(news.response(Mock(content=('<rss><channel>'+row*60+'</channel></rss>').encode()))),50)
+
 class HTTP(unittest.TestCase):
  setUp=fixture.HttpTests.setUp
  server=fixture.HttpTests.server
@@ -151,6 +239,16 @@ class HTTP(unittest.TestCase):
    status,_,body=self.request(path='/v1/responses',data=request())
   self.assertEqual(status,200);validate_response(body);provider.assert_called_once();self.assertEqual(len(self.calls),2)
   self.assertTrue(all('Authorization' not in headers for _,headers in self.calls));self.assertEqual(json.loads(body)['output'][0]['type'],'web_search_call')
+ def test_gateway_search_with_client_function_definitions_is_sdk_valid(self):
+  self.prepare()
+  with patch.object(w,'provider_search',return_value=[SOURCE]) as provider:
+   status,_,body=self.request(path='/v1/responses',data=request(tools=mixed_tools()))
+  self.assertEqual(status,200);validate_response(body);provider.assert_called_once();self.assertEqual(self.calls[0][0]['tools'][0],mixed_tools()[0])
+ def test_gateway_matches_observed_two_functions_plus_current_web_search(self):
+  self.prepare();tools=[mixed_tools()[0],{**mixed_tools()[0],'name':'other_client_task'},{'type':'web_search'}]
+  with patch.object(w,'provider_search',return_value=[SOURCE]) as provider:
+   status,_,body=self.request(path='/v1/responses',data=request(tools=tools))
+  self.assertEqual(status,200);validate_response(body);provider.assert_called_once();self.assertEqual(self.calls[0][0]['tools'][:2],tools[:2])
  def test_stream_has_real_search_and_citation_events(self):
   self.prepare()
   with patch.object(w,'provider_search',return_value=[SOURCE]):status,_,body=self.request(path='/v1/responses',data=request(stream=True))

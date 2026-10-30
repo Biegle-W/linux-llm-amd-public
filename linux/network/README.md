@@ -1,6 +1,6 @@
 # Linux LAN and Tailscale client access
 
-Responses text web search now uses free self-hosted SearXNG, without a paid API or search key. [Setup, verification and limits](OPENCAT-FREE-SEARCH-2026-10-30.md).
+Responses text web search uses free self-hosted SearXNG without a paid API or search key. OpenCat mixed client functions are supported, with dated public RSS search for current news. [Current compatibility, evidence and limits](OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).
 
 OpenCat iPhone endpoint compatibility is active. [Supported native Responses scope and verification](OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
 

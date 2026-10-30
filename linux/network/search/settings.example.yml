@@ -3,6 +3,7 @@ use_default_settings:
     keep_only:
       - bing
       - brave
+      - local news RSS
 general:
   debug: false
   instance_name: Local LLM Search
@@ -27,3 +28,9 @@ engines:
     disabled: false
   - name: brave
     disabled: false
+  - name: local news RSS
+    engine: local_news_rss
+    categories: [news]
+    shortcut: lnews
+    disabled: false
+    timeout: 8.0
