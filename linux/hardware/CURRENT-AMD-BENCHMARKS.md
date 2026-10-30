@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 29, 2026
 
+## SGLang telemetry stream repair — October 30
+
+The process-exit sampler fix passes five normal authenticated API streams and 179 CPU/ownership checks per checkout. This adds no new throughput or full-context result. [Repair and evidence](SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).
+
 ## Super INT4 vLLM preflight — October 29
 
 Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. [Completed checks and admission evidence](SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).

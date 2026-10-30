@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-30",
+  "scope": "SGLang sampler repair; scoped authenticated API functional verification",
+  "incident": {
+    "local_time": "03:06:42 EDT",
+    "exception": "KeyError",
+    "original_missing_key": "not logged"
+  },
+  "reproduced": {
+    "missing_key": "VmSwap",
+    "status_state": "R",
+    "PF_EXITING": true,
+    "original_attempts": 1,
+    "original_samples": 2,
+    "fixed_child_exits": 120,
+    "fixed_samples": 3600,
+    "fixed_failures": 0
+  },
+  "regressions": {
+    "private_passed": 179,
+    "public_passed": 179
+  },
+  "api": [
+    {
+      "request": 1,
+      "http_status": 200,
+      "done": true,
+      "finish_reason": "stop",
+      "events": 12,
+      "keepalives": 7,
+      "text_chars": 143,
+      "seconds": 80.645
+    },
+    {
+      "request": 2,
+      "http_status": 200,
+      "done": true,
+      "finish_reason": "stop",
+      "events": 12,
+      "keepalives": 0,
+      "text_chars": 143,
+      "seconds": 0.465
+    },
+    {
+      "request": 3,
+      "http_status": 200,
+      "done": true,
+      "finish_reason": "stop",
+      "events": 12,
+      "keepalives": 0,
+      "text_chars": 143,
+      "seconds": 0.422
+    },
+    {
+      "request": 4,
+      "http_status": 200,
+      "done": true,
+      "finish_reason": "stop",
+      "events": 12,
+      "keepalives": 0,
+      "text_chars": 143,
+      "seconds": 0.427
+    },
+    {
+      "request": 5,
+      "http_status": 200,
+      "done": true,
+      "finish_reason": "stop",
+      "events": 12,
+      "keepalives": 0,
+      "text_chars": 143,
+      "seconds": 0.51
+    }
+  ],
+  "unchanged": [
+    "memory admission and eviction protection",
+    "loading-swap-v4 thresholds",
+    "worker ownership",
+    "runtime pins and context windows",
+    "DSH timeout values",
+    "held model trials"
+  ],
+  "limits": [
+    "Original incident missing key was not recorded; exact exit race reproduced independently",
+    "Original DSH conversation not replayed",
+    "No new performance or full-context qualification"
+  ],
+  "updater": "Existing updater preserved; source fix is used on its next normal launch"
+}

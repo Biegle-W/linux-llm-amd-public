@@ -66,6 +66,8 @@ class Accounting(BoundedPolicyCase):
             root = Path(directory)
             (root / '1').mkdir()
             (root / '1/status').write_text('Name:\tworker\n')
+            fields=['S']+['0']*19;fields[19]='1'
+            (root / '1/stat').write_text('1 (live worker) '+' '.join(fields)+'\n')
             proc = Process(1, 0, '1', ('python3', str(ROOT / 'dsh/vllm-router.py')), '', 'S')
             with self.assertRaises(KeyError):
                 mem.sample_memory({1: proc}, root)

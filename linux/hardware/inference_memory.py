@@ -30,6 +30,21 @@ def worker_swap_limit_bytes():
             if policy == LEGACY_POLICY_NAME else WORKER_SWAP_LIMIT_BYTES)
 
 
+def confirmed_process_exit(member, base):
+    """Missing mm counters are normal only after a verified identity/exit check.
+
+    proc_pid_status obtains task state and mm separately: exit_mm can clear mm
+    while state still reads R. PF_EXITING is set before exit_mm. Never replace
+    a missing live counter with zero or skip its DRM counters without proof.
+    """
+    try:
+        fields = (base/'stat').read_text().rsplit(')', 1)[1].split()
+    except (FileNotFoundError, ProcessLookupError):
+        return True
+    return (fields[19] != member.start or fields[0] in ('Z', 'X') or
+            bool(int(fields[6]) & 0x00000004))  # Linux PF_EXITING
+
+
 def sample_memory(snapshot=None, proc_root=Path('/proc')):
     """Sample owned workers; tag unreadable live counters without hiding failures."""
     snapshot = processes() if snapshot is None else snapshot
@@ -57,6 +72,8 @@ def sample_memory(snapshot=None, proc_root=Path('/proc')):
                 continue
             fields = dict(line.split(':', 1) for line in status.splitlines() if ':' in line)
             if fields.get('State', '').strip()[:1] in ('Z', 'X'):
+                continue
+            if 'VmSwap' not in fields and confirmed_process_exit(snapshot[pid], base):
                 continue
             amount, unit = fields['VmSwap'].split()
             amount = int(amount)
@@ -140,6 +157,27 @@ def lifecycle_failures(record):
     return failures
 
 
+def sampler_error_detail(error):
+    """Safe counter names and source frames only; no messages, paths or locals."""
+    context = getattr(error, 'sampler_context', {})
+    context = context if isinstance(context, dict) else {}
+    pid, fd = context.get('pid'), context.get('fd')
+    reader = context.get('reader', 'aggregate_reading')
+    if reader not in ('process_snapshot', 'proc_status', 'fdinfo_inventory', 'drm_fdinfo', 'aggregate_reading'):
+        reader = 'unknown'
+    missing = error.args[0] if isinstance(error, KeyError) and error.args else None
+    if missing is not None and (not isinstance(missing, str) or missing not in MemoryMonitor.SAFE_COUNTER_NAMES):
+        missing = '<redacted>'
+    frames = [{'file': Path(frame.filename).name if Path(frame.filename).name in
+               ('inference_memory.py', 'backend_switch.py', 'swap_activity.py', 'amd_memory.py') else '<external>',
+               'function': frame.name[:80], 'line': frame.lineno}
+              for frame in traceback.extract_tb(error.__traceback__)[-6:]]
+    return {'error_type': type(error).__name__, 'reader': reader,
+            'pid': pid if type(pid) is int and pid > 0 else None,
+            'fd': fd if type(fd) is int and fd >= 0 else None,
+            'missing_key': missing, 'frames': frames}
+
+
 class MemoryMonitor:
     """Latch sampled peaks/errors from before launch until after worker shutdown.
 
@@ -203,26 +241,10 @@ class MemoryMonitor:
         if len(details) >= self.MAX_ERROR_DETAILS:
             self.summary['sampling_error_details_dropped'] += 1
             return
-        context = getattr(error, 'sampler_context', {})
-        context = context if isinstance(context, dict) else {}
-        pid, fd = context.get('pid'), context.get('fd')
-        reader = context.get('reader', 'aggregate_reading')
-        if reader not in ('process_snapshot', 'proc_status', 'fdinfo_inventory', 'drm_fdinfo', 'aggregate_reading'):
-            reader = 'unknown'
-        missing = error.args[0] if isinstance(error, KeyError) and error.args else None
-        if missing is not None and (not isinstance(missing, str) or missing not in self.SAFE_COUNTER_NAMES):
-            missing = '<redacted>'
-        frames = [{'file': Path(frame.filename).name if Path(frame.filename).name in
-                   ('inference_memory.py', 'backend_switch.py', 'swap_activity.py', 'amd_memory.py') else '<external>',
-                   'function': frame.name[:80], 'line': frame.lineno}
-                  for frame in traceback.extract_tb(error.__traceback__)[-6:]]
         details.append({'sample_index': self.summary['sample_attempts'],
                         'timestamp_utc': datetime.now(timezone.utc).isoformat(),
                         'monotonic_seconds': time.monotonic(), 'phase': self.phase,
-                        'component': component, 'error_type': type(error).__name__,
-                        'reader': reader, 'pid': pid if type(pid) is int and pid > 0 else None,
-                        'fd': fd if type(fd) is int and fd >= 0 else None,
-                        'missing_key': missing, 'frames': frames})
+                        'component': component, **sampler_error_detail(error)})
 
     def _sample_locked(self):
         self.summary['sample_attempts'] += 1

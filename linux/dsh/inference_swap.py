@@ -313,6 +313,9 @@ class OwnedWorkerWatch:
                     failures.append('vram_spill')
             except Exception as error:
                 self.activity.observe(None, self.phase)
+                self.last_reading = {**(self.last_reading or {}),
+                                     'phase': self.phase, 'monotonic': time.monotonic(),
+                                     'telemetry_error': _worker_memory.sampler_error_detail(error)}
                 failures.append('telemetry_error:' + type(error).__name__)
             if not failures:
                 return

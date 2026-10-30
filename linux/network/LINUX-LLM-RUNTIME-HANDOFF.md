@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## SGLang telemetry stream repair — October 30
+
+The corrected sampler is active after restarting only the idle, fault-latched SGLang router. Five authenticated API streams and 179 CPU/ownership checks per checkout pass; missing live telemetry and actual eviction still fail closed. The previous DSH HTTP-activity fix remains active. Original DSH conversation replay remains unverified. The nightly updater is preserved in its client-inactivity wait, with no task GPU reservation; existing imports change only on its next normal launch. Keep all RAM-test holds and current profiles/pins. [Fix, reproduction and verification limits](../hardware/SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).
+
 ## DSH stream activity repair — October 30
 
 The DSH pi-ai HTTP adapter now counts incoming SSE activity, including loading comments, before SDK parsing. Delayed-stream, silence/cancellation/error regressions and authenticated frontend readiness pass. Timeout values and inference guards are unchanged; the original failing provider/model request still needs confirmation. No model worker or test GPU lock was created. [Record](API-STREAM-ACTIVITY-FIX-2026-10-30.md).

@@ -26,8 +26,51 @@ class Diagnostics(unittest.TestCase):
         self.status=base/'status';self.status.write_text('State:\tS (sleeping)\nVmSwap:\t0 kB\n')
         self.fd=base/'fdinfo/9'
         self.fd.write_text('drm-driver:\tamdgpu\ndrm-pdev:\t0000:03:00.0\ndrm-client-id:\t22\ndrm-total-vram:\t1 KiB\ndrm-resident-vram:\t1 KiB\n')
+        self.stat=base/'stat'
+        self.write_stat()
         self.snapshot={self.pid:Process(self.pid,0,'1',('python3',str(ROOT/'dsh/vllm-router.py')),'','S')}
         self.env=patch.dict(os.environ,{'LOCAL_LLM_SWAP_POLICY':'loading-swap-v4'});self.env.start();self.addCleanup(self.env.stop)
+
+    def write_stat(self, state='S', flags=0, start='1'):
+        fields=[state]+['0']*19
+        fields[6]=str(flags);fields[19]=start
+        self.stat.write_text(f'{self.pid} (test child) '+ ' '.join(fields)+'\n')
+
+    def test_running_state_without_mm_requires_verified_exit(self):
+        self.status.write_text('State:\tR (running)\n')
+        self.write_stat(state='R', flags=4)
+        self.assertIsNone(mem.sample_memory(self.snapshot,self.root))
+        self.write_stat(state='R', flags=0)
+        with self.assertRaisesRegex(KeyError,'VmSwap'):
+            mem.sample_memory(self.snapshot,self.root)
+
+    def test_exiting_child_does_not_hide_live_worker_swap_or_eviction(self):
+        self.status.write_text('State:\tR (running)\n');self.write_stat(state='R',flags=4)
+        other=self.root/'4322';(other/'fdinfo').mkdir(parents=True)
+        (other/'status').write_text('State:\tS (sleeping)\nVmSwap:\t1024 kB\n')
+        (other/'fdinfo/9').write_text(self.fd.read_text()+'amd-evicted-vram: 1 B\n')
+        snapshot={**self.snapshot,4322:Process(4322,self.pid,'2',('python',),'','S')}
+        reading=mem.sample_memory(snapshot,self.root)
+        self.assertEqual(reading['processes'],1);self.assertEqual(reading['swap'],1024**2)
+        self.assertEqual(reading['spill'],1)
+
+    def test_missing_mm_with_reused_or_disappeared_identity_is_skipped(self):
+        self.status.write_text('State:\tR (running)\n')
+        self.write_stat(state='R',start='2')
+        self.assertIsNone(mem.sample_memory(self.snapshot,self.root))
+        self.stat.unlink()
+        self.assertIsNone(mem.sample_memory(self.snapshot,self.root))
+
+    def test_unreadable_or_malformed_identity_still_fails(self):
+        self.status.write_text('State:\tR (running)\n');self.stat.write_text('bad stat')
+        with self.assertRaises(IndexError):mem.sample_memory(self.snapshot,self.root)
+        self.write_stat(state='R',flags=4)
+        original=Path.read_text
+        def read(path,*a,**kw):
+            if path==self.stat:raise PermissionError('denied')
+            return original(path,*a,**kw)
+        with patch.object(Path,'read_text',read),self.assertRaises(PermissionError):
+            mem.sample_memory(self.snapshot,self.root)
 
     def monitor_sample(self,phase='inference'):
         monitor=mem.MemoryMonitor();monitor.set_phase(phase)

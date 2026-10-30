@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## SGLang telemetry stream repair — October 30
+
+[Functional repair](../SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md) and [curated evidence](sglang-telemetry-exit-fix-2026-10-30.json): five completed authenticated streams, 179 CPU/ownership checks per checkout and 3,600 race-reproduction samples. No new performance qualification.
+
 ## DSH stream activity repair — October 30
 
 GPU-free client adapter and transport validation only. [Report](../../network/API-STREAM-ACTIVITY-FIX-2026-10-30.md) and [curated checks](api-stream-activity-fix-2026-10-30.json). The original real conversation remains unverified.

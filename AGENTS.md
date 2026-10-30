@@ -1,5 +1,7 @@
 # Agent entry point
 
+**October 30 SGLang stream repair:** a reproduced child-exit telemetry race is fixed; five authenticated API streams and 179 CPU/ownership checks per checkout pass. Live missing counters and actual memory/eviction limits still fail closed. [Repair and limits](linux/hardware/SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).
+
 **October 30 DSH stream repair:** replayable HTTP activity repair is active; original failing route remains unconfirmed. Preserve timers, engine guards and RAM-test holds. [Evidence](linux/network/API-STREAM-ACTIVITY-FIX-2026-10-30.md).
 
 **October 29 Super INT4 preflight:** the service-pause retry also fails unchanged RAM admission; all stopped services are restored. Keep the working IQ3 selection. [Completed checks and pending qualification](linux/hardware/SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).

@@ -154,6 +154,16 @@ class OwnedWatchTests(unittest.TestCase):
                 self.stop.assert_called_once()
 
 
+    def test_telemetry_fault_records_sanitized_key_and_reader(self):
+        error=KeyError('VmSwap');error.sampler_context={'reader':'proc_status','pid':123,'fd':None}
+        watch=self.make_watch(memory=Mock(side_effect=error));watch.sample()
+        detail=watch.last_reading['telemetry_error']
+        self.assertEqual(detail['missing_key'],'VmSwap');self.assertEqual(detail['reader'],'proc_status')
+        self.assertEqual(detail['pid'],123);self.stop.assert_called_once()
+        watch=self.make_watch(memory=Mock(side_effect=KeyError('/private/SECRET')));watch.sample()
+        self.assertEqual(watch.last_reading['telemetry_error']['missing_key'],'<redacted>')
+
+
 class OwnershipTests(unittest.TestCase):
     def test_sampler_includes_only_supplied_root_and_descendants_even_if_unrecognized(self):
         import inference_swap as swap
