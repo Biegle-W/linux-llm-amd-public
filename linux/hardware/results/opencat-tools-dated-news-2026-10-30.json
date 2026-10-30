@@ -9,8 +9,8 @@
   "server_after_mixed_fix": "Actual iPhone searches completed; user reported insufficient dated-information answer",
   "original_question": "what is the news today",
   "tests": {
-    "focused_each_checkout": 60,
-    "search_news_client_contracts": 47,
+    "focused_each_checkout": 64,
+    "search_news_client_contracts": 51,
     "native_responses": 13,
     "private_pass": true,
     "public_pass": true
@@ -143,5 +143,40 @@
     "Other hosted tools remain unsupported",
     "Client functions execute only at the client",
     "History remains ephemeral and bounded"
-  ]
+  ],
+  "exact_today_news_question_SGLang": {
+    "status": "completed",
+    "seconds": 12.283,
+    "events": {
+      "response.created": 1,
+      "response.in_progress": 1,
+      "response.output_item.added": 3,
+      "response.web_search_call.in_progress": 2,
+      "response.web_search_call.searching": 2,
+      "response.web_search_call.completed": 2,
+      "response.output_item.done": 3,
+      "response.content_part.added": 1,
+      "response.output_text.delta": 5,
+      "response.output_text.annotation.added": 8,
+      "response.output_text.done": 1,
+      "response.content_part.done": 1,
+      "response.completed": 1
+    },
+    "text_chars": 1028,
+    "citations": 8,
+    "has_date_in_answer": true,
+    "client_calls": 0,
+    "strict_SDK_schema": true,
+    "news_rss_sources": 10
+  },
+  "loading_progress": {
+    "typed_event": "response.in_progress",
+    "interval_seconds": 5,
+    "scope": "Before first search/output; ordinary comments retained afterward",
+    "sequence_serialized": true,
+    "delayed_HTTP_and_real_SDK_accumulator_pass": true,
+    "client_cancellation_logged": true,
+    "cold_model_reload_for_test": false,
+    "actual_phone_cold_load_cancellation_cause_confirmed": false
+  }
 }

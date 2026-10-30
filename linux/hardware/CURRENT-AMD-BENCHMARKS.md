@@ -2,7 +2,7 @@
 
 ## OpenCat mixed tools and dated news — October 30
 
-Observed two-function-plus-web requests are accepted. Free dated RSS search and a full cited answer to the current-news question pass on vLLM; 60 focused checks per checkout. Final iPhone confirmation is pending. No new performance qualification or held-model trial. [Fix and evidence](../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).
+Observed two-function-plus-web requests are accepted. Free dated RSS search and a full cited answer to the current-news question pass on vLLM; 64 focused checks per checkout. Final iPhone confirmation is pending. No new performance qualification or held-model trial. [Fix and evidence](../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).
 
 ## Free OpenCat search service — October 30
 

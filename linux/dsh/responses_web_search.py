@@ -25,6 +25,7 @@ FUNCTION = 'local_web_search'
 PREFIX = 'resp_localws_'
 SLOTS = threading.BoundedSemaphore(2)
 MAX_SEARCHES = 3
+HEARTBEAT_SECONDS = 5
 
 
 class SearchError(Exception):
@@ -289,6 +290,7 @@ class Session:
         self.items = prior['input']+input_items(data.get('input', []))
         self.sources, self.web = prior['sources'], []
         self.id, self.sequence = PREFIX+uuid.uuid4().hex, 0
+        self.event_lock, self.finishing = threading.RLock(), False
         self.usage = {'input_tokens': 0, 'output_tokens': 0, 'total_tokens': 0,
                       'input_tokens_details': {'cached_tokens': 0, 'cache_write_tokens': 0}, 'output_tokens_details': {'reasoning_tokens': 0}}
         budget = data.get('max_output_tokens', 2048)
@@ -307,10 +309,20 @@ class Session:
             'top_p': data.get('top_p', 1), 'truncation': data.get('truncation', 'disabled'), 'usage': None}
 
     def event(self, kind, **fields):
-        self.check()
-        value = {'type': kind, **deepcopy(fields), 'sequence_number': self.sequence}
-        self.sequence += 1
-        self.emit(kind, value)
+        with self.event_lock:
+            self.check()
+            value = {'type': kind, **deepcopy(fields), 'sequence_number': self.sequence}
+            self.sequence += 1
+            self.emit(kind, value)
+
+    def heartbeat(self):
+        # A parsed lifecycle event keeps clients active during a cold model
+        # load; comment-only keepalives can disappear inside an SDK parser.
+        with self.event_lock:
+            if self.web or self.finishing:
+                return False
+            self.event('response.in_progress', response=self.base)
+            return True
 
     def start(self):
         self.event('response.created', response=self.base)
@@ -442,6 +454,8 @@ class Session:
         return final, output
 
     def finish(self, final, output):
+        with self.event_lock:
+            self.finishing = True
         for index, item in enumerate(output, start=len(self.web)):
             added = deepcopy(item)
             if item.get('type') == 'message':
@@ -511,9 +525,11 @@ def serve(handler, data, hub_port):
                 handler.wfile.write(('event: '+kind+'\ndata: '+json.dumps(value)+'\n\n').encode())
                 handler.wfile.flush()
     def keepalive():
-        while not done.wait(5):
+        while not done.wait(HEARTBEAT_SECONDS):
             try:
                 check()
+                if session.heartbeat():
+                    continue
                 with lock:
                     handler.wfile.write(b': local web search activity\n\n'); handler.wfile.flush()
             except OSError:
@@ -563,7 +579,7 @@ def serve(handler, data, hub_port):
         else:
             handler.send_json(200, final)
     except (BrokenPipeError, ConnectionResetError):
-        pass
+        print('Responses search cancelled by client;', len(session.web) if session else 0, 'searches completed or started', flush=True)
     except SearchError as error:
         # Codes/status only: never log prompts, queries, credentials or sources.
         print('Responses search failed:', error.code, 'HTTP', error.status, flush=True)

@@ -101,6 +101,18 @@ class Contracts(unittest.TestCase):
   tool={**mixed_tools()[0],'name':'private_function_name','description':'private description'}
   with patch('builtins.print') as log:w.Session(request(tools=[tool,{'type':'web_search'}],input='private prompt'),Mock())
   self.assertIn('function',str(log.call_args));self.assertNotIn('private_',str(log.call_args));self.assertNotIn('private prompt',str(log.call_args));self.assertNotIn('private description',str(log.call_args))
+ def test_loading_heartbeat_has_same_sdk_response_identity_and_stops_before_output(self):
+  events=[];s=w.Session(request(),Mock(side_effect=[reply([call()]),reply([answer()])]),lambda *_:[SOURCE],emit=lambda k,v:events.append((k,v)))
+  s.start();self.assertTrue(s.heartbeat());self.assertEqual(events[-1][0],'response.in_progress');validate_response(events[-1][1]['response'])
+  self.assertEqual(events[-1][1]['response']['id'],s.id);self.assertEqual(events[-1][1]['response']['output'],[])
+  final,output=s.run();self.assertFalse(s.heartbeat());s.finish(final,output);self.assertFalse(s.heartbeat());validate_response(events[-1][1],event=True)
+ def test_concurrent_loading_events_preserve_sequence_order(self):
+  import threading
+  events=[];s=w.Session(request(),Mock(),emit=lambda k,v:events.append(v))
+  threads=[threading.Thread(target=lambda:[s.heartbeat() for _ in range(10)]) for _ in range(3)]
+  for thread in threads:thread.start()
+  for thread in threads:thread.join()
+  self.assertEqual([e['sequence_number'] for e in events],list(range(30)))
  def test_model_can_select_dated_news_controls(self):
   item=call();item['arguments']=json.dumps({'query':'Current release news','category':'news','time_range':'month'})
   backend=Mock(side_effect=[reply([item]),reply([answer()])]);provider=Mock(return_value=[SOURCE])
@@ -249,6 +261,24 @@ class HTTP(unittest.TestCase):
   with patch.object(w,'provider_search',return_value=[SOURCE]) as provider:
    status,_,body=self.request(path='/v1/responses',data=request(tools=tools))
   self.assertEqual(status,200);validate_response(body);provider.assert_called_once();self.assertEqual(self.calls[0][0]['tools'][:2],tools[:2])
+ def test_delayed_model_stream_emits_parsed_loading_activity_and_completes(self):
+  import time
+  self.prepare();handler=self.backend.RequestHandlerClass;original=handler.do_POST
+  def delayed(inner):time.sleep(.15);return original(inner)
+  with patch.object(handler,'do_POST',delayed),patch.object(w,'HEARTBEAT_SECONDS',.02),patch.object(w,'provider_search',return_value=[SOURCE]):
+   status,_,body=self.request(path='/v1/responses',data=request(stream=True))
+  self.assertEqual(status,200);events=[json.loads(x[6:]) for x in body.decode().splitlines() if x.startswith('data: ')]
+  self.assertGreater(sum(e['type']=='response.in_progress' for e in events),1);self.assertEqual([e['sequence_number'] for e in events],list(range(len(events))));validate_response(events[-1],event=True)
+ def test_sdk_consumes_repeated_loading_progress_without_losing_search_output(self):
+  if Response is None:self.skipTest('Optional OpenAI SDK not installed')
+  import openai,time
+  self.prepare();handler=self.backend.RequestHandlerClass;original=handler.do_POST
+  def delayed(inner):time.sleep(.15);return original(inner)
+  with patch.object(handler,'do_POST',delayed),patch.object(w,'HEARTBEAT_SECONDS',.02),patch.object(w,'provider_search',return_value=[SOURCE]):
+   with openai.OpenAI(api_key='fixture-external-secret',base_url=f'http://127.0.0.1:{self.gateway.server_port}/v1',timeout=5,max_retries=0) as client:
+    with client.responses.stream(**request()) as stream:
+     events=list(stream);final=stream.get_final_response()
+  self.assertGreater(sum(e.type=='response.in_progress' for e in events),1);self.assertEqual(final.status,'completed');self.assertTrue(final.output_text);self.assertEqual(final.output[0].type,'web_search_call');validate_response(final.model_dump())
  def test_stream_has_real_search_and_citation_events(self):
   self.prepare()
   with patch.object(w,'provider_search',return_value=[SOURCE]):status,_,body=self.request(path='/v1/responses',data=request(stream=True))
