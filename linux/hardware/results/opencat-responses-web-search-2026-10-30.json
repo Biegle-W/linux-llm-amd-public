@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-30",
+  "scope": "Executable text web search through authenticated Responses API and guarded local model hub",
+  "provider": "Existing configured DSH DeepSeek Search API",
+  "model": "qwen3.8-27b-vllm",
+  "SDK": "3.31.0",
+  "tests": {
+    "new_search": 23,
+    "native_responses": 13,
+    "transport_admission": 45,
+    "hub": 9,
+    "per_checkout": 90,
+    "private_pass": true,
+    "public_pass": true
+  },
+  "live_checks": [
+    {
+      "kind": "real_search_JSON",
+      "status": "completed",
+      "search_calls": 1,
+      "text_chars": 222,
+      "seconds": 3.543,
+      "citation_hosts": [
+        "peps.python.org",
+        "www.python.org"
+      ]
+    },
+    {
+      "kind": "real_search_SSE_auto",
+      "status": "completed",
+      "events": {
+        "response.created": 1,
+        "response.in_progress": 1,
+        "response.output_item.added": 2,
+        "response.web_search_call.in_progress": 1,
+        "response.web_search_call.searching": 1,
+        "response.web_search_call.completed": 1,
+        "response.output_item.done": 2,
+        "response.content_part.added": 1,
+        "response.output_text.delta": 1,
+        "response.output_text.annotation.added": 4,
+        "response.output_text.done": 1,
+        "response.content_part.done": 1,
+        "response.completed": 1
+      },
+      "text_chars": 186,
+      "seconds": 3.02,
+      "citation_hosts": [
+        "mail.python.org",
+        "pythoninsider.blogspot.com",
+        "www.python.org"
+      ]
+    },
+    {
+      "kind": "ephemeral_history_without_new_search",
+      "status": "completed",
+      "text_chars": 50,
+      "seconds": 1.178
+    },
+    {
+      "kind": "plain_native_Responses_regression",
+      "status": "completed",
+      "text_chars": 5
+    },
+    {
+      "kind": "forced_search_strict_SDK_contract",
+      "status": "completed",
+      "tool_choice": "required",
+      "search_calls": 1,
+      "text_chars": 428,
+      "strict_SDK_schema": true
+    }
+  ],
+  "iphone_retry_confirmed": false,
+  "bounds": {
+    "max_searches_per_request": 3,
+    "concurrent_bridge_requests": 2,
+    "history_serialized_MiB": 16,
+    "history_entries": 128,
+    "history_TTL_seconds": 3600,
+    "provider_timeout_seconds": 25
+  },
+  "preserved": [
+    "Authentication/source-network checks",
+    "Guarded hub admission and worker ownership",
+    "RAM/VRAM/swap protections",
+    "Engine pins/profile holds/schedules",
+    "Plain native Responses path"
+  ],
+  "limits": [
+    "Search text/snippets only",
+    "Search-enabled final text is buffered before typed text events",
+    "Ephemeral history is cleared on gateway restart",
+    "Mixed/other hosted tools, images, background/Conversations/cache-only mode rejected",
+    "No confirmed iPhone retry yet"
+  ]
+}

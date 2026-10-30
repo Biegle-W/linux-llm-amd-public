@@ -1,5 +1,7 @@
 # Linux LAN and Tailscale client access
 
+Responses text web search is available through the existing configured DSH search provider. [Behavior, credentials and limits](OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md).
+
 OpenCat iPhone endpoint compatibility is active. [Supported native Responses scope and verification](OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
 
 The [consolidated handoff](LINUX-LLM-RUNTIME-HANDOFF.md) is the single current

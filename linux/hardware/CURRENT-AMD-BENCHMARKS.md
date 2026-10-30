@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 30, 2026
 
+## OpenCat executable Responses web search — October 30
+
+Functional API/tool verification: real JSON/SSE search with citations, history and native Responses pass on selected Qwen/vLLM; 90 relevant checks pass per checkout. No new model performance qualification or held-model trial. [Report](../network/OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md).
+
 ## Strata RDNA3 fork / current 32 GB — October 30
 
 The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. Individual short tuned-mode code/prose samples: 28.8/43.6 tokens/s. Read the retained 8K failure and final conservative checks; no matched speedup, full 256K result or production promotion. [Evidence](STRATA-RDNA3-32GB-TRIAL-2026-10-30.md).

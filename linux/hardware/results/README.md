@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## OpenCat Responses web search — October 30
+
+[Executed search/citation verification](../../network/OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md) and [curated checks](opencat-responses-web-search-2026-10-30.json): live JSON/SSE and history pass on Qwen/vLLM, 90 CPU/HTTP/SDK checks per checkout. No confirmed iPhone retry.
+
 ## Strata RDNA3/32 GB trial — October 30
 
 [Scoped trial and retained failures](../STRATA-RDNA3-32GB-TRIAL-2026-10-30.md) and [curated results](strata-rdna3-32gb-trial-2026-10-30.json). The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. No production promotion or new held-model queue.

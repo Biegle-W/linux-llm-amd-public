@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## OpenCat Responses web-search execution — October 30
+
+Search-enabled requests now execute real queries through the configured DSH DeepSeek Search API and feed numbered results to the selected local model. JSON/SSE search, genuine citations, ephemeral history and plain Responses pass on Qwen/vLLM; 90 relevant checks pass per checkout. Same `/v1` URL/key; enable web search in OpenCat. Text-search scope, bounded buffering/cache and unsupported tool modes are documented. iPhone retry remains unconfirmed. Guards, pins, other model holds and schedules remain; no recurring task or GPU reservation. [Verification and limits](OPENCAT-RESPONSES-WEB-SEARCH-2026-10-30.md).
+
 ## Isolated Strata RDNA3 trial on 32 GB — October 30
 
 The owner explicitly authorized this one-off trial with current 32 GB. The fork loads and short replies work; conservative 8K recall passes, but its history follow-up stalls. This tested 32 GB configuration is not qualified. All owned scopes stopped and reservation released; production Strata remains paused, with existing source/build, pins, guards and other RAM-held tests preserved. Normal API/hub/DSH services and schedules remain. [Build, 32 GB profile, failed attempts and verification limits](../hardware/STRATA-RDNA3-32GB-TRIAL-2026-10-30.md). The previous `qwen3.8-27b-vllm` route is restored and returns authenticated HTTP 200 with nonempty output. No remaining trial job or automatic retry queue.

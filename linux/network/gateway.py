@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT / 'dsh'))
 import model_catalog  # noqa: E402
 from model_catalog import BACKENDS  # noqa: E402
 from hub_transport import clean_error_body, relay_sse, sse_error
+import responses_web_search
 
 HUB_PORT = 30100
 
@@ -137,6 +138,11 @@ class Handler(BaseHTTPRequestHandler):
         backend = model['backend']
         if backend in ('strata', 'maya') and path not in ('/v1/chat/completions', '/v1/responses'):
             return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions and Responses.', 'unsupported_endpoint')
+        if path == '/v1/responses':
+            search_bridge = responses_web_search.handles(data)
+            print('Responses local-search bridge:', 'selected' if search_bridge else 'unused', flush=True)
+            if search_bridge:
+                return responses_web_search.serve(self, data, HUB_PORT)
         connection = None
         started = False
         finished = threading.Event()
