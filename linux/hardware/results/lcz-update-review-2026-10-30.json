@@ -1,0 +1,74 @@
+{
+  "checked_at_UTC": "2026-10-30T22:58:23.214426+00:00",
+  "scope": "Read-only source review; author reports are not new local measurements",
+  "topics": [
+    {
+      "topic": 2728,
+      "url": "https://lcz.me/topic/2728",
+      "posts_checked": 2,
+      "pages_checked": 1,
+      "latest_post_or_edit_Toronto": "2026-10-30T18:49:29.488000-04:00"
+    },
+    {
+      "topic": 1532,
+      "url": "https://lcz.me/topic/1532",
+      "posts_checked": 106,
+      "pages_checked": 6,
+      "latest_post_or_edit_Toronto": "2026-09-24T14:38:28.253000-04:00"
+    },
+    {
+      "topic": 2724,
+      "url": "https://lcz.me/topic/2724",
+      "posts_checked": 2,
+      "pages_checked": 1,
+      "latest_post_or_edit_Toronto": "2026-10-30T17:26:54.587000-04:00"
+    },
+    {
+      "topic": 2671,
+      "url": "https://lcz.me/topic/2671",
+      "posts_checked": 27,
+      "pages_checked": 2,
+      "latest_post_or_edit_Toronto": "2026-10-30T14:17:20.171000-04:00"
+    },
+    {
+      "topic": 2694,
+      "url": "https://lcz.me/topic/2694",
+      "posts_checked": 22,
+      "pages_checked": 2,
+      "latest_post_or_edit_Toronto": "2026-10-30T10:17:58.819000-04:00"
+    }
+  ],
+  "source_revisions": [
+    {
+      "url": "https://api.github.com/repos/StevenChenSE/sglang/branches/gfx1100-support",
+      "head": "f84475ccf593087df3d1da13c9e675eadee12352",
+      "date": "2026-09-11T08:22:04Z",
+      "merged": null
+    },
+    {
+      "url": "https://api.github.com/repos/nicejunjie/Strata-rdna3/branches/rdna3",
+      "head": "fc8f82334239199cd3cfcfa5ab5b8ac09827d19b",
+      "date": "2026-10-24T05:02:51Z",
+      "merged": null
+    },
+    {
+      "url": "https://api.github.com/repos/nicejunjie/Strata-rdna3/pulls/1",
+      "head": "309f0c8f8cef010f62746f80caf677c68e7141f9",
+      "date": "2026-10-27T00:12:58Z",
+      "merged": false
+    }
+  ],
+  "comparison": {
+    "SGLang_branch_matches_local_source": true,
+    "Strata_branch_and_PR_match_completed_trial": true,
+    "running_kernel": "7.0.0-42-generic",
+    "amdgpu_sched_policy": 0,
+    "MES_attachment_test_target": "Ubuntu linux-source7.0.0 package7.0.0-38.38; reporter custom kernel7.0.14-strata-mesfix1",
+    "MES_patch_sha256": "afcd71e5904bc66ee6139535ba2ff20a9d3bb9bc52a32e805d0a19854275a3fe",
+    "kernel_patch_inclusion_not_fully_audited": true
+  },
+  "runtime_changed": false,
+  "GPU_trials_started": false,
+  "new_schedules": false,
+  "promotion": false
+}

@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 30, 2026
 
+## LCZ source update review — October 30
+
+Read-only forum/source review, not a new host benchmark or runtime promotion. [Latest findings and applicability](LCZ-UPDATE-REVIEW-2026-10-30.md).
+
 ## OpenCat mixed tools and dated news — October 30
 
 Observed two-function-plus-web requests are accepted. Free dated RSS search and a full cited answer to the current-news question pass on vLLM; 69 focused checks per checkout. The owner confirms the iPhone now answers with sources; actual searched responses completed with citation annotations and no refusal parts. No new performance qualification or held-model trial. [Fix and evidence](../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).

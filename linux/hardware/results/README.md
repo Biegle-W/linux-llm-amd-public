@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## LCZ source update review — October 30
+
+[Curated source metadata](lcz-update-review-2026-10-30.json) and [review](../LCZ-UPDATE-REVIEW-2026-10-30.md). Author-reported results remain distinct from local qualification.
+
 ## OpenCat mixed tools and dated news — October 30
 
 [Request compatibility and dated answers](../../network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md), with [curated evidence](opencat-tools-dated-news-2026-10-30.json): 69 focused checks per checkout; exact current-news streaming answer with dated sources passes. The owner confirms the iPhone now answers with sources; actual searched responses completed with citation annotations and no refusal parts.
