@@ -279,8 +279,8 @@ class Handler(BaseHTTPRequestHandler):
     @inference_request
     def do_POST(self):
         path = urlsplit(self.path).path
-        if path not in ('/v1/chat/completions', '/v1/completions'):
-            return self.error_json(404, 'Only OpenAI chat/completion endpoints are exposed.', 'not_found')
+        if path not in ('/v1/chat/completions', '/v1/completions', '/v1/responses'):
+            return self.error_json(404, 'Only OpenAI chat/completion/Responses endpoints are exposed.', 'not_found')
         try:
             if self.headers.get('Transfer-Encoding'):
                 raise ValueError
@@ -300,8 +300,8 @@ class Handler(BaseHTTPRequestHandler):
         if model is None:
             return self.error_json(404, 'Unknown or retired model. Use GET /v1/models.', 'model_not_found')
         kind = model['backend']
-        if kind in ('strata', 'maya') and path != '/v1/chat/completions':
-            return self.error_json(400, f'{BACKENDS[kind][2]} supports chat completions.', 'unsupported_endpoint')
+        if kind in ('strata', 'maya') and path not in ('/v1/chat/completions', '/v1/responses'):
+            return self.error_json(400, f'{BACKENDS[kind][2]} supports chat completions and Responses.', 'unsupported_endpoint')
         self.close_connection = True
         if data.get('stream'):
             return self.stream(kind, model['id'], path, body)
@@ -384,18 +384,18 @@ class Handler(BaseHTTPRequestHandler):
             hub.response_started()
             if response.status >= 400 or 'text/event-stream' not in response.getheader('Content-Type', ''):
                 first.set()
-                return write(sse_error(error_payload(response.read(65536), response.status if response.status >= 400 else 502)))
+                return write(sse_error(error_payload(response.read(65536), response.status if response.status >= 400 else 502), responses=path == '/v1/responses'))
             def output(chunk):
                 first.set()
                 write(chunk)
-            relay_sse(response, output)
+            relay_sse(response, output, responses=path == "/v1/responses")
         except HubError as error:
-            write(sse_error({'message': str(error), 'code': error.code, 'status': error.status}))
+            write(sse_error({'message': str(error), 'code': error.code, 'status': error.status}, responses=path == '/v1/responses'))
         except (BrokenPipeError, ConnectionResetError):
             pass
         except (OSError, http.client.HTTPException):
             try:
-                write(sse_error({'message': 'Backend stream interrupted.', 'code': 'backend_unavailable', 'status': 503}))
+                write(sse_error({'message': 'Backend stream interrupted.', 'code': 'backend_unavailable', 'status': 503}, responses=path == '/v1/responses'))
             except OSError:
                 pass
         finally:

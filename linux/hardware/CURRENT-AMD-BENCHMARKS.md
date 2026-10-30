@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 29, 2026
 
+## OpenCat native Responses routing — October 30
+
+API compatibility verification only: Responses JSON/stream/history and Chat Completions pass on SGLang; 67 CPU routing checks pass per checkout. No new throughput or full-context result. [Fix and limits](../network/OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
+
 ## SGLang telemetry stream repair — October 30
 
 The process-exit sampler fix passes five normal authenticated API streams and 179 CPU/ownership checks per checkout. This adds no new throughput or full-context result. [Repair and evidence](SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).

@@ -1,13 +1,15 @@
 # Linux LAN and Tailscale client access
 
+OpenCat iPhone endpoint compatibility is active. [Supported native Responses scope and verification](OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
+
 The [consolidated handoff](LINUX-LLM-RUNTIME-HANDOFF.md) is the single current
 reference for Linux-host access, Windows/phone clients, exact model IDs,
 contexts, storage, runtime pins, backend launching and troubleshooting.
 It replaces the separate Shared client, Windows-network and upgrade guides;
 the original nine files are preserved in the dated Shared archive described there.
 
-The authenticated gateway uses TCP **10000** and OpenAI-compatible chat and
-completion APIs. Request any of the **12 enabled profiles** from `/v1/models`;
+The authenticated gateway uses TCP **10000** and OpenAI-compatible chat,
+completion and native Responses (`POST /v1/responses`) APIs. Request any of the **8 enabled profiles** from `/v1/models`;
 the loopback model hub starts or switches its backend through the guarded launcher.
 Catalog/health reads do not start a model. Existing explicit Desktop/CLI launches
 remain supported.

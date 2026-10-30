@@ -247,7 +247,7 @@ class Handler(BaseHTTPRequestHandler):
     @inference_request
     def do_POST(self):
         global memory_fault
-        if self.path not in ('/v1/chat/completions', '/models/load', '/models/unload'):
+        if self.path not in ('/v1/chat/completions', '/v1/responses', '/models/load', '/models/unload'):
             return self.send_json(404, {'error': 'Unknown endpoint'})
         try:
             length=int(self.headers.get('Content-Length','0'))

@@ -129,7 +129,7 @@ class Handler(BaseHTTPRequestHandler):
 
     @inference_request
     def do_POST(self):
-        if self.path not in ('/v1/chat/completions', '/v1/completions', '/generate'):
+        if self.path not in ('/v1/chat/completions', '/v1/completions', '/v1/responses', '/generate'):
             return self.send_json(404, {'error': 'Unknown endpoint'})
         try:
             data = json.loads(self.rfile.read(int(self.headers.get('Content-Length', '0'))))

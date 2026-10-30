@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-30",
+  "incident": {
+    "client": "OpenCat on iPhone",
+    "endpoint": "POST /v1/responses",
+    "http_status": 404,
+    "code": "not_found",
+    "cause": "Gateway route allowlist omitted native Responses API"
+  },
+  "repair": "Native POST Responses path through existing authenticated gateway and guarded hub; protocol-aware SSE termination/errors",
+  "tests": {
+    "responses": 13,
+    "existing_transport_admission": 45,
+    "existing_hub": 9,
+    "total_per_checkout": 67,
+    "private_pass": true,
+    "public_pass": true
+  },
+  "live": {
+    "sdk": "3.31.0",
+    "model": "qwen3.8-27b-sglang-dflash2",
+    "checks": [
+      {
+        "kind": "responses_nonstream",
+        "status": "completed",
+        "text_chars": 5,
+        "seconds": 65.2
+      },
+      {
+        "kind": "responses_stream_multiturn",
+        "status": "completed",
+        "text_chars": 5,
+        "history_marker_returned": true,
+        "events": {
+          "response.created": 1,
+          "response.in_progress": 1,
+          "response.output_item.added": 1,
+          "response.content_part.added": 1,
+          "response.output_text.delta": 2,
+          "response.output_text.done": 1,
+          "response.content_part.done": 1,
+          "response.output_item.done": 1,
+          "response.completed": 1
+        },
+        "seconds": 0.256
+      },
+      {
+        "kind": "chat_completions_regression",
+        "finish_reason": "stop",
+        "text_chars": 5,
+        "seconds": 0.221
+      }
+    ]
+  },
+  "client_retry_confirmed": false,
+  "limits": [
+    "POST create path only; no new retrieve/delete/cancel surface",
+    "Native GPU verification covers enabled SGLang only; other native backends reviewed in source/CPU routing fixtures",
+    "Original iPhone retry not yet observed"
+  ],
+  "preserved": [
+    "API credentials and source-network rules",
+    "profile enablement, runtime pins and context windows",
+    "GPU admission, worker ownership and memory guards",
+    "scheduled jobs and owner RAM-test holds"
+  ]
+}

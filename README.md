@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**October 30 OpenCat iPhone API repair:** native `POST /v1/responses` is exposed through the authenticated, guarded API. Responses JSON/stream/history and Chat Completions pass on SGLang; 67 CPU routing checks pass per checkout. iPhone retry remains unverified. [Repair and supported scope](linux/network/OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
+
 **October 30 SGLang stream repair:** a reproduced child-exit telemetry race is fixed; five authenticated API streams and 179 CPU/ownership checks per checkout pass. Live missing counters and actual memory/eviction limits still fail closed. [Repair and limits](linux/hardware/SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).
 
 **October 30 DSH stream repair:** The DSH pi-ai HTTP adapter now counts incoming SSE activity, including loading comments, before SDK parsing. Delayed-stream, silence/cancellation/error regressions and authenticated frontend readiness pass. Timeout values and inference guards are unchanged; the original failing provider/model request still needs confirmation. [Repair and validation limits](linux/network/API-STREAM-ACTIVITY-FIX-2026-10-30.md).

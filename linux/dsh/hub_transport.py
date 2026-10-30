@@ -49,14 +49,19 @@ def error_payload(payload, status, secrets=()):
     return error
 
 
-def sse_error(error, secrets=()):
-    return b'data: ' + json.dumps({'error': clean_value(error, secrets)}).encode() + b'\n\ndata: [DONE]\n\n'
+def sse_error(error, secrets=(), *, responses=False):
+    error = clean_value(error, secrets)
+    if responses:
+        value = {**error, 'type': 'error', 'param': error.get('param')}
+        return b'event: error\ndata: ' + json.dumps(value).encode() + b'\n\n'
+    return b'data: ' + json.dumps({'error': error}).encode() + b'\n\ndata: [DONE]\n\n'
 
 
-def relay_sse(response, write, secrets=()):
+def relay_sse(response, write, secrets=(), *, responses=False):
     """Parse across arbitrary HTTP chunks; preserve successful events byte for byte.
 
     Normalize errors already inside a 200 stream, then terminate with one DONE.
+    Responses streams finish on their typed terminal event instead of [DONE].
     A truncated HTTP/SSE response is a transport error, never a success.
     """
     pending = b''
@@ -68,12 +73,24 @@ def relay_sse(response, write, secrets=()):
             lines = frame.splitlines()
             data = b'\n'.join(line[5:].lstrip(b' ') for line in lines if line.startswith(b'data:'))
             if data == b'[DONE]':
+                if responses:
+                    raise http.client.HTTPException('Responses stream lacks a terminal event')
                 write(raw)
                 return
             try:
                 value = json.loads(data) if data else None
             except (ValueError, UnicodeDecodeError):
                 value = None
+            if responses and isinstance(value, dict) and value.get('type') in (
+                    'response.completed', 'response.incomplete', 'response.failed'):
+                if value['type'] == 'response.failed':
+                    # Native failures may contain private diagnostics; retain
+                    # their Responses envelope without a Chat Completions DONE.
+                    write(b'event: response.failed\ndata: ' +
+                          json.dumps(clean_value(value, secrets)).encode() + b'\n\n')
+                else:
+                    write(raw)
+                return
             is_error = isinstance(value, dict) and ('error' in value or value.get('object') == 'error'
                                                        or value.get('type') == 'error')
             if is_error or any(line.strip() == b'event: error' for line in lines):
@@ -83,7 +100,7 @@ def relay_sse(response, write, secrets=()):
                     code = error.get('code')
                     fallback = code if type(code) is int and 400 <= code <= 599 else status
                     status = error.get('status', error.get('status_code', fallback))
-                write(sse_error(error_payload(data, status, secrets)))
+                write(sse_error(error_payload(data, status, secrets), responses=responses))
                 return
             write(raw)
         if len(pending) > 1024 * 1024:

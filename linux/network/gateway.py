@@ -114,8 +114,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self.authorized():
             return
         path = urlsplit(self.path).path
-        if path not in ('/v1/chat/completions', '/v1/completions'):
-            return self.error_json(404, 'Only OpenAI chat/completion endpoints are exposed.', 'not_found')
+        if path not in ('/v1/chat/completions', '/v1/completions', '/v1/responses'):
+            return self.error_json(404, 'Only OpenAI chat/completion/Responses endpoints are exposed.', 'not_found')
         try:
             if self.headers.get('Transfer-Encoding'):
                 raise ValueError('Chunked request bodies are not supported')
@@ -135,8 +135,8 @@ class Handler(BaseHTTPRequestHandler):
         if model is None:
             return self.error_json(404, 'Unknown or retired model. Use GET /v1/models.', 'model_not_found')
         backend = model['backend']
-        if backend in ('strata', 'maya') and path != '/v1/chat/completions':
-            return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions.', 'unsupported_endpoint')
+        if backend in ('strata', 'maya') and path not in ('/v1/chat/completions', '/v1/responses'):
+            return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions and Responses.', 'unsupported_endpoint')
         connection = None
         started = False
         finished = threading.Event()
@@ -179,7 +179,7 @@ class Handler(BaseHTTPRequestHandler):
             if response.status >= 400:
                 output(clean_error_body(response.read(), secrets))
             elif 'text/event-stream' in response.getheader('Content-Type', ''):
-                relay_sse(response, output, secrets)
+                relay_sse(response, output, secrets, responses=path == "/v1/responses")
             else:
                 while chunk := response.read1(65536):
                     output(chunk)
@@ -191,7 +191,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             if started and data.get('stream'):
                 try:
-                    self.wfile.write(sse_error({'message': 'Hub stream interrupted.', 'status': 503, 'code': 'hub_unavailable'}))
+                    self.wfile.write(sse_error({'message': 'Hub stream interrupted.', 'status': 503, 'code': 'hub_unavailable'}, responses=path == '/v1/responses'))
                 except OSError:
                     pass
             if not started:

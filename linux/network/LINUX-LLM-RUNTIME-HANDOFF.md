@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## OpenCat iPhone Responses routing — October 30
+
+The same API URL/key now accepts native `POST /v1/responses` as well as Chat Completions. The earlier iPhone `not_found` came from the gateway allowlist. Real Responses JSON, SDK-assembled streaming/history and Chat Completions pass on SGLang; 67 CPU routing checks pass per checkout. Only idle gateway/hub services were restarted. iPhone retry remains unverified. All guards, model holds, pins and schedules remain. [Scope and verification](OPENCAT-RESPONSES-ROUTING-2026-10-30.md).
+
 ## SGLang telemetry stream repair — October 30
 
 The corrected sampler is active after restarting only the idle, fault-latched SGLang router. Five authenticated API streams and 179 CPU/ownership checks per checkout pass; missing live telemetry and actual eviction still fail closed. The previous DSH HTTP-activity fix remains active. Original DSH conversation replay remains unverified. The nightly updater is preserved in its client-inactivity wait, with no task GPU reservation; existing imports change only on its next normal launch. Keep all RAM-test holds and current profiles/pins. [Fix, reproduction and verification limits](../hardware/SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md).
@@ -1036,7 +1040,7 @@ a harness/client function, not an ability granted by the inference API alone.
 
 | Setting | Current Linux value |
 |---|---|
-| Protocol | OpenAI-compatible **Chat Completions** |
+| Protocol | OpenAI-compatible **Chat Completions** and native **Responses POST create** |
 | LAN base URL | `http://<LINUX_LAN_IP>:10000/v1` |
 | Tailscale base URL | `http://<LINUX_TAILSCALE_IP>:10000/v1` |
 | Linux MagicDNS alternative | `http://<LINUX_TAILSCALE_DNS>:10000/v1` |

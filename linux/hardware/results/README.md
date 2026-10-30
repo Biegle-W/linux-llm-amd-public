@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## OpenCat native Responses routing — October 30
+
+[Endpoint repair](../../network/OPENCAT-RESPONSES-ROUTING-2026-10-30.md) and [curated verification](opencat-responses-routing-2026-10-30.json): SDK JSON/stream/history plus Chat Completions on enabled SGLang, 67 CPU checks per checkout. iPhone retry remains unverified.
+
 ## SGLang telemetry stream repair — October 30
 
 [Functional repair](../SGLANG-TELEMETRY-EXIT-FIX-2026-10-30.md) and [curated evidence](sglang-telemetry-exit-fix-2026-10-30.json): five completed authenticated streams, 179 CPU/ownership checks per checkout and 3,600 race-reproduction samples. No new performance qualification.
