@@ -1,5 +1,7 @@
 # LCZ update review — October 30, 2026
 
+Follow-up: the [completed MES source audit and offline preparation](MES-SOURCE-AUDIT-2026-10-30.md) resolves exact-package inclusion/applicability below; no kernel activation or GPU trial. The original review remains dated evidence.
+
 Read-only review of five requested topics, including reply pages and edit timestamps: 12 public API pages covering 159 posts. Dates below use America/Toronto. Author-reported performance is separate from our qualified local results. No runtime setting, driver, kernel, service, hold, guard or schedule was changed; no GPU trial was started.
 
 | Topic | Latest findings | Assessment |
@@ -20,4 +22,4 @@ Our [completed Strata trial](STRATA-RDNA3-32GB-TRIAL-2026-10-30.md) remains unqu
 
 The remote [SGLang head](https://github.com/StevenChenSE/sglang/commit/f84475ccf593087df3d1da13c9e675eadee12352), [Strata head](https://github.com/nicejunjie/Strata-rdna3/commit/fc8f82334239199cd3cfcfa5ab5b8ac09827d19b) and [AVX2 startup PR](https://github.com/nicejunjie/Strata-rdna3/pull/1) were checked directly. No new source revision in these links warrants a runtime upgrade.
 
-Next useful investigation, if requested, is an installed-kernel/backport compatibility audit of the MES series. Existing model selections, holds, guards and completed evidence remain. [Curated source-check metadata](results/lcz-update-review-2026-10-30.json).
+The subsequently authorized installed-kernel/backport source audit is complete; see the follow-up above for its exact scope and remaining build/qualification gates. Existing model selections, holds, guards and completed evidence remain. [Curated source-check metadata](results/lcz-update-review-2026-10-30.json).

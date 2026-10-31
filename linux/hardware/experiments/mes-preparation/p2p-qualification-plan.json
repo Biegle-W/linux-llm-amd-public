@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "state": "prepared_only",
+  "automatic_execution": false,
+  "GPU_trials_authorized": false,
+  "switch": "PEX88096 PCIe 4.0; actual board wiring and configuration must be verified",
+  "stages": [
+    {
+      "name": "topology",
+      "requires_GPU_execution": false,
+      "evidence": ["both physical GPUs below the same transparent switch", "negotiated speed and width at every upstream and downstream hop", "BAR sizes, ACS and IOMMU routing recorded without configuration changes"],
+      "pass_does_not_establish": "HIP or RCCL peer transport"
+    },
+    {
+      "name": "peer_copy",
+      "requires_GPU_execution": true,
+      "blocked_until": "hardware installed and owner authorizes GPU qualification",
+      "evidence": ["bidirectional HIP peer capability", "bounded bidirectional peer copies with byte correctness and explicit synchronization", "separate peer-copy bandwidth and latency; host staging comparator"],
+      "guards": "Use the existing managed controller, ownership locks, unchanged memory/spill/swap/thermal protection; no standalone unguarded launch."
+    },
+    {
+      "name": "rccl",
+      "requires_GPU_execution": true,
+      "blocked_until": "guarded peer-copy qualification passes",
+      "evidence": ["two ranks with recorded physical device mapping", "correct all-reduce/all-gather results", "RCCL logs identify the exercised P2P/IPC data channels", "separate forced-host comparator with retained environment and logs"],
+      "pass_does_not_establish": "application speedup or full model correctness"
+    },
+    {
+      "name": "application",
+      "requires_GPU_execution": true,
+      "blocked_until": "owner authorizes each model trial and normal admission passes",
+      "evidence": ["Qwen/Sage/Bolt TP2 one profile at a time", "H3 matched source, conditioning, seed, shape, quantization and attention path", "transport identity in application logs", "full lifecycle memory and thermal record plus correctness checks"],
+      "RAM_holds": "remain unless the separately required visible-memory and idle checks pass",
+      "promotion": "only after the existing qualification gates"
+    }
+  ]
+}

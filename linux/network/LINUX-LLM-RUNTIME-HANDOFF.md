@@ -1,12 +1,16 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## MES source audit and offline preparation — October 30
+
+Exact `7.0.0-42.42` source lacks the workaround; no-fuzz applicability and a separate offline candidate reverse check pass. Loaded MES is `0x86` on both GPUs. Eleven CPU-only preparation checks pass; the H3 W4A8 runner/assets remain unqualified. Kernel, runtime selections, guards, holds and schedules remain; no GPU trial or active audit job. [Audit, prepared tools and next action](../hardware/MES-SOURCE-AUDIT-2026-10-30.md).
+
 ## Planned P2P and 96 GB — October 30
 
 The owner plans 96 GB total RAM (adding 64 GB) and a PEX88096 PCIe4 switch. Neither is treated as installed or qualified. Current holds, guards, selected profiles, services and schedules remain unchanged; no new trial/job. Saved 64 GB profiles require actual visible-memory and idle checks before restoration. [Conditional implementation order](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).
 
 ## LCZ source update review — October 30
 
-Five requested topics reviewed, including latest replies/edits and linked source heads. No new local benchmark, runtime promotion, kernel/driver change, guard change or trial job. Existing Strata qualification failure and RAM holds remain. Current kernel/backport inclusion is not fully audited; the experimental MES lead is not a proven stall fix. [Source findings and next investigation](../hardware/LCZ-UPDATE-REVIEW-2026-10-30.md).
+Five requested topics reviewed, including latest replies/edits and linked source heads. No new local benchmark, runtime promotion, kernel/driver change, guard change or trial job. Existing Strata qualification failure and RAM holds remain. The original review left kernel/backport inclusion open; the completed offline audit is linked above. The MES lead remains unproven for our stall. [Source findings and next investigation](../hardware/LCZ-UPDATE-REVIEW-2026-10-30.md).
 
 ## OpenCat mixed tools and dated news — October 30
 

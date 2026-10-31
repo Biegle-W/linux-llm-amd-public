@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## MES source audit and offline preparation — October 30
+
+Exact `7.0.0-42.42` source lacks the workaround; no-fuzz applicability and a separate offline candidate reverse check pass. Loaded MES is `0x86` on both GPUs. Eleven CPU-only preparation checks pass; the H3 W4A8 runner/assets remain unqualified. Kernel, runtime selections, guards, holds and schedules remain; no GPU trial or active audit job. [Audit, prepared tools and next action](../MES-SOURCE-AUDIT-2026-10-30.md).
+
 ## Planned P2P and 96 GB — October 30
 
 [Planning metadata](p2p-96gb-roadmap-2026-10-30.json), not measured upgrade results. [Roadmap](../P2P-96GB-ROADMAP-2026-10-30.md).

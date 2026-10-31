@@ -1,0 +1,320 @@
+{
+  "schema": 1,
+  "date": "2026-10-30",
+  "scope": "Offline source compatibility and preparation; no kernel installation or GPU trial",
+  "kernel_package": {
+    "package": "linux-source-7.0.0",
+    "version": "7.0.0-42.42",
+    "upstream_makefile": "7.0.14",
+    "archive_sha256": "3da06804a13cbc18974a61f78ff73dbbbfe476dc9b775e99102aee15aabe55a7"
+  },
+  "running_kernel": "7.0.0-42-generic",
+  "loaded_and_installed_amdgpu_srcversion_match": true,
+  "sched_policy": 0,
+  "loaded_MES_scheduler_versions": [
+    "0x86",
+    "0x86"
+  ],
+  "minimum_patch_MES_version": "0x70",
+  "kernel_HZ": 1000,
+  "upstream_comparison_commit": "d1ec743e945d7d5f514489d525bfcbc48cdf057f",
+  "original_attachment_sha256": "afcd71e5904bc66ee6139535ba2ff20a9d3bb9bc52a32e805d0a19854275a3fe",
+  "target_candidate_patch_sha256": "e8497465130b46ee83db8977dbbaa75f35bad10f6356cfb96863d35289ed88c4",
+  "original_source_audit": {
+    "schema": 1,
+    "status": "clean_source_candidate",
+    "patch_sha256": "afcd71e5904bc66ee6139535ba2ff20a9d3bb9bc52a32e805d0a19854275a3fe",
+    "source_sha256": {
+      "drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c": "0d33fce14050c0b0977ae5866be870aff68efa22efd8c8d44189a4a64ad3ecf5",
+      "drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h": "9c996dbe9273cfdd0edafdc6a3543c5654dbb86638b3b886adaa9b73746c5e06",
+      "drivers/gpu/drm/amd/amdgpu/mes_userqueue.c": "48192ea49d2b77de4df34fc92387042ac2e36426e3a35f9934fed40ece297491",
+      "drivers/gpu/drm/amd/amdgpu/mes_v11_0.c": "6a2e3ce6f1b29b5e8a994bdebe92a14d833c27c5c318027586a96c8e19b71c25",
+      "drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c": "59d1e6c863fd79479673e720fc45d226640482726e6632a1369e368b04182c90",
+      "drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h": "c5098ef28739e7b46238d8a01be1338236da92b3b0ceb5cb1023945813e48e92"
+    },
+    "features": {
+      "notify_api": false,
+      "userq_timer": false,
+      "userq_map_hook": false,
+      "userq_unmap_hook": false,
+      "firmware_version_gate": false,
+      "sriov_keeps_firmware_timer": false,
+      "kfd_timer": false,
+      "kfd_work_member": false,
+      "mes_work_member": false,
+      "microsecond_conversion": false,
+      "userq_reset_guard": false
+    },
+    "dry_run": {
+      "forward": {
+        "returncode": 0,
+        "details": [
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c",
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_userqueue.c",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_v11_0.c",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c",
+          "Hunk #4 succeeded at 2977 (offset 36 lines).",
+          "Hunk #5 succeeded at 3116 (offset 36 lines).",
+          "Hunk #6 succeeded at 3134 (offset 36 lines).",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h"
+        ]
+      },
+      "reverse": {
+        "returncode": 1,
+        "details": [
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c",
+          "Hunk #1 FAILED at 28.",
+          "Hunk #2 FAILED at 101.",
+          "Hunk #3 FAILED at 126.",
+          "Hunk #4 FAILED at 264.",
+          "Hunk #5 FAILED at 809.",
+          "5 out of 5 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h",
+          "Hunk #1 FAILED at 29.",
+          "Hunk #2 FAILED at 89.",
+          "Hunk #3 FAILED at 337.",
+          "Hunk #4 FAILED at 544.",
+          "4 out of 4 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_userqueue.c",
+          "Hunk #1 FAILED at 153.",
+          "Hunk #2 FAILED at 174.",
+          "2 out of 2 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_v11_0.c",
+          "Hunk #1 FAILED at 662.",
+          "Hunk #2 FAILED at 730.",
+          "2 out of 2 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c",
+          "Hunk #1 FAILED at 46.",
+          "Hunk #2 FAILED at 271.",
+          "Hunk #3 FAILED at 319.",
+          "Hunk #4 FAILED at 2941.",
+          "Hunk #5 FAILED at 3080.",
+          "Hunk #6 FAILED at 3098.",
+          "6 out of 6 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h",
+          "Hunk #1 FAILED at 280.",
+          "1 out of 1 hunk FAILED"
+        ]
+      }
+    },
+    "source_unchanged": true,
+    "compiled": false,
+    "installed": false,
+    "GPU_work_submitted": false
+  },
+  "offline_candidate_audit": {
+    "schema": 1,
+    "status": "patch_present",
+    "patch_sha256": "afcd71e5904bc66ee6139535ba2ff20a9d3bb9bc52a32e805d0a19854275a3fe",
+    "source_sha256": {
+      "drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c": "834ce5ed4165907374169452771f4eb723bf2cd388632578726b76c356654bad",
+      "drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h": "3a6bd837e481b0a0982280988b45d4e4c5d7831198b6b49c671fddbd050ed645",
+      "drivers/gpu/drm/amd/amdgpu/mes_userqueue.c": "a6d50aaedd77a921a107ad88fc1ffd4c8f3979f983a8c4327291027796dfcd2f",
+      "drivers/gpu/drm/amd/amdgpu/mes_v11_0.c": "1568b14cec54bc02f32014cc9e2e5c567ca0fdd60361fa0f3d029e8af82b9fb9",
+      "drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c": "46bc8da756b5024c080dd19a7551f30a28e9875e7ac3777c5ebf9c6f8324c4dd",
+      "drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h": "73134e8fc092800d3d347b24d7355c60226b9c2080f840ff44a8ba03eee98593"
+    },
+    "features": {
+      "notify_api": true,
+      "userq_timer": true,
+      "userq_map_hook": true,
+      "userq_unmap_hook": true,
+      "firmware_version_gate": true,
+      "sriov_keeps_firmware_timer": true,
+      "kfd_timer": true,
+      "kfd_work_member": true,
+      "mes_work_member": true,
+      "microsecond_conversion": true,
+      "userq_reset_guard": true
+    },
+    "dry_run": {
+      "forward": {
+        "returncode": 1,
+        "details": [
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c",
+          "Hunk #1 FAILED at 28.",
+          "Hunk #2 FAILED at 100.",
+          "Hunk #3 FAILED at 123.",
+          "Hunk #4 FAILED at 258.",
+          "Hunk #5 FAILED at 801.",
+          "5 out of 5 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h",
+          "Hunk #1 FAILED at 29.",
+          "Hunk #2 FAILED at 88.",
+          "Hunk #3 FAILED at 332.",
+          "Hunk #4 FAILED at 538.",
+          "4 out of 4 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_userqueue.c",
+          "Hunk #1 FAILED at 153.",
+          "Hunk #2 FAILED at 172.",
+          "2 out of 2 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_v11_0.c",
+          "Hunk #1 FAILED at 662.",
+          "Hunk #2 FAILED at 721.",
+          "2 out of 2 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c",
+          "Hunk #1 FAILED at 46.",
+          "Hunk #2 FAILED at 268.",
+          "Hunk #3 succeeded at 400 (offset 99 lines).",
+          "Hunk #4 FAILED at 2923.",
+          "Hunk #5 FAILED at 3048.",
+          "Hunk #6 FAILED at 3064.",
+          "5 out of 6 hunks FAILED",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h",
+          "Hunk #1 FAILED at 280.",
+          "1 out of 1 hunk FAILED"
+        ]
+      },
+      "reverse": {
+        "returncode": 0,
+        "details": [
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.c",
+          "checking file drivers/gpu/drm/amd/amdgpu/amdgpu_mes.h",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_userqueue.c",
+          "checking file drivers/gpu/drm/amd/amdgpu/mes_v11_0.c",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c",
+          "Hunk #4 succeeded at 2952 (offset 36 lines).",
+          "Hunk #5 succeeded at 3077 (offset 36 lines).",
+          "Hunk #6 succeeded at 3093 (offset 36 lines).",
+          "checking file drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.h"
+        ]
+      }
+    },
+    "source_unchanged": true,
+    "compiled": false,
+    "installed": false,
+    "GPU_work_submitted": false
+  },
+  "h3_readiness": {
+    "schema": 1,
+    "status": "inventory_only",
+    "sources": {
+      "plugin/__init__.py": {
+        "present": true,
+        "sha256": "31a55c839ac6133c550a087bf878db5366b29606d28f6a10b7124dd97350c9ea",
+        "classes": [
+          "Int8TensorwiseLayout",
+          "Params"
+        ],
+        "imports": [
+          "",
+          "comfy.quant_ops",
+          "int4_lora",
+          "int4_unet_loader",
+          "int8_clip_loader",
+          "int8_clip_save",
+          "int8_lora",
+          "int8_quant",
+          "int8_save",
+          "int8_unet_loader"
+        ],
+        "int8_tp_reference": true,
+        "W4A4_loader_reference": false
+      },
+      "plugin/int4_unet_loader.py": {
+        "present": true,
+        "sha256": "ff57c33c0498d9aa0f04791e9a25b27ef82a456d6e1b077a0e48a96dbcdf4477",
+        "classes": [
+          "UNetLoaderINT4ConvRot"
+        ],
+        "imports": [
+          "int4_quant"
+        ],
+        "int8_tp_reference": false,
+        "W4A4_loader_reference": true
+      },
+      "plugin/int4_lora.py": {
+        "present": true,
+        "sha256": "c09a099efee4ee1888acfe27814439d9fc7debbcf5818e1e4c9247e16dd6e48c",
+        "classes": [
+          "INT4GroupedLora"
+        ],
+        "imports": [],
+        "int8_tp_reference": false,
+        "W4A4_loader_reference": true
+      },
+      "plugin/w4a8_int8.py": {
+        "present": true,
+        "sha256": "56c455f9bb4a92dd63db2a066663ae047d728e1548febeededeb4f4b101009fa",
+        "classes": [],
+        "imports": [
+          "torch"
+        ],
+        "int8_tp_reference": true,
+        "W4A4_loader_reference": false
+      },
+      "tp/core.py": {
+        "present": true,
+        "sha256": "fe16181ae04aaa7a0c81b0e80f1a4b722389690ad8c97650cb888ef10a6e75ec",
+        "classes": [],
+        "imports": [],
+        "int8_tp_reference": true,
+        "W4A4_loader_reference": false
+      },
+      "tp/tp_boot.py": {
+        "present": true,
+        "sha256": "ebb618f53706f2e1616964ccfe3a423406505be9d711ab8048ba24e60e0f000a",
+        "classes": [],
+        "imports": [],
+        "int8_tp_reference": false,
+        "W4A4_loader_reference": false
+      },
+      "tp/tp_linear.py": {
+        "present": true,
+        "sha256": "18306ef14957bef50b6eabfb596add7c28742c3d6e691ae7eeea9aa4cb452e26",
+        "classes": [],
+        "imports": [],
+        "int8_tp_reference": true,
+        "W4A4_loader_reference": false
+      },
+      "sparse_attention": {
+        "present": false
+      },
+      "custom_w4a8_runner": {
+        "present": false
+      }
+    },
+    "assets": {
+      "diffusion": {
+        "present": false
+      },
+      "turbo_lora": {
+        "present": false
+      }
+    },
+    "missing": [
+      "diffusion",
+      "turbo_lora",
+      "sparse_attention",
+      "custom_w4a8_runner"
+    ],
+    "qualification_pending": [
+      "source/license and asset-format review",
+      "W4A8 packed-weight sharding, scales, ConvRot and LoRA correctness",
+      "sparse-attention integration and finite numerical output",
+      "existing memory/ownership/thermal/swap guards",
+      "measured transport identity and full media checks"
+    ],
+    "ready_to_launch": false,
+    "GPU_work_submitted": false,
+    "note": "File presence and AST validity do not establish compatibility."
+  },
+  "cpu_tests": {
+    "passed": 11,
+    "failed": 0,
+    "GPU_execution": false
+  },
+  "preservation": {
+    "kernel_unchanged": true,
+    "guard_and_config_hashes_unchanged": true,
+    "checked_hash_count": 7,
+    "authenticated_health_ok": true,
+    "no_inference_request_sent": true
+  },
+  "compiled": false,
+  "installed": false,
+  "GPU_trials": 0,
+  "new_schedules": 0,
+  "promotion": false
+}
