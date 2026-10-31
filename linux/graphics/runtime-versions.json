@@ -18,5 +18,14 @@
     "local_graphics_devices (maintained direct CLIP/VAE loaders)"
   ],
   "weights": "Shared SATA Graphics-Models; no duplicate NVMe model weights",
-  "requirements": "requirements-validated.txt"
+  "requirements": "requirements-validated.txt",
+  "h3_encoder_activation": {
+    "date": "2026-10-31",
+    "default": "projected8B FP8 + v3.1 ridge projection, T2V only",
+    "fallback": "native32B NVFP4",
+    "placement_unchanged": true,
+    "packages_unchanged": true,
+    "qualification": "guarded normal39-frame API smoke; finite tensors and full AV decode pass",
+    "clipproj_commit": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c"
+  }
 }

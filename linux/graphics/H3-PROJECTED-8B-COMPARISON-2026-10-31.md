@@ -1,5 +1,7 @@
 # Projected 8B versus native 32B H3 encoder — October 31, 2026
 
+Subsequent owner-authorized [normal T2V activation](H3-PROJECTED-8B-ACTIVATION-2026-10-31.md) is complete. The comparison below remains dated isolated evidence; its 32B W4A8 baseline is distinct from the retained normal Native32B NVFP4 workflow.
+
 The projected 8B path reduces encoder loading and encoder memory, while complete generation time remains close and variable. The tested text-to-video scenes remain coherent, with composition and detail changes.
 
 Treat stock 8B + ClipProj as a viable isolated candidate for this bounded text-only workload. Before scheduled preparation, encoder load falls by 35.1% and the complete-request median by only 4.0%. Across all six pairs, complete-generation medians are effectively equal, and two late 8B runs overlap scheduled CPU preparation. Encoder VRAM/RSS savings are substantial; whole-pipeline owned RAM is almost unchanged because the denoiser/VAE still dominates. These results support a memory/loading option within the tested workload; broader quality and production performance remain unqualified.

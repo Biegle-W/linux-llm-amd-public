@@ -7,10 +7,10 @@
     }
   },
   "3": {
-    "class_type": "GraphicsCLIPLoader",
+    "class_type": "GraphicsH3ProjectedCLIPLoader",
     "inputs": {
-      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
-      "type": "minimax",
+      "clip_name": "qwen3vl_8b_fp8_scaled.safetensors",
+      "projection_name": "mmh3-8b-ClipProj-v3.1.safetensors",
       "device": "cuda:1"
     }
   },

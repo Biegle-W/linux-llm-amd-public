@@ -6,3 +6,8 @@ shared_graphics:
   diffusion_models: diffusion_models
   text_encoders: text_encoders
   vae: vae
+
+h3_projected_encoder:
+  base_path: /mnt/shared/Graphics-Models/experimental/h3-8b-comparison-20261031
+  text_encoders: .
+  clip_projections: .

@@ -23,7 +23,7 @@ ssh -L 8188:127.0.0.1:8188 user@linux-host
 Then open the same loopback address on the client. The server binds to loopback;
 this installation does not expose a new unauthenticated LAN service.
 
-Choose **Workflows**, then **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**.
+Choose **Workflows**, then **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**. H3 defaults to the projected 8B text-only encoder; use **MiniMax H3 Native32B** for image conditioning or rollback.
 Refresh the list if needed. Edit the prompt, keep batch count 1 and click Run.
 Use the saved base-model schedules; neither workflow needs a prompt enhancer,
 Turbo adapter, GGUF loader or third-party node pack. The small maintained
@@ -66,8 +66,7 @@ uv pip check --python runtime/comfyui/.venv/bin/python
 ```
 
 Edit `graphics/extra_model_paths.yaml` for the real Shared SATA mount. It points
-at the seven retained files without copying weights onto NVMe. Copy the two
-editor workflow JSONs into `runtime/comfyui/user/default/workflows/`.
+at the retained base models and existing H3 8B/projection directory without copying weights. Copy the editor JSONs to `runtime/comfyui/user/default/workflows/`; name the H3 base **MiniMax H3 INT8.json** and its native32B fallback **MiniMax H3 Native32B.json**. Both launchers use `install-device-loaders.py` to install the complete extension plus pinned vendor source/licence. Validate portable contracts with `python3 graphics/test-h3-projected-loader.py`.
 Run `graphics/start-comfyui --auto-launch`. For PATH access install the small
 `graphics/comfyui` wrapper into `~/.local/bin/`; set `LOCAL_LLM_ROOT` when using
 a different repository location. Adjust the desktop file's absolute paths for

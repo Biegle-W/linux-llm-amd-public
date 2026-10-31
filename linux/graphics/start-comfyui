@@ -21,8 +21,7 @@ export ROCR_VISIBLE_DEVICES=0,1
 export OMP_NUM_THREADS=8
 export PYTHONUNBUFFERED=1
 
-install -D -m 644 "$repo/graphics/comfyui-device-loaders/__init__.py" \
-    "$runtime/custom_nodes/local_graphics_devices/__init__.py"
+python3 "$repo/graphics/install-device-loaders.py" --runtime "$runtime"
 "$runtime/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
 cd -- "$runtime"
 "$runtime/.venv/bin/python" main.py \

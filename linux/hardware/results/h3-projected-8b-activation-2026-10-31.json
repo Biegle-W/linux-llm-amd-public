@@ -1,0 +1,359 @@
+{
+  "date": "2026-10-31",
+  "status": "active for normal H3 text-to-video",
+  "scope": "Normal saved API graph through graphics/start-comfyui; observation-only temporary tensor/phase hooks, removed after qualification; unique output prefix only graph edit. Single39-frame functional smoke, not a benchmark comparison.",
+  "actual_physical_RAM_bytes": 32811171840,
+  "placement": "DiT cuda:0; projected encoder and VAEs cuda:1; component placement, not TP",
+  "attention": "PyTorch SDPA; existing launcher options retained",
+  "encoder_assets": [
+    {
+      "repository": "Comfy-Org/Qwen3-VL",
+      "revision": "02f0d3eefb59528799653d16735818801177ef1f",
+      "bytes": 10588637512,
+      "sha256": "4ba424cf62e51392e4d1a39933e803706f4e823c1065f36aaf149c6453f66bcd",
+      "path": "experimental/h3-8b-comparison-20261031/qwen3vl_8b_fp8_scaled.safetensors"
+    },
+    {
+      "repository": "NicoLab28/ClipProj-MiniMax-H3",
+      "revision": "2ebdbcdc27a29a9607efdb221a9afcb9a0cdd808",
+      "bytes": 41990896,
+      "sha256": "df0661849d0fd51db66b0c9aa76f2c1c3eabd81b9a4745edd2a4617ab24c87f7",
+      "path": "experimental/h3-8b-comparison-20261031/mmh3-8b-ClipProj-v3.1.safetensors"
+    }
+  ],
+  "clipproj_commit": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c",
+  "request_seconds": 215.57693670500885,
+  "server_ready_seconds": 5.057513311010553,
+  "guards": {
+    "policy": "loading-swap-v4",
+    "host_floor_bytes": 1073741824,
+    "vram_soft_bytes": 2147483648,
+    "vram_hard_bytes": 1610612736,
+    "physical_memory_cap_bytes": 32811171840
+  },
+  "memory": {
+    "samples": 219,
+    "sampling_errors": 0,
+    "min_available_bytes": 4369653760,
+    "min_free_vram_bytes": [
+      2934870016,
+      8051941376
+    ],
+    "max_worker_swap_bytes": 6992142336,
+    "max_worker_spill_bytes": 0
+  },
+  "swap_activity": {
+    "policy": "loading-swap-v4",
+    "samples": 219,
+    "sampling_errors": 0,
+    "elapsed_seconds": 220.3714830359968,
+    "worker_swap_peak_bytes": 6992142336,
+    "total_swapin_bytes": 14717968384,
+    "total_swapout_bytes": 18173763584,
+    "inference_window_samples": 0,
+    "max_inference_swapout_bytes_per_second": 0.0,
+    "max_inference_swap_io_bytes_per_second": 0.0,
+    "min_available_bytes": 4369911808,
+    "max_memory_full_psi_avg10": 0.0,
+    "max_low_memory_consecutive_samples": 0,
+    "max_full_psi_consecutive_samples": 0,
+    "write_budget_bytes_per_second": 134217728,
+    "progress_samples": 0,
+    "measured_slowdown_windows": 0,
+    "confirmed_write_slowdown_windows": 0,
+    "last_confirmed_write_slowdown": null,
+    "inference_write_limit_bytes_per_second": 134217728,
+    "inference_io_limit_bytes_per_second": 167772160,
+    "rate_window_seconds": 30,
+    "failures": [],
+    "advisories": []
+  },
+  "cgroup_completion": {
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 13",
+    "memory.peak": "24908509184",
+    "memory.swap.peak": "9403920384"
+  },
+  "shutdown_verified": true,
+  "reservation_released": true,
+  "finite_tensor_checks": [
+    {
+      "node": "MiniMaxH3ImageToVideo",
+      "seconds": 3.2198829039989505,
+      "tensors": [
+        {
+          "path": "MiniMaxH3ImageToVideo/0/0/0",
+          "shape": [
+            1,
+            76,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 389120
+        },
+        {
+          "path": "MiniMaxH3ImageToVideo/0/0/1/minimax_token_tags",
+          "shape": [
+            76
+          ],
+          "dtype": "torch.int64",
+          "device": "cpu",
+          "finite": true,
+          "numel": 76
+        },
+        {
+          "path": "MiniMaxH3ImageToVideo/1/samples/0",
+          "shape": [
+            1,
+            24,
+            12,
+            22,
+            38
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 240768
+        },
+        {
+          "path": "MiniMaxH3ImageToVideo/1/samples/1",
+          "shape": [
+            1,
+            32,
+            2,
+            65
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 4160
+        }
+      ]
+    },
+    {
+      "node": "SamplerCustomAdvanced",
+      "seconds": 144.4267807849974,
+      "tensors": [
+        {
+          "path": "SamplerCustomAdvanced/0/samples/0",
+          "shape": [
+            1,
+            24,
+            12,
+            22,
+            38
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 240768
+        },
+        {
+          "path": "SamplerCustomAdvanced/0/samples/1",
+          "shape": [
+            1,
+            32,
+            2,
+            65
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 4160
+        },
+        {
+          "path": "SamplerCustomAdvanced/1/samples/0",
+          "shape": [
+            1,
+            24,
+            12,
+            22,
+            38
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 240768
+        },
+        {
+          "path": "SamplerCustomAdvanced/1/samples/1",
+          "shape": [
+            1,
+            32,
+            2,
+            65
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 4160
+        }
+      ]
+    },
+    {
+      "node": "VAEDecodeAudio",
+      "seconds": 3.548910382000031,
+      "tensors": [
+        {
+          "path": "VAEDecodeAudio/0/waveform",
+          "shape": [
+            1,
+            2,
+            52000
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 104000
+        }
+      ]
+    },
+    {
+      "node": "VAEDecode",
+      "seconds": 22.94564805799746,
+      "tensors": [
+        {
+          "path": "VAEDecode/0",
+          "shape": [
+            39,
+            352,
+            608,
+            3
+          ],
+          "dtype": "torch.float32",
+          "device": "cpu",
+          "finite": true,
+          "numel": 25039872
+        }
+      ]
+    }
+  ],
+  "media": {
+    "passed": true,
+    "sha256": "09236f90ed56200a90166c21d1d1c60be00eee499c6bdb0fded005ead2a72c5e",
+    "video": {
+      "codec_name": "h264",
+      "width": 608,
+      "height": 352,
+      "r_frame_rate": "24/1",
+      "duration": "1.625000",
+      "nb_read_frames": "39"
+    },
+    "audio": {
+      "codec_name": "aac",
+      "sample_rate": "32000",
+      "channels": 2,
+      "duration": "1.625000"
+    },
+    "full_AV_decode_passed": true,
+    "finite_audio": true,
+    "audio_samples": 104448,
+    "audio_peak": 0.06120810657739639,
+    "audio_rms": 0.009895773604512215,
+    "decoded_video_sha256": "0dd063e23c82d8d276152344e43d2cc4ae3e74b31fbfd15623f8b756ce0b200e",
+    "decoded_audio_sha256": "61e72a59cdba89d2b66e64e9442e93c7653e4d4859702e9cd63ad03cf5c631af",
+    "sampled_frame_indexes_zero_based": [
+      0,
+      7,
+      15,
+      22,
+      30,
+      38
+    ]
+  },
+  "cpu_contract_checks_per_checkout": 7,
+  "startup_failures": "Two startup harness issues retained: a path preflight and temporary observer classmethod/schema mismatch. Both preceded generation; corrected. After the successful request, the harness JSON-decoded an empty cleanup response; saved API/tensor/guard/cleanup evidence independently qualified without rerun. Exactly one successful39-frame generation; no repeat of completed14-run encoder comparison.",
+  "rollback_workflows": [
+    "graphics/workflows/minimax-h3-native32b.json",
+    "graphics/workflows/minimax-h3-native32b-api.json"
+  ],
+  "sampled_visual_review": "Six evenly spaced frames show a stable red teapot on a sunlit wooden table, plant background and changing steam above the spout. No obvious gross corruption in this brief sample; no general quality-equivalence or perceptual audio claim.",
+  "limits": [
+    "T2V only; images/reference inputs rejected including cloned CLIP",
+    "32B original NVFP4 graph and weights retained for image-conditioning and rollback",
+    "No claim for long prompts, speech, maximum resolution/duration, BF16 equivalence or native TP2 promotion",
+    "Desktop workflow installed; graphical interaction not re-tested",
+    "No engine/package/kernel/clock/guard/hold/schedule change; actual host remains32GB and96GB/P2P unqualified"
+  ],
+  "thermals": {
+    "status": "complete",
+    "interval_seconds": 1.0,
+    "samples": 221,
+    "sample_errors": 0,
+    "cards": [
+      {
+        "gpu_index": 0,
+        "samples": 221,
+        "busy_samples": 31,
+        "sensor_samples": {
+          "mem": 221,
+          "edge": 221,
+          "junction": 221
+        },
+        "peak_temperature_c": {
+          "mem": 52.0,
+          "edge": 51.0,
+          "junction": 73.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 52.0,
+          "edge": 51.0,
+          "junction": 73.0
+        },
+        "throttle_samples_available": 221,
+        "thermal_limit_samples": 132,
+        "hotspot_limit_samples": 132,
+        "power_limit_samples": 28,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 3517.0,
+        "peak_power_average_w": 326.0,
+        "peak_gfx_clock_mhz": 2534.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      },
+      {
+        "gpu_index": 1,
+        "samples": 221,
+        "busy_samples": 5,
+        "sensor_samples": {
+          "mem": 221,
+          "edge": 221,
+          "junction": 221
+        },
+        "peak_temperature_c": {
+          "mem": 51.0,
+          "edge": 35.0,
+          "junction": 60.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 50.0,
+          "edge": 35.0,
+          "junction": 60.0
+        },
+        "throttle_samples_available": 221,
+        "thermal_limit_samples": 96,
+        "hotspot_limit_samples": 96,
+        "power_limit_samples": 3,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 2501.0,
+        "peak_power_average_w": 302.0,
+        "peak_gfx_clock_mhz": 3130.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 100.0,
+        "last_throttle_status": "available"
+      }
+    ]
+  },
+  "workflow_sha256": {
+    "minimax-h3-base-api.json": "ad12afc4c135cd1acd8cb1c74047d8a4fc430bebf2757f590889967cb4a1bf67",
+    "minimax-h3-base.json": "b69adfd0631e7b9f316bbe5ce8205765f93a29c34b354fbb6c05cdd28e920293",
+    "minimax-h3-native32b.json": "64f2fde78e8e4280365d5774d77226766b61a7e72ebb6ef6740e08a60066f3e5",
+    "minimax-h3-native32b-api.json": "4e1ffa45df0aa5e6c80f24a2362d8ecfb122ddda9d65f4b4b969ed1ef895769b"
+  },
+  "qualified_loader_sha256": {
+    "graphics/comfyui-device-loaders/__init__.py": "67b52279d2989e22cffbb78baf9c0954fa1828480310ca651ae6ec944ba19c65",
+    "graphics/install-device-loaders.py": "bf1713994f36faf2a97785631b911500e6042b9a26744f290bd7702c408cdb19"
+  }
+}

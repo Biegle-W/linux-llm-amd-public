@@ -38,7 +38,7 @@
     },
     {
       "id": 3,
-      "type": "GraphicsCLIPLoader",
+      "type": "GraphicsH3ProjectedCLIPLoader",
       "pos": [
         0,
         230
@@ -61,14 +61,14 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "GraphicsCLIPLoader"
+        "Node name for S&R": "GraphicsH3ProjectedCLIPLoader"
       },
       "widgets_values": [
-        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
-        "minimax",
+        "qwen3vl_8b_fp8_scaled.safetensors",
+        "mmh3-8b-ClipProj-v3.1.safetensors",
         "cuda:1"
       ],
-      "title": "Text encoder \u2014 GPU 1"
+      "title": "H3 8B text encoder - GPU 1"
     },
     {
       "id": 5,
@@ -582,7 +582,7 @@
       "mode": 0,
       "properties": {},
       "widgets_values": [
-        "Denoiser: GPU 0. Encoder and both VAEs: GPU 1. Staged component placement, not tensor parallelism. Base schedule: res_multistep / simple, 20 steps, CFG-free, native shifts 12 / 3, seed 42. Short validation draft: 608 x 352, 39 frames at 24 fps (1.625 seconds). 17k+5 frame grid. No Turbo LoRA is installed. Larger resolutions and 124+ frame runs need separate validation."
+        "8B projected text-to-video encoder selected. For image-conditioned work, open MiniMax H3 Native32B. Denoiser: GPU 0. Encoder and both VAEs: GPU 1. Staged component placement, not tensor parallelism. Base schedule: res_multistep / simple, 20 steps, CFG-free, native shifts 12 / 3, seed 42. Short validation draft: 608 x 352, 39 frames at 24 fps (1.625 seconds). 17k+5 frame grid. No Turbo LoRA is installed. Larger resolutions and 124+ frame runs need separate validation."
       ],
       "color": "#432",
       "bgcolor": "#653"

@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/nicolab28/ComfyUI-ClipProj",
+  "commit": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c",
+  "license": "MIT",
+  "files_sha256": {
+    "clipproj_nodes.py": "b5dcbf4bea47692c24fd504a95cdafc714c255df3d740a0496bcb0cb3ce9494a",
+    "clipproj_projection.py": "7991e2eecdf3e731ec31084298d84d9b5eda1403a6105fc2e8edc8bcced50673",
+    "clipproj_pinning.py": "3a7fb8d2b6a028355c48c5e6c0cdcfdce42144031dac84d831c1508cbe137d61",
+    "LICENSE": "2545b2b881f1f62a4b9f5f18fba5bd2d586c6949a969cd5dd4fc88ed341b8579"
+  },
+  "usage": "Unmodified implementation modules; only ProjectedCLIP is used. No vendor UI mappings or global unload hooks are installed."
+}

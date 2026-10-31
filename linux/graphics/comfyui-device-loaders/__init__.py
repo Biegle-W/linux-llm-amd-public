@@ -85,3 +85,68 @@ NODE_CLASS_MAPPINGS = {'GraphicsCLIPLoader': GraphicsCLIPLoader,
                        'GraphicsVAELoader': GraphicsVAELoader}
 NODE_DISPLAY_NAME_MAPPINGS = {'GraphicsCLIPLoader': 'Load Graphics Encoder on GPU',
                               'GraphicsVAELoader': 'Load Graphics VAE on GPU'}
+
+
+# The projection implementation remains pinned and unmodified. Its global UI
+# and resident-model hooks are deliberately not installed by this extension.
+from .clipproj_vendor.clipproj_nodes import ProjectedCLIP, detect_arch
+from .clipproj_vendor import clipproj_projection
+
+
+class H3TextOnlyProjectedCLIP(ProjectedCLIP):
+    def clone(self):
+        return type(self)(self._base.clone(), self._proj_name)
+
+    def tokenize(self, text, return_word_ids=False, images=None,
+                 minimax_ref_items=None, **kwargs):
+        if ((images is not None and len(images) > 0)
+                or (minimax_ref_items is not None and len(minimax_ref_items) > 0)):
+            raise ValueError('For image-conditioned H3, open the retained MiniMax H3 Native32B workflow.')
+        return super().tokenize(text, return_word_ids=return_word_ids,
+                                images=[] if images is None else images,
+                                minimax_ref_items=minimax_ref_items, **kwargs)
+
+
+def h3_projection_names():
+    clipproj_projection.register_folder()
+    folder_paths.folder_names_and_paths['clip_projections'][1].add('.safetensors')
+    return [name for name in folder_paths.get_filename_list('clip_projections')
+            if name.endswith('.safetensors')]
+
+
+class GraphicsH3ProjectedCLIPLoader:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {'required': {
+            'clip_name': (folder_paths.get_filename_list('text_encoders'),),
+            'projection_name': (h3_projection_names(),),
+            'device': (['cuda:0', 'cuda:1'], {'default': 'cuda:1'}),
+        }}
+
+    RETURN_TYPES = ('CLIP',)
+    FUNCTION = 'load_clip'
+    CATEGORY = 'graphics/loaders'
+
+    def load_clip(self, clip_name, projection_name, device):
+        path = folder_paths.get_full_path_or_raise('text_encoders', clip_name)
+        if detect_arch(path) != ('boogu', '8B'):
+            raise ValueError('This H3 text-to-video loader requires the selected Qwen3-VL 8B encoder.')
+        h3_projection_names()
+        projection = clipproj_projection.load_projection(projection_name)
+        if ('W' not in projection or list(projection['W'].shape) != [4096, 5120]
+                or int(projection['tap']) != 24 or 'sink_out' not in projection):
+            raise ValueError('This H3 text-to-video profile requires its matching 8B v3.1 ridge projection.')
+        target = gpu_device(device)
+        base = comfy.sd.load_clip(
+            ckpt_paths=[path],
+            embedding_directory=folder_paths.get_folder_paths('embeddings'),
+            clip_type=comfy.sd.CLIPType.BOOGU,
+            model_options={'load_device': target, 'initial_device': target,
+                           'offload_device': torch.device('cpu')},
+        )
+        clip = H3TextOnlyProjectedCLIP(base, projection_name)
+        return (clip,)
+
+
+NODE_CLASS_MAPPINGS['GraphicsH3ProjectedCLIPLoader'] = GraphicsH3ProjectedCLIPLoader
+NODE_DISPLAY_NAME_MAPPINGS['GraphicsH3ProjectedCLIPLoader'] = 'Load H3 8B Text Encoder on GPU'

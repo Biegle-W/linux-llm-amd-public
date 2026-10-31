@@ -1,5 +1,7 @@
 # Graphics model collection
 
+**October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation and rollback](H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
+
 [AMD H3 encoder-format comparison](H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
 
 ## Fresh H3 one-card versus two-card test — October28
@@ -15,8 +17,8 @@ Later fcys reply 17 now supplies source code; the earlier no-source observation 
 
 [October 27 H3 multi-GPU research](H3-MULTIGPU-RESEARCH-2026-10-27.md) now includes a firsthand dual-XTX ComfyUI SP2 report, the Kaihui AMD SP implementation and Bunsei’s separate R9700 Radiance TP2 fork. It distinguishes these from locally validated component placement, DisTorch2 and Dual-Sage. Research only; no runtime/workflow change or new graphics benchmark.
 
-One quality-oriented precision per image/video model, with one required encoder
-and the corresponding VAEs. ComfyUI is installed in an isolated ROCm environment;
+One selected image/video base model with its companions; H3 retains a smaller
+text-only encoder and the original 32B image-conditioning/rollback encoder. ComfyUI is installed in an isolated ROCm environment;
 both families passed two-GPU generation. See [measured results](VALIDATION-2026-10-18.md)
 and [start/install instructions](INSTALL.md). The official **Comfy Desktop**
 application-menu app imports the existing runtime, models and workflows;
@@ -30,7 +32,8 @@ normal startup with the official Ubuntu sandbox passed October21;
 | Qwen encoder | `text_encoders/qwen3vl_8b_bf16.safetensors` | Lossless merge and key mapping of existing BF16 shards |
 | Qwen VAE | `vae/qwen_image_2.1_vae_fp32.safetensors` | Existing FP32 tensors mapped to Comfy/Wan layout, with singleton shape changes only |
 | H3 first/last-frame base | `diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors` | New native Comfy INT8 replacement for the removed Q2 |
-| H3 encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | Retained NVFP4 storage baseline, with eager dequantization on gfx1100 |
+| H3 default T2V encoder + projection | `experimental/h3-8b-comparison-20261031/qwen3vl_8b_fp8_scaled.safetensors` + `mmh3-8b-ClipProj-v3.1.safetensors` | Stock FP8 8B + pinned v3.1 ridge projection; text-only |
+| H3 native32B fallback encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | Retained NVFP4 storage baseline, with eager dequantization on gfx1100 |
 | H3 video VAE | `vae/minimax_h3_video_vae_fp16.safetensors` | Existing downloaded file, moved intact |
 | H3 audio VAE | `vae/minimax_h3_audio_vae_fp32.safetensors` | Existing downloaded file, moved intact |
 | FLUX 3 Image Klein (distilled) | `diffusion_models/flux3-image-klein-bf16.safetensors` | Official BFL ComfyUI release, BF16 (October 23) |

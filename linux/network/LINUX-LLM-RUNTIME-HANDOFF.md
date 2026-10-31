@@ -1,6 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-**October 31 H3 projected-8B comparison:** all 12 timed generations pass guard/media checks. Before scheduled CPU preparation (four pairs), median encoder load is 31.9 s versus 49.1 s for native 32B W4A8; complete generation is 259.6 versus 270.5 s. Encoder memory falls; whole-workflow gains vary. Sampled quality, all six pairs and late scheduling overlap are recorded. Candidate remains isolated; production selections, RAM holds and guards remain. [Measured comparison and limits](../graphics/H3-PROJECTED-8B-COMPARISON-2026-10-31.md).
+**October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation, rollback and limits](../graphics/H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
+
+**October 31 H3 projected-8B comparison:** all 12 timed generations pass guard/media checks. Before scheduled CPU preparation (four pairs), median encoder load is 31.9 s versus 49.1 s for native 32B W4A8; complete generation is 259.6 versus 270.5 s. Encoder memory falls; whole-workflow gains vary. Sampled quality, all six pairs and late scheduling overlap are recorded. This comparison used an isolated runtime; normal T2V activation is recorded separately. RAM holds and guards remain. [Measured comparison and limits](../graphics/H3-PROJECTED-8B-COMPARISON-2026-10-31.md).
 
 **October 31 forum refresh:** 15 public reply pages / 206 posts reviewed. Later tiered-vLLM replies show progress but unresolved PLE/numerics; H3 projected 8B encoding is a separate quality candidate. Linked engine pins are unchanged. High-RAM/P2P results do not qualify this 32 GB host. Research only; no runtime or GPU trial. [Findings and next actions](../hardware/LCZ-FORUM-REFRESH-2026-10-31.md).
 
@@ -1282,6 +1284,7 @@ launcher; quit either interface before switching. Native app startup, both GPU
 discovery, workflow/model availability and unchanged inventories passed; no new
 generation or speed benchmark was run. [Desktop setup and package hash](../graphics/DESKTOP-2026-10-20.md). Web UI: `http://127.0.0.1:8188` (loopback; use SSH forwarding remotely).
 Choose saved workflows **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**.
+October 31: H3 INT8 now selects the projected 8B FP8 + v3.1 encoder for text-to-video; reopen the saved workflow to load the new graph. **MiniMax H3 Native32B** and its API graph preserve the exact original NVFP4 path for image conditioning and rollback. A guarded normal 39-frame API generation, finite conditioning/latents/images/audio and full AV decoding pass. The DiT, placement and runtime flags are unchanged. The isolated TP2 stack remains separate.
 The runtime is `runtime/comfyui` in the Linux repository, isolated Python 3.12.14,
 ComfyUI 0.42.0 at `8f04fd6ecf4a548937971e840af2a985529fab76`, Torch
 `2.15.0.dev20260827+rocm7.2`, Kitchen 0.2.39, aimdo 0.5.6, frontend 1.55.18.
@@ -1298,10 +1301,7 @@ terminate ComfyUI; run large graphics and LLM workloads separately.
 [Validation details](../graphics/VALIDATION-2026-10-18.md),
 [install/start guide](../graphics/INSTALL.md),
 [exact versions](../graphics/runtime-versions.json).
-No new weight quant or Turbo adapter was downloaded. Larger sizes, 124+ frame
-video, I2V/editing, Turbo and Windows execution remain unvalidated. The earlier
-Unsloth Q2 corrupt render is historical and not a controlled comparison with this
-native INT8 pipeline. The seven real model files remain on Shared SATA.
+The original seven-file collection and native32B weights remain on Shared SATA; the active 8B encoder/projection reuse the previously verified experimental directory. The completed isolated 124-frame comparison is separate evidence; larger normal-path sizes/durations, 8B image conditioning, Turbo and Windows execution remain unvalidated. The earlier Unsloth Q2 render remains historical.
 
 ## Strata and retired setups
 

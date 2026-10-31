@@ -105,5 +105,28 @@
     "added": "2026-10-23",
     "validation": "passed: 1024x1024 text-to-image and 1248x832 single-reference edit with the official prompt upsampler; see FLUX3-KLEIN-2026-10-23.md",
     "requires": "graphics/comfyui-device-loaders patchify Conv3d MIOpen workaround for the upsampler image path on torch 2.15.0.dev20260827+rocm7.2"
+  },
+  "h3_current_encoder_selection": {
+    "as_of": "2026-10-31",
+    "default": "projected8B, T2V only",
+    "assets": [
+      {
+        "repository": "Comfy-Org/Qwen3-VL",
+        "revision": "02f0d3eefb59528799653d16735818801177ef1f",
+        "bytes": 10588637512,
+        "sha256": "4ba424cf62e51392e4d1a39933e803706f4e823c1065f36aaf149c6453f66bcd",
+        "path": "experimental/h3-8b-comparison-20261031/qwen3vl_8b_fp8_scaled.safetensors"
+      },
+      {
+        "repository": "NicoLab28/ClipProj-MiniMax-H3",
+        "revision": "2ebdbcdc27a29a9607efdb221a9afcb9a0cdd808",
+        "bytes": 41990896,
+        "sha256": "df0661849d0fd51db66b0c9aa76f2c1c3eabd81b9a4745edd2a4617ab24c87f7",
+        "path": "experimental/h3-8b-comparison-20261031/mmh3-8b-ClipProj-v3.1.safetensors"
+      }
+    ],
+    "fallback": "Original32B NVFP4; exact native32b GUI/API graphs and weights retained",
+    "historical_fields": "Earlier byte totals and file inventory retain their dated original collection scope",
+    "validation_report": "H3-PROJECTED-8B-ACTIVATION-2026-10-31.md"
   }
 }
