@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-30",
+  "scope": "Advisory implementation roadmap; no runtime changes",
+  "current_RAM_nominal_GB": 32,
+  "planned_RAM_total_GB": 96,
+  "RAM_installed_now": false,
+  "incoming_switch": "PEX88096 PCIe Gen4",
+  "P2P_verified_after_switch": false,
+  "current_upstream_links": [
+    {
+      "CPU_root_port": "00:01.0",
+      "GT_s": 16,
+      "width": 8
+    },
+    {
+      "CPU_root_port": "00:01.1",
+      "GT_s": 16,
+      "width": 8
+    }
+  ],
+  "profile_restore_min_visible_RAM_GiB": 60,
+  "GPU_VRAM_GB_each": 24,
+  "H3_hard_free_VRAM_floor_GiB": 1.5,
+  "H3_12s_reported_remaining_VRAM_approx_GiB": 1.0,
+  "runtime_changed": false,
+  "new_GPU_trial_authorized_or_started": false,
+  "sources": [
+    "https://docs.broadcom.com/doc/BC-0484EN",
+    "https://rocm.docs.amd.com/projects/rccl/en/latest/how-to/rccl-usage-tips.html"
+  ]
+}

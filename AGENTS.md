@@ -1,5 +1,7 @@
 # Agent entry point
 
+**Planned hardware:** owner expects 96 GB total RAM and a PEX88096 switch. These are future conditions; current RAM holds and transport remain. [Conditional roadmap](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
+
 **October 30 LCZ source review:** five topics checked; linked engine revisions are unchanged. Experimental MES work merits source compatibility review. No runtime changes. [Findings](linux/hardware/LCZ-UPDATE-REVIEW-2026-10-30.md).
 
 **October 30 OpenCat search compatibility and dated news:** the actual two-function-plus-web request no longer fails HTTP400. Free RSS search supplies publication dates; the exact current-news question returns a dated answer with citations, and 69 focused checks pass per checkout. The iPhone now answers with sources, confirmed by the owner. [Fix, evidence and limits](linux/network/OPENCAT-TOOLS-DATED-NEWS-2026-10-30.md).

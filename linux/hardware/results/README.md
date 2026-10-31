@@ -1,5 +1,9 @@
 # Current benchmark results
 
+## Planned P2P and 96 GB — October 30
+
+[Planning metadata](p2p-96gb-roadmap-2026-10-30.json), not measured upgrade results. [Roadmap](../P2P-96GB-ROADMAP-2026-10-30.md).
+
 ## LCZ source update review — October 30
 
 [Curated source metadata](lcz-update-review-2026-10-30.json) and [review](../LCZ-UPDATE-REVIEW-2026-10-30.md). Author-reported results remain distinct from local qualification.

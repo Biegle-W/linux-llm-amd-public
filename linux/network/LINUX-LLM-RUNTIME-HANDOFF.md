@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+## Planned P2P and 96 GB — October 30
+
+The owner plans 96 GB total RAM (adding 64 GB) and a PEX88096 PCIe4 switch. Neither is treated as installed or qualified. Current holds, guards, selected profiles, services and schedules remain unchanged; no new trial/job. Saved 64 GB profiles require actual visible-memory and idle checks before restoration. [Conditional implementation order](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).
+
 ## LCZ source update review — October 30
 
 Five requested topics reviewed, including latest replies/edits and linked source heads. No new local benchmark, runtime promotion, kernel/driver change, guard change or trial job. Existing Strata qualification failure and RAM holds remain. Current kernel/backport inclusion is not fully audited; the experimental MES lead is not a proven stall fix. [Source findings and next investigation](../hardware/LCZ-UPDATE-REVIEW-2026-10-30.md).

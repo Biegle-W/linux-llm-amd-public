@@ -1,5 +1,9 @@
 # Current dual-AMD benchmarks — October 30, 2026
 
+## Planned P2P and 96 GB — October 30
+
+Planning only; no new benchmark, hardware activation or promotion. [Current/P2P/96 GB roadmap](P2P-96GB-ROADMAP-2026-10-30.md).
+
 ## LCZ source update review — October 30
 
 Read-only forum/source review, not a new host benchmark or runtime promotion. [Latest findings and applicability](LCZ-UPDATE-REVIEW-2026-10-30.md).
