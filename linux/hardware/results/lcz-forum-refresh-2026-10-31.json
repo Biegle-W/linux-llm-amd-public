@@ -1,0 +1,128 @@
+{
+  "checked_at_UTC": "2026-10-31T05:54:42.970363+00:00",
+  "scope": "Read-only source review; author reports are not local measurements",
+  "original_five": {
+    "pages": 12,
+    "posts": 181,
+    "previous_posts": 159,
+    "additional_posts": 22
+  },
+  "additional_three": {
+    "pages": 3,
+    "posts": 25
+  },
+  "topics": [
+    {
+      "topic": 2728,
+      "url": "https://lcz.me/topic/2728",
+      "pages_checked": 1,
+      "posts_checked": 19,
+      "latest_post_or_edit_UTC": "2026-10-31T05:49:25.268Z",
+      "retrieved_at_UTC": "2026-10-31T05:52:34.050697+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 1532,
+      "url": "https://lcz.me/topic/1532",
+      "pages_checked": 6,
+      "posts_checked": 106,
+      "latest_post_or_edit_UTC": "2026-09-24T18:38:28.253Z",
+      "retrieved_at_UTC": "2026-10-31T05:52:35.383595+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2724,
+      "url": "https://lcz.me/topic/2724",
+      "pages_checked": 1,
+      "posts_checked": 5,
+      "latest_post_or_edit_UTC": "2026-10-31T03:24:27.886Z",
+      "retrieved_at_UTC": "2026-10-31T05:52:33.977728+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2671,
+      "url": "https://lcz.me/topic/2671",
+      "pages_checked": 2,
+      "posts_checked": 27,
+      "latest_post_or_edit_UTC": "2026-10-30T18:17:20.171Z",
+      "retrieved_at_UTC": "2026-10-31T05:52:34.166315+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2694,
+      "url": "https://lcz.me/topic/2694",
+      "pages_checked": 2,
+      "posts_checked": 24,
+      "latest_post_or_edit_UTC": "2026-10-31T02:53:46.893Z",
+      "retrieved_at_UTC": "2026-10-31T05:52:34.555954+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2702,
+      "url": "https://lcz.me/topic/2702",
+      "pages_checked": 1,
+      "posts_checked": 13,
+      "latest_post_or_edit_UTC": "2026-10-30T04:01:48.053Z",
+      "retrieved_at_UTC": "2026-10-31T05:53:16.094949+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2670,
+      "url": "https://lcz.me/topic/2670",
+      "pages_checked": 1,
+      "posts_checked": 5,
+      "latest_post_or_edit_UTC": "2026-10-29T00:36:31.825Z",
+      "retrieved_at_UTC": "2026-10-31T05:53:16.338388+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    },
+    {
+      "topic": 2666,
+      "url": "https://lcz.me/topic/2666",
+      "pages_checked": 1,
+      "posts_checked": 7,
+      "latest_post_or_edit_UTC": "2026-10-29T14:32:21.658Z",
+      "retrieved_at_UTC": "2026-10-31T05:53:16.644700+00:00",
+      "method": "Public HTML embedded topic data; all reply pages"
+    }
+  ],
+  "source_revisions": [
+    {
+      "repository": "StevenChenSE/sglang",
+      "ref": "gfx1100-support",
+      "sha": "f84475ccf593087df3d1da13c9e675eadee12352"
+    },
+    {
+      "repository": "nicejunjie/Strata-rdna3",
+      "ref": "rdna3",
+      "sha": "fc8f82334239199cd3cfcfa5ab5b8ac09827d19b"
+    },
+    {
+      "repository": "nicejunjie/Strata-rdna3",
+      "ref": "refs/pull/1/head",
+      "sha": "309f0c8f8cef010f62746f80caf677c68e7141f9"
+    },
+    {
+      "repository": "happymy/MinimaxH3-7900xtx",
+      "ref": "master",
+      "sha": "bf9bb5123ec0d4c7b08ad53410a61a14c1c32ca0",
+      "plan_blob": "72cc3fde71a723d5fb52bfc20655d23e61f23d48"
+    }
+  ],
+  "comparison": {
+    "linked_engine_refs_unchanged": true,
+    "tiered_vllm": "Later replies report simple correct output and 1.60 aggregate tok/s; real PLE and numerical validation remain unresolved; no published source link in reviewed posts",
+    "h3_projected_encoder": "Distinct architecture/quality candidate; not equivalent to native 32B W4A8",
+    "h3_diffusion": "W4A8/Turbo/sparse TP2 source/assets remain unverified locally",
+    "strata_tuning": "64/128 GB author reports do not qualify current 32 GB profile",
+    "MES": "Completed offline source audit retained; no proven local stall fix",
+    "Super_INT4": "Completed admission retry retained: required 27.625 GiB; available 22.181 GiB"
+  },
+  "runtime_changed": false,
+  "GPU_trials_started": false,
+  "builds_started": false,
+  "model_downloads_started": false,
+  "new_schedules": false,
+  "promotion": false,
+  "active_task_jobs": [],
+  "owned_GPU_reservations": []
+}

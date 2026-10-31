@@ -1,5 +1,7 @@
 # LCZ update review — October 30, 2026
 
+Follow-up: the [October 31 forum refresh](LCZ-FORUM-REFRESH-2026-10-31.md) covers 22 additional posts in these five topics, additional tuning discussions and the projected-encoder lead. Its newer tiered-vLLM replies supersede the prototype status below; completed local MES/Strata evidence remains.
+
 Follow-up: the [completed MES source audit and offline preparation](MES-SOURCE-AUDIT-2026-10-30.md) resolves exact-package inclusion/applicability below; no kernel activation or GPU trial. The original review remains dated evidence.
 
 Read-only review of five requested topics, including reply pages and edit timestamps: 12 public API pages covering 159 posts. Dates below use America/Toronto. Author-reported performance is separate from our qualified local results. No runtime setting, driver, kernel, service, hold, guard or schedule was changed; no GPU trial was started.

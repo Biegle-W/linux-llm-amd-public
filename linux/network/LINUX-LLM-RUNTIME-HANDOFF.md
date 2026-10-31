@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**October 31 forum refresh:** 15 public reply pages / 206 posts reviewed. Later tiered-vLLM replies show progress but unresolved PLE/numerics; H3 projected 8B encoding is a separate quality candidate. Linked engine pins are unchanged. High-RAM/P2P results do not qualify this 32 GB host. Research only; no runtime or GPU trial. [Findings and next actions](../hardware/LCZ-FORUM-REFRESH-2026-10-31.md).
+
 **October 31 Super INT4 retry:** fresh vLLM/SGLang admission is blocked at 27.6 GiB required / 22.2 GiB available; SGLang also has Super architecture and channelwise quantization blockers. No candidate worker or runtime change; llama.cpp IQ3 remains selected. [Results and next steps](../hardware/SUPER-INT4-ENGINES-2026-10-31.md).
 
 ## MES source audit and offline preparation — October 30

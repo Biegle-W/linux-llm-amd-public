@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**October 31 forum refresh:** 15 public reply pages / 206 posts reviewed. Later tiered-vLLM replies show progress but unresolved PLE/numerics; H3 projected 8B encoding is a separate quality candidate. Linked engine pins are unchanged. High-RAM/P2P results do not qualify this 32 GB host. Research only; no runtime or GPU trial. [Findings and next actions](linux/hardware/LCZ-FORUM-REFRESH-2026-10-31.md).
+
 **October 31 Super INT4 retry:** fresh vLLM/SGLang admission is blocked at 27.6 GiB required / 22.2 GiB available; SGLang also has Super architecture and channelwise quantization blockers. No candidate worker or runtime change; llama.cpp IQ3 remains selected. [Results and next steps](linux/hardware/SUPER-INT4-ENGINES-2026-10-31.md).
 
 **October 30 MES compatibility audit:** the workaround is absent from exact kernel source `7.0.0-42.42`; the six-file patch passes no-fuzz application, and both loaded MES versions are `0x86`. Offline source candidate, H3 inventory tools and P2P plan are prepared; no kernel build/install or GPU trial. [Audit and limits](linux/hardware/MES-SOURCE-AUDIT-2026-10-30.md).
