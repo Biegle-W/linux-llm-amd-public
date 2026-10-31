@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-31T05:36:59.499735+00:00",
+  "core_weight_lower_bound": 69622358816,
+  "cards": [
+    {
+      "card": "card2",
+      "total": 25753026560,
+      "used": 28012544,
+      "weight_upper_bound": 22503788544
+    },
+    {
+      "card": "card0",
+      "total": 25753026560,
+      "used": 780378112,
+      "weight_upper_bound": 21751422976
+    }
+  ],
+  "minimum_CPU_backing": 25367147296,
+  "required_available_GiB": 27.624996930360794,
+  "available_GiB": 22.180805206298828,
+  "total_GiB": 30.557785034179688,
+  "admitted": false,
+  "reason": "MoE CPU expert storage requires 27.6 GiB available RAM (22.2 GiB available). Close memory-heavy applications and retry; swap is not counted as expert capacity.",
+  "full_worker_launched": false,
+  "limits": "Optimistic bound excludes KV/recurrent cache/workspaces, replication and repacking; guards unchanged.",
+  "candidate": "halt95/Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin",
+  "revision": "835d4cc7c9cc95f6dff9b1e4db2d5c520e847148",
+  "vllm_version": "0.33.0rc1.dev229+g3966924d5.rocm72",
+  "sglang_revision": "f84475ccf593087df3d1da13c9e675eadee12352",
+  "SGLang_blockers": [
+    "Exact checkpoint architecture NemotronH_Omni_Reasoning_V3 not registered; Nano aliases are registered instead.",
+    "Installed RDNA3 compressed-tensors kernel rejects channelwise group_size=-1; checkpoint uses channelwise INT8 Mamba projections."
+  ],
+  "selected_profile": "nemotron-3.5-super-iq3",
+  "runtime_changed": false,
+  "health_ok": true,
+  "GPU_trials": 0
+}

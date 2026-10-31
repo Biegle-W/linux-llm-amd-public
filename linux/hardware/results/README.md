@@ -1,5 +1,7 @@
 # Current benchmark results
 
+**October 31 Super INT4 retry:** fresh vLLM/SGLang admission is blocked at 27.6 GiB required / 22.2 GiB available; SGLang also has Super architecture and channelwise quantization blockers. No candidate worker or runtime change; llama.cpp IQ3 remains selected. [Results and next steps](../SUPER-INT4-ENGINES-2026-10-31.md).
+
 ## MES source audit and offline preparation — October 30
 
 Exact `7.0.0-42.42` source lacks the workaround; no-fuzz applicability and a separate offline candidate reverse check pass. Loaded MES is `0x86` on both GPUs. Eleven CPU-only preparation checks pass; the H3 W4A8 runner/assets remain unqualified. Kernel, runtime selections, guards, holds and schedules remain; no GPU trial or active audit job. [Audit, prepared tools and next action](../MES-SOURCE-AUDIT-2026-10-30.md).

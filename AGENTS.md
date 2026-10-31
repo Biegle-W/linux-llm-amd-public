@@ -1,5 +1,7 @@
 # Agent entry point
 
+**October 31 Super INT4 retry:** fresh vLLM/SGLang admission is blocked at 27.6 GiB required / 22.2 GiB available; SGLang also has Super architecture and channelwise quantization blockers. No candidate worker or runtime change; llama.cpp IQ3 remains selected. [Results and next steps](linux/hardware/SUPER-INT4-ENGINES-2026-10-31.md).
+
 **October 30 MES compatibility audit:** the workaround is absent from exact kernel source `7.0.0-42.42`; the six-file patch passes no-fuzz application, and both loaded MES versions are `0x86`. Offline source candidate, H3 inventory tools and P2P plan are prepared; no kernel build/install or GPU trial. [Audit and limits](linux/hardware/MES-SOURCE-AUDIT-2026-10-30.md).
 
 **Planned hardware:** owner expects 96 GB total RAM and a PEX88096 switch. These are future conditions; current RAM holds and transport remain. [Conditional roadmap](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
