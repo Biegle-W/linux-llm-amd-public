@@ -1,0 +1,3250 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "purpose": "User-authorized isolated stock8B+ClipProj versus native32B W4A8 HIPINT8; quality/loading/memory/complete generation",
+  "protocol": {
+    "objective": "User-authorized isolated stock8B+ClipProj versus native32B W4A8 HIPINT8; quality/loading/memory/complete generation",
+    "arms": [
+      "native32b",
+      "projected8b"
+    ],
+    "prompts": [
+      {
+        "id": "teapot",
+        "prompt": "integrated_multimodal_description: [Shot 1] A cinematic close-up of a red ceramic teapot on a pale wooden table. A thin ribbon of white steam rises from the spout and curls in warm morning sunlight. A green plant is softly blurred behind it. The camera remains locked off.\noverall_soundscape: Gentle birdsong outside and a quiet room ambience.\nnon_diegetic_music: N/A"
+      },
+      {
+        "id": "toy-bus",
+        "prompt": "integrated_multimodal_description: [Shot 1] A bright yellow toy bus drives slowly from left to right across a dark blue tabletop. Exactly three small red wooden blocks stand beside its route. The camera stays fixed as the bus passes the blocks.\noverall_soundscape: A quiet toy motor and soft rolling wheels.\nnon_diegetic_music: N/A"
+      },
+      {
+        "id": "bee-flower",
+        "prompt": "integrated_multimodal_description: [Shot 1] A macro shot of a fuzzy bumblebee sitting on a violet flower in a sunlit garden. The bee slowly moves its translucent wings while its legs remain on the petals. Blurred green foliage fills the background. The camera stays fixed.\noverall_soundscape: A gentle bee buzz and light outdoor ambience.\nnon_diegetic_music: N/A"
+      }
+    ],
+    "measured_frames": 124,
+    "canary_frames": 39,
+    "width": 608,
+    "height": 352,
+    "steps": 20,
+    "sampler": "res_multistep",
+    "scheduler": "simple",
+    "seeds": [
+      42,
+      43
+    ],
+    "design": "Two excluded end-to-end canaries followed by six paired workloads (three scenes x two seeds), AB/BA counterbalanced; fresh encoder and fresh TP2 servers per run; serial rank GPU placement; no production changes",
+    "timing": "Encoder cold-file load + projection load, tokenize, first encode; complete staged pipeline from encoder controller start through AV history completion, including process startup/serialization/shutdown/transition; denoiser request and phases also separate. No encoder warmup or diagnostic encodes inside measured trials.",
+    "guards": {
+      "host_available_GiB": 1,
+      "swap_monitor_host_available_GiB": 1,
+      "VRAM_soft_GiB": 2,
+      "soft_samples": 4,
+      "VRAM_hard_GiB": 1.5,
+      "dedicated_spill_bytes": 0,
+      "scope_RAM": "physical_MemTotal",
+      "scope_swap": "max",
+      "swap_policy": "loading-swap-v4",
+      "inference_write_MiB_s": 128,
+      "combined_MiB_s": 160,
+      "rate_window_seconds": 30,
+      "OS_oomd": "unchanged"
+    },
+    "scope": "Text-to-video, low resolution 5.17-second clips, two seeds; does not qualify image/reference conditioning, maximum capacity or production use"
+  },
+  "assets": [
+    {
+      "repository": "AX1Y2JP/MiniMax-H3-W4A8-ConvRot",
+      "revision": "61a33b9224f9aa119e2332cb24a884051c9cf810",
+      "source_path": "text_encoders/qwen3vl_32b_minimax_h3_w4a8_mixed.safetensors",
+      "bytes": 16475707690,
+      "sha256": "cf0fb6a8bb278418008ffa13ff2702b42c728fd7a4e74d1dc6a83d7cf3200682"
+    },
+    {
+      "repository": "Comfy-Org/Qwen3-VL",
+      "revision": "02f0d3eefb59528799653d16735818801177ef1f",
+      "source_path": "text_encoders/qwen3vl_8b_fp8_scaled.safetensors",
+      "bytes": 10588637512,
+      "sha256": "4ba424cf62e51392e4d1a39933e803706f4e823c1065f36aaf149c6453f66bcd"
+    },
+    {
+      "repository": "NicoLab28/ClipProj-MiniMax-H3",
+      "revision": "2ebdbcdc27a29a9607efdb221a9afcb9a0cdd808",
+      "source_path": "mmh3-8b-ClipProj-v3.1.safetensors",
+      "bytes": 41990896,
+      "sha256": "df0661849d0fd51db66b0c9aa76f2c1c3eabd81b9a4745edd2a4617ab24c87f7"
+    }
+  ],
+  "implementation": {
+    "ClipProj_repository": "https://github.com/nicolab28/ComfyUI-ClipProj",
+    "ClipProj_revision": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c",
+    "ComfyUI_snapshot": "0.42.0 / 8f04fd6ecf4a548937971e840af2a985529fab76",
+    "Torch_HIP": [
+      [
+        "2.15.0.dev20260827+rocm7.2",
+        "7.2.53211"
+      ]
+    ],
+    "native_HIP_W4A8_canary_dispatches": 350,
+    "projection_tap": 24,
+    "projection_shape": [
+      4096,
+      5120
+    ],
+    "projection_sink_preserved": true,
+    "original_source_files_unchanged": 1222,
+    "comparison_source_files_frozen": 1038
+  },
+  "summary": {
+    "native32b": {
+      "n": 6,
+      "timing": {
+        "load_seconds": {
+          "median": 45.884292298491346,
+          "min": 42.58893480000552,
+          "max": 52.29404959800013
+        },
+        "first_encode_seconds": {
+          "median": 2.699578632003977,
+          "min": 2.4003025550046004,
+          "max": 3.632890304987086
+        },
+        "complete_generation_seconds": {
+          "median": 273.29563084499387,
+          "min": 262.04172971399385,
+          "max": 307.62829543300904
+        },
+        "denoiser_request_seconds": {
+          "median": 202.63088171149866,
+          "min": 192.4876491909963,
+          "max": 222.82438953999372
+        },
+        "sampling_joint_ready_seconds": {
+          "median": 101.6658785815016,
+          "min": 98.29935839999234,
+          "max": 115.90968544500356
+        }
+      },
+      "memory": {
+        "encoder_memory": {
+          "scope_peak_bytes": 25623797760,
+          "max_owned_swap_bytes": 1011609600
+        },
+        "generation_memory": {
+          "scope_peak_bytes": 26169135104,
+          "max_owned_swap_bytes": 4224450560
+        }
+      },
+      "encoder_peaks": {
+        "RSS_highwater_bytes": 17689714688,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240
+      },
+      "whole_pipeline": {
+        "max_owned_scope_RAM_bytes": 26169135104,
+        "min_host_available_bytes": 8320897024,
+        "min_free_VRAM_bytes": [
+          5703835648,
+          12202467328
+        ],
+        "max_owned_swap_bytes": 4224450560
+      }
+    },
+    "projected8b": {
+      "n": 6,
+      "timing": {
+        "load_seconds": {
+          "median": 31.982769149493834,
+          "min": 29.15554609299579,
+          "max": 48.15946470700146
+        },
+        "first_encode_seconds": {
+          "median": 2.1088842430035584,
+          "min": 1.4558188889932353,
+          "max": 7.7034442799922545
+        },
+        "complete_generation_seconds": {
+          "median": 272.3355148865012,
+          "min": 239.8532178630121,
+          "max": 315.87815344800765
+        },
+        "denoiser_request_seconds": {
+          "median": 210.61162311750377,
+          "min": 191.0364021360001,
+          "max": 237.66941719999886
+        },
+        "sampling_joint_ready_seconds": {
+          "median": 100.9706922395053,
+          "min": 98.20710396599316,
+          "max": 126.12470622299588
+        }
+      },
+      "memory": {
+        "encoder_memory": {
+          "scope_peak_bytes": 22508310528,
+          "max_owned_swap_bytes": 975704064
+        },
+        "generation_memory": {
+          "scope_peak_bytes": 26132135936,
+          "max_owned_swap_bytes": 4843560960
+        }
+      },
+      "encoder_peaks": {
+        "RSS_highwater_bytes": 12173877248,
+        "torch_peak_allocated_bytes": 10851834880,
+        "torch_peak_reserved_bytes": 10947133440
+      },
+      "whole_pipeline": {
+        "max_owned_scope_RAM_bytes": 26132135936,
+        "min_host_available_bytes": 12714811392,
+        "min_free_VRAM_bytes": [
+          6922907648,
+          12202524672
+        ],
+        "max_owned_swap_bytes": 4843560960
+      }
+    }
+  },
+  "paired_timings": [
+    {
+      "prompt_id": "teapot",
+      "seed": 42,
+      "native32b_seconds": 273.7204576699878,
+      "projected8b_seconds": 249.55732898200222,
+      "native_over_projected": 1.0968239593946296,
+      "projected_time_change_percent": -8.827666332897177
+    },
+    {
+      "prompt_id": "teapot",
+      "seed": 43,
+      "native32b_seconds": 298.6280090309883,
+      "projected8b_seconds": 269.65937522599415,
+      "native_over_projected": 1.1074267630439933,
+      "projected_time_change_percent": -9.700574939033302
+    },
+    {
+      "prompt_id": "toy-bus",
+      "seed": 42,
+      "native32b_seconds": 262.04172971399385,
+      "projected8b_seconds": 275.0116545470082,
+      "native_over_projected": 0.9528386356775386,
+      "projected_time_change_percent": 4.949564654137495
+    },
+    {
+      "prompt_id": "toy-bus",
+      "seed": 43,
+      "native32b_seconds": 267.2205883389979,
+      "projected8b_seconds": 239.8532178630121,
+      "native_over_projected": 1.1141004932925944,
+      "projected_time_change_percent": -10.241490240739747
+    },
+    {
+      "prompt_id": "bee-flower",
+      "seed": 42,
+      "native32b_seconds": 307.62829543300904,
+      "projected8b_seconds": 284.73190540198993,
+      "native_over_projected": 1.0804138545650286,
+      "projected_time_change_percent": -7.442875174661934
+    },
+    {
+      "prompt_id": "bee-flower",
+      "seed": 43,
+      "native32b_seconds": 272.8708040199999,
+      "projected8b_seconds": 315.87815344800765,
+      "native_over_projected": 0.8638482941648367,
+      "projected_time_change_percent": 15.761066700582415
+    }
+  ],
+  "trials": [
+    {
+      "tag": "canary-p8c00-projected8b-teapot-s42",
+      "arm": "projected8b",
+      "prompt_id": "teapot",
+      "seed": 42,
+      "frames": 39,
+      "excluded_warmup": true,
+      "load_seconds": 24.161725775004015,
+      "first_encode_seconds": 1.6396263869974064,
+      "complete_generation_seconds": 192.354811814992,
+      "denoiser_request_seconds": 145.67718315200182,
+      "encoder_memory": {
+        "scope_peak_bytes": 23184510976,
+        "RSS_highwater_bytes": 12199424000,
+        "torch_peak_allocated_bytes": 10851834880,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 13910511616,
+        "min_free_VRAM_bytes": [
+          13997441024,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 0
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26656247808,
+        "min_host_available_bytes": 14414536704,
+        "min_free_VRAM_bytes": [
+          6942429184,
+          13508681728
+        ],
+        "max_owned_swap_bytes": 2980478976
+      },
+      "normalized_generation_graph_sha256": "a6c7f1e109cdad5f40e69a1a8536a517fb189d41ed4ddb00e211614d28024798",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:08:14.077805+00:00",
+      "generation_finish_UTC": "2026-10-31T06:11:26.660600+00:00",
+      "load_io_delta": {
+        "rchar": 4800840,
+        "wchar": 75285,
+        "syscr": 261,
+        "syscw": 12,
+        "read_bytes": 10640795136,
+        "write_bytes": 86016,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "100501a1094662643f78031649c313243b940f9063ce79a296ba9bdd014a92b4",
+        "decoded_audio_sha256": "bf1b05114e97879cdfa958477516d8d8ac436d30b2416715e8728419922e2246",
+        "sha256": "84495722ba323ee841b17a390348edfd05d357598a5c4250b59cf4d0054b1fac",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "1.625000",
+          "nb_read_frames": "39"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "1.625000"
+        },
+        "decoded_frames": 39,
+        "unique_decoded_frames": 39,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 104448,
+        "audio_peak": 0.10471019148826599,
+        "audio_rms": 0.012222760260249408,
+        "visual_assessment": "Excluded small canary; coherent teapot in sampled frames, complete AV decode.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              12,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              65
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.0489332377910614,
+          "std": 25.276264190673828
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 38,
+          "sampling_errors": 0,
+          "elapsed_seconds": 37.33337928500259,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 3690496,
+          "total_swapout_bytes": 88444928,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 13899165696,
+          "max_memory_full_psi_avg10": 0.01,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 150,
+          "sampling_errors": 0,
+          "elapsed_seconds": 150.7891260250035,
+          "worker_swap_peak_bytes": 2980478976,
+          "total_swapin_bytes": 2359021568,
+          "total_swapout_bytes": 4451254272,
+          "inference_window_samples": 5,
+          "max_inference_swapout_bytes_per_second": 230800.79175311708,
+          "max_inference_swap_io_bytes_per_second": 14800143.402503205,
+          "min_available_bytes": 14426447872,
+          "max_memory_full_psi_avg10": 0.63,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 35.834954249003204,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 21.622700280000572
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 56.714110870001605
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.358752389001893
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.2966178079950623
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.1493628689931938
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.614046706003137
+        }
+      ],
+      "pre_scheduled_preparation_pair": null,
+      "scheduled_CPU_preparation_overlap": false
+    },
+    {
+      "tag": "canary-p8c01-native32b-teapot-s42",
+      "arm": "native32b",
+      "prompt_id": "teapot",
+      "seed": 42,
+      "frames": 39,
+      "excluded_warmup": true,
+      "load_seconds": 42.87525266400189,
+      "first_encode_seconds": 2.6957923979935003,
+      "complete_generation_seconds": 220.52329166600248,
+      "denoiser_request_seconds": 154.07867773300677,
+      "encoder_memory": {
+        "scope_peak_bytes": 25744441344,
+        "RSS_highwater_bytes": 17110781952,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 10541973504,
+        "min_free_VRAM_bytes": [
+          5711921152,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 813752320
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26551644160,
+        "min_host_available_bytes": 14994124800,
+        "min_free_VRAM_bytes": [
+          6942138368,
+          13508804608
+        ],
+        "max_owned_swap_bytes": 2193752064
+      },
+      "normalized_generation_graph_sha256": "a6c7f1e109cdad5f40e69a1a8536a517fb189d41ed4ddb00e211614d28024798",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:11:32.767368+00:00",
+      "generation_finish_UTC": "2026-10-31T06:15:13.523084+00:00",
+      "load_io_delta": {
+        "rchar": 4468462,
+        "wchar": 959,
+        "syscr": 254,
+        "syscw": 9,
+        "read_bytes": 16594901504,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "21dabf8e5e47ec654f25b09496e84872c55f2b7f915a41623509948ab28d0e34",
+        "decoded_audio_sha256": "303a4ac9f7a9797dfea63cf394b3060eb5b0c6a9419e371618cf273e5a4d3963",
+        "sha256": "942a44f7d61963708707a43a1b4fa6dcc548c13e7c5b23d71a5183788a8c0216",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "1.625000",
+          "nb_read_frames": "39"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "1.625000"
+        },
+        "decoded_frames": 39,
+        "unique_decoded_frames": 39,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 104448,
+        "audio_peak": 0.08151298761367798,
+        "audio_rms": 0.008018736422557142,
+        "visual_assessment": "Excluded small canary; coherent teapot in sampled frames, complete AV decode.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              12,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              65
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04150953143835068,
+          "std": 23.39650535583496
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 56,
+          "sampling_errors": 0,
+          "elapsed_seconds": 55.5534384210041,
+          "worker_swap_peak_bytes": 813752320,
+          "total_swapin_bytes": 834121728,
+          "total_swapout_bytes": 1153519616,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 10536792064,
+          "max_memory_full_psi_avg10": 0.28,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 159,
+          "sampling_errors": 0,
+          "elapsed_seconds": 159.87463496500277,
+          "worker_swap_peak_bytes": 2193752064,
+          "total_swapin_bytes": 2282876928,
+          "total_swapout_bytes": 2822017024,
+          "inference_window_samples": 7,
+          "max_inference_swapout_bytes_per_second": 1074466.3033848698,
+          "max_inference_swap_io_bytes_per_second": 26581456.011225514,
+          "min_available_bytes": 14994313216,
+          "max_memory_full_psi_avg10": 1.43,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 36.89164168399293,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.885196564006037
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 62.40280916300253
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 34.6009076420014
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 35.51886528999603
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2651645769947208
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.8181140660017263
+        }
+      ],
+      "pre_scheduled_preparation_pair": null,
+      "scheduled_CPU_preparation_overlap": false
+    },
+    {
+      "tag": "canary-p8c02-native32b-teapot-s42",
+      "arm": "native32b",
+      "prompt_id": "teapot",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 51.58082452099188,
+      "first_encode_seconds": 2.7500162920041475,
+      "complete_generation_seconds": 273.7204576699878,
+      "denoiser_request_seconds": 199.20474594499683,
+      "encoder_memory": {
+        "scope_peak_bytes": 23089238016,
+        "RSS_highwater_bytes": 17139392512,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 8320897024,
+        "min_free_VRAM_bytes": [
+          5706309632,
+          25724968960
+        ],
+        "max_owned_swap_bytes": 765669376
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 25490870272,
+        "min_host_available_bytes": 14259073024,
+        "min_free_VRAM_bytes": [
+          6922358784,
+          12202467328
+        ],
+        "max_owned_swap_bytes": 4224450560
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:15:19.024004+00:00",
+      "generation_finish_UTC": "2026-10-31T06:19:52.982505+00:00",
+      "load_io_delta": {
+        "rchar": 4468452,
+        "wchar": 959,
+        "syscr": 252,
+        "syscw": 9,
+        "read_bytes": 16600517120,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "9b70d348a48380acaa485f93d05ed8f72343d2a55419f19b59440c8970f7d300",
+        "decoded_audio_sha256": "93147c9886ce5d2e879a245e5cb6f91a23f843a313033278f9bbc194c383bddb",
+        "sha256": "31b3fddcb0f35cebecfe46a3e3ed70817a24562cc0239597e5a1a5879cd615a1",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.16583344340324402,
+        "audio_rms": 0.004249409187394403,
+        "visual_assessment": "Main scene and stable composition pass; steam-origin/detail partial.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04150953143835068,
+          "std": 23.39650535583496
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 64,
+          "sampling_errors": 0,
+          "elapsed_seconds": 63.72433768599876,
+          "worker_swap_peak_bytes": 765669376,
+          "total_swapin_bytes": 564719616,
+          "total_swapout_bytes": 1072721920,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 8316739584,
+          "max_memory_full_psi_avg10": 0.12,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 204,
+          "sampling_errors": 0,
+          "elapsed_seconds": 205.41190446499968,
+          "worker_swap_peak_bytes": 4224450560,
+          "total_swapin_bytes": 4385492992,
+          "total_swapout_bytes": 5290745856,
+          "inference_window_samples": 70,
+          "max_inference_swapout_bytes_per_second": 1915933.2215602996,
+          "max_inference_swap_io_bytes_per_second": 20335983.43081379,
+          "min_available_bytes": 14278803456,
+          "max_memory_full_psi_avg10": 2.36,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 100.54297893999319,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 9.637320601003012
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 125.5829425319971
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.405032473994652
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.621509281991166
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2648575619969051
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.724243046002812
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Red ceramic teapot, pale wood, green plant, warm sunlight retained. Stable outline across six frames; steam visibly evolves.",
+        "detail": "Broader open mouth with steam from both rim/mouth and spout; the requested ribbon from the spout is less clear.",
+        "verdict": "Main scene and stable composition pass; steam-origin/detail partial."
+      }
+    },
+    {
+      "tag": "canary-p8c03-projected8b-teapot-s42",
+      "arm": "projected8b",
+      "prompt_id": "teapot",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 29.15554609299579,
+      "first_encode_seconds": 2.1109073529951274,
+      "complete_generation_seconds": 249.55732898200222,
+      "denoiser_request_seconds": 199.09003759500047,
+      "encoder_memory": {
+        "scope_peak_bytes": 22439419904,
+        "RSS_highwater_bytes": 12173877248,
+        "torch_peak_allocated_bytes": 10851834880,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 12983730176,
+        "min_free_VRAM_bytes": [
+          13903036416,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 461406208
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 24988139520,
+        "min_host_available_bytes": 13497122816,
+        "min_free_VRAM_bytes": [
+          6922907648,
+          12202758144
+        ],
+        "max_owned_swap_bytes": 3585425408
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:19:57.374611+00:00",
+      "generation_finish_UTC": "2026-10-31T06:24:07.152499+00:00",
+      "load_io_delta": {
+        "rchar": 4804943,
+        "wchar": 1152,
+        "syscr": 259,
+        "syscw": 11,
+        "read_bytes": 10638632448,
+        "write_bytes": 12288,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "234a0722d5db16e23456289ae1fdf69f4b17460a14f20e1727ecfbc954009552",
+        "decoded_audio_sha256": "265bfa3658eb4cd455819812409379f600011864fbc748b1627a0b3a9d46aed1",
+        "sha256": "7022a605ade85018a72736955a998b31dc9f435ee19481c4a139752555035b8d",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.16531431674957275,
+        "audio_rms": 0.005677110928665425,
+        "visual_assessment": "Main scene and stable composition pass; spout attachment clearer, thin-ribbon detail partial.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.0489332489669323,
+          "std": 25.276264190673828
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 40,
+          "sampling_errors": 0,
+          "elapsed_seconds": 39.40036380599486,
+          "worker_swap_peak_bytes": 461406208,
+          "total_swapin_bytes": 129355776,
+          "total_swapout_bytes": 512974848,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 12983107584,
+          "max_memory_full_psi_avg10": 0.0,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 204,
+          "sampling_errors": 0,
+          "elapsed_seconds": 205.2672394310066,
+          "worker_swap_peak_bytes": 3585425408,
+          "total_swapin_bytes": 4980617216,
+          "total_swapout_bytes": 6790283264,
+          "inference_window_samples": 69,
+          "max_inference_swapout_bytes_per_second": 1267415.6092737657,
+          "max_inference_swap_io_bytes_per_second": 22920081.20705761,
+          "min_available_bytes": 13498204160,
+          "max_memory_full_psi_avg10": 1.66,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 99.39555061500869,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 10.08128049399238
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 126.6586801319936
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.2040176459995564
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.1969155529950513
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2275135230011074
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.221113955994952
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Red ceramic teapot, pale wood, green plant, warm sunlight retained. Stable outline across six frames; steam visibly evolves.",
+        "detail": "Steam plume is more clearly attached to the spout; also a fine lid/rim plume. Dense billowing steam is less thin than requested.",
+        "verdict": "Main scene and stable composition pass; spout attachment clearer, thin-ribbon detail partial."
+      }
+    },
+    {
+      "tag": "canary-p8c04-projected8b-teapot-s43",
+      "arm": "projected8b",
+      "prompt_id": "teapot",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 32.53451634099474,
+      "first_encode_seconds": 7.7034442799922545,
+      "complete_generation_seconds": 269.65937522599415,
+      "denoiser_request_seconds": 192.15917590999743,
+      "encoder_memory": {
+        "scope_peak_bytes": 22508310528,
+        "RSS_highwater_bytes": 12164620288,
+        "torch_peak_allocated_bytes": 10851834880,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 13546491904,
+        "min_free_VRAM_bytes": [
+          13609897984,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 277270528
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 25577779200,
+        "min_host_available_bytes": 13862940672,
+        "min_free_VRAM_bytes": [
+          6923403264,
+          12202577920
+        ],
+        "max_owned_swap_bytes": 3992567808
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:24:11.013238+00:00",
+      "generation_finish_UTC": "2026-10-31T06:28:40.894873+00:00",
+      "load_io_delta": {
+        "rchar": 4804943,
+        "wchar": 942,
+        "syscr": 259,
+        "syscw": 9,
+        "read_bytes": 10638480896,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "bd098ccb3bc5b0bc998e160279009d09e415400d8d9946b68ae85bc209704a20",
+        "decoded_audio_sha256": "1527947b30b2d181910830da7a14e32c0931621638e31c31493d1d111dd768c2",
+        "sha256": "b4066f2f6599514166d37e828ff85cb58d847357df408a52a1826043b6db2966",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.0923667699098587,
+        "audio_rms": 0.0047866386422076085,
+        "visual_assessment": "Main scene and stable composition pass; spout-origin detail clear in sampled frames.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.0489332489669323,
+          "std": 25.276264190673828
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 57,
+          "sampling_errors": 0,
+          "elapsed_seconds": 56.563978089005104,
+          "worker_swap_peak_bytes": 277270528,
+          "total_swapin_bytes": 126296064,
+          "total_swapout_bytes": 276668416,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 13535449088,
+          "max_memory_full_psi_avg10": 0.18,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 204,
+          "sampling_errors": 0,
+          "elapsed_seconds": 205.29941508399497,
+          "worker_swap_peak_bytes": 3992567808,
+          "total_swapin_bytes": 4394364928,
+          "total_swapout_bytes": 5354541056,
+          "inference_window_samples": 68,
+          "max_inference_swapout_bytes_per_second": 2238721.731985196,
+          "max_inference_swap_io_bytes_per_second": 29765182.094096918,
+          "min_available_bytes": 13855199232,
+          "max_memory_full_psi_avg10": 0.75,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 98.73830244400597,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 8.35718559200177
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 121.6828189779917
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.1949447249935474
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.239835451997351
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.1341808549914276
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.286026390007464
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Large glazed red teapot with lid, pale wood, green foliage and warm window light. Stable silhouette across six frames; evolving steam.",
+        "detail": "Steam is visibly connected to the long spout. More of the close-up frame is filled by the pot.",
+        "verdict": "Main scene and stable composition pass; spout-origin detail clear in sampled frames."
+      }
+    },
+    {
+      "tag": "canary-p8c05-native32b-teapot-s43",
+      "arm": "native32b",
+      "prompt_id": "teapot",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 52.29404959800013,
+      "first_encode_seconds": 2.6491409720038064,
+      "complete_generation_seconds": 298.6280090309883,
+      "denoiser_request_seconds": 222.82438953999372,
+      "encoder_memory": {
+        "scope_peak_bytes": 24233693184,
+        "RSS_highwater_bytes": 17221222400,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 9032617984,
+        "min_free_VRAM_bytes": [
+          5703835648,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 1011609600
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 25846067200,
+        "min_host_available_bytes": 14568087552,
+        "min_free_VRAM_bytes": [
+          6923816960,
+          12202647552
+        ],
+        "max_owned_swap_bytes": 3229945856
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:28:45.690345+00:00",
+      "generation_finish_UTC": "2026-10-31T06:33:44.544087+00:00",
+      "load_io_delta": {
+        "rchar": 4468457,
+        "wchar": 959,
+        "syscr": 253,
+        "syscw": 9,
+        "read_bytes": 16589743104,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "57b2ba7d66ee150eed11f70ec4b12de32dabac91f325671fec9a1880c1d68569",
+        "decoded_audio_sha256": "904dbe6f1b3ce41f62130446cfe725f07d13b536f712252603d247adb102ab45",
+        "sha256": "2c4dde77f4af3a371d9f6d0582d0c660dfe79125d5da288c71130914eaebe4e1",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.0769992396235466,
+        "audio_rms": 0.002595501406267518,
+        "visual_assessment": "Main scene and stable composition pass; precise steam attachment partial.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            84,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04150953143835068,
+          "std": 23.39650535583496
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 65,
+          "sampling_errors": 0,
+          "elapsed_seconds": 64.7273781279946,
+          "worker_swap_peak_bytes": 1011609600,
+          "total_swapin_bytes": 1657819136,
+          "total_swapout_bytes": 2151243776,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 9028886528,
+          "max_memory_full_psi_avg10": 0.19,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 227,
+          "sampling_errors": 0,
+          "elapsed_seconds": 228.61930124100763,
+          "worker_swap_peak_bytes": 3229945856,
+          "total_swapin_bytes": 3551268864,
+          "total_swapout_bytes": 4154343424,
+          "inference_window_samples": 71,
+          "max_inference_swapout_bytes_per_second": 647425.9895856825,
+          "max_inference_swap_io_bytes_per_second": 15290124.595331311,
+          "min_available_bytes": 14563901440,
+          "max_memory_full_psi_avg10": 1.81,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 101.81281408900395,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 6.839330286995391
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 126.78496658398944
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 26.85597544000484
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 28.07542740399367
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2546490649983753
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.320673387002898
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Smaller matte red teapot with lid, pale wood, green foliage and warm window light. Stable silhouette across six frames; evolving steam.",
+        "detail": "Steam appears above the short spout but its attachment is less visible, with a small apparent gap in sampled frames. Different pot shape and wider framing.",
+        "verdict": "Main scene and stable composition pass; precise steam attachment partial."
+      }
+    },
+    {
+      "tag": "canary-p8c06-projected8b-toy-bus-s42",
+      "arm": "projected8b",
+      "prompt_id": "toy-bus",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 34.0764759050071,
+      "first_encode_seconds": 1.4558188889932353,
+      "complete_generation_seconds": 275.0116545470082,
+      "denoiser_request_seconds": 222.13320864000707,
+      "encoder_memory": {
+        "scope_peak_bytes": 22487986176,
+        "RSS_highwater_bytes": 12150362112,
+        "torch_peak_allocated_bytes": 10851214336,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 14010044416,
+        "min_free_VRAM_bytes": [
+          13993009152,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 0
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 24986046464,
+        "min_host_available_bytes": 14343327744,
+        "min_free_VRAM_bytes": [
+          6926467072,
+          12202557440
+        ],
+        "max_owned_swap_bytes": 3711770624
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:33:50.142980+00:00",
+      "generation_finish_UTC": "2026-10-31T06:38:25.385180+00:00",
+      "load_io_delta": {
+        "rchar": 4804949,
+        "wchar": 941,
+        "syscr": 260,
+        "syscw": 9,
+        "read_bytes": 10638721536,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "f628fd299f7c8b46a2f30e87821bfbf8167071bd78e57e489753379f1ed46982",
+        "decoded_audio_sha256": "0fd5ef7b5273defb5dbdda14fe6ba2a8319329c22f166e68817f1f5788e8c886",
+        "sha256": "7a3969c4d112ea47a83b1cdd5aa512bfe4f9cd9ec6bdec619e0b8b228d1013d0",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.06115306168794632,
+        "audio_rms": 0.0045865577565646735,
+        "visual_assessment": "Subject, three-red-block count, relative block size, direction and sampled stability pass.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            72,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.06140272319316864,
+          "std": 27.236967086791992
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 44,
+          "sampling_errors": 0,
+          "elapsed_seconds": 43.43344673399406,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 21458944,
+          "total_swapout_bytes": 274432,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 14007083008,
+          "max_memory_full_psi_avg10": 0.02,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 226,
+          "sampling_errors": 0,
+          "elapsed_seconds": 227.61685150700214,
+          "worker_swap_peak_bytes": 3711770624,
+          "total_swapin_bytes": 4327792640,
+          "total_swapout_bytes": 4955709440,
+          "inference_window_samples": 71,
+          "max_inference_swapout_bytes_per_second": 11366814.820873896,
+          "max_inference_swap_io_bytes_per_second": 36113209.5856734,
+          "min_available_bytes": 14344744960,
+          "max_memory_full_psi_avg10": 1.7,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 102.6236319620075,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 7.587953107009525
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 127.26974948999123
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.2509292110044044
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.3105717250000453
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2088085760042304
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 12.63608672200644
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Yellow toy bus moves left to right on a blue tabletop. Three small red cubes remain stable in front of the bus route across sampled frames.",
+        "detail": "Smaller blocks match the relative size instruction more closely. Bus has letter-like side markings; the prompt did not prohibit them.",
+        "verdict": "Subject, three-red-block count, relative block size, direction and sampled stability pass."
+      }
+    },
+    {
+      "tag": "canary-p8c07-native32b-toy-bus-s42",
+      "arm": "native32b",
+      "prompt_id": "toy-bus",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 45.16528019699035,
+      "first_encode_seconds": 3.2088524770078948,
+      "complete_generation_seconds": 262.04172971399385,
+      "denoiser_request_seconds": 192.4876491909963,
+      "encoder_memory": {
+        "scope_peak_bytes": 24400187392,
+        "RSS_highwater_bytes": 17046876160,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 8860311552,
+        "min_free_VRAM_bytes": [
+          5708230656,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 825294848
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 25550831616,
+        "min_host_available_bytes": 14236868608,
+        "min_free_VRAM_bytes": [
+          6926483456,
+          12202688512
+        ],
+        "max_owned_swap_bytes": 3088334848
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:38:28.309856+00:00",
+      "generation_finish_UTC": "2026-10-31T06:42:50.583687+00:00",
+      "load_io_delta": {
+        "rchar": 4468453,
+        "wchar": 959,
+        "syscr": 252,
+        "syscw": 9,
+        "read_bytes": 16589673472,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "d990b9743323e7f185fc1126738ef5bd5cc695239bb817cd567d26e1f7c3eb33",
+        "decoded_audio_sha256": "9ad378e4e36f455617d835e0e7b2dab17bace9d55b63e6be2052d3f49aea37ff",
+        "sha256": "41a8480a490fbc3d65fcdedd16126b69f1752c88f38f72a461c4acaaeb5fd970",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.8982632756233215,
+        "audio_rms": 0.051094216273708054,
+        "visual_assessment": "Subject, three-red-block count, direction and sampled stability pass; small-block size detail partial.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            72,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.06192728132009506,
+          "std": 25.207168579101562
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 58,
+          "sampling_errors": 0,
+          "elapsed_seconds": 57.556418904001475,
+          "worker_swap_peak_bytes": 825294848,
+          "total_swapin_bytes": 1141542912,
+          "total_swapout_bytes": 1335631872,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 8858677248,
+          "max_memory_full_psi_avg10": 0.13,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 198,
+          "sampling_errors": 0,
+          "elapsed_seconds": 199.22189942399564,
+          "worker_swap_peak_bytes": 3088334848,
+          "total_swapin_bytes": 3892916224,
+          "total_swapout_bytes": 5162528768,
+          "inference_window_samples": 67,
+          "max_inference_swapout_bytes_per_second": 1889521.1435620817,
+          "max_inference_swap_io_bytes_per_second": 17497768.777619835,
+          "min_available_bytes": 14216945664,
+          "max_memory_full_psi_avg10": 2.39,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 98.29935839999234,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 5.691907330008689
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 123.51594074099557
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.259689910992165
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.4358606840105494
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2239958599966485
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.369026637999923
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Yellow toy bus moves left to right on a blue tabletop. Three primary red blocks remain stable behind its route across sampled frames.",
+        "detail": "Red blocks are relatively large versus the bus, with additional multicoloured numbered blocks in the background. Clean bus side without obvious lettering.",
+        "verdict": "Subject, three-red-block count, direction and sampled stability pass; small-block size detail partial."
+      }
+    },
+    {
+      "tag": "canary-p8c08-native32b-toy-bus-s43",
+      "arm": "native32b",
+      "prompt_id": "toy-bus",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 46.60330439999234,
+      "first_encode_seconds": 2.6154571310034953,
+      "complete_generation_seconds": 267.2205883389979,
+      "denoiser_request_seconds": 197.11850984599732,
+      "encoder_memory": {
+        "scope_peak_bytes": 25357025280,
+        "RSS_highwater_bytes": 17178923008,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 10082488320,
+        "min_free_VRAM_bytes": [
+          5708242944,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 890085376
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26169135104,
+        "min_host_available_bytes": 14639824896,
+        "min_free_VRAM_bytes": [
+          6926598144,
+          12202627072
+        ],
+        "max_owned_swap_bytes": 2553409536
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:42:54.978526+00:00",
+      "generation_finish_UTC": "2026-10-31T06:47:22.429223+00:00",
+      "load_io_delta": {
+        "rchar": 4468458,
+        "wchar": 960,
+        "syscr": 253,
+        "syscw": 9,
+        "read_bytes": 16586287616,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "adadab6c980c5512b574bfa50a7bced94b036dbe6c088f147b567d8efb36cc21",
+        "decoded_audio_sha256": "f15fa7075bf252b995668f69e842517274f94604d15ef217c60d904b91f9bff0",
+        "sha256": "7c0d48557b032bfc1984188795767fa871a4fc5e7383658fe6927f4ed6331f27",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.6692560315132141,
+        "audio_rms": 0.02965930674742845,
+        "visual_assessment": "Subject, initial three-red-block count, movement direction and sampled stability pass; small-block detail partial.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            72,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.06192728132009506,
+          "std": 25.207168579101562
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 60,
+          "sampling_errors": 0,
+          "elapsed_seconds": 59.606251831006375,
+          "worker_swap_peak_bytes": 890085376,
+          "total_swapin_bytes": 1490952192,
+          "total_swapout_bytes": 2109915136,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 10085605376,
+          "max_memory_full_psi_avg10": 0.31,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 201,
+          "sampling_errors": 0,
+          "elapsed_seconds": 202.23914237601275,
+          "worker_swap_peak_bytes": 2553409536,
+          "total_swapin_bytes": 2964885504,
+          "total_swapout_bytes": 3201052672,
+          "inference_window_samples": 70,
+          "max_inference_swapout_bytes_per_second": 121657.26849353735,
+          "max_inference_swap_io_bytes_per_second": 40843199.85630736,
+          "min_available_bytes": 14661693440,
+          "max_memory_full_psi_avg10": 11.48,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 4,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": [
+            "active_memory_pressure_observed"
+          ]
+        }
+      },
+      "sampling_joint_ready_seconds": 101.51894307399925,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 4.004862174988375
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 130.78472610199242
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.1742119919945253
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.3435082619980676
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2085992979991715
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.285779254991212
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Yellow toy bus moves monotonically left to right on a blue tabletop; three red blocks are visible initially and later become occluded as the bus passes. Fixed blue background/horizon and stable bus design in sampled frames.",
+        "detail": "The touching red blocks are relatively large versus the bus. Letter-like side markings appear; the prompt did not prohibit them.",
+        "verdict": "Subject, initial three-red-block count, movement direction and sampled stability pass; small-block detail partial."
+      }
+    },
+    {
+      "tag": "canary-p8c09-projected8b-toy-bus-s43",
+      "arm": "projected8b",
+      "prompt_id": "toy-bus",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 31.175329903999227,
+      "first_encode_seconds": 1.881018680986017,
+      "complete_generation_seconds": 239.8532178630121,
+      "denoiser_request_seconds": 191.0364021360001,
+      "encoder_memory": {
+        "scope_peak_bytes": 22026481664,
+        "RSS_highwater_bytes": 11923185664,
+        "torch_peak_allocated_bytes": 10851214336,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 14526521344,
+        "min_free_VRAM_bytes": [
+          13614243840,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 502853632
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26132135936,
+        "min_host_available_bytes": 14207852544,
+        "min_free_VRAM_bytes": [
+          6927294464,
+          12202536960
+        ],
+        "max_owned_swap_bytes": 3233853440
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:47:26.695178+00:00",
+      "generation_finish_UTC": "2026-10-31T06:51:26.782481+00:00",
+      "load_io_delta": {
+        "rchar": 4804944,
+        "wchar": 1151,
+        "syscr": 259,
+        "syscw": 11,
+        "read_bytes": 10898494976,
+        "write_bytes": 12288,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "2034e57309b34cf003e41c4651388eacd0501466c4b1aaace8a1e5236293065a",
+        "decoded_audio_sha256": "4dc33b27ff7acb90c865a7afa4e07adb33b8736865cc344f5f176005696b369e",
+        "sha256": "2360937e15c1e859595f5e2adde57c0c61c2886be22da601822c89d151fd3ac6",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.21621456742286682,
+        "audio_rms": 0.020667613897566557,
+        "visual_assessment": "Subject, initial three-red-block count, small-block size, movement direction and sampled stability pass.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            72,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.06140269339084625,
+          "std": 27.236967086791992
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 41,
+          "sampling_errors": 0,
+          "elapsed_seconds": 40.393545198996435,
+          "worker_swap_peak_bytes": 502853632,
+          "total_swapin_bytes": 412774400,
+          "total_swapout_bytes": 838066176,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 14511869952,
+          "max_memory_full_psi_avg10": 0.46,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 195,
+          "sampling_errors": 0,
+          "elapsed_seconds": 196.16079042600177,
+          "worker_swap_peak_bytes": 3233853440,
+          "total_swapin_bytes": 4139790336,
+          "total_swapout_bytes": 5136560128,
+          "inference_window_samples": 67,
+          "max_inference_swapout_bytes_per_second": 3515269.2607753407,
+          "max_inference_swap_io_bytes_per_second": 26617982.900900923,
+          "min_available_bytes": 14217547776,
+          "max_memory_full_psi_avg10": 1.71,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 98.20710396599316,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 5.932568634001655
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 122.02998507099983
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.3032804420072353
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.418050206004409
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2360420280019753
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.371113058004994
+        }
+      ],
+      "pre_scheduled_preparation_pair": true,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Yellow toy bus moves monotonically left to right across a blue surface; three separated small red cubes are visible initially and become occluded/revealed as the bus passes. Stable bus design and camera in sampled frames.",
+        "detail": "Smaller separated blocks follow the requested relative size more closely. Dark windows and letter-like side markings differ from A.",
+        "verdict": "Subject, initial three-red-block count, small-block size, movement direction and sampled stability pass."
+      }
+    },
+    {
+      "tag": "canary-p8c10-native32b-bee-flower-s42",
+      "arm": "native32b",
+      "prompt_id": "bee-flower",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 45.034533696991275,
+      "first_encode_seconds": 2.4003025550046004,
+      "complete_generation_seconds": 307.62829543300904,
+      "denoiser_request_seconds": 214.6519790260063,
+      "encoder_memory": {
+        "scope_peak_bytes": 25623797760,
+        "RSS_highwater_bytes": 17689714688,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 9179774976,
+        "min_free_VRAM_bytes": [
+          5708230656,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 0
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26016129024,
+        "min_host_available_bytes": 14962032640,
+        "min_free_VRAM_bytes": [
+          6926733312,
+          12202868736
+        ],
+        "max_owned_swap_bytes": 3444473856
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:51:31.916322+00:00",
+      "generation_finish_UTC": "2026-10-31T06:56:39.794124+00:00",
+      "load_io_delta": {
+        "rchar": 4468461,
+        "wchar": 1170,
+        "syscr": 253,
+        "syscw": 11,
+        "read_bytes": 16576449024,
+        "write_bytes": 12288,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "327cec80cc74a93d0a19fed1c8c26600c8db2236c5312b733c907195d8103d3e",
+        "decoded_audio_sha256": "5a7e2a0274aab05d21ec258f3fcb98e71277558d761ae13061cdbf8765445781",
+        "sha256": "49e24a7130bbc54a4662894aca32e101141bb17774d8b2c4ead198d3a8626f5a",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.08612905442714691,
+        "audio_rms": 0.015028535333216035,
+        "visual_assessment": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            82,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04656464606523514,
+          "std": 23.672962188720703
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 55,
+          "sampling_errors": 0,
+          "elapsed_seconds": 54.53395467900555,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 281853952,
+          "total_swapout_bytes": 557985792,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 9179774976,
+          "max_memory_full_psi_avg10": 0.15,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 246,
+          "sampling_errors": 0,
+          "elapsed_seconds": 247.9534630679991,
+          "worker_swap_peak_bytes": 3444473856,
+          "total_swapin_bytes": 4243968000,
+          "total_swapout_bytes": 4179824640,
+          "inference_window_samples": 85,
+          "max_inference_swapout_bytes_per_second": 2423435.637467711,
+          "max_inference_swap_io_bytes_per_second": 17253118.95860557,
+          "min_available_bytes": 14955810816,
+          "max_memory_full_psi_avg10": 1.52,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 115.90968544500356,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 3.311619083993719
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 145.65253062300326
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.2479894690040965
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.475383591998252
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.192995694000274
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 11.434444657003041
+        }
+      ],
+      "pre_scheduled_preparation_pair": false,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Fuzzy black/yellow bumblebee on a violet flower against blurred green foliage. Visible wing veins, fur and flower stamens remain coherent across six samples.",
+        "detail": "Bee changes body angle and wing pose while remaining on the flower. Some leg movements are visible; occlusion prevents exhaustive leg/contact checking.",
+        "verdict": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified."
+      }
+    },
+    {
+      "tag": "canary-p8c11-projected8b-bee-flower-s42",
+      "arm": "projected8b",
+      "prompt_id": "bee-flower",
+      "seed": 42,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 31.431021957992925,
+      "first_encode_seconds": 2.1068611330119893,
+      "complete_generation_seconds": 284.73190540198993,
+      "denoiser_request_seconds": 234.29531452299852,
+      "encoder_memory": {
+        "scope_peak_bytes": 22481833984,
+        "RSS_highwater_bytes": 12163997696,
+        "torch_peak_allocated_bytes": 10851730944,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 13915664384,
+        "min_free_VRAM_bytes": [
+          13997436928,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 0
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 25260273664,
+        "min_host_available_bytes": 14252466176,
+        "min_free_VRAM_bytes": [
+          6926712832,
+          12202524672
+        ],
+        "max_owned_swap_bytes": 4003913728
+      },
+      "normalized_generation_graph_sha256": "de2d2f9eb62bff53e2e61aefbd73f4d7c4cc5c5ca4b0d820006f9c26764f25e4",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T06:56:44.565068+00:00",
+      "generation_finish_UTC": "2026-10-31T07:01:29.515801+00:00",
+      "load_io_delta": {
+        "rchar": 4804947,
+        "wchar": 941,
+        "syscr": 259,
+        "syscw": 9,
+        "read_bytes": 10638554624,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "f6bc60731aeba78973863824a86c25f0585aa61542664a0c0d6f9bbe38d6aa12",
+        "decoded_audio_sha256": "0ca5f209bd1486c117b98e2ec5bd415684dac046f965d0b93f70980fe0fc7117",
+        "sha256": "66224b2d6a99d99f1d3ee168d836766f25152a7eb20d1270f7cc55cbeee01d7e",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.06039554625749588,
+        "audio_rms": 0.011176025090176038,
+        "visual_assessment": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            82,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04955630376935005,
+          "std": 25.55864143371582
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 42,
+          "sampling_errors": 0,
+          "elapsed_seconds": 41.40443008999864,
+          "worker_swap_peak_bytes": 0,
+          "total_swapin_bytes": 17461248,
+          "total_swapout_bytes": 30945280,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 13910425600,
+          "max_memory_full_psi_avg10": 0.1,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 236,
+          "sampling_errors": 0,
+          "elapsed_seconds": 239.0596125109878,
+          "worker_swap_peak_bytes": 4003913728,
+          "total_swapin_bytes": 4356354048,
+          "total_swapout_bytes": 5315710976,
+          "inference_window_samples": 71,
+          "max_inference_swapout_bytes_per_second": 5266943.738383192,
+          "max_inference_swap_io_bytes_per_second": 29332628.499311842,
+          "min_available_bytes": 14250606592,
+          "max_memory_full_psi_avg10": 10.99,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 2,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 102.5458338640019,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 8.487194374989485
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 129.58030072500696
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.547117831010837
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.856381760997465
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.4273423529957654
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 10.282416635003756
+        }
+      ],
+      "pre_scheduled_preparation_pair": false,
+      "scheduled_CPU_preparation_overlap": true,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Fuzzy black/yellow bumblebee on a violet flower against blurred green foliage. Fur, translucent veined wings and stamens remain coherent across six samples.",
+        "detail": "More horizontal body pose and different wing overlap/framing than A. Wing and body positions change while the bee remains on the flower; exact leg contact is not exhaustively visible.",
+        "verdict": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified."
+      }
+    },
+    {
+      "tag": "canary-p8c12-projected8b-bee-flower-s43",
+      "arm": "projected8b",
+      "prompt_id": "bee-flower",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 48.15946470700146,
+      "first_encode_seconds": 4.680669296998531,
+      "complete_generation_seconds": 315.87815344800765,
+      "denoiser_request_seconds": 237.66941719999886,
+      "encoder_memory": {
+        "scope_peak_bytes": 21862174720,
+        "RSS_highwater_bytes": 11543547904,
+        "torch_peak_allocated_bytes": 10851730944,
+        "torch_peak_reserved_bytes": 10947133440,
+        "min_host_available_bytes": 12971798528,
+        "min_free_VRAM_bytes": [
+          13614354432,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 975704064
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 22935195648,
+        "min_host_available_bytes": 12714811392,
+        "min_free_VRAM_bytes": [
+          6927245312,
+          12202672128
+        ],
+        "max_owned_swap_bytes": 4843560960
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T07:01:34.476520+00:00",
+      "generation_finish_UTC": "2026-10-31T07:06:50.519609+00:00",
+      "load_io_delta": {
+        "rchar": 4804952,
+        "wchar": 940,
+        "syscr": 260,
+        "syscw": 9,
+        "read_bytes": 10989495808,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "dd76587e8971ee80fa080b9ce1e4ffcbf24f7f91a5923645f8138125270d3a67",
+        "decoded_audio_sha256": "7224989fce63d2ff933717b667c910b96b7e0883a4231f15023e20dbc1529801",
+        "sha256": "6a8dfa354df53c6453d3092ecfc4d1df44d860e5eb93737d018c8fde85e8bf7a",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.06271012872457504,
+        "audio_rms": 0.015852858030814005,
+        "visual_assessment": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            82,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04955630749464035,
+          "std": 25.55864143371582
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 66,
+          "sampling_errors": 0,
+          "elapsed_seconds": 66.88935590500478,
+          "worker_swap_peak_bytes": 975704064,
+          "total_swapin_bytes": 891699200,
+          "total_swapout_bytes": 1315311616,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 12968259584,
+          "max_memory_full_psi_avg10": 0.06,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 238,
+          "sampling_errors": 0,
+          "elapsed_seconds": 244.13905374599562,
+          "worker_swap_peak_bytes": 4843560960,
+          "total_swapin_bytes": 6069747712,
+          "total_swapout_bytes": 6822703104,
+          "inference_window_samples": 93,
+          "max_inference_swapout_bytes_per_second": 8044936.046182996,
+          "max_inference_swap_io_bytes_per_second": 19996810.538852394,
+          "min_available_bytes": 12719820800,
+          "max_memory_full_psi_avg10": 3.61,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 126.12470622299588,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 12.99205346099916
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 158.22727687600127
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.5824533569975756
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 4.3862552829959895
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.271810207006638
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.530932571986341
+        }
+      ],
+      "pre_scheduled_preparation_pair": false,
+      "scheduled_CPU_preparation_overlap": true,
+      "visual_review_label": "B",
+      "visual_review": {
+        "scene": "Fuzzy black/yellow bumblebee on a violet flower cluster against green bokeh. Detailed wings, fur and flower stamens remain coherent across sampled frames.",
+        "detail": "Closer, rounder body framing than A; wing/body pose changes as the bee stays on the flower. Occluded legs prevent exhaustive contact/anatomy assessment.",
+        "verdict": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified."
+      }
+    },
+    {
+      "tag": "canary-p8c13-native32b-bee-flower-s43",
+      "arm": "native32b",
+      "prompt_id": "bee-flower",
+      "seed": 43,
+      "frames": 124,
+      "excluded_warmup": false,
+      "load_seconds": 42.58893480000552,
+      "first_encode_seconds": 3.632890304987086,
+      "complete_generation_seconds": 272.8708040199999,
+      "denoiser_request_seconds": 206.0570174780005,
+      "encoder_memory": {
+        "scope_peak_bytes": 25157062656,
+        "RSS_highwater_bytes": 16989782016,
+        "torch_peak_allocated_bytes": 18044163584,
+        "torch_peak_reserved_bytes": 18863882240,
+        "min_host_available_bytes": 10088812544,
+        "min_free_VRAM_bytes": [
+          5708066816,
+          25724981248
+        ],
+        "max_owned_swap_bytes": 970153984
+      },
+      "generation_memory": {
+        "scope_peak_bytes": 26091606016,
+        "min_host_available_bytes": 14816260096,
+        "min_free_VRAM_bytes": [
+          6927634432,
+          12202725376
+        ],
+        "max_owned_swap_bytes": 2633609216
+      },
+      "normalized_generation_graph_sha256": "1724231f1d1e978ff56fb7c025247b7616188dbe238389f31c1778b38f3aff29",
+      "torch": "2.15.0.dev20260827+rocm7.2",
+      "hip": "7.2.53211",
+      "both_ranks_fixture_verified": true,
+      "encoder_start_UTC": "2026-10-31T07:06:55.370080+00:00",
+      "generation_finish_UTC": "2026-10-31T07:11:28.469450+00:00",
+      "load_io_delta": {
+        "rchar": 4468461,
+        "wchar": 959,
+        "syscr": 253,
+        "syscw": 9,
+        "read_bytes": 16598141440,
+        "write_bytes": 8192,
+        "cancelled_write_bytes": 0
+      },
+      "memory_sampling_errors": 0,
+      "spill_bytes": 0,
+      "media": {
+        "decoded_video_sha256": "f922a889bde169a56117420aec7c5a9f55f8fe8ef19e632813bb0c7274ee121d",
+        "decoded_audio_sha256": "bb2f4bd086ca1449c3e3b01ac2eb50fa387dbc192a1de40c16c6798bb5601022",
+        "sha256": "e57a499855e5faad19941956078697c28388f7316090454a7aea1d9bceb7c16f",
+        "video": {
+          "codec_name": "h264",
+          "width": 608,
+          "height": 352,
+          "r_frame_rate": "24/1",
+          "duration": "5.166667",
+          "nb_read_frames": "124"
+        },
+        "audio": {
+          "codec_name": "aac",
+          "sample_rate": "32000",
+          "channels": 2,
+          "duration": "5.166688"
+        },
+        "decoded_frames": 124,
+        "unique_decoded_frames": 124,
+        "ffmpeg_decode_errors": false,
+        "audio_finite": true,
+        "audio_samples": 331776,
+        "audio_peak": 0.12494650483131409,
+        "audio_rms": 0.02797278474366809,
+        "visual_assessment": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified.",
+        "audio_semantic_assessment": "not qualified by signal checks",
+        "rank1_latents": [
+          {
+            "path": "latent/samples/__h3_nested__/0",
+            "shape": [
+              1,
+              24,
+              37,
+              22,
+              38
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          },
+          {
+            "path": "latent/samples/__h3_nested__/1",
+            "shape": [
+              1,
+              32,
+              2,
+              207
+            ],
+            "dtype": "torch.float32",
+            "finite": true
+          }
+        ]
+      },
+      "conditioning": [
+        {
+          "path": "conditioning/0/0",
+          "shape": [
+            1,
+            82,
+            5120
+          ],
+          "dtype": "torch.float32",
+          "finite": true,
+          "mean": 0.04656464606523514,
+          "std": 23.672962188720703
+        }
+      ],
+      "swap_activity": {
+        "encoder": {
+          "policy": "loading-swap-v4",
+          "samples": 56,
+          "sampling_errors": 0,
+          "elapsed_seconds": 55.72826751200773,
+          "worker_swap_peak_bytes": 970153984,
+          "total_swapin_bytes": 752631808,
+          "total_swapout_bytes": 1828995072,
+          "inference_window_samples": 0,
+          "max_inference_swapout_bytes_per_second": 0.0,
+          "max_inference_swap_io_bytes_per_second": 0.0,
+          "min_available_bytes": 10088710144,
+          "max_memory_full_psi_avg10": 0.23,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        },
+        "generation": {
+          "policy": "loading-swap-v4",
+          "samples": 211,
+          "sampling_errors": 0,
+          "elapsed_seconds": 212.907241058012,
+          "worker_swap_peak_bytes": 2633609216,
+          "total_swapin_bytes": 3186216960,
+          "total_swapout_bytes": 3515334656,
+          "inference_window_samples": 80,
+          "max_inference_swapout_bytes_per_second": 2724336.0411015297,
+          "max_inference_swap_io_bytes_per_second": 16384256.582903113,
+          "min_available_bytes": 14812581888,
+          "max_memory_full_psi_avg10": 5.77,
+          "max_low_memory_consecutive_samples": 0,
+          "max_full_psi_consecutive_samples": 0,
+          "write_budget_bytes_per_second": 134217728,
+          "progress_samples": 0,
+          "measured_slowdown_windows": 0,
+          "confirmed_write_slowdown_windows": 0,
+          "last_confirmed_write_slowdown": null,
+          "inference_write_limit_bytes_per_second": 134217728,
+          "inference_io_limit_bytes_per_second": 167772160,
+          "rate_window_seconds": 30,
+          "failures": [],
+          "advisories": []
+        }
+      },
+      "sampling_joint_ready_seconds": 111.41216221200011,
+      "rank0_phase_spans": [
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 3.5559616109967465
+        },
+        {
+          "label": "denoising",
+          "duration_seconds": 138.50843835499836
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 2.2605964060057886
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 3.487418130011065
+        },
+        {
+          "label": "load-models-gpu",
+          "duration_seconds": 1.2451943020132603
+        },
+        {
+          "label": "vae-decode",
+          "duration_seconds": 9.452436311999918
+        }
+      ],
+      "pre_scheduled_preparation_pair": false,
+      "scheduled_CPU_preparation_overlap": false,
+      "visual_review_label": "A",
+      "visual_review": {
+        "scene": "Fuzzy black/yellow bumblebee with pale rear on a violet flower cluster, blurred green background. Wing veins, fur and flower structures stay coherent across sampled frames.",
+        "detail": "Side-on branch composition; wings and body angle change as the bee stays on the flower. Some legs are occluded or move, so exact continuous contact/anatomy is not exhaustively assessed.",
+        "verdict": "Main scene, sampled fine detail and wing/body movement pass; exact continuous leg contact unqualified."
+      }
+    }
+  ],
+  "quality_method": "Anonymous A/B contact sheets, six evenly spaced frames per clip; notes recorded before reading label mapping. Full AV decoding separately; no perceptual non-inferiority or audio semantic claim.",
+  "decision": {
+    "headline": "The projected 8B path reduces encoder loading and encoder memory, while complete generation time remains close and variable. The tested text-to-video scenes remain coherent, with composition and detail changes.",
+    "assessment": "Treat stock 8B + ClipProj as a viable isolated candidate for this bounded text-only workload. Before scheduled preparation, encoder load falls by 35.1% and the complete-request median by only 4.0%. Across all six pairs, complete-generation medians are effectively equal, and two late 8B runs overlap scheduled CPU preparation. Encoder VRAM/RSS savings are substantial; whole-pipeline owned RAM is almost unchanged because the denoiser/VAE still dominates. These results support a memory/loading option within the tested workload; broader quality and production performance remain unqualified.",
+    "quality_summary": "All six outputs per arm retain the requested main scenes in the sampled frames. Projected 8B shows clearer spout attachment in the two teapot seeds and smaller red blocks matching the relative-size instruction in the bus seeds. Both bus paths retain three initial red blocks and rightward motion, with later occlusion. Bee pairs retain macro detail and evolving wing/body pose without a clear overall sampled winner. Framing, pot/bus design and background details change; exact continuous leg contact and transient defects between sampled frames remain unqualified.",
+    "next_action": "The comparison is complete; no benchmark work or automatic retry remains. Keep the candidate isolated and retain the existing production selection. Broader reference-image, speech/audio semantics, long-prompt or production integration would be a separate qualification scope."
+  },
+  "guard_pass": true,
+  "cleanup_verified": true,
+  "production_promoted": false,
+  "new_schedules": false,
+  "remaining_comparison_work": [],
+  "scheduled_preparation": {
+    "start_UTC": "2026-10-31T07:00:02+00:00",
+    "description": "Existing 03:00 updater began isolated CPU preparation during late bee runs; schedule/service unchanged. First four complete matched pairs preceded it.",
+    "end_UTC": "2026-10-31T07:06:54+00:00"
+  },
+  "pre_update_summary": {
+    "native32b": {
+      "n": 4,
+      "timing": {
+        "load_seconds": {
+          "median": 49.09206446049211,
+          "min": 45.16528019699035,
+          "max": 52.29404959800013
+        },
+        "first_encode_seconds": {
+          "median": 2.699578632003977,
+          "min": 2.6154571310034953,
+          "max": 3.2088524770078948
+        },
+        "complete_generation_seconds": {
+          "median": 270.47052300449286,
+          "min": 262.04172971399385,
+          "max": 298.6280090309883
+        },
+        "denoiser_request_seconds": {
+          "median": 198.16162789549708,
+          "min": 192.4876491909963,
+          "max": 222.82438953999372
+        },
+        "sampling_joint_ready_seconds": {
+          "median": 101.03096100699622,
+          "min": 98.29935839999234,
+          "max": 101.81281408900395
+        }
+      }
+    },
+    "projected8b": {
+      "n": 4,
+      "timing": {
+        "load_seconds": {
+          "median": 31.854923122496984,
+          "min": 29.15554609299579,
+          "max": 34.0764759050071
+        },
+        "first_encode_seconds": {
+          "median": 1.9959630169905722,
+          "min": 1.4558188889932353,
+          "max": 7.7034442799922545
+        },
+        "complete_generation_seconds": {
+          "median": 259.6083521039982,
+          "min": 239.8532178630121,
+          "max": 275.0116545470082
+        },
+        "denoiser_request_seconds": {
+          "median": 195.62460675249895,
+          "min": 191.0364021360001,
+          "max": 222.13320864000707
+        },
+        "sampling_joint_ready_seconds": {
+          "median": 99.06692652950733,
+          "min": 98.20710396599316,
+          "max": 102.6236319620075
+        }
+      }
+    }
+  },
+  "comparison_source_sha256": {
+    "driver.py": "d2937164a80a387f8c708fa4d0e53290939aa047c4b2cee1ae3b1734c847f919",
+    "run_encoder.py": "c5190a6db732affd54906d9a36f1be14de437e3208357c6d47c401f3016902a5",
+    "run_generation.py": "0c1dc78738fe6e77946b0e9b1ed4c8a15f778bf96857d6cf367541cb8622ea2e",
+    "guard_functions.py": "dc6e2f94428881f63da51c4cbd07a9826bbe1dea15e18de8106b007ad7afa16f",
+    "launch_servers.py": "3d5348215612802e316bb146cde177f5c4518ad2f6f9b8d8824ca2ae65cad0da",
+    "launch_servers_conditioning.py": "5a2145ca44d38cf090587eb4bc055805e703a66543ce37bdf21fb34547a61173",
+    "protocol.private.json": "ddaaca42a0f6ca94f111f2b2f6eb5b36c4177b91fa22609de27549f73161eaa8",
+    "comfy-matched/custom_nodes/h3_encoder_benchmark/__init__.py": "ea541ea1dec591e7436b0aabc5b89c70243e7738d0fa11437705fd45ca78e55b",
+    "comfy-matched/custom_nodes/h3_trial_phase/__init__.py": "be793f287710518f2690d5ba8dcb45aa02b2c626b07e5e4ea5181c1e46ba3aa6"
+  },
+  "anonymous_pair_labels": {
+    "teapot-s42": {
+      "A": "projected8b",
+      "B": "native32b"
+    },
+    "teapot-s43": {
+      "A": "projected8b",
+      "B": "native32b"
+    },
+    "toy-bus-s42": {
+      "A": "native32b",
+      "B": "projected8b"
+    },
+    "toy-bus-s43": {
+      "A": "native32b",
+      "B": "projected8b"
+    },
+    "bee-flower-s42": {
+      "A": "native32b",
+      "B": "projected8b"
+    },
+    "bee-flower-s43": {
+      "A": "native32b",
+      "B": "projected8b"
+    }
+  }
+}

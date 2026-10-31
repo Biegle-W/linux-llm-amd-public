@@ -1,5 +1,7 @@
 # AMD H3 text-encoder formats compared — October 28, 2026
 
+Follow-up: the [distinct 8B projected-encoder comparison](H3-PROJECTED-8B-COMPARISON-2026-10-31.md) measures fresh complete requests and sampled quality against this native 32B W4A8 path. It changes the conditioning architecture; the same-architecture format results below remain dated evidence.
+
 W4A8 with verified native HIP INT8 matrix multiplication is a viable AMD candidate for the 7900 XTX on the tested workload. It substantially reduces encoding time, with similar owned RAM and slightly lower peak Torch-reserved VRAM than corrected NVFP4. The paired clips retain the requested main scenes, while composition changes and shared negative-instruction failures remain. The gain applies to encoding; loading remains large and variable.
 
 The comparison keeps H3's 50-layer Qwen3-VL-32B architecture, tokenizer, raw prompts, FP32 hidden-state output, GPU initialization and staged encoder/TP2 execution. The tested alternative is W4A8 safetensors, using the installed HIP implementation on the 7900 XTX. Its default floating-point multiplication and an isolated native-integer option are measured separately. Production selection remains unchanged.

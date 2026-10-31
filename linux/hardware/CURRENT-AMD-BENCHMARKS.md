@@ -1,4 +1,6 @@
-# Current dual-AMD benchmarks — October 30, 2026
+# Current dual-AMD benchmarks — October 31, 2026
+
+**October 31 H3 projected-8B comparison:** all 12 timed generations pass guard/media checks. Before scheduled CPU preparation (four pairs), median encoder load is 31.9 s versus 49.1 s for native 32B W4A8; complete generation is 259.6 versus 270.5 s. Encoder memory falls; whole-workflow gains vary. Sampled quality, all six pairs and late scheduling overlap are recorded. Candidate remains isolated; production selections, RAM holds and guards remain. [Measured comparison and limits](../graphics/H3-PROJECTED-8B-COMPARISON-2026-10-31.md).
 
 **October 31 forum refresh:** 15 public reply pages / 206 posts reviewed. Later tiered-vLLM replies show progress but unresolved PLE/numerics; H3 projected 8B encoding is a separate quality candidate. Linked engine pins are unchanged. High-RAM/P2P results do not qualify this 32 GB host. Research only; no runtime or GPU trial. [Findings and next actions](LCZ-FORUM-REFRESH-2026-10-31.md).
 

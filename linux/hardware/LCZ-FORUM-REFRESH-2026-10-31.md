@@ -1,5 +1,7 @@
 # AMD forum optimization refresh — October 31, 2026
 
+Follow-up: the user-authorized [projected 8B versus native 32B H3 comparison](../graphics/H3-PROJECTED-8B-COMPARISON-2026-10-31.md) is complete. Loading, memory, complete generation, sampled quality and scheduled-background overlap are measured; the candidate remains isolated.
+
 The fresh forum review establishes **no ready-to-apply runtime improvement for this 32 GB server**. The strongest new leads are a smaller projected H3 encoder and host-specific Strata tuning; both need separate qualification. The larger H3 W4A8/Turbo/sparse path remains a source/assets integration candidate. No runtime, kernel, driver, package, service, profile, guard, RAM hold, pin or schedule changed, and no GPU trial, build or model download was started.
 
 ## Coverage and changes since October 30
