@@ -1,5 +1,7 @@
 # Daily engine updates
 
+**November 1 DSH and testing policy:** all enabled models use one **AMD server** provider. Calculate context limits from RAM/VRAM and engine allocations; run only a short tool-call check through the harness and unload. No routine full-context, near-window or long benchmark tests. This owner instruction supersedes older routine qualification requirements below. The daily updater remains paused. [Current policy](SHORT-HARNESS-TEST-POLICY-2026-11-01.md).
+
 **November 1 daily updater paused by owner:** the 03:00 timer is inactive, not enabled for automatic startup, and has no next run. The updater service is inactive. Resume only on an explicit owner request. Selected runtimes, RAM holds and guards remain. [Pause and verification](ENGINE-UPDATER-PAUSED-2026-11-01.md).
 
 The configured updater checks candidate engine builds in isolation. Its timer/hold

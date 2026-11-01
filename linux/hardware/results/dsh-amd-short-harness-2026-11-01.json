@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-01",
+  "change": "DSH enabled local routes consolidated under AMD server",
+  "enabled_routes": 8,
+  "configuration_checks_per_checkout": 7,
+  "harness": "Installed DSH 0.2.1-rc.2 headless through normal guarded AMD model hub",
+  "model": "empero-qwen3.8-35b-a3b",
+  "tool": "read",
+  "tool_call_count": 1,
+  "tool_result": "completed",
+  "model_response_count": 2,
+  "generated_tokens": 85,
+  "final_marker_correct": true,
+  "model_unloaded": true,
+  "full_context_test": false,
+  "other_models_retested": false,
+  "context_caps": "Retained existing bounded engine cache allocations; no cap increased",
+  "daily_updates": "paused"
+}

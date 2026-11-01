@@ -17,7 +17,7 @@ try:
         raise SystemExit(0)
     subprocess.run([sys.executable, str(ROOT / 'apply-stream-activity.py')], check=True)
     configure()
-    print('Choose a local provider/model in DSH; the model hub starts its backend on your first message.', flush=True)
+    print('Choose a model under AMD server in DSH; the model hub starts its backend on your first message.', flush=True)
     print('Closing this terminal stops DSH; the backend stays running in its own terminal.', flush=True)
     app = subprocess.Popen([str(ROOT / 'run'), 'web', '--host', '127.0.0.1', '--port', '3080', *sys.argv[1:]],
                            cwd=ROOT / 'workspace', start_new_session=True)

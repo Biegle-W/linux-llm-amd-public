@@ -1,5 +1,7 @@
 # Daily engine update
 
+**November 1 DSH and testing policy:** all enabled models use one **AMD server** provider. Calculate context limits from RAM/VRAM and engine allocations; run only a short tool-call check through the harness and unload. No routine full-context, near-window or long benchmark tests. This owner instruction supersedes older routine qualification requirements below. The daily updater remains paused. [Current policy](../SHORT-HARNESS-TEST-POLICY-2026-11-01.md).
+
 **Current availability — October 29:** Qwen27B/SGLang is qualified and enabled after the ROCm multicast/VRAM-guard correction; eight working profiles remain available. Ornith, both DeepSeek XS routes and Qwen Flash Next/Strata remain paused until the owner reports more RAM. Actual spill protection and all other guards remain. [Fix and verification](../SGLANG-VRAM-GUARD-FIX-2026-10-29.md).
 
 ## Current policy / Strata retry — October 29

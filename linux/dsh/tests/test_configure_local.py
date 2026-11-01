@@ -1,4 +1,4 @@
-"""Regression checks for local model configuration across DSH's settings migration."""
+"""Check AMD provider migration without changing unrelated DSH settings or holds."""
 import importlib.util
 from pathlib import Path
 import shutil
@@ -17,81 +17,86 @@ class ConfigureLocalTests(unittest.TestCase):
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
         self.module.ROOT = self.root
-        for name in ('models.json', 'sglang-profiles.json', 'vllm-profiles.json', 'strata-profiles.json'):
+        for name in ('models.json', 'sglang-profiles.json', 'vllm-profiles.json',
+                     'strata-profiles.json', 'maya-profiles.json'):
             shutil.copy2(source / name, self.root / name)
         self.home = self.root / 'data'
         self.home.mkdir()
-        self.provider = {'api': 'openai-completions', 'baseURL': 'http://127.0.0.1:9999/v1', 'models': []}
-        self.selection = {'provider': 'external-test', 'model': 'preserved'}
-        self.settings = {'llm-pi-ai': {'providers': {'external-test': self.provider}},
-                         'agent-default-model': self.selection}
+        self.external = {'api': 'openai-completions', 'baseURL': 'http://example.invalid/v1',
+                         'apiKeyEnv': 'EXTERNAL_SECRET', 'models': []}
 
-    def test_retired_deepseek_selection_moves_to_xs_in_same_provider(self):
-        source = Path(__file__).resolve().parents[1]
-        shutil.copy2(source / 'maya-profiles.json', self.root / 'maya-profiles.json')
-        path = self.home / 'settings.yaml'
-        for provider, retired, retained in [('maya-local', 'deepseek-v4.1-flash-1017-maya-s', 'deepseek-v4.1-flash-1017-maya'),
-                                            ('strata-local', 'deepseek-v4.1-flash-1017-strata-s', 'deepseek-v4.1-flash-1017-strata-xs')]:
-            with self.subTest(provider=provider):
-                settings = dict(self.settings, **{'agent-default-model': {'provider': provider, 'model': retired}})
-                path.write_text(yaml.safe_dump(settings)); self.module.configure()
-                actual = yaml.safe_load(path.read_text())
-                self.assertEqual(actual['agent-default-model'], {'provider': provider, 'model': retained})
-                ids = {m['id'] for m in actual['llm-pi-ai']['providers'][provider]['models']}
-                self.assertIn(retained, ids); self.assertNotIn(retired, ids)
-                self.assertEqual(actual['llm-pi-ai']['providers']['external-test'], self.provider)
-
-    def test_sage_migration_preserves_id_and_other_providers(self):
-        path = self.home / 'settings.yaml'
-        settings = dict(self.settings, **{'agent-default-model': {'provider': 'llama-local', 'model': 'sage-a1.5'}})
-        path.write_text(yaml.safe_dump(settings))
-        self.module.configure()
-        actual = yaml.safe_load(path.read_text())
-        self.assertEqual(actual['agent-default-model'], {'provider': 'vllm-local', 'model': 'sage-a1.5'})
-        providers = actual['llm-pi-ai']['providers']
-        self.assertEqual(providers['external-test'], self.provider)
-        self.assertNotIn('sage-a1.5', {m['id'] for m in providers['llama-local']['models']})
-        sage = next(m for m in providers['vllm-local']['models'] if m['id'] == 'sage-a1.5')
-        self.assertEqual(sage['contextWindow'], 65536)
-        self.assertEqual(sage['input'], ['text'])
+    def refresh(self, selection, *, profile=None, default=None):
+        settings = {'llm-pi-ai': {'providers': {'external-test': self.external,
+                     **{key: {'models': []} for key in self.module.LOCAL}}},
+                    'agent-default-model': selection, 'unrelated': {'preserve': True}}
+        if profile:
+            path = self.home / 'profiles' / profile / 'cordis.patch.yml'
+            entries = [{'id': k, 'name': '@deepseek-ai/dsh-' + k, 'config': v}
+                       for k, v in settings.items()]
+            entries.append({'id': 'custom', 'name': 'custom-plugin', 'disabled': True})
+            data = entries
+        else:
+            path = self.home / 'settings.yaml'
+            data = settings
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(data))
+        self.module.configure(default, profile=profile or 'web')
         first = path.read_text()
-        self.module.configure()
+        self.module.configure(default, profile=profile or 'web')
         self.assertEqual(path.read_text(), first)
+        result = yaml.safe_load(first)
+        if profile:
+            self.assertEqual(result[-1], {'id': 'custom', 'name': 'custom-plugin', 'disabled': True})
+            result = {e['id']: e.get('config') for e in result}
+            self.assertFalse((self.home / 'settings.yaml').exists())
+        self.assertEqual(result['unrelated'], {'preserve': True})
+        self.assertEqual(result['llm-pi-ai']['providers']['external-test'], self.external)
+        self.assertEqual(set(result['llm-pi-ai']['providers']), {'amd-server', 'external-test'})
+        return result
 
-    def test_legacy_preserves_selection_and_unrelated_settings(self):
-        path = self.home / 'settings.yaml'
-        self.settings['ui-onboarding'] = {'welcomeNoticeVersion': 7}
-        path.write_text(yaml.safe_dump(self.settings))
-        self.module.configure()
-        actual = yaml.safe_load(path.read_text())
-        self.assertEqual(actual['agent-default-model'], self.selection)
-        self.assertEqual(actual['llm-pi-ai']['providers']['external-test'], self.provider)
-        self.assertEqual(actual['ui-onboarding'], self.settings['ui-onboarding'])
-        self.assertIn('llama-local', actual['llm-pi-ai']['providers'])
+    def test_existing_selection_migrates_to_single_server(self):
+        result = self.refresh({'provider': 'llama-local', 'model': 'empero-qwen3.8-35b-a3b'})
+        self.assertEqual(result['agent-default-model'],
+                         {'provider': 'amd-server', 'model': 'empero-qwen3.8-35b-a3b'})
+        provider = result['llm-pi-ai']['providers']['amd-server']
+        self.assertEqual(provider['displayName'], 'AMD server')
+        self.assertEqual(provider['baseURL'], 'http://127.0.0.1:30100/v1')
+        self.assertEqual(len(provider['models']), 8)
+        self.assertEqual(len({m['id'] for m in provider['models']}), 8)
 
-    def test_profile_refresh_preserves_overrides_and_is_repeatable(self):
-        path = self.home / 'profiles/web/cordis.patch.yml'
-        path.parent.mkdir(parents=True)
-        entries = [{'id': key, 'name': '@deepseek-ai/dsh-' + key, 'config': value}
-                   for key, value in self.settings.items()]
-        unrelated = {'id': 'unrelated', 'name': 'custom-plugin', 'disabled': True,
-                     'config': {'preserve': True}}
-        entries.append(unrelated)
-        path.write_text(yaml.safe_dump(entries))
-        self.module.configure()
-        first = path.read_text()
-        self.module.configure()
-        self.assertEqual(path.read_text(), first)
-        entries = yaml.safe_load(first)
-        actual = {entry['id']: entry['config'] for entry in entries}
-        self.assertEqual(entries[-1], unrelated)
-        self.assertEqual(actual['agent-default-model'], self.selection)
-        self.assertEqual(actual['llm-pi-ai']['providers']['external-test'], self.provider)
-        self.assertFalse((self.home / 'settings.yaml').exists())
-        self.module.configure('sglang-local')
-        actual = {entry['id']: entry['config'] for entry in yaml.safe_load(path.read_text())}
-        self.assertEqual(actual['agent-default-model'],
-                         {'provider': 'sglang-local', 'model': 'qwen3.8-27b-sglang-dflash2'})
+    def test_external_selection_is_preserved(self):
+        selection = {'provider': 'external-test', 'model': 'keep'}
+        self.assertEqual(self.refresh(selection)['agent-default-model'], selection)
+
+    def test_model_compat_and_context_are_preserved(self):
+        result = self.refresh({'provider': 'maya-local', 'model': 'glm-5.3-flash-maya'})
+        models = {m['id']: m for m in result['llm-pi-ai']['providers']['amd-server']['models']}
+        self.assertEqual(models['glm-5.3-flash-maya']['compat']['chatTemplateKwargs'],
+                         {'enable_thinking': False})
+        self.assertNotIn('compat', models['qwen3.8-27b-vllm'])
+        self.assertEqual(models['qwen3.8-27b-vllm']['contextWindow'], 163840)
+        self.assertEqual(models['sage-a1.5']['contextWindow'], 65536)
+        self.assertEqual(result['agent-default-model']['provider'], 'amd-server')
+
+    def test_paused_models_stay_hidden_and_cannot_be_default(self):
+        result = self.refresh({'provider': 'strata-local', 'model': 'qwen3.8-flash-next-iq3_xxs'})
+        ids = {m['id'] for m in result['llm-pi-ai']['providers']['amd-server']['models']}
+        self.assertNotIn('ornith-1.5-122b', ids)
+        self.assertNotIn('deepseek-v4.1-flash-1017-maya', ids)
+        self.assertEqual(result['agent-default-model']['model'], 'empero-qwen3.8-35b-a3b')
+
+    def test_retired_ids_migrate_without_reenabling_models(self):
+        result = self.refresh({'provider': 'llama-local', 'model': 'nemotron-3.5-bolt'})
+        self.assertEqual(result['agent-default-model'],
+                         {'provider': 'amd-server', 'model': 'nemotron-3.5-bolt-vllm'})
+
+    def test_web_profile_migration_preserves_other_plugins(self):
+        self.refresh({'provider': 'llama-local', 'model': 'sage-a1.5'}, profile='web')
+
+    def test_headless_profile_uses_same_provider(self):
+        result = self.refresh({}, profile='headless', default='sglang-local')
+        self.assertEqual(result['agent-default-model'],
+                         {'provider': 'amd-server', 'model': 'qwen3.8-27b-sglang-dflash2'})
 
 
 if __name__ == '__main__':
