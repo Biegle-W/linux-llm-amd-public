@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 1 post-RAM queue:** vLLM Flash Next disk-backed PLE is queued for reassessment after RAM installation and an owner request to proceed. ROCm support must be established first; RAM alone does not remove the reviewed CUDA-only restriction. Any later check is short DSH tool-call testing followed by unload. Daily updates and model holds stay paused. [Queue and prerequisites](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).
+
 **November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](../hardware/DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).
 
 **November 1 DSH and testing policy:** all enabled models use one **AMD server** provider. Calculate context limits from RAM/VRAM and engine allocations; run only a short tool-call check through the harness and unload. No routine full-context, near-window or long benchmark tests. This owner instruction supersedes older routine qualification requirements below. The daily updater remains paused. [Current policy](../hardware/SHORT-HARNESS-TEST-POLICY-2026-11-01.md).
