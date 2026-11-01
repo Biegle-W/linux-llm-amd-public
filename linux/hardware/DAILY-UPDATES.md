@@ -1,5 +1,7 @@
 # Daily engine updates
 
+**November 1 daily updater paused by owner:** the 03:00 timer is inactive, not enabled for automatic startup, and has no next run. The updater service is inactive. Resume only on an explicit owner request. Selected runtimes, RAM holds and guards remain. [Pause and verification](ENGINE-UPDATER-PAUSED-2026-11-01.md).
+
 The configured updater checks candidate engine builds in isolation. Its timer/hold
 status is recorded in the canonical runtime handoff; this text does not enable it.
 Promotion retains fixed performance/marker/quality gates and valid lifecycle

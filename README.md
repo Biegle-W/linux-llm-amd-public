@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**November 1 daily updater paused by owner:** the 03:00 timer is inactive, not enabled for automatic startup, and has no next run. The updater service is inactive. Resume only on an explicit owner request. Selected runtimes, RAM holds and guards remain. [Pause and verification](linux/hardware/ENGINE-UPDATER-PAUSED-2026-11-01.md).
+
 **November 1 DeepSeek test plan:** first-hand Linux gfx1100 reports support investigating the current dual 7900 XTX / 32 GB host. The staged plan tests full routing, bounded memory, actual quantized kernels, A→B→A session restoration, context growth and a stock/AtomicChat comparison. Research and plan only; no trial, download, build, runtime change or hold removal. [Sources, test sequence and gates](linux/hardware/DEEPSEEK-GSQ-32GB-TEST-PLAN-2026-11-01.md).
 
 **October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation, rollback and limits](linux/graphics/H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
