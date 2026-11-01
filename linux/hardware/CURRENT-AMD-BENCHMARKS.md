@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks — October 31, 2026
 
+**November 1 DeepSeek test plan:** first-hand Linux gfx1100 reports support investigating the current dual 7900 XTX / 32 GB host. The staged plan tests full routing, bounded memory, actual quantized kernels, A→B→A session restoration, context growth and a stock/AtomicChat comparison. Research and plan only; no trial, download, build, runtime change or hold removal. [Sources, test sequence and gates](DEEPSEEK-GSQ-32GB-TEST-PLAN-2026-11-01.md).
+
 **October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation, rollback and limits](../graphics/H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
 
 **October 31 H3 projected-8B comparison:** all 12 timed generations pass guard/media checks. Before scheduled CPU preparation (four pairs), median encoder load is 31.9 s versus 49.1 s for native 32B W4A8; complete generation is 259.6 versus 270.5 s. Encoder memory falls; whole-workflow gains vary. Sampled quality, all six pairs and late scheduling overlap are recorded. This comparison used an isolated runtime; normal T2V activation is recorded separately. RAM holds and guards remain. [Measured comparison and limits](../graphics/H3-PROJECTED-8B-COMPARISON-2026-10-31.md).

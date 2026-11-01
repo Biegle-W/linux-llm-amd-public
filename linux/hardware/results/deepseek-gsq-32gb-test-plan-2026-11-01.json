@@ -1,0 +1,394 @@
+{
+  "date": "2026-11-01",
+  "status": "plan only; no trial executed",
+  "objective": "Qualify full-routing DeepSeek GSQ-RCO IQ1_M on the current dual 7900 XTX / 32 GB host; compare AtomicChat only after the stock control passes.",
+  "current_hardware": {
+    "gpu_count": 2,
+    "gpu": "RX7900XTX gfx1100",
+    "nominal_vram_total_GB": 48,
+    "nominal_host_ram_GB": 32,
+    "visible_host_ram_GiB": 30.56,
+    "nominal_aggregate_GB": 80,
+    "comparison_claim_GB": 76,
+    "warning": "RAM and VRAM have distinct uses; total capacity alone does not prove fit or failure."
+  },
+  "candidate": {
+    "repository": "Niko1221/Strata",
+    "tag": "v0.2.9",
+    "commit": "c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+    "engine_package_version": "0.1.55",
+    "architecture": "gfx1100 source build",
+    "first_toolchain": "Retained ROCm 7.2.3 / AVX2. Any different SDK must be isolated and separately recorded.",
+    "control_model": "Stock ISTA GSQ-RCO IQ1_M / 1.75 bpw",
+    "comparison_model": "AtomicChat IQ1_M, same quantization",
+    "initial_engram": "Matching ISTA IQ4_NL; do not assume the retained Q6 table has identical payloads."
+  },
+  "preserved": {
+    "DeepSeek_source": "8183c6b67162340c09b67360860177c577a65f2e",
+    "Qwen_source_short": "7dd5cf18e68c",
+    "production_profiles_and_RAM_holds": "Unchanged",
+    "runtime_or_schedule_changes": false
+  },
+  "sources": [
+    {
+      "url": "https://github.com/Niko1221/Strata/issues/4136",
+      "kind": "First-hand dual gfx1100 DeepSeek report",
+      "limit": "64 GiB RAM and a source build; not current 32 GB qualification."
+    },
+    {
+      "url": "https://github.com/Niko1221/Strata/pull/4800",
+      "kind": "First-hand single gfx1100 IQ1_M benchmark",
+      "pin": "d1c1d4a254d075dec424da12db850c8f4ca9eb42",
+      "limit": "62.6 GiB RAM, ROCm 10.2, 568 MiB free VRAM, speed only; PR 4796 is an earlier submission of the same data."
+    },
+    {
+      "url": "https://github.com/Niko1221/Strata/issues/4350",
+      "kind": "Conversation-restore fault report",
+      "limit": "Root cause unresolved; recovery is not a correctness fix."
+    },
+    {
+      "url": "https://github.com/Niko1221/Strata/issues/3933",
+      "kind": "Mixed R9700/XTX placement and cache measurements",
+      "limit": "PCIe 3 x1 bottleneck differs from this workstation."
+    },
+    {
+      "url": "https://github.com/Niko1221/Strata/pull/4801",
+      "kind": "CMake path-with-space build fix",
+      "limit": "Not a kernel fix; unnecessary for a checkout path without spaces."
+    },
+    {
+      "url": "https://github.com/Niko1221/Strata/blob/main/docs/MODELS.md",
+      "kind": "Author memory and routing guide"
+    },
+    {
+      "url": "https://www.reddit.com/r/LocalLLM/comments/1xe7r2g/for_those_running_deepseek_41_what_are_you_using/",
+      "kind": "Forum discovery discussion",
+      "limit": "Not matching 32 GB / dual XTX qualification."
+    },
+    {
+      "url": "https://huggingface.co/AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF",
+      "kind": "Model layout and behavior card"
+    }
+  ],
+  "initial_envelope": {
+    "GPU_indices": [
+      0,
+      1
+    ],
+    "routed_experts_per_token": 6,
+    "context_tokens": 8192,
+    "requests_at_once": 1,
+    "expert_RAM_store_target_GiB": 8,
+    "optional_second_store_target_GiB": 12,
+    "worker_memory_high_GiB": 18,
+    "worker_memory_max_GiB": 20,
+    "minimum_physical_ram_GiB": 29,
+    "minimum_preload_available_ram_GiB": 23,
+    "running_host_floor_GiB": 3,
+    "native_reserve_MiB_per_card": 8192,
+    "startup_free_VRAM_GiB_per_card": 6,
+    "dedicated_spill_acceptance_bytes": 0,
+    "cpu_threads": 24,
+    "DSpark": false,
+    "vision": false,
+    "swap_policy": "loading-swap-v4",
+    "inference_swap_write_limit_MiB_s": 128,
+    "inference_combined_swap_io_limit_MiB_s": 160,
+    "swap_rate_window_s": 30,
+    "guards": "Retain existing continuous host/VRAM, telemetry and native watchdog protection; fail closed."
+  },
+  "stages": [
+    {
+      "id": 0,
+      "name": "Source, layout, build and readiness checks",
+      "GPU_work": false
+    },
+    {
+      "id": 1,
+      "name": "Selected-type actual-shape kernel checks and bounded fit"
+    },
+    {
+      "id": 2,
+      "name": "Semantic cases, A-A-A-B-A, history and context ladder",
+      "fresh_starts": 3,
+      "context_ceiling_tokens": 32768
+    },
+    {
+      "id": 3,
+      "name": "AtomicChat matched comparison after stock passes",
+      "excluded_warmups": 1,
+      "timed_pairs_per_prompt_size": 3,
+      "prompt_sizes": [
+        4096,
+        8192
+      ],
+      "soak_minutes": 30
+    }
+  ],
+  "storage": {
+    "AtomicChat_backbone_bytes": 120721120256,
+    "shared_Engram_bytes_from_community_manifest": 110595290816,
+    "one_active_source_set_approx_GB": 231.3,
+    "two_backbones_plus_one_Engram_approx_GB": 352,
+    "shared_NVMe_available_bytes_at_review": 432162603008,
+    "prepare_cache_temp_bytes": "Inventory before acquisition; do not assume zero.",
+    "existing_weights_deleted": false
+  },
+  "outcomes": [
+    "Build/layout blocked",
+    "Kernel/numerics blocked",
+    "Resource blocked under retained guards",
+    "Functional/history failed",
+    "Qualified within measured context and features"
+  ],
+  "GPU_trials_started": false,
+  "model_weights_downloaded": false,
+  "packages_built_or_installed": false,
+  "active_owned_jobs": [],
+  "owned_GPU_reservations": [],
+  "next_action": "Stage 0 review and isolated preparation when execution is requested; no global upgrade or automatic promotion.",
+  "functional_cases": [
+    {
+      "id": "arithmetic",
+      "prompt": "Return JSON only: {\"result\": 17*23-9}.",
+      "expected_json": {
+        "result": 382
+      }
+    },
+    {
+      "id": "exact_facts",
+      "facts": {
+        "owner": "Mira",
+        "budget": 148,
+        "canary": "ORCHID-71"
+      },
+      "request": "Return exactly these three fields as JSON.",
+      "expected_json": {
+        "owner": "Mira",
+        "budget": 148,
+        "canary": "ORCHID-71"
+      }
+    },
+    {
+      "id": "unanswerable",
+      "facts": "The ledger contains owner Mira and budget 148. It contains no launch date.",
+      "request": "Return {\"launch_date\":null} if the date is missing.",
+      "expected_json": {
+        "launch_date": null
+      }
+    },
+    {
+      "id": "declared_tool",
+      "tools": [
+        {
+          "name": "lookup_inventory",
+          "arguments_schema": {
+            "type": "object",
+            "properties": {
+              "sku": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "sku"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ],
+      "prompt": "Use lookup_inventory to check SKU BLUE-17.",
+      "expected_call": {
+        "name": "lookup_inventory",
+        "arguments": {
+          "sku": "BLUE-17"
+        }
+      },
+      "stub_result": {
+        "stock": 7
+      },
+      "followup_expected_json": {
+        "sku": "BLUE-17",
+        "stock": 7
+      }
+    }
+  ],
+  "session_restore_case": {
+    "sequence": [
+      "A1",
+      "A2",
+      "A3",
+      "B1",
+      "A4"
+    ],
+    "A1": {
+      "project": "KEEL",
+      "owner": "Mira",
+      "budget": 148,
+      "canary": "ORCHID-71"
+    },
+    "A2_update": {
+      "budget": 152
+    },
+    "A3_update": {
+      "owner": "Sana"
+    },
+    "B1_separate_conversation": {
+      "project": "KEEL",
+      "owner": "Noah",
+      "budget": 937,
+      "canary": "CINDER-26"
+    },
+    "A4_full_history_expected": {
+      "project": "KEEL",
+      "owner": "Sana",
+      "budget": 152,
+      "canary": "ORCHID-71"
+    },
+    "fresh_owned_starts": 3,
+    "coverage": "Resend complete A history, use distinct system prompts/session IDs, and record actual cache reuse/restore. If the cache path is not reached, label it not covered; do not enable experimental persistent slots to force coverage."
+  },
+  "coding_cases": [
+    {
+      "id": "duration",
+      "signature": "parse_duration(s) -> int",
+      "spec": "Parse ISO-8601 day/hour/minute/second durations; reject invalid strings with ValueError.",
+      "cases": [
+        {
+          "input": "PT1H30M",
+          "expected": 5400
+        },
+        {
+          "input": "P1D",
+          "expected": 86400
+        },
+        {
+          "input": "PT0S",
+          "expected": 0
+        },
+        {
+          "input": "P",
+          "expected_exception": "ValueError"
+        }
+      ]
+    },
+    {
+      "id": "intervals",
+      "signature": "merge_intervals(intervals) -> list",
+      "spec": "Sort and merge overlapping or touching closed intervals without mutating input.",
+      "cases": [
+        {
+          "input": [
+            [
+              5,
+              7
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              4
+            ],
+            [
+              5,
+              7
+            ]
+          ]
+        },
+        {
+          "input": [],
+          "expected": []
+        },
+        {
+          "input": [
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          "expected": [
+            [
+              1,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "csv",
+      "signature": "parse_csv(text) -> list[list[str]]",
+      "spec": "Parse CSV including quoted commas, escaped quotes and empty cells.",
+      "cases": [
+        {
+          "input": "a,\"b,c\",d\n",
+          "expected": [
+            [
+              "a",
+              "b,c",
+              "d"
+            ]
+          ]
+        },
+        {
+          "input": "\"a\"\"b\",,c\n",
+          "expected": [
+            [
+              "a\"b",
+              "",
+              "c"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dedup",
+      "signature": "stable_dedup(items) -> list",
+      "spec": "Remove duplicate hashable values while preserving first appearance and input.",
+      "cases": [
+        {
+          "input": [
+            3,
+            1,
+            3,
+            2,
+            1
+          ],
+          "expected": [
+            3,
+            1,
+            2
+          ]
+        },
+        {
+          "input": [
+            "b",
+            "a",
+            "b"
+          ],
+          "expected": [
+            "b",
+            "a"
+          ]
+        },
+        {
+          "input": [],
+          "expected": []
+        }
+      ]
+    }
+  ],
+  "coding_execution_scope": "Later test execution is restricted to a temporary directory, standard library only, no network or host-side tools, bounded time/resources. No model-generated code was executed while preparing this plan."
+}
