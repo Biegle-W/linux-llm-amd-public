@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).
+
 ## Super INT4 vLLM preflight — October 29
 
 Super INT4 small-kernel/UVA checks pass; a temporary nonessential-service pause still fails full-model RAM admission (26.9 GiB required / 23.5 GiB available, before cache/workspace overhead). All three services are restored. No full-model benchmark or promotion; working Super IQ3 remains selected. Small single-GPU layer correctness only; no new model throughput or full-window validation. [Record](SUPER-INT4-VLLM-PREFLIGHT-2026-10-29.md).

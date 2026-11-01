@@ -13,7 +13,11 @@
   "final_marker_correct": true,
   "model_unloaded": true,
   "full_context_test": false,
-  "other_models_retested": false,
+  "other_models_retested": true,
   "context_caps": "Retained existing bounded engine cache allocations; no cap increased",
-  "daily_updates": "paused"
+  "daily_updates": "paused",
+  "followup_report": "DSH-ENABLED-TOOL-CHECKS-2026-11-01.md",
+  "followup_new_routes_attempted": 7,
+  "followup_total_passed": 4,
+  "followup_total_not_passed": 4
 }
