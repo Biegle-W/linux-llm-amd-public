@@ -1,0 +1,18 @@
+{
+  "wheel": "0.33.0rc1.dev229+g3966924d5.rocm72",
+  "reader_source": "https://github.com/Trosfy/vllm/pull/58815",
+  "reader_head": "a7ebbe5fa1fe5984e4d0f1f2d65ab3501d6ba9ac",
+  "base_files": {
+    "vllm/config/engram.py": "c9247c5bd690de50bb2001d4b35117a740910d88334791793ddc05cc8cca2ba0",
+    "vllm/models/qwen4_exp/amd/ple_layer.py": "7a5968fe2719eb6f9d764dfc7a23caa70cb7a26e637b3d2fa007a80bbec8921f",
+    "vllm/models/qwen4_exp/amd/model_state.py": "0d8fe70211855220c2608c55765816133618ae5355ca5501f735d39a6670cca2",
+    "vllm/models/qwen4_exp/common/ngram_embedding.py": "ef0319508554d26da0870c5b8894d4a96b6d82ad069695558d2497c6814102f8"
+  },
+  "candidate_files": {
+    "vllm/config/engram.py": "86fe1d8901a678473b461af23cd8375af882d30c1c03acd4f16540d4188c8e57",
+    "vllm/models/qwen4_exp/amd/model_state.py": "fe3b1f926577839aba8e4a0af1da11adb8d70009c6db7e12df6a4bd839c290ad",
+    "vllm/models/qwen4_exp/amd/ple_layer.py": "f7c7940c725e73f82ce00fc4cdf5727077fbed4b15d1c8efe344bfae560a49d7",
+    "vllm/models/qwen4_exp/common/file_gather.py": "e034249243b0c23847107eb4e611ffde4106c07566c1796e08aa3b2db8da7a3f",
+    "vllm/models/qwen4_exp/common/ngram_embedding.py": "cf863e8025097a3f93d0ef3802aeae8d0fa9c58ae007c9e20380e5e822d80c30"
+  }
+}

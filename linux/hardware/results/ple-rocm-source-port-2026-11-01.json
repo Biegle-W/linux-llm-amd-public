@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-01",
+  "status": "isolated source candidate; device qualification deferred",
+  "wheel": "0.33.0rc1.dev229+g3966924d5.rocm72",
+  "upstream_reader": {
+    "url": "https://github.com/Trosfy/vllm/pull/58815",
+    "head": "a7ebbe5fa1fe5984e4d0f1f2d65ab3501d6ba9ac"
+  },
+  "flag": "rocm_host_file_gather",
+  "cpu_tests_passed": 38,
+  "cpu_seconds": 4.32,
+  "gpu_tests": 0,
+  "gpu_context_initialized": false,
+  "full_model_tests": 0,
+  "full_context_tests": 0,
+  "live_runtime_modified": false,
+  "base_hashes_unchanged": true,
+  "patch_fuzz": 0,
+  "candidate_file_count": 5,
+  "preparer_refuses_unknown_base": true,
+  "preparer_refuses_existing_output": true,
+  "scope": [
+    "ROCm Qwen4Exp",
+    "V2 runner explicit",
+    "TP1 or TP2",
+    "DP1",
+    "PP1",
+    "MTP off",
+    "BF16 or FP8 PLE; NVFP4 remains rejected"
+  ],
+  "limits": [
+    "CPU storage tests partly isolate distributed allocation; two real TP2 base constructors covered",
+    "HIP transfers, GPU kernels, graph replay and model outputs unverified",
+    "Compatible safetensors checkpoint and RAM/VRAM admission required after RAM upgrade"
+  ],
+  "next_check": "One short DSH tool call then unload, only after RAM and owner request",
+  "daily_updates": "paused"
+}

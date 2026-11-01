@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**November 1 ROCm PLE candidate:** an isolated AMD file-gather source port is prepared with 38 passing CPU checks and an exact-hash/zero-fuzz preparer. It is not installed or GPU-qualified. After RAM installation and an owner request, verify supported weights/capacity, then use only a short DSH tool-call check and unload. Existing runtime selections, holds and paused updater remain. [Source changes, package and limits](linux/hardware/PLE-ROCM-SOURCE-PORT-2026-11-01.md).
+
 **November 1 post-RAM queue:** vLLM Flash Next disk-backed PLE is queued for reassessment after RAM installation and an owner request to proceed. ROCm support must be established first; RAM alone does not remove the reviewed CUDA-only restriction. Any later check is short DSH tool-call testing followed by unload. Daily updates and model holds stay paused. [Queue and prerequisites](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
 
 **November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](linux/hardware/DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).

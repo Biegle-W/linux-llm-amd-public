@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks and DSH status — November 1, 2026
 
+**November 1 ROCm PLE candidate:** an isolated AMD file-gather source port is prepared with 38 passing CPU checks and an exact-hash/zero-fuzz preparer. It is not installed or GPU-qualified. After RAM installation and an owner request, verify supported weights/capacity, then use only a short DSH tool-call check and unload. Existing runtime selections, holds and paused updater remain. [Source changes, package and limits](PLE-ROCM-SOURCE-PORT-2026-11-01.md).
+
 **November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).
 
 **November 1 DSH and testing policy:** all enabled models use one **AMD server** provider. Calculate context limits from RAM/VRAM and engine allocations; run only a short tool-call check through the harness and unload. No routine full-context, near-window or long benchmark tests. This owner instruction supersedes older routine qualification requirements below. The daily updater remains paused. [Current policy](SHORT-HARNESS-TEST-POLICY-2026-11-01.md).

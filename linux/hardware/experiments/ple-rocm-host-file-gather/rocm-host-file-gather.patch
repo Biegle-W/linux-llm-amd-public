@@ -1,0 +1,455 @@
+--- a/vllm/config/engram.py
++++ b/vllm/config/engram.py
+@@ -34,6 +34,9 @@
+ class EngramConfig:
+     """Configuration for Engram embedding storage and sharding."""
+ 
++    rocm_host_file_gather: bool = False
++    """Experimental AMD checkpoint-file PLE lookup; TP1/2, DP1, PP1, no MTP."""
++
+     cpu_offload: bool = True
+     """Store embedding weights in pinned CPU memory for UVA lookup."""
+ 
+@@ -57,6 +60,10 @@
+ 
+     @model_validator(mode="after")
+     def _validate_shared_memory(self) -> Self:
++        if self.rocm_host_file_gather and (
++            self.dp_shared_memory or self.use_thp or self.embedding_across_dp
++        ):
++            raise ValueError("ROCm file gather does not support shared/THP/DP-sharded tables")
+         if self.dp_shared_memory and not self.cpu_offload:
+             raise ValueError("dp_shared_memory requires cpu_offload=True")
+         if self.use_thp and (not self.cpu_offload or self.dp_shared_memory):
+@@ -82,11 +89,20 @@
+                 "embeddings and non-empty n-gram layer ids."
+             )
+ 
++        if self.rocm_host_file_gather:
++            from vllm.platforms import current_platform
++            from vllm import envs
++            if field != "ple_layer_ids" or not current_platform.is_rocm():
++                raise ValueError("rocm_host_file_gather requires Qwen4Exp on ROCm")
++            if envs.VLLM_USE_V2_MODEL_RUNNER is not True:
++                raise ValueError("ROCm file gather requires explicit VLLM_USE_V2_MODEL_RUNNER=1")
++
+     def resolve_dp_shared_memory(self, parallel_config: "ParallelConfig") -> None:
+         """Share host tables by default wherever the configuration permits."""
+         if self.dp_shared_memory is None:
+             self.dp_shared_memory = (
+                 self.cpu_offload
++                and not self.rocm_host_file_gather
+                 and not self.use_thp
+                 and parallel_config.data_parallel_size > 1
+                 and not parallel_config.enable_elastic_ep
+@@ -94,6 +110,13 @@
+ 
+     def verify_parallel_config(self, parallel_config: "ParallelConfig") -> None:
+         """Reject unsupported embedding parallel topologies."""
++        if self.rocm_host_file_gather and (
++            parallel_config.pipeline_parallel_size != 1
++            or parallel_config.data_parallel_size != 1
++            or parallel_config.tensor_parallel_size not in (1, 2)
++            or parallel_config.enable_elastic_ep
++        ):
++            raise ValueError("ROCm file gather is restricted to TP1/2, DP1, PP1, no elastic EP")
+         if self.dp_shared_memory:
+             if parallel_config.data_parallel_size <= 1:
+                 raise ValueError("dp_shared_memory requires data_parallel_size > 1.")
+--- a/vllm/models/qwen4_exp/amd/model_state.py
++++ b/vllm/models/qwen4_exp/amd/model_state.py
+@@ -13,6 +13,9 @@
+ from vllm.v1.worker.gpu.model_states.mamba_hybrid import MambaHybridModelState
+ from vllm.v1.worker.gpu.states import RequestState
+ 
++from ..common.file_gather import Qwen4ExpPLEFileGatherEmbedding, stage_checkpoint_rows
++from .ple_layer import Qwen4ExpNGramEmbedding
++
+ 
+ class Qwen4ExpModelState(MambaHybridModelState):
+     """Add rollback-safe PLE n-gram context to the model inputs."""
+@@ -26,6 +29,12 @@
+     ) -> None:
+         super().__init__(vllm_config, model, encoder_cache, device)
+         config = self.model_config.hf_text_config
++        self.file_gather_modules = [
++            m for m in model.modules() if isinstance(m, Qwen4ExpNGramEmbedding)
++            and isinstance(m.ngram_embedding, Qwen4ExpPLEFileGatherEmbedding)
++        ]
++        if self.file_gather_modules and vllm_config.speculative_config is not None:
++            raise ValueError("Experimental ROCm file gather requires speculative decoding/MTP off")
+         self.uses_ngram_embedding = bool(config.ple_layer_ids)
+         if not self.uses_ngram_embedding:
+             self.ngram_context_len = 0
+@@ -61,7 +70,8 @@
+     ) -> torch.Tensor:
+         num_reqs = input_batch.num_reqs
+         num_reqs_padded = input_batch.num_reqs_after_padding
+-        context = self.ngram_context[:num_reqs_padded]
++        context = (self.ngram_context if self.file_gather_modules
++                   else self.ngram_context[:num_reqs_padded])
+         context.fill_(self.ngram_eos_token_id)
+         if num_reqs == 0:
+             return context
+@@ -95,9 +105,21 @@
+         num_reqs_padded = input_batch.num_reqs_after_padding
+         query_start_loc = self.ple_query_start_loc[: num_reqs_padded + 1]
+         query_start_loc.copy_(input_batch.query_start_loc[: num_reqs_padded + 1])
++        context = self._prepare_ngram_context(input_batch, req_states)
++        if self.file_gather_modules:
++            # Clear the fixed backing buffer so a smaller replay cannot see stale request tails.
++            self.ple_query_start_loc[num_reqs_padded + 1:].copy_(query_start_loc[-1])
++            stage_checkpoint_rows(
++                self.file_gather_modules, input_batch.input_ids[:input_batch.num_tokens],
++                self.ple_query_start_loc, context,
++            )
++            for module in self.file_gather_modules:
++                module.ngram_embedding._staging[
++                    input_batch.num_tokens:input_batch.num_tokens_after_padding
++                ].zero_()
+         model_inputs.update(
+             query_start_loc=query_start_loc,
+-            ngram_context=self._prepare_ngram_context(input_batch, req_states),
++            ngram_context=context,
+         )
+         return model_inputs
+ 
+@@ -110,6 +132,9 @@
+         if not self.uses_ngram_embedding:
+             return model_inputs
+ 
++        if self.file_gather_modules:
++            for module in self.file_gather_modules:
++                module.ngram_embedding._staging.zero_()
+         query_start_loc = self.ple_query_start_loc[: num_reqs + 1]
+         query_start_loc[0] = 0
+         tokens_per_req, num_extra_tokens = divmod(num_tokens, num_reqs)
+--- a/vllm/models/qwen4_exp/amd/ple_layer.py
++++ b/vllm/models/qwen4_exp/amd/ple_layer.py
+@@ -43,6 +43,7 @@
+     Qwen4ExpPLENvFp4EmbeddingMethod,
+     Qwen4ExpPLEPinnedHostEmbedding,
+ )
++from ..common.file_gather import Qwen4ExpPLEFileGatherEmbedding
+ from ..common.ops.ple import ple_conv, ple_gate, ple_ngram_ids
+ 
+ logger = init_logger(__name__)
+@@ -259,13 +260,16 @@
+             )
+         engram_config = get_current_vllm_config().engram_config
+         embedding_cls = (
+-            Qwen4ExpPLEPinnedHostEmbedding
++            Qwen4ExpPLEFileGatherEmbedding
++            if engram_config is not None and engram_config.rocm_host_file_gather
++            else Qwen4ExpPLEPinnedHostEmbedding
+             if engram_config is not None and engram_config.cpu_offload
+             else Qwen4ExpPLEDeviceEmbedding
+         )
+         # A TP reduce-scatter covers all vocabulary owners only when ETP=TP.
+         self.use_reduce_scatter = (
+             self.use_sequence_parallel
++            and embedding_cls is not Qwen4ExpPLEFileGatherEmbedding
+             and get_etp_group().world_size == get_tp_group().world_size
+         )
+         self.ngram_embedding = embedding_cls(
+@@ -292,6 +296,20 @@
+             self.ngram_embedding.weight.is_pinned(),
+         )
+ 
++    def compute_ngram_ids(self, input_ids, query_start_loc, ngram_context):
++        """Compute AMD PLE IDs eagerly, without a forward-context lookup."""
++        input_ids = input_ids.reshape(-1)
++        output = input_ids.new_empty((input_ids.shape[0], self.ngram_heads), dtype=torch.int64)
++        ple_ngram_ids(
++            input_ids=input_ids, query_start_loc=query_start_loc,
++            ngram_context=ngram_context, layer_multipliers=self.layer_multipliers,
++            ngram_heads_vocab_sizes=self.ngram_heads_vocab_sizes,
++            ngram_heads_offsets=self.ngram_heads_offsets,
++            eos_token_id=self.eos_token_id, heads_per_ngram=self.heads_per_ngram,
++            output=output,
++        )
++        return output
++
+     def _sp_shard_embeddings(self, embeddings: torch.Tensor) -> torch.Tensor:
+         """Shard embedding token rows, optionally reducing vocabulary contributions."""
+         # Each embedding element has one vocabulary owner, including FP8 bytes.
+@@ -311,6 +329,10 @@
+         ngram_context: torch.Tensor,
+     ) -> torch.Tensor:
+         """Return full embeddings or a token shard after combining vocabulary owners."""
++        if isinstance(self.ngram_embedding, Qwen4ExpPLEFileGatherEmbedding):
++            output = self.ngram_embedding(input_ids.reshape(-1))
++            # Every rank gathered complete rows; reducing would multiply values by TP.
++            return sp_shard(output) if self.use_sequence_parallel else output
+         input_ids = input_ids.reshape(-1)
+         ngram_ids = input_ids.new_empty(
+             (input_ids.shape[0], self.ngram_heads), dtype=torch.int64
+@@ -399,6 +421,10 @@
+                         f"expected {expected_shape}, got "
+                         f"{tuple(loaded_weight.shape)}"
+                     )
++                if isinstance(embedding, Qwen4ExpPLEFileGatherEmbedding):
++                    embedding.accept_checkpoint_shard(shard_index, loaded_weight, shard_size)
++                    loaded.add("ngram_embedding.weight")
++                    continue
+                 embedding.weight.weight_loader(
+                     embedding.weight,
+                     loaded_weight,
+--- /dev/null
++++ b/vllm/models/qwen4_exp/common/file_gather.py
+@@ -0,0 +1,233 @@
++# SPDX-License-Identifier: Apache-2.0
++# SPDX-FileCopyrightText: Copyright contributors to the vLLM project
++"""Experimental ROCm PLE file reader, derived from Trosfy/vllm PR #58815.
++
++Host I/O stays outside captured forwards. No production activation is implied.
++"""
++import mmap
++import os
++import torch
++from vllm.config import get_current_vllm_config
++from .ngram_embedding import Qwen4ExpPLEEmbedding, Qwen4ExpPLEEmbeddingMethod
++
++def _maps_entry(ptr: int) -> tuple[str, int]:
++    """Return the path and file offset of ``ptr`` from ``/proc/self/maps``."""
++    with open("/proc/self/maps") as maps:
++        for line in maps:
++            fields = line.split(maxsplit=5)
++            low, high = (int(bound, 16) for bound in fields[0].split("-"))
++            if low <= ptr < high:
++                path = fields[5].rstrip("\n") if len(fields) > 5 else ""
++                return path, ptr - low + int(fields[2], 16)
++    return "", 0
++
++
++class Qwen4ExpPLEFileGatherEmbedding(Qwen4ExpPLEEmbedding):
++    """PLE rows read on the host from the checkpoint shard files."""
++
++    def __init__(
++        self,
++        num_embeddings: int,
++        embedding_dim: int,
++        *,
++        params_dtype: torch.dtype,
++        padding_size: int,
++        prefix: str,
++        embedding_method: Qwen4ExpPLEEmbeddingMethod,
++        num_ngram_heads: int = 1,
++        max_total_tokens: int = 0,
++        data_parallel_rank: int = 0,
++        reduce_results: bool = True,
++    ) -> None:
++        super().__init__(
++            num_embeddings,
++            embedding_dim,
++            params_dtype=params_dtype,
++            padding_size=padding_size,
++            prefix=prefix,
++            embedding_method=embedding_method,
++            data_parallel_rank=data_parallel_rank,
++            reduce_results=reduce_results,
++        )
++        if max_total_tokens <= 0 or num_ngram_heads <= 0:
++            raise ValueError("File gather requires positive token/head capacity")
++        self._dummy = get_current_vllm_config().load_config.load_format == "dummy"
++        shape = (max_total_tokens, num_ngram_heads, embedding_dim)
++        dtype, pin = self.weight.dtype, self.weight.device.type != "cpu"
++        self._staging = torch.zeros(shape, dtype=dtype, device=self.weight.device)
++        self._host_ids = torch.empty(
++            shape[:2], dtype=torch.int64, device="cpu", pin_memory=pin
++        )
++        # Step N+1 writes these rows only after its stream sync, so after step N's H2D.
++        self._host_rows = torch.empty(shape, dtype=dtype, device="cpu", pin_memory=pin)
++        self._rows = torch.empty_like(self._host_rows).view(torch.uint8).flatten(0, 1)
++        self._shards: dict[int, torch.Tensor] | None = {}
++        self._shard_size = 0
++        self._bound = False
++        self._fds: dict[str, int] = {}
++        self._fds_t = self._bases = torch.empty(0, dtype=torch.int64)
++
++    def allocate_embedding_weight(
++        self,
++        num_embeddings: int,
++        embedding_dim: int,
++        dtype: torch.dtype,
++    ) -> torch.Tensor:
++        """Allocate no rows; they stay in the checkpoint files."""
++        return torch.empty(0, embedding_dim, dtype=dtype)
++
++    def accept_checkpoint_shard(
++        self,
++        shard_index: int,
++        loaded_weight: torch.Tensor,
++        shard_size: int,
++    ) -> None:
++        """Keep a checkpoint shard as a zero-copy byte view of its storage."""
++        if self._bound or self._shards is None:
++            self._shards = None
++            raise RuntimeError("PLE host file gather does not support weight reload")
++        if loaded_weight.device.type != "cpu":
++            raise ValueError("PLE checkpoint shard must be a CPU file-backed tensor")
++        if loaded_weight.dtype != self.weight.dtype:
++            raise ValueError(
++                f"PLE shard dtype {loaded_weight.dtype} must match the embedding "
++                f"dtype {self.weight.dtype}; host file gather serves rows as stored"
++            )
++        if shard_size <= 0 or shard_index < 0:
++            raise ValueError("Invalid PLE shard index/size")
++        if self._shard_size and self._shard_size != shard_size:
++            raise ValueError("Inconsistent PLE shard size")
++        expected = min(shard_size, self.org_vocab_size - shard_index * shard_size)
++        if expected <= 0 or tuple(loaded_weight.shape) != (expected, self.embedding_dim):
++            raise ValueError("Invalid PLE shard shape/range")
++        if not loaded_weight.is_contiguous():
++            raise ValueError("PLE shard must be contiguous")
++        if shard_index in self._shards:
++            raise ValueError(f"Duplicate PLE embedding shard {shard_index}")
++        self._shards[shard_index] = loaded_weight.view(torch.uint8)
++        self._shard_size = shard_size
++
++    def bind_file_shards(self) -> None:
++        """Record each shard's file and offset and release the loader's views."""
++        if self._shards is None:
++            raise RuntimeError("PLE host file gather does not support weight reload")
++        if not self._dummy and not self._bound:
++            rows = sum(shard.shape[0] for shard in self._shards.values())
++            if rows != self.org_vocab_size:
++                raise ValueError(
++                    f"PLE shards cover {rows} of {self.org_vocab_size} rows"
++                )
++            expected = (self.org_vocab_size + self._shard_size - 1) // self._shard_size
++            if sorted(self._shards) != list(range(expected)):
++                raise ValueError("PLE shards must cover a contiguous index range")
++            self._fds_t, self._bases = torch.zeros(
++                2, len(self._shards), dtype=torch.int64, device="cpu"
++            )
++            for index, shard in self._shards.items():
++                path, offset = _maps_entry(shard.data_ptr())
++                if not path or not os.path.isfile(path):
++                    raise ValueError(
++                        f"PLE embedding shard {index} is not a file-backed view "
++                        f"({path or 'anonymous'})"
++                    )
++                if path not in self._fds:
++                    self._fds[path] = os.open(path, os.O_RDONLY)
++                self._fds_t[index], self._bases[index] = self._fds[path], offset
++        self._shards = {}
++        self._bound = True
++
++    def stage_rows(self, num_tokens: int) -> None:
++        """Read the rows for ``_host_ids[:num_tokens]`` and copy them to staging."""
++        if self._shards is None or not self._bound:
++            raise RuntimeError("PLE host file gather is unbound or was reloaded")
++        if not 0 <= num_tokens <= self._staging.shape[0]:
++            raise ValueError("PLE step exceeds staging capacity")
++        if num_tokens == 0:
++            return
++        ids = self._host_ids[:num_tokens].flatten()
++        out = self._host_rows[:num_tokens].flatten(0, 1).view(torch.uint8)
++        if not self._fds:
++            out.zero_()
++        else:
++            ids, inverse = ids.unique(return_inverse=True)
++            if ids.numel() and not 0 <= ids[0] <= ids[-1] < self.org_vocab_size:
++                raise IndexError(f"PLE id out of range for {self.org_vocab_size} rows")
++            shard = ids // self._shard_size
++            local = ids - shard * self._shard_size
++            page, row_bytes = mmap.PAGESIZE, out.shape[1]
++            start = self._bases[shard] + local * row_bytes
++            first, last = start // page, (start + row_bytes - 1) // page
++            run = torch.ones_like(first, dtype=torch.bool)
++            run[1:] = (first[1:] > last[:-1] + 1) | (shard[1:] != shard[:-1])
++            fds, lows = self._fds_t[shard[run]].tolist(), first[run].tolist()
++            # Queue every page read before the serial reads.
++            for fd, lo, hi in zip(fds, lows, last[run.roll(-1)].tolist()):
++                os.posix_fadvise(
++                    fd, lo * page, (hi - lo + 1) * page, os.POSIX_FADV_WILLNEED
++                )
++            rows = self._rows[: ids.numel()]
++            for row, fd, offset in zip(
++                rows.numpy(), self._fds_t[shard].tolist(), start.tolist()
++            ):
++                if os.preadv(fd, [row], offset) != row_bytes:
++                    raise ValueError(
++                        f"PLE shard file {os.readlink(f'/proc/self/fd/{fd}')} is "
++                        f"truncated at offset {offset}"
++                    )
++            torch.index_select(rows, 0, inverse, out=out)
++        self._staging[:num_tokens].copy_(
++            self._host_rows[:num_tokens], non_blocking=True
++        )
++
++    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
++        """Return the rows staged for this step."""
++        if hidden_states.shape[0] > self._staging.shape[0]:
++            raise ValueError("PLE forward exceeds staging capacity")
++        return self._staging[: hidden_states.shape[0]].flatten(-2)
++
++    def start_prefetch(
++        self,
++        hidden_states: torch.Tensor,
++        ngram_ids: torch.Tensor,
++    ) -> None:
++        """Rows are staged in ``prepare_inputs``, so prefetch is a no-op."""
++        return None
++
++    def finalize_prefetch(self, total_tokens: int) -> torch.Tensor:
++        """Return the fixed-address rows already staged by prepare_inputs."""
++        if not 0 <= total_tokens <= self._staging.shape[0]:
++            raise ValueError("PLE prefetch exceeds staging capacity")
++        return self._staging[:total_tokens].flatten(-2)
++
++    def close(self):
++        """Release descriptors with the model, including failed partial binds."""
++        for fd in self._fds.values():
++            try:
++                os.close(fd)
++            except OSError:
++                pass
++        self._fds.clear()
++        self._bound = False
++        self._shards = None
++
++    def __del__(self):
++        if hasattr(self, "_fds"):
++            self.close()
++
++
++
++def stage_checkpoint_rows(
++    modules: list,
++    input_ids: torch.Tensor,
++    query_start_loc: torch.Tensor,
++    ngram_context: torch.Tensor,
++) -> None:
++    """Stage host-file-gather PLE rows for one step behind a single stream sync."""
++    num_tokens = input_ids.shape[0]
++    for module in modules:
++        ids = module.compute_ngram_ids(input_ids, query_start_loc, ngram_context)
++        module.ngram_embedding._host_ids[:num_tokens].copy_(ids, non_blocking=True)
++    if input_ids.device.type != "cpu":
++        torch.accelerator.current_stream().synchronize()
++    for module in modules:
++        module.ngram_embedding.stage_rows(num_tokens)
+--- a/vllm/models/qwen4_exp/common/ngram_embedding.py
++++ b/vllm/models/qwen4_exp/common/ngram_embedding.py
+@@ -292,6 +292,11 @@
+         """Convert looked-up PLE rows to the activation dtype."""
+         raise NotImplementedError
+ 
++    def process_weights_after_loading(self, layer: nn.Module) -> None:
++        bind = getattr(layer, "bind_file_shards", None)
++        if bind is not None:
++            bind()
++
+ 
+ class Qwen4ExpPLEUnquantizedEmbeddingMethod(Qwen4ExpPLEEmbeddingMethod):
+     """Unquantized PLE embedding storage and lookup semantics."""
+@@ -371,6 +376,7 @@
+         sentinel = torch.finfo(torch.float32).min
+         if torch.any(layer.weight_scale == sentinel):
+             raise ValueError("FP8 PLE checkpoint is missing its global scale")
++        super().process_weights_after_loading(layer)
+ 
+     def dequantize(
+         self,
