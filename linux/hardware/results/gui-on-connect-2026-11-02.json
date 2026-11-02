@@ -4,7 +4,7 @@
   "unit_verification": "passed on host",
   "shell_syntax": "passed",
   "installation": "installed and verified",
-  "connector_default": "HDMI-A",
+  "connector_default": "HDMI-A,DP",
   "poll_seconds": 5,
   "requires_usb_keyboard_and_mouse": true,
   "automatic_logout_or_stop": false,
@@ -21,5 +21,14 @@
     "usb_keyboard": true,
     "usb_mouse": true,
     "ready": false
+  },
+  "installed_connectors": "HDMI-A",
+  "requested_connectors": "HDMI-A,DP",
+  "configuration_update": "pending administrator authentication",
+  "requested_configuration_readonly_check": {
+    "display": true,
+    "usb_keyboard": true,
+    "usb_mouse": true,
+    "ready": true
   }
 }

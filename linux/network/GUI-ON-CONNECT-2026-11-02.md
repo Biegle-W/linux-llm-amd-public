@@ -22,14 +22,17 @@ in, stop the desktop on disconnect, restart inference, or load a model. An
 already-running desktop is left running. No raw keyboard or mouse events are
 read. No inference hardware/memory/context guards change.
 
-HDMI-only is the requested default. A read-only live check found USB keyboard
-and mouse capabilities, but the connected monitor reported DisplayPort rather
-than HDMI. To include DisplayPort, set this in
-`/etc/default/local-llm-gui-on-connect` after installation:
+The owner selected HDMI and DisplayPort. New-install configuration accepts both.
+The existing installed configuration still accepts HDMI only: updating the root-owned
+configuration requires administrator authentication. The requested configuration
+passes a read-only live check with all three conditions present. To apply it:
 
-```ini
-LOCAL_LLM_GUI_CONNECTORS=HDMI-A,DP
+```sh
+sudo sed -i 's/^LOCAL_LLM_GUI_CONNECTORS=.*/LOCAL_LLM_GUI_CONNECTORS=HDMI-A,DP/' /etc/default/local-llm-gui-on-connect
 ```
+
+The installer preserves existing configuration, so reinstalling does not replace
+an existing HDMI-only setting.
 
 The next check reads the configuration; no inference restart is needed.
 To disable automatic GUI startup while preserving a running desktop:
