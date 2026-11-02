@@ -3,12 +3,23 @@
   "cpu_checks_per_checkout": 9,
   "unit_verification": "passed on host",
   "shell_syntax": "passed",
-  "installation": "pending administrator execution",
+  "installation": "installed and verified",
   "connector_default": "HDMI-A",
   "poll_seconds": 5,
   "requires_usb_keyboard_and_mouse": true,
   "automatic_logout_or_stop": false,
   "gui_login_required": true,
   "model_tests": 0,
-  "hotplug_reboot_tested": false
+  "hotplug_reboot_tested": false,
+  "timer_enabled": true,
+  "timer_active": true,
+  "latest_check_exit_status": 0,
+  "installed_files_match_reviewed_source": true,
+  "installed_files_root_owned": true,
+  "live_detection": {
+    "display": false,
+    "usb_keyboard": true,
+    "usb_mouse": true,
+    "ready": false
+  }
 }

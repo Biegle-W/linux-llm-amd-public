@@ -15,8 +15,8 @@ backend was preserved during the completed idle hub restart; DSH was not restart
 
 The OS now defaults to `multi-user.target`, verified on November 2. A current
 desktop session is still running; no reboot or desktop shutdown was performed.
-[Automatic GUI-on-connect setup](GUI-ON-CONNECT-2026-11-02.md) is prepared and
-requires administrator installation.
+[Automatic GUI-on-connect setup](GUI-ON-CONNECT-2026-11-02.md) is installed,
+enabled and verified running.
 
 To open the desktop on demand from a console or SSH session:
 

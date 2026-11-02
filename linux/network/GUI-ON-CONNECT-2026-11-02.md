@@ -1,10 +1,12 @@
 # GUI on local device connection — November 2, 2026
 
-Prepared and CPU-validated; system installation is pending administrator
-execution. Sudo requires interactive authentication and pkexec found no
-authentication agent, so no system detector files or timer were installed.
+Installed by the owner and verified on November 2. The system timer is enabled
+and active; the latest service check exits successfully. The installed detector
+and units match the reviewed source, are root-owned, and have no group/other
+write permission. Live detection finds USB keyboard and mouse capabilities;
+HDMI is disconnected, so readiness is false.
 
-From the repository root, install with:
+For installation or reinstallation from the repository root:
 
 ```sh
 sudo bash network/install-gui-on-connect.sh
@@ -40,6 +42,6 @@ Validation: nine CPU tests pass per checkout, covering missing components,
 HDMI/DisplayPort selection, non-USB rejection, composite receivers, multiple
 GPU connectors, missing udev metadata and safe service activation. Shell syntax
 and host systemd unit verification pass. Real-device checks used `--check` and
-made no changes. No reboot, hotplug lifecycle or root installation has been
-validated. Default boot is already `multi-user.target`; a desktop session is
+made no changes. Installation and ongoing timer execution are verified; no reboot or actual
+hotplug lifecycle has been validated. Default boot is already `multi-user.target`; a desktop session is
 currently active. Existing inference services and paused engine updater remain.
