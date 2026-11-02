@@ -3,8 +3,8 @@
 Installed by the owner and verified on November 2. The system timer is enabled
 and active; the latest service check exits successfully. The installed detector
 and units match the reviewed source, are root-owned, and have no group/other
-write permission. Live detection finds USB keyboard and mouse capabilities;
-HDMI is disconnected, so readiness is false.
+write permission. Live detection finds a connected DisplayPort display and USB keyboard/mouse
+capabilities; readiness is true with the installed HDMI-plus-DisplayPort setting.
 
 For installation or reinstallation from the repository root:
 
@@ -22,17 +22,15 @@ in, stop the desktop on disconnect, restart inference, or load a model. An
 already-running desktop is left running. No raw keyboard or mouse events are
 read. No inference hardware/memory/context guards change.
 
-The owner selected HDMI and DisplayPort. New-install configuration accepts both.
-The existing installed configuration still accepts HDMI only: updating the root-owned
-configuration requires administrator authentication. The requested configuration
-passes a read-only live check with all three conditions present. To apply it:
+The owner selected HDMI and DisplayPort, applied the configuration, and the
+installed setting is verified as `LOCAL_LLM_GUI_CONNECTORS=HDMI-A,DP`. Both
+new-install and installed configuration now accept either connector type. The
+timer is enabled and active; the latest service check succeeds. The graphical
+display manager is active. This verifies detection and operation with the current
+desktop already running, not a fresh hotplug-triggered desktop start.
 
-```sh
-sudo sed -i 's/^LOCAL_LLM_GUI_CONNECTORS=.*/LOCAL_LLM_GUI_CONNECTORS=HDMI-A,DP/' /etc/default/local-llm-gui-on-connect
-```
-
-The installer preserves existing configuration, so reinstalling does not replace
-an existing HDMI-only setting.
+For future configuration changes, edit `/etc/default/local-llm-gui-on-connect`.
+The installer preserves existing configuration on reinstallation.
 
 The next check reads the configuration; no inference restart is needed.
 To disable automatic GUI startup while preserving a running desktop:

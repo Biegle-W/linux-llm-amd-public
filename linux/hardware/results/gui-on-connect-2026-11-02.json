@@ -17,18 +17,19 @@
   "installed_files_match_reviewed_source": true,
   "installed_files_root_owned": true,
   "live_detection": {
-    "display": false,
+    "display": true,
     "usb_keyboard": true,
     "usb_mouse": true,
-    "ready": false
+    "ready": true
   },
-  "installed_connectors": "HDMI-A",
+  "installed_connectors": "HDMI-A,DP",
   "requested_connectors": "HDMI-A,DP",
-  "configuration_update": "pending administrator authentication",
+  "configuration_update": "applied and verified",
   "requested_configuration_readonly_check": {
     "display": true,
     "usb_keyboard": true,
     "usb_mouse": true,
     "ready": true
-  }
+  },
+  "display_manager_active": true
 }
