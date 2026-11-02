@@ -27,5 +27,35 @@
   "sources": [
     "https://docs.broadcom.com/doc/BC-0484EN",
     "https://rocm.docs.amd.com/projects/rccl/en/latest/how-to/rccl-usage-tips.html"
-  ]
+  ],
+  "maya_v1_1_50_post_RAM_queue": {
+    "queued_date": "2026-11-02",
+    "status": "waiting_for_installed_RAM_and_owner_request",
+    "release": "v1.1.50",
+    "source_commit": "10e69a0eb11541004abb24f9fa47147e9002326f",
+    "source": "https://github.com/mw00/project-maya/releases/tag/v1.1.50",
+    "planning_pin_only": true,
+    "installed_runtime_unchanged": "v1.1.40 / cbaaec5d70fde2730e251dec6b418e4b454c01bd",
+    "planned_total_RAM_GB": 96,
+    "new_GLM_Maya_XS_upstream_target": {
+      "model_size_approx_GB": 73,
+      "RAM_GB": 64,
+      "GPU_VRAM_GB": 24,
+      "context_tokens": 131072,
+      "locally_qualified": false
+    },
+    "review": [
+      "HIP/gfx1100 compatibility and actual admission",
+      "GLM Maya-XS capacity and allocation-derived context",
+      "guarded hub/model API integration",
+      "thinking budgets and RAM-resident DeepSeek changes"
+    ],
+    "baseline_turbo_enabled": false,
+    "P2P_requires_separate_transport_verification": true,
+    "test": "one short actual DSH tool round trip, verify unload, then next requested model",
+    "preserve_all_guards_holds_and_paused_updater": true,
+    "runtime_changed": false,
+    "download_build_GPU_test_or_schedule_started": false,
+    "automatic_RAM_resume": false
+  }
 }

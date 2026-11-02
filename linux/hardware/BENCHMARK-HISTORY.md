@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 2 post-RAM Maya pin:** queue `v1.1.50` (`10e69a0eb115`) for isolated compatibility/capacity review after the RAM upgrade and owner request. Then use only short DSH tool-call checks with verified unload. Planning only; current runtime, guards, holds and paused updater remain. [Pinned queue](P2P-96GB-ROADMAP-2026-10-30.md).
+
 **November 2 Empero failure retest:** one short DSH read-tool round trip passes the strict marker-only final answer; owned unload verified. Earlier format failure retained; caps, pins, guards, held models and paused updater unchanged. [Result](EMPERO-FAILURE-RETEST-2026-11-02.md).
 
 **November 2 repeat 2 DSH checks:** fresh owner-requested checks on all eight enabled routes: **7/8 passed, 1/8 did not pass**. Each tested backend was verified unloaded before switching, including the final model. RAM/VRAM/swap and thermal observations are recorded; pins, caps, guards, holds and paused updater remain. Historical speed measurements are unchanged. [Results and guardrails](DSH-ENABLED-TOOL-CHECKS-2026-11-02-REPEAT-2.md).
