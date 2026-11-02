@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 2 future-model test plan:** one short real harness tool round trip per requested model, then verified owned unload before switching. Benchmark listings now show RAM, per-card VRAM and swap guardrails; dated speeds and historical guard evidence remain. Documentation only, no new model run. [Plan and guard catalog](FUTURE-MODEL-TEST-PLAN-2026-11-02.md).
+
 **November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).
 
 ## Super INT4 vLLM preflight — October 29

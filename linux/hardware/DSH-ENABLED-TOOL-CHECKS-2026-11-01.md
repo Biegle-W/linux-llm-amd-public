@@ -1,5 +1,7 @@
 # Enabled AMD models: short DSH tool checks — November 1, 2026
 
+**November 2 guardrail annotation:** the [current normal-route guard catalog](FUTURE-MODEL-TEST-PLAN-2026-11-02.md#current-normal-route-guard-catalog) adds per-route RAM/VRAM/swap limits. These are source annotations, not new measurements or retroactive assertions about these November 1 attempts. Future checks must verify unload before switching models.
+
 The owner requested the same short tool-call check on the other seven enabled
 routes. Each used its normal guarded backend; when startup was admitted, one
 fresh installed DSH headless session ran through **AMD server**, the model hub

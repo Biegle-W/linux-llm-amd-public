@@ -231,5 +231,11 @@
       "runtime_revision": "cbaaec5d70fde2730e251dec6b418e4b454c01bd"
     }
   ],
-  "limits": "One tiny fixture per route; not a reliability rate, full-context qualification, arbitrary-tool check or other-harness certification. Cold-load duration is not decode throughput."
+  "limits": "One tiny fixture per route; not a reliability rate, full-context qualification, arbitrary-tool check or other-harness certification. Cold-load duration is not decode throughput.",
+  "guardrail_annotation": {
+    "date": "2026-11-02",
+    "catalog": "future-model-test-plan-2026-11-02.json",
+    "scope": "Current normal-route source annotations only; historical measured guards, samples, speeds and statuses are unchanged.",
+    "new_model_run": false
+  }
 }

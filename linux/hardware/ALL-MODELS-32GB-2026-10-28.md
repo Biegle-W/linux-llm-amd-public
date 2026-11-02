@@ -25,16 +25,19 @@ Stages are finished; qualification outcomes below include retained guard stops a
 
 Three timed code/prose trials follow an excluded warmup per task; prefill uses three fresh approximately 8K salted marker prompts. Values are medians. Prefill **N** is native engine timing; **E** is measured engine-phase timing. Fresh TTFT starts at request submission and ends at the first reasoning/content token; loading is excluded. Context is configured capacity, not a claim that every row exercised the full window. Storage is decimal allocated associated-file GB from the October 27 inventory.
 
+
+**Guardrail columns added November 2:** normal-route values are current source annotations, not new measurements or assertions about guards used for the dated speed samples. RAM is total/available before loading, worker high/max or runtime available floor as labeled; VRAM is per card. `v4: 128/160` means writes/combined I/O ceilings over complete 30-second inference windows; loading/parked swap is allowed. Historical isolated arms retain their dated limits; historical graphics retain v3. See the [full guard catalog and debounce/coverage rules](FUTURE-MODEL-TEST-PLAN-2026-11-02.md#current-normal-route-guard-catalog). Qwen/Strata remains owner-held despite older row status text.
+
 ## VRAM only models
 
-| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
-|---|---|---:|---:|---:|---:|---:|---|
-| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct28 / measured selected runtime | 3,402.9 N | 2.416 | 132.46 / 83.76 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
-| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct28 / measured selected runtime | 6,031.9 N | 1.398 | 46.89 / 46.94 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` |
-| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 5,075.2 E | 1.657 | 120.11 / 111.20 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
-| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 1,403.6 E | 5.865 | 142.01 / 78.15 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` |
-| Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct28 / Oct29 / measured selected runtime | 2,787.9 E | 2.906 | 38.04 / 37.88 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
-| Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct29 / low-buffer candidate did not qualify | — | — | — / — | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location | RAM guardrails GiB | VRAM guardrails GiB/card | Swap guardrails |
+|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| Empero IQ4_XS · llama.cpp `19cce6919992` | Oct28 / measured selected runtime | 3,402.9 N | 2.416 | 132.46 / 83.76 | 262,144 | 19.63 | SATA1 `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` | 12 total / 7 avail; worker 4/5; floor 3 | 21 pre-load; 3 soft / 1.5 hard; spill 0 | v4: 128/160 MiB/s, 30 s |
+| Flint UD-Q4_K_XL · llama.cpp `19cce6919992`, reasoning128 | Oct28 / measured selected runtime | 6,031.9 N | 1.398 | 46.89 / 46.94 | 32,768 | 25.06 | SATA1 `GGUF-Models/Flint-40B-A2.5B` | 12 total / 7 avail; worker 4/5; floor 3 | 21 pre-load; 3 soft / 1.5 hard; spill 0 | v4: 128/160 MiB/s, 30 s |
+| Sage-A1.5 W4A16 AutoRound · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 5,075.2 E | 1.657 | 120.11 / 111.20 | 65,536 | 20.33 | SATA1 `vLLM-Models/Sage-A1.5-W4A16-AutoRound` | Engine allocation; no numeric host gate | 21 pre-load; actual eviction/spill 0 | v4: 128/160 MiB/s, 30 s |
+| Qwen3.8-27B W4A16 · vLLM `0.32.1rc1.dev602+g5d35ce393.rocm72` | Oct28 / Oct29 / measured selected runtime | 1,403.6 E | 5.865 | 142.01 / 78.15 | 163,840 | 20.05 | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` | Engine allocation; no numeric host gate | 21 pre-load; actual eviction/spill 0 | v4: 128/160 MiB/s, 30 s |
+| Nemotron3.5 Bolt74B-A9B W4A16 · vLLM `0.32.1rc1.dev435+gc50aca144.rocm72` held | Oct28 / Oct29 / measured selected runtime | 2,787.9 E | 2.906 | 38.04 / 37.88 | 262,144 | 43.65 | SATA1 `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` | Engine allocation; no numeric host gate | 22 pre-load; actual eviction/spill 0 | v4: 128/160 MiB/s, 30 s |
+| Qwen27B W4A16 · SGLang `f84475ccf593`, DFlash2 | Oct29 / low-buffer candidate did not qualify | — | — | — / — | 163,840 | 21.34 shared base + draft | System `models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` + `models/drafts/Qwen3.8-27B-DFlash2-W4A16` | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
 
 Sage, Qwen vLLM and Bolt retain their valid original short trials; their missing prefill/continuous stages are measured in separate client sessions after repairing the client tokenizer dependency. Engine versions, quantization, contexts and pins remain. Flint retains its 128-token reasoning budget; visible-answer TTFT is separately recorded in the numeric evidence. SGLang’s original graph capture spilled dedicated VRAM and is excluded; a graph-disabled retry is an isolated candidate, with the same 163,840-token actual KV-capacity gate.
 
@@ -48,11 +51,11 @@ Historical pre-fix Qwen27B/SGLang trial: **the low-buffer candidate did not qual
 
 ## MoE models with CPU RAM offload
 
-| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
-|---|---|---:|---:|---:|---:|---:|---|
-| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-cache2; isolated | 371.2 N | 22.130 | 11.22 / 12.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
-| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-physical; isolated | 434.6 N | 18.876 | 15.61 / 17.18 | 32,768 | 59.76 | NVMe `Nemotron-Super` |
-| Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct29 / retained CPU profile held; see file/paged attempts | — | — | — / — | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` |
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location | RAM guardrails GiB | VRAM guardrails GiB/card | Swap guardrails |
+|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-cache2; isolated | 371.2 N | 22.130 | 11.22 / 12.09 | 32,768 | 59.76 | NVMe `Nemotron-Super` | Historical arm limits; host floor 3 | Historical 3 soft / 1.5 hard; spill 0 | v3, historical |
+| Super120B UD-IQ3_XXS · llama.cpp `2280f0fd163b` | Oct29 / super-original-physical; isolated | 434.6 N | 18.876 | 15.61 / 17.18 | 32,768 | 59.76 | NVMe `Nemotron-Super` | Historical arm limits; host floor 3 | Historical 3 soft / 1.5 hard; spill 0 | v3, historical |
+| Ornith122B Q4_K_M · llama.cpp `2280f0fd163b` | Oct29 / retained CPU profile held; see file/paged attempts | — | — | — / — | 32,768 | 76.76 | SATA1 `GGUF-Models/Ornith-1.5-122B-GGUF` | Held: 60 total / 45.0625 avail; floor 3 | 21 pre-load; 3 runtime; owned spill 0 | v4: 128/160 MiB/s, 30 s |
 
 Native placements are isolated from the retained Super/Ornith production profiles. The bounded Super arm used experimental MemoryHigh/Max 20/22 GiB. The later physical-RAM series uses actual MemTotal for MemoryMax and no artificial MemoryHigh. RAM expert backing may page under the allowed swap policy; it is not a fully resident capacity claim. File-backed mmap candidates explicitly depend on SSD reads. Super’s passed near 31K/history checks and Ornith’s actual exercised scope are recorded per arm.
 
@@ -68,28 +71,28 @@ These isolated candidates use mmap file reads or explicit swap-paged CPU buffers
 
 ### Streaming engine profiles and compared tiers
 
-| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location |
-|---|---|---:|---:|---:|---:|---:|---|
-| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-small; native candidate, held | 1,013.6 N | 8.098 | 36.42 / 37.35 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
-| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-large; active temporary 32 GB | 1,155.8 N | 7.104 | 70.15 / 50.95 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp |
-| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-small; active temporary 32 GB | 440.9 N | 18.922 | 5.76 / 5.66 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
-| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-large; native candidate, held | 464.6 N | 17.771 | 6.42 / 6.68 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS |
-| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-large; native candidate, held | 684.1 N | 11.993 | 2.76 / 2.12 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
-| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-small-retry1; native candidate, held | 691.1 N | 11.834 | 2.91 / 1.72 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF |
-| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-small; native candidate, held | 185.6 N | 44.067 | 2.95 / 1.86 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
-| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-large-retry1; native candidate, held | 185.2 N | 44.159 | 3.29 / 1.66 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata |
+| Model / engine | Date / status | Prefill t/s | Fresh TTFT s | Code / prose t/s | Context tokens | GB | Storage location | RAM guardrails GiB | VRAM guardrails GiB/card | Swap guardrails |
+|---|---|---:|---:|---:|---:|---:|---|---|---|---|
+| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-small; native candidate, held | 1,013.6 N | 8.098 | 36.42 / 37.35 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
+| Qwen / Strata `0.1.49.2/7dd5cf18e68c` | Oct28 / strata-iq3-profile-large; active temporary 32 GB | 1,155.8 N | 7.104 | 70.15 / 50.95 | 262,144 | 128.14 | NVMe Strata/models, Strata/packs, Strata/mtp | Held: 29 total / 25 avail; worker 20/22; floor 3 | 7/8 engine reserve; 5 loaded startup; 3/1.5 runtime | v4: 128/160 MiB/s, 30 s |
+| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-small; active temporary 32 GB | 440.9 N | 18.922 | 5.76 / 5.66 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS | 29 total / 23 avail; worker 18/20; floor 3 | 16 pre-load; 8 engine reserve; 3/1.5 runtime | v4: 128/160 MiB/s, 30 s |
+| GLM / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-glm-profile-large; native candidate, held | 464.6 N | 17.771 | 6.42 / 6.68 | 32,768 | 97.42 | NVMe Maya/Maya-S-v2-IQ2_XXS | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
+| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-large; native candidate, held | 684.1 N | 11.993 | 2.76 / 2.12 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
+| DeepSeek XS / Maya `1.1.26/f26d8bab43f9` | Oct28 / maya-deepseek-profile-small-retry1; native candidate, held | 691.1 N | 11.834 | 2.91 / 1.72 | 32,768 | 281.87 shared | NVMe Maya/DeepSeek-V4.1-Flash-1017-GGUF | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
+| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-small; native candidate, held | 185.6 N | 44.067 | 2.95 / 1.86 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
+| DeepSeek XS / Strata `0.1.49.1/8183c6b67162` | Oct28 / strata-deepseek-xs-profile-large-retry1; native candidate, held | 185.2 N | 44.159 | 3.29 / 1.66 | 32,768 | 281.87 shared | Same XS weights; NVMe Strata/DeepSeek-V4.1-Flash-1017 metadata | Historical arm: see dated evidence | Historical arm: see dated evidence | Historical; see dated evidence |
 
 Qwen/Strata large and GLM/Maya small are the previously activated temporary 32 GB profiles. Both DeepSeek engines retain their prior production profiles: their native 32 GB rows are valid measurements, with mixed performance and incomplete activation qualification. GLM’s larger tier passed native tests but failed normal RAM admission; the smaller qualified tier remains selected. These completed October 28 tests were reused. The DeepSeek storage set is shared. [Qualification and exclusions](SSD-STREAMING-32GB-2026-10-28.md).
 
 ## Images and video
 
-| Workflow | Timed trials | Fresh request median s | Range s | Encoder costs | Status |
-|---|---:|---:|---:|---|---|
-| qwen-image | 3 | 190.720 | 171.490–210.335 | included | passed; visual review complete |
-| flux-t2i | 3 | 170.274 | 156.815–185.506 | included | passed; visual review complete |
-| flux-edit | 3 | 161.970 | 161.705–196.266 | included | passed; visual review complete |
-| H3 single GPU, reused Oct28 | 3 | 179.209 | 171.416–220.722 | excluded | passed within sampled scope |
-| H3 actual RCCL TP2, reused Oct28 | 3 | 153.773 | 130.983–180.981 | excluded | passed within sampled scope |
+| Workflow | Timed trials | Fresh request median s | Range s | Encoder costs | Status | RAM guardrails GiB | VRAM guardrails GiB/card | Swap guardrails |
+|---|---:|---:|---:|---|---|---|---|---|
+| qwen-image | 3 | 190.720 | 171.490–210.335 | included | passed; visual review complete | 3 host floor | 2 soft ×4 / 1.5 hard; spill 0 | v3, historical |
+| flux-t2i | 3 | 170.274 | 156.815–185.506 | included | passed; visual review complete | 3 host floor | 2 soft ×4 / 1.5 hard; spill 0 | v3, historical |
+| flux-edit | 3 | 161.970 | 161.705–196.266 | included | passed; visual review complete | 3 host floor | 2 soft ×4 / 1.5 hard; spill 0 | v3, historical |
+| H3 single GPU, reused Oct28 | 3 | 179.209 | 171.416–220.722 | excluded | passed within sampled scope | 1 host floor | See matched H3 guard evidence | v3, historical |
+| H3 actual RCCL TP2, reused Oct28 | 3 | 153.773 | 130.983–180.981 | excluded | passed within sampled scope | 1 host floor | See matched H3 guard evidence | v3, historical |
 
 Qwen/FLUX retain the saved staged component placement: transformer on GPU0, encoder/upsampler and VAE stages on GPU1. The H3 rows separately compare one-card execution with actual RCCL TP2.
 

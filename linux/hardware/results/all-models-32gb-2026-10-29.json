@@ -7797,5 +7797,11 @@
     "custom_nodes/allmodels_gpu_init/__init__.py": "3eb2fccf46ad6797c544d721480cdc3acb278e9b8fcd671868efc021296f2f73",
     "custom_nodes/allmodels_phase/__init__.py": "ae81fa94f1d49cc7584f9c62f6ca7237904336a5abdc2b11794327718aa5c0d0"
   },
-  "generated_at": "2026-10-29T03:28:19.532436-04:00"
+  "generated_at": "2026-10-29T03:28:19.532436-04:00",
+  "guardrail_annotation": {
+    "date": "2026-11-02",
+    "catalog": "future-model-test-plan-2026-11-02.json",
+    "scope": "Current normal-route source annotations only; historical measured guards, samples, speeds and statuses are unchanged.",
+    "new_model_run": false
+  }
 }

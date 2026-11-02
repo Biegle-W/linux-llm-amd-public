@@ -1,0 +1,189 @@
+{
+  "schema": "amd-short-harness-plan-v1",
+  "date": "2026-11-02",
+  "status": "plan/source annotation; no model execution",
+  "sequence": [
+    "admit_one_requested_model",
+    "one_real_harness_tool_round_trip",
+    "owned_unload",
+    "verify_empty_and_release",
+    "next_model_only_after_verified_cleanup"
+  ],
+  "protocol": {
+    "default_harness": "installed DSH through AMD server",
+    "tool": "read tiny unique-marker file",
+    "max_tool_calls": 1,
+    "max_model_responses": 2,
+    "max_output_tokens_per_response": 256,
+    "router_readiness_deadline_seconds": 90,
+    "harness_deadline_seconds": 240,
+    "cold_loading_in_phase_deadline": true,
+    "cleanup_verification_deadline_seconds": 60,
+    "automatic_retries": 0,
+    "full_context_test": false,
+    "throughput_benchmark": false,
+    "cleanup_failure_stops_sequence": true,
+    "held_models_auto_resume": false
+  },
+  "swap": {
+    "policy": "loading-swap-v4",
+    "inference_window_seconds": 30,
+    "write_limit_MiB_per_second": 128,
+    "combined_read_write_limit_MiB_per_second": 160,
+    "loading_parked_swap_allowed": true,
+    "occupancy_and_PSI_alone_fail": false,
+    "shorter_than_window_verdict": "insufficient coverage",
+    "host_IO_attribution": "system-wide, not worker-only"
+  },
+  "catalog_scope": "Current normal routes, November 2 source review. Not historical test measurements; not prospective hardware qualification.",
+  "guardrails": [
+    {
+      "route": "Empero / llama.cpp",
+      "RAM_guardrails": "\u226512 total, \u22657 available; worker high/max 4/5; runtime available floor 3",
+      "VRAM_guardrails": "\u226521 free before load; runtime 3 soft (2 samples), 1.5 hard; zero owned spill",
+      "swap_guardrails": "v4: 128 write / 160 combined, 30 s"
+    },
+    {
+      "route": "Flint / llama.cpp",
+      "RAM_guardrails": "\u226512 total, \u22657 available; worker high/max 4/5; runtime available floor 3",
+      "VRAM_guardrails": "\u226521 free before load; runtime 3 soft (2 samples), 1.5 hard; zero owned spill",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Super IQ3 / llama.cpp",
+      "RAM_guardrails": "\u226528 total; available \u2265host experts +4 = 23.124 (rounded up); runtime available floor 3 (3 samples)",
+      "VRAM_guardrails": "\u226521 free before load; runtime \u22653 (3 low samples); zero owned spill through the shared lifecycle guard",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Ornith / llama.cpp, held",
+      "RAM_guardrails": "\u226560 total; available \u2265host experts +4 = 45.0625; runtime available floor 3 (3 samples)",
+      "VRAM_guardrails": "\u226521 free before load; runtime \u22653 (3 low samples); zero owned spill through the shared lifecycle guard",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Qwen 27B / vLLM",
+      "RAM_guardrails": "Engine allocation/admission; no separate numeric host-RAM gate in this route; calculate physical fit before test",
+      "VRAM_guardrails": "\u226521 free before load; allocation fraction 0.82; zero owned eviction/spill",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Sage / vLLM",
+      "RAM_guardrails": "Engine allocation/admission; no separate numeric host-RAM gate in this route; calculate physical fit before test",
+      "VRAM_guardrails": "\u226521 free before load; allocation fraction 0.82; zero owned eviction/spill",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Bolt / vLLM",
+      "RAM_guardrails": "Engine allocation/admission; no separate numeric host-RAM gate in this route; calculate physical fit before test",
+      "VRAM_guardrails": "\u226522 free before load; allocation fraction 0.94; zero owned eviction/spill",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Qwen 27B / SGLang DFlash2",
+      "RAM_guardrails": "Engine allocation/admission; no separate numeric host-RAM gate in this route; calculate physical fit before test",
+      "VRAM_guardrails": "\u226522.75 free before load; allocation fraction 0.85; zero actual eviction/spill, not requested/unbacked buffers",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "GLM / Maya, bounded 32 GB tier",
+      "RAM_guardrails": "\u226529 total, \u226523 available; worker high/max 18/20; native RAM headroom 12; runtime available floor 3",
+      "VRAM_guardrails": "\u226516 free before load; engine reserve 8; runtime 3 soft (2 samples), 1.5 hard; zero owned spill through the shared lifecycle guard",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "Qwen Flash Next / Strata, held bounded tier",
+      "RAM_guardrails": "\u226529 total, \u226525 available (also expert budget + full host KV +6); worker high/max 20/22; runtime available floor 3",
+      "VRAM_guardrails": "Engine reserve 7 initial /8 later (minimum allowed 6); loaded startup free \u22655; runtime 3 soft (2 samples), 1.5 hard; zero owned spill through the shared lifecycle guard",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "DeepSeek XS / Maya, held retained tier",
+      "RAM_guardrails": "\u226560 total, \u226552 available; worker max 52; runtime available floor 3",
+      "VRAM_guardrails": "\u226516 free before load; runtime 3 soft (2 samples), 1.5 hard; zero owned spill through the shared lifecycle guard",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    },
+    {
+      "route": "DeepSeek XS / Strata, held retained tier",
+      "RAM_guardrails": "\u226560 total, \u226552 available; worker max 52; runtime available floor 3",
+      "VRAM_guardrails": "\u226516 free before load; profile startup reserve 6; loaded startup free \u22655; runtime 3 soft (2 samples), 1.5 hard; zero owned spill",
+      "swap_guardrails": "v4: 128 / 160, 30 s"
+    }
+  ],
+  "run_record_template": {
+    "status": "not_run",
+    "timestamp_utc": null,
+    "model": null,
+    "quantization": null,
+    "engine_build_profile": null,
+    "harness_version": null,
+    "route": null,
+    "configured_context": null,
+    "calculated_cap": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "tool_calls": null,
+    "tool_result_id_matches": null,
+    "marker_verified": null,
+    "exact_failure": null,
+    "guard_snapshot": null,
+    "RAM": {
+      "physical_total_bytes": null,
+      "available_before_bytes": null,
+      "available_min_bytes": null,
+      "available_after_unload_bytes": null,
+      "worker_memory_metric": null,
+      "worker_memory_peak_bytes": null
+    },
+    "VRAM_per_GPU": [],
+    "swap": {
+      "total_bytes": null,
+      "used_before_bytes": null,
+      "used_peak_bytes": null,
+      "used_after_bytes": null,
+      "owned_worker_peak_bytes": null,
+      "host_swapin_delta_bytes": null,
+      "host_swapout_delta_bytes": null,
+      "complete_inference_windows": null,
+      "window_verdict": "not_measured"
+    },
+    "cleanup": {
+      "owned_cgroup_empty": null,
+      "worker_and_port_gone": null,
+      "owner_and_reservation_released": null,
+      "next_model_allowed": false
+    },
+    "coverage": {
+      "sample_interval_seconds": null,
+      "phases_and_duration": null,
+      "missing_sensors": [],
+      "sampled_thermal_peaks": null
+    }
+  },
+  "source_sha256": {
+    "dsh/moe-offload.json": "f64c6ea630dd161f331830a1e0e31f4513d644e9605597cabba9cdaedbc34aa5",
+    "dsh/moe_memory.py": "d8275f32db113752d5ccfb66983d04df2926cc88ff551323c927a7bff43addfc",
+    "dsh/vllm-profiles.json": "74a915514814f2dc1a1ae7419cf7616e9e4a8bd34409a8d814892b2718d36312",
+    "dsh/sglang-profiles.json": "c471dd24e740c141b69229249581ad386fe1e1b64083e9a37050a5e6f887c189",
+    "dsh/rocm_runtime.py": "b10f1edaa1e87bf4cc3131c12d898ffadabfd91bfb7b6f99cae917adf222b0e1",
+    "dsh/streaming_memory.py": "efe3b6a9491eb470f13d806cdcfb385305d1e3a3211f165cecfe743db4c21996",
+    "dsh/strata_memory.py": "933ca21daa2e3372249ff97f4e5324e7d7f557a987ca6f627ac9cad15c5b9dd7",
+    "dsh/strata_runtime.py": "316cc77d2451bf574dba1dad2172c0d2e32f128e628ac6d9255aa028dffde016",
+    "dsh/maya_runtime.py": "3b91eb83a80b7d57827b7e8d5548cd8e38e9d3584a608552113440d7e8b21a51",
+    "dsh/strata_ds41_runtime.py": "e46f5c6ed0eb4119ad32907893c2ccb1f307bca9b753925838f567f4a8b88a4d",
+    "dsh/inference_swap.py": "94724e8aec7c50c7e2d6ad13cd1be950970ce7888b534bef0efcb5fdde40f230",
+    "hardware/inference_memory.py": "46dc79342d74147420e7f2e691e2cbe4162ae6df5f3e66cca1529845dbbbcb96",
+    "hardware/swap_activity.py": "a17d72d4660a322d54f6f7a572b6c04868d83056081e21f877d0b016d219226b",
+    "dsh/strata-iq3-profile.json": "ea7bffd7c8956f24205b026b02a063723b0411cae2a782f6c8d18734d938940c",
+    "dsh/maya-glm-profile.json": "d72807dcdc411d9921725d09ccd042f402c5921ccda64453da7467d1ff0f675c",
+    "dsh/maya-deepseek-profile.json": "b43ad4cd0b3f55636b6e3759770e8bcf749bdb18cdba465da22d500e2621e8ca",
+    "dsh/strata-deepseek-xs-profile.json": "4c0619a8e29a4f4df5b2401b7d1e61b717231af59c747b7bdac67e0a19d24c60",
+    "dsh/llama-router.py": "fe5ccd493db8dd03466417d807c4df19e1c8a71132a74e403dc3eeadecaa4400",
+    "dsh/vllm-router.py": "14484ef254fe7958fc960312f0233132dbc54bb8d581fe54f8b3bc82ca3765b8",
+    "dsh/sglang-router.py": "a8bead69a33ab6e5ba5a4def9f83738970e2d3639396c0410bd6f495ab596216",
+    "dsh/maya-router.py": "3e85677f7e60f64dbf2b1d546a2b9915b1347d007fded526ca4bd5cfe742e2eb",
+    "dsh/strata-router.py": "78caf110708af3716de2e5b0e5c91622ff9626dac60f06be55c4a0babfc5f3f6"
+  },
+  "effective_owned_eviction_spill_limit_bytes": 0
+}

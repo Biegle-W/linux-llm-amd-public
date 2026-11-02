@@ -1,5 +1,7 @@
 # Current benchmark results
 
+**November 2 future-model test plan:** one short real harness tool round trip per requested model, then verified owned unload before switching. Benchmark listings now show RAM, per-card VRAM and swap guardrails; dated speeds and historical guard evidence remain. Documentation only, no new model run. [Plan and guard catalog](../FUTURE-MODEL-TEST-PLAN-2026-11-02.md).
+
 **October 31 Super INT4 retry:** fresh vLLM/SGLang admission is blocked at 27.6 GiB required / 22.2 GiB available; SGLang also has Super architecture and channelwise quantization blockers. No candidate worker or runtime change; llama.cpp IQ3 remains selected. [Results and next steps](../SUPER-INT4-ENGINES-2026-10-31.md).
 
 ## MES source audit and offline preparation — October 30
