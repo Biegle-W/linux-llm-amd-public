@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 2 repeat 2 DSH checks:** fresh owner-requested checks on all eight enabled routes: **7/8 passed, 1/8 did not pass**. Each tested backend was verified unloaded before switching, including the final model. RAM/VRAM/swap and thermal observations are recorded; pins, caps, guards, holds and paused updater remain. Historical speed measurements are unchanged. [Results and guardrails](DSH-ENABLED-TOOL-CHECKS-2026-11-02-REPEAT-2.md).
+
 **November 2 enabled-model DSH checks:** fresh owner-requested checks on all eight enabled routes: **8/8 passed, 0/8 did not pass**. Each tested backend was verified unloaded before switching, including the final model. RAM/VRAM/swap and thermal observations are recorded; pins, caps, guards, holds and paused updater remain. Historical speed measurements are unchanged. [Results and guardrails](DSH-ENABLED-TOOL-CHECKS-2026-11-02.md).
 
 **November 2 future-model test plan:** one short real harness tool round trip per requested model, then verified owned unload before switching. Benchmark listings now show RAM, per-card VRAM and swap guardrails; dated speeds and historical guard evidence remain. Documentation only, no new model run. [Plan and guard catalog](FUTURE-MODEL-TEST-PLAN-2026-11-02.md).
