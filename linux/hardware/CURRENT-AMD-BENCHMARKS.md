@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
+**November 2 post-RAM DeepSeek Q1 queue:** replace the existing DeepSeek weight backing for both Maya and Strata with compatible latest Unsloth Q1 quants, after format/pack and RAM/VRAM admission review. Preserve rollback files; one short DSH check and verified unload per route. No current download/replacement or hold change. [Migration queue](P2P-96GB-ROADMAP-2026-10-30.md).
+
 **November 2 post-RAM Maya pin:** queue `v1.1.50` (`10e69a0eb115`) for isolated compatibility/capacity review after the RAM upgrade and owner request. Then use only short DSH tool-call checks with verified unload. Planning only; current runtime, guards, holds and paused updater remain. [Pinned queue](P2P-96GB-ROADMAP-2026-10-30.md).
 
 **November 2 Empero failure retest:** one short DSH read-tool round trip passes the strict marker-only final answer; owned unload verified. Earlier format failure retained; caps, pins, guards, held models and paused updater unchanged. [Result](EMPERO-FAILURE-RETEST-2026-11-02.md).
