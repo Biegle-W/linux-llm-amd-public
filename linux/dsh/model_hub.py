@@ -2,8 +2,9 @@
 """Loopback OpenAI API for every enabled local model; starts or switches backends on demand.
 
 A request naming any catalog model is proxied to its backend. If that backend is not
-serving, the normal guarded launcher (dsh/start-backend-terminal) is started headlessly;
-its startup handover stops the previous backend and keeps every memory/VRAM guard.
+serving, the normal guarded launcher (dsh/start-backend-terminal) is started with
+a reusable desktop log window when available. Its startup handover stops the
+previous backend and keeps every memory/VRAM guard.
 Switches wait for in-flight replies on the old backend, never run while an agent holds
 hardware/generated/GPU-LOCK, and are serialized. Streaming clients receive SSE comment
 keep-alives while a model loads.
@@ -32,6 +33,7 @@ sys.path.insert(0, str(ROOT))
 from model_catalog import BACKENDS, catalog
 from inference_idle import inference_request, IdleUnloader, TIMEOUT
 from hub_transport import clean_text, clean_error_body, error_payload, sse_error, relay_sse
+from terminal_logs import open_log_window
 
 PORT = 30100
 GPU_LOCK = ROOT.parent / 'hardware/generated/GPU-LOCK'
@@ -93,6 +95,7 @@ class Hub:
         self.inflight = 0
         self.switching = False
         self.process = None
+        self.log_windows = {}
         self.serving, self.sleep = serving, sleep
         self.launch = launch or self._launch
 
@@ -114,6 +117,9 @@ class Hub:
         if kind in ('maya','strata'):
             args += ['--model', model]
         print(f'Starting {BACKENDS[kind][2]} for {model}.', flush=True)
+        self.log_windows[kind] = open_log_window(
+            ROOT / 'logs' / f'{kind}-launcher.log',
+            f'AMD server — {BACKENDS[kind][2]}', self.log_windows.get(kind))
         return subprocess.Popen(args, cwd=ROOT / 'workspace', stdin=subprocess.DEVNULL,
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                 start_new_session=True)

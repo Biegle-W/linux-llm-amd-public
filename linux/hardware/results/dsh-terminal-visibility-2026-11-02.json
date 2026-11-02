@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-02",
+  "change": "desktop on-demand backend log viewers",
+  "scope": "CPU launcher and routing checks; no model load for validation",
+  "suites": [
+    "hardware.test_terminal_logs",
+    "hardware.test_model_hub",
+    "hardware.test_router_admission"
+  ],
+  "private_checks": 61,
+  "public_checks": 61,
+  "passed": true,
+  "activation": "idle hub restart completed",
+  "backend_supervision": "direct guarded child retained",
+  "headless_fallback": true,
+  "gpu_tests": 0,
+  "engine_profile_context_changes": false,
+  "daily_updater": "paused",
+  "activated_at_utc": "2026-11-02T05:44:36.815356+00:00",
+  "existing_backend_and_dsh_preserved": true,
+  "existing_log_viewers_preserved": true
+}

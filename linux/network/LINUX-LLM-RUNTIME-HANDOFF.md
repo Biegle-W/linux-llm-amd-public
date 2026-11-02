@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 2 DSH terminal visibility:** desktop on-demand backend launches open reusable Ptyxis log viewers while retaining direct guarded-child supervision and headless fallback. Existing DSH is preserved; 61 CPU checks pass, with no model load for validation. Activated after an idle hub restart; the existing backend and DSH were preserved. [Behavior, verification and limits](DSH-TERMINAL-VISIBILITY-2026-11-02.md).
+
 **November 1 ROCm PLE candidate:** an isolated AMD file-gather source port is prepared with 38 passing CPU checks and an exact-hash/zero-fuzz preparer. It is not installed or GPU-qualified. After RAM installation and an owner request, verify supported weights/capacity, then use only a short DSH tool-call check and unload. Existing runtime selections, holds and paused updater remain. [Source changes, package and limits](../hardware/PLE-ROCM-SOURCE-PORT-2026-11-01.md).
 
 **November 1 post-RAM queue:** vLLM Flash Next disk-backed PLE is queued for reassessment after RAM installation and an owner request to proceed. ROCm support must be established first; RAM alone does not remove the reviewed CUDA-only restriction. Any later check is short DSH tool-call testing followed by unload. Daily updates and model holds stay paused. [Queue and prerequisites](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).

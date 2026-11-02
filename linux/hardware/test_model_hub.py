@@ -102,14 +102,28 @@ class HubTests(unittest.TestCase):
         self.assertIn('22.75 GiB', str(raised.exception))
         self.assertEqual((hub.switching, hub.inflight), (False, 0))
 
-    def test_maya_and_strata_launch_headless_with_the_requested_model(self):
+    def test_maya_and_strata_keep_requested_model_and_guarded_child(self):
         for kind,model in [('maya','deepseek-v4.1-flash-1017-maya'),
                            ('strata','deepseek-v4.1-flash-1017-strata-xs')]:
-            with self.subTest(kind=kind),patch.object(mh.subprocess,'Popen') as popen:
+            with self.subTest(kind=kind),patch.object(mh.subprocess,'Popen') as popen, \
+                    patch.object(mh, 'open_log_window') as window:
                 mh.Hub()._launch(kind,model)
                 args=popen.call_args.args[0]
                 self.assertEqual(args[1:],[kind,'--no-browser','--model',model])
                 self.assertTrue(popen.call_args.kwargs['start_new_session'])
+                self.assertIs(popen.call_args.kwargs['stdout'], mh.subprocess.DEVNULL)
+                window.assert_called_once_with(mh.ROOT / 'logs' / f'{kind}-launcher.log',
+                                               f'AMD server — {mh.BACKENDS[kind][2]}', None)
+
+    def test_launch_returns_guarded_backend_and_reuses_viewer_handle(self):
+        viewer, child = Mock(), Mock()
+        with patch.object(mh, 'open_log_window', return_value=viewer) as window, \
+                patch.object(mh.subprocess, 'Popen', return_value=child) as popen:
+            hub = mh.Hub()
+            self.assertIs(hub._launch('llama', 'example'), child)
+            self.assertIs(hub._launch('llama', 'example'), child)
+            self.assertIs(window.call_args.args[2], viewer)
+            self.assertEqual(popen.call_args.args[0], [str(mh.LAUNCHER), 'llama'])
 
 
 class HttpTests(unittest.TestCase):
