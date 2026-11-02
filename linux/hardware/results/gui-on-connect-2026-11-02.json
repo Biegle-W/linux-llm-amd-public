@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-02",
+  "cpu_checks_per_checkout": 9,
+  "unit_verification": "passed on host",
+  "shell_syntax": "passed",
+  "installation": "pending administrator execution",
+  "connector_default": "HDMI-A",
+  "poll_seconds": 5,
+  "requires_usb_keyboard_and_mouse": true,
+  "automatic_logout_or_stop": false,
+  "gui_login_required": true,
+  "model_tests": 0,
+  "hotplug_reboot_tested": false
+}

@@ -4,7 +4,7 @@
 
 **November 2 future-model test plan:** one short real harness tool round trip per requested model, then verified owned unload before switching. Benchmark listings now show RAM, per-card VRAM and swap guardrails; dated speeds and historical guard evidence remain. Documentation only, no new model run. [Plan and guard catalog](../hardware/FUTURE-MODEL-TEST-PLAN-2026-11-02.md).
 
-**November 2 headless server defaults:** inference launches headlessly; GUI logs require explicit opt-in. The model-drive verifier no longer depends on desktop login. API/hub and SSH startup are enabled. GUI boot remains pending administrator authentication; 62 CPU checks pass per checkout. [Operation and remaining boot step](HEADLESS-INFERENCE-2026-11-02.md).
+**November 2 GUI-on-connect setup:** headless boot is configured. A tested HDMI + USB keyboard + USB mouse detector is prepared; installing its system timer requires administrator execution. DisplayPort is an explicit configuration option. Nine CPU checks pass per checkout; inference is unchanged. [Install, behavior and limits](GUI-ON-CONNECT-2026-11-02.md).
 
 **November 1 ROCm PLE candidate:** an isolated AMD file-gather source port is prepared with 38 passing CPU checks and an exact-hash/zero-fuzz preparer. It is not installed or GPU-qualified. After RAM installation and an owner request, verify supported weights/capacity, then use only a short DSH tool-call check and unload. Existing runtime selections, holds and paused updater remain. [Source changes, package and limits](../hardware/PLE-ROCM-SOURCE-PORT-2026-11-01.md).
 
