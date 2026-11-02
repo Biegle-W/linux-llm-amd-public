@@ -1,0 +1,170 @@
+{
+  "model": "empero-qwen3.8-35b-a3b",
+  "backend": "llama",
+  "configured_context": 262144,
+  "started": "2026-11-02T19:15:56.588053+00:00",
+  "finished": "2026-11-02T19:16:49.585859+00:00",
+  "status": "passed",
+  "attempts": 1,
+  "tool_calls": 1,
+  "tool_names": [
+    "read"
+  ],
+  "tool_result_statuses": [
+    "completed"
+  ],
+  "model_steps": 2,
+  "initial_input_tokens": 5924,
+  "generated_tokens": 85,
+  "usage_per_step": [
+    {
+      "inputTokens": 5924,
+      "outputTokens": 68,
+      "totalTokens": 5992
+    },
+    {
+      "inputTokens": 112,
+      "outputTokens": 17,
+      "totalTokens": 6121,
+      "cacheReadTokens": 5992
+    }
+  ],
+  "final_marker_correct": true,
+  "tool_call_result_ids_match": true,
+  "unloaded": true,
+  "cleanup": {
+    "owned_cgroups_empty": true,
+    "observed_worker_scopes": 2,
+    "all_backend_ports_closed": true,
+    "owner_released": true,
+    "launcher_exited": true,
+    "seconds": 0.646
+  },
+  "harness_seconds_including_load": 50.861,
+  "test": "Owner-requested single retest of Empero strict final-marker failure",
+  "harness": "Installed DSH through AMD server, normal tool catalog",
+  "max_output_tokens_per_response": 256,
+  "full_context_test": false,
+  "throughput_benchmark": false,
+  "configuration_sources_unchanged": true,
+  "GPU_reservation_released": true,
+  "memory_observation": {
+    "sample_interval_seconds": 0.5,
+    "samples": 107,
+    "duration_seconds": 52.98544348700125,
+    "errors": [],
+    "RAM_available_min_bytes": 27869130752,
+    "worker_sum_RSS_peak_bytes": 1945243648,
+    "cgroup_memory_peak_bytes": 1796726784,
+    "VRAM_per_GPU": [
+      {
+        "index": 0,
+        "minimum_free_bytes": 12915486720,
+        "peak_used_bytes": 12837539840
+      },
+      {
+        "index": 1,
+        "minimum_free_bytes": 11473338368,
+        "peak_used_bytes": 14279688192
+      }
+    ],
+    "swap": {
+      "host_used_peak_bytes": 1308536832,
+      "host_swapin_delta_bytes": 139264,
+      "host_swapout_delta_bytes": 0,
+      "IO_scope": "system-wide lifecycle; not worker-attributed or inference-phase rate",
+      "owned_worker_swap_peak_bytes": 0,
+      "owned_eviction_spill_peak_bytes": 0,
+      "runtime_policy": "loading-swap-v4, 128 MiB/s writes / 160 MiB/s combined over 30s inference windows",
+      "independent_inference_window_verdict": "not evaluated: observer does not infer exact request phases; unchanged runtime guard remains active"
+    }
+  },
+  "thermal": {
+    "schema": 1,
+    "label": "empero-qwen3.8-35b-a3b-short-dsh",
+    "status": "complete",
+    "interval_seconds": 1.0,
+    "samples": 54,
+    "sample_errors": 0,
+    "raw_samples_dropped": 0,
+    "raw_limit_bytes": 67108864,
+    "cards": {
+      "0000:03:00.0": {
+        "gpu_index": 0,
+        "samples": 54,
+        "busy_samples": 3,
+        "sensor_samples": {
+          "mem": 54,
+          "edge": 54,
+          "junction": 54
+        },
+        "peak_temperature_c": {
+          "mem": 34.0,
+          "edge": 31.0,
+          "junction": 41.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 34.0,
+          "edge": 31.0,
+          "junction": 41.0
+        },
+        "throttle_samples_available": 54,
+        "thermal_limit_samples": 30,
+        "hotspot_limit_samples": 30,
+        "power_limit_samples": 3,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 2012.0,
+        "peak_power_average_w": 182.0,
+        "peak_gfx_clock_mhz": 1821.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 50.0,
+        "last_throttle_status": "available"
+      },
+      "0000:06:00.0": {
+        "gpu_index": 1,
+        "samples": 54,
+        "busy_samples": 4,
+        "sensor_samples": {
+          "mem": 54,
+          "edge": 54,
+          "junction": 54
+        },
+        "peak_temperature_c": {
+          "mem": 50.0,
+          "edge": 27.0,
+          "junction": 42.0
+        },
+        "peak_busy_temperature_c": {
+          "mem": 50.0,
+          "edge": 27.0,
+          "junction": 42.0
+        },
+        "throttle_samples_available": 54,
+        "thermal_limit_samples": 17,
+        "hotspot_limit_samples": 17,
+        "power_limit_samples": 3,
+        "current_limit_samples": 0,
+        "peak_fan_rpm": 1726.0,
+        "peak_power_average_w": 173.0,
+        "peak_gfx_clock_mhz": 1816.0,
+        "peak_memory_clock_mhz": 1249.0,
+        "peak_busy_percent": 49.0,
+        "last_throttle_status": "available"
+      }
+    },
+    "cpu_peak_package_c": {
+      "Package id 0": 55.0
+    },
+    "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads.",
+    "started_utc": "2026-11-02T19:15:56.591122+00:00",
+    "last_sample_utc": "2026-11-02T19:16:49.581159+00:00"
+  },
+  "guardrails": {
+    "route": "Empero / llama.cpp",
+    "RAM_guardrails": "\u226512 total, \u22657 available; worker high/max 4/5; runtime available floor 3",
+    "VRAM_guardrails": "\u226521 free before load; runtime 3 soft (2 samples), 1.5 hard; zero owned spill",
+    "swap_guardrails": "v4: 128 write / 160 combined, 30 s"
+  },
+  "prior_failure_preserved": true,
+  "preflight_note": "Initial preflight stopped on stale hub route metadata before any model load. Verified no owner, backend ports or populated worker scope before the single executed test."
+}
