@@ -1,5 +1,7 @@
 # AMD server catalog and short harness checks — November 1, 2026
 
+**November 2 enabled-model DSH checks:** fresh owner-requested checks on all eight enabled routes: **8/8 passed, 0/8 did not pass**. Each tested backend was verified unloaded before switching, including the final model. RAM/VRAM/swap and thermal observations are recorded; pins, caps, guards, holds and paused updater remain. Historical speed measurements are unchanged. [Results and guardrails](DSH-ENABLED-TOOL-CHECKS-2026-11-02.md).
+
 **November 2 operational plan:** require verified owned unload before loading the next requested model. Save RAM/VRAM/swap guard values and short-run coverage alongside results. [Sequence, result fields and guard catalog](FUTURE-MODEL-TEST-PLAN-2026-11-02.md). This extends the short-check policy; historical results remain unchanged.
 
 **November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).

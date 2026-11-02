@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 2 enabled-model DSH checks:** fresh owner-requested checks on all eight enabled routes: **8/8 passed, 0/8 did not pass**. Each tested backend was verified unloaded before switching, including the final model. RAM/VRAM/swap and thermal observations are recorded; pins, caps, guards, holds and paused updater remain. Historical speed measurements are unchanged. [Results and guardrails](../hardware/DSH-ENABLED-TOOL-CHECKS-2026-11-02.md).
+
 **November 2 future-model test plan:** one short real harness tool round trip per requested model, then verified owned unload before switching. Benchmark listings now show RAM, per-card VRAM and swap guardrails; dated speeds and historical guard evidence remain. Documentation only, no new model run. [Plan and guard catalog](../hardware/FUTURE-MODEL-TEST-PLAN-2026-11-02.md).
 
 **November 2 DSH terminal visibility:** desktop on-demand backend launches open reusable Ptyxis log viewers while retaining direct guarded-child supervision and headless fallback. Existing DSH is preserved; 61 CPU checks pass, with no model load for validation. Activated after an idle hub restart; the existing backend and DSH were preserved. [Behavior, verification and limits](DSH-TERMINAL-VISIBILITY-2026-11-02.md).
