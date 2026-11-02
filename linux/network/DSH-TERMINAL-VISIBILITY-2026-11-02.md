@@ -1,5 +1,7 @@
 # DSH desktop backend logs — November 2, 2026
 
+Superseded by [headless defaults](HEADLESS-INFERENCE-2026-11-02.md): GUI logs now require explicit opt-in.
+
 On-demand requests now open a Ptyxis log window for the selected backend when
 the hub has a desktop display and Ptyxis is installed. The window follows the
 persistent launcher log, including startup failures and replacement log files.

@@ -2,9 +2,9 @@
 """Loopback OpenAI API for every enabled local model; starts or switches backends on demand.
 
 A request naming any catalog model is proxied to its backend. If that backend is not
-serving, the normal guarded launcher (dsh/start-backend-terminal) is started with
-a reusable desktop log window when available. Its startup handover stops the
-previous backend and keeps every memory/VRAM guard.
+serving, the normal guarded launcher (dsh/start-backend-terminal) starts headlessly.
+Desktop log windows require explicit LOCAL_LLM_GUI_LOGS=1 opt-in. Startup handover
+stops the previous backend and keeps every memory/VRAM guard.
 Switches wait for in-flight replies on the old backend, never run while an agent holds
 hardware/generated/GPU-LOCK, and are serialized. Streaming clients receive SSE comment
 keep-alives while a model loads.
@@ -117,9 +117,10 @@ class Hub:
         if kind in ('maya','strata'):
             args += ['--model', model]
         print(f'Starting {BACKENDS[kind][2]} for {model}.', flush=True)
-        self.log_windows[kind] = open_log_window(
-            ROOT / 'logs' / f'{kind}-launcher.log',
-            f'AMD server — {BACKENDS[kind][2]}', self.log_windows.get(kind))
+        if os.environ.get('LOCAL_LLM_GUI_LOGS') == '1':
+            self.log_windows[kind] = open_log_window(
+                ROOT / 'logs' / f'{kind}-launcher.log',
+                f'AMD server — {BACKENDS[kind][2]}', self.log_windows.get(kind))
         return subprocess.Popen(args, cwd=ROOT / 'workspace', stdin=subprocess.DEVNULL,
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                 start_new_session=True)

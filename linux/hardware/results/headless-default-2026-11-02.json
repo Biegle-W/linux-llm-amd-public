@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-02",
+  "gui_logs_default": false,
+  "gui_opt_in": "LOCAL_LLM_GUI_LOGS=1",
+  "cpu_checks_per_checkout": 62,
+  "gpu_tests": 0,
+  "boot_default": "graphical.target",
+  "headless_boot": "pending administrator authentication",
+  "model_drive_verifier_target": "default.target",
+  "boot_without_desktop_tested": false,
+  "headless_hub_activated": true,
+  "existing_backend_preserved": true
+}

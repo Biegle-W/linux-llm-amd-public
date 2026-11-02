@@ -1,9 +1,7 @@
 [Unit]
-Description=Verify local LLM model drives (sharedSATA1, shared NVMe) at session start
-# Unprompted internal-drive mounts are allowed only while the local desktop
-# session is active, so start with the graphical session, not at boot.
-After=graphical-session.target
-PartOf=graphical-session.target
+Description=Verify local LLM model drives (sharedSATA1, shared NVMe) at user-manager startup
+# Model drives mount through system fstab; verify them without desktop login.
+After=basic.target
 
 [Service]
 Type=oneshot
@@ -13,4 +11,4 @@ TimeoutStartSec=300
 NoNewPrivileges=true
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target

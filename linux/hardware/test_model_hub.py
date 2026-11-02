@@ -106,7 +106,8 @@ class HubTests(unittest.TestCase):
         for kind,model in [('maya','deepseek-v4.1-flash-1017-maya'),
                            ('strata','deepseek-v4.1-flash-1017-strata-xs')]:
             with self.subTest(kind=kind),patch.object(mh.subprocess,'Popen') as popen, \
-                    patch.object(mh, 'open_log_window') as window:
+                    patch.object(mh, 'open_log_window') as window, \
+                    patch.dict(mh.os.environ, {'LOCAL_LLM_GUI_LOGS': '1'}):
                 mh.Hub()._launch(kind,model)
                 args=popen.call_args.args[0]
                 self.assertEqual(args[1:],[kind,'--no-browser','--model',model])
@@ -115,10 +116,22 @@ class HubTests(unittest.TestCase):
                 window.assert_called_once_with(mh.ROOT / 'logs' / f'{kind}-launcher.log',
                                                f'AMD server — {mh.BACKENDS[kind][2]}', None)
 
+    def test_desktop_session_still_launches_headlessly_without_explicit_opt_in(self):
+        for setting in ('', '0', 'true'):
+            with self.subTest(setting=setting), patch.dict(mh.os.environ,
+                    {'DISPLAY': ':0', 'LOCAL_LLM_GUI_LOGS': setting}), \
+                    patch.object(mh, 'open_log_window') as window, \
+                    patch.object(mh.subprocess, 'Popen') as popen:
+                hub = mh.Hub()
+                self.assertIs(hub._launch('llama', 'example'), popen.return_value)
+                window.assert_not_called()
+                self.assertEqual(popen.call_args.args[0], [str(mh.LAUNCHER), 'llama'])
+
     def test_launch_returns_guarded_backend_and_reuses_viewer_handle(self):
         viewer, child = Mock(), Mock()
         with patch.object(mh, 'open_log_window', return_value=viewer) as window, \
-                patch.object(mh.subprocess, 'Popen', return_value=child) as popen:
+                patch.object(mh.subprocess, 'Popen', return_value=child) as popen, \
+                patch.dict(mh.os.environ, {'LOCAL_LLM_GUI_LOGS': '1'}):
             hub = mh.Hub()
             self.assertIs(hub._launch('llama', 'example'), child)
             self.assertIs(hub._launch('llama', 'example'), child)

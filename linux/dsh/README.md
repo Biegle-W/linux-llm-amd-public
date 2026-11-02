@@ -4,11 +4,10 @@ All enabled local models appear under **AMD server**. The loopback model hub
 starts the correct backend on the first message; selecting a model does not
 require choosing a separate engine provider.
 
-Desktop on-demand launches open a reusable Ptyxis window with the backend's
-live launcher log. Closing the log window leaves inference running. Sessions
-without a display or Ptyxis keep background behavior. The hub continues to
-supervise the guarded launcher directly. See the
-[terminal visibility verification](../network/DSH-TERMINAL-VISIBILITY-2026-11-02.md).
+Inference launches headlessly by default, including during desktop sessions.
+GUI log viewers require explicit `LOCAL_LLM_GUI_LOGS=1` opt-in; manual desktop
+launchers remain available on demand. See the
+[headless server setup](../network/HEADLESS-INFERENCE-2026-11-02.md).
 
 Eight routes are currently enabled: Empero, Super IQ3, Flint, Qwen 27B SGLang
 DFlash2, Qwen 27B vLLM MTP, Nemotron Bolt, Sage and GLM. Qwen's two routes keep
