@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "source defect verified; isolated candidate built and statically audited",
+  "status": "isolated candidate passes guarded P2P-disabled SHM communicator check",
   "RCCL_source_commit": "bf3ebf549fec376521b7d35f09a67f67071c96d3",
   "nohostcall_recipe_commit": "23c2beb2e200353fda84afa216c2cea2f7c579e9",
   "installed_library_SHA256_unchanged": true,
@@ -17,7 +17,7 @@
   },
   "compiled_successfully": true,
   "installed": false,
-  "GPU_tested": false,
+  "GPU_tested": true,
   "proven_SGLang_crash_remedy": false,
   "SGLang_hold_retained": true,
   "new_model_retry": false,
@@ -30,11 +30,15 @@
   "ncclCommDump_required_by_installed_consumers": false,
   "ncclCommDump_exported": false,
   "runtime_fingerprints_unchanged": true,
-  "dependency_runtime_review_pending": true,
+  "dependency_runtime_review_pending": false,
   "raw_candidate_SHA256": "dac52a5727ef62eada19b1b6066b1b6c3bf2e3c222d7409506000593982bf69e",
   "raw_candidate_real_ROCm_SMI_dependency": true,
   "isolated_SMI_compatibility_copy_staged": true,
   "SMI_required_exports": 9,
   "missing_SMI_exports": [],
-  "candidate_loaded": false
+  "candidate_loaded": true,
+  "application_qualification_pending": true,
+  "candidate_P2P_enabled_tested": false,
+  "host_transport_verified": "SHM/direct/direct both directions",
+  "communicator_result": "rccl-candidate-host-2026-11-03.json"
 }

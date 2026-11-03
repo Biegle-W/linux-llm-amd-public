@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-03",
+  "status": "passed",
+  "scope": "isolated candidate; P2P disabled; SGLang Python environment; no model workload",
+  "candidate_SHA256": "45847d2f61a504746867a1beef08be1041999682b00a7abf19cdc07b11f1d118",
+  "loaded_candidate_verified_parent_and_both_ranks": true,
+  "NCCL_P2P_DISABLE": 1,
+  "NCCL_P2P_LEVEL": "unset",
+  "NCCL_PROTO": "Simple",
+  "torch": "2.13.0+git733fca1",
+  "hip": "7.2.53211",
+  "transport": "SHM/direct/direct",
+  "P2P_IPC_channel_lines": 0,
+  "ranks": 2,
+  "dtypes": [
+    "fp32",
+    "bf16"
+  ],
+  "elements": [
+    1,
+    4096,
+    1048576
+  ],
+  "collectives": [
+    "all_reduce",
+    "rank-distinct all_gather"
+  ],
+  "rank_cases_passed": 12,
+  "elapsed_seconds": 8.47255700400001,
+  "max_owned_swap_bytes": 0,
+  "max_owned_spill_bytes": 0,
+  "minimum_host_available_bytes": 55809282048,
+  "minimum_free_VRAM_bytes": [
+    24385974272,
+    25023193088
+  ],
+  "new_kernel_faults_during_guard": [],
+  "owned_processes_exited": true,
+  "KFD_clients_remaining": [],
+  "GPU_lock_released": true,
+  "installed_runtime_fingerprints_unchanged": true,
+  "amdsmi_warning_32": "retained; device_count=2 and independent sysfs guard telemetry valid",
+  "candidate_installed": false,
+  "SGLang_retried": false,
+  "SGLang_fault_hold_retained": true,
+  "crash_cause_proven": false,
+  "candidate_P2P_enabled_tested": false,
+  "channel_directions": [
+    "0 -> 1 via SHM/direct/direct",
+    "1 -> 0 via SHM/direct/direct"
+  ],
+  "new_kernel_faults_through_final_cleanup": []
+}
