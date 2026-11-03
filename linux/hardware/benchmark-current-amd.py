@@ -159,7 +159,7 @@ def marker_output_limit(kind, model):
 
 def prefill_prompt(index):
     from tokenizers import Tokenizer
-    tokenizer = Tokenizer.from_file(str(ROOT/'models/Qwen3.8-27B-W4A16-AutoRound-GPTQ/tokenizer.json'))
+    tokenizer = Tokenizer.from_file(str(Path(json.loads((ROOT/'dsh/sglang-profiles.json').read_text())['qwen3.8-27b-sglang-dflash2']['model_path'])/'tokenizer.json'))
     salt = uuid.uuid4().hex
     def make(n):
         lines = [f'Record {i:05d}: bay {i%97}, blue bolts {i%31+1}, washers {i%43+2}, sets {i%19+1}.' for i in range(n)]

@@ -11,8 +11,8 @@ spec = importlib.util.spec_from_file_location('gpu_checks', ROOT / 'hardware/tes
 gpu = importlib.util.module_from_spec(spec); spec.loader.exec_module(gpu)
 PORT = 18042
 MODEL = 'qwen-spec-test'
-TARGET = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
-DRAFT = '/opt/local-llm/models/drafts/Qwen3.8-27B-DFlash2-W4A16'
+TARGET = '/mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
+DRAFT = '/mnt/shared/vLLM-Models/drafts/Qwen3.8-27B-DFlash2-W4A16'
 
 
 def request(path, body=None, stream=False):

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+python3 "$ROOT/dsh/shared_storage.py"
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 export VLLM_ENGINE_READY_TIMEOUT_S=1800
-exec "$ROOT/vllm/run-rocm" serve /opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
+exec "$ROOT/vllm/run-rocm" serve /mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
  --host 127.0.0.1 --port 30011 --served-model-name qwen3.8-27b-vllm \
  --tensor-parallel-size 2 --disable-custom-all-reduce --language-model-only --dtype bfloat16 \
  --max-model-len 163840 --max-num-seqs 1 --max-num-batched-tokens 2048 \

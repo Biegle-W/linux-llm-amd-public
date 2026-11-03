@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+python3 "$ROOT/dsh/shared_storage.py"
 # Internal base worker; the guarded router supplies the active DFlash2 ID and strategy.
 exec "$ROOT/sglang/run-rocm" \
- --model-path /opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
+ --model-path /mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ \
  --host 127.0.0.1 --port 30001 --served-model-name qwen3.8-27b-rocm-worker \
  --tp-size 2 --disable-custom-all-reduce --quantization gptq --dtype bfloat16 \
  --language-only --json-model-override-args '{"language_model_only":true}' \

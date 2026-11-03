@@ -44,6 +44,15 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(env['SGLANG_RDNA_VLLM_VERIFY'], '1')
         self.assertEqual(env['SGLANG_LOCAL_RDNA_VERIFY_WALK_FIX'], '1')
 
+    def test_unavailable_model_drive_keeps_current_worker(self):
+        cfg = dict(router.PROFILES[router.DEFAULT])
+        with patch.dict(router.PROFILES, {'test-no-drive': cfg}), \
+                patch.object(router, 'ensure_sglang_models', side_effect=RuntimeError('model drive unavailable')), \
+                patch.object(router, 'stop_worker') as stop, patch.object(router.subprocess, 'Popen') as start:
+            with self.assertRaisesRegex(RuntimeError, 'drive unavailable'):
+                router.ensure_worker('test-no-drive')
+        stop.assert_not_called(); start.assert_not_called()
+
     def test_catalog_hides_failed_profile_and_keeps_working_default(self):
         handler = object.__new__(router.Handler)
         handler.path = '/v1/models'

@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-02",
+  "operation": "Qwen main and DFlash2 draft system-to-SATA relocation",
+  "files": 29,
+  "logical_bytes": 21335488549,
+  "system_allocated_bytes_reclaimed": 21335621632,
+  "verification": "full source/destination SHA256 equality before originals removed",
+  "main": "/mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ",
+  "draft": "/mnt/shared/vLLM-Models/drafts/Qwen3.8-27B-DFlash2-W4A16",
+  "main_files": 17,
+  "draft_files": 12,
+  "source_originals_removed": true,
+  "CPU_tests_each_repository": 33,
+  "GPU_inference": false,
+  "engine_restart": false,
+  "numerical_settings_and_guards_preserved": true,
+  "active_migration_jobs": [],
+  "owned_locks": []
+}

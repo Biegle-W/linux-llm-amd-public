@@ -1,4 +1,49 @@
-# Model categories and disk storage — October 27, 2026
+# Current LLM model storage — November 2, 2026
+
+Qwen main and DFlash2 now use sharedSATA1; retained Maya/Strata streaming assets use the system drive. Super IQ3 and old DeepSeek weight backing are removed. Seven enabled engine routes share six enabled base weight sets; Ornith and Strata Qwen remain configured but paused. Super W4A16 and Flint AWQ are retained experimental candidates. No new inference or performance result is implied. [Qwen relocation](QWEN-SATA-MIGRATION-2026-11-02.md) · [Streaming relocation](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+
+Current sizes below are logical bytes of each retained directory, including small metadata/support files, expressed in decimal GB; shared weight files count once. The older allocated-storage figures below retain their original scope.
+
+| Root | Current location |
+|---|---|
+| System models | `/opt/local-llm/models` |
+| Shared SATA | `/mnt/shared` |
+
+## VRAM only models — selected loading configurations
+
+| Model | Logical GB | Location relative to Shared SATA |
+|---|---:|---|
+| Qwen 27B W4A16 plus DFlash2 | 21.335 | `vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ`; `vLLM-Models/drafts/Qwen3.8-27B-DFlash2-W4A16` |
+| Empero 35B IQ4_XS | 19.628 | `GGUF-Models/Empero-Qwen3.8-35B-A3B-Distill` |
+| Flint GGUF | 25.055 | `GGUF-Models/Flint-40B-A2.5B` |
+| Bolt W4A16 | 43.645 | `vLLM-Models/Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16` |
+| Sage W4A16 | 20.327 | `vLLM-Models/Sage-A1.5-W4A16-AutoRound` |
+
+## MoE models with CPU RAM offload — configured, held
+
+| Model | Logical GB | Location relative to Shared SATA |
+|---|---:|---|
+| Ornith 122B Q4_K_M plus projector | 76.756 | `GGUF-Models/Ornith-1.5-122B-GGUF` |
+
+## MoE models with SSD streaming
+
+| Model | Logical GB | Location relative to System models | Status |
+|---|---:|---|---|
+| GLM Maya-S v2 | 97.646 | `streaming/Maya/Maya-S-v2-IQ2_XXS` | Enabled |
+| Strata Qwen GGUF/support/MTP | 79.129 | `streaming/Strata` | Paused for RAM; tiny DeepSeek reference metadata included |
+
+## Downloaded experimental alternatives — no qualified production loading selection
+
+| Candidate | Logical GB | Location relative to Shared SATA |
+|---|---:|---|
+| Super W4A16 Merlin mixed INT4/INT8 | 72.920 | `vLLM-Models/Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin` |
+| Flint AWQ | 22.415 | `vLLM-Models/Flint-AWQ` |
+
+New DeepSeek Unsloth Q1 weights are not downloaded. Runtime/source pins, guards, holds and the paused updater remain. No task copy/GPU job or reservation remains. The image/video collection is separate at `/mnt/shared/Graphics-Models`.
+
+---
+
+# Historical October 27 model-storage snapshot
 
 Earlier same-day Flint [reasoning128 benchmark](FLINT-REASONING128-2026-10-27.md): prefill 6034.8 tokens/s, TTFT 1.396 s (visible answer 4.436s), code/prose 46.63/46.57 tokens/s, 32K, 25.06 GB SATA1. The latest engine refresh is in [the October27 report](VRAM-ENGINE-UPDATE-2026-10-27.md); current allocations below include the later Sage INT4 replacement, with the remaining Flint alternative listed separately.
 

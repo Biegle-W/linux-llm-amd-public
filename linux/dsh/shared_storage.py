@@ -143,9 +143,25 @@ def ensure_llama_models(presets=None):
 
 
 def ensure_vllm_models(profiles):
-    """Mount the volumes of vLLM profiles kept on model drives; internal-disk models need none."""
+    """Verify external model drives, including sanitized reference mount roots."""
     ensure_model_paths([p['model_path'] for p in profiles.values()
-                        if str(p.get('model_path', '')).startswith('/mnt/')])
+                        if str(p.get('model_path', '')).startswith('/mnt/')
+                        or (p.get('model_path') and Path(p['model_path']).is_relative_to(SHARED))])
+
+
+def ensure_sglang_models(config):
+    """Verify the configured main checkpoint and speculative draft before handover."""
+    paths = [config['model_path']]
+    args = config.get('extra_args', [])
+    flag = '--speculative-draft-model-path'
+    for i, value in enumerate(args):
+        if value == flag:
+            if i + 1 >= len(args) or args[i + 1].startswith('--'):
+                raise RuntimeError('Missing SGLang speculative draft path.')
+            paths.append(args[i + 1])
+        elif value.startswith(flag + '='):
+            paths.append(value.split('=', 1)[1])
+    ensure_model_paths(paths)
 
 
 def ensure_strata_models(config=None):

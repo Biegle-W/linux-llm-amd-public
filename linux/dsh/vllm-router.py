@@ -22,7 +22,7 @@ if BACKEND != 'vllm':
     raise SystemExit('Unknown local vLLM backend: ' + BACKEND)
 PROFILES = json.loads((ROOT / (BACKEND + '-profiles.json')).read_text())
 PUBLIC_PORT, WORKER_PORT = (30010, 30011)
-MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
+MODEL = '/mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
 DEFAULT = 'qwen3.8-27b-vllm'
 lock = threading.Lock()
 lifecycle = threading.RLock()
@@ -57,10 +57,10 @@ def ensure_worker(model):
     swap_guard.check()
     if active == model and worker is not None and worker.poll() is None:
         return
-    stop_worker()
     cfg = PROFILES[model]
-    # Mount only this profile's model drive; internal-disk profiles need none.
+    # Verify storage before replacing any owned worker.
     ensure_vllm_models({model: cfg})
+    stop_worker()
     if cfg.get('runtime') == 'rocm':
         require_rocm_headroom(cfg.get('min_free_vram_gib', 21.0))
     with socket.socket() as probe:

@@ -13,10 +13,11 @@ from pathlib import Path
 from inference_idle import inference_request
 from inference_swap import WorkerSwapGuard
 from rocm_runtime import require_rocm_headroom
+from shared_storage import ensure_sglang_models
 
 ROOT = Path('/opt/local-llm/dsh')
 PROFILES = json.loads((ROOT / 'sglang-profiles.json').read_text())
-MODEL = '/opt/local-llm/models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
+MODEL = '/mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ'
 DEFAULT = 'qwen3.8-27b-sglang-dflash2'
 lock = threading.Lock()
 worker = None
@@ -72,6 +73,7 @@ def ensure_worker(model):
     env = worker_environment(cfg)
     if active == model and worker is not None and worker.poll() is None:
         return
+    ensure_sglang_models(cfg)
     stop_worker()
     if cfg.get('runtime') == 'rocm':
         require_rocm_headroom(cfg.get('min_free_vram_gib', 22.25))

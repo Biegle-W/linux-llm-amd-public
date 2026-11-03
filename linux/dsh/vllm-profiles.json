@@ -10,7 +10,8 @@
     "launcher": "/opt/local-llm/vllm/start-qwen-rocm",
     "min_free_vram_gib": 21.0,
     "kv_cache_dtype": "bfloat16",
-    "context_validation": "October27 dev602: fresh 160851 input/history 160897; API/JSON/tools/SSE, ordered markers/history, both GPUs, loading-swap-v2, zero observed dedicated-VRAM spill. See hardware/VLLM-DEV602-PROMOTION-2026-10-27.md; narrow checks, not exhaustive full-window quality."
+    "context_validation": "October27 dev602: fresh 160851 input/history 160897; API/JSON/tools/SSE, ordered markers/history, both GPUs, loading-swap-v2, zero observed dedicated-VRAM spill. See hardware/VLLM-DEV602-PROMOTION-2026-10-27.md; narrow checks, not exhaustive full-window quality.",
+    "model_path": "/mnt/shared/vLLM-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ"
   },
   "nemotron-3.5-bolt-vllm": {
     "name": "Nemotron-3.5-Bolt-74B-A9B vLLM dual AMD (262K, AutoRound W4A16, BF16 KV)",

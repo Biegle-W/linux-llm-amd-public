@@ -191,5 +191,34 @@ class ModelVolumeTests(unittest.TestCase):
         mount.assert_not_called()
 
 
+    def test_qwen_main_and_draft_share_one_sata_mount_check(self):
+        cfg = {'model_path': str(storage.STATIC_MODELS/'Qwen/main'),
+               'extra_args': ['--speculative-draft-model-path', str(storage.STATIC_MODELS/'drafts/Qwen')]}
+        with patch.object(storage, 'ensure_model_drive') as ensure:
+            storage.ensure_sglang_models(cfg)
+        ensure.assert_called_once_with(storage.SHARED, storage.STATIC_MODELS, storage.UUID, 'sharedSATA1')
+
+    def test_unknown_sglang_draft_is_refused_before_mounting(self):
+        cfg = {'model_path': str(storage.STATIC_MODELS/'Qwen/main'),
+               'extra_args': ['--speculative-draft-model-path=/tmp/unknown/draft']}
+        with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaisesRegex(RuntimeError, 'outside'):
+            storage.ensure_sglang_models(cfg)
+        ensure.assert_not_called()
+
+    def test_malformed_draft_option_is_refused_before_mounting(self):
+        cfg = {'model_path': str(storage.STATIC_MODELS/'Qwen/main'),
+               'extra_args': ['--speculative-draft-model-path', '--other-option']}
+        with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaisesRegex(RuntimeError, 'Missing'):
+            storage.ensure_sglang_models(cfg)
+        ensure.assert_not_called()
+
+    def test_vllm_preflight_admits_configured_sanitized_mount_root(self):
+        mount = Path('/mnt/test-model-drive')
+        with patch.object(storage, 'SHARED', mount), patch.object(storage, 'STATIC_MODELS', mount/'vLLM-Models'), \
+                patch.object(storage, 'ensure_model_drive') as ensure:
+            storage.ensure_vllm_models({'qwen': {'model_path': str(mount/'vLLM-Models/Qwen')}})
+        ensure.assert_called_once_with(mount, mount/'vLLM-Models', storage.UUID, 'sharedSATA1')
+
+
 if __name__ == '__main__':
     unittest.main()
