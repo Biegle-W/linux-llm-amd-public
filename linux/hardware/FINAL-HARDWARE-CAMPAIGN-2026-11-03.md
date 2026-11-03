@@ -107,3 +107,7 @@ Static Maya review finds host-staged decode residual transfer and an opt-in nati
 ## New NVMe placement and CPU clarification
 
 **November 3 new streaming storage:** new SSD-streaming weights now use the newly mounted NVMe through UUID-checked placement, with the existing 90% capacity limit. GPU-led inference may use CPU expert offload; fully CPU inference is excluded. The isolated Strata comparison is in progress. [Verified placement and interrupted-trial attribution](NEW-NVME-STREAMING-2026-11-03.md). No new GPU fault was observed in the owner-stopped first Strata trial; the continuation remains guarded and unqualified.
+
+## Repeat freeze update
+
+**November 3 repeat hard freeze:** the isolated dual-GPU Strata Qwen Off trial froze the system; the owner manually reset it. DFlash2 was not loaded and the compiler was frozen. The exact cause is unresolved. All GPU campaign work is stopped under a fresh persistent hold. [Evidence and containment](STRATA-HARD-FREEZE-2026-11-03.md).

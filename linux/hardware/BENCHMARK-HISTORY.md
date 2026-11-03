@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 3 repeat hard freeze:** the isolated dual-GPU Strata Qwen Off trial froze the system; the owner manually reset it. DFlash2 was not loaded and the compiler was frozen. The exact cause is unresolved. All GPU campaign work is stopped under a fresh persistent hold. [Evidence and containment](STRATA-HARD-FREEZE-2026-11-03.md).
+
 **November 3 GPU campaign stopped:** the old production Maya GLM baseline stalled at 62/256 warmup tokens and hit an AMD MES/SMU queue/reset fault. GLM is disabled and a persistent GPU fault reservation blocks new campaign GPU work. Latest Maya was not installed. Restart observed; recovery and cause remain unverified. [Containment and next steps](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-maya-fault-containment-and-revised-queue).
 
 **November 3 final-hardware progress:** latest llama selected for Flint; Empero retains prior code after a strict final-format failure. Q1 backing hashes and selected kernel tests pass; profile restoration and the rest of the campaign remain pending. [Results and limits](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-qualified-llama-split-and-q1-progress).

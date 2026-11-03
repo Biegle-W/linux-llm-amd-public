@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 3 repeat hard freeze:** the isolated dual-GPU Strata Qwen Off trial froze the system; the owner manually reset it. DFlash2 was not loaded and the compiler was frozen. The exact cause is unresolved. All GPU campaign work is stopped under a fresh persistent hold. [Evidence and containment](../hardware/STRATA-HARD-FREEZE-2026-11-03.md).
+
 **November 3 new streaming storage:** new SSD-streaming weights now use the newly mounted NVMe through UUID-checked placement, with the existing 90% capacity limit. GPU-led inference may use CPU expert offload; fully CPU inference is excluded. The isolated Strata comparison is in progress. [Placement and campaign status](../hardware/NEW-NVME-STREAMING-2026-11-03.md).
 
 **November 3 GPU campaign stopped:** the old production Maya GLM baseline stalled at 62/256 warmup tokens and hit an AMD MES/SMU queue/reset fault. GLM is disabled and a persistent GPU fault reservation blocks new campaign GPU work. Latest Maya was not installed. Restart observed; recovery and cause remain unverified. [Containment and next steps](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-maya-fault-containment-and-revised-queue).

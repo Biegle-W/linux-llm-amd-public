@@ -9,3 +9,7 @@ The newly prepared DFlash2 source and both runtime packs now reside on the new N
 The owner clarified that GPU-led model inference with some CPU expert offload is permitted; running an entire model on the CPU is excluded. The RCCL CPU build compiles a GPU communication library and performs no model inference. Its owned scope continues, frozen only during guarded timing and thawed afterward.
 
 The first isolated Strata Off trial was stopped for that clarification, with no new GPU fault. Its owned scopes emptied and KFD clients cleared. Three completed code trials are retained; the continuation measures the remaining prose/retrieval/tool checks in a new process and records the interruption, rather than repeating those code samples. No completed comparison or promotion is claimed. Maya GLM remains disabled, and the recurring updater remains paused.
+
+## Repeat freeze update
+
+**November 3 repeat hard freeze:** the isolated dual-GPU Strata Qwen Off trial froze the system; the owner manually reset it. DFlash2 was not loaded and the compiler was frozen. The exact cause is unresolved. All GPU campaign work is stopped under a fresh persistent hold. [Evidence and containment](STRATA-HARD-FREEZE-2026-11-03.md).

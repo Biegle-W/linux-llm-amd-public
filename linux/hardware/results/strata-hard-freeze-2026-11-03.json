@@ -1,0 +1,23 @@
+{
+  "status": "hard system freeze; owner manually reset; GPU campaign stopped",
+  "source": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+  "route": "Strata Qwen dual AMD IQ3_XXS",
+  "drafting": "Off; neural drafters absent, text lookup retained",
+  "DFlash2_loaded": false,
+  "Maya_candidate_installed": false,
+  "last_saved_guard_UTC_approx": "2026-11-03T14:55:03Z",
+  "new_boot_UTC": "2026-11-03T14:56:29Z",
+  "CPU_library_compile_scope_frozen": true,
+  "partial_code_samples": 3,
+  "partial_prose_samples": 3,
+  "fresh_8K_markers_passed": 1,
+  "full_benchmark_complete": false,
+  "tool_gate_complete": false,
+  "last_saved_host_available_GiB": 36.4,
+  "last_saved_owned_swap_MiB_approx": 754,
+  "last_saved_dedicated_VRAM_spill_bytes": 0,
+  "terminal_kernel_failure_persisted": false,
+  "cause": "unresolved; active workload identified, failing component unproven",
+  "persistent_GPU_fault_hold": true,
+  "new_GPU_work_authorized_by_this_record": false
+}
