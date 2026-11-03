@@ -1,0 +1,13 @@
+# AMD peer-access disable tooling — November 3, 2026
+
+**Prepared tooling; no active-disable or inference result is claimed.** The earlier bounded peer correctness qualification remains historical. Physical switch retention is compatible with disabling the GPU peer-memory path.
+
+[The boot-time installer](amd_p2p_disable.py) stages `amdgpu.pcie_p2p=0 amdgpu.use_xgmi_p2p=0`. When the matching authenticated managed P2P-routing configuration exists, it withdraws that configuration and its identity-domain option. It preserves other boot arguments, backs up the prior state, validates every generated kernel entry and restores preimages on failure. It never changes live PCI registers, resets/unbinds GPUs or reboots. Installation needs administrator authentication; activation needs a separately controlled reboot. Rollback restores the previous next-boot policy.
+
+The kernel parameters control the KFD peer topology/mapping gate. DMA-buf sharing uses a separate PCI routing check, so a transport environment variable or module flag alone does not establish every peer route is disabled. Read back bridge ACS redirection after reboot and verify the actual APIs used by the engine. See [kernel parameter documentation](https://kernel.org/doc/html/latest/gpu/amdgpu/module-parameters.html), [peer-access implementation](https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c) and [DMA-buf implementation](https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c).
+
+Nine new CPU checks (40 P2P checks total per checkout) cover argument preservation, quoted routing options, rollback, generation/validation failure recovery, modified-state refusal and shell syntax. The [negative HIP checker](verify_amd_p2p_off.cpp) builds against ROCm 7.2.3. It refuses to initialize HIP until both driver flags are off, then requires two visible GPUs, zero capability in each direction and `hipErrorPeerAccessUnsupported` for both peer-enable requests. It submits no kernels or remote-memory accesses. Build success is not GPU qualification.
+
+After staging and reboot, read back the flags, six selected bridge ACS controls and KFD/HIP capabilities. Run fresh default, fine-grain and no-SDMA checks under the site's existing ownership/memory/thermal guards before any inference. Host-staged transfers are still valid. Existing model profiles, memory/SSD guards, holds and schedules are unchanged by this tooling. No performance or stability claim follows from preparation.
+
+[Machine-readable preparation status](results/amd-p2p-disabled-2026-11-03.json).

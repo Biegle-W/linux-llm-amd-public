@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "date": "2026-11-03",
+  "status": "prepared_not_installed",
+  "active_p2p_disabled": false,
+  "reboot_required_after_install": true,
+  "gpu_test_run": false,
+  "short_inference_run": false,
+  "cpu_tests_passed": 9,
+  "negative_hip_checker_build": "passed_ROCm_7.2.3",
+  "current_driver_flags": {
+    "pcie_p2p": "Y",
+    "use_xgmi_p2p": "1"
+  },
+  "prepared_driver_flags": {
+    "pcie_p2p": "0",
+    "use_xgmi_p2p": "0"
+  },
+  "retire_authenticated_managed_peer_routing": true,
+  "physical_pcie_switch_retained": true,
+  "memory_ssd_guards_changed": false,
+  "holds_schedules_changed": false,
+  "postboot_verification_pending": true,
+  "all_p2p_cpu_tests_passed_per_checkout": 40
+}
