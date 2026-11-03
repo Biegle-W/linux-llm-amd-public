@@ -47,6 +47,10 @@ class Tests(unittest.TestCase):
    if cmd[0]=='update-grub':self.grub.write_text('linux /vmlinuz quiet\n')
   with self.assertRaises(RuntimeError):self.stage(bad)
   self.assertFalse(self.config.exists());self.assertEqual(self.grub.read_text(),'original grub\n')
+ def test_admission_errors_preserved_without_staging(self):
+  self.r['admission_errors']=['Additional redirecting bridge 0000:0a:00.0 ACS=0x1d']
+  with self.assertRaisesRegex(RuntimeError,'0000:0a:00.0'):self.stage()
+  self.assertFalse(self.config.exists())
  def test_existing_config_refused(self):
   self.config.write_text('unmanaged')
   with self.assertRaises(RuntimeError):self.stage()
@@ -94,9 +98,9 @@ class TopologyTests(unittest.TestCase):
   r=m.audit(self.pci);self.assertEqual(r['selected_bridges'][1]['selector'],'0000:00:01.0/00.0/04.0/00.0/00.0')
  def test_redirect_on_amd_internal_bridge_is_not_broadly_cleared(self):
   p=self.nodes['0000:0a:00.0']/'config';b=bytearray(p.read_bytes());struct.pack_into('<IHH',b,0x100,0x0001000d,0x7f,0x1d);p.write_bytes(b)
-  with self.assertRaisesRegex(RuntimeError,'Another bridge'):m.audit(self.pci)
+  r=m.audit(self.pci);self.assertTrue(any('0000:0a:00.0' in e for e in r['admission_errors']))
  def test_unexpected_control_refuses_installation(self):
   p=self.nodes['0000:08:00.0']/'config';b=bytearray(p.read_bytes());struct.pack_into('<H',b,0x106,0x7f);p.write_bytes(b)
-  with self.assertRaisesRegex(RuntimeError,'Unexpected ACS'):m.audit(self.pci)
+  r=m.audit(self.pci);self.assertTrue(any('Unexpected ACS' in e for e in r['admission_errors']))
 
 if __name__=='__main__':unittest.main()

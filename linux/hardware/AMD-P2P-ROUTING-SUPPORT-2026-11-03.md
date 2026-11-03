@@ -1,6 +1,6 @@
 # AMD PEX88096 routing support — November 3, 2026
 
-**Status: prepared and CPU-validated; administrator staging and reboot are pending. P2P is not yet fixed or qualified.** The owner requested installation of the support needed for the installed PEX88096 and dual RX 7900 XTX. Linux already binds the switch ports to `pcieport`; no additional generic PLX driver is indicated. The working NVIDIA configuration had a scoped ACS correction, while current AMD HIP peer access is false both ways. [Measured result and working NVIDIA comparison](PCIE-SWITCH-P2P-CHECK-2026-11-03.md).
+**Status: the first administrator installation correctly stopped before staging because an additional path bridge redirects peer traffic. A read-only extended-capability audit is pending to identify that bridge. No boot setting or live PCI register changed; P2P is not fixed or qualified.** The owner requested installation of the support needed for the installed PEX88096 and dual RX 7900 XTX. Linux already binds the switch ports to `pcieport`; no additional generic PLX driver is indicated. The working NVIDIA configuration had a scoped ACS correction, while current AMD HIP peer access is false both ways. [Measured result and working NVIDIA comparison](PCIE-SWITCH-P2P-CHECK-2026-11-03.md).
 
 The prepared `amd_p2p_support.py` uses the existing kernel's documented `pci=config_acs` support before amdgpu initializes. It does not replace amdgpu, ROCm, the kernel or firmware. No NVIDIA-specific driver is installed.
 
@@ -41,7 +41,7 @@ Rollback regenerates and verifies GRUB; the current boot remains unchanged. The 
 
 ## Validation
 
-**22 CPU tests pass per checkout**, using synthetic PCI capability/topology records and temporary boot files. They cover four-bridge discovery, root/endpoint/unrelated-path exclusion, preservation of ACS bits outside 0x0c, hierarchy selectors, malformed/truncated/cyclic capabilities, unexpected controls, other redirecting bridges, shell/GRUB token quoting, existing-policy/symlink refusal, no-op refusal, transactional staging rollback and safe removal rollback. These are installation-logic checks; no administrator stage, reboot or new GPU test occurred during preparation.
+**23 CPU tests pass per checkout**, using synthetic PCI capability/topology records and temporary boot files. The audit retains all bridge controls and admission errors even when installation is refused. Tests cover four-bridge discovery, root/endpoint/unrelated-path exclusion, preservation of ACS bits outside 0x0c, hierarchy selectors, malformed/truncated/cyclic capabilities, unexpected controls, other redirecting bridges, shell/GRUB token quoting, existing-policy/symlink refusal, no-op refusal, transactional staging rollback and safe removal rollback. These are installation-logic checks; no administrator stage, reboot or new GPU test occurred during preparation.
 
 Sources: [Linux 7.0 kernel parameters](https://www.kernel.org/doc/html/v7.0/admin-guide/kernel-parameters.html), [PCI path selector and ACS implementation](https://github.com/torvalds/linux/blob/v7.0/drivers/pci/pci.c), [working NVIDIA ACS reference](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/PEX-ACS-PAIR-20261031.md).
 

@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "prepared; administrator staging and reboot pending",
+  "status": "first installation refused additional redirecting bridge before staging; read-only audit pending",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -13,7 +13,7 @@
     "0x1d",
     "0x11"
   ],
-  "cpu_tests": 22,
+  "cpu_tests": 23,
   "live_PCI_writes": false,
   "IOMMU_policy_changed": false,
   "kernel_driver_firmware_replaced": false,
@@ -22,5 +22,6 @@
   "model_holds_changed": false,
   "updater_resumed": false,
   "reboot_performed": false,
-  "p2p_fixed_or_qualified": false
+  "p2p_fixed_or_qualified": false,
+  "boot_policy_staged": false
 }

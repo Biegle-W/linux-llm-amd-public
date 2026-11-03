@@ -82,16 +82,17 @@ def audit(pci_root=Path('/sys/bus/pci/devices')):
     selected=[r for r in rows if r['vendor']=='0x1000' and r['device']=='0xc010' and r['pcie_type']==6]
     if len(selected)!=4:raise RuntimeError('Expected exactly four Broadcom downstream bridges on the selected paths')
     selected_ids={r['pci'] for r in selected}
+    errors=[]
     for row in rows:
         a=row['acs']
         if row['pci'] in selected_ids:
-            if not a or a['capability']&0x0c!=0x0c:raise RuntimeError('Selected downstream bridge lacks expected ACS capability')
-            if a['control'] not in (0x1d,0x11):raise RuntimeError(f"Unexpected ACS control on {row['pci']}: {a['control']:#x}; no configuration staged")
-        elif a and a['control']&0x2c:raise RuntimeError('Another bridge redirects peer traffic; requires separate review')
+            if not a or a['capability']&0x0c!=0x0c:errors.append(f"Selected bridge {row['pci']} lacks expected ACS capability");continue
+            if a['control'] not in (0x1d,0x11):errors.append(f"Unexpected ACS control on {row['pci']}: {a['control']:#x}")
+        elif a and a['control']&0x2c:errors.append(f"Additional redirecting bridge {row['pci']} vendor={row['vendor']} device={row['device']} type={row['pcie_type']} ACS={a['control']:#x}")
     groups=[]
     for p in gpus:
         group=(p/'iommu_group').resolve();t=group/'type';groups.append(t.read_text().strip() if t.exists() else None)
-    return {'schema':1,'sampled_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'gpu_pci':[p.name for p in gpus],'common_switch':common.name,'bridges':rows,'selected_bridges':selected,'gpu_iommu_domains':groups,'request_completion_redirect_present':any(r['acs']['control']&0x0c for r in selected),'live_pci_writes':False}
+    return {'schema':1,'sampled_utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'gpu_pci':[p.name for p in gpus],'common_switch':common.name,'bridges':rows,'selected_bridges':selected,'gpu_iommu_domains':groups,'request_completion_redirect_present':any(r['acs'] and r['acs']['control']&0x0c for r in selected),'admission_errors':errors,'live_pci_writes':False}
 
 
 def parameter(report):
@@ -122,6 +123,7 @@ def atomic(path,data,mode=0o644):
 
 
 def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=''):
+    if report.get('admission_errors'):raise RuntimeError('; '.join(report['admission_errors'])+'; run audit --output to save the read-only report')
     param=parameter(report);body=dropin(param).encode()
     if config.is_symlink() or state.is_symlink() or grub.is_symlink():raise RuntimeError('Refuse symlinked managed files')
     if config.exists():
@@ -173,7 +175,7 @@ def main():
             defaults=Path('/etc/default/grub').read_text()+'\n'+'\n'.join(p.read_text() for p in Path('/etc/default/grub.d').glob('*.cfg') if p!=config)
             result=stage(report,config,state,grub,Path('/var/backups'),existing_args=defaults)
         elif args.action=='verify':
-            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=not report['request_completion_redirect_present'];result={'active_parameter':active,'redirect_bits_clear':clear,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear else 'not active or register verification failed'}
+            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=not report['request_completion_redirect_present'] and not report.get('admission_errors');result={'active_parameter':active,'redirect_bits_clear':clear,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear else 'not active or register verification failed'}
     output=json.dumps(result,indent=2)+'\n'
     if args.output:args.output.write_text(output)
     print(output)

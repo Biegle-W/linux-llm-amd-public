@@ -1,6 +1,6 @@
 # New PCIe switch: HIP peer access check — November 3, 2026
 
-**Owner-requested repair preparation:** [scoped AMD boot-routing support](AMD-P2P-ROUTING-SUPPORT-2026-11-03.md) passes 22 CPU checks; administrator staging/reboot and actual P2P qualification remain pending.
+**Owner-requested repair preparation:** [scoped AMD boot-routing support](AMD-P2P-ROUTING-SUPPORT-2026-11-03.md) passes 23 CPU checks; administrator staging/reboot and actual P2P qualification remain pending.
 
 **Result: direct P2P is not available in the current configuration.** Both RX 7900 XTX cards are below the installed, owner-confirmed Broadcom/PLX PEX88096 switch fabric on the ASUS TX GAMING B760M WIFI / i5-13600KF host, but HIP reports no peer access in either direction. This is a tested capability failure, not a bandwidth measurement or a verdict that the switch hardware cannot support P2P.
 
