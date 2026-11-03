@@ -1,6 +1,6 @@
 # AMD peer-access disable tooling — November 3, 2026
 
-**Boot-time disable staged; reboot and runtime verification pending. No active-disable or inference result is claimed.** The earlier bounded peer correctness qualification remains historical. Physical switch retention is compatible with disabling the GPU peer-memory path.
+**Driver disable active after reboot; complete routing/API verification remains pending.** Both module flags read off, managed peer-routing boot options are absent and KFD exposes no GPU-to-GPU links. Protected ACS register readback, negative HIP checks and short inference remain unrun; no complete P2P-off, performance or stability result is claimed. The earlier bounded peer correctness qualification remains historical. Physical switch retention is compatible with disabling the GPU peer-memory path.
 
 [The boot-time installer](amd_p2p_disable.py) stages `amdgpu.pcie_p2p=0 amdgpu.use_xgmi_p2p=0`. When the matching authenticated managed P2P-routing configuration exists, it withdraws that configuration and its identity-domain option. It preserves other boot arguments, backs up the prior state, validates every generated kernel entry and restores preimages on failure. It never changes live PCI registers, resets/unbinds GPUs or reboots. Administrator installation has completed; activation needs a separately controlled reboot. Rollback restores the previous next-boot policy.
 

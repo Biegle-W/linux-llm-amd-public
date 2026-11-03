@@ -1,16 +1,16 @@
 {
   "schema": 1,
   "date": "2026-11-03",
-  "status": "staged_reboot_pending",
-  "active_p2p_disabled": false,
-  "reboot_required_after_install": true,
+  "status": "driver_disabled_protected_routing_verification_pending",
+  "active_p2p_disabled": null,
+  "reboot_required_after_install": false,
   "gpu_test_run": false,
   "short_inference_run": false,
   "cpu_tests_passed": 9,
   "negative_hip_checker_build": "passed_ROCm_7.2.3",
   "current_driver_flags": {
-    "pcie_p2p": "Y",
-    "use_xgmi_p2p": "1"
+    "pcie_p2p": "N",
+    "use_xgmi_p2p": "0"
   },
   "prepared_driver_flags": {
     "pcie_p2p": "0",
@@ -24,5 +24,17 @@
   "all_p2p_cpu_tests_passed_per_checkout": 40,
   "administrator_installation": "owner_completed_successfully",
   "installed_dropin_sha256": "ce2a16d578c0e4df0c64e7244a0c7dd988bd7ee05f130136101cd72abbc52836",
-  "live_gpu_changes": false
+  "live_gpu_changes": false,
+  "driver_peer_access_disabled": true,
+  "reboot_completed": true,
+  "kfd_gpu_count": 2,
+  "kfd_gpu_to_gpu_links": [],
+  "managed_peer_routing_boot_options_absent": true,
+  "protected_acs_readback": "pending_administrator_authentication",
+  "boot_fault_scan": "passed_no_gpu_reset_oom_faults",
+  "ssd_health_gate": "passed",
+  "live_nvme_temperature_c": [
+    33.85,
+    35.85
+  ]
 }
