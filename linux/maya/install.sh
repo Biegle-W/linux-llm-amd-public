@@ -2,8 +2,8 @@
 # CPU-only preparation. Never starts/calibrates inference or promotes profiles.
 set -euo pipefail
 MAYA_SETUP_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-MAYA_MODELS_ROOT=${MAYA_MODELS_ROOT:?Set MAYA_MODELS_ROOT to the Maya folder on the shared NVMe}
-case "${1:-}" in glm|deepseek) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/LLM-Models/Maya maya/install.sh {glm|deepseek}; DeepSeek-S is retired.' >&2; exit 2 ;; esac
+MAYA_MODELS_ROOT=${MAYA_MODELS_ROOT:?Set MAYA_MODELS_ROOT to the Maya folder under the system-drive models/streaming directory}
+case "${1:-}" in glm|deepseek) family=$1 ;; *) echo 'Usage: MAYA_MODELS_ROOT=/path/local-llm/models/streaming/Maya maya/install.sh {glm|deepseek}; DeepSeek-S is retired.' >&2; exit 2 ;; esac
 cd "$MAYA_SETUP_ROOT"
 # XS uses the retained S Engram shards5/6. Only verify this sealed pack: stock
 # DeepSeek setup would download retired S assets or duplicate shared Engram data.

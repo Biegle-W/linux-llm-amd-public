@@ -108,11 +108,14 @@ class MayaTests(unittest.TestCase):
             (root/'data/settings.yaml').write_text(yaml.safe_dump(settings))
             with patch.object(frontend,'ROOT',root):frontend.configure()
             actual=yaml.safe_load((root/'data/settings.yaml').read_text())
-            self.assertEqual(actual['agent-default-model'],settings['agent-default-model'])
+            self.assertEqual(actual['agent-default-model'],{'provider':'amd-server','model':ident})
             self.assertEqual(actual['theme'],'dark')
             self.assertEqual(actual['llm-pi-ai']['providers']['remote'],settings['llm-pi-ai']['providers']['remote'])
-            maya=actual['llm-pi-ai']['providers']['maya-local']
-            self.assertEqual([(m['id'],m['contextWindow']) for m in maya['models']],[('validated',32768)])
+            models=actual['llm-pi-ai']['providers']['amd-server']['models']
+            maya=next(m for m in models if m['id']=='validated')
+            self.assertEqual(maya['contextWindow'],32768)
+            self.assertNotIn('disabled',{m['id'] for m in models})
+            self.assertNotIn('implicit',{m['id'] for m in models})
             self.assertFalse(maya['compat']['chatTemplateKwargs']['enable_thinking'])
 
     def test_disabled_model_is_not_advertised_by_gateway(self):

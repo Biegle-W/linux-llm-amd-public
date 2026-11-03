@@ -1,5 +1,7 @@
 # Linux LLM AMD — public reference
 
+**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount remain pending authentication. Holds, pins, guards and paused updater remain. [Relocation proof and remaining step](linux/hardware/SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+
 **November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](linux/hardware/STRATA-GGUF-STORAGE-2026-11-02.md).
 
 **November 2 owner-requested weight removal:** Super IQ3 and old DeepSeek Maya/Strata backing files are removed; approximately 341.6 GB reclaimed. Seven enabled routes remain. Super INT4/vLLM and latest compatible Unsloth Q1 are queued for post-RAM qualification; old weight rollback files are no longer present. Guards, other holds and paused updater remain. [Removal and preparation](linux/hardware/MODEL-WEIGHT-REMOVAL-2026-11-02.md).
@@ -514,8 +516,8 @@ is claimed for these performance-neutral updates. See
 `linux/hardware/CPU-RAM-PROFILES-2026-10-20.md`. Earlier i5/32 GB and NVIDIA results
 must retain their original hardware/build/workload. Strata's corrected expert pack
 and shared-NVMe pool measurements are distinct from old SATA-pack results.
-Strata and standalone App share one new shared-NVMe asset set; engine settings
-and watchdogs are independent. Maya selected profiles are validated there, with their guards described below. Keep engines/environments Linux ext4 and all model weights
+Strata and standalone App share one asset set (relocated to system `models/streaming/` November 2); engine settings
+and watchdogs are independent. Maya selected profiles use the relocated system storage, with their guards described below. Keep engines/environments Linux ext4 and all model weights
 excluded from Git.
 
 ### Project Maya — October 20
@@ -523,7 +525,7 @@ excluded from Git.
 Maya v1.1.24 / 25deec5 is active on retained ROCm7.2.3 for GLM-5.3-Flash Maya-S v2 and
 DeepSeek-V4.1-Flash-1017 Maya-XS + matching DSpark xs2 and separate Maya-S/noDSpark, each 32K, both 7900XTX cards through layer groups.
 GLM retains 40 GiB bounded pinned RAM/MTP; DeepSeek 24 CPU threads/mapped experts,
-GPU hot caching, with matching DSpark for XS only. Shared NVMe holds all weights/generated packs.
+GPU hot caching, with matching DSpark for XS only. At the October 20 measurement, Shared NVMe held the weights/generated packs; retained assets moved to system `models/streaming/` on November 2.
 The native 8 GiB/card reserve must leave >=6 GiB actual whole-card free at startup;
 keep continuous latched guards, zero worker swap/spill and 52G worker scope.
 Physical 60 GiB / available 52 GiB before load remains required. The 64 GB Strata 13.5 GiB
@@ -702,6 +704,17 @@ At the user's request the shared SATA model drive is labelled `sharedSATA1` (exF
 folders on an unmounted path. Public examples keep `/mnt/shared`.
 The former Bolt volume `sharedSATA2` is retired from model configuration; Bolt now resides on sharedSATA1.
 Administrator unmount/fstab cleanup is required before physical removal.
+
+### Model storage placement — November 2
+
+Retained Maya/Strata weights and packs now use `/opt/local-llm/models/streaming/`
+in sanitized examples. Only sharedSATA1 remains in external model mount discovery.
+The retired Sabrent data volume is empty; authenticated boot-mount cleanup and
+clean unmount remain before shutdown/removal. New static/checkpoint weights go
+to sharedSATA1; streaming packs use system `models/streaming/`. Keep every drive
+below 90% used and run `python3 dsh/shared_storage.py --place static|streaming
+--size-gb N` before adding files. Historical shared-NVMe paths retain dated evidence.
+[Relocation and verification](linux/hardware/SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
 
 ### Engine preference — standing user instruction (October 22)
 

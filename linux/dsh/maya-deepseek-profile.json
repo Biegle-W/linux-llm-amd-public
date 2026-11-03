@@ -2,7 +2,7 @@
   "exe": "/opt/local-llm/maya/upstream/build-hip/maya-ds4",
   "args": [
     "--pack",
-    "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4",
+    "/opt/local-llm/models/streaming/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4",
     "--max-context",
     "32768",
     "--tp",
@@ -17,7 +17,7 @@
     "24"
   ],
   "cwd": "/opt/local-llm/maya/upstream",
-  "tokenizer": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4/tokenizer",
+  "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS/maya-ds4/tokenizer",
   "backend": "hip",
   "model_name": "deepseek-v4.1-flash-1017-maya",
   "gpu": [
@@ -37,10 +37,10 @@
   "log": "/opt/local-llm/dsh/logs/maya-deepseek-native.log",
   "installer": {
     "family": "deepseek",
-    "models_dir": "/mnt/shared-nvme/LLM-Models/Maya",
+    "models_dir": "/opt/local-llm/models/streaming/Maya",
     "quant": "DeepSeek-V4.1-Flash-1017",
     "ds4_quant": "maya-xs",
-    "model_dir": "/mnt/shared-nvme/LLM-Models/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS",
+    "model_dir": "/opt/local-llm/models/streaming/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS",
     "written": "2026-10-23T15:55:23.283061+00:00"
   },
   "parallel": 1,

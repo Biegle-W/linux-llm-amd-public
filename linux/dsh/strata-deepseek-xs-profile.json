@@ -2,7 +2,7 @@
   "exe": "/opt/local-llm/strata-dsv41/upstream/build-hip/strata-dsv41",
   "args": [
     "--pack",
-    "/mnt/shared-nvme/LLM-Models/Strata/DeepSeek-V4.1-Flash-1017/Maya-XS/pack",
+    "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Maya-XS/pack",
     "--max-context",
     "32768",
     "--tp",
@@ -19,7 +19,7 @@
     "0"
   ],
   "cwd": "/opt/local-llm/strata-dsv41/upstream",
-  "tokenizer": "/mnt/shared-nvme/LLM-Models/Strata/DeepSeek-V4.1-Flash-1017/Maya-XS/pack/tokenizer",
+  "tokenizer": "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Maya-XS/pack/tokenizer",
   "arch": "deepseek41",
   "model_name": "deepseek-v4.1-flash-1017-strata-xs",
   "backend": "hip",

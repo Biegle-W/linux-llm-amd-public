@@ -27,11 +27,11 @@ class ModelVolumeTests(unittest.TestCase):
         ensure.assert_called_once_with(storage.SHARED, checkpoint.parent, storage.UUID, 'sharedSATA1')
 
     def test_retired_sata2_is_not_discovered_or_admitted(self):
-        self.assertEqual({row[0] for row in storage.VOLUMES}, {'sharedSATA1', 'Shared NVMe'})
+        self.assertEqual({row[0] for row in storage.VOLUMES}, {'sharedSATA1'})
         with patch.object(storage, 'ensure_model_drive') as ensure, \
                 patch.object(storage.Path, 'exists', return_value=True):
             self.assertEqual(storage.mount_all(wait=0), [])
-        self.assertEqual(ensure.call_count, 2)
+        self.assertEqual(ensure.call_count, 1)
         old_path = storage.SHARED.with_name('sharedSATA2') / 'vLLM-Models' / 'Bolt'
         with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaises(RuntimeError):
             storage.ensure_model_paths([old_path])
@@ -118,7 +118,7 @@ class ModelVolumeTests(unittest.TestCase):
                               '[super]\nmodel = ' + str(storage.STREAM_MODELS/'Nemotron-Super/x.gguf') + '\n')
             with patch.object(storage, 'ensure_model_drive') as ensure:
                 storage.ensure_llama_models([preset])
-            self.assertEqual(sorted(call.args[3] for call in ensure.call_args_list), ['Shared NVMe', 'sharedSATA1'])
+            self.assertEqual(sorted(call.args[3] for call in ensure.call_args_list), ['sharedSATA1'])
 
     def test_model_outside_configured_volumes_is_refused_before_mounting(self):
         with patch.object(storage, 'ensure_model_drive') as ensure, self.assertRaisesRegex(RuntimeError, 'outside'):
@@ -169,6 +169,26 @@ class ModelVolumeTests(unittest.TestCase):
                     patch.object(storage, 'ensure_shared_models') as sata, self.assertRaises(RuntimeError):
                 storage.ensure_strata_models(config)
             nvme.assert_not_called(); sata.assert_not_called()
+
+
+    def test_system_streaming_requires_no_external_mount(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with patch.object(storage, 'STREAM_MODELS', Path(folder)), patch.object(storage, 'ensure_model_drive') as mount:
+                storage.ensure_streaming_models()
+            mount.assert_not_called()
+
+    def test_missing_system_streaming_root_is_refused_without_mounting(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with patch.object(storage, 'STREAM_MODELS', Path(folder)/'absent'), patch.object(storage, 'ensure_model_drive') as mount:
+                with self.assertRaisesRegex(RuntimeError, 'System-drive'):
+                    storage.ensure_streaming_models()
+            mount.assert_not_called()
+
+    def test_retired_sabrent_path_is_not_admitted(self):
+        with patch.object(storage, 'ensure_model_drive') as mount:
+            with self.assertRaisesRegex(RuntimeError, 'outside'):
+                storage.ensure_model_paths([storage.STREAM_SHARED/'LLM-Models/model.gguf'])
+        mount.assert_not_called()
 
 
 if __name__ == '__main__':

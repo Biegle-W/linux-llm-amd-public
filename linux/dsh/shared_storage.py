@@ -15,12 +15,13 @@ SHARED = Path('/mnt/shared')
 MODELS = SHARED / 'GGUF-Models'
 UUID = 'CONFIGURE_SHARED_DRIVE_UUID'
 STREAM_SHARED = Path('/mnt/shared-nvme')
-STREAM_MODELS = STREAM_SHARED / 'LLM-Models'
+# STREAM_SHARED is retained only to sanitize historical export paths.
 STREAM_UUID = 'CONFIGURE_SHARED_NVME_UUID'
 # SATA1 holds GGUF files and checkpoints; SATA2 was removed from the configured volumes.
 STATIC_MODELS = SHARED / 'vLLM-Models'
-# Streaming models (Strata/Maya SSD streaming packs) added from October 24 live on the system NVMe.
+# All retained streaming weights/packs migrated to system NVMe by owner November 2.
 INTERNAL_STREAM_MODELS = Path(__file__).resolve().parents[1] / 'models' / 'streaming'
+STREAM_MODELS = INTERNAL_STREAM_MODELS
 # Placement of NEW model files (user instruction, October 26): nothing new on the Shared NVMe;
 # non-streaming weights go to sharedSATA1, SSD-streaming packs to the system NVMe; every drive
 # stays below 90% used after the copy.
@@ -29,7 +30,6 @@ MAX_USE = 0.90
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
     ('sharedSATA1', UUID, SHARED, MODELS, True),
-    ('Shared NVMe', STREAM_UUID, STREAM_SHARED, STREAM_MODELS, True),
 )
 
 
@@ -89,7 +89,8 @@ def ensure_shared_models():
 
 
 def ensure_streaming_models():
-    ensure_model_drive(STREAM_SHARED, STREAM_MODELS, STREAM_UUID, 'Shared NVMe')
+    if not STREAM_MODELS.is_dir():
+        raise RuntimeError('System-drive streaming model folder is missing; no external volume is mounted or replacement downloaded.')
 
 
 def new_model_dir(kind, size_bytes):
@@ -131,7 +132,7 @@ def ensure_model_paths(paths):
 
 
 def ensure_llama_models(presets=None):
-    """llama.cpp presets may mix volumes (Super IQ3 loads from the shared NVMe)."""
+    """llama.cpp presets may mix sharedSATA1 and system-drive model paths."""
     root = Path(__file__).resolve().parent
     presets = presets or [root/'models-amd.ini', root/'models-hip.ini']
     paths = [line.split('=', 1)[1].strip() for preset in presets if Path(preset).is_file()
@@ -153,8 +154,6 @@ def ensure_strata_models(config=None):
     args = cfg['args']
     pack = Path(args[args.index('--pack') + 1])
     if pack.is_relative_to(INTERNAL_STREAM_MODELS):
-        pass
-    elif pack.is_relative_to(STREAM_MODELS):
         ensure_streaming_models()
     elif pack.is_relative_to(MODELS):
         ensure_shared_models()

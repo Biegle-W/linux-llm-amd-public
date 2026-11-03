@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-02",
+  "operation": "Sabrent to system-drive relocation",
+  "files": 148,
+  "logical_bytes": 176775668158,
+  "model_files": 54,
+  "model_logical_bytes": 176774836591,
+  "macos_metadata_files": 94,
+  "macos_metadata_bytes": 831567,
+  "verification": "full SHA256 equality before path-only metadata relocation and source removal",
+  "originals_removed": true,
+  "data_volume_empty": true,
+  "streaming_root": "/opt/local-llm/models/streaming",
+  "external_required_volumes": [
+    "sharedSATA1"
+  ],
+  "CPU_tests_each_repository": 41,
+  "GPU_inference": false,
+  "runtime_settings_guards_holds_pins_preserved": true,
+  "system_filesystem_available_GiB_rounded": 229,
+  "system_filesystem_used_percent_rounded": 73,
+  "mount_status": "still mounted; authenticated fstab cleanup and clean unmount pending",
+  "active_migration_jobs": [],
+  "owned_locks": []
+}

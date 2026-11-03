@@ -56,7 +56,7 @@ def check_config(cfg, before_handover=False, require_validated=True):
     def value(flag):return args[args.index(flag)+1]
     pack=Path(value('--glm-pack' if glm else '--pack')).resolve()
     if not pack.is_relative_to(STREAM_MODELS/'Maya') or not pack.is_dir():
-        raise RuntimeError('Maya model packs must use the configured shared NVMe model folder.')
+        raise RuntimeError('Maya model packs must use the configured system-drive streaming model folder.')
     if int(value('--max-context'))<=0:
         raise RuntimeError('Maya context must be explicitly bounded.')
     if int(value('--vram-reserve-mib' if glm else '--reserve-mib'))<6144:

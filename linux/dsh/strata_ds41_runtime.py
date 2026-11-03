@@ -73,7 +73,7 @@ def require_profile(cfg,before_handover=False,*,require_validated=True):
     if (not pack.is_relative_to(STREAM_MODELS/'Strata/DeepSeek-V4.1-Flash-1017')
             or valid.get('pack_metadata_sha256')!=pack_fingerprint(pack)
             or Path(cfg['tokenizer'])!=pack/'tokenizer'):
-        raise RuntimeError('Strata DeepSeek pack/tokenizer differs from the validated shared-weight pack.')
+        raise RuntimeError('Strata DeepSeek pack/tokenizer differs from the validated system-drive weight pack.')
     total,available=host_memory()
     bounded=check_32gb(cfg,total,available,'deepseek',check_available=not before_handover)
     if not bounded and (total<60*GIB or (not before_handover and available<52*GIB)):

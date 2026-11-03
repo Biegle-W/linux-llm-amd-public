@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount remain pending authentication. Holds, pins, guards and paused updater remain. [Relocation proof and remaining step](../hardware/SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+
 **November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](../hardware/STRATA-GGUF-STORAGE-2026-11-02.md).
 
 **November 2 owner-requested weight removal:** Super IQ3 and old DeepSeek Maya/Strata backing files are removed; approximately 341.6 GB reclaimed. Seven enabled routes remain. Super INT4/vLLM and latest compatible Unsloth Q1 are queued for post-RAM qualification; old weight rollback files are no longer present. Guards, other holds and paused updater remain. [Removal and preparation](../hardware/MODEL-WEIGHT-REMOVAL-2026-11-02.md).
@@ -815,7 +817,7 @@ explicit. SDK7 retains only two known excluded mixedQ4_K/IQ4_XS bitexact failure
 those types remain blocked. [Current report/trials/thermals](../hardware/MAYA-ROCM10-2026-10-20.md).
 
 Binary/source/config fingerprints and the DeepSeek descriptor/index/Engram hash
-must match before loading. Models are at `/mnt/shared-nvme/LLM-Models/Maya` on the new shared NVMe;
+must match before loading. At the October 20 measurement, models were at `/mnt/shared-nvme/LLM-Models/Maya` on the new shared NVMe;
 no model weights were left in the Maya engine folder on the Linux primary NVMe.
 
 **Windows:** reuse the GGUF/draft/vision assets, but build/validate Windows engines
@@ -1185,7 +1187,9 @@ model listing and authenticated health; it does not expose DSH, worker managemen
 or the Responses API. Browser CORS is not enabled; use a native client or a
 server-side connector. Tool-calling clients must execute tools and return results.
 
-## Storage and runtime pins
+## Storage and runtime pins — October 20–26 history
+
+**November 2 superseding storage state:** retained Maya/Strata assets now use `/opt/local-llm/models/streaming/`; only sharedSATA1 remains in configured external mount discovery. The Sabrent data volume is empty but remains mounted pending authenticated boot-entry cleanup and clean unmount. The Shared handoff stays on sharedSATA1. The paths and counts below describe their dated historical state.
 
 Linux runtime/repository root: `/opt/local-llm` on ext4 NVMe.
 Shared SATA model root: `/mnt/shared/GGUF-Models` = `D:\GGUF-Models`.

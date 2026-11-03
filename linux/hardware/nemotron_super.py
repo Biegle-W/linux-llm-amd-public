@@ -7,9 +7,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODELS = Path('/mnt/llm-models/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF')
-# Verified runtime copy on the shared NVMe (load 42 s vs 112 s from SATA, identical inference;
-# hardware/SUPER-NVME-LOAD-2026-10-20.md). The SATA tree keeps the manifest and backup.
-RUNTIME_MODELS = Path('/mnt/shared-nvme/LLM-Models/Nemotron-Super/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF')
+# Retired IQ3 reference location on system storage; no weights are recreated here.
+# October 20 shared-NVMe/SATA timings remain historical, not system-drive results.
+RUNTIME_MODELS = Path('/opt/local-llm/models/streaming/Nemotron-Super/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF')
 GIB = 1024**3
 IQ3_LAYERS = [3, 12, 17, 21, 26, 30, 34, 39, 43, 48, 52, 59, 65, 74, 81, 85]
 

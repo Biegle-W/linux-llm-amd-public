@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
+**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount remain pending authentication. Holds, pins, guards and paused updater remain. [Relocation proof and remaining step](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+
 **November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](STRATA-GGUF-STORAGE-2026-11-02.md).
 
 **November 2 owner-requested weight removal:** Super IQ3 and old DeepSeek Maya/Strata backing files are removed; approximately 341.6 GB reclaimed. Seven enabled routes remain. Super INT4/vLLM and latest compatible Unsloth Q1 are queued for post-RAM qualification; old weight rollback files are no longer present. Guards, other holds and paused updater remain. [Removal and preparation](MODEL-WEIGHT-REMOVAL-2026-11-02.md).
@@ -645,8 +647,8 @@ history proof, while this batch adds fresh controls rather than new context size
 [Benchmark ledger](BENCHMARK-HISTORY.md) ·
 [Historical i5/32GB AMD](AMD-BENCHMARKS-2026-10-19.md).
 
-All previous storage/guards/DSH default/PATH/frontend policies are retained.
-No weights were downloaded or moved. Streaming Strata/Maya/Super assets stay on
+At the October 21 measurement, prior storage/guards/DSH default/PATH/frontend policies were retained.
+No weights were downloaded or moved in that benchmark. Then, streaming Strata/Maya/Super assets were on
 shared NVMe; resident GGUFs on Shared SATA, SGLang/vLLM checkpoints on Linux NVMe.
 [Storage evidence](results/streaming-storage-2026-10-20.json).
 

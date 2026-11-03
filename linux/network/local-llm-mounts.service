@@ -1,5 +1,5 @@
 [Unit]
-Description=Verify local LLM model drives (sharedSATA1, shared NVMe) at user-manager startup
+Description=Verify local LLM model drives (sharedSATA1; streaming models on system drive) at user-manager startup
 # Model drives mount through system fstab; verify them without desktop login.
 After=basic.target
 
