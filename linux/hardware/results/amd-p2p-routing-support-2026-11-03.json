@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "ACS11 active and HIP peers available, but direct reads fail; identity trial prepared",
+  "status": "ACS11 registers verified; identity trial staged/root-file verified; reboot and data qualification pending",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -45,5 +45,9 @@
   "fine_grain_remote_read_correct": false,
   "IPC_RCCL": "gated",
   "identity_trial_prepared": true,
-  "identity_trial_staged": false
+  "identity_trial_staged": true,
+  "identity_trial_dropin_hash_verified": true,
+  "identity_trial_root_ownership_mode_verified": true,
+  "identity_trial_active": false,
+  "ACS_registers_verified": true
 }
