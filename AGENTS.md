@@ -1,5 +1,7 @@
 # Agent entry point
 
+**November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](linux/hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).
+
 [November 3 mixed-controller RGB RAM repair](linux/hardware/RGB-RAM-CONTROLLER-FIX-2026-11-03.md): completed and owner-confirmed; inference settings unchanged.
 
 **November 3 RCCL control investigation:** the exact retained library’s source recipe has a P2P-level precedence defect: an Intel platform default can overwrite the explicit disable setting. The isolated correction passes static checks, guarded P2P-disabled SHM collectives, and a reduced target-only SGLang initialization at 4K with graphs/draft/warmup off. Readiness and owned unload passed; a nonfatal freeze-GC callback warning remains. The candidate is uninstalled, production SGLang stays held, and the original crash cause is unresolved. The SGLang fault hold and existing guards remain. [Source audit and candidate limits](linux/hardware/RCCL-P2P-CONTROL-AUDIT-2026-11-03.md).
