@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
-**November 3 P2P-disable preparation:** driver-level boot disable and managed peer-routing withdrawal are prepared; nine CPU checks and the negative HIP checker build pass. Installation, reboot, effective-off verification and the single short inference check remain pending. The physical switch, guards, holds and schedules remain. [Prepared change and required checks](AMD-P2P-DISABLE-2026-11-03.md).
+**November 3 P2P-disable preparation:** driver-level boot disable and managed peer-routing withdrawal are staged after owner authentication; CPU checks and the negative HIP checker build pass. Reboot, effective-off verification and the single short inference check remain pending. The physical switch, guards, holds and schedules remain. [Prepared change and required checks](AMD-P2P-DISABLE-2026-11-03.md).
 
 **November 3 owner guard reset:** minimum free RAM is 1 GiB and free VRAM is 128 MiB per card. `MemoryHigh` is disabled; worker hard RAM limits derive from installed RAM minus 1 GiB. Existing 33.53 GiB total swap is unchanged; v5 removes software swap-rate ceilings and adds SSD SMART/live-NVMe-temperature checks with normal wear accepted. CPU checks pass; no inference or SSD-speed benchmark was run. Existing model/device holds and paused schedules remain. This explicit owner policy supersedes older resource floors/rate defaults. [Policy, coverage and validation](RESOURCE-GUARDS-2026-11-03.md).
 

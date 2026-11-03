@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-11-03",
-  "status": "prepared_not_installed",
+  "status": "staged_reboot_pending",
   "active_p2p_disabled": false,
   "reboot_required_after_install": true,
   "gpu_test_run": false,
@@ -21,5 +21,8 @@
   "memory_ssd_guards_changed": false,
   "holds_schedules_changed": false,
   "postboot_verification_pending": true,
-  "all_p2p_cpu_tests_passed_per_checkout": 40
+  "all_p2p_cpu_tests_passed_per_checkout": 40,
+  "administrator_installation": "owner_completed_successfully",
+  "installed_dropin_sha256": "ce2a16d578c0e4df0c64e7244a0c7dd988bd7ee05f130136101cd72abbc52836",
+  "live_gpu_changes": false
 }
