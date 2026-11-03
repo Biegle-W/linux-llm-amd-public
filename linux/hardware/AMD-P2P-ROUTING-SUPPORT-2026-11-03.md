@@ -1,48 +1,33 @@
 # AMD PEX88096 routing support — November 3, 2026
 
-**Status: administrator staging succeeded. GRUB generation, syntax and exact six-path kernel-token validation passed; installed drop-in hash, root ownership and mode 0644 are verified. Reboot and actual peer qualification remain pending. No live PCI register, driver or IOMMU-mode change occurred.**
+**Current state: HIP peer capability is available both ways, but ACS controls need correction before full qualification.** The first owner-controlled reboot applied the scoped parameter. A fresh guarded diagnostic reports peer access true in both directions under default HIP, fine grain, and fine grain with SDMA disabled. Both owned diagnostic processes and reservations were cleaned up; no data-buffer, direct-kernel, IPC or RCCL test has yet qualified this boot.
 
-The prepared `amd_p2p_support.py` uses the existing kernel's documented `pci=config_acs` support before amdgpu initializes. It does not replace amdgpu, ROCm, the kernel or firmware. No NVIDIA-specific driver is installed.
+The privileged register audit found **0x00 on all six downstream bridges**, rather than the intended 0x11. The initial `xxx00xx` flags preserved firmware defaults; those defaults were zero, unlike Linux's earlier 0x1d controls. The revised flags **`xx100x1`** explicitly enable Source Validation and Upstream Forwarding and disable Request/Completion Redirect. The resulting controlled mask is 0x1d, with desired value 0x11. Other bits retain firmware defaults. This corrects the installer's initial assumption; it is not a successful final P2P result.
 
-## Scope and admission
+The helper selects exactly four Broadcom PEX880xx downstream bridges plus exactly one AMD 1479 downstream parent directly above each of the two Navi31 GPUs. CPU roots, endpoints, other bridges and unrelated paths are excluded. Hierarchical path selectors tolerate bus renumbering. No vendor-wide ACS override or IOMMU-mode change is used. The current GPU domains remain translated. Linux already supplies the pcieport driver; no NVIDIA or replacement AMD driver is installed.
 
-The administrator installer reads extended PCI configuration and rediscovers exactly two 24 GB amdgpu Navi31 graphics functions with a common approved Broadcom PEX880xx ancestor. It selects **exactly four Broadcom downstream bridges plus exactly two AMD 1479 downstream parents, one directly above each GPU** along their paths, excluding CPU root ports, GPU endpoints, other AMD bridges, empty branches and unrelated devices. Its expected controls are the known-working-reference values **0x1d / 0x11**. Any other control or an additional redirecting bridge refuses installation for separate review. If the request/completion redirect bits are already clear, it refuses an unnecessary repair.
+The revised install action can transactionally replace its own previous configuration only when the managed marker, saved state and SHA256 match. The zero-control exception is admitted only for that authenticated prior xxx00xx policy. Unknown controls/policies still refuse installation. On generation/validation failure, prior drop-in, state and GRUB files are restored. Root-private backups are retained. No live PCI write, driver reset or automatic reboot occurs.
 
-For admitted paths, kernel flags `xxx00xx` clear only ACS bits 2/3 (mask **0x0c**), preserving all other controls. Hierarchical device/function path selectors tolerate secondary bus renumbering and avoid a vendor-wide match. The configuration applies to normal and recovery Ubuntu kernel entries. Exact token quoting, generated kernel entries and GRUB syntax are checked; existing boot options remain. The change permits peer forwarding within those selected branches and can alter their IOMMU grouping. No global ACS override or IOMMU-mode change is staged. The current translated-domain difference can be assessed separately if peer access remains unavailable.
-
-The installer writes one managed root-owned GRUB drop-in plus root-private state and backups. Existing conflicting/unmanaged ACS policy, symlinks, unknown state or active GPU reservations cause refusal. A staging/generation/verification failure restores the prior GRUB configuration and removes the new managed files. Installation performs **no live PCI register write, GPU driver unload/reset, display restart or reboot**. Because KFD peer topology is established during device initialization, a boot-time correction is used instead of assuming a live register write would update the cached peer graph.
-
-## Installation and verification
-
-From the operational checkout, with administrator authentication:
+From the operational checkout, run with administrator authentication:
 
 ```bash
-sudo python3 hardware/amd_p2p_support.py audit
 sudo python3 hardware/amd_p2p_support.py install
 ```
 
-The install action performs its own audit; the separate audit is optional. It stops without staging anything if actual controls do not meet admission. A successful result explicitly says that the policy is staged for reboot. **Reboot remains owner-controlled.** Do not call preparation or staging a working-P2P result.
-
-After reboot:
+After successful corrected staging and owner-controlled reboot:
 
 ```bash
 sudo python3 hardware/amd_p2p_support.py verify
 ```
 
-Then repeat the existing guarded HIP capability check, followed only on success by direct peer read/write correctness, HIP IPC and bounded RCCL qualification. Production `NCCL_P2P_DISABLE=1`, model holds/guards and updater pause stay until separately qualified. No model test or profile restoration is part of this installer.
+Verification now requires the active staged parameter and **exact ACS 0x11 on all six ports**, rather than only clear redirect bits. Only then continue guarded peer enable, direct read/write integrity, HIP IPC and bounded RCCL qualification. Production host fallback, RAM holds, guards and updater pause remain unchanged.
 
-To remove the managed next-boot policy:
+Rollback removes the managed next-boot policy and validates regenerated GRUB:
 
 ```bash
 sudo python3 hardware/amd_p2p_support.py rollback
 ```
 
-Rollback regenerates and verifies GRUB; the current boot remains unchanged. The retained root-private backup records the original generated boot file. Reaudit the selectors after moving the switch or changing the motherboard/root slot.
+**28 CPU checks pass per checkout**, including the actual zero-firmware flag regression, authenticated previous-policy upgrade and full rollback after failed upgrade, plus topology/capability admission and GRUB token quoting. Corrected administrator staging/reboot remain pending. No new inference/model-speed result exists.
 
-## Validation
-
-**25 CPU tests pass per checkout**, using synthetic PCI capability/topology records and temporary boot files. The audit retains all bridge controls and admission errors even when installation is refused. Tests cover six-bridge discovery and exact AMD parent identity, root/endpoint/unrelated-path exclusion, preservation of ACS bits outside 0x0c, hierarchy selectors, malformed/truncated/cyclic capabilities, unexpected controls, other redirecting bridges, shell/GRUB token quoting, existing-policy/symlink refusal, no-op refusal, transactional staging rollback and safe removal rollback. These are installation-logic checks; preparation performed no reboot or new GPU test. Subsequent administrator staging succeeded with root-private rollback files retained; the active boot still uses the prior settings.
-
-Sources: [Linux 7.0 kernel parameters](https://www.kernel.org/doc/html/v7.0/admin-guide/kernel-parameters.html), [PCI path selector and ACS implementation](https://github.com/torvalds/linux/blob/v7.0/drivers/pci/pci.c), [working NVIDIA ACS reference](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/PEX-ACS-PAIR-20261031.md).
-
-[Curated preparation state](results/amd-p2p-routing-support-2026-11-03.json).
+Sources: [Linux kernel parameters](https://www.kernel.org/doc/html/v7.0/admin-guide/kernel-parameters.html), [PCI ACS implementation and firmware-control semantics](https://github.com/torvalds/linux/blob/v7.0/drivers/pci/pci.c). [Curated state](results/amd-p2p-routing-support-2026-11-03.json).

@@ -1,19 +1,19 @@
 {
   "date": "2026-11-03",
-  "status": "staged and installed-file verified; reboot and peer qualification pending",
+  "status": "initial boot exposes HIP peers; actual ACS zero requires corrected staging/reboot",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
   "mechanism": "kernel pci=config_acs before amdgpu initialization",
   "selected_downstream_bridges": 6,
-  "acs_mask": "0x0c",
-  "acs_flags": "xxx00xx",
+  "acs_mask": "0x1d",
+  "acs_flags": "xx100x1",
   "selectors": "hierarchical paths; no vendor-wide match",
   "admitted_control_values": [
     "0x1d",
     "0x11"
   ],
-  "cpu_tests": 25,
+  "cpu_tests": 28,
   "live_PCI_writes": false,
   "IOMMU_policy_changed": false,
   "kernel_driver_firmware_replaced": false,
@@ -31,5 +31,10 @@
   "dropin_mode": "0644",
   "dropin_hash_verified": true,
   "GRUB_generation_and_validation": "passed",
-  "reboot_required": true
+  "reboot_required": true,
+  "desired_acs": "0x11",
+  "observed_postboot_acs": "0x00 on all six selected ports",
+  "HIP_peer_capability_both_directions": true,
+  "postboot_capability_cases": 3,
+  "corrected_staging_pending": true
 }

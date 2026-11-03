@@ -12,8 +12,8 @@ class Tests(unittest.TestCase):
   if cmd[0]=='update-grub':self.grub.write_text("linux /vmlinuz root=UUID=test '"+m.parameter(self.r)+"'\n")
  def stage(self,run=None,**kw):return m.stage(self.r,self.config,self.state,self.grub,self.root,run=run or self.good,**kw)
  def test_exact_mask_and_scoped_paths(self):
-  p=m.parameter(self.r);self.assertEqual(p.count('xxx00xx@'),6);self.assertNotIn('iommu',p);self.assertNotIn('pcie_acs_override',p)
-  mask=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x!='x');self.assertEqual(mask,0x0c)
+  p=m.parameter(self.r);self.assertEqual(p.count('xx100x1@'),6);self.assertNotIn('iommu',p);self.assertNotIn('pcie_acs_override',p)
+  mask=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x!='x');self.assertEqual(mask,0x1d)
  def test_grub_shell_and_grub_parser_quoting(self):
   f=self.root/'cfg';param=m.parameter(self.r);f.write_text(m.dropin(param));v=subprocess.check_output(['sh','-c','GRUB_CMDLINE_LINUX="quiet splash"; . "$1"; printf "%s" "$GRUB_CMDLINE_LINUX"','sh',str(f)],text=True)
   self.assertEqual(shlex.split(v),['quiet','splash',param])
@@ -51,6 +51,20 @@ class Tests(unittest.TestCase):
   self.r['admission_errors']=['Additional redirecting bridge 0000:0a:00.0 ACS=0x1d']
   with self.assertRaisesRegex(RuntimeError,'0000:0a:00.0'):self.stage()
   self.assertFalse(self.config.exists())
+ def legacy(self):
+  import hashlib
+  self.stage();old=self.config.read_text().replace('xx100x1','xxx00xx');self.config.write_text(old);d=json.loads(self.state.read_text());d['parameter']=d['parameter'].replace('xx100x1','xxx00xx');d['dropin_sha256']=hashlib.sha256(old.encode()).hexdigest();self.state.write_text(json.dumps(d))
+  for i,r in enumerate(self.r['selected_bridges']):r.update(pci=f'0000:{i+1:02x}:00.0',acs={'control':0})
+  self.r['request_completion_redirect_present']=False;self.r['admission_errors']=[f"Unexpected ACS control on {r['pci']}: 0x0" for r in self.r['selected_bridges']]
+ def test_authenticated_legacy_zero_policy_can_be_corrected(self):
+  self.legacy();d=self.stage();self.assertIn('xx100x1@',d['parameter'])
+ def test_failed_legacy_update_restores_previous_configuration_and_state(self):
+  self.legacy();before=self.config.read_bytes();state=self.state.read_bytes();grub=self.grub.read_bytes()
+  def fail(*a,**kw):raise RuntimeError('failed')
+  with self.assertRaises(RuntimeError):self.stage(fail)
+  self.assertEqual(self.config.read_bytes(),before);self.assertEqual(self.state.read_bytes(),state);self.assertEqual(self.grub.read_bytes(),grub)
+ def test_explicit_flags_restore_expected_control_from_zero_firmware(self):
+  mask=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x!='x');value=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x=='1');self.assertEqual((0 & ~mask)|value,0x11)
  def test_existing_config_refused(self):
   self.config.write_text('unmanaged')
   with self.assertRaises(RuntimeError):self.stage()

@@ -14,7 +14,7 @@ import tempfile
 import time
 
 MARKER='# Managed local-llm AMD PEX peer routing; no live PCI writes.'
-FLAGS='xxx00xx'  # Preserve every bit except Request Redirect (2), Completion Redirect (3).
+FLAGS='xx100x1'  # Explicitly retain SV/UF; clear RR/CR. x preserves firmware, not Linux defaults.
 GIB=1024**3
 BDF=re.compile(r'[0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\.[0-7]')
 
@@ -112,7 +112,7 @@ def parameter(report):
 def dropin(param):
     if not re.fullmatch(r'pci=config_acs=[a-z0-9@:.\-/;]+',param):raise RuntimeError('Invalid kernel argument')
     # GRUB must receive one quoted token: semicolons must not become GRUB commands.
-    return MARKER+'\n# Only ACS bits 2/3 change; path selectors tolerate bus renumbering.\nGRUB_CMDLINE_LINUX="${GRUB_CMDLINE_LINUX} \''+param+'\'"\n'
+    return MARKER+'\n# Retain SV/UF explicitly; clear RR/CR; path selectors tolerate bus renumbering.\nGRUB_CMDLINE_LINUX="${GRUB_CMDLINE_LINUX} \''+param+'\'"\n'
 
 
 def atomic(path,data,mode=0o644):
@@ -127,17 +127,28 @@ def atomic(path,data,mode=0o644):
 
 
 def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=''):
-    if report.get('admission_errors'):raise RuntimeError('; '.join(report['admission_errors'])+'; run audit --output to save the read-only report')
     param=parameter(report);body=dropin(param).encode()
     if config.is_symlink() or state.is_symlink() or grub.is_symlink():raise RuntimeError('Refuse symlinked managed files')
-    if config.exists():
-        if config.read_bytes()==body and state.exists():return {'status':'already staged','reboot_required':True,'parameter':param}
-        raise RuntimeError('Existing routing configuration differs; no overwrite')
-    if state.exists():raise RuntimeError('Existing state requires explicit review')
+    old_config=config.read_bytes() if config.exists() else None
+    old_state=state.read_bytes() if state.exists() else None
+    prior=None
+    if old_config is not None:
+        if old_state is None:raise RuntimeError('Existing routing configuration differs; no overwrite')
+        prior=json.loads(old_state)
+        if not old_config.startswith(MARKER.encode()) or hashlib.sha256(old_config).hexdigest()!=prior['dropin_sha256']:raise RuntimeError('Existing managed file differs; no overwrite')
+        if old_config==body:return {'status':'already staged','reboot_required':True,'parameter':param}
+    elif old_state is not None:raise RuntimeError('Existing state requires explicit review')
+    errors=report.get('admission_errors',[])
+    legacy=prior and 'pci=config_acs=xxx00xx@' in prior['parameter']
+    if errors:
+        permitted={f"Unexpected ACS control on {r['pci']}: 0x0" for r in report['selected_bridges'] if r.get('acs',{}).get('control')==0}
+        if not legacy or any(e not in permitted for e in errors):raise RuntimeError('; '.join(errors)+'; run audit --output to save the read-only report')
     if re.search(r'(?:config_acs|disable_acs_redir|pcie_acs_override)=',existing_args):raise RuntimeError('Existing ACS boot policy requires review')
-    if not report['request_completion_redirect_present']:raise RuntimeError('ACS redirect is already clear; this repair is not indicated')
+    if not report['request_completion_redirect_present'] and not legacy:raise RuntimeError('ACS redirect is already clear; this repair is not indicated')
     backup=Path(tempfile.mkdtemp(prefix='local-llm-amd-p2p-',dir=backup_root));backup.chmod(0o700)
     shutil.copy2(grub,backup/'grub.cfg');atomic(backup/'audit.json',(json.dumps(report,indent=2)+'\n').encode(),0o600)
+    if old_config is not None:atomic(backup/'previous-dropin.cfg',old_config,0o600)
+    if old_state is not None:atomic(backup/'previous-state.json',old_state,0o600)
     try:
         atomic(config,body)
         run(['update-grub'],check=True)
@@ -150,7 +161,12 @@ def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=
         atomic(state,(json.dumps(record,indent=2)+'\n').encode(),0o600)
         return record
     except BaseException:
-        config.unlink(missing_ok=True);shutil.copy2(backup/'grub.cfg',grub);state.unlink(missing_ok=True);raise
+        if old_config is None:config.unlink(missing_ok=True)
+        else:atomic(config,old_config)
+        shutil.copy2(backup/'grub.cfg',grub)
+        if old_state is None:state.unlink(missing_ok=True)
+        else:atomic(state,old_state,0o600)
+        raise
 
 
 def rollback(config,state,grub,run=subprocess.run):
@@ -179,7 +195,7 @@ def main():
             defaults=Path('/etc/default/grub').read_text()+'\n'+'\n'.join(p.read_text() for p in Path('/etc/default/grub.d').glob('*.cfg') if p!=config)
             result=stage(report,config,state,grub,Path('/var/backups'),existing_args=defaults)
         elif args.action=='verify':
-            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=not report['request_completion_redirect_present'] and not report.get('admission_errors');result={'active_parameter':active,'redirect_bits_clear':clear,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear else 'not active or register verification failed'}
+            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=all(r['acs']['control']==0x11 for r in report['selected_bridges']) and not report.get('admission_errors');result={'active_parameter':active,'redirect_bits_clear':clear,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear else 'not active or register verification failed'}
     output=json.dumps(result,indent=2)+'\n'
     if args.output:args.output.write_text(output)
     print(output)
