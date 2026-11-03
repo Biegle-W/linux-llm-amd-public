@@ -1,4 +1,6 @@
-# Current LLM model storage — November 2, 2026
+# Current LLM model storage — November 3, 2026
+
+**November 3 cleanup:** current model locations below are retained. Unused environments/build/cache payloads are removed; the additional H3 derived rank shards now use sharedSATA1 `Graphics-Models/experimental/h3-hoststage-20261028/shards`. Maya/Strata streaming weights stay on system NVMe. [Scope and verification](SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
 
 Qwen main and DFlash2 now use sharedSATA1; retained Maya/Strata streaming assets use the system drive. Super IQ3 and old DeepSeek weight backing are removed. Seven enabled engine routes share six enabled base weight sets; Ornith and Strata Qwen remain configured but paused. Super W4A16 and Flint AWQ are retained experimental candidates. No new inference or performance result is implied. [Qwen relocation](QWEN-SATA-MIGRATION-2026-11-02.md) · [Streaming relocation](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
 

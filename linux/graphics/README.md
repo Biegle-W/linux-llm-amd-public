@@ -1,5 +1,7 @@
 # Graphics model collection
 
+**November 3 storage cleanup:** the remaining 21.06 GB H3 experimental rank shards moved to shared SATA after complete SHA-256 and original-pin comparison. Normal models/workflows and current environments are preserved; the TP2 candidate remains build-only/disabled. [Registry](staged-weight-locations.json) · [Cleanup and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
+
 **October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation and rollback](H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
 
 [AMD H3 encoder-format comparison](H3-AMD-ENCODER-FORMATS-2026-10-28.md): Tested W4A8 on the same H3 encoder against corrected NVFP4. Native HIP INT8 encoding was 5.91–8.11× faster across three prompts after warmup; separate cold-file load times, RAM/VRAM, nine paired TP2 clips and quality limits are recorded. Native W4A8 preserves the sampled main scenes, with design changes and shared prompt limitations; it remains an isolated tested candidate. Both host floors remain 1 GiB; other guards and production selection remain.
@@ -82,8 +84,7 @@ Qwen passed 512x512 / 40 steps in 100.9 seconds total (about 13 seconds denoisin
 H3 passed 608x352 / 39 frames / 20 steps in 232.4 seconds total (about 29 seconds
 denoising), with coherent video and finite stereo audio. The 32 GB host swapped
 while staging; larger sizes and maximum capacity remain untested. Original model payloads
-stay on Shared SATA. The isolated host-staged trial retains 21.06 GB of derived
-rank shards on the system disk; production model placement is unchanged. See the
+stay on Shared SATA. The isolated host-staged trial's 21.06 GB derived rank shards moved to shared SATA on November 3; production model placement is unchanged. See the
 [validation report](VALIDATION-2026-10-18.md) for sampling and timing limits.
 
 ## Provenance and reproduction

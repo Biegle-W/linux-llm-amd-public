@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-03",
+  "candidate": "H3 experimental TP2 rank shards",
+  "directory": "/mnt/shared/Graphics-Models/experimental/h3-hoststage-20261028/shards",
+  "runtime_allowed": false,
+  "status": "SEALED-BUILD-ONLY; relocation does not qualify or activate candidate",
+  "files": [
+    {
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.rank0.safetensors",
+      "bytes": 11331569704,
+      "sha256": "9d55809c53bcf88abdc35a3662746e33a0d3badee913bffc2756c5f7c5bd5a41"
+    },
+    {
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.rank1.safetensors",
+      "bytes": 9729256848,
+      "sha256": "b559045bc180d72eddcfd4f9ac213e169a9d956b14197cb69b2c70b73a3157a7"
+    },
+    {
+      "name": "minimax_h3_fl2va_pruned_int8_convrot.tp2.json",
+      "bytes": 1470,
+      "sha256": "a24e1889639201f5864e77502c68eb81980812ea300079f82366fa0f245c5bbe"
+    }
+  ],
+  "relocation_verification": "full source/destination SHA256 equality and original shard-pin equality; re-seal any inode-bound experimental admission before future use"
+}
