@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "six-bridge audited repair prepared; administrator staging and reboot pending",
+  "status": "staged and installed-file verified; reboot and peer qualification pending",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -23,8 +23,13 @@
   "updater_resumed": false,
   "reboot_performed": false,
   "p2p_fixed_or_qualified": false,
-  "boot_policy_staged": false,
+  "boot_policy_staged": true,
   "selected_broadcom_bridges": 4,
   "selected_amd_1479_parents": 2,
-  "observed_acs_controls": "0x1d on all six path downstream bridges"
+  "observed_acs_controls": "0x1d on all six path downstream bridges",
+  "root_owned_dropin_verified": true,
+  "dropin_mode": "0644",
+  "dropin_hash_verified": true,
+  "GRUB_generation_and_validation": "passed",
+  "reboot_required": true
 }
