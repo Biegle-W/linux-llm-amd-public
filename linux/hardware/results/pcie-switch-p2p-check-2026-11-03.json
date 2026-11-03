@@ -6,7 +6,7 @@
     "board": "ASUS TX GAMING B760M WIFI",
     "kernel": "7.0.0-42-generic",
     "memtotal_KiB": 32084672,
-    "switch": "Broadcom PEX880xx Gen4 fabric",
+    "switch": "Broadcom/PLX PEX88096, owner-confirmed; PCI ID exposes PEX880xx family",
     "common_upstream": "0000:01:00.0",
     "gpu_pci": [
       "0000:0b:00.0",
@@ -138,5 +138,12 @@
   "persistent_transport_changed": false,
   "RAM_holds_changed": false,
   "updater_resumed": false,
-  "configuration_firmware_or_driver_changed": false
+  "configuration_firmware_or_driver_changed": false,
+  "diagnosis": {
+    "physical_topology": "Both GPUs below the same PEX88096 switch fabric; not separate motherboard GPU ports",
+    "kernel_chipset_message": "Generic PCI peer-route rejection, not proof of motherboard-chipset fault",
+    "host_bridge_allowlist_rejection": "Observed 8086:a704 in current boot log",
+    "ACS_cause_confirmed": false,
+    "next_read_only_step": "Inspect switch/bridge ACS controls in privileged PCI capability report"
+  }
 }

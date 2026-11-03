@@ -46,5 +46,7 @@
   "owned_gpu_locks": [],
   "installed_display_rule_verified": true,
   "latest_p2p_check": "pcie-switch-p2p-check-2026-11-03.json",
-  "p2p_status": "tested unavailable in both directions"
+  "p2p_status": "tested unavailable in both directions",
+  "switch_owner_identification": "Broadcom/PLX PEX88096",
+  "motherboard_chipset_cause_established": false
 }
