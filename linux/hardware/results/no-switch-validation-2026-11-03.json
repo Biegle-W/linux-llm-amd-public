@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "date": "2026-11-03",
+  "status": "in_progress",
+  "topology": {
+    "broadcom_switch_present": false,
+    "gpu_count": 2,
+    "vram_per_gpu_gib": 24,
+    "narrowest_paths": [
+      "PCIe4x16",
+      "PCIe4x4"
+    ],
+    "visible_ram_gib": 61.55192184448242
+  },
+  "p2p_driver_flags": {
+    "pcie_p2p": "N",
+    "use_xgmi_p2p": "0"
+  },
+  "retained_card_ordinal_mapping": [
+    "PowerColor",
+    "Sapphire"
+  ],
+  "completed_or_active_stages": [
+    {
+      "stage": "hardware-smoke",
+      "status": "passed",
+      "guard": "passed",
+      "load_seconds": null,
+      "generated_tokens": null,
+      "request_count": null,
+      "error": null,
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "llama-empero",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_seconds": 47.95719823500008,
+      "generated_tokens": 76,
+      "request_count": 2,
+      "error": null,
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "llama-flint",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_seconds": 51.95374915399998,
+      "generated_tokens": 159,
+      "request_count": 2,
+      "error": null,
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "strata-short",
+      "status": "passed-one-short-DSH-check-with-direct-IO",
+      "guard": "passed",
+      "load_seconds": 77.85473289200002,
+      "generated_tokens": 77,
+      "request_count": 2,
+      "error": null,
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "vllm-bolt",
+      "status": "starting",
+      "guard": "starting",
+      "load_seconds": null,
+      "generated_tokens": null,
+      "request_count": 0,
+      "error": null,
+      "owned_scopes_empty": null,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "vllm-qwen",
+      "status": "failed",
+      "guard": "failed",
+      "load_seconds": null,
+      "generated_tokens": null,
+      "request_count": 0,
+      "error": "TimeoutError: 210-second loading deadline",
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "stage": "vllm-sage",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_seconds": 83.46266162699999,
+      "generated_tokens": 75,
+      "request_count": 2,
+      "error": null,
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    }
+  ],
+  "normal_profiles_activated": false,
+  "engine_upgrades": false,
+  "schedules_changed": false,
+  "guards_changed": false,
+  "ram_test_subset_gib": 2,
+  "ram_test_patterns": 3,
+  "unavailable_assets": [
+    "removed Super IQ3",
+    "removed old DeepSeek XS backing for Maya/Strata"
+  ],
+  "cpu_tests": {
+    "current_owner_policy": "8 passed",
+    "P2P": "40 passed",
+    "llama source/ownership/launch": "18 passed",
+    "shared storage": "26 passed",
+    "legacy_validation": "memory82/swap77 replayed; remaining outdated fixture/default expectations recorded; no guard change"
+  }
+}
