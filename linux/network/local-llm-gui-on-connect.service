@@ -1,15 +1,21 @@
 [Unit]
-Description=Start graphical login when display and USB keyboard/mouse are connected
+Description=Start graphical login only on local keyboard or mouse activity
+After=systemd-udev-trigger.service
 ConditionPathExists=/etc/systemd/system/display-manager.service
 
 [Service]
-Type=oneshot
+Type=simple
 EnvironmentFile=-/etc/default/local-llm-gui-on-connect
 ExecStart=/usr/bin/python3 /usr/local/libexec/local-llm-gui-on-connect.py
-TimeoutStartSec=60
+Restart=on-failure
+RestartSec=2
+UMask=0077
 NoNewPrivileges=yes
 ProtectSystem=strict
 ProtectHome=yes
 ProtectKernelTunables=yes
 PrivateTmp=yes
 RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target
