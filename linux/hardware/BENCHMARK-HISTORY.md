@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 3 GPU campaign stopped:** the old production Maya GLM baseline stalled at 62/256 warmup tokens and hit an AMD MES/SMU queue/reset fault. GLM is disabled and a persistent GPU fault reservation blocks new campaign GPU work. Latest Maya was not installed. Restart observed; recovery and cause remain unverified. [Containment and next steps](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-maya-fault-containment-and-revised-queue).
+
 **November 3 final-hardware progress:** latest llama selected for Flint; Empero retains prior code after a strict final-format failure. Q1 backing hashes and selected kernel tests pass; profile restoration and the rest of the campaign remain pending. [Results and limits](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-qualified-llama-split-and-q1-progress).
 
 **November 3 revised hardware plan:** ASUS TX B760M DDR5, Core i5-13600KF and 64 GB DDR5, with both RX 7900 XTX cards downstream of one active PCIe switch in the CPU-connected x16 slot. This is the next planned platform; the earlier 96 GB target remains a separate future scenario. Hardware is not yet installed/validated. Current profiles, RAM holds, host-transport fallback, guards and paused updater remain. [Confirmed plan and post-install admission](ASUS-64GB-PCIE-SWITCH-PLAN-2026-11-03.md).

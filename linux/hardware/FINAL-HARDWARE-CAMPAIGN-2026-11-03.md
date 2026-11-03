@@ -75,3 +75,23 @@ The staged ROCm10 vLLM's stock RCCL archive has37gfx1100 device images and13hidd
 - [tandem.cpp](https://github.com/ewhacc/tandem.cpp): its documented CUDA-tested path is a research lead, not an AMD runtime selection.
 - [AtomicChat GSQ-RCO](https://huggingface.co/AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF):121/138/155GB backbones also require shared110GBEngram; total sizes are231/249/266GB. Its modified-weight and limited benchmark claims do not establish universal zero refusals or zero quality loss.
 - [GSQ-RCO Coder](https://huggingface.co/ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-GGUF): it removes half the routed experts; its effective1.05bpw uses the original transformer denominator.72.12GB backbone plus110.60GBEngram is182.72GB on disk. It remains a separate optional model, not a replacement for the completed Q1 restoration.
+
+## November 3 Maya fault containment and revised queue
+
+The old production Maya GLM baseline (`cbaaec5d70fd`) stalled at 62 of 256 warmup tokens, then encountered MES queue removal failure, SMU nonresponse and a failed reset sequence. The latest Maya candidate was never installed. This is a failed baseline, with no comparative pass or speed result. The guard reported no owned OOM/swap/spill trigger; the underlying cause is unresolved.
+
+All campaign GPU work is stopped. GLM is disabled with an explicit owner-instruction requirement for resumption, and a persistent GPU fault reservation remains latched. No retry, framework GPU import, communicator probe, manual reset or automatic reboot is authorized by this checkpoint. Existing independent holds, rollback, guards and recurring updater pause remain.
+
+Read-only boot-journal audit confirms a restart at 14:32 UTC (09:32 Toronto), after the 12:50 UTC Maya fault. The hold was created after this restart; matching its boot identifier does not prove the machine remained on the fault boot. No KFD compute clients or matching new kernel fault signatures were observed in the current boot. These observations alone do not qualify recovery or authorize a GPU workload.
+
+The CPU-only ROCm10 RCCL build was interrupted: its scope is inactive, recorded controller/worker processes are absent, the stale job record says building, and the log ends at 513/1925 with no completed library. Existing Ninja outputs are preserved. An incremental CPU-only continuation needs an ownership audit and a distinct continuation record, never deletion of the old record or a duplicate build.
+
+Completed llama comparisons, independent Empero/Ornith selections, all five Q1 shard hashes, both metadata packs and selected Q1 kernel gates remain valid completed evidence and must not be repeated for documentation. Q1 admission/capacity/tools/profile benchmarks remain pending; the unselected Strata IQ3 numerical failure remains recorded.
+
+After crash containment and verified readiness, the owner's new priority is:
+
+1. Strata 0.2.10 Qwen DFlash2 versus MTP versus Off on the dual-XTX/64 GB system.
+2. vLLM disk-backed PLE eligibility and AMD compatibility, followed by a controlled comparison only if supported. The reviewed staged Qwen4Exp CUDA-only validator does not establish AMD DeepSeek support.
+3. Prepare and benchmark the additional ISTA-DASLab DeepSeek GSQ-RCO Coder candidate, preserving the completed Q1 restoration. Its 182.72 GB total includes 110.60 GB shared Engram; reuse requires verified identical hashes.
+
+Use the authorized standard tool checks and repeated speed protocol, recording correctness, TTFT, prefill, decode, end-to-end time, RAM/VRAM, disk I/O, cold/warm behavior and spread. Unsupported paths and failures receive explicit outcomes. Remaining model restorations, engine qualifications and six fixed diffusion/edit workflows are still unfinished. Next action: preserve the fault hold, finish read-only recovery/transport review and CPU-only preparation before any bounded, separately reviewed GPU stage.

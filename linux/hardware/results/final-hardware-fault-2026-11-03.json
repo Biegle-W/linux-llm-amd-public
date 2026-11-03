@@ -1,0 +1,22 @@
+{
+  "status": "GPU campaign stopped; old Maya baseline fault",
+  "baseline_source": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
+  "candidate_installed": false,
+  "warmup_tokens_completed": 62,
+  "warmup_tokens_requested": 256,
+  "GLM_enabled": false,
+  "persistent_GPU_fault_hold": true,
+  "GPU_work_performed_since_hold": false,
+  "current_boot_start_UTC": "2026-11-03T14:32:07Z",
+  "hold_created_after_restart": true,
+  "recovery_qualified": false,
+  "CPU_RCCL_build": "interrupted; partial outputs preserved; no completed library",
+  "completed_build_log_step": 513,
+  "build_log_total_steps": 1925,
+  "priority_after_readiness": [
+    "Strata Qwen DFlash2 vs MTP vs Off",
+    "PLE offload AMD eligibility and controlled comparison if supported",
+    "additional DeepSeek GSQ-RCO Coder preparation and benchmark"
+  ],
+  "campaign_complete": false
+}

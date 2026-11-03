@@ -3,7 +3,9 @@
     "name": "GLM-5.3-Flash Maya-S (v2) (dual AMD HIP, CPU/expert cache, NVMe streaming)",
     "context": 32768,
     "config": "maya-glm-profile.json",
-    "enabled": true
+    "enabled": false,
+    "disabled_reason": "Final-hardware old-runtime baseline stalled during warmup and hit an AMD MES GPU queue/reset fault. Preserve source/config and investigate dual-GPU transport after driver recovery; no automatic retry.",
+    "resume_requires_owner_instruction": true
   },
   "deepseek-v4.1-flash-1017-maya": {
     "name": "DeepSeek-V4.1-Flash-1017 Maya-XS + DSpark (dual AMD HIP, CPU/expert cache, NVMe streaming)",
