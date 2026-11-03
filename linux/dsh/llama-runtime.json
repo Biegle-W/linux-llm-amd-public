@@ -6,7 +6,7 @@
     "ornith-1.5-122b",
     "flint-40b-a2.5b"
   ],
-  "source_commit": "eb4e244be77a906a183cd4a00fd51d9ad3200955",
+  "source_commit": "0ef27309b78d054832e44a95a6fb9314d4b7363c",
   "runtime_overrides": {},
   "source_overrides": {
     "ornith-1.5-122b": {
@@ -14,6 +14,12 @@
       "source_commit": "2280f0fd163b03d4331d49e08460f66502e35854",
       "manual_runtime_pin": "2280f0fd163b03d4331d49e08460f66502e35854",
       "runtime_pin_reason": "Owner-authorized October29 split: retain the normal Ornith profile on its independent old source/build while all unpinned llama models qualify newer global revisions. Normal 60 GiB physical-RAM admission remains; no candidate incompatibility is asserted."
+    },
+    "empero-qwen3.8-35b-a3b": {
+      "path": "/opt/local-llm/llm-tools/llama-empero-eb4e244",
+      "source_commit": "eb4e244be77a906a183cd4a00fd51d9ad3200955",
+      "manual_runtime_pin": "eb4e244be77a906a183cd4a00fd51d9ad3200955",
+      "runtime_pin_reason": "Final-hardware comparison: latest source passed speed/retrieval gates, but its Empero DSH check added prose/code fences to the required marker-only answer. Retain prior Empero code; Flint passed all standard and strict tool checks."
     }
   },
   "paused_models": {

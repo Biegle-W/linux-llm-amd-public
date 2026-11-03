@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 3 final-hardware progress:** latest llama selected for Flint; Empero retains prior code after a strict final-format failure. Q1 backing hashes and selected kernel tests pass; profile restoration and the rest of the campaign remain pending. [Results and limits](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-qualified-llama-split-and-q1-progress).
+
 **Final-hardware baseline checkpoint:** old-runtime Empero and Flint standard timings/retrieval pass; latest-engine comparison and whole-catalog restoration remain pending. Known disabled Maya fused-prefill failures and a broader DeepSeek IQ3 parity blocker are retained. [Measured scope and pending work](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#llama-production-baselines-completed).
 
 **November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).
@@ -443,11 +445,11 @@ cleanup remain required. No engine was promoted or benchmark rerun for this poli
 change. Nightly updates remain paused.
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-10-30 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Qualified engine selections — November3 final-hardware checkpoint** (nightly updater paused; remaining candidates under qualification):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `eb4e244be77a` |
+| llama.cpp | `0ef27309b78d` global/Flint; Empero `eb4e244be77a` and paused Ornith `2280f0fd163b` hold independent builds |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `7dd5cf18e68c` |
@@ -456,7 +458,7 @@ change. Nightly updates remain paused.
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Last run: llama.cpp skipped (production baseline failed); Maya promoted.
+Latest campaign checkpoint: llama split promotion for Flint; Empero retains prior code after a strict final-format failure. Maya comparison and remaining restoration work continue. The October30 scheduled run remains historical.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background

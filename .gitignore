@@ -66,3 +66,6 @@ linux/maya/rocwmma-7.2.3/
 
 # Independent manually held Ornith source/build; runtime assets stay local.
 /linux/llm-tools/llama-ornith-*/
+
+# Independently pinned Empero runtime build
+/linux/llm-tools/llama-empero-*/

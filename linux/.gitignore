@@ -110,3 +110,6 @@ llm-tools/rccl-nohostcall/
 
 # Independent manually held Ornith source/build; runtime assets stay local.
 /llm-tools/llama-ornith-*/
+
+# Independently pinned Empero runtime build
+/llm-tools/llama-empero-*/

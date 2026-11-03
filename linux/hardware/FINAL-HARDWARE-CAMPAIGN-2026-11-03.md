@@ -52,3 +52,26 @@ Maya's established per-card gate ran36cases:34passed, while the known fused-pref
 The broad DeepSeek GPU gate failed **IQ3_XXS WMMA-versus-scalar output:3.14e-3 against the unchanged3e-3 tolerance**, on both cards; the two devices were bit-identical and no GPU/bus fault occurred. Broad promotion is held. Exact header review shows the selected Unsloth Q1 uses IQ1_S and IQ2_XXS, including IQ1_S gate/up with IQ2_XXS down. That exact mixed-format path still needs its own validation; the unselected IQ3 failure is retained and no tolerance is relaxed.
 
 A newer vLLM `0.33.0rc1.dev573+g40941f2c4.rocm100` is now dependency-staged for gfx1100 only, with matching Torch2.13.0/ROCm10.0.0 and Triton3.8. Its228packages pass dependency consistency. It is neither selected nor GPU-qualified, and system drivers are unchanged. Its SDK uses external `.kpack` device images, so RCCL/device-image and runtime-isolation preflights are pending before a guarded GPU probe. The supported gfx1100 SGLang fork, selected runtimes and paused model profiles remain unchanged at this checkpoint.
+
+## November 3 qualified llama split and Q1 progress
+
+Flint now uses global llama.cpp `0ef27309b78d`. Its standard comparison and strict DSH read-tool round trip pass. Empero retains independent `eb4e244be77a` code: the newer candidate completed the read tool and two model steps but added explanatory text/code fences to the required marker-only final answer. That strict failure is retained. Ornith's independent old pin and pause remain pending its restoration qualification.
+
+| Route | Baseline code / prose | Candidate code / prose | Fresh probes | Strict DSH result | Selection |
+|---|---:|---:|---:|---|---|
+| Empero | 160.84 / 102.26 t/s | 160.83 / 104.90 t/s | 3/3 | Final-format failure; tool completed | Prior source held |
+| Flint | 71.98 / 71.64 t/s | 72.62 / 72.18 t/s | 3/3 | Pass | Latest source |
+
+Both candidates pass the unchanged shared-method speed/retrieval and complete native lifecycle gates. A final supervisor empty-scope race triggered rollback after the complete candidate record; the saved results were reused after correcting that race. A compiler internal error at eight jobs was followed by a successful two-job build. No successful GPU benchmark was repeated. Controlled split activation passes; the old Empero library cohort is verified, its code/constants/device images are unchanged after localizing library search paths, and owned scopes/KFD clients/reservation are clear. No new GPU fault or owned swap/spill was observed. Sampled thermal coverage and limits are in the [curated progress record](results/final-hardware-progress-2026-11-03.json).
+
+All five Unsloth Q1 backing shards are now fully hash-verified. Two metadata-only packs reference the same232,979,608,420-byte GGUF payload. Maya's selected Q1 tests pass on both cards, including IQ4_NL Engram, Q5_K/Q6_K dense tensors and the exact IQ1_S/IQ2_XXS role combinations. Strata's corresponding selected tests also pass. A newly added K-quant fixture initially placed scales at the wrong offsets, producingNaNs in both GPU and reference; legal test data corrected from upstreamMaya/GGML passes with unchanged engine math and thresholds. The earlier unselectedIQ3_XXS numerical failure remains. These are format/kernel results: model capacity, explicit admission, normal tools and restored-profile benchmarks remain pending.
+
+The staged ROCm10 vLLM's stock RCCL archive has37gfx1100 device images and13hidden-hostcall declarations; required PyTorch exports are present. A matchingSDK10 RCCL build is in progress, preserving explicit user P2P controls and NDEBUG in all191compilecommands. It is unselected and has not been GPU-tested. Maya GLM comparison and the rest of the restoration/LLM/diffusion campaign continue; the recurring updater remains paused.
+
+### Additional research decisions
+
+- [vLLM Engram source](https://github.com/vllm-project/vllm/blob/main/vllm/config/engram.py): the exact staged validator restricts `disk_offload` to Qwen4Exp on CUDA; it does not admit the AMD DeepSeek route.
+- [LSA paper](https://arxiv.org/abs/2610.42147): the headline speedups concern an attention layer at ultra-long context; the proposed variants require distillation or native training. AMD whole-engine performance is unverified here.
+- [tandem.cpp](https://github.com/ewhacc/tandem.cpp): its documented CUDA-tested path is a research lead, not an AMD runtime selection.
+- [AtomicChat GSQ-RCO](https://huggingface.co/AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF):121/138/155GB backbones also require shared110GBEngram; total sizes are231/249/266GB. Its modified-weight and limited benchmark claims do not establish universal zero refusals or zero quality loss.
+- [GSQ-RCO Coder](https://huggingface.co/ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-GGUF): it removes half the routed experts; its effective1.05bpw uses the original transformer denominator.72.12GB backbone plus110.60GBEngram is182.72GB on disk. It remains a separate optional model, not a replacement for the completed Q1 restoration.

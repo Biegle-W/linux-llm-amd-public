@@ -1,5 +1,7 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
+**November 3 final-hardware progress:** latest llama selected for Flint; Empero retains prior code after a strict final-format failure. Q1 backing hashes and selected kernel tests pass; profile restoration and the rest of the campaign remain pending. [Results and limits](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-qualified-llama-split-and-q1-progress).
+
 **Final-hardware baseline checkpoint:** old-runtime Empero and Flint standard timings/retrieval pass; latest-engine comparison and whole-catalog restoration remain pending. Known disabled Maya fused-prefill failures and a broader DeepSeek IQ3 parity blocker are retained. [Measured scope and pending work](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#llama-production-baselines-completed).
 
 **November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).

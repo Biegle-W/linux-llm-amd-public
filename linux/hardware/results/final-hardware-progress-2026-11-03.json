@@ -1,0 +1,256 @@
+{
+  "date": "2026-11-03",
+  "scope": "Llama split selection and Q1 format qualification checkpoint; whole-catalog campaign remains in progress",
+  "hardware": {
+    "CPU": "i5-13600KF",
+    "visible_RAM_GiB": 61.55143737792969,
+    "GPUs": "2 RX7900XTX24GiB via PCIe switch"
+  },
+  "llama": {
+    "from": "eb4e244be77a906a183cd4a00fd51d9ad3200955",
+    "candidate": "0ef27309b78d054832e44a95a6fb9314d4b7363c",
+    "selection": "Latest global source for passing Flint; independent prior-source holds for Empero and still-paused Ornith",
+    "profiles": [
+      {
+        "model": "empero-qwen3.8-35b-a3b",
+        "baseline": {
+          "configured_context": 262144,
+          "status": "passed",
+          "code_decode_tps": 160.841032029283,
+          "prose_decode_tps": 102.2558396524569,
+          "code_TTFT_seconds": 0.049651477000224986,
+          "prose_TTFT_seconds": 0.04989628600014839,
+          "fresh_probe_input_tokens": null,
+          "markers_passed": 3,
+          "owned_swap_peak_bytes": 0,
+          "owned_spill_peak_bytes": 0,
+          "worker_memory_samples": 33,
+          "memory_sampling_errors": 0,
+          "thermal": {
+            "samples": 31,
+            "sample_errors": 0,
+            "CPU_package_peak_C": {
+              "Package id 0": 63.0
+            },
+            "cards": [
+              {
+                "index": 0,
+                "samples": 31,
+                "peak_temperature_C": {
+                  "mem": 50.0,
+                  "edge": 30.0,
+                  "junction": 51.0
+                },
+                "thermal_limit_samples": 12,
+                "hotspot_limit_samples": 12
+              },
+              {
+                "index": 1,
+                "samples": 31,
+                "peak_temperature_C": {
+                  "mem": 40.0,
+                  "edge": 38.0,
+                  "junction": 55.0
+                },
+                "thermal_limit_samples": 23,
+                "hotspot_limit_samples": 23
+              }
+            ],
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+          }
+        },
+        "candidate": {
+          "configured_context": 262144,
+          "status": "passed",
+          "code_decode_tps": 160.82658152329932,
+          "prose_decode_tps": 104.90223984400909,
+          "code_TTFT_seconds": 0.0513815890008118,
+          "prose_TTFT_seconds": 0.04950807800014445,
+          "fresh_probe_input_tokens": null,
+          "markers_passed": 3,
+          "owned_swap_peak_bytes": 0,
+          "owned_spill_peak_bytes": 0,
+          "worker_memory_samples": 33,
+          "memory_sampling_errors": 0,
+          "thermal": {
+            "samples": 32,
+            "sample_errors": 0,
+            "CPU_package_peak_C": {
+              "Package id 0": 60.0
+            },
+            "cards": [
+              {
+                "index": 0,
+                "samples": 32,
+                "peak_temperature_C": {
+                  "mem": 52.0,
+                  "edge": 30.0,
+                  "junction": 46.0
+                },
+                "thermal_limit_samples": 21,
+                "hotspot_limit_samples": 21
+              },
+              {
+                "index": 1,
+                "samples": 32,
+                "peak_temperature_C": {
+                  "mem": 40.0,
+                  "edge": 38.0,
+                  "junction": 53.0
+                },
+                "thermal_limit_samples": 29,
+                "hotspot_limit_samples": 29
+              }
+            ],
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+          }
+        },
+        "strict_tool_status": "failed",
+        "tool_calls": 1,
+        "completed_tool_results": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "final_marker_correct": false,
+        "unloaded_after_tool": true,
+        "selected_source": "eb4e244be77a906a183cd4a00fd51d9ad3200955"
+      },
+      {
+        "model": "flint-40b-a2.5b",
+        "baseline": {
+          "configured_context": 32768,
+          "status": "passed",
+          "code_decode_tps": 71.98456427366946,
+          "prose_decode_tps": 71.64476480446595,
+          "code_TTFT_seconds": 0.07248580600025889,
+          "prose_TTFT_seconds": 0.06379876600021817,
+          "fresh_probe_input_tokens": null,
+          "markers_passed": 3,
+          "owned_swap_peak_bytes": 0,
+          "owned_spill_peak_bytes": 0,
+          "worker_memory_samples": 40,
+          "memory_sampling_errors": 0,
+          "thermal": {
+            "samples": 43,
+            "sample_errors": 0,
+            "CPU_package_peak_C": {
+              "Package id 0": 60.0
+            },
+            "cards": [
+              {
+                "index": 0,
+                "samples": 43,
+                "peak_temperature_C": {
+                  "mem": 52.0,
+                  "edge": 33.0,
+                  "junction": 63.0
+                },
+                "thermal_limit_samples": 24,
+                "hotspot_limit_samples": 24
+              },
+              {
+                "index": 1,
+                "samples": 43,
+                "peak_temperature_C": {
+                  "mem": 42.0,
+                  "edge": 42.0,
+                  "junction": 65.0
+                },
+                "thermal_limit_samples": 32,
+                "hotspot_limit_samples": 32
+              }
+            ],
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+          }
+        },
+        "candidate": {
+          "configured_context": 32768,
+          "status": "passed",
+          "code_decode_tps": 72.61966334121577,
+          "prose_decode_tps": 72.1822327117549,
+          "code_TTFT_seconds": 0.07099750999987009,
+          "prose_TTFT_seconds": 0.06365259599988349,
+          "fresh_probe_input_tokens": null,
+          "markers_passed": 3,
+          "owned_swap_peak_bytes": 0,
+          "owned_spill_peak_bytes": 0,
+          "worker_memory_samples": 40,
+          "memory_sampling_errors": 0,
+          "thermal": {
+            "samples": 43,
+            "sample_errors": 0,
+            "CPU_package_peak_C": {
+              "Package id 0": 62.0
+            },
+            "cards": [
+              {
+                "index": 0,
+                "samples": 43,
+                "peak_temperature_C": {
+                  "mem": 53.0,
+                  "edge": 32.0,
+                  "junction": 60.0
+                },
+                "thermal_limit_samples": 26,
+                "hotspot_limit_samples": 26
+              },
+              {
+                "index": 1,
+                "samples": 43,
+                "peak_temperature_C": {
+                  "mem": 43.0,
+                  "edge": 42.0,
+                  "junction": 63.0
+                },
+                "thermal_limit_samples": 33,
+                "hotspot_limit_samples": 33
+              }
+            ],
+            "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+          }
+        },
+        "strict_tool_status": "passed",
+        "tool_calls": 1,
+        "completed_tool_results": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "final_marker_correct": true,
+        "unloaded_after_tool": true,
+        "selected_source": "0ef27309b78d054832e44a95a6fb9314d4b7363c"
+      }
+    ],
+    "standard_gates": "unchanged95%performance,TTFT,retrieval,phase-awareloading-swap-v4,zeroownedspill,completebenchmarklifecyclecoverage",
+    "benchmark_supervisor_shutdown": "A final empty-scope telemetry race triggered rollback after the complete candidate record. Native lifecycle had329worker samples/0errors; saved records passed unchanged gates. The race was corrected without accepting missing telemetry for populated scopes. Controlled split activation and owned unload passed.",
+    "old_Empero_relocation": "ELF search paths localized; code, constant and device-image section hashes unchanged across16ELFfiles; normal-launcher answer and loaded-library cohort verified. This is not a new strict-format pass.",
+    "GPU_cleanup_verified": true
+  },
+  "Q1": {
+    "source_repo": "unsloth/DeepSeek-V4.1-Flash-1017-GGUF",
+    "source_revision": "2688c0c3c2c3b052ec4f6d10a8417b0ef7ee4eba",
+    "variant": "UD-IQ1_S",
+    "verified_shards": 5,
+    "verified_payload_bytes": 232979608420,
+    "weights_shared_between_engines": true,
+    "pack_conversion": "Two metadata-only packs; no duplicate GGUF weight backing",
+    "Maya_selected_kernel_scope": "Both cards pass native KV/dense, IQ4_NL Engram, IQ1_S/IQ2_XXS/Q5_K/Q6_K dense checks and exact3expert-role pairs at small/model shapes; upstreamreference arithmetic/thresholds unchanged",
+    "Strata_selected_kernel_scope": "Both cards pass uniform19/16 atmodelshape, exact3rolepairs atsmall/modelshape, sharedKV/dense/Engram/slot; IQ4_NLEngram bit-exact. LegalQ5_K/Q6_K dense fixtures pass bothcards. Initial newK-quantfixture usedwrongscaleoffsets and producedNaN inbothGPUandreference; correctedtestdata followsupstreamMaya/GGML; enginecode andthresholdsunchanged.",
+    "broad_gate_failure_retained": "UnselectedIQ3_XXS WMMA-vs-scalar3.14e-3 >unchanged3e-3 onbothcards; no broadengine/all-format promotion",
+    "models_restored": false,
+    "pending": "ExplicitQ1format/cacheadmission, measuredmodelcapacity, normalDSHtools andstandardbenchmarks"
+  },
+  "ROCm10": {
+    "vllm_candidate": "0.33.0rc1.dev573+g40941f2c4.rocm100",
+    "stock_RCCL_static_audit": {
+      "gfx1100_device_images": 37,
+      "kernel_descriptors": 138,
+      "hidden_hostcall_buffers": 13,
+      "missing_required_PyTorch_exports": 0
+    },
+    "matching_RCCL_source": "ROCm/rocm-systems therock-10.0 at6b0e43f341195e203754e08f850e437ff2fc09f9",
+    "matching_build": "InprogressinmatchingSDK10; explicituserP2Poverrideafterplatformdefaults;NDEBUGreachesall191compilecommands; nostaged7.2SDKreferences",
+    "selected": false,
+    "GPU_tested": false
+  },
+  "remaining": "MayaGLMcomparisonongoing; restoreOrnith,StrataQwen,DeepSeek,SGLang,SuperINT4 aftertheirguards; finishvLLM andfixed diffusion/edit benchmarks; keeprecurringupdaterpaused"
+}

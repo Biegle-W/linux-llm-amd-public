@@ -1,5 +1,7 @@
 # LLM benchmark and context history
 
+**November 3 final-hardware progress:** latest llama selected for Flint; Empero retains prior code after a strict final-format failure. Q1 backing hashes and selected kernel tests pass; profile restoration and the rest of the campaign remain pending. [Results and limits](FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-qualified-llama-split-and-q1-progress).
+
 **November 3 revised hardware plan:** ASUS TX B760M DDR5, Core i5-13600KF and 64 GB DDR5, with both RX 7900 XTX cards downstream of one active PCIe switch in the CPU-connected x16 slot. This is the next planned platform; the earlier 96 GB target remains a separate future scenario. Hardware is not yet installed/validated. Current profiles, RAM holds, host-transport fallback, guards and paused updater remain. [Confirmed plan and post-install admission](ASUS-64GB-PCIE-SWITCH-PLAN-2026-11-03.md).
 
 **November 3 AMD primary display:** the first validated AMD inference card is now GNOME's preferred GPU; its DisplayPort cable connection is verified. The old Intel-primary/AMD-ignore rules are replaced. Nine CPU checks per checkout and six DRM-node rule dry runs pass; installed tags and root-owned rule are verified. Headless boot, input-triggered GUI, inference pins/guards and paused updater remain. The active session still has its old Intel renderer until a new graphical session; firmware boot-video selection is unchanged. [Policy, verification and firmware boundary](AMD-PRIMARY-DISPLAY-2026-11-03.md).
