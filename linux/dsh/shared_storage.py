@@ -22,10 +22,11 @@ STATIC_MODELS = SHARED / 'vLLM-Models'
 # All retained streaming weights/packs migrated to system NVMe by owner November 2.
 INTERNAL_STREAM_MODELS = Path(__file__).resolve().parents[1] / 'models' / 'streaming'
 STREAM_MODELS = INTERNAL_STREAM_MODELS
-# Placement of NEW model files (user instruction, October 26): nothing new on the Shared NVMe;
-# non-streaming weights go to sharedSATA1, SSD-streaming packs to the system NVMe; every drive
-# stays below 90% used after the copy.
-NEW_MODEL_DIRS = {'static': STATIC_MODELS, 'streaming': INTERNAL_STREAM_MODELS}
+# November 3 owner instruction: NEW SSD-streaming models use the new NVMe.
+NEW_STREAM_SHARED = Path('/mnt/new-streaming-nvme')
+NEW_STREAM_UUID = 'CONFIGURE_NEW_STREAMING_NVME_UUID'
+NEW_STREAM_MODELS = NEW_STREAM_SHARED / 'LLM-Models'
+NEW_MODEL_DIRS = {'static': STATIC_MODELS, 'streaming': NEW_STREAM_MODELS}
 MAX_USE = 0.90
 # (label, UUID, mount point, required model directory or None, required)
 VOLUMES = (
@@ -96,12 +97,13 @@ def ensure_streaming_models():
 def new_model_dir(kind, size_bytes):
     """Return the directory for a new model of `kind` ('static' or 'streaming') and `size_bytes`.
 
-    Refuses when the copy would take its drive to 90% or more; never falls back to the Shared NVMe.
+    Refuses at 90% used; verifies the selected volume and never falls back to another disk.
     """
     target = NEW_MODEL_DIRS[kind]
     if kind == 'static':
         ensure_model_drive(SHARED, STATIC_MODELS, UUID, 'sharedSATA1')
     else:
+        ensure_model_drive(NEW_STREAM_SHARED, NEW_STREAM_SHARED, NEW_STREAM_UUID, 'new streaming NVMe')
         target.mkdir(parents=True, exist_ok=True)
     usage = shutil.disk_usage(target)
     after = (usage.used + size_bytes) / usage.total
@@ -117,6 +119,9 @@ def ensure_model_paths(paths):
     for path in map(Path, paths):
         if path.is_relative_to(INTERNAL_STREAM_MODELS):
             continue   # system disk: always present
+        if path.is_relative_to(NEW_STREAM_MODELS):
+            needed.add(('new streaming NVMe', NEW_STREAM_UUID, NEW_STREAM_SHARED, NEW_STREAM_MODELS))
+            continue
         if path.is_relative_to(STATIC_MODELS):
             needed.add(('sharedSATA1', UUID, SHARED, STATIC_MODELS))
             continue
@@ -171,6 +176,8 @@ def ensure_strata_models(config=None):
     pack = Path(args[args.index('--pack') + 1])
     if pack.is_relative_to(INTERNAL_STREAM_MODELS):
         ensure_streaming_models()
+    elif pack.is_relative_to(NEW_STREAM_MODELS):
+        ensure_model_drive(NEW_STREAM_SHARED, NEW_STREAM_MODELS, NEW_STREAM_UUID, 'new streaming NVMe')
     elif pack.is_relative_to(MODELS):
         ensure_shared_models()
     else:

@@ -220,5 +220,27 @@ class ModelVolumeTests(unittest.TestCase):
         ensure.assert_called_once_with(mount, mount/'vLLM-Models', storage.UUID, 'sharedSATA1')
 
 
+    def test_new_streaming_placement_verifies_mount_before_creating_directory(self):
+        with patch.object(storage, 'mounted_uuid', return_value='WRONG'), patch.object(Path, 'mkdir') as mkdir:
+            with self.assertRaisesRegex(RuntimeError, 'different drive'):
+                storage.new_model_dir('streaming', 100)
+        mkdir.assert_not_called()
+
+    def test_new_streaming_placement_keeps_capacity_limit(self):
+        from types import SimpleNamespace
+        with patch.object(storage, 'ensure_model_drive') as ensure, patch.object(Path, 'mkdir'), \
+                patch.object(storage.shutil, 'disk_usage', return_value=SimpleNamespace(total=1000, used=800)):
+            with self.assertRaisesRegex(RuntimeError, 'limit 90%'):
+                storage.new_model_dir('streaming', 100)
+        ensure.assert_called_once_with(storage.NEW_STREAM_SHARED, storage.NEW_STREAM_SHARED,
+                                       storage.NEW_STREAM_UUID, 'new streaming NVMe')
+
+    def test_new_streaming_paths_verify_the_new_volume(self):
+        with patch.object(storage, 'ensure_model_drive') as ensure:
+            storage.ensure_model_paths([storage.NEW_STREAM_MODELS/'Coder/model.gguf'])
+        ensure.assert_called_once_with(storage.NEW_STREAM_SHARED, storage.NEW_STREAM_MODELS,
+                                       storage.NEW_STREAM_UUID, 'new streaming NVMe')
+
+
 if __name__ == '__main__':
     unittest.main()
