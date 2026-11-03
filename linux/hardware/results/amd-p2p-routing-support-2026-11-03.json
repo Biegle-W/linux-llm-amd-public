@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-03",
+  "status": "prepared; administrator staging and reboot pending",
+  "owner_requested_support_installation": true,
+  "additional_switch_driver_required": false,
+  "existing_switch_driver": "pcieport",
+  "mechanism": "kernel pci=config_acs before amdgpu initialization",
+  "selected_downstream_bridges": 4,
+  "acs_mask": "0x0c",
+  "acs_flags": "xxx00xx",
+  "selectors": "hierarchical paths; no vendor-wide match",
+  "admitted_control_values": [
+    "0x1d",
+    "0x11"
+  ],
+  "cpu_tests": 22,
+  "live_PCI_writes": false,
+  "IOMMU_policy_changed": false,
+  "kernel_driver_firmware_replaced": false,
+  "GPU_tests_after_preparation": 0,
+  "production_transport_changed": false,
+  "model_holds_changed": false,
+  "updater_resumed": false,
+  "reboot_performed": false,
+  "p2p_fixed_or_qualified": false
+}
