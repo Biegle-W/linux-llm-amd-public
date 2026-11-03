@@ -1,6 +1,6 @@
 # RCCL explicit P2P-control audit — November 3, 2026
 
-**Confirmed source-order defect; isolated candidate built, statically audited and host-transport checked. Not installed or SGLang-qualified, and not established as a remedy for the held SGLang failure.** Existing production libraries, model pins and guards remain unchanged. The SGLang route stays held; no further model retry has been run.
+**Confirmed source-order defect; isolated candidate passes static, host-transport and reduced initialization checks. Not installed or production-profile qualified, and not established as a remedy for the held SGLang failure.** Existing production libraries, model pins and guards remain unchanged. The production SGLang route stays held; only the explicitly scoped reduced target initialization below has run.
 
 The pinned build recipe for the retained no-hostcall RCCL 2.27.7 identifies source commit **bf3ebf549fec376521b7d35f09a67f67071c96d3**. In that exact source's `ncclTopoCheckP2p`, the function obtains the explicit user P2P level first, then assigns the Intel default `PATH_PXB` afterward. Thus the platform-default assignment can overwrite the level obtained from `NCCL_P2P_DISABLE=1` or an explicit P2P-level setting.
 
@@ -39,3 +39,17 @@ The guard sampled zero owned swap/spill, a minimum of about 51.98 GiB available 
 This establishes a working disabled-P2P shared-memory path for the tested candidate and small collective workload. It does not qualify candidate P2P-on behavior, CUDA graphs, full SGLang initialization, model inference, or the original crash remedy. SGLang stays fault-held; RAM/weight holds, pins, guards and updater pause remain. No candidate was installed and no model retry ran. Any further GPU workload requires its own authorized scope.
 
 [Curated communicator result](results/rccl-candidate-host-2026-11-03.json).
+
+## Guarded reduced SGLang initialization
+
+The owner authorized one isolated initialization using the candidate and P2P disabled, keeping production unchanged. It reached readiness in **64.74 seconds**, then the owned server and all ranks were unloaded. Both `/health` and `/server_info` returned HTTP 200 after the ready marker. Health generation was disabled; no generation request was sent.
+
+This was a deliberately reduced **target-only TP2 / 4,096-token** test: GPTQ weights and BF16 compute/KV, memory fraction 0.65, Mamba cache limit eight, no DFlash draft, both graph backends disabled, and server warmup skipped. Actual KV capacity was 4,096 tokens. The 32 GiB transient memory limit and ten-minute deadline supplemented the retained owned-worker loading/swap guard, RAM/VRAM/spill checks, thermal limits and new-kernel-fault stop. Generated kernel caches stayed in the isolated workspace. Production profiles, launchers, selected library, holds and updater state were unchanged.
+
+Target weights loaded in 45.83 seconds (8.68 GB per rank as logged), and Mamba/KV cache initialization completed. Both rank channel logs acknowledged the disable flag and selected `SHM/direct/direct` in both directions; no P2P channel appeared. The guard verified candidate mappings in owned processes. There were 249 guard samples, zero owned swap/spill, about 49.00 GiB minimum available host RAM and 13.51/14.10 GiB minimum free VRAM. Sampled sensor maxima were 48/33°C. No new GPU/bus/OOM fault appeared through final cleanup. The owned cgroup was empty, all observed owned processes exited, KFD clients were absent, the reservation was released and the isolated server port closed.
+
+A **nonfatal `post-warmup freeze_gc` callback warning** reported connection refused before readiness. The retained source catches that request exception and logs it; the ready marker and both read-only endpoint checks subsequently succeeded. The AMD-SMI warning 32 seen in the earlier communicator check was not seen in this initialization log; no AMD-SMI repair is claimed. Independent sysfs guard telemetry remained valid. No startup code was changed to suppress or fix warnings.
+
+This establishes reduced target initialization and clean unload for this candidate. It does not reproduce the failed full DFlash setup, exercise generation or graphs, qualify the production profile, or establish that RCCL caused or cured the original bus loss. Production SGLang stays fault-held and the candidate remains uninstalled. Further workload changes need an explicitly scoped follow-up.
+
+[Curated initialization result](results/sglang-candidate-init-2026-11-03.json).

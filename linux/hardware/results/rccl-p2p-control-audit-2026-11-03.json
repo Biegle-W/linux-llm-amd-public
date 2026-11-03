@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "isolated candidate passes guarded P2P-disabled SHM communicator check",
+  "status": "isolated candidate passes reduced target-only SGLang initialization with nonfatal startup warning",
   "RCCL_source_commit": "bf3ebf549fec376521b7d35f09a67f67071c96d3",
   "nohostcall_recipe_commit": "23c2beb2e200353fda84afa216c2cea2f7c579e9",
   "installed_library_SHA256_unchanged": true,
@@ -20,7 +20,7 @@
   "GPU_tested": true,
   "proven_SGLang_crash_remedy": false,
   "SGLang_hold_retained": true,
-  "new_model_retry": false,
+  "new_model_retry": true,
   "kernel_firmware_replacement": false,
   "candidate_SHA256": "45847d2f61a504746867a1beef08be1041999682b00a7abf19cdc07b11f1d118",
   "hidden_hostcall_buffers": 0,
@@ -40,5 +40,9 @@
   "application_qualification_pending": true,
   "candidate_P2P_enabled_tested": false,
   "host_transport_verified": "SHM/direct/direct both directions",
-  "communicator_result": "rccl-candidate-host-2026-11-03.json"
+  "communicator_result": "rccl-candidate-host-2026-11-03.json",
+  "reduced_SGLang_initialization_passed": true,
+  "full_SGLang_profile_qualified": false,
+  "model_retry_scope": "isolated target-only initialization; no generation",
+  "initialization_result": "sglang-candidate-init-2026-11-03.json"
 }
