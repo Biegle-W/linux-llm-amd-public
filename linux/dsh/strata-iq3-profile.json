@@ -109,9 +109,9 @@
     "memory.swap.max": "max"
   },
   "local_validation": {
-    "status": "requires-local-validation",
+    "status": "pending_native_GGUF_backing_check_after_RAM",
     "native_validation": "passed",
-    "normal_integration_status": "passed",
+    "normal_integration_status": "pending_native_GGUF_backing_check_after_RAM",
     "validated_utc": "2026-10-29T02:02:46.601506+00:00",
     "scope": "32GB native performance/quality/near-window/history and normal guarded authenticated API integration passed",
     "evidence": "hardware/results/ssd-streaming-32gb-2026-10-28.json",
@@ -120,5 +120,12 @@
     "binary_sha256": "e2734244e6389ac6c549abff76a1ee96529c7f91398503fb7b4e8c909b001f6d",
     "normal_validated_utc": "2026-10-29T02:04:32.602393+00:00",
     "note": "Sanitized reference paths and recorded host results; qualify the local binary, assets, profile, memory tier and normal API before use."
+  },
+  "weight_storage": {
+    "expert_backing": "original GGUF shards; duplicated pack experts.bin removed",
+    "duplicate_expert_bytes_removed": 42912972800,
+    "latest_release_source_checked": "v0.2.9 / c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+    "runtime_upgrade_activated": false,
+    "post_RAM_short_harness_check_required": true
   }
 }

@@ -1,5 +1,7 @@
 # Agent entry point
 
+**November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](linux/hardware/STRATA-GGUF-STORAGE-2026-11-02.md).
+
 **November 2 owner-requested weight removal:** Super IQ3 and old DeepSeek Maya/Strata backing files are removed; approximately 341.6 GB reclaimed. Seven enabled routes remain. Super INT4/vLLM and latest compatible Unsloth Q1 are queued for post-RAM qualification; old weight rollback files are no longer present. Guards, other holds and paused updater remain. [Removal and preparation](linux/hardware/MODEL-WEIGHT-REMOVAL-2026-11-02.md).
 
 **November 2 post-RAM DeepSeek Q1 queue:** replace the existing DeepSeek weight backing for both Maya and Strata with compatible latest Unsloth Q1 quants, after format/pack and RAM/VRAM admission review. Preserve rollback files; one short DSH check and verified unload per route. No current download/replacement or hold change. [Migration queue](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).

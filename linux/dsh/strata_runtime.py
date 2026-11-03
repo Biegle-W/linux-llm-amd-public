@@ -67,6 +67,27 @@ def check_config(cfg, total, available, *, check_available=True):
         raise RuntimeError(' '.join(problems))
 
 
+def required_weight_assets(cfg):
+    """The native mmap loader can read experts from GGUF without a copied blob."""
+    args = cfg['args']
+    paths = {name: Path(args[args.index(name) + 1])
+             for name in ('--pack', '--native', '--ple-gguf', '--mtp')}
+    required = [paths['--native'], paths['--ple-gguf'], paths['--pack']/'dense.bin',
+                paths['--mtp']/'dense.bin', paths['--mtp']/'experts.bin',
+                paths['--mtp']/'draft_vocab.bin', Path(cfg['tokenizer'])/'tokenizer.json']
+    if '--mmap-experts' in args:
+        required += [paths['--pack']/'index.txt', paths['--pack']/'native_experts.txt']
+    else:
+        required.append(paths['--pack']/'experts.bin')
+    return required
+
+
+def require_weight_assets(cfg):
+    required = required_weight_assets(cfg)
+    if not all(p.is_file() and p.stat().st_size for p in required):
+        raise RuntimeError('Retained Strata Q3 assets are missing. Check the model drive.')
+
+
 def require_strata(before_handover=False,model=None):
     profiles = json.loads((ROOT / 'dsh/strata-profiles.json').read_text())
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
@@ -104,11 +125,5 @@ def require_strata(before_handover=False,model=None):
     if engine != ROOT / 'strata/build-hip/strata' or not os.access(engine, os.X_OK):
         raise RuntimeError('The retained Strata HIP executable is unavailable.')
     args = cfg['args']
-    paths = {name: Path(args[args.index(name) + 1]) for name in ('--pack', '--native', '--ple-gguf', '--mtp')}
-    required = [paths['--native'], paths['--ple-gguf'], paths['--pack']/'dense.bin',
-                paths['--pack']/'experts.bin', paths['--mtp']/'dense.bin',
-                paths['--mtp']/'experts.bin', paths['--mtp']/'draft_vocab.bin',
-                Path(cfg['tokenizer'])/'tokenizer.json']
-    if not all(p.is_file() and p.stat().st_size for p in required):
-        raise RuntimeError('Retained Strata Q3 assets are missing. Check the Shared drive.')
+    require_weight_assets(cfg)
     return cfg

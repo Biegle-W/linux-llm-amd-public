@@ -160,5 +160,15 @@
     "requires_actual_RAM_and_fresh_admission": true,
     "test": "one short DSH tool-call check then verified unload",
     "no_download_GPU_test_or_schedule_now": true
+  },
+  "strata_GGUF_backing_cleanup_2026_11_02": {
+    "original_GGUFs_retained": true,
+    "copied_experts_removed": true,
+    "unused_MTP_intermediates_removed": true,
+    "MTP_runtime_retained": true,
+    "latest_release_source_checked": "v0.2.9 / c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+    "engine_upgrade_activated": false,
+    "RAM_hold_preserved": true,
+    "new_short_harness_check_after_RAM_required": true
   }
 }

@@ -1,0 +1,30 @@
+{
+  "status": "duplicate_removed",
+  "bytes_verified_and_removed": 42912972800,
+  "MTP_conversion_intermediates_removed": true,
+  "MTP_runtime_pack_preserved": true,
+  "reclaimed_bytes": 49017782272,
+  "free_after_bytes": 823059677184,
+  "remaining_dense_pack_bytes": 1538035200,
+  "GGUF_native_requirements_pass": true,
+  "existing_engine_pin_unchanged": true,
+  "held_profile_still_disabled": true,
+  "GPU_inference_run": false,
+  "CPU_tests_pass_each_repo": 15,
+  "verification": {
+    "status": "passed",
+    "method": "CPU metadata bounds/type/offset checks and complete byte-for-byte comparison of every copied expert against original GGUF tensor slices",
+    "layers": 48,
+    "experts_per_layer": 512,
+    "bytes_compared": 42912972800,
+    "duplicate_allocated_bytes": 42912972800,
+    "no_GPU_execution": true
+  },
+  "latest_release_checked": {
+    "tag": "v0.2.9",
+    "source_commit": "c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+    "installed": false
+  },
+  "remaining_Strata_allocated_bytes": 79134326784,
+  "all_existing_memory_and_ownership_guards_unchanged": true
+}
