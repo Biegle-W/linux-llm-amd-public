@@ -13,7 +13,7 @@ Twelve maintained/queued LLM routes are in scope: Empero and Flint/HIP llama; Or
 ## Preparation checkpoint
 
 - Latest llama.cpp `0ef27309b78d054832e44a95a6fb9314d4b7363c` built in isolation; not installed or GPU-qualified yet.
-- Maya 1.1.51 `3a47bbe8883f61ed4724d4b43f9dd46f7703a733` is building; both Strata components queue source `ffa80d73133ea5c548aefe57889a16e8085a938f` (0.2.10). Builds remain separate from production.
+- Maya 1.1.51 `3a47bbe8883f61ed4724d4b43f9dd46f7703a733` and both Strata components at `ffa80d73133ea5c548aefe57889a16e8085a938f` (0.2.10) built in isolation. The DeepSeek local test adapter needed a test-only kernel-symbol rename for a new header definition; no engine objects, mathematical code or tolerances were changed. All remain separate from production.
 - ComfyUI 0.43.0 `ab08f7b2caa6d4007ecde3762116c6193613f43b` and its required frontend/node dependencies are staged; dependency consistency passes. The existing ROCm Torch stack is retained during this engine comparison. Generation qualification and promotion are pending.
 - The current gfx1100 SGLang fork is at its latest branch head. Official 0.5.23's AOT setup explicitly exits for gfx1100; it is not a drop-in supported upgrade. Existing local fixes are preserved.
 - The installed vLLM ROCm 7.2 wheel is current on that channel. Newer official releases/wheel families and the updated RDNA3 fork require compatibility review; a newer package number is not a passing hardware qualification.
@@ -33,3 +33,22 @@ A [firsthand ComfyUI stability report](https://www.reddit.com/r/comfyui/comments
 ## Remaining work
 
 Complete source/weight preparation; verify updated kernels and format support; qualify supported engine candidates with rollback; restore each paused route after admission and tool checks; run the standard sequential LLM and fixed diffusion benchmarks; publish per-route outcomes and exact remaining blockers. No whole-catalog success, latest-engine promotion or fastest-setup claim is made at this checkpoint.
+
+## Llama production baselines completed
+
+These are **old-runtime baselines before the new llama.cpp candidate**, at source `eb4e244be77a906a183cd4a00fd51d9ad3200955` on the final hardware. They are not new-engine or full-catalog results.
+
+| Route | Median code decode | Median prose decode | Fresh retrieval probes |
+|---|---:|---:|---:|
+| Empero | 160.84 tokens/s | 102.26 tokens/s | 3/3 pass |
+| Flint | 71.98 tokens/s | 71.64 tokens/s | 3/3 pass |
+
+The shared method excludes workload warmups and retains three timed code/prose trials plus three fresh approximately8K marker probes. The owned campaign download was frozen during timing and thawed afterward. The outer guard recorded zero owned swap/spill and no new GPU/bus/OOM fault; owned cgroups emptied, KFD clients were absent and the reservation was released. Candidate comparison and promotion remain pending. [Curated baseline record](results/final-hardware-baseline-2026-11-03.json).
+
+## Additional qualification evidence and blockers
+
+Maya's established per-card gate ran36cases:34passed, while the known fused-prefill case failed on each card. That path remains disabled and is not claimed qualified. Five native CPU format/path/RAM/pack/IQ tests also passed. The latest separate Strata DeepSeek API suite ran 64 tests: 63 passed and one real-tokenizer test was skipped pending the restored pack.
+
+The broad DeepSeek GPU gate failed **IQ3_XXS WMMA-versus-scalar output:3.14e-3 against the unchanged3e-3 tolerance**, on both cards; the two devices were bit-identical and no GPU/bus fault occurred. Broad promotion is held. Exact header review shows the selected Unsloth Q1 uses IQ1_S and IQ2_XXS, including IQ1_S gate/up with IQ2_XXS down. That exact mixed-format path still needs its own validation; the unselected IQ3 failure is retained and no tolerance is relaxed.
+
+A newer vLLM `0.33.0rc1.dev573+g40941f2c4.rocm100` is now dependency-staged for gfx1100 only, with matching Torch2.13.0/ROCm10.0.0 and Triton3.8. Its228packages pass dependency consistency. It is neither selected nor GPU-qualified, and system drivers are unchanged. Its SDK uses external `.kpack` device images, so RCCL/device-image and runtime-isolation preflights are pending before a guarded GPU probe. The supported gfx1100 SGLang fork, selected runtimes and paused model profiles remain unchanged at this checkpoint.

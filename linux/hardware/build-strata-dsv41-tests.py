@@ -35,6 +35,11 @@ for name,text in [('ds4_core_selected_test.cu',core),('ds4_iq_shape_test.cpp',iq
     test=build/name;test.write_text(text)
     obj=build/(name+'.o')
     cmd=shlex.split(compile_line)
+    if name == 'ds4_core_selected_test.cu':
+        # New upstream headers define this kernel in both the copied test TU
+        # and the already-built model TU. Give the test copy its own symbol;
+        # its body, inputs and tolerances and all engine objects stay intact.
+        cmd.insert(1, '-Dstream_fetch_kernel=strata_selected_test_stream_fetch_kernel')
     cmd[cmd.index('-o')+1]=str(obj)
     cmd[cmd.index('-c')+1]=str(test)
     if '-MF' in cmd:cmd[cmd.index('-MF')+1]=str(obj)+'.d'
@@ -46,6 +51,7 @@ for name,text in [('ds4_core_selected_test.cu',core),('ds4_iq_shape_test.cpp',iq
     link[link.index('-o')+1]=name.rsplit('.',1)[0]
     subprocess.run(link,cwd=build,check=True)
 record={'source_commit':subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip(),
+        'test_compatibility':'PCIe fetch kernel symbol renamed only in the copied test translation unit; engine objects unchanged',
         'scope':'Test-source-only variants; engine objects and tolerances unchanged. Mixed experts limited to selected IQ2/3 pairs (all five small-shape pairs and IQ2_XXS/IQ3_XXS plus IQ2_S/IQ3_S at5120/2304). Unselected Q4_K/IQ4_XS and Q2_K/Q3_K pairs excluded. Uniform actual-shape IQ test uses5120/2304.',
         'tests':{n:hashlib.sha256((build/n).read_bytes()).hexdigest() for n in ('ds4_core_selected_test','ds4_iq_shape_test')}}
 (build/'selected-test-build.json').write_text(json.dumps(record,indent=2)+'\n')

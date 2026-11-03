@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-03",
+  "scope": "pre-upgrade production llama baseline only; not whole-catalog completion",
+  "source_commit": "eb4e244be77a906a183cd4a00fd51d9ad3200955",
+  "visible_RAM_GiB": 61.55143737792969,
+  "GPU": "2 RX7900XTX24GiB",
+  "method": "excluded workload warmups; three code/prose trials capped256tokens and three fresh8K marker probes; production profile allocations retained; no maximum-context claim",
+  "profiles": [
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "status": "passed",
+      "context": 262144,
+      "code_decode_tps_SSE": 160.841032029283,
+      "prose_decode_tps_SSE": 102.2558396524569,
+      "code_TTFT_seconds": 0.049651477000224986,
+      "prose_TTFT_seconds": 0.04989628600014839,
+      "fresh_marker_probes_passed": 3,
+      "prefill_output_cap": 64,
+      "prefill_phase_tps": [
+        null,
+        null,
+        null
+      ],
+      "prefill_native_tps": [
+        3549.839741296975,
+        3570.760408866894,
+        3562.5800753932263
+      ]
+    },
+    {
+      "model": "flint-40b-a2.5b",
+      "status": "passed",
+      "context": 32768,
+      "code_decode_tps_SSE": 71.98456427366946,
+      "prose_decode_tps_SSE": 71.64476480446595,
+      "code_TTFT_seconds": 0.07248580600025889,
+      "prose_TTFT_seconds": 0.06379876600021817,
+      "fresh_marker_probes_passed": 3,
+      "prefill_output_cap": 192,
+      "prefill_phase_tps": [
+        null,
+        null,
+        null
+      ],
+      "prefill_native_tps": [
+        5657.450840209426,
+        5665.799660409483,
+        5737.19749711902
+      ]
+    }
+  ],
+  "max_owned_swap_bytes": 0,
+  "max_owned_spill_bytes": 0,
+  "new_kernel_faults": [],
+  "owned_cgroups_empty": true,
+  "KFD_clients_remaining": [],
+  "GPU_lock_released": true,
+  "campaign_download_frozen_during_timing_and_thawed": true,
+  "new_engine_installed": false
+}
