@@ -1,0 +1,7 @@
+# Managed local-llm GNOME AMD primary policy. Firmware/cabling are separate.
+# https://github.com/GNOME/mutter/blob/main/doc/multi-gpu.md
+# Clear the superseded Intel-primary and AMD-ignore tags on card/render nodes.
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*|/dev/dri/renderD[0-9]*", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x8086", ATTRS{device}=="0xa780", TAG-="mutter-device-preferred-primary"
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*|/dev/dri/renderD[0-9]*", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x744c", TAG-="mutter-device-ignore", TAG-="mutter-device-preferred-primary"
+# Both AMD cards share the same IDs: match the selected PCI parent as well.
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*|/dev/dri/renderD[0-9]*", SUBSYSTEMS=="pci", KERNELS=="@AMD_PRIMARY_PCI@", ATTRS{vendor}=="0x1002", ATTRS{device}=="0x744c", TAG+="mutter-device-preferred-primary"

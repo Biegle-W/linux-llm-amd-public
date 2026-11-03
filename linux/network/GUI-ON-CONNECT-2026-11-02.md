@@ -1,5 +1,7 @@
 # Headless boot with GUI on keyboard/mouse activity — November 2, 2026
 
+**November 3 display placement:** GNOME now prefers the first AMD card for its next session, and the monitor is connected there. This does not change headless boot or the actual-input trigger below. [Primary-GPU policy](../hardware/AMD-PRIMARY-DISPLAY-2026-11-03.md).
+
 The owner requested headless boot even with all peripherals connected, then graphical login only after actual keyboard or mouse input. The replacement is installed and verified: `multi-user.target` remains the default, the persistent activity watcher is enabled/running, and the old presence-only timer is disabled/inactive. The installed detector and unit exactly match the reviewed source, are root-owned and have no group/other write permission.
 
 ## Behavior
