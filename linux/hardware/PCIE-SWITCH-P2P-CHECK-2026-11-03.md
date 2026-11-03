@@ -45,3 +45,5 @@ This evidence supports the owner's working-switch history and makes **missing sw
 **Privileged audit update:** request/completion redirection is enabled (ACS 0x1d) on four Broadcom ports and both AMD 1479 downstream parents (0a:00.0 / 12:00.0). These additional AMD internal bridges explain why the NVIDIA four-bridge template was insufficient. The scoped six-bridge boot correction is prepared; post-reboot peer qualification is still required.
 
 **Post-reboot diagnostic update:** HIP capability is now true both ways in all three cases. Root audit shows ACS 0x00 on six ports; the installer is corrected to explicitly target 0x11 because its original unchanged flags preserved zero firmware controls. Corrected staging is verified; activation and direct/IPC/RCCL tests remain pending. No final P2P qualification is claimed.
+
+**Corrected-boot actual-data update:** ACS 0x11 is applied and HIP capability is true both ways. Local-kernel checks pass, but real peer reads mismatch in both directions and under fine grain. IPC/RCCL are blocked; an identity-domain comparison trial is prepared, not qualified.

@@ -126,8 +126,10 @@ def atomic(path,data,mode=0o644):
         if os.path.exists(temp):os.unlink(temp)
 
 
-def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=''):
-    param=parameter(report);body=dropin(param).encode()
+def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args='',identity_mode=False):
+    param=parameter(report);text=dropin(param)
+    if identity_mode:text+='GRUB_CMDLINE_LINUX="${GRUB_CMDLINE_LINUX} iommu=pt"\n'
+    body=text.encode()
     if config.is_symlink() or state.is_symlink() or grub.is_symlink():raise RuntimeError('Refuse symlinked managed files')
     old_config=config.read_bytes() if config.exists() else None
     old_state=state.read_bytes() if state.exists() else None
@@ -144,7 +146,8 @@ def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=
         permitted={f"Unexpected ACS control on {r['pci']}: 0x0" for r in report['selected_bridges'] if r.get('acs',{}).get('control')==0}
         if not legacy or any(e not in permitted for e in errors):raise RuntimeError('; '.join(errors)+'; run audit --output to save the read-only report')
     if re.search(r'(?:config_acs|disable_acs_redir|pcie_acs_override)=',existing_args):raise RuntimeError('Existing ACS boot policy requires review')
-    if not report['request_completion_redirect_present'] and not legacy:raise RuntimeError('ACS redirect is already clear; this repair is not indicated')
+    if identity_mode and re.search(r'(?:intel_iommu|amd_iommu|iommu)=',existing_args):raise RuntimeError('Existing IOMMU boot policy requires review')
+    if not report['request_completion_redirect_present'] and not legacy and not (identity_mode and prior):raise RuntimeError('ACS redirect is already clear; this repair is not indicated')
     backup=Path(tempfile.mkdtemp(prefix='local-llm-amd-p2p-',dir=backup_root));backup.chmod(0o700)
     shutil.copy2(grub,backup/'grub.cfg');atomic(backup/'audit.json',(json.dumps(report,indent=2)+'\n').encode(),0o600)
     if old_config is not None:atomic(backup/'previous-dropin.cfg',old_config,0o600)
@@ -156,8 +159,8 @@ def stage(report,config,state,grub,backup_root,run=subprocess.run,existing_args=
         # Require every Ubuntu kernel entry to carry one single, quoted policy argument.
         import shlex
         lines=[l.strip() for l in grub.read_text().splitlines() if re.match(r'^\s*linux(?:efi)?\s+.*vmlinuz',l)]
-        if not lines or any(shlex.split(l).count(param)!=1 for l in lines):raise RuntimeError('Generated GRUB kernel entries did not preserve the exact policy token')
-        record={'schema':1,'status':'staged for reboot; no live driver/routing change','parameter':param,'dropin_sha256':hashlib.sha256(body).hexdigest(),'backup':str(backup),'audit':report,'reboot_required':True,'IOMMU_policy_changed':False}
+        if not lines or any(shlex.split(l).count(param)!=1 or (identity_mode and shlex.split(l).count('iommu=pt')!=1) for l in lines):raise RuntimeError('Generated GRUB kernel entries did not preserve the exact policy token')
+        record={'schema':1,'status':'staged for reboot; no live driver/routing change','parameter':param,'dropin_sha256':hashlib.sha256(body).hexdigest(),'backup':str(backup),'audit':report,'reboot_required':True,'IOMMU_policy_changed':identity_mode}
         atomic(state,(json.dumps(record,indent=2)+'\n').encode(),0o600)
         return record
     except BaseException:
@@ -180,22 +183,37 @@ def rollback(config,state,grub,run=subprocess.run):
     return {'status':'next-boot policy removed; active boot unchanged','reboot_required':True}
 
 
+def restore_previous(config,state,grub,run=subprocess.run):
+    current=json.loads(state.read_text())
+    if not current.get('IOMMU_policy_changed'):raise RuntimeError('No identity-domain trial to revert')
+    if hashlib.sha256(config.read_bytes()).hexdigest()!=current['dropin_sha256']:raise RuntimeError('Managed trial file changed')
+    backup=Path(current['backup']);previous=(backup/'previous-dropin.cfg').read_bytes();previous_state=(backup/'previous-state.json').read_bytes()
+    if hashlib.sha256(previous).hexdigest()!=json.loads(previous_state)['dropin_sha256']:raise RuntimeError('Previous-policy backup hash mismatch')
+    old=config.read_bytes();oldstate=state.read_bytes();oldgrub=grub.read_bytes()
+    try:
+        atomic(config,previous);atomic(state,previous_state,0o600);run(['update-grub'],check=True);run(['grub-script-check',str(grub)],check=True)
+    except BaseException:
+        atomic(config,old);atomic(state,oldstate,0o600);atomic(grub,oldgrub,0o600);raise
+    return {'status':'prior ACS-only next-boot policy restored; active boot unchanged','reboot_required':True}
+
+
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('action',choices=['audit','install','verify','rollback']);parser.add_argument('--output',type=Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('action',choices=['audit','install','install-identity','verify','rollback','rollback-trial']);parser.add_argument('--output',type=Path);args=parser.parse_args()
     if os.geteuid()!=0:raise RuntimeError('Administrator PCI configuration access is required; run with sudo')
     installer_lock=open('/run/lock/local-llm-amd-p2p-support.lock','a')
     fcntl.flock(installer_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
     config=Path('/etc/default/grub.d/zz-local-llm-amd-p2p.cfg');state=Path('/var/lib/local-llm-amd-p2p/state.json');grub=Path('/boot/grub/grub.cfg')
-    if args.action=='rollback':result=rollback(config,state,grub)
+    if args.action=='rollback-trial':result=restore_previous(config,state,grub)
+    elif args.action=='rollback':result=rollback(config,state,grub)
     else:
         report=audit();result=report
-        if args.action=='install':
+        if args.action in ('install','install-identity'):
             root=Path(__file__).resolve().parents[1];lock=root/'hardware/generated/GPU-LOCK'
             if lock.exists():raise RuntimeError('An existing GPU reservation is active; preserve it')
             defaults=Path('/etc/default/grub').read_text()+'\n'+'\n'.join(p.read_text() for p in Path('/etc/default/grub.d').glob('*.cfg') if p!=config)
-            result=stage(report,config,state,grub,Path('/var/backups'),existing_args=defaults)
+            result=stage(report,config,state,grub,Path('/var/backups'),existing_args=defaults,identity_mode=args.action=='install-identity')
         elif args.action=='verify':
-            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=all(r['acs']['control']==0x11 for r in report['selected_bridges']) and not report.get('admission_errors');result={'active_parameter':active,'redirect_bits_clear':clear,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear else 'not active or register verification failed'}
+            record=json.loads(state.read_text());active=record['parameter'] in Path('/proc/cmdline').read_text().split();clear=all(r['acs']['control']==0x11 for r in report['selected_bridges']) and not report.get('admission_errors');identity_ok=not record.get('IOMMU_policy_changed') or ('iommu=pt' in Path('/proc/cmdline').read_text().split() and all(str(t).lower()=='identity' for t in report['gpu_iommu_domains']));result={'active_parameter':active,'redirect_bits_clear':clear,'identity_domain_requirement_met':identity_ok,'audit':report,'status':'routing policy verified; HIP/data correctness still required' if active and clear and identity_ok else 'not active or register verification failed'}
     output=json.dumps(result,indent=2)+'\n'
     if args.output:args.output.write_text(output)
     print(output)

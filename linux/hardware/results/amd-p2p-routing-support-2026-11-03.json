@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "corrected xx100x1 policy staged and hash/root0644 verified; corrected reboot and full peer qualification pending",
+  "status": "ACS11 active and HIP peers available, but direct reads fail; identity trial prepared",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -13,7 +13,7 @@
     "0x1d",
     "0x11"
   ],
-  "cpu_tests": 28,
+  "cpu_tests": 31,
   "live_PCI_writes": false,
   "IOMMU_policy_changed": false,
   "kernel_driver_firmware_replaced": false,
@@ -37,5 +37,13 @@
   "HIP_peer_capability_both_directions": true,
   "postboot_capability_cases": 3,
   "corrected_staging_pending": false,
-  "corrected_staging_verified": true
+  "corrected_staging_verified": true,
+  "corrected_boot_verified_from_kernel": true,
+  "local_integrity_passed_both_GPUs": true,
+  "remote_reads_correct": false,
+  "remote_read_failures_directions": 2,
+  "fine_grain_remote_read_correct": false,
+  "IPC_RCCL": "gated",
+  "identity_trial_prepared": true,
+  "identity_trial_staged": false
 }

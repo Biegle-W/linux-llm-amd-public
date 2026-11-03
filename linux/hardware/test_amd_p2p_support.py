@@ -9,7 +9,7 @@ class Tests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.config=self.root/'config';self.state=self.root/'state';self.grub=self.root/'grub';self.grub.write_text('original grub\n');self.r=report()
  def good(self,cmd,check):
-  if cmd[0]=='update-grub':self.grub.write_text("linux /vmlinuz root=UUID=test '"+m.parameter(self.r)+"'\n")
+  if cmd[0]=='update-grub':self.grub.write_text("linux /vmlinuz root=UUID=test '"+m.parameter(self.r)+"'"+(' iommu=pt' if 'iommu=pt' in self.config.read_text() else '')+"\n")
  def stage(self,run=None,**kw):return m.stage(self.r,self.config,self.state,self.grub,self.root,run=run or self.good,**kw)
  def test_exact_mask_and_scoped_paths(self):
   p=m.parameter(self.r);self.assertEqual(p.count('xx100x1@'),6);self.assertNotIn('iommu',p);self.assertNotIn('pcie_acs_override',p)
@@ -65,6 +65,13 @@ class Tests(unittest.TestCase):
   self.assertEqual(self.config.read_bytes(),before);self.assertEqual(self.state.read_bytes(),state);self.assertEqual(self.grub.read_bytes(),grub)
  def test_explicit_flags_restore_expected_control_from_zero_firmware(self):
   mask=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x!='x');value=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x=='1');self.assertEqual((0 & ~mask)|value,0x11)
+ def test_identity_trial_keeps_acs_and_stages_identity_token(self):
+  self.stage();d=self.stage(identity_mode=True);self.assertTrue(d['IOMMU_policy_changed']);self.assertIn('iommu=pt',self.config.read_text())
+ def test_identity_trial_rollback_restores_acs_only(self):
+  self.stage();old=self.config.read_bytes();self.stage(identity_mode=True);m.restore_previous(self.config,self.state,self.grub,run=self.good);self.assertEqual(self.config.read_bytes(),old)
+ def test_conflicting_iommu_trial_refused(self):
+  self.stage()
+  with self.assertRaises(RuntimeError):self.stage(identity_mode=True,existing_args='iommu=off')
  def test_existing_config_refused(self):
   self.config.write_text('unmanaged')
   with self.assertRaises(RuntimeError):self.stage()
