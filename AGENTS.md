@@ -1,5 +1,7 @@
 # Agent entry point
 
+**November 3 revised hardware plan:** ASUS TX B760M DDR5, Core i5-13600KF and 64 GB DDR5, with both RX 7900 XTX cards downstream of one active PCIe switch in the CPU-connected x16 slot. This is the next planned platform; the earlier 96 GB target remains a separate future scenario. Hardware is not yet installed/validated. Current profiles, RAM holds, host-transport fallback, guards and paused updater remain. [Confirmed plan and post-install admission](linux/hardware/ASUS-64GB-PCIE-SWITCH-PLAN-2026-11-03.md).
+
 **November 3 AMD primary display:** the first validated AMD inference card is now GNOME's preferred GPU; its DisplayPort cable connection is verified. The old Intel-primary/AMD-ignore rules are replaced. Nine CPU checks per checkout and six DRM-node rule dry runs pass; installed tags and root-owned rule are verified. Headless boot, input-triggered GUI, inference pins/guards and paused updater remain. The active session still has its old Intel renderer until a new graphical session; firmware boot-video selection is unchanged. [Policy, verification and firmware boundary](linux/hardware/AMD-PRIMARY-DISPLAY-2026-11-03.md).
 
 **November 3 system-drive cleanup:** unused environments, build payloads and package caches removed, reclaiming about 230.3 GB; another 21.1 GB of non-streaming H3 staged weights moved to SATA after full SHA-256 verification. Current/pinned engines, SDK/toolchain, kernel caches, model guards and paused updater remain. All 526,274 protected files/links and 18 critical fingerprints are unchanged; four CPU environments and 57 checks per checkout pass. [Cleanup, placement and verification](linux/hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
@@ -48,7 +50,7 @@
 
 **October 30 MES compatibility audit:** the workaround is absent from exact kernel source `7.0.0-42.42`; the six-file patch passes no-fuzz application, and both loaded MES versions are `0x86`. Offline source candidate, H3 inventory tools and P2P plan are prepared; no kernel build/install or GPU trial. [Audit and limits](linux/hardware/MES-SOURCE-AUDIT-2026-10-30.md).
 
-**Planned hardware:** owner expects 96 GB total RAM and a PEX88096 switch. These are future conditions; current RAM holds and transport remain. [Conditional roadmap](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
+**Planned hardware — revised November 3:** ASUS TX B760M DDR5 / 13600KF / 64 GB with both GPUs behind one active switch on the CPU x16 slot. The prior 96 GB target is a separate future scenario; installed capacity, current RAM holds and host transport remain unchanged. [Conditional roadmap](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
 
 **October 30 LCZ source review:** five topics checked; linked engine revisions are unchanged. Experimental MES work merits source compatibility review. No runtime changes. [Findings](linux/hardware/LCZ-UPDATE-REVIEW-2026-10-30.md).
 

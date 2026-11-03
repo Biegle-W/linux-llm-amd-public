@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 3 revised hardware plan:** ASUS TX B760M DDR5, Core i5-13600KF and 64 GB DDR5, with both RX 7900 XTX cards downstream of one active PCIe switch in the CPU-connected x16 slot. This is the next planned platform; the earlier 96 GB target remains a separate future scenario. Hardware is not yet installed/validated. Current profiles, RAM holds, host-transport fallback, guards and paused updater remain. [Confirmed plan and post-install admission](../hardware/ASUS-64GB-PCIE-SWITCH-PLAN-2026-11-03.md).
+
 **November 3 AMD primary display:** the first validated AMD inference card is now GNOME's preferred GPU; its DisplayPort cable connection is verified. The old Intel-primary/AMD-ignore rules are replaced. Nine CPU checks per checkout and six DRM-node rule dry runs pass; installed tags and root-owned rule are verified. Headless boot, input-triggered GUI, inference pins/guards and paused updater remain. The active session still has its old Intel renderer until a new graphical session; firmware boot-video selection is unchanged. [Policy, verification and firmware boundary](../hardware/AMD-PRIMARY-DISPLAY-2026-11-03.md).
 
 **November 3 system-drive cleanup:** unused environments, build payloads and package caches removed, reclaiming about 230.3 GB; another 21.1 GB of non-streaming H3 staged weights moved to SATA after full SHA-256 verification. Current/pinned engines, SDK/toolchain, kernel caches, model guards and paused updater remain. All 526,274 protected files/links and 18 critical fingerprints are unchanged; four CPU environments and 57 checks per checkout pass. [Cleanup, placement and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
@@ -52,7 +54,7 @@ Exact `7.0.0-42.42` source lacks the workaround; no-fuzz applicability and a sep
 
 ## Planned P2P and 96 GB — October 30
 
-The owner plans 96 GB total RAM (adding 64 GB) and a PEX88096 PCIe4 switch. Neither is treated as installed or qualified. Current holds, guards, selected profiles, services and schedules remain unchanged; no new trial/job. Saved 64 GB profiles require actual visible-memory and idle checks before restoration. [Conditional implementation order](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).
+The October 30 plan was 96 GB total RAM plus a PEX88096 switch. The November 3 next-platform plan supersedes the RAM/board/CPU assumption with ASUS TX B760M DDR5, 13600KF and 64 GB, with both GPUs behind one active switch on the CPU x16 slot. The earlier 96 GB scenario is separate future work; the complete switch board and installed platform remain unqualified. Current holds, guards, selected profiles, services and schedules remain unchanged; no new trial/job. Saved 64 GB profiles require actual visible-memory and idle checks before restoration. [Conditional implementation order](../hardware/P2P-96GB-ROADMAP-2026-10-30.md).
 
 ## LCZ source update review — October 30
 

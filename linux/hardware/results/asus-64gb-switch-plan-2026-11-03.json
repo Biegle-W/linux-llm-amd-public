@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-03",
+  "status": "owner-confirmed plan;not installed or qualified",
+  "planned_motherboard": "ASUS TX B760M DDR5;TX GAMING B760M WIFI reference;exact installed DMI to verify",
+  "planned_CPU": "Intel Core i5-13600KF",
+  "planned_RAM_GB": 64,
+  "planned_RAM_type": "DDR5",
+  "planned_GPU_topology": "CPU x16 slot -> one active transparent PCIe switch -> both RX7900XTX",
+  "motherboard_bifurcation_required": false,
+  "chipset_secondary_slot_used_for_planned_GPU_route": false,
+  "earlier_switch_candidate": "PEX88096;complete board/firmware to verify",
+  "earlier_96GB_plan": "separate conditional future scenario",
+  "current_platform_changed": false,
+  "holds_changed": false,
+  "host_transport_fallback_changed": false,
+  "updater_resumed": false,
+  "GPU_tests": 0,
+  "automatic_resume_or_schedule_created": false,
+  "active_jobs": [],
+  "owned_locks": []
+}
