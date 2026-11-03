@@ -31,7 +31,7 @@
   "BAR0_aperture_GiB_each": 32,
   "active_desktop_gpu": "0000:13:00.0",
   "planned_preferred_gpu": "0000:0b:00.0",
-  "display_rule_installation": "pending interactive sudo authentication",
+  "display_rule_installation": "installed; bytes/root ownership/mode and all four live AMD node tags verified",
   "cpu_display_checks": 9,
   "drm_dry_runs": 4,
   "udev_verify": "passed",
@@ -43,5 +43,6 @@
   "headless_default": "multi-user.target",
   "input_watcher": "enabled/active",
   "task_gpu_jobs": [],
-  "owned_gpu_locks": []
+  "owned_gpu_locks": [],
+  "installed_display_rule_verified": true
 }
