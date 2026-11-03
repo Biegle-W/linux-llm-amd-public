@@ -10,7 +10,7 @@
     "--dspark",
     "on",
     "--reserve-mib",
-    "8192",
+    "128",
     "--expert-profile",
     "/opt/local-llm/dsh/data/maya/deepseek-expert-profile.bin",
     "--cpu-threads",
@@ -68,5 +68,16 @@
     "reference_config_sha256": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
     "note": "Sanitized reference paths differ from measured workstation; prepare metadata and validate local binary/profile before loading.",
     "weights_removed": true
+  },
+  "startup_free_vram_gib": 0.125,
+  "worker_memory_limits": {
+    "memory.high": "max",
+    "memory.max": 65016582144,
+    "memory.swap.max": 36000755712
+  },
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "CPU resource-policy checks passed; GPU use unqualified",
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
   }
 }

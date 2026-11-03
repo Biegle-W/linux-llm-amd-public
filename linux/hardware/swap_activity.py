@@ -1,8 +1,8 @@
 """Allow loading/parked swap; guard inference churn, not SSD lifetime guarantees.
 
 Host swap counters measure system-wide I/O; they do not attribute it to workers.
-The current owner-requested policy caps sustained inference swap writes at
-128 MiB/s and combined reads+writes at 160 MiB/s over 30-second windows.
+The current owner-requested policy permits device-speed swap I/O without a
+software rate ceiling. Owned workers separately enforce SSD SMART/thermal health.
 Loading/parked swap remains allowed. PSI is advisory; SSD lifetime is not inferred.
 No sampling loop, process inspection, service changes, or dependencies.
 """
@@ -19,18 +19,19 @@ POLICY_NAME = 'loading-swap-v3'
 RATE_LIMIT_POLICY_NAME = 'loading-swap-v2'
 LEGACY_POLICY_NAME = 'low-churn-v1'
 BOUNDED_RATE_POLICY_NAME = 'loading-swap-v4'
-DEFAULT_POLICY_NAME = BOUNDED_RATE_POLICY_NAME
-MODERN_POLICIES = (POLICY_NAME, BOUNDED_RATE_POLICY_NAME)
+FULL_SPEED_POLICY_NAME = 'loading-swap-v5'
+DEFAULT_POLICY_NAME = FULL_SPEED_POLICY_NAME
+MODERN_POLICIES = (POLICY_NAME, BOUNDED_RATE_POLICY_NAME, FULL_SPEED_POLICY_NAME)
 USER_INFERENCE_WRITE_LIMIT_BYTES = 128 * 1024**2
 USER_INFERENCE_IO_LIMIT_BYTES = 160 * 1024**2
 
 def selected_policy():
-    value = os.environ.get('LOCAL_LLM_SWAP_POLICY', DEFAULT_POLICY_NAME)
+    value = os.environ.get('LOCAL_LLM_SWAP_POLICY', BOUNDED_RATE_POLICY_NAME if os.environ.get('LOCAL_LLM_LEGACY_SWAP_VALIDATION') == '1' else DEFAULT_POLICY_NAME)
     if value not in (*MODERN_POLICIES, RATE_LIMIT_POLICY_NAME, LEGACY_POLICY_NAME, 'bounded-64mib'):
         raise ValueError('Unknown inference swap policy')
     # Historical validation requires a second explicit opt-in. An old inherited
     # environment or frozen harness must not restore the superseded stop rules.
-    if value != BOUNDED_RATE_POLICY_NAME and os.environ.get('LOCAL_LLM_LEGACY_SWAP_VALIDATION') != '1':
+    if value != FULL_SPEED_POLICY_NAME and os.environ.get('LOCAL_LLM_LEGACY_SWAP_VALIDATION') != '1':
         return DEFAULT_POLICY_NAME
     return value
 
@@ -42,12 +43,14 @@ SWAPOUT_BUDGET_BYTES = 4 * 1024**3
 INFERENCE_SWAPOUT_RATE_LIMIT_BYTES = 1 * 1024**2
 INFERENCE_IO_RATE_LIMIT_BYTES = 8 * 1024**2
 RATE_WINDOW_SECONDS = 30
-MIN_AVAILABLE_BYTES = 2 * 1024**3
+MIN_AVAILABLE_BYTES = (2 if os.environ.get('LOCAL_LLM_LEGACY_RESOURCE_VALIDATION') == '1' else 1) * 1024**3
 MIN_PRESSURE_SAMPLES = 3
 MEMORY_FULL_PSI_AVG10_LIMIT = 10.0
 
 
 def _rate_limits(policy):
+    if policy == FULL_SPEED_POLICY_NAME:
+        return math.inf, math.inf
     if policy == BOUNDED_RATE_POLICY_NAME:
         return USER_INFERENCE_WRITE_LIMIT_BYTES, USER_INFERENCE_IO_LIMIT_BYTES
     return INFERENCE_SWAPOUT_RATE_LIMIT_BYTES, INFERENCE_IO_RATE_LIMIT_BYTES
@@ -125,6 +128,8 @@ class SwapActivity:
                 raise ValueError('write budget must be positive or None')
         self.write_budget = write_budget_bytes_per_second
         self.policy = selected_policy()
+        if self.policy == FULL_SPEED_POLICY_NAME:
+            self.write_budget = None
         if self.policy == BOUNDED_RATE_POLICY_NAME and self.write_budget is None:
             self.write_budget = USER_INFERENCE_WRITE_LIMIT_BYTES
         self.legacy = self.policy in (LEGACY_POLICY_NAME, 'bounded-64mib')
@@ -150,6 +155,9 @@ class SwapActivity:
                               progress_samples=0, measured_slowdown_windows=0,
                               confirmed_write_slowdown_windows=0,
                               last_confirmed_write_slowdown=None)
+        if self.policy == FULL_SPEED_POLICY_NAME:
+            self._data.update(software_rate_limit=False, storage_health_required=True,
+                              minimum_available_bytes=MIN_AVAILABLE_BYTES)
         if self.policy == BOUNDED_RATE_POLICY_NAME:
             self._data.update(inference_write_limit_bytes_per_second=USER_INFERENCE_WRITE_LIMIT_BYTES,
                               inference_io_limit_bytes_per_second=USER_INFERENCE_IO_LIMIT_BYTES,
@@ -428,6 +436,9 @@ def validate_summary(summary, require_inference=False):
                 errors.append(failure)
     if summary.get('policy') in MODERN_POLICIES:
         errors.extend(_validate_v3_evidence(summary))
+    if summary.get('policy') == FULL_SPEED_POLICY_NAME:
+        if summary.get('software_rate_limit') is not False or summary.get('storage_health_required') is not True:
+            errors.append('invalid_full_speed_health_policy')
     if summary.get('policy') == BOUNDED_RATE_POLICY_NAME:
         for field, expected in [('inference_write_limit_bytes_per_second', USER_INFERENCE_WRITE_LIMIT_BYTES),
                                 ('inference_io_limit_bytes_per_second', USER_INFERENCE_IO_LIMIT_BYTES),

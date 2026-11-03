@@ -1,4 +1,5 @@
 """Admit sealed Strata DeepSeek profiles without changing the retained Qwen engine."""
+import resource_policy
 import hashlib
 import json
 import os
@@ -38,7 +39,7 @@ def check_settings(cfg):
     def value(flag):
         return args[args.index(flag)+1] if flag in args else None
     if (value('--max-context')!='32768' or value('--cpu-threads')!='24'
-            or value('--tp')!='2' or value('--reserve-mib')!='8192'
+            or value('--tp')!='2' or value('--reserve-mib')!=('128' if resource_policy.active() else '8192')
             or value('--ssd-cache') not in ('0','24')):
         raise RuntimeError('Strata DeepSeek requires its validated 32K/24-thread/reserve/memory settings.')
     quant=cfg.get('installer',{}).get('quant')
@@ -49,8 +50,8 @@ def check_settings(cfg):
     if (env.get('STRATA_DS4_PROMPT_SKIP')!='0' or env.get('DS4_YOCO')!='0'
             or env.get('STRATA_DS4_SLOT_KEEP')!='0' or env.get('STRATA_DS4_DISK_SKIP_W','0')!='0'):
         raise RuntimeError('Prompt skipping and unvalidated slot reuse must remain disabled.')
-    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None or cfg.get('startup_free_vram_gib')!=6:
-        raise RuntimeError('Strata DeepSeek requires phase-aware swap and 6GiB actual startup headroom.')
+    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None or cfg.get('startup_free_vram_gib')!=(0.125 if resource_policy.active() else 6):
+        raise RuntimeError('Strata DeepSeek requires phase-aware swap and active-policy startup headroom.')
 
 
 def require_profile(cfg,before_handover=False,*,require_validated=True):

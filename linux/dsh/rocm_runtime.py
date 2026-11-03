@@ -1,4 +1,5 @@
 """Validate the isolated AMD runtime before switching away from another backend."""
+import resource_policy
 from pathlib import Path
 import subprocess
 import time
@@ -22,6 +23,8 @@ def require_rocm(kind):
 
 
 def require_rocm_headroom(min_free_gib=21.0):
+    if resource_policy.active():
+        min_free_gib = resource_policy.VRAM_RESERVE_BYTES / 1024**3
     devices = amd_devices()
     for _ in range(50):
         free = min(int((d / 'mem_info_vram_total').read_text()) - int((d / 'mem_info_vram_used').read_text()) for d in devices)

@@ -26,7 +26,7 @@
     "--kv-resident",
     "32768",
     "--vram-reserve-mib",
-    "7168",
+    "128",
     "--conversation-cache-mib",
     "0",
     "--conversation-cache-slots",
@@ -49,7 +49,7 @@
     "mmap",
     "--trim-stage-weights",
     "--vram-reserve-later-mib",
-    "8192"
+    "128"
   ],
   "cwd": "/opt/local-llm/strata",
   "tokenizer": "/opt/local-llm/models/streaming/Strata/packs/iq3_xxs/tokenizer",
@@ -104,9 +104,9 @@
   },
   "host_ram_profile": "32gb-v1",
   "worker_memory_limits": {
-    "memory.high": 21474836480,
-    "memory.max": 23622320128,
-    "memory.swap.max": "max"
+    "memory.high": "max",
+    "memory.max": 65016582144,
+    "memory.swap.max": 36000755712
   },
   "local_validation": {
     "status": "pending_native_GGUF_backing_check_after_RAM",
@@ -127,5 +127,11 @@
     "latest_release_source_checked": "v0.2.9 / c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
     "runtime_upgrade_activated": false,
     "post_RAM_short_harness_check_required": true
+  },
+  "startup_free_vram_gib": 0.125,
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "CPU resource-policy checks passed; GPU use unqualified",
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
   }
 }

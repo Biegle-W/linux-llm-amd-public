@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 from amd_device import amd_devices
 from moe_memory import host_memory
+import resource_policy
 from streaming_memory import check_32gb
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -35,7 +36,7 @@ def memory_blockers(total, available, minimum=29, budget=8, *, check_available=T
     problems = []
     if total < minimum * GIB:
         problems.append(f'Strata needs {minimum:g} GiB OS-visible RAM for this profile; found {total/GIB:.1f}.')
-    required = budget + kv_gib + 6
+    required = budget + kv_gib + (1 if resource_policy.active() else 6)
     if check_available and available < required * GIB:
         problems.append(f'Strata needs {required:.2f} GiB available RAM before loading '
                         f'({budget:g} GiB expert budget, {kv_gib:.2f} GiB host KV and 6 GiB headroom); '
@@ -53,8 +54,8 @@ def check_config(cfg, total, available, *, check_available=True):
     args = cfg['args']
     reserve = int(args[args.index('--vram-reserve-mib') + 1]) if '--vram-reserve-mib' in args else 0
     later = int(args[args.index('--vram-reserve-later-mib') + 1]) if '--vram-reserve-later-mib' in args else reserve
-    if min(reserve, later) < 6144:
-        raise RuntimeError('Strata must reserve at least 6 GiB on each desktop/inference GPU.')
+    if min(reserve, later) < (128 if resource_policy.active() else 6144):
+        raise RuntimeError('Strata per-card reserve is below the active resource policy.')
     if '--resident-cpu-experts' not in args or '--resident-budget-gib' not in args:
         raise RuntimeError('Strata requires bounded CPU expert backing plus GPU expert caching.')
     budget = float(args[args.index('--resident-budget-gib') + 1])

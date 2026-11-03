@@ -1,8 +1,9 @@
 """Protect desktop GPU headroom; never signal unrelated processes."""
 from amd_device import amd_devices
+import resource_policy
 
 GIB = 1024**3
-STARTUP_FREE_VRAM_GIB = 5
+STARTUP_FREE_VRAM_GIB = resource_policy.VRAM_RESERVE_BYTES / GIB if resource_policy.active() else 5
 
 
 def startup_vram_blocker(readings):
@@ -34,6 +35,10 @@ class MemoryGuard:
         self.low_vram = self.low_ram = self.missing = 0
 
     def check(self, available, swap, spill, readings):
+        if resource_policy.active() and readings is not None:
+            if len(readings) != 2:
+                return 'Both AMD cards must have valid VRAM telemetry'
+            return resource_policy.headroom_failure(available, readings)
         if readings is None:
             self.missing += 1
             if self.missing >= 3:

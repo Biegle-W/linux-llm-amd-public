@@ -1,4 +1,5 @@
 """Select the explicitly activated llama runtime before backend handover."""
+import resource_policy
 import json
 import os
 import re
@@ -136,12 +137,12 @@ def launch_spec(backend=None, model=None):
 
 def require_amd_headroom():
     devices = amd_devices()
-    required = 18 * 1024**3
+    required = resource_policy.VRAM_RESERVE_BYTES if resource_policy.active() else 18 * 1024**3
     for _ in range(50):
         free = [int((d / 'mem_info_vram_total').read_text()) -
                 int((d / 'mem_info_vram_used').read_text()) for d in devices]
         if min(free) >= required:
             return
         time.sleep(0.2)
-    raise RuntimeError('Dual-AMD llama.cpp requires 18 GiB free VRAM on each card. '
+    raise RuntimeError('Dual-AMD llama.cpp lacks the active-policy per-card VRAM headroom. '
                        'No unrelated application was stopped.')

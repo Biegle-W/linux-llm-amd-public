@@ -10,7 +10,7 @@
     "--dspark",
     "on",
     "--reserve-mib",
-    "8192",
+    "128",
     "--expert-profile",
     "/opt/local-llm/dsh/data/strata-dsv41/deepseek-xs-expert-profile.bin",
     "--cpu-threads",
@@ -48,7 +48,7 @@
   "idle_unload_s": 0,
   "open_browser": false,
   "worker_swap_max_bytes": null,
-  "startup_free_vram_gib": 6,
+  "startup_free_vram_gib": 0.125,
   "mcp_servers": {},
   "installer": {
     "quant": "Maya-XS",
@@ -70,5 +70,15 @@
     "reference_config_sha256": "e9fb8ac725625093ca3533ccf58b73e0b438376059cabac0c2d238492a58398d",
     "note": "Sanitized example paths; validate the local binary, pack and profile before loading.",
     "weights_removed": true
+  },
+  "worker_memory_limits": {
+    "memory.high": "max",
+    "memory.max": 65016582144,
+    "memory.swap.max": 36000755712
+  },
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "CPU resource-policy checks passed; GPU use unqualified",
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
   }
 }

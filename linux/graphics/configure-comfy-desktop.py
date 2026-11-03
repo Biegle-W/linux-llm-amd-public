@@ -40,7 +40,7 @@ def main():
     old = next((r for r in records if r.get("id") == INSTALL_ID), {})
     args = ["--cuda-device", "all", "--default-device", "0", "--listen", "127.0.0.1",
             "--port", "8188", "--extra-model-paths-config", str(ROOT / "graphics/extra_model_paths.yaml"),
-            "--reserve-vram", "2", "--disable-pinned-memory", "--disable-async-offload",
+            "--reserve-vram", "0.125", "--disable-pinned-memory", "--disable-async-offload",
             "--disable-dynamic-vram", "--cache-none", "--use-pytorch-cross-attention",
             "--disable-partner-nodes"]
     record = {**old, "id": INSTALL_ID, "name": "Local dual-AMD — existing models and workflows",

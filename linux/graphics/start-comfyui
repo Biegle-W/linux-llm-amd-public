@@ -2,6 +2,10 @@
 set -euo pipefail
 
 repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+if [[ -e "$repo/hardware/generated/GPU-LOCK" ]]; then
+    printf 'GPUs are reserved by an existing task/fault hold; ComfyUI was not started.\n' >&2
+    exit 1
+fi
 runtime=${COMFYUI_DIR:-"$repo/runtime/comfyui"}
 paths=${COMFYUI_MODEL_PATHS:-"$repo/graphics/extra_model_paths.yaml"}
 state="$repo/graphics/generated"
@@ -22,12 +26,11 @@ export OMP_NUM_THREADS=8
 export PYTHONUNBUFFERED=1
 
 python3 "$repo/graphics/install-device-loaders.py" --runtime "$runtime"
-"$runtime/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
 cd -- "$runtime"
-"$runtime/.venv/bin/python" main.py \
+"$runtime/.venv/bin/python" "$repo/graphics/guarded_comfy.py" "$runtime/.venv/bin/python" main.py \
     --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188 \
     --extra-model-paths-config "$paths" \
     --output-directory "$repo/graphics/outputs" \
-    --reserve-vram 2 --disable-pinned-memory --disable-async-offload \
+    --reserve-vram 0.125 --disable-pinned-memory --disable-async-offload \
     --disable-dynamic-vram --cache-none --use-pytorch-cross-attention \
     --disable-partner-nodes "$@" 2>&1 | tee "$state/comfyui-$(date +%Y%m%d-%H%M%S).log"

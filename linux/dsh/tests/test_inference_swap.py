@@ -772,6 +772,8 @@ class RouterIntegrationTests(unittest.TestCase):
                     ensure = lambda: module.ensure_worker.__wrapped__(model)
                     stop = module.stop_worker
                     if name in ('vllm', 'sglang'):
+                        if name == 'sglang':
+                            module.ensure_sglang_models = Mock()
                         module.require_rocm_headroom = Mock()
                         module.get_worker = Mock(return_value={'data':[{'max_model_len':cfg['context']}],
                                                                'max_total_num_tokens':cfg['context']})

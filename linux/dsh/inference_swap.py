@@ -1,7 +1,7 @@
 """Low-churn watch for one explicitly owned worker; never a global process guard.
 
-Loading/parked swap is allowed. The owner-requested default uses 30-second
-inference ceilings: 128 MiB/s swap writes and 160 MiB/s combined reads+writes.
+Loading/parked swap is allowed. The owner-requested default permits device-speed swap I/O, with
+SSD SMART/live-temperature checks and 1 GiB RAM / 128 MiB per-card headroom.
 Pressure remains advisory; historical v3 retains its matched-slowdown semantics.
 Host I/O is system-wide telemetry, not worker attribution or SSD damage evidence.
 """
@@ -17,6 +17,8 @@ import time
 import uuid
 import json
 from contextlib import contextmanager
+import resource_policy
+from storage_health import StorageHealthMonitor
 
 
 class OwnedScope:
@@ -141,6 +143,19 @@ def spawn_owned(args, *, expected_memory_limits=None, **kwargs):
             raise RuntimeError('Unsupported owned-worker scope options')
     if not command or kwargs.get('shell') or 'executable' in kwargs or 'preexec_fn' in kwargs:
         raise RuntimeError('Unsupported owned-worker spawn; explicit argv required')
+    if resource_policy.active():
+        # The owner's current policy supersedes profile-era RAM/swap ceilings.
+        kept = []
+        while properties:
+            prop = properties.pop(0)
+            if prop in ('-p', '--property'):
+                value = properties.pop(0)
+                if not value.startswith(('MemoryHigh=', 'MemoryMax=', 'MemorySwapMax=')):
+                    kept.extend((prop, value))
+            elif not prop.startswith(('--property=MemoryHigh=', '--property=MemoryMax=', '--property=MemorySwapMax=')):
+                kept.append(prop)
+        expected_memory_limits = resource_policy.scope_limits()
+        properties = kept + resource_policy.properties(expected_memory_limits)
     unit = 'dsh-worker-' + uuid.uuid4().hex + '.scope'
     read_fd, write_fd = os.pipe()
     scope = proc = None
@@ -242,11 +257,14 @@ class OwnedWorkerWatch:
     owner: Process | OwnedScope
 
     def __init__(self, proc, on_fault, *, host_reader=read_host_activity,
-                 memory_reader, interval=.5, write_budget_bytes_per_second=None):
+                 memory_reader, interval=.5, write_budget_bytes_per_second=None,
+                 storage_monitor=None, headroom_reader=None):
         self.proc = proc
         self.on_fault = on_fault
         self.host_reader = host_reader
         self.memory_reader = memory_reader
+        self.storage_monitor = storage_monitor
+        self.headroom_reader = headroom_reader
         self.interval = interval
         self.activity = SwapActivity(write_budget_bytes_per_second=write_budget_bytes_per_second)
         self.phase = 'loading'
@@ -298,7 +316,14 @@ class OwnedWorkerWatch:
                         'explicit_eviction_clients', 'legacy_fallback_clients', 'requested_vram_bytes',
                         'resident_vram_bytes', 'requested_nonresident_vram_bytes', 'explicit_evicted_vram_bytes')
                         if type(stats.get(key)) is int and stats[key] >= 0}
-                self.activity.observe(self.host_reader(), self.phase, reading['swap'],
+                host = self.host_reader()
+                if self.storage_monitor is not None:
+                    self.storage_monitor.check()
+                if self.headroom_reader is not None:
+                    reason = resource_policy.headroom_failure(host['available_bytes'], self.headroom_reader())
+                    if reason:
+                        failures.append(reason)
+                self.activity.observe(host, self.phase, reading['swap'],
                                       progress=reading.get('progress'))
                 failures.extend(self.activity.failures())
                 new = set(self.activity.summary().get('advisories', [])) - self.reported_advisories
@@ -342,6 +367,12 @@ class WorkerSwapGuard:
         self.memory_reader = memory_reader
         self.terminator = terminator
         self.write_budget = write_budget_bytes_per_second
+        self.storage_monitor = StorageHealthMonitor() if resource_policy.active() else None
+        if resource_policy.active():
+            from strata_memory import vram_snapshot
+            self.headroom_reader = vram_snapshot
+        else:
+            self.headroom_reader = None
         self.lock = threading.RLock()
         self.watch = None
         self.fault = None
@@ -356,6 +387,8 @@ class WorkerSwapGuard:
             self.check()
             if self.watch is not None:
                 raise RuntimeError('Previous owned-worker watch must be stopped before switching')
+            if self.storage_monitor is not None:
+                self.storage_monitor.check()
             # Baseline before Popen: record loading writes without a fixed byte cap.
             try:
                 baseline = self.host_reader()
@@ -373,7 +406,8 @@ class WorkerSwapGuard:
                 raise RuntimeError('Low-churn guard: ' + self.fault + '; router restart required') from error
             watch = OwnedWorkerWatch(proc, self._violation, host_reader=self.host_reader,
                                      memory_reader=lambda: self.memory_reader(owner),
-                                     write_budget_bytes_per_second=self.write_budget)
+                                     write_budget_bytes_per_second=self.write_budget,
+                                     storage_monitor=self.storage_monitor, headroom_reader=self.headroom_reader)
             self.watch = watch
             watch.owner = owner
             watch.activity = activity

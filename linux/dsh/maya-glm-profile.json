@@ -14,9 +14,9 @@
     "--expert-profile",
     "/opt/local-llm/dsh/data/maya/glm-expert-profile.bin",
     "--vram-reserve-mib",
-    "8192",
+    "128",
     "--vram-reserve-later-mib",
-    "8192"
+    "128"
   ],
   "cwd": "/opt/local-llm/maya/upstream",
   "tokenizer": "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer",
@@ -36,13 +36,13 @@
   "port": 30031,
   "backend": "hip",
   "env": {
-    "MAYA_GLM_RESERVE_MB": "8192",
-    "MAYA_GLM_RAM_HEADROOM_GB": "12",
+    "MAYA_GLM_RESERVE_MB": "128",
+    "MAYA_GLM_RAM_HEADROOM_GB": "1",
     "MAYA_GLM_PREFILL_SUB": "1024",
     "MAYA_GLM_PREFILL_MB": "4096",
     "MAYA_HIPBLASLT_TUNING": "/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100202.txt:/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100500.txt",
     "MAYA_GLM_RAM_GB": "8",
-    "MAYA_GLM_RESERVE_LATER_MB": "8192",
+    "MAYA_GLM_RESERVE_LATER_MB": "128",
     "MAYA_GLM_PREFILL_FUSED": "0"
   },
   "host": "127.0.0.1",
@@ -77,8 +77,14 @@
   },
   "host_ram_profile": "32gb-v1",
   "worker_memory_limits": {
-    "memory.high": 19327352832,
-    "memory.max": 21474836480,
-    "memory.swap.max": "max"
+    "memory.high": "max",
+    "memory.max": 65016582144,
+    "memory.swap.max": 36000755712
+  },
+  "startup_free_vram_gib": 0.125,
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "CPU resource-policy checks passed; GPU use unqualified",
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
   }
 }
