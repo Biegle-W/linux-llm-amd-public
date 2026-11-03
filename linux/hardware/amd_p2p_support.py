@@ -81,6 +81,10 @@ def audit(pci_root=Path('/sys/bus/pci/devices')):
         data=(p/'config').read_bytes();row={**identity(p),'pcie_type':pcie_type(data),'acs':acs(data),'selector':path_selector(p)};rows.append(row)
     selected=[r for r in rows if r['vendor']=='0x1000' and r['device']=='0xc010' and r['pcie_type']==6]
     if len(selected)!=4:raise RuntimeError('Expected exactly four Broadcom downstream bridges on the selected paths')
+    internal_ids={p.resolve().parent.name for p in gpus}
+    internal=[r for r in rows if r['pci'] in internal_ids and r['vendor']=='0x1002' and r['device']=='0x1479' and r['pcie_type']==6]
+    if len(internal)!=2:raise RuntimeError('Expected one AMD 1479 downstream parent directly above each GPU')
+    selected=selected+internal
     selected_ids={r['pci'] for r in selected}
     errors=[]
     for row in rows:
@@ -97,11 +101,11 @@ def audit(pci_root=Path('/sys/bus/pci/devices')):
 
 def parameter(report):
     selected=report['selected_bridges']
-    if len(selected)!=4:raise RuntimeError('Refusing broad or incomplete bridge selection')
+    if len(selected)!=6:raise RuntimeError('Refusing broad or incomplete six-bridge selection')
     selectors=[r['selector'] for r in selected]
     for s in selectors:
         if not re.fullmatch(r'[0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\.[0-7](?:/[0-9a-f]{2}\.[0-7])+',s):raise RuntimeError('Unsafe path selector')
-    if len(set(selectors))!=4:raise RuntimeError('Duplicate bridge selectors')
+    if len(set(selectors))!=6:raise RuntimeError('Duplicate bridge selectors')
     return 'pci=config_acs='+';'.join(FLAGS+'@'+s for s in selectors)
 
 

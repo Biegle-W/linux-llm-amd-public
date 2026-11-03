@@ -1,6 +1,6 @@
 # New PCIe switch: HIP peer access check — November 3, 2026
 
-**Owner-requested repair preparation:** [scoped AMD boot-routing support](AMD-P2P-ROUTING-SUPPORT-2026-11-03.md) passes 23 CPU checks; administrator staging/reboot and actual P2P qualification remain pending.
+**Owner-requested repair preparation:** [scoped AMD boot-routing support](AMD-P2P-ROUTING-SUPPORT-2026-11-03.md) passes 25 CPU checks; administrator staging/reboot and actual P2P qualification remain pending.
 
 **Result: direct P2P is not available in the current configuration.** Both RX 7900 XTX cards are below the installed, owner-confirmed Broadcom/PLX PEX88096 switch fabric on the ASUS TX GAMING B760M WIFI / i5-13600KF host, but HIP reports no peer access in either direction. This is a tested capability failure, not a bandwidth measurement or a verdict that the switch hardware cannot support P2P.
 
@@ -33,7 +33,7 @@ The [November 1 pair-only post-reboot verification](https://github.com/Biegle-W/
 | Setting | Working NVIDIA record | Current AMD observation |
 |---|---|---|
 | Switch | PEX88096, switched pair | Owner-confirmed same PEX88096; both AMD cards share its ancestry |
-| Scoped ACS boot policy | Active; selected downstream controls 0x1d → 0x11 | `local-llm-acs-pair.service` is not installed; actual ACS controls await privileged read |
+| Scoped ACS boot policy | Active; selected downstream controls 0x1d → 0x11 | `local-llm-acs-pair.service` is not installed; privileged audit confirms ACS 0x1d on four Broadcom and two AMD 1479 downstream bridges |
 | IOMMU domains | Identity | Both GPU groups report **DMA-FQ** (translated) |
 | Driver peer handling | Qualified NVIDIA 615.71.09 dynamic BAR1 candidate | Current amdgpu/HIP rejects peer access |
 | Correctness | Bidirectional seeded remote reads/writes passed | Direct stages blocked by false HIP capability |
@@ -41,3 +41,5 @@ The [November 1 pair-only post-reboot verification](https://github.com/Biegle-W/
 This evidence supports the owner's working-switch history and makes **missing switch ACS policy a concrete leading hypothesis**, with a separate IOMMU-domain difference to assess. It does not prove which current setting causes AMD's rejection. Inspect the current switch controls before adapting only the relevant routing policy; do not copy NVIDIA module patches, old PCI addresses, guards or schedules. This repository comparison changes no ACS/IOMMU/firmware/driver setting and performs no new GPU test. The NVIDIA repositories were read only.
 
 [Curated observations and guard minima](results/pcie-switch-p2p-check-2026-11-03.json).
+
+**Privileged audit update:** request/completion redirection is enabled (ACS 0x1d) on four Broadcom ports and both AMD 1479 downstream parents (0a:00.0 / 12:00.0). These additional AMD internal bridges explain why the NVIDIA four-bridge template was insufficient. The scoped six-bridge boot correction is prepared; post-reboot peer qualification is still required.

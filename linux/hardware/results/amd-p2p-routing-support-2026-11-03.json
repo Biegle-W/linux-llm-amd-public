@@ -1,11 +1,11 @@
 {
   "date": "2026-11-03",
-  "status": "first installation refused additional redirecting bridge before staging; read-only audit pending",
+  "status": "six-bridge audited repair prepared; administrator staging and reboot pending",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
   "mechanism": "kernel pci=config_acs before amdgpu initialization",
-  "selected_downstream_bridges": 4,
+  "selected_downstream_bridges": 6,
   "acs_mask": "0x0c",
   "acs_flags": "xxx00xx",
   "selectors": "hierarchical paths; no vendor-wide match",
@@ -13,7 +13,7 @@
     "0x1d",
     "0x11"
   ],
-  "cpu_tests": 23,
+  "cpu_tests": 25,
   "live_PCI_writes": false,
   "IOMMU_policy_changed": false,
   "kernel_driver_firmware_replaced": false,
@@ -23,5 +23,8 @@
   "updater_resumed": false,
   "reboot_performed": false,
   "p2p_fixed_or_qualified": false,
-  "boot_policy_staged": false
+  "boot_policy_staged": false,
+  "selected_broadcom_bridges": 4,
+  "selected_amd_1479_parents": 2,
+  "observed_acs_controls": "0x1d on all six path downstream bridges"
 }

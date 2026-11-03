@@ -3,7 +3,7 @@ from pathlib import Path
 s=importlib.util.spec_from_file_location('support',Path(__file__).with_name('amd_p2p_support.py'));m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 
 def report():
- return {'selected_bridges':[{'selector':x} for x in ['0000:00:01.0/00.0/04.0','0000:00:01.0/00.0/04.0/00.0/00.0','0000:00:01.0/00.0/08.0','0000:00:01.0/00.0/08.0/00.0/00.0']],'request_completion_redirect_present':True}
+ return {'selected_bridges':[{'selector':x} for x in ['0000:00:01.0/00.0/04.0','0000:00:01.0/00.0/04.0/00.0/00.0','0000:00:01.0/00.0/08.0','0000:00:01.0/00.0/08.0/00.0/00.0','0000:00:01.0/00.0/04.0/00.0/00.0/00.0/00.0','0000:00:01.0/00.0/08.0/00.0/00.0/00.0/00.0']],'request_completion_redirect_present':True}
 
 class Tests(unittest.TestCase):
  def setUp(self):
@@ -12,7 +12,7 @@ class Tests(unittest.TestCase):
   if cmd[0]=='update-grub':self.grub.write_text("linux /vmlinuz root=UUID=test '"+m.parameter(self.r)+"'\n")
  def stage(self,run=None,**kw):return m.stage(self.r,self.config,self.state,self.grub,self.root,run=run or self.good,**kw)
  def test_exact_mask_and_scoped_paths(self):
-  p=m.parameter(self.r);self.assertEqual(p.count('xxx00xx@'),4);self.assertNotIn('iommu',p);self.assertNotIn('pcie_acs_override',p)
+  p=m.parameter(self.r);self.assertEqual(p.count('xxx00xx@'),6);self.assertNotIn('iommu',p);self.assertNotIn('pcie_acs_override',p)
   mask=sum(1<<i for i,x in enumerate(m.FLAGS[::-1]) if x!='x');self.assertEqual(mask,0x0c)
  def test_grub_shell_and_grub_parser_quoting(self):
   f=self.root/'cfg';param=m.parameter(self.r);f.write_text(m.dropin(param));v=subprocess.check_output(['sh','-c','GRUB_CMDLINE_LINUX="quiet splash"; . "$1"; printf "%s" "$GRUB_CMDLINE_LINUX"','sh',str(f)],text=True)
@@ -83,24 +83,34 @@ class TopologyTests(unittest.TestCase):
   for ids in [('0000:02:04.0','0000:07:00.0','0000:08:00.0','0000:09:00.0','0000:0a:00.0','0000:0b:00.0'),('0000:02:08.0','0000:0f:00.0','0000:10:00.0','0000:11:00.0','0000:12:00.0','0000:13:00.0')]:
    parent=common
    for i,bdf in enumerate(ids):
-    parent=self.device(parent,bdf,'0x1000' if i<3 else '0x1002',6 if i in (0,2,4) else 5 if i!=5 else 0,acs_control=0x1d if i in (0,2) else None,gpu=i==5)
+    parent=self.device(parent,bdf,'0x1000' if i<3 else '0x1002',6 if i in (0,2,4) else 5 if i!=5 else 0,acs_control=0x1d if i in (0,2,4) else None,gpu=i==5)
  def device(self,parent,bdf,vendor,ptype,acs_control=None,gpu=False):
   p=parent/bdf;p.mkdir();self.nodes[bdf]=p;(self.pci/bdf).symlink_to(p,target_is_directory=True)
-  for k,v in {'vendor':vendor,'device':'0x744c' if gpu else '0xc010' if vendor=='0x1000' else '0x1478','class':'0x030000' if gpu else '0x060400'}.items():(p/k).write_text(v)
+  for k,v in {'vendor':vendor,'device':'0x744c' if gpu else '0xc010' if vendor=='0x1000' else ('0x1479' if ptype==6 else '0x1478'),'class':'0x030000' if gpu else '0x060400'}.items():(p/k).write_text(v)
   b=bytearray(4096);b[0x34]=0x40;b[0x40]=0x10;struct.pack_into('<H',b,0x42,ptype<<4)
   if acs_control is not None:struct.pack_into('<IHH',b,0x100,0x0001000d,0x7f,acs_control)
   (p/'config').write_bytes(b)
   if gpu:(p/'driver').symlink_to(self.driver);(p/'mem_info_vram_total').write_text(str(24*m.GIB))
   return p
  def test_audit_selects_only_four_relevant_broadcom_downstream(self):
-  r=m.audit(self.pci);self.assertEqual([x['pci'] for x in r['selected_bridges']],['0000:02:04.0','0000:08:00.0','0000:02:08.0','0000:10:00.0']);self.assertTrue(r['request_completion_redirect_present']);self.assertEqual(r['common_switch'],'0000:01:00.0');self.assertNotIn('0000:00:01.0',[x['pci'] for x in r['bridges']])
+  r=m.audit(self.pci);self.assertEqual([x['pci'] for x in r['selected_bridges']],['0000:02:04.0','0000:08:00.0','0000:02:08.0','0000:10:00.0','0000:0a:00.0','0000:12:00.0']);self.assertTrue(r['request_completion_redirect_present']);self.assertEqual(r['common_switch'],'0000:01:00.0');self.assertNotIn('0000:00:01.0',[x['pci'] for x in r['bridges']])
  def test_full_selector_ignores_changing_secondary_bus_numbers(self):
   r=m.audit(self.pci);self.assertEqual(r['selected_bridges'][1]['selector'],'0000:00:01.0/00.0/04.0/00.0/00.0')
- def test_redirect_on_amd_internal_bridge_is_not_broadly_cleared(self):
-  p=self.nodes['0000:0a:00.0']/'config';b=bytearray(p.read_bytes());struct.pack_into('<IHH',b,0x100,0x0001000d,0x7f,0x1d);p.write_bytes(b)
-  r=m.audit(self.pci);self.assertTrue(any('0000:0a:00.0' in e for e in r['admission_errors']))
+ def test_unexpected_redirecting_upstream_bridge_is_refused(self):
+  p=self.nodes['0000:09:00.0']/'config';b=bytearray(p.read_bytes());struct.pack_into('<IHH',b,0x100,0x0001000d,0x7f,0x1d);p.write_bytes(b)
+  r=m.audit(self.pci);self.assertTrue(any('0000:09:00.0' in e for e in r['admission_errors']))
  def test_unexpected_control_refuses_installation(self):
   p=self.nodes['0000:08:00.0']/'config';b=bytearray(p.read_bytes());struct.pack_into('<H',b,0x106,0x7f);p.write_bytes(b)
   r=m.audit(self.pci);self.assertTrue(any('Unexpected ACS' in e for e in r['admission_errors']))
+
+class InternalIdentityTests(unittest.TestCase):
+ setUp=TopologyTests.setUp
+ device=TopologyTests.device
+ def test_missing_expected_amd_parent_refused(self):
+  (self.nodes['0000:0a:00.0']/'device').write_text('0x9999')
+  with self.assertRaisesRegex(RuntimeError,'AMD 1479'):m.audit(self.pci)
+ def test_internal_controls_preserve_other_bits(self):
+  r=m.audit(self.pci);self.assertEqual(len(r['selected_bridges']),6);self.assertFalse(r['admission_errors'])
+  for row in r['selected_bridges']:self.assertEqual(row['acs']['control'] & ~0x0c,0x11)
 
 if __name__=='__main__':unittest.main()
