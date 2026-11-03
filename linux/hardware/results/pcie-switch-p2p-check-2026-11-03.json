@@ -1,0 +1,142 @@
+{
+  "date": "2026-11-03",
+  "status": "HIP peer access unavailable in both directions; later direct tests blocked",
+  "platform": {
+    "cpu": "i5-13600KF",
+    "board": "ASUS TX GAMING B760M WIFI",
+    "kernel": "7.0.0-42-generic",
+    "memtotal_KiB": 32084672,
+    "switch": "Broadcom PEX880xx Gen4 fabric",
+    "common_upstream": "0000:01:00.0",
+    "gpu_pci": [
+      "0000:0b:00.0",
+      "0000:13:00.0"
+    ]
+  },
+  "amdgpu_pcie_p2p": "Y",
+  "kernel_p2p_config": [
+    "CONFIG_PCI_P2PDMA=y",
+    "CONFIG_HSA_AMD_P2P=y",
+    "CONFIG_DMABUF_MOVE_NOTIFY=y"
+  ],
+  "capability_cases": [
+    {
+      "name": "default",
+      "environment": {},
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_pcie",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_no_sdma",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1",
+        "HSA_ENABLE_SDMA": "0"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": false
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": false
+        }
+      ]
+    }
+  ],
+  "peer_enable": {
+    "pairs": [
+      {
+        "source": 0,
+        "source_pci": "0000:0b:00.0",
+        "target": 1,
+        "capability_status": 0,
+        "can_access": false,
+        "enable_status": 101,
+        "enable_name": "hipErrorInvalidDevice",
+        "enable_message": "invalid device ordinal"
+      },
+      {
+        "source": 1,
+        "source_pci": "0000:13:00.0",
+        "target": 0,
+        "capability_status": 0,
+        "can_access": false,
+        "enable_status": 101,
+        "enable_name": "hipErrorInvalidDevice",
+        "enable_message": "invalid device ordinal"
+      }
+    ],
+    "gpu_buffers_allocated": false,
+    "direct_tests_admitted": false
+  },
+  "kfd_peer_links_between_GPUs": 0,
+  "kernel_rejection_both_directions": true,
+  "direct_copy_data_integrity": "not attempted: peer capability prerequisite failed",
+  "direct_kernel_read_write": "not attempted: peer capability prerequisite failed",
+  "hip_ipc": "not attempted: peer capability prerequisite failed",
+  "rccl_p2p": "not attempted: guarded peer qualification prerequisite failed",
+  "new_bandwidth_or_application_speed_result": false,
+  "ACS_routing": "privileged capability dump pending; current non-root lspci cannot read extended capabilities",
+  "iommu_domain": "Translated",
+  "guarded_diagnostics": {
+    "completed_stages": 2,
+    "sampling_errors": 0,
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "minimum_available_bytes": 24961810432,
+    "minimum_free_vram_bytes": [
+      25724956672,
+      24726941696
+    ],
+    "all_owned_processes_exited": true,
+    "all_reservations_released": true,
+    "remaining_kfd_clients": []
+  },
+  "persistent_transport_changed": false,
+  "RAM_holds_changed": false,
+  "updater_resumed": false,
+  "configuration_firmware_or_driver_changed": false
+}

@@ -1,5 +1,7 @@
 # Installed ASUS / 13600KF / switched dual AMD topology — November 3, 2026
 
+**Subsequent P2P check:** peer capability and enable fail both ways; direct/IPC/RCCL stages remain blocked. [Measured result](PCIE-SWITCH-P2P-CHECK-2026-11-03.md).
+
 Read-only post-reboot discovery confirms **ASUS TX GAMING B760M WIFI (BIOS 1836), Core i5-13600KF (14 cores / 20 threads)** and both RX 7900 XTX cards behind a common Broadcom/LSI PEX880xx Gen4 switch fabric. The exact switch board model and firmware are not established by its generic PCI ID. **RAM installation remains pending: 32,084,672 KiB / 30.60 GiB is currently visible; 64 GB is the planned capacity.** Earlier benchmark timings retain their original CPU, RAM and topology attribution.
 
 ## Observed topology and allocation
