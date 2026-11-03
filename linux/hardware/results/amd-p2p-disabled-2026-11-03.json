@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-11-03",
-  "status": "p2p_disabled_verified_short_trial_loading_deadline",
+  "status": "p2p_off_verified_loading_only_retry_not_qualified",
   "active_p2p_disabled": true,
   "verification_scope": "audited driver, six-bridge routing, KFD topology and HIP peer capability/enable APIs",
   "current_driver_flags": {
@@ -85,5 +85,25 @@
   "llama_cpu_tests_per_checkout": 18,
   "negative_hip_checker_build": "passed_ROCm_7.2.3",
   "performance_or_sustained_stability_qualified": false,
-  "direct_io_descriptor_proof_repeated": false
+  "direct_io_descriptor_proof_repeated": false,
+  "p2p_current_boot_flags": {
+    "pcie_p2p": "N",
+    "use_xgmi_p2p": "0"
+  },
+  "subsequent_authorized_retry": {
+    "only_changed_control": "loading_timeout_seconds",
+    "prior_loading_timeout_seconds": 150,
+    "loading_timeout_seconds": 210,
+    "overall_timeout_seconds": 240,
+    "worker_runtime_max_seconds": 240,
+    "other_controls_unchanged": true,
+    "model_profile_unchanged": true,
+    "hip_negative_cases_passed": 3,
+    "load_seconds": 71.32677251199993,
+    "requests_completed": 0,
+    "qualification": "failed",
+    "site_specific_evidence": "private",
+    "active_gpu_jobs_after_recovery": 0,
+    "further_workload_authorized": false
+  }
 }

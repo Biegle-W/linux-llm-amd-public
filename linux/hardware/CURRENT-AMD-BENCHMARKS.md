@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
-**November 3 P2P disabled and verified:** driver flags off, restored six-port ACS redirection, translated IOMMU, no KFD peer links, and three fresh HIP cases with zero peer capability/refused enables. The single Strata load attempt hit the retained 150-second deadline before readiness; no inference request ran. Owned work unloaded; guards, fault hold and paused schedules remain. Legacy llama peer opt-in removed; 58 CPU checks pass per checkout. [Verification and test limits](AMD-P2P-DISABLE-2026-11-03.md).
+**November 3 P2P-off retry remains unqualified:** the owner-authorized loading-only retry used 210 seconds, retained both 240-second overall caps and all other guards, and loaded in 71.327 s; its first request did not complete. P2P-off remains selected, GPU work is held and no test is active after recovery. [Current state and evidence limits](AMD-P2P-DISABLE-2026-11-03.md).
 
 **November 3 owner guard reset:** minimum free RAM is 1 GiB and free VRAM is 128 MiB per card. `MemoryHigh` is disabled; worker hard RAM limits derive from installed RAM minus 1 GiB. Existing 33.53 GiB total swap is unchanged; v5 removes software swap-rate ceilings and adds SSD SMART/live-NVMe-temperature checks with normal wear accepted. CPU checks pass; no inference or SSD-speed benchmark was run. Existing model/device holds and paused schedules remain. This explicit owner policy supersedes older resource floors/rate defaults. [Policy, coverage and validation](RESOURCE-GUARDS-2026-11-03.md).
 
