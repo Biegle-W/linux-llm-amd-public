@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-03",
+  "scope": "PC lighting only",
+  "physical_dimms": 4,
+  "rgb_dimms_expected": 3,
+  "rgb_controllers_detected": 3,
+  "corsair_controllers": 2,
+  "corsair_leds_per_controller": 10,
+  "ene_controllers": 1,
+  "ene_leds_per_controller": 8,
+  "motherboard_controllers": 1,
+  "white_application_validation": "pass",
+  "off_application_validation": "pass",
+  "validator_tests_passed": 13,
+  "persistent_smbus_access_installed": true,
+  "boot_modules_configured": true,
+  "restore_service_enabled": true,
+  "restore_command_validation": "pass",
+  "final_setting": "White",
+  "owner_visual_confirmation": "all three RGB sticks white",
+  "reboot_validation": "not performed",
+  "inference_or_gpu_runtime_changes": false
+}
