@@ -26,7 +26,7 @@
   },
   {
     "id": "nemotron-3.5-super-iq3",
-    "enabled": true,
+    "enabled": false,
     "name": "Nemotron 3.5 Super VL 120B UD-IQ3_XXS (32K, dual AMD HIP, CPU experts + GPU cache, text/tools)",
     "quantization": "UD-IQ3_XXS",
     "path": "/mnt/shared-nvme/LLM-Models/Nemotron-Super/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-GGUF/UD-IQ3_XXS/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-UD-IQ3_XXS-00001-of-00003.gguf",
@@ -67,7 +67,10 @@
     "cpu_moe_layers": 16,
     "batch_size": 512,
     "ubatch_size": 128,
-    "flash_attention": true
+    "flash_attention": true,
+    "disabled_reason": "Removed by owner November 2 to reclaim storage; IQ3 retired. Await RAM and separate guarded vLLM INT4 qualification; no automatic fallback or resume.",
+    "resume_requires_owner_instruction": true,
+    "weights_removed": true
   },
   {
     "id": "ornith-1.5-122b",

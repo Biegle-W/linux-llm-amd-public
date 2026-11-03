@@ -54,9 +54,9 @@
     "DS4_STREAM": "0"
   },
   "local_validation": {
-    "status": "requires-local-validation",
+    "status": "retired_weights_removed",
     "native_validation": "passed",
-    "normal_integration_status": "requires-local-validation",
+    "normal_integration_status": "retired_weights_removed",
     "source_commit": "25deec505b525212e05faa58697d9d2b7d17fdb3",
     "binary_sha256": "4a3b77e997d88498f9fd140867af227553f9c651c4693c0a31b710620bdcd814",
     "pack_metadata_sha256": "6fed44760415e7addc67f16f0c731ed1eef8a06ca8789dc5fff80bb7e8a1e1c8",
@@ -66,6 +66,7 @@
     "normal_validated_utc": "2026-10-23T16:06:04.805352+00:00",
     "benchmark_evidence": "hardware/results/maya-xs-dspark-2026-10-23.json",
     "reference_config_sha256": "fd5fe9ef9b70a78d11afe9dd88257b69c3da7dea6ef24c27f54f971af6331cae",
-    "note": "Sanitized reference paths differ from measured workstation; prepare metadata and validate local binary/profile before loading."
+    "note": "Sanitized reference paths differ from measured workstation; prepare metadata and validate local binary/profile before loading.",
+    "weights_removed": true
   }
 }

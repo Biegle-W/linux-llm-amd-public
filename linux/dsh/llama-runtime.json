@@ -17,7 +17,8 @@
     }
   },
   "paused_models": {
-    "ornith-1.5-122b": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume."
+    "ornith-1.5-122b": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume.",
+    "nemotron-3.5-super-iq3": "Removed by owner November 2 to reclaim storage; IQ3 retired. Await RAM and separate guarded vLLM INT4 qualification; no automatic fallback or resume."
   },
   "reference_note": "Sanitized example paths; verify each selected source/build locally before loading."
 }

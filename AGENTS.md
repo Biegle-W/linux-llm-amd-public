@@ -1,5 +1,7 @@
 # Agent entry point
 
+**November 2 owner-requested weight removal:** Super IQ3 and old DeepSeek Maya/Strata backing files are removed; approximately 341.6 GB reclaimed. Seven enabled routes remain. Super INT4/vLLM and latest compatible Unsloth Q1 are queued for post-RAM qualification; old weight rollback files are no longer present. Guards, other holds and paused updater remain. [Removal and preparation](linux/hardware/MODEL-WEIGHT-REMOVAL-2026-11-02.md).
+
 **November 2 post-RAM DeepSeek Q1 queue:** replace the existing DeepSeek weight backing for both Maya and Strata with compatible latest Unsloth Q1 quants, after format/pack and RAM/VRAM admission review. Preserve rollback files; one short DSH check and verified unload per route. No current download/replacement or hold change. [Migration queue](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).
 
 **November 2 post-RAM Maya pin:** queue `v1.1.50` (`10e69a0eb115`) for isolated compatibility/capacity review after the RAM upgrade and owner request. Then use only short DSH tool-call checks with verified unload. Planning only; current runtime, guards, holds and paused updater remain. [Pinned queue](linux/hardware/P2P-96GB-ROADMAP-2026-10-30.md).

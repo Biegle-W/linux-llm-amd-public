@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-02",
+  "status": "complete",
+  "owner_authorized_payload_deletion": true,
+  "removed": {
+    "Super_IQ3_allocated_bytes": 59764506624,
+    "DeepSeek_old_backing_allocated_bytes": 281859063808
+  },
+  "reclaimed_bytes": 341624881152,
+  "model_volume_free_before_bytes": 432417013760,
+  "model_volume_free_after_bytes": 774041894912,
+  "files_deleted": 22,
+  "enabled_models": [
+    "empero-qwen3.8-35b-a3b",
+    "flint-40b-a2.5b",
+    "qwen3.8-27b-sglang-dflash2",
+    "qwen3.8-27b-vllm",
+    "nemotron-3.5-bolt-vllm",
+    "sage-a1.5",
+    "glm-5.3-flash-maya"
+  ],
+  "old_weight_rollback_available": false,
+  "configuration_and_metadata_preimages_preserved": true,
+  "Super_INT4_checkpoint_retained": true,
+  "Super_vLLM_INT4_enabled_or_qualified": false,
+  "DeepSeek_Q1_downloaded_or_enabled": false,
+  "both_DeepSeek_profiles_disabled_and_old_validation_retired": true,
+  "all_unrelated_guards_pins_and_holds_preserved": true,
+  "daily_updater": "paused, unchanged",
+  "CPU_configuration_checks_passed_each_checkout": 7,
+  "live_hub_catalog_verified": true,
+  "no_model_load_or_service_restart": true,
+  "new_static_checkpoint_destination": "sharedSATA1/vLLM-Models",
+  "new_streaming_pack_destination": "system NVMe models/streaming",
+  "max_drive_used_fraction": 0.9
+}

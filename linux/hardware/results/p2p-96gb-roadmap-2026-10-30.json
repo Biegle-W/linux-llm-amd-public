@@ -141,12 +141,24 @@
     "planned_96GB_locally_qualified": false,
     "require_engine_specific_conversion_and_pack_validation": true,
     "verify_tokenizer_engram_PLE_and_draft_compatibility": true,
-    "preserve_existing_weights_packs_and_profiles_for_rollback": true,
+    "preserve_existing_weights_packs_and_profiles_for_rollback": false,
     "do_not_delete_files_referenced_by_either_engine": true,
     "test": "one short actual DSH tool round trip per admitted requested route; verified unload before next route",
     "preserve_guards_holds_and_paused_updater": true,
-    "weights_downloaded_replaced_or_deleted_now": false,
+    "weights_downloaded_replaced_or_deleted_now": "Old backing removed November 2; no new Q1 download or activation",
     "runtime_changed": false,
-    "automatic_resume_or_schedule": false
+    "automatic_resume_or_schedule": false,
+    "preserve_configuration_and_metadata_references": true,
+    "old_weight_backing_removed_by_owner": "2026-11-02"
+  },
+  "super_INT4_vllm_post_RAM_queue": {
+    "date": "2026-11-02",
+    "IQ3_weights_removed": true,
+    "IQ3_route_disabled": true,
+    "existing_INT4_checkpoint_retained": true,
+    "vllm_candidate_not_enabled_or_qualified": true,
+    "requires_actual_RAM_and_fresh_admission": true,
+    "test": "one short DSH tool-call check then verified unload",
+    "no_download_GPU_test_or_schedule_now": true
   }
 }

@@ -13,7 +13,8 @@
     "config": "strata-deepseek-xs-profile.json",
     "enabled": false,
     "family": "deepseek41",
-    "disabled_reason": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume.",
-    "resume_requires_owner_instruction": true
+    "disabled_reason": "Old DeepSeek Maya-XS/shared Maya-S/DSpark/vision backing deleted by owner November 2. Await latest compatible Unsloth Q1 migration after RAM; fresh conversion, manifests and short DSH qualification required.",
+    "resume_requires_owner_instruction": true,
+    "weights_removed": true
   }
 }

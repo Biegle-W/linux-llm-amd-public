@@ -57,17 +57,18 @@
   },
   "expert_profile_seed_sha256": "82833f7218db53718a1467ac4b8825c01cf11baf7b2f5192574f23991f0086d9",
   "local_validation": {
-    "status": "requires-local-validation",
+    "status": "retired_weights_removed",
     "source_commit": "8183c6b67162340c09b67360860177c577a65f2e",
     "binary_sha256": "52215c1c90e51522c0cebcd5a12137114551b372df0b5158717de5b438e7fc59",
     "pack_metadata_sha256": "6fed44760415e7addc67f16f0c731ed1eef8a06ca8789dc5fff80bb7e8a1e1c8",
-    "normal_integration_status": "passed",
+    "normal_integration_status": "retired_weights_removed",
     "evidence": "hardware/results/strata-deepseek-2026-10-24.json",
     "context": 32768,
     "approximate_prompt_skip": false,
     "both_gpus": true,
     "seed_sha256": "82833f7218db53718a1467ac4b8825c01cf11baf7b2f5192574f23991f0086d9",
     "reference_config_sha256": "e9fb8ac725625093ca3533ccf58b73e0b438376059cabac0c2d238492a58398d",
-    "note": "Sanitized example paths; validate the local binary, pack and profile before loading."
+    "note": "Sanitized example paths; validate the local binary, pack and profile before loading.",
+    "weights_removed": true
   }
 }
