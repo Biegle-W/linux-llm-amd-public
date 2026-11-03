@@ -22,4 +22,20 @@ The precise routing blocker is still under investigation. Additional current-boo
 
 Existing `NCCL_P2P_DISABLE=1` host transport, runtime pins, guards, RAM holds and updater pause remain. No ACS override, IOMMU/boot change, firmware write, kernel/driver replacement or automatic model trial occurred. Next action: inspect the read-only privileged switch/bridge ACS report; propose a scoped, reviewable fix only if its evidence supports one. Repeat direct qualification only after peer capability becomes available.
 
+## Working NVIDIA setup on this switch: repository comparison
+
+The owner reports this same board/switch previously worked with the two NVIDIA cards. The NVIDIA repository confirms a successful **RTX 3080 Ti / RTX 3080** PEX88096 configuration. Its [October 31 ACS correction](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/PEX-ACS-PAIR-20261031.md) found four Broadcom downstream bridges with ACS control **0x1d**, then cleared only request/completion redirection to **0x11** (mask 0x0c), preserving other controls. A root-owned boot service reapplied that scoped policy. All devices used identity IOMMU domains. NVIDIA also needed its separately qualified dynamic BAR1 driver implementation; those NVIDIA-specific modifications are not an AMD repair.
+
+The [November 1 pair-only post-reboot verification](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/P2P-PERMANENT-PAIR-20261101.md) confirms three seeded patterns, 16 MiB remote reads/writes, both directions, at **13.082 GB/s each way**. The [curated result](https://github.com/Biegle-W/linux-llm-nvidia-public/blob/main/docs/validation-results/20261101-permanent-pair-p2p.json) records active ACS service and successful current-boot proof. Earlier failed post-boot reports are superseded by that successful repair; they are not the final NVIDIA verdict.
+
+| Setting | Working NVIDIA record | Current AMD observation |
+|---|---|---|
+| Switch | PEX88096, switched pair | Owner-confirmed same PEX88096; both AMD cards share its ancestry |
+| Scoped ACS boot policy | Active; selected downstream controls 0x1d → 0x11 | `local-llm-acs-pair.service` is not installed; actual ACS controls await privileged read |
+| IOMMU domains | Identity | Both GPU groups report **DMA-FQ** (translated) |
+| Driver peer handling | Qualified NVIDIA 615.71.09 dynamic BAR1 candidate | Current amdgpu/HIP rejects peer access |
+| Correctness | Bidirectional seeded remote reads/writes passed | Direct stages blocked by false HIP capability |
+
+This evidence supports the owner's working-switch history and makes **missing switch ACS policy a concrete leading hypothesis**, with a separate IOMMU-domain difference to assess. It does not prove which current setting causes AMD's rejection. Inspect the current switch controls before adapting only the relevant routing policy; do not copy NVIDIA module patches, old PCI addresses, guards or schedules. This repository comparison changes no ACS/IOMMU/firmware/driver setting and performs no new GPU test. The NVIDIA repositories were read only.
+
 [Curated observations and guard minima](results/pcie-switch-p2p-check-2026-11-03.json).

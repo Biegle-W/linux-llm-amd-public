@@ -145,5 +145,36 @@
     "host_bridge_allowlist_rejection": "Observed 8086:a704 in current boot log",
     "ACS_cause_confirmed": false,
     "next_read_only_step": "Inspect switch/bridge ACS controls in privileged PCI capability report"
+  },
+  "working_nvidia_reference": {
+    "repository": "Biegle-W/linux-llm-nvidia-public",
+    "report": "docs/P2P-PERMANENT-PAIR-20261101.md",
+    "date": "2026-11-01",
+    "gpus": [
+      "RTX 3080 Ti",
+      "RTX 3080"
+    ],
+    "seeded_bidirectional_correctness": true,
+    "peer_copy_GB_s": [
+      13.082,
+      13.082
+    ],
+    "acs_control_before": "0x1d",
+    "acs_control_after": "0x11",
+    "cleared_mask": "0x0c",
+    "modified_downstream_bridges": 4,
+    "iommu_domains": "Identity",
+    "nvidia_driver": "615.71.09 qualified dynamic BAR1 candidate"
+  },
+  "current_amd_comparison": {
+    "acs_service": "not installed",
+    "gpu_iommu_group_types": [
+      "DMA-FQ",
+      "DMA-FQ"
+    ],
+    "actual_acs_registers": "not yet readable without sudo",
+    "interpretation": "Missing scoped ACS policy is a leading hypothesis; causal AMD fix not yet verified",
+    "configuration_changed": false,
+    "nvidia_repositories_modified": false
   }
 }
