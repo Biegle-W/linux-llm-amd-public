@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "initial boot exposes HIP peers; actual ACS zero requires corrected staging/reboot",
+  "status": "corrected xx100x1 policy staged and hash/root0644 verified; corrected reboot and full peer qualification pending",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -36,5 +36,6 @@
   "observed_postboot_acs": "0x00 on all six selected ports",
   "HIP_peer_capability_both_directions": true,
   "postboot_capability_cases": 3,
-  "corrected_staging_pending": true
+  "corrected_staging_pending": false,
+  "corrected_staging_verified": true
 }

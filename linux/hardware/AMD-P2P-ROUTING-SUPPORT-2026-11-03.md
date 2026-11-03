@@ -28,6 +28,6 @@ Rollback removes the managed next-boot policy and validates regenerated GRUB:
 sudo python3 hardware/amd_p2p_support.py rollback
 ```
 
-**28 CPU checks pass per checkout**, including the actual zero-firmware flag regression, authenticated previous-policy upgrade and full rollback after failed upgrade, plus topology/capability admission and GRUB token quoting. Corrected administrator staging/reboot remain pending. No new inference/model-speed result exists.
+**28 CPU checks pass per checkout**, including the actual zero-firmware flag regression, authenticated previous-policy upgrade and full rollback after failed upgrade, plus topology/capability admission and GRUB token quoting. Corrected administrator staging succeeded; drop-in SHA256, root ownership and mode 0644 are verified. Corrected reboot remains pending. No new inference/model-speed result exists.
 
 Sources: [Linux kernel parameters](https://www.kernel.org/doc/html/v7.0/admin-guide/kernel-parameters.html), [PCI ACS implementation and firmware-control semantics](https://github.com/torvalds/linux/blob/v7.0/drivers/pci/pci.c). [Curated state](results/amd-p2p-routing-support-2026-11-03.json).
