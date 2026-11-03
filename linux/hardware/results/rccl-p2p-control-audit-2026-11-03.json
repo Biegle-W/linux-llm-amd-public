@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "source defect verified; isolated CPU candidate build in progress",
+  "status": "source defect verified; isolated candidate built and statically audited",
   "RCCL_source_commit": "bf3ebf549fec376521b7d35f09a67f67071c96d3",
   "nohostcall_recipe_commit": "23c2beb2e200353fda84afa216c2cea2f7c579e9",
   "installed_library_SHA256_unchanged": true,
@@ -15,11 +15,26 @@
     "memory_max_GiB": 24,
     "CPU_quota_percent": 400
   },
-  "compiled_successfully": false,
+  "compiled_successfully": true,
   "installed": false,
   "GPU_tested": false,
   "proven_SGLang_crash_remedy": false,
   "SGLang_hold_retained": true,
   "new_model_retry": false,
-  "kernel_firmware_replacement": false
+  "kernel_firmware_replacement": false,
+  "candidate_SHA256": "45847d2f61a504746867a1beef08be1041999682b00a7abf19cdc07b11f1d118",
+  "hidden_hostcall_buffers": 0,
+  "required_consumer_exports": 37,
+  "missing_consumer_exports": [],
+  "device_images": 1,
+  "ncclCommDump_required_by_installed_consumers": false,
+  "ncclCommDump_exported": false,
+  "runtime_fingerprints_unchanged": true,
+  "dependency_runtime_review_pending": true,
+  "raw_candidate_SHA256": "dac52a5727ef62eada19b1b6066b1b6c3bf2e3c222d7409506000593982bf69e",
+  "raw_candidate_real_ROCm_SMI_dependency": true,
+  "isolated_SMI_compatibility_copy_staged": true,
+  "SMI_required_exports": 9,
+  "missing_SMI_exports": [],
+  "candidate_loaded": false
 }

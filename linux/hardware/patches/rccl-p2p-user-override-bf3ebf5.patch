@@ -1,0 +1,10 @@
+--- a/src/graph/paths.cc
++++ b/src/graph/paths.cc
+@@ -325,3 +324,0 @@
+-  // User override
+-  NCCLCHECK(ncclGetUserP2pLevel(&p2pLevel));
+-
+@@ -337,0 +335,3 @@
++
++  // Explicit user settings, including disable=1/LOC, override platform defaults.
++  NCCLCHECK(ncclGetUserP2pLevel(&p2pLevel));
