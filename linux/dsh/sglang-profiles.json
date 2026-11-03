@@ -30,6 +30,8 @@
     "rdna_verify": true,
     "rdna_verify_walk_fix": true,
     "context_validation": "Fresh160861 input/22 output, cached160832-token full-history follow-up; arithmetic/JSON/tools/SSE; both cards, zero owned swap/spill",
-    "enabled": true
+    "enabled": false,
+    "disabled_reason": "Temporary application P2P fault hold: November 3 short DSH attempt ended in AMD SMU/MES GPU reset failure before tool completion. No OOM cause established. Preserve profile/pin and investigate before retry.",
+    "resume_requires_owner_instruction": true
   }
 }

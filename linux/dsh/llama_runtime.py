@@ -114,6 +114,9 @@ def launch_spec(backend=None, model=None):
         env = dict(item.decode().split('=', 1) for item in result.stdout.split(b'\0') if item)
         env['LD_LIBRARY_PATH'] += ':' + str(ROOT.parent / 'llm-tools/cuda-build/lib')
         env.pop('GGML_CUDA_ENABLE_UNIFIED_MEMORY', None)
+        # Empero/Flint passed normal short DSH checks with native HIP P2P.
+        if model in ('empero-qwen3.8-35b-a3b', 'flint-40b-a2.5b'):
+            env['GGML_CUDA_P2P'] = '1'
     devices = amd_devices()
     if (not binary.is_file() or len(devices) != 2):
         raise RuntimeError('Selected 24 GB AMD runtime is unavailable; no backend has been stopped.')

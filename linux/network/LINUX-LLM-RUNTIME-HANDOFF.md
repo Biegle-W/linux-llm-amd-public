@@ -1,5 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+**November 3 application P2P rollout interrupted:** Empero and Flint passed short DSH tool checks and unloaded. SGLang initialization coincided with an AMD SMU/MES GPU fault; four further routes were not attempted. Shared RCCL promotion is rolled back, explicit native P2P is limited to the two passing HIP llama models, and SGLang is temporarily held. The new boot exposes **61.55 GiB RAM** after the reported RAM upgrade (consistent with 64 GB installed); existing RAM holds/profile caps are not automatically restored. [Outcomes and containment](../hardware/P2P-DSH-ROLLOUT-2026-11-03.md).
+
 **November 3 P2P qualification passed:** ACS 0x11 on six path bridges plus identity GPU domains now pass bidirectional 16 MiB remote reads/writes, HIP IPC and two-rank RCCL all-reduce/all-gather with logged P2P/IPC. Peer copies measured 13.761 / 13.862 GB/s in the bounded check. All owned processes/reservations are released; existing production runtime flags, RAM holds and updater pause remain. No model-speed qualification. [Scope and evidence](../hardware/AMD-P2P-QUALIFIED-2026-11-03.md).
 
 **November 3 switched P2P test:** HIP reports **no peer access in either direction** under default, fine-grain and no-SDMA cases; explicit peer-enable calls return error 101. Linux rejects both peer routes and KFD has no GPU peer links; this does not identify the motherboard chipset as the cause. Both GPUs are behind the owner-confirmed PEX88096 switch; the NVIDIA repo confirms working PEX88096 P2P after scoped ACS 0x1d→0x11 and identity IOMMU domains. This AMD boot lacks that ACS service and uses translated GPU domains; current switch controls still need inspection. Direct-copy/IPC/RCCL P2P stages are blocked at that prerequisite; no throughput result. Diagnostic processes exited and reservations released; host transport, RAM holds, guards and paused updater remain. [Result and diagnosis](../hardware/PCIE-SWITCH-P2P-CHECK-2026-11-03.md).
@@ -592,7 +594,7 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 ## Current status and hardware
 
 - Intel **i5-13600KF (14 cores /20 threads)**, ASUS TX GAMING B760M WIFI,
-  **30.60 GiB visible RAM**, with 64 GB pending. Both RX 7900 XTX 24 GB cards
+  **61.55 GiB visible RAM** after the reported RAM upgrade (consistent with 64 GB installed). Existing capacity profiles/holds remain pending separate admission. Both RX 7900 XTX 24 GB cards
   are behind the installed PEX880xx switch fabric: Gen4 x16 common uplink,
   Gen4 x8 segments in each GPU branch. P2P remains unqualified. Historical
   i9/MSI/64 GB benchmark results retain their original hardware attribution.

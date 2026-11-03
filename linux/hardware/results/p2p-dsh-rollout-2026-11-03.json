@@ -1,0 +1,324 @@
+{
+  "date": "2026-11-03",
+  "status": "interrupted by GPU fault during third model; rollout contained",
+  "planned_routes": 7,
+  "passed_and_unloaded": 2,
+  "interrupted_gpu_fault": 1,
+  "not_attempted": 4,
+  "completed_checks": [
+    {
+      "model": "empero-qwen3.8-35b-a3b",
+      "backend": "llama",
+      "status": "passed",
+      "configured_context": 262144,
+      "tool_calls": 1,
+      "tool_names": [
+        "read"
+      ],
+      "tool_result_statuses": [
+        "completed"
+      ],
+      "model_steps": 2,
+      "initial_input_tokens": 5927,
+      "generated_tokens": 88,
+      "final_marker_correct": true,
+      "tool_call_result_ids_match": true,
+      "unloaded": true,
+      "transport_evidence": {
+        "worker_env_variants": [
+          {
+            "GGML_CUDA_P2P": "1",
+            "HIP_VISIBLE_DEVICES": "0,1",
+            "HSA_ENABLE_SDMA": "0",
+            "NCCL_P2P_DISABLE": "0",
+            "ROCR_VISIBLE_DEVICES": "0,1"
+          }
+        ],
+        "rccl_log_files": 0,
+        "P2P_IPC_lines": 0,
+        "P2P_direct_lines": 0,
+        "SHM_lines": 0
+      },
+      "memory": {
+        "sample_interval_seconds": 0.5,
+        "samples": 141,
+        "duration_seconds": 70.168379372,
+        "errors": [],
+        "RAM_available_min_bytes": 24803688448,
+        "worker_sum_RSS_peak_bytes": 1819189248,
+        "cgroup_memory_peak_bytes": 1686867968,
+        "VRAM_per_GPU": [
+          {
+            "index": 0,
+            "minimum_free_bytes": 12305588224,
+            "peak_used_bytes": 13447438336
+          },
+          {
+            "index": 1,
+            "minimum_free_bytes": 11519459328,
+            "peak_used_bytes": 14233567232
+          }
+        ],
+        "swap": {
+          "host_used_peak_bytes": 0,
+          "host_swapin_delta_bytes": 0,
+          "host_swapout_delta_bytes": 0,
+          "IO_scope": "system-wide lifecycle; not worker-attributed or inference-phase rate",
+          "owned_worker_swap_peak_bytes": 0,
+          "owned_eviction_spill_peak_bytes": 0,
+          "runtime_policy": "loading-swap-v4, 128 MiB/s writes / 160 MiB/s combined over 30s inference windows",
+          "independent_inference_window_verdict": "not evaluated: observer does not infer exact request phases; unchanged runtime guard remains active"
+        },
+        "owned_scope_count": 2
+      },
+      "thermal": {
+        "samples": 71,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 50.0
+        },
+        "cards": {
+          "0000:0b:00.0": {
+            "gpu_index": 0,
+            "samples": 71,
+            "busy_samples": 5,
+            "sensor_samples": {
+              "mem": 71,
+              "edge": 71,
+              "junction": 71
+            },
+            "peak_temperature_c": {
+              "mem": 49.0,
+              "edge": 28.0,
+              "junction": 43.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 49.0,
+              "edge": 28.0,
+              "junction": 43.0
+            },
+            "throttle_samples_available": 71,
+            "thermal_limit_samples": 47,
+            "hotspot_limit_samples": 47,
+            "power_limit_samples": 3,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 1718.0,
+            "peak_power_average_w": 179.0,
+            "peak_gfx_clock_mhz": 1911.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 54.0,
+            "last_throttle_status": "available"
+          },
+          "0000:13:00.0": {
+            "gpu_index": 1,
+            "samples": 71,
+            "busy_samples": 5,
+            "sensor_samples": {
+              "mem": 71,
+              "edge": 71,
+              "junction": 71
+            },
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 31.0,
+              "junction": 45.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 32.0,
+              "edge": 31.0,
+              "junction": 45.0
+            },
+            "throttle_samples_available": 71,
+            "thermal_limit_samples": 23,
+            "hotspot_limit_samples": 23,
+            "power_limit_samples": 3,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2078.0,
+            "peak_power_average_w": 204.0,
+            "peak_gfx_clock_mhz": 2846.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 96.0,
+            "last_throttle_status": "available"
+          }
+        },
+        "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    },
+    {
+      "model": "flint-40b-a2.5b",
+      "backend": "llama",
+      "status": "passed",
+      "configured_context": 32768,
+      "tool_calls": 1,
+      "tool_names": [
+        "read"
+      ],
+      "tool_result_statuses": [
+        "completed"
+      ],
+      "model_steps": 2,
+      "initial_input_tokens": 5441,
+      "generated_tokens": 128,
+      "final_marker_correct": true,
+      "tool_call_result_ids_match": true,
+      "unloaded": true,
+      "transport_evidence": {
+        "worker_env_variants": [
+          {
+            "GGML_CUDA_P2P": "1",
+            "HIP_VISIBLE_DEVICES": "0,1",
+            "HSA_ENABLE_SDMA": "0",
+            "NCCL_P2P_DISABLE": "0",
+            "ROCR_VISIBLE_DEVICES": "0,1"
+          }
+        ],
+        "rccl_log_files": 0,
+        "P2P_IPC_lines": 0,
+        "P2P_direct_lines": 0,
+        "SHM_lines": 0
+      },
+      "memory": {
+        "sample_interval_seconds": 0.5,
+        "samples": 113,
+        "duration_seconds": 56.196301521999885,
+        "errors": [],
+        "RAM_available_min_bytes": 25139154944,
+        "worker_sum_RSS_peak_bytes": 1369931776,
+        "cgroup_memory_peak_bytes": 1205207040,
+        "VRAM_per_GPU": [
+          {
+            "index": 0,
+            "minimum_free_bytes": 9741037568,
+            "peak_used_bytes": 16011988992
+          },
+          {
+            "index": 1,
+            "minimum_free_bytes": 12077461504,
+            "peak_used_bytes": 13675565056
+          }
+        ],
+        "swap": {
+          "host_used_peak_bytes": 0,
+          "host_swapin_delta_bytes": 0,
+          "host_swapout_delta_bytes": 0,
+          "IO_scope": "system-wide lifecycle; not worker-attributed or inference-phase rate",
+          "owned_worker_swap_peak_bytes": 0,
+          "owned_eviction_spill_peak_bytes": 0,
+          "runtime_policy": "loading-swap-v4, 128 MiB/s writes / 160 MiB/s combined over 30s inference windows",
+          "independent_inference_window_verdict": "not evaluated: observer does not infer exact request phases; unchanged runtime guard remains active"
+        },
+        "owned_scope_count": 2
+      },
+      "thermal": {
+        "samples": 57,
+        "sample_errors": 0,
+        "cpu_peak_package_c": {
+          "Package id 0": 58.0
+        },
+        "cards": {
+          "0000:0b:00.0": {
+            "gpu_index": 0,
+            "samples": 57,
+            "busy_samples": 7,
+            "sensor_samples": {
+              "mem": 57,
+              "edge": 57,
+              "junction": 57
+            },
+            "peak_temperature_c": {
+              "mem": 50.0,
+              "edge": 29.0,
+              "junction": 45.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 50.0,
+              "edge": 29.0,
+              "junction": 45.0
+            },
+            "throttle_samples_available": 57,
+            "thermal_limit_samples": 49,
+            "hotspot_limit_samples": 49,
+            "power_limit_samples": 2,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2207.0,
+            "peak_power_average_w": 142.0,
+            "peak_gfx_clock_mhz": 2130.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 53.0,
+            "last_throttle_status": "available"
+          },
+          "0000:13:00.0": {
+            "gpu_index": 1,
+            "samples": 57,
+            "busy_samples": 4,
+            "sensor_samples": {
+              "mem": 57,
+              "edge": 57,
+              "junction": 57
+            },
+            "peak_temperature_c": {
+              "mem": 32.0,
+              "edge": 32.0,
+              "junction": 50.0
+            },
+            "peak_busy_temperature_c": {
+              "mem": 32.0,
+              "edge": 32.0,
+              "junction": 50.0
+            },
+            "throttle_samples_available": 57,
+            "thermal_limit_samples": 16,
+            "hotspot_limit_samples": 16,
+            "power_limit_samples": 1,
+            "current_limit_samples": 0,
+            "peak_fan_rpm": 2090.0,
+            "peak_power_average_w": 289.0,
+            "peak_gfx_clock_mhz": 3020.0,
+            "peak_memory_clock_mhz": 1249.0,
+            "peak_busy_percent": 95.0,
+            "last_throttle_status": "available"
+          }
+        },
+        "limits": "Sampled peaks, not guaranteed transient maxima; SMU flags are reported samples, not measured time throttled. Whole-card sensors include unrelated workloads."
+      }
+    }
+  ],
+  "interrupted_model": "qwen3.8-27b-sglang-dflash2",
+  "fault_observation": "AMD GPU1 SMU bus error, unrecoverable MES/reset failure during draft initialization; no recorded OOM kill; root cause unresolved",
+  "last_sample_available_RAM_GiB": 18.05,
+  "last_sample_used_VRAM_GiB": [
+    17.19,
+    16.53
+  ],
+  "new_RAM": {
+    "visible_KiB": 64541360,
+    "visible_GiB": 61.551,
+    "timing": "installed after interrupted test boot; earlier checks retain 32GB attribution",
+    "inferred_installed_GB": 64,
+    "owner_report": "more RAM installed"
+  },
+  "containment": {
+    "native_HIP_P2P_explicit_models": [
+      "empero-qwen3.8-35b-a3b",
+      "flint-40b-a2.5b"
+    ],
+    "shared_RCCL_promotion_rolled_back": true,
+    "shared_NCCL_P2P_DISABLE": 1,
+    "shared_GGML_CUDA_P2P": "unset; only qualified llama models opt in",
+    "SGLang_route": "temporary GPU-fault hold; owner instruction required before resume",
+    "actual_host_transport_guaranteed_by_disable_flag": false,
+    "unqualified_Maya_Strata_native_promotion_removed": true,
+    "old_RAM_holds_resumed": false,
+    "other_contexts_allocations_pins_guards_changed": false,
+    "updater_resumed": false
+  },
+  "cleanup": {
+    "current_boot_inference_workers": 0,
+    "current_KFD_clients": 0,
+    "old_campaign_and_SGLang_owner_records": "archived and removed only after exact claim match, absent PIDs and closed ports; no process killed",
+    "normal_third_model_unload_verified_before_crash": false,
+    "reboot_cleared_old_workers": true
+  },
+  "CPU_checks_per_checkout": 16,
+  "original_request_complete": false
+}

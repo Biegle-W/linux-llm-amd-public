@@ -17,9 +17,13 @@ export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
 
-# Raptor Lake graphics ports fail the kernel cross-root P2P check.
-# Keep validated host transport; see hardware/PCIE-P2P-2026-10-17.md.
+# Qualified PEX88096 + scoped ACS 0x11 + identity-domain peer path.
+# Retain all RAM/VRAM guards and custom-all-reduce exclusions.
+# Hardware/IPC/RCCL proof: hardware/AMD-P2P-QUALIFIED-2026-11-03.md.
+# RCCL application P2P promotion rolled back after the SGLang GPU fault.
+# Native HIP llama.cpp enables peer access in its qualified launch path.
 export NCCL_P2P_DISABLE=1
+unset GGML_CUDA_P2P
 # Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"
 export SGLANG_NCCL_SO_PATH="$ROOT/llm-tools/rccl-nohostcall/librccl.so.1"
