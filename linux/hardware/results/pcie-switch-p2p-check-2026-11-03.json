@@ -176,5 +176,7 @@
     "interpretation": "Missing scoped ACS policy is a leading hypothesis; causal AMD fix not yet verified",
     "configuration_changed": false,
     "nvidia_repositories_modified": false
-  }
+  },
+  "latest_qualification": "amd-p2p-qualified-2026-11-03.json",
+  "latest_P2P_status": "PASS bounded direct/IPC/RCCL with ACS11 and identity domains"
 }

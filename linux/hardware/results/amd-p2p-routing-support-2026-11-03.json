@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "ACS11 registers verified; identity trial staged/root-file verified; reboot and data qualification pending",
+  "status": "boot policy active and bounded hardware/HIPIPC/RCCL peer correctness passed",
   "owner_requested_support_installation": true,
   "additional_switch_driver_required": false,
   "existing_switch_driver": "pcieport",
@@ -22,7 +22,7 @@
   "model_holds_changed": false,
   "updater_resumed": false,
   "reboot_performed": false,
-  "p2p_fixed_or_qualified": false,
+  "p2p_fixed_or_qualified": true,
   "boot_policy_staged": true,
   "selected_broadcom_bridges": 4,
   "selected_amd_1479_parents": 2,
@@ -31,7 +31,7 @@
   "dropin_mode": "0644",
   "dropin_hash_verified": true,
   "GRUB_generation_and_validation": "passed",
-  "reboot_required": true,
+  "reboot_required": false,
   "desired_acs": "0x11",
   "observed_postboot_acs": "0x00 on all six selected ports",
   "HIP_peer_capability_both_directions": true,
@@ -48,6 +48,8 @@
   "identity_trial_staged": true,
   "identity_trial_dropin_hash_verified": true,
   "identity_trial_root_ownership_mode_verified": true,
-  "identity_trial_active": false,
-  "ACS_registers_verified": true
+  "identity_trial_active": true,
+  "ACS_registers_verified": true,
+  "latest_qualification": "amd-p2p-qualified-2026-11-03.json",
+  "latest_P2P_status": "PASS bounded direct/IPC/RCCL with ACS11 and identity domains"
 }

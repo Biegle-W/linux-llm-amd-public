@@ -1,5 +1,7 @@
 # AMD PEX88096 routing support — November 3, 2026
 
+**Latest outcome: bounded P2P qualification PASS with ACS 0x11 + identity domains.** [Verified data/IPC/RCCL results](AMD-P2P-QUALIFIED-2026-11-03.md). Earlier pending states and failures below retain their original stage attribution.
+
 **Current state: HIP peer capability is available both ways, but ACS controls need correction before full qualification.** The first owner-controlled reboot applied the scoped parameter. A fresh guarded diagnostic reports peer access true in both directions under default HIP, fine grain, and fine grain with SDMA disabled. Both owned diagnostic processes and reservations were cleaned up; no data-buffer, direct-kernel, IPC or RCCL test has yet qualified this boot.
 
 The privileged register audit found **0x00 on all six downstream bridges**, rather than the intended 0x11. The initial `xxx00xx` flags preserved firmware defaults; those defaults were zero, unlike Linux's earlier 0x1d controls. The revised flags **`xx100x1`** explicitly enable Source Validation and Upstream Forwarding and disable Request/Completion Redirect. The resulting controlled mask is 0x1d, with desired value 0x11. Other bits retain firmware defaults. This corrects the installer's initial assumption; it is not a successful final P2P result.

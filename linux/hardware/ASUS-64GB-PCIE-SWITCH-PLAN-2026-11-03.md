@@ -1,5 +1,7 @@
 # Planned ASUS DDR5 / 13600KF / 64 GB platform with an active PCIe switch — November 3, 2026
 
+**Latest outcome: bounded P2P qualification PASS with ACS 0x11 + identity domains.** [Verified data/IPC/RCCL results](AMD-P2P-QUALIFIED-2026-11-03.md). Earlier pending states and failures below retain their original stage attribution.
+
 **Subsequent P2P check:** peer capability and enable fail both ways; direct/IPC/RCCL stages remain blocked. [Measured result](PCIE-SWITCH-P2P-CHECK-2026-11-03.md).
 
 The owner plans to return this machine to **ASUS TX B760M DDR5, Intel Core i5-13600KF and 64 GB DDR5**, and clarified that both AMD GPUs will connect through an **active PCIe switch**, rather than motherboard lane bifurcation. The CPU spelling and DDR5 variant were confirmed. The matched ASUS reference is TX GAMING B760M WIFI, not its D4 variant; verify the installed board's exact DMI/model after the swap. The earlier PEX88096 proposal remains the reference switch candidate; the complete switch board, firmware and port configuration still need to be checked when installed.

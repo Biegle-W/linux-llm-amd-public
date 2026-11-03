@@ -1,0 +1,244 @@
+{
+  "date": "2026-11-03",
+  "status": "PASS bounded hardware/HIP IPC/RCCL P2P qualification",
+  "platform": {
+    "CPU": "i5-13600KF",
+    "board": "ASUS TX GAMING B760M WIFI",
+    "switch": "PEX88096",
+    "GPUs": [
+      "RX7900XTX",
+      "RX7900XTX"
+    ],
+    "gpu_pci": [
+      "0000:0b:00.0",
+      "0000:13:00.0"
+    ],
+    "visible_RAM_KiB": 32084672,
+    "kernel": "7.0.0-42-generic",
+    "common_uplink": "Gen4 x16",
+    "GPU_branch_limit": "Gen4 x8"
+  },
+  "boot_policy": {
+    "ACS_flags": "xx100x1",
+    "downstream_bridges": 6,
+    "ACS_control": "0x11 per current boot kernel log",
+    "IOMMU_parameter": "iommu=pt",
+    "GPU_domains": [
+      "identity",
+      "identity"
+    ]
+  },
+  "HIP_capability": [
+    {
+      "name": "default",
+      "environment": {},
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": true
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": true
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_pcie",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": true
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": true
+        }
+      ]
+    },
+    {
+      "name": "fine_grain_no_sdma",
+      "environment": {
+        "HSA_FORCE_FINE_GRAIN_PCIE": "1",
+        "HSA_ENABLE_SDMA": "0"
+      },
+      "device_count": 2,
+      "device_count_status": 0,
+      "pairs": [
+        {
+          "from": 0,
+          "to": 1,
+          "status": 0,
+          "peer_access": true
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "status": 0,
+          "peer_access": true
+        }
+      ]
+    }
+  ],
+  "direct_integrity": {
+    "passed": true,
+    "bytes": 16777216,
+    "patterns_per_direction": 3,
+    "directions": 2,
+    "operations": [
+      "GPU kernel remote reads",
+      "GPU kernel remote writes",
+      "hipMemcpyPeer"
+    ]
+  },
+  "HIP_IPC": {
+    "passed": true,
+    "separate_exec_process": true,
+    "remote_read_and_write": true,
+    "directions": 2,
+    "bytes": 16777216
+  },
+  "RCCL": {
+    "passed": true,
+    "ranks": 2,
+    "all_reduce_and_all_gather": true,
+    "dtypes": [
+      "FP32",
+      "BF16"
+    ],
+    "elements": [
+      1,
+      4096,
+      1048576
+    ],
+    "peer_transport_log": "P2P/IPC both directions",
+    "library": "retained nohostcall RCCL2.27.7",
+    "P2P_env_test": "NCCL_P2P_DISABLE=0, NCCL_P2P_LEVEL=SYS, HSA_ENABLE_SDMA=0",
+    "attempted_host_controls": "correctness passed but still logged P2P/IPC even with NCCL_P2P_DISABLE=1 and level unset; not valid host-transport comparisons"
+  },
+  "copy_timing": {
+    "sample_count_per_case": 8,
+    "warmups_excluded": 1,
+    "units": "decimal GB/s; host-timed synchronized API calls, no model speed claim",
+    "samples": [
+      {
+        "source": "0",
+        "target": "1",
+        "bytes": "4096",
+        "host_staged": "0",
+        "median_us": "40.078",
+        "GB_s": "0.102",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "0",
+        "target": "1",
+        "bytes": "4096",
+        "host_staged": "1",
+        "median_us": "72.470",
+        "GB_s": "0.057",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "0",
+        "target": "1",
+        "bytes": "16777216",
+        "host_staged": "0",
+        "median_us": "1219.199",
+        "GB_s": "13.761",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "0",
+        "target": "1",
+        "bytes": "16777216",
+        "host_staged": "1",
+        "median_us": "2842.587",
+        "GB_s": "5.902",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "1",
+        "target": "0",
+        "bytes": "4096",
+        "host_staged": "0",
+        "median_us": "37.139",
+        "GB_s": "0.110",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "1",
+        "target": "0",
+        "bytes": "4096",
+        "host_staged": "1",
+        "median_us": "66.546",
+        "GB_s": "0.062",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "1",
+        "target": "0",
+        "bytes": "16777216",
+        "host_staged": "0",
+        "median_us": "1210.278",
+        "GB_s": "13.862",
+        "samples": "8",
+        "correct": "true"
+      },
+      {
+        "source": "1",
+        "target": "0",
+        "bytes": "16777216",
+        "host_staged": "1",
+        "median_us": "2872.347",
+        "GB_s": "5.841",
+        "samples": "8",
+        "correct": "true"
+      }
+    ]
+  },
+  "guard_summary": {
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "minimum_available_bytes": 23591088128,
+    "minimum_free_VRAM_bytes": [
+      24318394368,
+      24942870528
+    ],
+    "all_owned_processes_exited": true,
+    "all_reservations_released": true,
+    "remaining_KFD_clients": []
+  },
+  "limitations": [
+    "Bounded selected data patterns and collective sizes; no full-model/application qualification",
+    "PyTorch AMD SMI inventory warning error32; torch enumeration and tests passed; independent sysfs memory/thermal monitoring retained",
+    "Forced-host RCCL controls did not establish host transport; explicit pinned-host copy timing is separate valid comparator"
+  ],
+  "production_runtime_files_changed": false,
+  "production_NCCL_P2P_DISABLE_flag": 1,
+  "actual_application_transport_requalified": false,
+  "RAM_holds_changed": false,
+  "updater_resumed": false,
+  "prior_failures_retained": true
+}

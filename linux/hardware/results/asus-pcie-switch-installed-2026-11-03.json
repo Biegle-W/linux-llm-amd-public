@@ -35,7 +35,7 @@
   "cpu_display_checks": 9,
   "drm_dry_runs": 4,
   "udev_verify": "passed",
-  "p2p_qualified": false,
+  "p2p_qualified": true,
   "gpu_tests": 0,
   "runtime_or_transport_changed": false,
   "holds_changed": false,
@@ -48,5 +48,7 @@
   "latest_p2p_check": "pcie-switch-p2p-check-2026-11-03.json",
   "p2p_status": "tested unavailable in both directions",
   "switch_owner_identification": "Broadcom/PLX PEX88096",
-  "motherboard_chipset_cause_established": false
+  "motherboard_chipset_cause_established": false,
+  "latest_qualification": "amd-p2p-qualified-2026-11-03.json",
+  "latest_P2P_status": "PASS bounded direct/IPC/RCCL with ACS11 and identity domains"
 }
