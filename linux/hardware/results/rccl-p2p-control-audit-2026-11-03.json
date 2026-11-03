@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-03",
+  "status": "source defect verified; isolated CPU candidate build in progress",
+  "RCCL_source_commit": "bf3ebf549fec376521b7d35f09a67f67071c96d3",
+  "nohostcall_recipe_commit": "23c2beb2e200353fda84afa216c2cea2f7c579e9",
+  "installed_library_SHA256_unchanged": true,
+  "source_defect": "explicit user level assigned before Intel default overwrites it",
+  "candidate": "apply user override after platform defaults",
+  "zero_fuzz_patch_check": "passed",
+  "source_order_check": "passed",
+  "candidate_architecture": "gfx1100",
+  "NDEBUG_device_compile": true,
+  "CPU_build_resources": {
+    "jobs": 3,
+    "memory_max_GiB": 24,
+    "CPU_quota_percent": 400
+  },
+  "compiled_successfully": false,
+  "installed": false,
+  "GPU_tested": false,
+  "proven_SGLang_crash_remedy": false,
+  "SGLang_hold_retained": true,
+  "new_model_retry": false,
+  "kernel_firmware_replacement": false
+}
