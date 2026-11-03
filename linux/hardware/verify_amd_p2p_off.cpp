@@ -21,8 +21,12 @@ int main() {
     if (!check(hipGetDeviceCount(&count)) || count != 2) return 3;
     bool passed = true;
     for (int d = 0; d < count; ++d) {
-        char bus[32] = {};
+        char bus[32] = {}, peer_bus[32] = {};
         if (!check(hipSetDevice(d)) || !check(hipDeviceGetPCIBusId(bus, sizeof(bus), d))) return 4;
+        // Establish that both indices name real, distinct devices before interpreting
+        // ROCm 7.2.3's hipErrorInvalidDevice as its unsupported-peer error.
+        if (!check(hipDeviceGetPCIBusId(peer_bus, sizeof(peer_bus), 1-d)) ||
+            std::string(bus) == std::string(peer_bus)) return 4;
         std::cout << "device=" << d << " pci=" << bus << '\n';
         int can = -1;
         if (!check(hipDeviceCanAccessPeer(&can, d, 1-d))) return 5;
@@ -33,7 +37,10 @@ int main() {
             check(hipDeviceDisablePeerAccess(1-d));
             passed = false;
         }
-        if (can != 0 || enabled != hipErrorPeerAccessUnsupported) passed = false;
+        // CLR rocm-7.2.3 hip_peer.cpp returns hipErrorInvalidDevice when its
+        // valid-device canAccessPeer query returns zero. Do not accept other errors.
+        bool refused = enabled == hipErrorPeerAccessUnsupported || enabled == hipErrorInvalidDevice;
+        if (can != 0 || !refused) passed = false;
         (void)hipGetLastError();
     }
     std::cout << (passed ? "PASS: both peer capabilities absent and enable requests refused\n"

@@ -17,11 +17,10 @@ export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
 
-# Qualified PEX88096 + scoped ACS 0x11 + identity-domain peer path.
+# Current mode: driver P2P off, firmware ACS redirection and translated domains.
 # Retain all RAM/VRAM guards and custom-all-reduce exclusions.
-# Hardware/IPC/RCCL proof: hardware/AMD-P2P-QUALIFIED-2026-11-03.md.
-# RCCL application P2P promotion rolled back after the SGLang GPU fault.
-# Native HIP llama.cpp enables peer access in its qualified launch path.
+# Current verification/limits: hardware/AMD-P2P-DISABLE-2026-11-03.md.
+# Earlier peer correctness remains historical; launchers no longer opt into P2P.
 export NCCL_P2P_DISABLE=1
 unset GGML_CUDA_P2P
 # Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.

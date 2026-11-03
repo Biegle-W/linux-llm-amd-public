@@ -62,6 +62,29 @@ class Selection(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'Invalid qualified'):
             runtime.runtime_source('sage')
 
+    def test_hip_launch_strips_peer_enable_for_both_previously_opted_in_models(self):
+        binary = self.source / 'build-hip/bin/llama-server'
+        binary.parent.mkdir(parents=True)
+        binary.touch()
+        (self.root / 'models-hip.ini').touch()
+        self.settings['models'] = {'empero-qwen3.8-35b-a3b': {}, 'flint-40b-a2.5b': {}}
+        (self.root / 'llama-runtime.json').write_text(json.dumps(self.settings))
+        inventory = 'ROCm0: AMD Radeon RX 7900 XTX\nROCm1: AMD Radeon RX 7900 XTX\n'
+        def run(cmd, **kw):
+            if cmd[0] == 'bash':
+                return types.SimpleNamespace(stdout=b'GGML_CUDA_P2P=0\0LD_LIBRARY_PATH=/sdk\0KEEP_ME=yes\0')
+            self.assertNotIn('GGML_CUDA_P2P', kw['env'])
+            return types.SimpleNamespace(stdout=inventory, stderr='')
+        with patch.object(runtime, 'runtime_source', return_value=(self.source, self.commit)), \
+             patch.object(runtime, 'verify_source_pin'), patch.object(runtime, 'validate_profiles'), \
+             patch.object(runtime, 'require_worker_scope'), patch.object(runtime, 'amd_devices', return_value=[1, 2]), \
+             patch.object(runtime.subprocess, 'run', side_effect=run):
+            for model in self.settings['models']:
+                actual, _, env, _ = runtime.launch_spec('hip-amd', model)
+                self.assertEqual(actual, binary)
+                self.assertNotIn('GGML_CUDA_P2P', env)
+                self.assertEqual(env['KEEP_ME'], 'yes')
+
 class Router(unittest.TestCase):
     def namespace(self, identity):
         tree = ast.parse((DSH / 'llama-router.py').read_text())

@@ -1,5 +1,7 @@
 # Dual RX 7900 XTX P2P qualification — November 3, 2026
 
+**Current mode: P2P disabled.** The following bounded correctness results are historical; see [active disable verification and qualification limits](AMD-P2P-DISABLE-2026-11-03.md).
+
 **PASS: bounded bidirectional GPU peer read/write correctness, HIP IPC and RCCL P2P/IPC correctness.** The owner-rebooted ASUS TX GAMING B760M WIFI / i5-13600KF host now uses the PEX88096 with ACS **0x11** on the four Broadcom and two AMD 1479 downstream bridges, plus **identity GPU IOMMU domains** from `iommu=pt`. Both GPUs share the Gen4 x16 upstream link; each branch includes Gen4 x8. RAM remains **30.60 GiB visible**; the planned 64 GB is still pending.
 
 ## Correctness and transport
