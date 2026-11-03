@@ -22,5 +22,7 @@
   "GPU_inference": false,
   "desktop_restart": false,
   "active_jobs": [],
-  "owned_locks": []
+  "owned_locks": [],
+  "post_swap_observations": "asus-pcie-switch-installed-2026-11-03.json",
+  "pre_swap_evidence_only": true
 }

@@ -1,8 +1,8 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
-**November 3 revised hardware plan:** ASUS TX B760M DDR5, Core i5-13600KF and 64 GB DDR5, with both RX 7900 XTX cards downstream of one active PCIe switch in the CPU-connected x16 slot. This is the next planned platform; the earlier 96 GB target remains a separate future scenario. Hardware is not yet installed/validated. Current profiles, RAM holds, host-transport fallback, guards and paused updater remain. [Confirmed plan and post-install admission](../hardware/ASUS-64GB-PCIE-SWITCH-PLAN-2026-11-03.md).
+**November 3 installed platform:** ASUS TX GAMING B760M WIFI / i5-13600KF and both RX 7900 XTX cards behind the Broadcom PEX880xx switch are detected after reboot. The common uplink is Gen4 x16; each GPU branch includes Gen4 x8. RAM remains **30.60 GiB visible**, with 64 GB pending. P2P is unqualified; host fallback, holds, guards and paused updater remain. The regenerated first-AMD display rule passes nine CPU checks and four DRM dry runs; administrator installation is pending. [Observed state and pending steps](../hardware/ASUS-PCIE-SWITCH-INSTALLED-2026-11-03.md).
 
-**November 3 AMD primary display:** the first validated AMD inference card is now GNOME's preferred GPU; its DisplayPort cable connection is verified. The old Intel-primary/AMD-ignore rules are replaced. Nine CPU checks per checkout and six DRM-node rule dry runs pass; installed tags and root-owned rule are verified. Headless boot, input-triggered GUI, inference pins/guards and paused updater remain. The active session still has its old Intel renderer until a new graphical session; firmware boot-video selection is unchanged. [Policy, verification and firmware boundary](../hardware/AMD-PRIMARY-DISPLAY-2026-11-03.md).
+**November 3 AMD primary display after hardware swap:** GNOME currently uses the second AMD card (13:00.0), where the monitor is connected. The installed preference still matches the old PCI address; the validated regenerated rule selects the first AMD (0b:00.0), pending administrator installation. Headless/input-triggered GUI behavior remains. See the installed-platform report above; the original display-policy report retains the pre-swap proof.
 
 **November 3 system-drive cleanup:** unused environments, build payloads and package caches removed, reclaiming about 230.3 GB; another 21.1 GB of non-streaming H3 staged weights moved to SATA after full SHA-256 verification. Current/pinned engines, SDK/toolchain, kernel caches, model guards and paused updater remain. All 526,274 protected files/links and 18 critical fingerprints are unchanged; four CPU environments and 57 checks per checkout pass. [Cleanup, placement and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
 
@@ -373,7 +373,7 @@ unchanged. Both AMD checkout origins now use the renamed repositories. The
 canonical handoff is synchronized to the existing Shared location on the AMD host.
 
 Updated **October 26, 2026**. The benchmark-reference hardware is i9-13900KS,
-64 GB RAM and two RX 7900 XTX 24 GB; the live OS currently exposes **14.83 GiB RAM**.
+64 GB RAM and two RX 7900 XTX 24 GB; the post-November 3 swap host exposes **30.60 GiB RAM**, with the new CPU/board/switch described above.
 Twelve catalog profiles retain Super IQ3; Muse Q4 and Super Q4_K_XL are retired.
 **Nightly engine updates are paused**, not automatically resumed by qualification.
 The retained versions are in the block below.
@@ -587,10 +587,11 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 
 ## Current status and hardware
 
-- Intel **i9-13900KS (24 cores /32 threads)**. Historical benchmark RAM is64GB
-  (61.51GiB OS-visible); the live host currently exposes **14.83GiB**.
-  MSI MPG Z690 CARBON WIFI, **two RX 7900 XTX 24 GB**. Both GPUs use CPU PCIe 4.0 x8 links.
-  The PEX88096 switch remains purchased but not installed or P2P-validated.
+- Intel **i5-13600KF (14 cores /20 threads)**, ASUS TX GAMING B760M WIFI,
+  **30.60 GiB visible RAM**, with 64 GB pending. Both RX 7900 XTX 24 GB cards
+  are behind the installed PEX880xx switch fabric: Gen4 x16 common uplink,
+  Gen4 x8 segments in each GPU branch. P2P remains unqualified. Historical
+  i9/MSI/64 GB benchmark results retain their original hardware attribution.
 - Every active profile uses both cards. Empero, Sage and Flint keep all model
   weights on GPUs; Super and Ornith retain CPU expert backing plus GPU caches. Strata streams PLE
   and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through

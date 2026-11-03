@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-03",
+  "scope": "read-only post-reboot discovery; no GPU execution",
+  "motherboard": "ASUS TX GAMING B760M WIFI",
+  "bios": "1836",
+  "cpu": "Intel Core i5-13600KF",
+  "logical_cpus": 20,
+  "memtotal_KiB": 32084672,
+  "memtotal_GiB": 30.598,
+  "planned_RAM_GB": 64,
+  "RAM_upgrade_pending": true,
+  "switch_family": "Broadcom/LSI PEX880xx Gen4; PCI 1000:c010",
+  "exact_switch_board_firmware_verified": false,
+  "switch_upstream": {
+    "pci": "0000:01:00.0",
+    "GT_s": 16,
+    "width": 16
+  },
+  "gpu_pci": [
+    "0000:0b:00.0",
+    "0000:13:00.0"
+  ],
+  "gpu_endpoint_width": 16,
+  "branch_width": 8,
+  "branch_limit_bridges": [
+    "0000:08:00.0",
+    "0000:10:00.0"
+  ],
+  "vram_bytes_each": 25753026560,
+  "visible_vram_bytes_each": 25753026560,
+  "BAR0_aperture_GiB_each": 32,
+  "active_desktop_gpu": "0000:13:00.0",
+  "planned_preferred_gpu": "0000:0b:00.0",
+  "display_rule_installation": "pending interactive sudo authentication",
+  "cpu_display_checks": 9,
+  "drm_dry_runs": 4,
+  "udev_verify": "passed",
+  "p2p_qualified": false,
+  "gpu_tests": 0,
+  "runtime_or_transport_changed": false,
+  "holds_changed": false,
+  "updater_resumed": false,
+  "headless_default": "multi-user.target",
+  "input_watcher": "enabled/active",
+  "task_gpu_jobs": [],
+  "owned_gpu_locks": []
+}

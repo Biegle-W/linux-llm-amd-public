@@ -1,5 +1,7 @@
 # First AMD GPU preferred for graphical sessions — November 3, 2026
 
+**Post-swap update:** PCI addresses changed. Current GNOME uses card2 / 13:00.0; regenerated first-card preference targets 0b:00.0 and awaits administrator installation. The original verification below is pre-swap evidence. [Current observation and pending step](ASUS-PCIE-SWITCH-INSTALLED-2026-11-03.md).
+
 The owner requested moving default video output from Intel to the first AMD GPU because inference will run headless. The first validated AMD GPU (the same first card used by the dual-card inference device discovery) is now the GNOME/Mutter preferred primary device. The owner moved the monitor cable, and the connected DisplayPort connector is verified on that same AMD card. The installed preference and removal of the old Intel-only policy are verified. **Live renderer selection still needs a new graphical session; no session was restarted.**
 
 ## Selection and installation

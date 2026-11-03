@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "owner-confirmed plan;not installed or qualified",
+  "status": "CPU/board/switch installed; RAM pending; P2P unqualified",
   "planned_motherboard": "ASUS TX B760M DDR5;TX GAMING B760M WIFI reference;exact installed DMI to verify",
   "planned_CPU": "Intel Core i5-13600KF",
   "planned_RAM_GB": 64,
@@ -10,12 +10,13 @@
   "chipset_secondary_slot_used_for_planned_GPU_route": false,
   "earlier_switch_candidate": "PEX88096;complete board/firmware to verify",
   "earlier_96GB_plan": "separate conditional future scenario",
-  "current_platform_changed": false,
+  "current_platform_changed": true,
   "holds_changed": false,
   "host_transport_fallback_changed": false,
   "updater_resumed": false,
   "GPU_tests": 0,
   "automatic_resume_or_schedule_created": false,
   "active_jobs": [],
-  "owned_locks": []
+  "owned_locks": [],
+  "latest_observations": "asus-pcie-switch-installed-2026-11-03.json"
 }

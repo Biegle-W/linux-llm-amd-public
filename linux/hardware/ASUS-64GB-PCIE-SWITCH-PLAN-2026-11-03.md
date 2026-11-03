@@ -2,7 +2,7 @@
 
 The owner plans to return this machine to **ASUS TX B760M DDR5, Intel Core i5-13600KF and 64 GB DDR5**, and clarified that both AMD GPUs will connect through an **active PCIe switch**, rather than motherboard lane bifurcation. The CPU spelling and DDR5 variant were confirmed. The matched ASUS reference is TX GAMING B760M WIFI, not its D4 variant; verify the installed board's exact DMI/model after the swap. The earlier PEX88096 proposal remains the reference switch candidate; the complete switch board, firmware and port configuration still need to be checked when installed.
 
-This is a planned state. The current host is still MSI MPG Z690 CARBON WIFI, i9-13900KS and about 30.56 GiB visible RAM. No runtime, CPU affinity, memory profile, driver, kernel, boot setting or model hold is changed by this plan.
+The CPU, motherboard and switch are now installed; RAM remains pending. See the [post-reboot observations](ASUS-PCIE-SWITCH-INSTALLED-2026-11-03.md) for current hardware, link widths and display-rule installation status. The original plan below records intent; no runtime, CPU affinity, memory profile, driver, kernel, boot setting or model hold is changed by this documentation.
 
 ## Intended topology
 
@@ -38,6 +38,6 @@ Only with an owner request to execute GPU work: verify peer capability both ways
 
 After transport/capacity admission and requested profile restoration, use only one short real DSH harness tool-call check per requested model, with verified owned unload before switching. No automatic held-model resume, long/full-context benchmark, repeated performance matrix, candidate promotion or updater restart is queued.
 
-No hardware installation, runtime change, weight download, model test or task GPU reservation occurred in this planning update. Next action: the owner installs the platform/switch, then reports completion so actual read-only admission can be performed before requested model/transport changes.
+The original planning update performed no installation or GPU work. The subsequent owner-installed platform has now received read-only discovery; see the observations linked above. Complete RAM installation and requested admission before profile/transport changes.
 
 [Curated planning state](results/asus-64gb-switch-plan-2026-11-03.json).
