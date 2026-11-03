@@ -19,7 +19,10 @@
   "runtime_settings_guards_holds_pins_preserved": true,
   "system_filesystem_available_GiB_rounded": 229,
   "system_filesystem_used_percent_rounded": 73,
-  "mount_status": "still mounted; authenticated fstab cleanup and clean unmount pending",
+  "mount_status": "cleanly unmounted; Sabrent fstab entry removed; independently verified",
   "active_migration_jobs": [],
-  "owned_locks": []
+  "owned_locks": [],
+  "boot_mount_entry_removed": true,
+  "clean_unmount_verified": true,
+  "physical_removal": "not observed; shut down before removing internal NVMe"
 }

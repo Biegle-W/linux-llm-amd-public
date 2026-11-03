@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
-**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount remain pending authentication. Holds, pins, guards and paused updater remain. [Relocation proof and remaining step](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount are now verified complete; shut down before physical removal. Holds, pins, guards and paused updater remain. [Relocation proof and removal guidance](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
 
 **November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](STRATA-GGUF-STORAGE-2026-11-02.md).
 

@@ -1,6 +1,6 @@
 # Sabrent model relocation to the system drive — November 2, 2026
 
-All remaining Sabrent data-volume files were copied and fully SHA-256 matched before the originals were removed. **148 files / 176,775,668,158 logical bytes** were preserved. The Sabrent data volume is empty; it is still mounted pending authenticated administrator cleanup. The system filesystem has about **229 GiB available / 73% used** after relocation (rounded filesystem figures).
+All remaining Sabrent data-volume files were copied and fully SHA-256 matched before the originals were removed. **148 files / 176,775,668,158 logical bytes** were preserved. The Sabrent data volume is empty and cleanly unmounted; its boot-mount entry is removed. Both facts were independently verified after the owner ran the authenticated cleanup. The system filesystem has about **229 GiB available / 73% used** after relocation (rounded filesystem figures).
 
 | Preserved content | Files | Logical bytes | Destination |
 |---|---:|---:|---|
@@ -23,8 +23,8 @@ Configured Maya/Strata profile, tokenizer, GGUF and installer paths now use `mod
 
 Both DeepSeek routes remain retired/disabled, Strata Qwen remains paused, and runtime/source pins, numerical settings, DSH defaults, memory/swap/thermal/ownership guards and the paused updater are preserved. This is storage verification, not a new GPU qualification or speed result. Historical Sabrent benchmark paths remain dated evidence; this relocation supersedes their storage location.
 
-## Remaining administrator step
+## Verified removal preparation
 
-Clean UDisks unmount was refused because OS authentication is required. The exact Sabrent boot-mount entry still requires removal from `/etc/fstab`, followed by system-manager reload and clean unmount. A narrowly scoped local administrator script is prepared; it backs up fstab and removes only that entry. Do not force-unmount. The separate unmounted small Sabrent partition was not changed. After the mounted data partition is cleanly unmounted and boot cleanup is verified, shut down the PC before physically removing this internal NVMe. Linux root and EFI boot partitions are on the separate system drive.
+The owner ran the authenticated administrator cleanup. The exact Sabrent boot-mount entry was removed from `/etc/fstab` after a local backup, the system manager was reloaded, and the data partition was cleanly unmounted. Independent checks confirm the boot entry and data-volume mount are absent. The earlier unauthenticated UDisks refusal is resolved; no forced unmount occurred. The separate small Sabrent partition remains unmounted and was not changed. **Shut down the PC before physically removing this internal NVMe.** Linux root and EFI boot partitions are on the separate system drive. Physical removal has not been observed.
 
-Static/checkpoint storage remains sharedSATA1. New and retained streaming packs use system `models/streaming/`; retain the below-90% storage admission rule. No additional download, RAM-hold removal or GPU trial is authorized by this relocation. Next action: finish authenticated boot-mount cleanup, verify unmounted state, then shut down before removal.
+Static/checkpoint storage remains sharedSATA1. New and retained streaming packs use system `models/streaming/`; retain the below-90% storage admission rule. No additional download, RAM-hold removal or GPU trial is authorized by this relocation. No migration job or software-cleanup blocker remains. Next action: shut down before physically removing the Sabrent; do not remove it while the PC is running.

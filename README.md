@@ -1,6 +1,6 @@
 # Linux LLM AMD — public reference
 
-**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount remain pending authentication. Holds, pins, guards and paused updater remain. [Relocation proof and remaining step](linux/hardware/SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
+**November 2 Sabrent relocation:** all 148 remaining files (176.776 GB) copied to the system drive and fully SHA-256 verified before removing originals. Maya/Strata paths and mount discovery now use system storage; the Sabrent data volume is empty. Forty-one CPU checks pass per checkout; no GPU inference. Administrator boot-mount cleanup and clean unmount are now verified complete; shut down before physical removal. Holds, pins, guards and paused updater remain. [Relocation proof and removal guidance](linux/hardware/SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
 
 **November 2 Strata storage cleanup:** one original GGUF expert backing retained; verified duplicate experts and unused MTP intermediates removed, reclaiming 49.0 GB. Required dense/support and draft runtime files remain. The layout is supported by reviewed v0.2.9 source; installed engine pin and RAM hold remain. Fifteen CPU checks pass per checkout; no GPU inference. [Layout and proof](linux/hardware/STRATA-GGUF-STORAGE-2026-11-02.md).
 
@@ -709,8 +709,8 @@ Administrator unmount/fstab cleanup is required before physical removal.
 
 Retained Maya/Strata weights and packs now use `/opt/local-llm/models/streaming/`
 in sanitized examples. Only sharedSATA1 remains in external model mount discovery.
-The retired Sabrent data volume is empty; authenticated boot-mount cleanup and
-clean unmount remain before shutdown/removal. New static/checkpoint weights go
+The retired Sabrent data volume is empty and cleanly unmounted; its boot-mount
+entry is removed. Shut down before physical removal. New static/checkpoint weights go
 to sharedSATA1; streaming packs use system `models/streaming/`. Keep every drive
 below 90% used and run `python3 dsh/shared_storage.py --place static|streaming
 --size-gb N` before adding files. Historical shared-NVMe paths retain dated evidence.
