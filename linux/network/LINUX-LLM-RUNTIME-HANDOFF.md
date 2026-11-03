@@ -1600,3 +1600,11 @@ was not automated. Network checks are host self-access, not a remote client.
 
 Maya quant research: [candidate assessment](../hardware/MAYA-QUANT-OPTIONS-2026-10-20.md).
 The later [S/S24 A/B](../hardware/MAYA-S-VS-S24-2026-10-20.md) selected Maya-S. DeepSeek-S32K is unchanged; preserve source/format/memory guards.
+
+### CPU-only continuation and Strata preparation
+
+The interrupted RCCL build has now resumed incrementally under a distinct owned CPU-only continuation: two compile jobs, four logical CPU quota, 24 GiB memory maximum and nice 10, with GPU visibility disabled. The old record/log and partial outputs remain intact. It is still building, unselected and unqualified; no completed-library or runtime-pass claim is made. Freeze only this verified owned continuation during future timed comparisons and thaw it in cleanup.
+
+The matching pinned Strata DFlash2 source (revision `a22a1744e85c`) is downloaded and fully SHA-256 verified. NumPy-only conversion produced the exact pinned 522,458,112-byte Q4_0 pack and 339,694,592-byte Q4_0 selector pack, each hash-verified. These are staged artifacts, with no production installation or GPU execution. Three isolated DFlash2/MTP/Off configurations preserve the same target quant, layer split, context/KV, memory tier and three-token verification window. DFlash2 explicitly forbids MTP fallback. Strata Off removes the neural drafter but retains suffix/prompt lookup; native IQ packs reject a verification window below two, so Off must not be described as completely speculation-free.
+
+Static Maya review finds host-staged decode residual transfer and an opt-in native peer-prefill path. Source comments describe prior pageable-transfer wedges, but do not prove this fault's cause; changing RCCL or enabling a bounce option is not an established remedy. GPU work and GLM remain held. PLE disk offload is unsupported by the reviewed staged Qwen4Exp CUDA-only validator; no AMD timing is claimed. The additional Coder download/benchmark remains queued after the requested Strata and PLE stages.

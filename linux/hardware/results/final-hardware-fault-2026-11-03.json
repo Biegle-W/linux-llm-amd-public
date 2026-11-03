@@ -18,5 +18,31 @@
     "PLE offload AMD eligibility and controlled comparison if supported",
     "additional DeepSeek GSQ-RCO Coder preparation and benchmark"
   ],
-  "campaign_complete": false
+  "campaign_complete": false,
+  "CPU_RCCL_continuation": "active incremental CPU-only; original evidence preserved; not selected or GPU-qualified",
+  "Strata_drafter_source_revision": "a22a1744e85c17364dcc54a6a420af7135d4c7f6",
+  "Strata_drafter_files": [
+    {
+      "name": "config.json",
+      "bytes": 1236,
+      "sha256": "2409575986f9ea24d455343eb469c0e6940def5edab1d1be503bb8eb4cc3b1b9"
+    },
+    {
+      "name": "model.safetensors",
+      "bytes": 1206140008,
+      "sha256": "d6723f2a359eaf33ec0c95f22ae8edda896774020c552296a85e1913b4d3186f"
+    },
+    {
+      "name": "qwen3.8-flash-next-dflash2.q4_0.pack",
+      "bytes": 522458112,
+      "sha256": "cda40d62d0eb8f37ed6e272142641a1d2f0de4a32f9e14d0416e7a71534849f1"
+    },
+    {
+      "name": "qwen3.8-flash-next-dflash2.q4_0-selq4.pack",
+      "bytes": 339694592,
+      "sha256": "4a42b98220ea7880664002c8edda1563aecbae754b762a2e2f31b2b91ee93ecd"
+    }
+  ],
+  "Strata_comparison": "prepared-only DFlash2/MTP/Off matched spec3; no GPU execution",
+  "PLE_staged_candidate": "disk_offload requires Qwen4Exp CUDA; AMD route unsupported"
 }
