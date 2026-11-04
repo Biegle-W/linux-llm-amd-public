@@ -59,7 +59,7 @@
   ],
   "preserved": "Existing fault reservation, model/source holds, paused schedules, raw previous evidence and completed format/hash checks",
   "causality": "Recurrence after reported one-PSU rewiring shows split-PSU alone is insufficient to explain all failures. P2P-enabled switch/routing configuration failed; exact cause not isolated.",
-  "updated_utc": "2026-11-04T20:15:10.762758+00:00",
+  "updated_utc": "2026-11-04T20:23:00.644517+00:00",
   "postboot_peer_checks": {
     "stages": {
       "peer-capability": {
@@ -279,5 +279,65 @@
     "PLE/SuperINT4 loading diagnosis",
     "Radiance/TensorFold candidate builds and inference",
     "Sustained stability"
-  ]
+  ],
+  "RMA_assessment": {
+    "conclusion": "Given owner-reported standalone stability, do not RMA yet on this evidence. Sapphire remains implicated, but multi-GPU/switch branch/ordering/software interaction is not isolated.",
+    "implicating_evidence": "Same Sapphire is repeatedly first inaccessible, with SMU/MES/reset and bus loss. New single-PSU report did not prevent recurrence.",
+    "counterevidence_and_confounders": [
+      "Owner confirms Sapphire is stable alone directly in motherboard slot without switch",
+      "Sapphire participated in prior no-switch short inference passes; latest isolated MayaCoder passed there",
+      "Currentboot directpeerreadwrite/IPC/RCCLcorrectness and StrataQwenMTPshortcheck passed before Maya startupfailed",
+      "PhysicalSapphire, switchbranch and secondGPUrole have not been independently exchanged; recurring PCI13 address identifies a location, not proof of faulty silicon",
+      "Existing kernel/ROCm firmware/memorymapping paths remain possible; missing candidateVMracefix is source-applicable but not a localdiagnosis",
+      "Recordedtelemetry beforefault shows neitherthermalguard norRAM/VRAMreserve breach; latertransients andpowerintegrity are not ruledout"
+    ],
+    "discriminating_checks_proposed_not_run": [
+      {
+        "check": "Reuse owner-reported standalone stability; inspect whether its workload/software match the failing case before requiring any repeat",
+        "interpretation": "No standalone failure is reported; current evidence favors investigating multi-GPU configuration before an RMA decision"
+      },
+      {
+        "check": "Powered-off card exchange between switch branches while branch cables/power leads stay fixed; track physical cards independently of PCI addresses",
+        "interpretation": "Failure follows physicalSapphire -> card suspicion strengthens; failure stays branch -> switch/riser/cable/slot/powerpath suspicion strengthens"
+      },
+      {
+        "check": "Same switch/PSU/ACS/IOMMU and software with only P2P driver gate changed",
+        "interpretation": "Separates P2P gate from routing and switch; no automatic trial authorized or queued after crash"
+      }
+    ],
+    "warranty": "Sapphire directs warranty service to original retailer/reseller, requiring proof of purchase; terms vary by region",
+    "warranty_source": "https://www.sapphiretech.com/en/support",
+    "owner_standalone_history": "Owner confirms Sapphire is stable alone directly in motherboard slot without switch"
+  },
+  "VM_update_race_candidate": {
+    "primary_source": "https://lists.freedesktop.org/archives/amd-gfx/2026-October/154551.html",
+    "title": "drm/amdgpu: wait for pending page table updates before switching a VM to CPU updates",
+    "date": "2026-10-08",
+    "mechanism": "Queued SDMA page-table clears can race CPU compute-VM updates; proposedfix records clears in last_update and waits before switching updatefunctions",
+    "upstream_test_scope": "Reported on R9700/gfx1201 and7.2.9/7.3rc6 with a minimalKFDclient; not an exact7900XTX/Maya reproduction",
+    "local_source_package": "linux-source-7.0.0 7.0.0-42.42, retainedAPT-verifieddownload",
+    "source_file_sha256": {
+      "amdgpu_sync.c": "5e6ad0681e47fd938b38907d80e46e81c1f115326aee4388093085708a9d7593",
+      "amdgpu_vm.c": "944f429dabde8907699e425385052f667f9c1cf5d77a37bdc953d0a218913f6a",
+      "amdgpu_vm_pt.c": "dbb67aacf314f032b2a69223a4f5a90bebbee73d12c49dfcc132d25d7bff3329"
+    },
+    "loaded_module_srcversion": "5D83CAC58AAB94EF1CC75F1",
+    "source_findings": {
+      "old_PD_sync_present": true,
+      "new_last_update_wait_present": false,
+      "PT_clear_NULL_commit_present": true,
+      "PT_clear_records_last_update": false,
+      "sync_uses_dependent_read_fences": true
+    },
+    "patch_dry_run_returncode": 0,
+    "dry_run_fuzz": 0,
+    "baseline_unchanged": true,
+    "local_signature_limit": "The reported SQC trap-page fault0x008012B1/permission0xb is not present in our persisted kernel log. Missingfix and similarMESrecovery symptoms do not establish causalidentity.",
+    "action": "Offlinecandidateonly; no kernelbuild/install/bootchange or additionalGPUtest"
+  },
+  "known_fix_not_missing": {
+    "description": "AMD KFD exclusive SVM split-boundary correction is already present in the installed/loaded module per retained binaryaudit; currentloadedsrcversion matches",
+    "source": "https://github.com/torvalds/linux/commit/b89d58b6595d79dc3fe75e213e1f4c5efd0251d4",
+    "upstream_confirmation": "https://github.com/ROCm/rocm-systems/issues/4817#issuecomment-6023275073"
+  }
 }
