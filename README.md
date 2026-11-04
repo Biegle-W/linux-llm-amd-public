@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+<!-- prefill-timing-correction:begin -->
+**November 4 TTFT correction:** the 20-second first-output cutoff was agent-selected and unsuitable for these large models. Deadline-stopped Q1/Strata Coder/loaded-GLM attempts are inconclusive, not proof of model failure. Corrected isolated checks remove the coupled prefill/client cutoffs, use existing total budgets, and retain all physical, heartbeat, decode-stall, ownership and cleanup protections. The active PLE attempt is preserved; a one-off corrected continuation waits for its verified unload. Existing successful short checks and production holds remain. [Policy and verification](linux/hardware/PREFILL-TIMING-CORRECTION-2026-11-04.md).
+<!-- prefill-timing-correction:end -->
+
 <!-- maya-strata-q1-upgrade:begin -->
 **November 4 current results:** DeepSeek Coder on isolated Maya 1.1.52 passed the strict DSH read-tool round trip and unloaded; the same Coder on Strata missed the 20-second first-output limit. Both engines passed the required Coder format checks on both cards. Strata Qwen 0.2.10 remains installed with its passing MTP preset and catalog hold. Unsloth Q1, GLM and Super INT4 remain unqualified under current limits. PLE is still downloading; no model is loaded at this checkpoint. No new GPU reset/bus-loss/OOM was recorded in completed no-switch trials. All guards, holds, P2P-off and paused schedules remain. [Qualification and remaining work](linux/hardware/MAYA-STRATA-Q1-UPGRADE-2026-11-03.md). [Community setups](linux/hardware/DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md).
 <!-- maya-strata-q1-upgrade:end -->

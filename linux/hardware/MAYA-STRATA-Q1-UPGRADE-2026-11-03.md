@@ -1,5 +1,8 @@
 # Latest Maya/Strata, Unsloth Q1 and pinned tasks — November 3, 2026
 
+**November 4 timing correction:** the agent-added 20-second TTFT cutoff was unsuitable for these large models. Past first-output deadline stops are **inconclusive inference attempts**, not proof the models cannot work. Raw outcomes remain. Corrected diagnostics measure prefill and use existing enclosing budgets while preserving physical safety and cleanup guards. [Corrected policy and verification](PREFILL-TIMING-CORRECTION-2026-11-04.md).
+
+
 **Partial qualification complete; remaining downloads/checks continue.** Latest official Maya 1.1.52 (`6c9a27b44fa1`) and Strata 0.2.10 (`ffa80d73133e`, DeepSeek native 0.1.56) are built in isolation. This record separates passing short checks from failed qualifications and candidates that have not run. Strata Qwen 0.2.10 is now installed with the passing MTP settings: 12 GiB resident expert budget, native reserve 1024 MiB, prefill 256, spec 2/p=0.7, USERPTR off, direct-I/O loading and the tested GPU order. Source/binary hashes, installed server environment, resource admission, assets and unchanged catalog hold were verified. A complete rollback copy is retained. Maya remains 1.1.40 and Strata DeepSeek remains 0.2.4 after their candidate request failures. All catalog holds remain. No new GPU reset, bus-loss or OOM fault has been recorded in this no-switch boot.
 
 ## Completed short checks

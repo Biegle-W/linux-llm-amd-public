@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "Maya Coder short tool check passed; Strata Coder first-output stop; PLE download pending",
+  "status": "Past TTFT-cutoff outcomes inconclusive; corrected short diagnostics queued after active PLE",
   "hardware": "Two RX 7900 XTX, 64 GB installed RAM, direct Gen4 x16 and chipset Gen4 x4; no external switch; P2P off",
   "candidate_sources": {
     "maya": {
@@ -13,22 +13,6 @@
       "revision": "ffa80d73133ea5c548aefe57889a16e8085a938f",
       "selection": "Qwen installed and held; DeepSeek candidate not promoted"
     }
-  },
-  "guards": {
-    "free_RAM_GiB": 1,
-    "free_VRAM_MiB_per_card": 128,
-    "MemoryHigh": "max",
-    "MemoryMax": "MemTotal minus 1 GiB",
-    "swap_policy": "loading-swap-v5",
-    "swap_GiB": 33.53,
-    "first_output_seconds": 20,
-    "request_seconds": 30,
-    "decode_stall_seconds": 3,
-    "supervisor_heartbeat_seconds": 6,
-    "cleanup_seconds": 15,
-    "edge_C": 75,
-    "junction_memory_C": 90,
-    "CPU_C": 85
   },
   "trials": [
     {
@@ -321,7 +305,9 @@
         "owned_cgroups_empty": true,
         "remaining_KFD_clients": [],
         "stop_reason": "first output deadline"
-      }
+      },
+      "inference_verdict": "inconclusive: agent-selected TTFT cutoff",
+      "qualification_status": "inconclusive inference; raw timing stop retained"
     },
     {
       "stage": "maya-q1",
@@ -346,7 +332,9 @@
         "owned_cgroups_empty": true,
         "remaining_KFD_clients": [],
         "stop_reason": "first output deadline"
-      }
+      },
+      "inference_verdict": "inconclusive: agent-selected TTFT cutoff",
+      "qualification_status": "inconclusive inference; raw timing stop retained"
     },
     {
       "stage": "maya-glm",
@@ -389,7 +377,9 @@
         "owned_cgroups_empty": true,
         "remaining_KFD_clients": [],
         "stop_reason": "first output deadline"
-      }
+      },
+      "inference_verdict": "inconclusive: agent-selected TTFT cutoff",
+      "qualification_status": "inconclusive inference; raw timing stop retained"
     },
     {
       "stage": "maya-glm-64gb",
@@ -452,7 +442,9 @@
         "owned_cgroups_empty": true,
         "remaining_KFD_clients": [],
         "stop_reason": "first output deadline"
-      }
+      },
+      "inference_verdict": "inconclusive: agent-selected TTFT cutoff",
+      "qualification_status": "inconclusive inference; raw timing stop retained"
     },
     {
       "stage": "vllm-super-int4",
@@ -558,8 +550,9 @@
           "status": "failed"
         }
       ],
-      "qualification_status": "blocked by guard",
-      "new_kernel_fault_count": 0
+      "qualification_status": "inconclusive inference; raw timing stop retained",
+      "new_kernel_fault_count": 0,
+      "inference_verdict": "inconclusive: agent-selected TTFT cutoff"
     },
     {
       "stage": "maya-coder",
@@ -924,9 +917,9 @@
     "limits": "Three historical containment fixture expectations fail under the owner v5 default; all nine pass under explicit CPU-only legacy fixture opt-ins. No historical limits applied to GPU tests."
   },
   "remaining": [
-    "Complete PLE download and its existing one-off short check after verification",
-    "Review PLE result and reconcile records; no duplicate Coder/math tests",
-    "Maya Coder passed isolated configuration only; no automatic production promotion"
+    "Preserve current PLE attempt and inspect its actual outcome",
+    "Existing one-off timing-correction continuation waits for verified cleanup, then runs only diagnostic-invalidated short checks with corrected waiting",
+    "Review new results before any activation; no automatic promotion or numeric/math repeats"
   ],
   "installed_sources": {
     "maya": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
@@ -1065,5 +1058,33 @@
       "test_source_sha256": "8d7077435224b3f999aa6d332e17549ec7cdeb480f9c7654fc8b8516f9012322",
       "scope": "Same legal test bodies/reference/tolerances and exact engine objects; CLI selects one pair (two shapes) or new dense formats, each <=210s; no default all-matrix run."
     }
-  ]
+  ],
+  "diagnostic_timing_correction": {
+    "policy": "prefill-observation-v1",
+    "first_token_deadline_seconds": null,
+    "client_wait": "remaining existing overall stage budget minus existing cleanup allowance",
+    "post_first_output_budget_seconds": 30,
+    "decode_stall_seconds": 3,
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "loading_and_stage_caps": "unchanged",
+    "physical_guards": "unchanged",
+    "source_of_old_20s": "agent-selected diagnostic default, not an explicit owner-set requirement"
+  },
+  "historical_guard_profile": {
+    "free_RAM_GiB": 1,
+    "free_VRAM_MiB_per_card": 128,
+    "MemoryHigh": "max",
+    "MemoryMax": "MemTotal minus 1 GiB",
+    "swap_policy": "loading-swap-v5",
+    "swap_GiB": 33.53,
+    "first_output_seconds": 20,
+    "request_seconds": 30,
+    "decode_stall_seconds": 3,
+    "supervisor_heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "edge_C": 75,
+    "junction_memory_C": 90,
+    "CPU_C": 85
+  }
 }
