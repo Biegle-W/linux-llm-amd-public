@@ -1,5 +1,7 @@
 # AMD peer-access disable verification — November 3, 2026
 
+**Later hardware state:** the external switch has been removed; P2P stays off. See [no-switch validation and guard limits](NO-SWITCH-VALIDATION-2026-11-03.md). The switch-present measurements below are historical.
+
 **Direct GPU peer-memory access is disabled and verified for the audited dual-XTX inference stack. The initial bounded Strata attempt hit its 150-second loading deadline. A separately authorized loading-only retry increased it to 210 seconds while retaining the 240-second overall caps and all other controls. That retry became ready in 71.327 s but did not complete its first inference request; it remains unqualified.** Both GPUs and the physical PCIe switch remain present.
 
 ## Active disable and checks

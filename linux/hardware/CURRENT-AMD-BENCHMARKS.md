@@ -1,6 +1,6 @@
 # Current dual-AMD benchmarks and DSH status — November 2, 2026
 
-**November 3 no-switch validation in progress:** both GPUs are present on Gen4 x16/x4 paths with P2P off. Basic RAM/storage/GPU correctness and short Strata, Empero, Flint and Sage DSH checks pass. Qwen/vLLM reached the retained loading deadline; other retained LLM/graphics paths are being checked serially. No production promotion, guard relaxation or schedule change. [Coverage and current results](NO-SWITCH-VALIDATION-2026-11-03.md).
+**November 3 no-switch validation completed with guard blocks:** eight short LLM/backend checks and six graphics renders passed without a new GPU reset/bus-loss/OOM fault. Sustained Strata stopped at the configured Sapphire 90°C junction limit; GLM stopped at the 128 MiB free-VRAM floor. Gen4 x16/x4 paths, P2P-off, source pins, production pauses and all resource guards remain. No GPU job is active. [Final coverage and limits](NO-SWITCH-VALIDATION-2026-11-03.md).
 
 **November 3 P2P-off retry remains unqualified:** the owner-authorized loading-only retry used 210 seconds, retained both 240-second overall caps and all other guards, and loaded in 71.327 s; its first request did not complete. P2P-off remains selected, GPU work is held and no test is active after recovery. [Current state and evidence limits](AMD-P2P-DISABLE-2026-11-03.md).
 

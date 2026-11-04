@@ -1,119 +1,301 @@
 {
-  "schema": 1,
+  "schema": 2,
   "date": "2026-11-03",
-  "status": "in_progress",
+  "status": "completed_with_guard_blocks",
   "topology": {
-    "broadcom_switch_present": false,
-    "gpu_count": 2,
-    "vram_per_gpu_gib": 24,
-    "narrowest_paths": [
-      "PCIe4x16",
-      "PCIe4x4"
+    "Broadcom_switch_present": false,
+    "GPUs": 2,
+    "VRAM_per_card_gib": 24,
+    "upstream_paths": [
+      "Gen4 x16",
+      "Gen4 x4"
     ],
-    "visible_ram_gib": 61.55192184448242
+    "P2P_driver_flags": {
+      "pcie_p2p": "N",
+      "use_xgmi_p2p": "0"
+    }
   },
-  "p2p_driver_flags": {
-    "pcie_p2p": "N",
-    "use_xgmi_p2p": "0"
-  },
-  "retained_card_ordinal_mapping": [
-    "PowerColor",
-    "Sapphire"
-  ],
-  "completed_or_active_stages": [
+  "LLM_paths": [
     {
-      "stage": "hardware-smoke",
-      "status": "passed",
-      "guard": "passed",
-      "load_seconds": null,
-      "generated_tokens": null,
-      "request_count": null,
-      "error": null,
-      "owned_scopes_empty": true,
-      "new_gpu_faults": false
-    },
-    {
-      "stage": "llama-empero",
-      "status": "passed-one-short-DSH-check",
-      "guard": "passed",
-      "load_seconds": 47.95719823500008,
-      "generated_tokens": 76,
-      "request_count": 2,
-      "error": null,
-      "owned_scopes_empty": true,
-      "new_gpu_faults": false
-    },
-    {
-      "stage": "llama-flint",
-      "status": "passed-one-short-DSH-check",
-      "guard": "passed",
-      "load_seconds": 51.95374915399998,
-      "generated_tokens": 159,
-      "request_count": 2,
-      "error": null,
-      "owned_scopes_empty": true,
-      "new_gpu_faults": false
-    },
-    {
+      "path": "Strata / Qwen IQ3",
       "stage": "strata-short",
-      "status": "passed-one-short-DSH-check-with-direct-IO",
-      "guard": "passed",
+      "status": "passed",
       "load_seconds": 77.85473289200002,
-      "generated_tokens": 77,
-      "request_count": 2,
-      "error": null,
+      "DSH_generated_tokens": 77,
+      "TTFT_seconds": [
+        8.651005655999995,
+        7.323528671999952
+      ],
       "owned_scopes_empty": true,
       "new_gpu_faults": false
     },
     {
-      "stage": "vllm-bolt",
-      "status": "starting",
-      "guard": "starting",
-      "load_seconds": null,
-      "generated_tokens": null,
-      "request_count": 0,
-      "error": null,
-      "owned_scopes_empty": null,
-      "new_gpu_faults": false
-    },
-    {
-      "stage": "vllm-qwen",
-      "status": "failed",
-      "guard": "failed",
-      "load_seconds": null,
-      "generated_tokens": null,
-      "request_count": 0,
-      "error": "TimeoutError: 210-second loading deadline",
+      "path": "llama / Empero",
+      "stage": "llama-empero",
+      "status": "passed",
+      "load_seconds": 47.95719823500008,
+      "DSH_generated_tokens": 76,
+      "TTFT_seconds": [
+        2.455303877999995,
+        0.17693839699995806
+      ],
       "owned_scopes_empty": true,
       "new_gpu_faults": false
     },
     {
+      "path": "llama / Flint",
+      "stage": "llama-flint",
+      "status": "passed",
+      "load_seconds": 51.95374915399998,
+      "DSH_generated_tokens": 159,
+      "TTFT_seconds": [
+        1.3252515540000331,
+        0.2084382479999931
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "llama / Ornith",
+      "stage": "llama-ornith",
+      "status": "passed",
+      "load_seconds": 171.35142532300006,
+      "DSH_generated_tokens": 77,
+      "TTFT_seconds": [
+        18.264640595999936,
+        4.584082572999932
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "vLLM / Sage",
       "stage": "vllm-sage",
-      "status": "passed-one-short-DSH-check",
-      "guard": "passed",
+      "status": "passed",
       "load_seconds": 83.46266162699999,
-      "generated_tokens": 75,
-      "request_count": 2,
-      "error": null,
+      "DSH_generated_tokens": 75,
+      "TTFT_seconds": [
+        1.4218822920001912,
+        0.24015014600013274
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "SGLang / Qwen",
+      "stage": "sglang-qwen",
+      "status": "passed",
+      "load_seconds": 80.6983305340002,
+      "DSH_generated_tokens": 75,
+      "TTFT_seconds": [
+        5.3684753190000265,
+        0.44644336999999723
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "vLLM / Qwen",
+      "stage": "vllm-qwen-normal-startup",
+      "status": "passed",
+      "load_seconds": 111.8368011460002,
+      "DSH_generated_tokens": 80,
+      "TTFT_seconds": [
+        4.800258293999832,
+        0.2932424440000432
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "vLLM / Bolt",
+      "stage": "vllm-bolt-normal-startup",
+      "status": "passed",
+      "load_seconds": 152.59007194499964,
+      "DSH_generated_tokens": 84,
+      "TTFT_seconds": [
+        5.380814898000153,
+        0.28932311500011565
+      ],
+      "owned_scopes_empty": true,
+      "new_gpu_faults": false
+    },
+    {
+      "path": "Maya / GLM",
+      "stage": "maya-glm-interface-fixed",
+      "status": "stopped: free VRAM below 128 MiB",
+      "load_seconds": null,
+      "DSH_generated_tokens": null,
+      "TTFT_seconds": [],
       "owned_scopes_empty": true,
       "new_gpu_faults": false
     }
   ],
-  "normal_profiles_activated": false,
-  "engine_upgrades": false,
-  "schedules_changed": false,
-  "guards_changed": false,
-  "ram_test_subset_gib": 2,
-  "ram_test_patterns": 3,
-  "unavailable_assets": [
-    "removed Super IQ3",
-    "removed old DeepSeek XS backing for Maya/Strata"
+  "passed_short_LLM_paths": 8,
+  "graphics_workflows": [
+    {
+      "workflow": "graphics-flux-t2i",
+      "status": "render passed; cleanup separately verified",
+      "seconds": 98.55850036499987,
+      "artifacts": [
+        {
+          "bytes": 1936269,
+          "width": 1024,
+          "height": 1024
+        }
+      ]
+    },
+    {
+      "workflow": "graphics-flux-i2i",
+      "status": "passed including guarded unload",
+      "seconds": 48.69413028099984,
+      "artifacts": [
+        {
+          "bytes": 1753572,
+          "width": 1248,
+          "height": 832
+        }
+      ]
+    },
+    {
+      "workflow": "graphics-qwen-t2i",
+      "status": "passed including guarded unload",
+      "seconds": 92.274863697,
+      "artifacts": [
+        {
+          "bytes": 350841,
+          "width": 512,
+          "height": 512
+        }
+      ]
+    },
+    {
+      "workflow": "graphics-qwen-edit",
+      "status": "passed including guarded unload",
+      "seconds": 44.22220919900019,
+      "artifacts": [
+        {
+          "bytes": 430684,
+          "width": 640,
+          "height": 416
+        }
+      ]
+    },
+    {
+      "workflow": "graphics-h3-t2v",
+      "status": "passed including guarded unload",
+      "seconds": 151.8518055640002,
+      "artifacts": [
+        {
+          "bytes": 109197,
+          "video_probe": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "h264",
+                "width": 608,
+                "height": 352
+              },
+              {
+                "codec_name": "aac"
+              }
+            ],
+            "format": {
+              "duration": "1.625000"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "workflow": "graphics-h3-i2v",
+      "status": "passed including guarded unload",
+      "seconds": 108.72511529999974,
+      "artifacts": [
+        {
+          "bytes": 255292,
+          "video_probe": {
+            "programs": [],
+            "stream_groups": [],
+            "streams": [
+              {
+                "codec_name": "h264",
+                "width": 608,
+                "height": 352
+              },
+              {
+                "codec_name": "aac"
+              }
+            ],
+            "format": {
+              "duration": "1.625000"
+            }
+          }
+        }
+      ]
+    }
   ],
-  "cpu_tests": {
-    "current_owner_policy": "8 passed",
-    "P2P": "40 passed",
-    "llama source/ownership/launch": "18 passed",
-    "shared storage": "26 passed",
-    "legacy_validation": "memory82/swap77 replayed; remaining outdated fixture/default expectations recorded; no guard change"
-  }
+  "valid_graphics_outputs": 6,
+  "sustained_Strata": {
+    "planned_seconds": 600,
+    "completed": false,
+    "reason": "Sapphire junction reached configured90C guard",
+    "load_seconds": 78.10735151500012,
+    "complete_tool_rounds": 3,
+    "completed_requests": 7,
+    "last_fully_saved_sustained_seconds": 54.893484228000034,
+    "threshold_sample_elapsed_from_stage_start": 147.41240577200006,
+    "temperature_peaks_c": {
+      "0000:03:00.0/mem": 74.0,
+      "0000:03:00.0/edge": 70.0,
+      "0000:03:00.0/junction": 90.0,
+      "0000:0a:00.0/mem": 70.0,
+      "0000:0a:00.0/edge": 54.0,
+      "0000:0a:00.0/junction": 85.0
+    },
+    "owned_scopes_empty": true
+  },
+  "minimum_sampled_host_available_gib": 14.938373565673828,
+  "max_owned_swap_bytes": 6209282048,
+  "max_owned_spill_bytes": 0,
+  "sampled_gpu_temperature_peaks_c": {
+    "Sapphire/mem": 74.0,
+    "Sapphire/edge": 70.0,
+    "Sapphire/junction": 90.0,
+    "PowerColor/mem": 70.0,
+    "PowerColor/edge": 54.0,
+    "PowerColor/junction": 85.0
+  },
+  "sampled_cpu_package_peaks_c": {
+    "Package id 0": 82.0
+  },
+  "new_gpu_reset_bus_oom_faults": 0,
+  "final_KFD_clients": 0,
+  "active_GPU_jobs": 0,
+  "CPU_checks": {
+    "current_policy_regression_subsets_passed": 92,
+    "cleanup_harness_checks_passed": 5,
+    "RAM_subset_gib": 2,
+    "RAM_patterns": 3,
+    "both_GPU_local_patterns": 3,
+    "legacy_memory_swap_tests": "two historical test methods retain stale fixtures/default-policy expectations; not fully green"
+  },
+  "unavailable": [
+    "retired Super IQ3 weights",
+    "removed old DeepSeek XS backing for Maya",
+    "removed old DeepSeek XS backing for Strata"
+  ],
+  "production_profiles_enabled": false,
+  "source_pins_changed": false,
+  "production_guards_changed": false,
+  "schedules_changed": false,
+  "fault_hold_retained": true,
+  "first_Flux_render_note": "Completed valid1024PNG; outer test guard stopped during teardown telemetry race. Fresh audit verified empty scopes/KFD and noGPUfault. Future harness added positive pinned termination/empty-KFD proof within same15sdeadline; active missing telemetry still fails closed. Completed render not repeated.",
+  "qualification_limits": [
+    "Short DSH probes only for individual paths; not full configured context qualification",
+    "600s sustained Strata test incomplete due thermal guard",
+    "No full RAM/DIMM certification or sustained expert-file-streaming verdict",
+    "Physical card order normalized for Strata/llama comparison; production device ordering not changed"
+  ]
 }
