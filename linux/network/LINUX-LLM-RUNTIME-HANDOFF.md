@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+<!-- maya-strata-q1-upgrade:begin -->
+**November 3 latest-engine and community follow-up:** Strata Qwen 0.2.10 is installed with the short DSH-qualified MTP settings; its catalog hold remains. Explicit DFlash2 inference passed with a retained harness-completion race. Maya GLM and Unsloth Q1 candidates remain unqualified after latency/loading stops; their installed pins are retained. Super INT4 whole-expert loading reached its existing startup deadline, with owned unload independently verified. Coder and PLE downloads continue under a one-off short-check continuation; no GPU job is active at this checkpoint. No new GPU reset/bus-loss/OOM fault is recorded in this no-switch boot. Holds, P2P-off, guard thresholds and paused recurring schedules remain. [Qualification and remaining tasks](../hardware/MAYA-STRATA-Q1-UPGRADE-2026-11-03.md). [Successful dual-XTX/64 GB community setups](../hardware/DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md).
+<!-- maya-strata-q1-upgrade:end -->
+
 **November 3 no-switch validation completed with guard blocks:** eight short LLM/backend checks and six graphics renders passed without a new GPU reset/bus-loss/OOM fault. Sustained Strata stopped at the configured Sapphire 90°C junction limit; GLM stopped at the 128 MiB free-VRAM floor. Gen4 x16/x4 paths, P2P-off, source pins, production pauses and all resource guards remain. No GPU job is active. [Final coverage and limits](../hardware/NO-SWITCH-VALIDATION-2026-11-03.md).
 
 **November 3 P2P-off retry remains unqualified:** the owner-authorized loading-only retry used 210 seconds, retained both 240-second overall caps and all other guards, and loaded in 71.327 s; its first request did not complete. P2P-off remains selected, GPU work is held and no test is active after recovery. [Current state and evidence limits](../hardware/AMD-P2P-DISABLE-2026-11-03.md).
@@ -464,13 +468,13 @@ change. Nightly updates remain paused.
 | llama.cpp | `0ef27309b78d` global/Flint; Empero `eb4e244be77a` and paused Ornith `2280f0fd163b` hold independent builds |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `7dd5cf18e68c` |
+| Strata Qwen | `ffa80d73133e` / 0.2.10; short DSH-qualified MTP settings, catalog hold retained |
 | Maya | `cbaaec5d70fd` |
 | Strata DeepSeek | `8183c6b67162` |
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Latest campaign checkpoint: llama split promotion for Flint; Empero retains prior code after a strict final-format failure. Maya comparison and remaining restoration work continue. The October30 scheduled run remains historical.
+Latest checkpoint: Strata Qwen 0.2.10 installed after the short DSH check; catalog hold retained. Flint keeps its split promotion and Empero its prior code. Maya/Strata DeepSeek candidates failed short qualification, so their installed pins remain. Super INT4 whole-expert loading timed out; Coder and PLE download/short-check continuation remains. The nightly updater stays paused.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
@@ -906,9 +910,9 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 
 ## Active model catalog
 
-The current catalog has **12 enabled profiles**: five llama.cpp, one SGLang, two vLLM, two Strata and two Maya. The current i9/64 GB report retains separate timing methods and exact build attribution.
-Earlier runtime/placement checks remain in their dated reports and must not
-replace the catalog and settings below.
+**Historical catalog snapshot:** 12 profiles were enabled then. Later retirements and holds supersede this snapshot; it does not describe current availability. Use the latest dated status at the top and the current profile files. These historical rows retain their original timing and build attribution.
+Earlier runtime/placement checks and the rows below retain historical settings;
+current profile files and the latest dated status control availability.
 
 All contexts below include system instructions, tool definitions/results,
 conversation history, user input **and output**. They are configured budgets,

@@ -45,6 +45,18 @@ class Process:
     state: str
 
 
+def process_identity(pid, *, proc_root=Path('/proc')):
+    """Read kernel identity without touching a worker's locked argument pages."""
+    path = proc_root / str(pid)
+    try:
+        if path.stat().st_uid != os.getuid():
+            return None
+        fields = (path / 'stat').read_text().rsplit(')', 1)[1].split()
+        return Process(pid, int(fields[1]), fields[19], (), '', fields[0])
+    except (OSError, ValueError, IndexError):
+        return None
+
+
 def process(pid):
     path = Path('/proc') / str(pid)
     try:
@@ -178,19 +190,19 @@ def owned_processes(snapshot, root=ROOT, owner=None, exclude=None):
     return {pid: snapshot[pid] for pid in selected if snapshot[pid].state != 'Z'}
 
 
-def alive(old):
-    current = process(old.pid)
+def alive(old, *, identity_only=False):
+    current = process_identity(old.pid) if identity_only else process(old.pid)
     return current is not None and current.start == old.start and current.state != 'Z'
 
 
-def send(old, sig):
+def send(old, sig, *, identity_only=False):
     # pidfd prevents a reused PID from being signalled after inspection.
     try:
         fd = os.pidfd_open(old.pid)
     except ProcessLookupError:
         return
     try:
-        if alive(old):
+        if alive(old, identity_only=identity_only):
             signal.pidfd_send_signal(fd, sig)
     except ProcessLookupError:
         pass

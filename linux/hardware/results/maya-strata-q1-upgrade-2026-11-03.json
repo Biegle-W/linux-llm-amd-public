@@ -1,0 +1,528 @@
+{
+  "date": "2026-11-03",
+  "status": "Qwen upgrade installed; remaining download/short-check continuation active",
+  "hardware": "Two RX 7900 XTX, 64 GB installed RAM, direct Gen4 x16 and chipset Gen4 x4; no external switch; P2P off",
+  "candidate_sources": {
+    "maya": {
+      "version": "1.1.52",
+      "revision": "6c9a27b44fa17cab662d8bfe4885d6f865288901",
+      "selection": "isolated, not promoted"
+    },
+    "strata": {
+      "version": "0.2.10",
+      "revision": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+      "selection": "Qwen installed and held; DeepSeek candidate not promoted"
+    }
+  },
+  "guards": {
+    "free_RAM_GiB": 1,
+    "free_VRAM_MiB_per_card": 128,
+    "MemoryHigh": "max",
+    "MemoryMax": "MemTotal minus 1 GiB",
+    "swap_policy": "loading-swap-v5",
+    "swap_GiB": 33.53,
+    "first_output_seconds": 20,
+    "request_seconds": 30,
+    "decode_stall_seconds": 3,
+    "supervisor_heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "edge_C": 75,
+    "junction_memory_C": 90,
+    "CPU_C": 85
+  },
+  "trials": [
+    {
+      "stage": "strata-mtp",
+      "status": "failed",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 138,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 55686103040,
+        "min_free_VRAM_bytes": [
+          20938752,
+          2132959232
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "strata-mtp-reserve1024",
+      "status": "passed-one-short-DSH-check",
+      "load_seconds": 75.33425913300016,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 86,
+        "initial_input_tokens": 5695,
+        "usage_per_step": [
+          {
+            "inputTokens": 5695,
+            "outputTokens": 68,
+            "totalTokens": 5763
+          },
+          {
+            "inputTokens": 5876,
+            "outputTokens": 18,
+            "totalTokens": 5894
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "TTFT_seconds": 7.988653325999621,
+          "elapsed_seconds": 9.018393241000012,
+          "output_chunks": 50,
+          "usage": {
+            "prompt_tokens": 5695,
+            "completion_tokens": 68,
+            "total_tokens": 5763,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "TTFT_seconds": 7.511099254999863,
+          "elapsed_seconds": 7.827901806998852,
+          "output_chunks": 17,
+          "usage": {
+            "prompt_tokens": 5876,
+            "completion_tokens": 18,
+            "total_tokens": 5894,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ],
+      "guard": {
+        "status": "passed",
+        "samples": 347,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 51696476160,
+        "min_free_VRAM_bytes": [
+          615612416,
+          1924231168
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "strata-dflash2",
+      "status": "passed-one-short-DSH-check",
+      "load_seconds": 114.4814773629987,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 81,
+        "initial_input_tokens": 5680,
+        "usage_per_step": [
+          {
+            "inputTokens": 5680,
+            "outputTokens": 63,
+            "totalTokens": 5743
+          },
+          {
+            "inputTokens": 5851,
+            "outputTokens": 18,
+            "totalTokens": 5869
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "TTFT_seconds": 7.857673170999988,
+          "elapsed_seconds": 9.403697313999146,
+          "output_chunks": 45,
+          "usage": {
+            "prompt_tokens": 5680,
+            "completion_tokens": 63,
+            "total_tokens": 5743,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "TTFT_seconds": 7.282337789998564,
+          "elapsed_seconds": 7.75159050199909,
+          "output_chunks": 17,
+          "usage": {
+            "prompt_tokens": 5851,
+            "completion_tokens": 18,
+            "total_tokens": 5869,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ],
+      "guard": {
+        "status": "passed",
+        "samples": 447,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 53051379712,
+        "min_free_VRAM_bytes": [
+          801337344,
+          1926840320
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "strata-dflash2-explicit",
+      "status": "failed",
+      "load_seconds": 133.28696003000005,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 85,
+        "initial_input_tokens": 5686,
+        "usage_per_step": [
+          {
+            "inputTokens": 5686,
+            "outputTokens": 65,
+            "totalTokens": 5751
+          },
+          {
+            "inputTokens": 5863,
+            "outputTokens": 20,
+            "totalTokens": 5883
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "TTFT_seconds": 7.810230729000978,
+          "elapsed_seconds": 8.982747650999954,
+          "output_chunks": 47,
+          "usage": {
+            "prompt_tokens": 5686,
+            "completion_tokens": 65,
+            "total_tokens": 5751,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "TTFT_seconds": 7.419708654000715,
+          "elapsed_seconds": 7.876691329000096,
+          "output_chunks": 19,
+          "usage": {
+            "prompt_tokens": 5863,
+            "completion_tokens": 20,
+            "total_tokens": 5883,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      ],
+      "guard": {
+        "status": "failed",
+        "samples": 521,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 52441784320,
+        "min_free_VRAM_bytes": [
+          419164160,
+          1819799552
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "strata-q1",
+      "status": "failed",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 71,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 56591601664,
+        "min_free_VRAM_bytes": [
+          32182272,
+          49774592
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "strata-q1-reserve1024",
+      "status": "starting",
+      "load_seconds": 157.04892112999914,
+      "requests": [
+        {
+          "index": 1,
+          "status": "starting"
+        }
+      ],
+      "guard": {
+        "status": "failed",
+        "samples": 613,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 52978425856,
+        "min_free_VRAM_bytes": [
+          820187136,
+          723759104
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "first output deadline"
+      }
+    },
+    {
+      "stage": "maya-q1",
+      "status": "starting",
+      "load_seconds": 153.5727977360002,
+      "requests": [
+        {
+          "index": 1,
+          "status": "starting"
+        }
+      ],
+      "guard": {
+        "status": "failed",
+        "samples": 597,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 54626816000,
+        "min_free_VRAM_bytes": [
+          607952896,
+          517414912
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "first output deadline"
+      }
+    },
+    {
+      "stage": "maya-glm",
+      "status": "starting",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 532,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 49341579264,
+        "min_free_VRAM_bytes": [
+          858120192,
+          868294656
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "maya-glm-health-fixed",
+      "status": "starting",
+      "load_seconds": 112.91390015199977,
+      "requests": [
+        {
+          "index": 1,
+          "status": "starting"
+        }
+      ],
+      "guard": {
+        "status": "failed",
+        "samples": 294,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 48029974528,
+        "min_free_VRAM_bytes": [
+          831844352,
+          769429504
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "first output deadline"
+      }
+    },
+    {
+      "stage": "maya-glm-64gb",
+      "status": "starting",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 185,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 25863446528,
+        "min_free_VRAM_bytes": [
+          862109696,
+          858116096
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "supervisor heartbeat missing"
+      }
+    },
+    {
+      "stage": "maya-glm-64gb-identity",
+      "status": "failed",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 724,
+        "max_owned_swap_bytes": 194191360,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 14222782464,
+        "min_free_VRAM_bytes": [
+          858132480,
+          868331520
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "model loading deadline"
+      }
+    },
+    {
+      "stage": "strata-q1-community",
+      "status": "failed",
+      "load_seconds": 51.04170838100072,
+      "requests": [
+        {
+          "index": 1,
+          "status": "failed"
+        }
+      ],
+      "guard": {
+        "status": "failed",
+        "samples": 270,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 52537991168,
+        "min_free_VRAM_bytes": [
+          819507200,
+          700186624
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "first output deadline"
+      }
+    },
+    {
+      "stage": "vllm-super-int4",
+      "status": "failed",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 115,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 54403227648,
+        "min_free_VRAM_bytes": [
+          23476068352,
+          23484362752
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    {
+      "stage": "vllm-super-int4-ep",
+      "status": "failed",
+      "requests": [],
+      "guard": {
+        "status": "failed",
+        "samples": 2692,
+        "max_owned_swap_bytes": 7816916992,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 1839362048,
+        "min_free_VRAM_bytes": [
+          8534999040,
+          8543289344
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "cleanup_verified_independently": "2026-11-04T04:08:50.971907+00:00",
+        "stop_reason": "model loading deadline"
+      }
+    }
+  ],
+  "corrections": {
+    "strata-dflash2": "Mislabeled: actual native argv had no neural drafter. Does not qualify DFlash2.",
+    "strata-dflash2-explicit": "Actual DFlash2 active and strict DSH correct; raw runner failed proxy completion race. Final proxy rows both completed. Inference passed with audited harness race; raw failure retained.",
+    "maya-glm": "Invalid old readiness adapter; loaded model never received inference.",
+    "maya-glm-64gb": "Supervisor blocked reading process cmdline during host-memory registration; heartbeat stop, not GPU fault. Corrected identity reader leaves thresholds unchanged.",
+    "vllm-super-int4-ep": "Startup deadline. Controller interrupted saving cleanup; independent exact-owned-unit/KFD/kernel verification confirms unload. Raw interrupted record retained; no pass or rerun."
+  },
+  "runtime_guard_fix": {
+    "scope": "Already owned cgroup members use kernel stat identity, UID/start-time and exact/nested cgroup checks; pidfd signals retained. Global process classification unchanged.",
+    "verification": {
+      "private_identity_and_owner_policy": 14,
+      "public_identity_and_owner_policy": 14,
+      "ownership_containment_legacy_fixture_replay": 9,
+      "private_known_scope": 4,
+      "private_readiness": 5,
+      "private_proxy_commit": 4,
+      "private_cleanup_signal_race": 4,
+      "private_continuation_boundaries": 5,
+      "installed_server_effective_environment": 1
+    },
+    "limits": "Three historical containment fixture expectations fail under the owner v5 default; all nine pass under explicit CPU-only legacy fixture opt-ins. No historical limits applied to GPU tests."
+  },
+  "remaining": [
+    "Coder and PLE verified downloads continue",
+    "One-off continuation converts Coder metadata and performs one short check per candidate, stopping on unsafe boundary",
+    "Inspect saved outcomes after continuation; no automatic production promotion or new recurring schedule"
+  ],
+  "installed_sources": {
+    "maya": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
+    "strata_qwen": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "strata_deepseek": "8183c6b67162340c09b67360860177c577a65f2e"
+  }
+}

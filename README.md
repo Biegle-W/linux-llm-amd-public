@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+<!-- maya-strata-q1-upgrade:begin -->
+**November 3 latest-engine and community follow-up:** Strata Qwen 0.2.10 is installed with the short DSH-qualified MTP settings; its catalog hold remains. Explicit DFlash2 inference passed with a retained harness-completion race. Maya GLM and Unsloth Q1 candidates remain unqualified after latency/loading stops; their installed pins are retained. Super INT4 whole-expert loading reached its existing startup deadline, with owned unload independently verified. Coder and PLE downloads continue under a one-off short-check continuation; no GPU job is active at this checkpoint. No new GPU reset/bus-loss/OOM fault is recorded in this no-switch boot. Holds, P2P-off, guard thresholds and paused recurring schedules remain. [Qualification and remaining tasks](linux/hardware/MAYA-STRATA-Q1-UPGRADE-2026-11-03.md). [Successful dual-XTX/64 GB community setups](linux/hardware/DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md).
+<!-- maya-strata-q1-upgrade:end -->
+
 **November 3 no-switch validation completed with guard blocks:** eight short LLM/backend checks and six graphics renders passed without a new GPU reset/bus-loss/OOM fault. Sustained Strata stopped at the configured Sapphire 90°C junction limit; GLM stopped at the 128 MiB free-VRAM floor. Gen4 x16/x4 paths, P2P-off, source pins, production pauses and all resource guards remain. No GPU job is active. [Final coverage and limits](linux/hardware/NO-SWITCH-VALIDATION-2026-11-03.md).
 
 **November 3 P2P-off retry remains unqualified:** the owner-authorized loading-only retry used 210 seconds, retained both 240-second overall caps and all other guards, and loaded in 71.327 s; its first request did not complete. P2P-off remains selected, GPU work is held and no test is active after recovery. [Current state and evidence limits](linux/hardware/AMD-P2P-DISABLE-2026-11-03.md).

@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 import threading
 import subprocess
-from backend_switch import Process, process, send
+from backend_switch import Process, process, process_identity, send
 import signal
 import os
 import errno
@@ -71,7 +71,10 @@ class OwnedScope:
             except FileNotFoundError:
                 continue
             for value in pids:
-                member = process(int(value))
+                # Cgroup membership already establishes the owned boundary.
+                # cmdline/cwd are not needed here and may wait behind a large
+                # host-memory registration, blocking the safety collector.
+                member = process_identity(int(value))
                 if member is None:
                     continue
                 try:
@@ -90,7 +93,7 @@ class OwnedScope:
         # Graceful first pass is intentionally not the final ownership proof.
         # A TERM handler may fork and its parent may disappear during this wait.
         for member in self.snapshot().values():
-            send(member, signal.SIGTERM)
+            send(member, signal.SIGTERM, identity_only=True)
         deadline = time.monotonic() + .3
         while self.populated() and time.monotonic() < deadline:
             time.sleep(.01)

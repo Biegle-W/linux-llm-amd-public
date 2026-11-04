@@ -12,13 +12,9 @@
     "--expert-cache",
     "auto",
     "--prefill",
-    "2048",
+    "256",
     "--spec",
-    "3",
-    "--spec-min-p",
-    "0.7",
-    "--mtp",
-    "/opt/local-llm/models/streaming/Strata/mtp/rt",
+    "2",
     "--max-context",
     "262144",
     "--kv",
@@ -26,7 +22,7 @@
     "--kv-resident",
     "32768",
     "--vram-reserve-mib",
-    "128",
+    "1024",
     "--conversation-cache-mib",
     "0",
     "--conversation-cache-slots",
@@ -49,7 +45,22 @@
     "mmap",
     "--trim-stage-weights",
     "--vram-reserve-later-mib",
-    "128"
+    "1024",
+    "--suffix-draft",
+    "0",
+    "--lookup-chain",
+    "0",
+    "--lookup-max-t",
+    "0",
+    "--prompt-cache",
+    "0",
+    "--pipeline-windows",
+    "0",
+    "--no-spec-split",
+    "--mtp",
+    "/opt/local-llm/models/streaming/Strata/mtp/rt",
+    "--spec-min-p",
+    "0.7"
   ],
   "cwd": "/opt/local-llm/strata",
   "tokenizer": "/opt/local-llm/models/streaming/Strata/packs/iq3_xxs/tokenizer",
@@ -78,13 +89,63 @@
     "STRATA_PREFILL_MMQ": "1",
     "STRATA_NO_ARENA_THP": "1",
     "STRATA_IO_STATS": "1",
-    "STRATA_SPLIT_OVERLAP": "1",
-    "STRATA_HIPBLASLT_TUNING": "/opt/local-llm/strata/tools/hip/gfx1100-hipblaslt-100202.txt"
+    "STRATA_SPLIT_OVERLAP": "0",
+    "STRATA_HIPBLASLT_TUNING": "/opt/local-llm/strata/tools/hip/gfx1100-hipblaslt-100202.txt",
+    "HSA_USERPTR_FOR_PAGED_MEM": "0",
+    "STRATA_UNBUFFERED_LOAD": "1",
+    "ROCR_VISIBLE_DEVICES": "1,0",
+    "HIP_VISIBLE_DEVICES": "0,1"
   },
   "minimum_host_ram_gib": 29,
-  "validation_status": "passed: source8183c6b6/HIP7.2.3, matchinggfx1100hipBLASLt100202 table, prefill2048, bothAMD/split26/native256K/13.5GiB/allguards; repeated controls/confirmation and normal near258K/history/UI/authenticatedhostself API, zero owned swap/spill; see hardware/STRATA-TUNING-2026-10-24.md",
+  "validation_status": "Latest source and MTP preset pass one short installed DSH headless read-tool round trip through the guarded native server; no full-context or sustained qualification.",
   "worker_swap_max_bytes": null,
   "runtime_validation": {
+    "status": "passed-short-DSH",
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "version": "0.2.10",
+    "binary_sha256": "ee1857a23fa0b29b1a5786290da2032cde7718f843b6fbb39d0e2f9bb47bafbe",
+    "evidence": "hardware/results/maya-strata-q1-upgrade-2026-11-03.json",
+    "scope": "One read tool, two model steps, exact final marker; no long-context test; catalog hold retained."
+  },
+  "tuning_validation": {
+    "status": "short-tool-check-only",
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "prefill_chunk": 256,
+    "speculative_tokens": 2,
+    "reserve_mib": 1024,
+    "resident_budget_gib": 12,
+    "scope": "Selected passing MTP settings; no new speed comparison."
+  },
+  "host_ram_profile": "32gb-v1",
+  "worker_memory_limits": {
+    "memory.high": "max",
+    "memory.max": 65017131008,
+    "memory.swap.max": 36000755712
+  },
+  "local_validation": {
+    "status": "passed-short-DSH",
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "version": "0.2.10",
+    "binary_sha256": "ee1857a23fa0b29b1a5786290da2032cde7718f843b6fbb39d0e2f9bb47bafbe",
+    "evidence": "hardware/results/maya-strata-q1-upgrade-2026-11-03.json",
+    "scope": "One read tool, two model steps, exact final marker; no long-context test; catalog hold retained."
+  },
+  "weight_storage": {
+    "expert_backing": "original GGUF shards; duplicated pack experts.bin removed",
+    "duplicate_expert_bytes_removed": 42912972800,
+    "latest_release_source_checked": "v0.2.10 / ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "runtime_upgrade_activated": true,
+    "post_RAM_short_harness_check_required": false
+  },
+  "startup_free_vram_gib": 0.125,
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "Passed one short guarded DSH tool round trip with current resource policy; sustained and full-context use unqualified",
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
+  },
+  "drafting": "mtp",
+  "mtp": true,
+  "historical_runtime_validation": {
     "status": "passed",
     "source_commit": "9ae93f7b1fe989d04a8e404d32cddaeeff10505f",
     "version": "0.1.46.1",
@@ -93,45 +154,5 @@
     "evidence": "hardware/results/strata-startup5-2026-10-20.json",
     "normal_integration_status": "passed",
     "validated_utc": "2026-10-20T18:18:51.059915+00:00"
-  },
-  "tuning_validation": {
-    "source_commit": "8183c6b67162340c09b67360860177c577a65f2e",
-    "binary_sha256": "3e214bbf98e416164a7a97e41a5657dbb2bd6561d5e57ea4fa5d30cad0b82871",
-    "prefill_chunk": 2048,
-    "hipblaslt_table_sha256": "a594869223200c62019d3c997345e89664d5126fcbd089a44f4f95a267ad2ff3",
-    "evidence": "hardware/results/strata-tuning-2026-10-24.json",
-    "status": "passed"
-  },
-  "host_ram_profile": "32gb-v1",
-  "worker_memory_limits": {
-    "memory.high": "max",
-    "memory.max": 65016582144,
-    "memory.swap.max": 36000755712
-  },
-  "local_validation": {
-    "status": "pending_native_GGUF_backing_check_after_RAM",
-    "native_validation": "passed",
-    "normal_integration_status": "pending_native_GGUF_backing_check_after_RAM",
-    "validated_utc": "2026-10-29T02:02:46.601506+00:00",
-    "scope": "32GB native performance/quality/near-window/history and normal guarded authenticated API integration passed",
-    "evidence": "hardware/results/ssd-streaming-32gb-2026-10-28.json",
-    "candidate_tag": "strata-iq3-profile-large",
-    "source_commit": "7dd5cf18e68c639a8773e096c5c79f971ea2a9f5",
-    "binary_sha256": "e2734244e6389ac6c549abff76a1ee96529c7f91398503fb7b4e8c909b001f6d",
-    "normal_validated_utc": "2026-10-29T02:04:32.602393+00:00",
-    "note": "Sanitized reference paths and recorded host results; qualify the local binary, assets, profile, memory tier and normal API before use."
-  },
-  "weight_storage": {
-    "expert_backing": "original GGUF shards; duplicated pack experts.bin removed",
-    "duplicate_expert_bytes_removed": 42912972800,
-    "latest_release_source_checked": "v0.2.9 / c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
-    "runtime_upgrade_activated": false,
-    "post_RAM_short_harness_check_required": true
-  },
-  "startup_free_vram_gib": 0.125,
-  "resource_guard_policy": "owner-headroom-v1",
-  "resource_guard_validation": {
-    "status": "CPU resource-policy checks passed; GPU use unqualified",
-    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity"
   }
 }
