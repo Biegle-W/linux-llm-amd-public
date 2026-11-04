@@ -1,7 +1,11 @@
 # Linux LLM AMD — public reference
 
+<!-- vmpt-models:begin -->
+**November 4 patched-kernel model checks:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard and unloaded. PLE/Super passed fresh idle admission and their single conditional queue is running. All safety holds and limits remain. [Live checkpoint and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
+<!-- vmpt-models:end -->
+
 <!-- vmpt-kernel:begin -->
-**November 4 patched VM page-table kernel:** `7.0.14-42-vmpt1` booted with the expected driver identity. All four short peer-capability/local/direct-IPC/RCCL stages passed, with actual P2P/IPC transport, clean kernel fault scans and verified owned cleanup. The fault hold and stock persistent boot default remain; no model startup, sustained stability or causal fix is qualified. [Validation and pending steps](linux/hardware/VM-PAGE-TABLE-KERNEL-2026-11-04.md).
+**November 4 patched VM page-table kernel:** `7.0.14-42-vmpt1` booted with the expected driver identity. All four short peer-capability/local/direct-IPC/RCCL stages passed, with actual P2P/IPC transport, clean kernel fault scans and verified owned cleanup. The fault hold and stock persistent boot default remain; later model checks are recorded above; sustained stability and causal attribution remain unqualified. [Validation and pending steps](linux/hardware/VM-PAGE-TABLE-KERNEL-2026-11-04.md).
 <!-- vmpt-kernel:end -->
 
 <!-- switch-restored-p2p:begin -->

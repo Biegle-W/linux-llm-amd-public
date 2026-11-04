@@ -1,0 +1,150 @@
+{
+  "date": "2026-11-04",
+  "kernel": "7.0.14-42-vmpt1",
+  "status": "six prepared checks complete; conditional queue stopped; review required",
+  "scope": "Original six short DSH tool checks plus PLE and Super INT4 EP2 after admission; no promotion or sustained run",
+  "models": {
+    "strata-qwen-mtp": {
+      "status": "passed-one-short-DSH-check",
+      "guard_status": "passed",
+      "load_seconds": 117.72386220800013,
+      "stop_reason": null,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 85,
+        "initial_input_tokens": 5689,
+        "usage_per_step": [
+          {
+            "inputTokens": 5689,
+            "outputTokens": 66,
+            "totalTokens": 5755
+          },
+          {
+            "inputTokens": 5867,
+            "outputTokens": 19,
+            "totalTokens": 5886
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      }
+    },
+    "maya-coder": {
+      "status": "passed-one-short-DSH-check",
+      "guard_status": "passed",
+      "load_seconds": 33.24975984900016,
+      "stop_reason": null,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 99,
+        "initial_input_tokens": 5793,
+        "usage_per_step": [
+          {
+            "inputTokens": 5793,
+            "outputTokens": 82,
+            "totalTokens": 5875
+          },
+          {
+            "inputTokens": 95,
+            "outputTokens": 17,
+            "totalTokens": 5986,
+            "cacheReadTokens": 5874
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      }
+    },
+    "strata-coder": {
+      "status": "passed-one-short-DSH-check",
+      "guard_status": "passed",
+      "load_seconds": 17.450701125000023,
+      "stop_reason": null,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 98,
+        "initial_input_tokens": 5796,
+        "usage_per_step": [
+          {
+            "inputTokens": 5796,
+            "outputTokens": 84,
+            "totalTokens": 5880
+          },
+          {
+            "inputTokens": 93,
+            "outputTokens": 14,
+            "totalTokens": 5986,
+            "cacheReadTokens": 5879
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      }
+    },
+    "strata-q1": {
+      "status": "failed",
+      "guard_status": "failed",
+      "load_seconds": 41.53195096100012,
+      "stop_reason": "decode progress stalled",
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": null
+    },
+    "maya-q1": {
+      "status": "failed",
+      "guard_status": "failed",
+      "load_seconds": 53.30006344499998,
+      "stop_reason": "decode progress stalled",
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": null
+    },
+    "maya-glm": {
+      "status": "failed",
+      "guard_status": "failed",
+      "load_seconds": 69.57448367100005,
+      "stop_reason": "decode progress stalled",
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "tool": null
+    }
+  },
+  "conditional": {
+    "PLE": "Static metadata/overlay/capacity admission passed; fresh idle RAM/VRAM and loading admission still required",
+    "Super INT4 EP2": "Full expert2688/group128layout preserved; static admission passed; original900/990budget retained"
+  },
+  "preserved": "Original source/weight pins, math, custom all-reduce exclusions, hostcall settings, resource/storage/thermal/heartbeat/decode/cleanup limits, holds and paused schedules",
+  "transport_limit": "System P2P and scoped NCCL P2P enabled; actual model transport must be read from logs; explicit native custom-AR exclusions remain",
+  "updated_utc": "2026-11-04T22:33:55.297308+00:00",
+  "conditional_status": "stopped; review required"
+}

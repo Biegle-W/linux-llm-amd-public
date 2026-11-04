@@ -1072,3 +1072,5 @@ November 4: isolated `7.0.14-42-vmpt1` source/full-build validation only; built 
 November 4 staging follow-up: candidate files installed; false initramfs GPU-presence requirement corrected; six regression tests pass. Existing-stage validation and one-shot boot remain pending; no patched-kernel GPU or performance result. [Repair](VM-PAGE-TABLE-KERNEL-2026-11-04.md#initramfs-validator-repair).
 
 November 4 patched-kernel checkpoint: one fresh queue passed all four short peer stages with P2P/IPC transport and clean owned unload. Functional validation only; no model or performance qualification. [Results](VM-PAGE-TABLE-KERNEL-2026-11-04.md#candidate-boot-and-four-short-peer-checks).
+
+November 4 patched-kernel model checks: three strict short tool passes; both Q1 variants and GLM stop at the retained decode guard with verified unload. PLE/Super are admitted and in progress; no promotion or sustained qualification. [Checkpoint](PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).

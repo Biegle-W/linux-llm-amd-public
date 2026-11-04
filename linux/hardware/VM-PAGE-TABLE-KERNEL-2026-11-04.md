@@ -36,3 +36,5 @@ RCCL logged four P2P/IPC connections. All owned cgroups emptied and KFD is empty
 Both live IOMMU domains are identity. Postboot ACS evidence consists of six exact current-boot `0x11` programming records, unchanged bridge paths/selectors, and the privileged preboot direct-register audit; direct postboot register reads were not obtained. Actual peer integrity and logged P2P/IPC provide functional routing evidence.
 
 PyTorch logged a nonfatal AMDSMI initialization warning 32; the collectives and transport assertions passed while independent sysfs thermal telemetry remained available. No model trial or further automatic GPU work is queued. Passing short peer checks does not validate a model-startup path or establish that the VM race patch fixes a prior failure. The concurrent slot change also limits causal attribution.
+
+Later model checks have now run under the same patched boot. Three strict short tool checks pass; both Q1 variants and GLM stop at the retained decode guard with verified unload. PLE/Super conditional work is in progress. [Model checkpoint](PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
