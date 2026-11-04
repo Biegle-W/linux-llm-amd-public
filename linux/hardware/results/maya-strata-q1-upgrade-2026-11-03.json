@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "Past TTFT-cutoff outcomes inconclusive; corrected short diagnostics queued after active PLE",
+  "status": "Requested bounded corrected checks completed and unloaded; Strata Coder strict inference pass independently verified; Q1/GLM/PLE unqualified; no production promotion",
   "hardware": "Two RX 7900 XTX, 64 GB installed RAM, direct Gen4 x16 and chipset Gen4 x4; no external switch; P2P off",
   "candidate_sources": {
     "maya": {
@@ -635,10 +635,6 @@
       "new_kernel_fault_count": 0
     },
     {
-      "stage": "vllm-ple-file-gather",
-      "status": "prepared; not run"
-    },
-    {
       "stage": "coder-formats-strata-0",
       "status": "passed-selected-formats",
       "guard": {
@@ -889,6 +885,242 @@
       "requests": [],
       "qualification_status": "passed-selected-formats",
       "new_kernel_fault_count": 0
+    },
+    {
+      "stage": "vllm-ple-file-gather",
+      "status": "starting",
+      "load_seconds": null,
+      "requests": [],
+      "tool": null,
+      "guard": {
+        "status": "failed",
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "max_owned_swap_bytes": 9758908416,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 3079675904,
+        "min_free_VRAM_bytes": [
+          7935971328,
+          7944257536
+        ]
+      },
+      "stop_reason": "model loading deadline",
+      "qualification_status": "inconclusive-loading-budget"
+    },
+    {
+      "stage": "strata-coder-prefill",
+      "status": "passed-one-short-DSH-check",
+      "load_seconds": 25.955681990999437,
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25155,
+          "message_count": 3,
+          "tool_count": 25,
+          "input_sha256": "673d1e24f81e68c038c0bddba177cf09750e8aaa6c474aaab5bece0a099019ca",
+          "usage": {
+            "prompt_tokens": 5799,
+            "completion_tokens": 85,
+            "total_tokens": 5884,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "output_chunks": 55,
+          "TTFT_seconds": 26.92192691799937,
+          "elapsed_seconds": 35.378730896998604
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25791,
+          "message_count": 5,
+          "tool_count": 25,
+          "input_sha256": "a70ff1f18bbc4c96bbe167ff6e52e688af31d584e8c41908887f5c3087ef25d2",
+          "usage": {
+            "prompt_tokens": 5978,
+            "completion_tokens": 15,
+            "total_tokens": 5993,
+            "prompt_tokens_details": {
+              "cached_tokens": 5883
+            }
+          },
+          "output_chunks": 14,
+          "TTFT_seconds": 2.1570162429998163,
+          "elapsed_seconds": 2.8643774060001306
+        }
+      ],
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 100,
+        "initial_input_tokens": 5799,
+        "usage_per_step": [
+          {
+            "inputTokens": 5799,
+            "outputTokens": 85,
+            "totalTokens": 5884
+          },
+          {
+            "inputTokens": 95,
+            "outputTokens": 15,
+            "totalTokens": 5993,
+            "cacheReadTokens": 5883
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "guard": {
+        "status": "failed",
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 29026762752,
+        "min_free_VRAM_bytes": [
+          658853888,
+          691367936
+        ]
+      },
+      "stop_reason": "RuntimeError: Owned runner has not committed a terminal result",
+      "qualification_status": "strict-inference-pass-independently-audited",
+      "guard_record_status": "failed-cleanup-result-recording-race",
+      "owned_unit_states": {
+        "amd-finalhw-run-d6d1f6c0d7144ebbaa804c5f4da36402.scope": "inactive",
+        "dsh-worker-dba73ca9fe824a1e8e3a34f6e0763ba6.scope": "inactive"
+      },
+      "raw_audit_sha256": {
+        "result.private.json": "47c0778e01218b5e11490964ac3b79ff8cb4750ffb60a6ae7a916434e8453357",
+        "tool-events.private.jsonl": "5729ed31e95bc0b32e89e892f033dae90fc3052a39eb598c422e66dfa3f9223c",
+        "upgrade-strata-coder-prefill.guard.private.json": "a44590f7d0a0c41b0506b0e7a04df73b743cc640746c3e1b7651064ec6c1f43c"
+      }
+    },
+    {
+      "stage": "strata-q1-prefill",
+      "status": "starting",
+      "load_seconds": 103.95666617499955,
+      "requests": [
+        {
+          "index": 1,
+          "status": "starting",
+          "max_tokens": 256,
+          "input_bytes": 25140,
+          "message_count": 3,
+          "tool_count": 25
+        }
+      ],
+      "tool": null,
+      "guard": {
+        "status": "failed",
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 45117812736,
+        "min_free_VRAM_bytes": [
+          595849216,
+          698867712
+        ]
+      },
+      "stop_reason": "decode progress stalled",
+      "qualification_status": "stopped-decode-stall-no-complete-tool-pass"
+    },
+    {
+      "stage": "maya-q1-prefill",
+      "status": "starting",
+      "load_seconds": 70.06549935699877,
+      "requests": [
+        {
+          "index": 1,
+          "status": "starting",
+          "max_tokens": 256,
+          "input_bytes": 25130,
+          "message_count": 3,
+          "tool_count": 25
+        }
+      ],
+      "tool": null,
+      "guard": {
+        "status": "failed",
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 55089086464,
+        "min_free_VRAM_bytes": [
+          397725696,
+          511344640
+        ]
+      },
+      "stop_reason": "decode progress stalled",
+      "qualification_status": "stopped-decode-stall-no-complete-tool-pass"
+    },
+    {
+      "stage": "maya-glm-prefill",
+      "status": "failed",
+      "load_seconds": 85.32926952100024,
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25089,
+          "message_count": 3,
+          "tool_count": 25,
+          "input_sha256": "edcff4052814ccd8427fe04c2b3aaa8e218725f4221dabe9d03ca15e5d8b9694",
+          "usage": {
+            "prompt_tokens": 5514,
+            "completion_tokens": 46,
+            "total_tokens": 5560,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "output_chunks": 42,
+          "TTFT_seconds": 81.48007211500226,
+          "elapsed_seconds": 96.52456039900062
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25681,
+          "message_count": 5,
+          "tool_count": 25,
+          "input_sha256": "89f18940817e1af90bf4d233b61a7d2f945b5ed18e120bab7f9bcc9a667c1438",
+          "output_chunks": 0,
+          "TTFT_seconds": null,
+          "elapsed_seconds": 41.96173382199777
+        }
+      ],
+      "tool": null,
+      "error": "DiagnosticBudgetExpired: Enclosing diagnostic budget exhausted; inference is inconclusive",
+      "guard": {
+        "status": "failed",
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 48655642624,
+        "min_free_VRAM_bytes": [
+          677068800,
+          674525184
+        ]
+      },
+      "stop_reason": "RuntimeError: Owned runner has not committed a terminal result",
+      "qualification_status": "inconclusive-enclosing-diagnostic-budget",
+      "interpretation": "First request completed, TTFT81.480s, one tool call; second-step no output before remaining stage budget; no full strict tool pass. Raw cleanup-result recording failure retained."
     }
   ],
   "corrections": {
@@ -916,17 +1148,13 @@
     },
     "limits": "Three historical containment fixture expectations fail under the owner v5 default; all nine pass under explicit CPU-only legacy fixture opt-ins. No historical limits applied to GPU tests."
   },
-  "remaining": [
-    "Preserve current PLE attempt and inspect its actual outcome",
-    "Existing one-off timing-correction continuation waits for verified cleanup, then runs only diagnostic-invalidated short checks with corrected waiting",
-    "Review new results before any activation; no automatic promotion or numeric/math repeats"
-  ],
+  "remaining": [],
   "installed_sources": {
     "maya": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
     "strata_qwen": "ffa80d73133ea5c548aefe57889a16e8085a938f",
     "strata_deepseek": "8183c6b67162340c09b67360860177c577a65f2e"
   },
-  "updated_utc": "2026-11-04T05:29:13.683863+00:00",
+  "updated_utc": "2026-11-04T06:03:50.331828+00:00",
   "fixture_layout_audit": {
     "CPU_samples": 10000,
     "old_random_embedded_scales_nonfinite": 305,
@@ -942,11 +1170,11 @@
       "verified_bytes": 182718891848
     },
     "ple": {
-      "status": "downloading",
+      "status": "complete-sha256-verified",
       "repository": "albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE",
       "revision": "c6af9fee7ad2cb8ef44b534a99b8c1b81fb0f6da",
       "selected_bytes": 124825224734,
-      "verified_bytes": 99581443613
+      "verified_bytes": 124825224734
     }
   },
   "Coder_layout": {
@@ -991,7 +1219,7 @@
     "metadata_packs": "Maya and Strata created against one fully verified backing; no duplicate expert/table payload copy"
   },
   "continuation": {
-    "status": "waiting for verified downloads: ple",
+    "status": "Prior pinned continuation finished; corrected one-off active",
     "scope": "single one-off completion of requested short checks; no production promotion or recurring schedule",
     "tasks": {
       "coder-formats-strata-0": {
@@ -1086,5 +1314,12 @@
     "edge_C": 75,
     "junction_memory_C": 90,
     "CPU_C": 85
+  },
+  "corrected_continuation": {
+    "status": "finished; no further task queued",
+    "automatic_production_promotion": false,
+    "all_owned_units_inactive": true,
+    "KFD_clients": [],
+    "new_kernel_GPU_reset_bus_loss_OOM_matches": []
   }
 }
