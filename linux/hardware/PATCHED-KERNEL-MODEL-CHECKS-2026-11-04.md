@@ -1,5 +1,7 @@
 # Patched-kernel original-plan model checks
 
+**Subsequent policy change:** current software temperature ceilings are now 100°C; the results below retain their original guard thresholds. The hold/STOP remain and no model was rerun. [Current temperature policy](TEMPERATURE-GUARDS-2026-11-04.md).
+
 The campaign stopped at PLE's retained **85°C CPU guard**, with a **sampled 87°C** maximum. PLE unloaded; **Super INT4 EP2 never started and remains blocked**. No further GPU work or automatic retry is queued. Tests used `7.0.14-42-vmpt1`, after four bounded peer/IPC/RCCL checks passed.
 
 | Model stage | Final outcome | Load seconds |

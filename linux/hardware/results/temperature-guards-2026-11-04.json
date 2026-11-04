@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-04",
+  "software_temperature_limit_C": 100,
+  "comparison": "stop at or above the limit",
+  "sensors": [
+    "CPU package",
+    "GPU edge",
+    "GPU junction",
+    "GPU memory",
+    "SSD live",
+    "SSD SMART numeric"
+  ],
+  "hardware_firmware_and_SMART_health_warning_checks": "unchanged",
+  "fault_hold_and_STOP": "remain latched; no automatic GPU continuation",
+  "current_campaign_guard_copies_updated": 12,
+  "CPU_only_tests_per_repository": 12,
+  "campaign_thermal_callsite_cases": 144,
+  "GPU_work_started": false,
+  "services_restarted": false,
+  "updated_utc": "2026-11-04T23:06:19.671759+00:00"
+}

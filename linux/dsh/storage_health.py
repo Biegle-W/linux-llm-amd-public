@@ -5,9 +5,9 @@ import re
 from pathlib import Path
 import subprocess
 import time
+from temperature_policy import TEMPERATURE_LIMIT_C
 
 SMART_MAX_AGE_SECONDS = 1200
-TEMPERATURE_LIMIT_C = 70
 
 
 def read_health():
@@ -42,7 +42,7 @@ def evaluate(records, temperatures, now):
         if not isinstance(value, (int, float)) or not math.isfinite(value) or value < -20:
             raise ValueError('Invalid NVMe temperature: ' + name)
         if value >= TEMPERATURE_LIMIT_C:
-            return 'SSD temperature at or above 70 C: ' + name
+            return f'SSD temperature at or above {TEMPERATURE_LIMIT_C:g} C: ' + name
     for record in records:
         stamp = record.get('updated')
         if type(stamp) is not int or not -60 <= now - stamp <= SMART_MAX_AGE_SECONDS:
@@ -55,7 +55,7 @@ def evaluate(records, temperatures, now):
         if not isinstance(temp, (int, float)) or not math.isfinite(temp) or temp <= 0:
             raise ValueError('Invalid SSD SMART temperature')
         if temp - 273.15 >= TEMPERATURE_LIMIT_C:
-            return 'SSD SMART temperature at or above 70 C: ' + record['device']
+            return f'SSD SMART temperature at or above {TEMPERATURE_LIMIT_C:g} C: ' + record['device']
         if record.get('nvme'):
             if any(type(record.get(k)) is not int or record[k] < 0
                    for k in ['media_errors', 'spare', 'spare_threshold']):

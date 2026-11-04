@@ -200,5 +200,12 @@
     "new_GPU_work_started": false
   },
   "next_action": "Keep GPU hold and STOP latched. Resolve/review CPU thermal boundary before separately authorized fresh admission; do not retry PLE or start Super automatically.",
-  "production_promoted": false
+  "production_promoted": false,
+  "subsequent_temperature_policy": {
+    "software_limit_C": 100,
+    "historical_results_reclassified": false,
+    "GPU_work_resumed": false,
+    "policy_record": "temperature-guards-2026-11-04.json",
+    "updated_utc": "2026-11-04T23:06:19.671759+00:00"
+  }
 }

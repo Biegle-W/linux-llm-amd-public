@@ -1,5 +1,9 @@
 # Agent entry point
 
+<!-- temperature-guards:begin -->
+**Current temperature policy — November 4:** CPU, GPU edge/junction/memory and SSD software guards stop at **100°C or above**, as requested by the owner. Hardware protections, SMART health-warning checks and all other guards remain. Existing fault hold and STOP stay latched; no retry, model launch, service restart or schedule resumption occurred. The completed PLE stop remains an 85°C-policy historical result. [Policy and validation](linux/hardware/TEMPERATURE-GUARDS-2026-11-04.md).
+<!-- temperature-guards:end -->
+
 <!-- vmpt-models:begin -->
 **November 4 patched-kernel model checks — stopped:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard. PLE then hit the 85°C CPU guard (sampled 87°C) and unloaded; Super never started and is blocked. Final owned cleanup and idle GPUs are verified; no new journal GPU/reset/bus-loss/OOM or kernel-crash pattern was found. The thermal stop/fault hold, stock boot default, all guards, source pins, services and paused schedules remain. No PLE retry or Super launch is queued. [Final outcomes and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
 <!-- vmpt-models:end -->

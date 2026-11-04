@@ -83,8 +83,11 @@ class OwnerPolicy(unittest.TestCase):
         stop.assert_called_once_with(proc, watch.fault)
 
     def test_storage_healthy_and_warning_cases(self):
-        self.assertIsNone(storage.evaluate(healthy(), {'nvme0': 69.99}, 1000))
-        self.assertIn('temperature', storage.evaluate(healthy(), {'nvme0':70}, 1000))
+        self.assertIsNone(storage.evaluate(healthy(), {'nvme0': 99.99}, 1000))
+        self.assertIn('100 C', storage.evaluate(healthy(), {'nvme0':100}, 1000))
+        records=healthy()
+        records[0]['temperature_K']=373.15
+        self.assertIn('100 C', storage.evaluate(records, {'nvme0':30}, 1000))
         for field, value in [('critical_warning',['read-only']), ('media_errors',1), ('spare',4)]:
             records=healthy()
             records[0][field]=value
