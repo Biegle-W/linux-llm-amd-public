@@ -1065,3 +1065,6 @@ At that maintenance,no performance run or engine update was performed. The [date
 covered ten enabled profiles, retaining the original nine-profile record and
 the separate approximately-8K Nemotron Super timing batch. Previous results and
 measured builds remain unchanged. See [maintenance](WORKSPACE-MAINTENANCE-2026-10-19.md).
+
+<!-- vmpt-kernel-ledger -->
+November 4: isolated `7.0.14-42-vmpt1` source/full-build validation only; built and staged in isolated workspace; administrator authentication required for host installation/reboot. No patched-kernel speed result or promotion. [Scope](VM-PAGE-TABLE-KERNEL-2026-11-04.md).
