@@ -17,10 +17,10 @@ export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
 
-# Current mode: driver P2P off, firmware ACS redirection and translated domains.
-# Retain all RAM/VRAM guards and custom-all-reduce exclusions.
-# Current verification/limits: hardware/AMD-P2P-DISABLE-2026-11-03.md.
-# Earlier peer correctness remains historical; launchers no longer opt into P2P.
+# Production retains host transport and existing custom-all-reduce exclusions.
+# The owner enabled driver P2P for isolated switch tests on November 4.
+# Peer checks passed, but Maya startup hit GPU reset/bus loss; all tests are held.
+# Current evidence: hardware/results/switch-restored-p2p-2026-11-04.json.
 export NCCL_P2P_DISABLE=1
 unset GGML_CUDA_P2P
 # Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.

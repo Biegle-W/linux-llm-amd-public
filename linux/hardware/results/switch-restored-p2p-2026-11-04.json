@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "status": "P2P policy restored for next boot; owner reboot and runtime qualification pending",
+  "status": "Owner-reported crash/reboot; confirmed Sapphire SMU/MES/reset/bus loss during Maya Coder startup; all GPU testing held",
   "owner_authorization": "Switch is back; continue testing plan with P2P",
   "hardware": {
     "GPUs": "2x RX7900XTX24GB",
@@ -19,19 +19,22 @@
     "IOMMU_policy": "iommu=pt identity domains",
     "disable_dropin_removed": true,
     "GRUB_generation_and_kernel_entry_validation": "passed",
-    "reboot_required": true,
+    "reboot_required": false,
     "automatic_reboot": false,
-    "live_GPU_changes": false
+    "live_GPU_changes": false,
+    "reboot_required_at_staging": true,
+    "activation": "Verified after owner reboot: P2PY/use_xgmi1, both identity domains, six exact kernel ACS0x11 programming records"
   },
   "current_boot": {
     "P2P_parameters": {
-      "pcie_p2p": "N",
-      "use_xgmi_p2p": "0"
+      "pcie_p2p": "Y",
+      "use_xgmi_p2p": "1"
     },
     "GPU_clients": [],
+    "owned_queue_units": "all three inactive after reboot",
     "new_kernel_GPU_reset_bus_loss_OOM_matches": [],
-    "peer_data_tests": "not run",
-    "inference": "not run"
+    "inference": "none active; stop sentinel and persistent fault hold",
+    "boot_settings_changed_after_crash": false
   },
   "guards": {
     "free_RAM_GiB": 1,
@@ -51,14 +54,230 @@
     "original_loading_and_stage_budgets": "unchanged"
   },
   "next_order": [
-    "Owner reboot; verify active driver parameter, exact selectedACS0x11, identity GPUdomains, source/device/idle/kernel/SSD admission",
-    "Guarded bidirectional actual peer read/write, HIPIPC, RCCLdata correctness and transport logs; capability alone is insufficient",
-    "Short StrataQwenMTP and isolated latestMayaCoder/StrataCoder checks on changed physical hardware",
-    "Investigate both Q1 post-outputstall stops; complete GLMtoolcheck and inspect PLE/SuperINT4 loading budgets before blind repetition",
-    "Radiance andTensorFold: isolated source/format/memory/math admission before supportedQwen trials; no automatic promotion",
-    "Sustained stability remains unqualified after prior thermal ceiling; no automatic long run"
+    "Preserve crash evidence and stopped state; no automatic GPU continuation",
+    "If later authorized, compare same switch/PSU/ACS/IOMMU with only P2P gate disabled; the existing disable helper also retires routing/IOMMU, so it does not implement that one-variable comparison"
   ],
   "preserved": "Existing fault reservation, model/source holds, paused schedules, raw previous evidence and completed format/hash checks",
-  "causality": "Switch and PSU arrangement changed together; no conclusion that either caused earlier faults",
-  "updated_utc": "2026-11-04T19:37:56.960280+00:00"
+  "causality": "Recurrence after reported one-PSU rewiring shows split-PSU alone is insufficient to explain all failures. P2P-enabled switch/routing configuration failed; exact cause not isolated.",
+  "updated_utc": "2026-11-04T20:15:10.762758+00:00",
+  "postboot_peer_checks": {
+    "stages": {
+      "peer-capability": {
+        "status": "passed",
+        "elapsed_seconds": 0.5799264190000031,
+        "samples": 2,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 62173724672,
+        "min_free_VRAM_bytes": [
+          25606107136,
+          25676308480
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "peer-local": {
+        "status": "passed",
+        "elapsed_seconds": 0.5509215920000088,
+        "samples": 2,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 62139006976,
+        "min_free_VRAM_bytes": [
+          25333293056,
+          25676296192
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "peer-integrity-ipc": {
+        "status": "passed",
+        "elapsed_seconds": 0.5501249179999945,
+        "samples": 2,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 62053634048,
+        "min_free_VRAM_bytes": [
+          25333227520,
+          25403379712
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "peer-rccl": {
+        "status": "passed",
+        "elapsed_seconds": 7.725661037999998,
+        "samples": 28,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 58937376768,
+        "min_free_VRAM_bytes": [
+          24824033280,
+          24894230528
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      }
+    },
+    "direct_integrity": "16MiB, three deterministic patterns, both directions; remote GPU reads/writes and peer copies checked in full",
+    "IPC": "fresh exec processes, both directions, owner verifies exported allocation after child exit",
+    "RCCL": "FP32/BF16 all-reduce and all-gather, 1/4096/1048576 elements, logs show P2P/IPC both ways",
+    "limits": "Bounded correctness only; not sustained stability or proof every model selects peer transport",
+    "routing_evidence": "Kernel boot messages confirm six selected ACS0x11 writes and current sysfs identity domains. A fresh privileged config-space read was unavailable; no desktop authentication agent."
+  },
+  "model_checks": {
+    "strata_qwen_mtp": {
+      "status": "strict-short-tool-pass",
+      "load_seconds": 67.22433788700005,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 83,
+        "initial_input_tokens": 5683,
+        "usage_per_step": [
+          {
+            "inputTokens": 5683,
+            "outputTokens": 64,
+            "totalTokens": 5747
+          },
+          {
+            "inputTokens": 5857,
+            "outputTokens": 19,
+            "totalTokens": 5876
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25117,
+          "message_count": 3,
+          "tool_count": 25,
+          "input_sha256": "02f0cc6cc06043cf56efe31f0b6b440081e1d810946c6d75b257902b555ccac7",
+          "usage": {
+            "prompt_tokens": 5683,
+            "completion_tokens": 64,
+            "total_tokens": 5747,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "output_chunks": 46,
+          "TTFT_seconds": 7.975695594000058,
+          "elapsed_seconds": 8.957917466000026
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "max_tokens": 256,
+          "input_bytes": 25717,
+          "message_count": 5,
+          "tool_count": 25,
+          "input_sha256": "67ecc7a8589954c6fc4ed6c7e65393a8fc9455b3c88081a271a3bb3f479c0736",
+          "usage": {
+            "prompt_tokens": 5857,
+            "completion_tokens": 19,
+            "total_tokens": 5876,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "output_chunks": 18,
+          "TTFT_seconds": 7.206700967000074,
+          "elapsed_seconds": 7.5160998590000645
+        }
+      ],
+      "guard_status": "passed",
+      "owned_unload_verified": true,
+      "actual_MTP": "engine logs report accepted drafts; this does not establish model P2P transport"
+    },
+    "maya_coder": {
+      "status": "GPU fault during model loading; no readiness or inference",
+      "source": "Maya1.1.52/6c9a27b44fa17cab662d8bfe4885d6f865288901",
+      "first_SMU_no_response_Toronto": "2026-11-04 14:56:42",
+      "device_lost_Toronto": "2026-11-04 14:57:00",
+      "faulting_GPU": "Sapphire13:00.0",
+      "inference_requests": 0,
+      "kernel_messages": [
+        "amdgpu 0000:13:00.0: SMU: No response msg_reg: 12 resp_reg: 0",
+        "amdgpu 0000:13:00.0: SMU: No response msg_reg: 12 resp_reg: 0",
+        "amdgpu 0000:13:00.0: MES failed to respond to msg=REMOVE_QUEUE",
+        "amdgpu 0000:13:00.0: MES might be in unrecoverable state, issue a GPU reset",
+        "amdgpu 0000:13:00.0: GPU reset begin!. Source:  3",
+        "amdgpu 0000:13:00.0: MES failed to respond to msg=REMOVE_QUEUE",
+        "amdgpu 0000:13:00.0: MES might be in unrecoverable state, issue a GPU reset",
+        "amdgpu 0000:13:00.0: SMU: No response msg_reg: 12 resp_reg: 0",
+        "amdgpu 0000:13:00.0: SMU: No response msg_reg: 12 resp_reg: 0",
+        "amdgpu 0000:13:00.0: SMU: No response msg_reg: 12 resp_reg: 0",
+        "amdgpu 0000:13:00.0: device lost from bus!",
+        "amdgpu 0000:13:00.0: SMU: bus error for message: DisallowGfxOff(41) response:0xFFFFFFFF "
+      ],
+      "watchdog": "supervisor heartbeat missing; six-second guard",
+      "cleanup": "KFDclient remained past15sdeadline; no clean unload before reboot is claimed",
+      "sample_count": 23,
+      "last_sample_elapsed_seconds": 5.998574313999939,
+      "sampled_extrema": {
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 57400762368,
+        "min_free_VRAM_bytes": [
+          636538880,
+          721518592
+        ]
+      },
+      "sampled_temperature_peaks_C": {
+        "0000:0b:00.0:mem": 51.0,
+        "0000:0b:00.0:edge": 29.0,
+        "0000:0b:00.0:junction": 40.0,
+        "0000:13:00.0:mem": 40.0,
+        "0000:13:00.0:edge": 34.0,
+        "0000:13:00.0:junction": 41.0,
+        "CPU:Package id 0": 51.0
+      },
+      "last_scope_memory_events": [
+        {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        }
+      ],
+      "sample_limit": "Last telemetry sample preceded first recorded SMU failure; no inference that later transients are ruled out",
+      "custom_peer_allreduce": "MAYA_DS4_HIP_PEER_AR=0 retained; driver-level P2P enabled does not prove use of this optional model peer kernel",
+      "actual_parallel_layout": "Requested TP2; engine logged tensor parallel2->1 because n_ff2304 does not split into whole256-value expert blocks across2 ranks; each GPU gets its own layers. No assertion that a peer all-reduce was running."
+    }
+  },
+  "setup_correction": "Initial generated device-identification command had a Python quoting SyntaxError before HIP initialization/model load; failed setup records retained. Corrected standalone mapper verified PowerColor0b first and Sapphire13 second. These initial setup stops are not model failures.",
+  "raw_monitor_record_limit": "The saved guard did not record kernel fault matches while it was unresponsive; the persisted failed-boot journal confirms SMU/MES/reset/bus loss. Its empty field is not a clean-boot verdict. The raw queue pre-launch label is inaccurate: the model worker was already loading, but readiness had not yet saved its unit.",
+  "remaining_on_hold": [
+    "StrataCoder on new switch boot",
+    "UnslothQ1 on both engines on new switch boot",
+    "GLM complete tool check on new switch boot",
+    "PLE/SuperINT4 loading diagnosis",
+    "Radiance/TensorFold candidate builds and inference",
+    "Sustained stability"
+  ]
 }
