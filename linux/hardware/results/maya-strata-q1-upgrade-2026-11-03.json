@@ -1,6 +1,6 @@
 {
   "date": "2026-11-03",
-  "status": "Qwen upgrade installed; remaining download/short-check continuation active",
+  "status": "Maya Coder short tool check passed; Strata Coder first-output stop; PLE download pending",
   "hardware": "Two RX 7900 XTX, 64 GB installed RAM, direct Gen4 x16 and chipset Gen4 x4; no external switch; P2P off",
   "candidate_sources": {
     "maya": {
@@ -535,11 +535,111 @@
     },
     {
       "stage": "strata-coder",
-      "status": "prepared; not run"
+      "status": "failed",
+      "guard": {
+        "status": "failed",
+        "samples": 166,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 52462301184,
+        "min_free_VRAM_bytes": [
+          661278720,
+          649756672
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": [],
+        "stop_reason": "first output deadline"
+      },
+      "load_seconds": 20.95012871599829,
+      "tool": null,
+      "requests": [
+        {
+          "index": 1,
+          "status": "failed"
+        }
+      ],
+      "qualification_status": "blocked by guard",
+      "new_kernel_fault_count": 0
     },
     {
       "stage": "maya-coder",
-      "status": "prepared; not run"
+      "status": "passed-one-short-DSH-check",
+      "guard": {
+        "status": "passed",
+        "samples": 205,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 27971379200,
+        "min_free_VRAM_bytes": [
+          350081024,
+          461144064
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "load_seconds": 31.960922742000548,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 98,
+        "initial_input_tokens": 5787,
+        "usage_per_step": [
+          {
+            "inputTokens": 5787,
+            "outputTokens": 83,
+            "totalTokens": 5870
+          },
+          {
+            "inputTokens": 91,
+            "outputTokens": 15,
+            "totalTokens": 5975,
+            "cacheReadTokens": 5869
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "requests": [
+        {
+          "index": 1,
+          "status": "completed",
+          "TTFT_seconds": 15.693706415000634,
+          "elapsed_seconds": 19.099934935999045,
+          "output_chunks": 53,
+          "usage": {
+            "prompt_tokens": 5787,
+            "completion_tokens": 83,
+            "total_tokens": 5870,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        {
+          "index": 2,
+          "status": "completed",
+          "TTFT_seconds": 1.3975198730004195,
+          "elapsed_seconds": 1.9038755870024033,
+          "output_chunks": 14,
+          "usage": {
+            "prompt_tokens": 5960,
+            "completion_tokens": 15,
+            "total_tokens": 5975,
+            "prompt_tokens_details": {
+              "cached_tokens": 5869
+            }
+          }
+        }
+      ],
+      "qualification_status": "passed-one-short-DSH-check",
+      "new_kernel_fault_count": 0
     },
     {
       "stage": "vllm-ple-file-gather",
@@ -610,37 +710,192 @@
     },
     {
       "stage": "coder-formats-strata-1",
-      "status": "running",
+      "status": "passed-selected-formats",
       "guard": {
-        "status": "starting",
-        "samples": 5,
+        "status": "passed",
+        "samples": 1582,
         "max_owned_swap_bytes": 0,
         "max_owned_spill_bytes": 0,
-        "min_available_bytes": 61674237952,
+        "min_available_bytes": 61589622784,
         "min_free_VRAM_bytes": [
-          25254805504,
-          25724981248
-        ]
+          25219051520,
+          25724973056
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
       },
       "rows": [
         {
           "case": -1,
           "returncode": 0,
           "reused_completed_prefix": false
+        },
+        {
+          "case": 0,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 2,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 3,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 4,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 5,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 6,
+          "returncode": 0,
+          "reused_completed_prefix": false
         }
       ],
       "tool": null,
       "requests": [],
-      "qualification_status": "running",
+      "qualification_status": "passed-selected-formats",
       "new_kernel_fault_count": 0
     },
     {
       "stage": "coder-formats-maya-0",
-      "status": "prepared; not run"
+      "status": "passed-selected-formats",
+      "guard": {
+        "status": "passed",
+        "samples": 1568,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61148790784,
+        "min_free_VRAM_bytes": [
+          25716682752,
+          25230090240
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "rows": [
+        {
+          "case": -1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 0,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 2,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 3,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 4,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 5,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 6,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        }
+      ],
+      "tool": null,
+      "requests": [],
+      "qualification_status": "passed-selected-formats",
+      "new_kernel_fault_count": 0
     },
     {
       "stage": "coder-formats-maya-1",
-      "status": "prepared; not run"
+      "status": "passed-selected-formats",
+      "guard": {
+        "status": "passed",
+        "samples": 1567,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61638451200,
+        "min_free_VRAM_bytes": [
+          25221820416,
+          25724977152
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "rows": [
+        {
+          "case": -1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 0,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 2,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 3,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 4,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 5,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 6,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        }
+      ],
+      "tool": null,
+      "requests": [],
+      "qualification_status": "passed-selected-formats",
+      "new_kernel_fault_count": 0
     }
   ],
   "corrections": {
@@ -669,16 +924,16 @@
     "limits": "Three historical containment fixture expectations fail under the owner v5 default; all nine pass under explicit CPU-only legacy fixture opt-ins. No historical limits applied to GPU tests."
   },
   "remaining": [
-    "Observe existing per-card format stages (one pair per process, 210s each,900/990s stage caps) and conditional Coder short checks; no duplicate launch",
-    "Complete verified PLE download, then isolated short check if previous boundaries clean",
-    "Review saved outcomes, update documentation/Shared and publish reviewed results; no automatic promotion"
+    "Complete PLE download and its existing one-off short check after verification",
+    "Review PLE result and reconcile records; no duplicate Coder/math tests",
+    "Maya Coder passed isolated configuration only; no automatic production promotion"
   ],
   "installed_sources": {
     "maya": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
     "strata_qwen": "ffa80d73133ea5c548aefe57889a16e8085a938f",
     "strata_deepseek": "8183c6b67162340c09b67360860177c577a65f2e"
   },
-  "updated_utc": "2026-11-04T04:49:25.184666+00:00",
+  "updated_utc": "2026-11-04T05:29:13.683863+00:00",
   "fixture_layout_audit": {
     "CPU_samples": 10000,
     "old_random_embedded_scales_nonfinite": 305,
@@ -698,7 +953,7 @@
       "repository": "albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE",
       "revision": "c6af9fee7ad2cb8ef44b534a99b8c1b81fb0f6da",
       "selected_bytes": 124825224734,
-      "verified_bytes": 51162250627
+      "verified_bytes": 99581443613
     }
   },
   "Coder_layout": {
@@ -743,11 +998,41 @@
     "metadata_packs": "Maya and Strata created against one fully verified backing; no duplicate expert/table payload copy"
   },
   "continuation": {
-    "status": "coder-formats-strata-1",
+    "status": "waiting for verified downloads: ple",
     "scope": "single one-off completion of requested short checks; no production promotion or recurring schedule",
     "tasks": {
       "coder-formats-strata-0": {
         "status": "passed-selected-formats",
+        "guard_status": "passed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      },
+      "coder-formats-strata-1": {
+        "status": "passed-selected-formats",
+        "guard_status": "passed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      },
+      "strata-coder": {
+        "status": "failed",
+        "guard_status": "failed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      },
+      "coder-formats-maya-0": {
+        "status": "passed-selected-formats",
+        "guard_status": "passed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      },
+      "coder-formats-maya-1": {
+        "status": "passed-selected-formats",
+        "guard_status": "passed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      },
+      "maya-coder": {
+        "status": "passed-one-short-DSH-check",
         "guard_status": "passed",
         "owned_cgroups_empty": true,
         "reused_completed_record": false

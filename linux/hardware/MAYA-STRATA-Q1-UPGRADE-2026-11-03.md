@@ -50,6 +50,16 @@ The one-off continuation also initially refused an ownership check as the comple
 
 The corrected legal combined batch reached its 210-second process limit after both new dense formats and the first three role pairs completed on Strata GPU0, with all recorded comparisons finite and matching. Its raw timeout remains a failure. An independent output audit reuses only those completed checks (11 successful comparisons for each of the small and model shapes). Remaining pairs now run as independent processes with the same 210-second limit, grouped into per-card stages with the existing 900/990-second caps. Each model check still waits for its engine to pass both cards. No completed pair is repeated for a clean log, and model first-output/request/cleanup thresholds are unchanged.
 
+## November 4 completed Coder follow-up
+
+All four engine/card selected-format stages passed. The audited Strata GPU0 prefix was reused; the remaining independent cases completed without changing reference math, tolerances or numeric guards. The earlier invalid fixture and combined-batch timeout remain recorded as failures, rather than being overwritten.
+
+- **Maya 1.1.52 / ISTA Coder:** passed the actual installed DSH headless read-tool round trip. Load **31.961 s**; first output **15.694 s**, then **1.398 s** for the tool-result reply; exactly one read, two model steps, **98 generated tokens**, matching IDs and exact final marker. Both proxy requests completed. Guard passed and owned scopes/KFD emptied.
+- **Strata 0.2.10 / same Coder backing:** loaded **20.950 s**, then the first DSH request hit the unchanged **20-second first-output deadline**. No tool round trip passed. Owned scopes/KFD emptied; no new GPU fault was recorded.
+- **PLE:** download still in progress; no device/model test yet. The same one-off continuation is waiting for full file verification. No production promotion is automatic.
+
+The Maya Coder result qualifies this isolated model/configuration for a short tool request. It does not qualify GLM or Unsloth Q1, establish sustained stability, or enable a normal catalog route. Installed Maya and Strata DeepSeek pins and all existing catalog holds remain.
+
 ## Guards and interpretation
 
 P2P remains off on both direct x16/chipset x4 cards. Free RAM 1 GiB, free VRAM 128 MiB per card, current RAM hard limit, unrestricted soft limit, loading-swap-v5 SSD health/temperature checks, first output 20 s, request 30 s, decode stall 3 s, supervisor heartbeat 6 s and cleanup 15 s are unchanged. Existing 33.53 GiB swap capacity is unchanged. Q1/Super/PLE use their existing 900 s startup allowance; GLM/Qwen use 210 s. Edge/junction-memory/CPU limits remain 75/90/85°C. No driver, kernel, PCIe, PSU-wiring or schedule change was made.
@@ -61,16 +71,16 @@ An engine passing a short tool check does not establish sustained stability, ful
 <!-- pinned-followup:begin -->
 ## Follow-up checkpoint
 
-2026-11-04T04:49:25.184666+00:00 UTC: coder-formats-strata-1. Completed records are reused.
+2026-11-04T05:29:13.683863+00:00 UTC: waiting for verified downloads: ple. Completed records are reused.
 
 | Check | Saved status |
 | --- | --- |
 | coder-format-parity-legal | testprocess-timeout |
 | coder-formats-strata-0 | passed-selected-formats |
-| coder-formats-strata-1 | running |
-| coder-formats-maya-0 | prepared; not run |
-| coder-formats-maya-1 | prepared; not run |
-| strata-coder | prepared; not run |
-| maya-coder | prepared; not run |
+| coder-formats-strata-1 | passed-selected-formats |
+| coder-formats-maya-0 | passed-selected-formats |
+| coder-formats-maya-1 | passed-selected-formats |
+| strata-coder | failed — first output deadline |
+| maya-coder | passed-one-short-DSH-check |
 | vllm-ple-file-gather | prepared; not run |
 <!-- pinned-followup:end -->

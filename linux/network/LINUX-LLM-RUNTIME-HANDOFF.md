@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 <!-- maya-strata-q1-upgrade:begin -->
-**November 3 latest-engine and community follow-up:** Strata Qwen 0.2.10 is installed with the short DSH-qualified MTP settings; its catalog hold remains. Maya GLM and Unsloth Q1 candidates remain unqualified, and Super INT4 hit its loading deadline. Coder backing is fully verified and packed; its newly needed format checks and conditional short model checks continue in a one-off queue. PLE download/qualification remains pending. Completed legal format checks are reused after splitting an oversized test batch; no numerical tolerance or guard threshold changed. No new GPU reset/bus-loss/OOM fault is recorded in completed no-switch trials. Holds, P2P-off and paused recurring schedules remain. [Qualification and remaining tasks](../hardware/MAYA-STRATA-Q1-UPGRADE-2026-11-03.md). [Successful dual-XTX/64 GB community setups](../hardware/DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md).
+**November 4 current results:** DeepSeek Coder on isolated Maya 1.1.52 passed the strict DSH read-tool round trip and unloaded; the same Coder on Strata missed the 20-second first-output limit. Both engines passed the required Coder format checks on both cards. Strata Qwen 0.2.10 remains installed with its passing MTP preset and catalog hold. Unsloth Q1, GLM and Super INT4 remain unqualified under current limits. PLE is still downloading; no model is loaded at this checkpoint. No new GPU reset/bus-loss/OOM was recorded in completed no-switch trials. All guards, holds, P2P-off and paused schedules remain. [Qualification and remaining work](../hardware/MAYA-STRATA-Q1-UPGRADE-2026-11-03.md). [Community setups](../hardware/DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md).
 <!-- maya-strata-q1-upgrade:end -->
 
 **November 3 no-switch validation completed with guard blocks:** eight short LLM/backend checks and six graphics renders passed without a new GPU reset/bus-loss/OOM fault. Sustained Strata stopped at the configured Sapphire 90°C junction limit; GLM stopped at the 128 MiB free-VRAM floor. Gen4 x16/x4 paths, P2P-off, source pins, production pauses and all resource guards remain. No GPU job is active. [Final coverage and limits](../hardware/NO-SWITCH-VALIDATION-2026-11-03.md).
@@ -474,7 +474,7 @@ change. Nightly updates remain paused.
 | llama.cpp ornith-1.5-122b (manual source pin) | `2280f0fd163b` |
 | vLLM nemotron-3.5-bolt-vllm (manual runtime pin) | `0.32.1rc1.dev435+gc50aca144.rocm72` |
 
-Latest checkpoint: Strata Qwen 0.2.10 installed after the short DSH check; catalog hold retained. Flint keeps its split promotion and Empero its prior code. Maya/Strata DeepSeek candidates failed short qualification, so their installed pins remain. Super INT4 whole-expert loading timed out; Coder and PLE download/short-check continuation remains. The nightly updater stays paused.
+Latest checkpoint: Strata Qwen 0.2.10 installed after the short DSH check; catalog hold retained. Flint keeps its split promotion and Empero its prior code. Isolated Maya Coder now passes a short check; GLM/Q1 and Strata Coder remain unqualified, so installed Maya/Strata DeepSeek pins and catalog holds remain. Super INT4 whole-expert loading timed out; Coder and PLE download/short-check continuation remains. The nightly updater stays paused.
 <!-- daily-update:end -->
 
 **Inference-only swap / 10-minute idle policy (October24):** unrelated/background
