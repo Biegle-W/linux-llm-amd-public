@@ -491,6 +491,156 @@
         "cleanup_verified_independently": "2026-11-04T04:08:50.971907+00:00",
         "stop_reason": "model loading deadline"
       }
+    },
+    {
+      "stage": "coder-format-parity",
+      "status": "failed",
+      "guard": {
+        "status": "failed",
+        "samples": 615,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61488111616,
+        "min_free_VRAM_bytes": [
+          25716686848,
+          25235746816
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "qualification_status": "blocked by guard",
+      "new_kernel_fault_count": 0
+    },
+    {
+      "stage": "coder-format-parity-legal",
+      "status": "testprocess-timeout",
+      "guard": {
+        "status": "failed",
+        "samples": 778,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61569409024,
+        "min_free_VRAM_bytes": [
+          25716674560,
+          25233723392
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "rows": [],
+      "tool": null,
+      "requests": [],
+      "qualification_status": "blocked by guard",
+      "new_kernel_fault_count": 0
+    },
+    {
+      "stage": "strata-coder",
+      "status": "prepared; not run"
+    },
+    {
+      "stage": "maya-coder",
+      "status": "prepared; not run"
+    },
+    {
+      "stage": "vllm-ple-file-gather",
+      "status": "prepared; not run"
+    },
+    {
+      "stage": "coder-formats-strata-0",
+      "status": "passed-selected-formats",
+      "guard": {
+        "status": "passed",
+        "samples": 1024,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61441179648,
+        "min_free_VRAM_bytes": [
+          25716678656,
+          25227415552
+        ],
+        "owned_cgroups_empty": true,
+        "remaining_KFD_clients": []
+      },
+      "rows": [
+        {
+          "case": -1,
+          "returncode": 0,
+          "reused_completed_prefix": true
+        },
+        {
+          "case": 0,
+          "returncode": 0,
+          "reused_completed_prefix": true
+        },
+        {
+          "case": 1,
+          "returncode": 0,
+          "reused_completed_prefix": true
+        },
+        {
+          "case": 2,
+          "returncode": 0,
+          "reused_completed_prefix": true
+        },
+        {
+          "case": 3,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 4,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 5,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        },
+        {
+          "case": 6,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        }
+      ],
+      "tool": null,
+      "requests": [],
+      "qualification_status": "passed-selected-formats",
+      "new_kernel_fault_count": 0
+    },
+    {
+      "stage": "coder-formats-strata-1",
+      "status": "running",
+      "guard": {
+        "status": "starting",
+        "samples": 5,
+        "max_owned_swap_bytes": 0,
+        "max_owned_spill_bytes": 0,
+        "min_available_bytes": 61674237952,
+        "min_free_VRAM_bytes": [
+          25254805504,
+          25724981248
+        ]
+      },
+      "rows": [
+        {
+          "case": -1,
+          "returncode": 0,
+          "reused_completed_prefix": false
+        }
+      ],
+      "tool": null,
+      "requests": [],
+      "qualification_status": "running",
+      "new_kernel_fault_count": 0
+    },
+    {
+      "stage": "coder-formats-maya-0",
+      "status": "prepared; not run"
+    },
+    {
+      "stage": "coder-formats-maya-1",
+      "status": "prepared; not run"
     }
   ],
   "corrections": {
@@ -498,7 +648,9 @@
     "strata-dflash2-explicit": "Actual DFlash2 active and strict DSH correct; raw runner failed proxy completion race. Final proxy rows both completed. Inference passed with audited harness race; raw failure retained.",
     "maya-glm": "Invalid old readiness adapter; loaded model never received inference.",
     "maya-glm-64gb": "Supervisor blocked reading process cmdline during host-memory registration; heartbeat stop, not GPU fault. Corrected identity reader leaves thresholds unchanged.",
-    "vllm-super-int4-ep": "Startup deadline. Controller interrupted saving cleanup; independent exact-owned-unit/KFD/kernel verification confirms unload. Raw interrupted record retained; no pass or rerun."
+    "vllm-super-int4-ep": "Startup deadline. Controller interrupted saving cleanup; independent exact-owned-unit/KFD/kernel verification confirms unload. Raw interrupted record retained; no pass or rerun.",
+    "coder-format-parity": "Invalid old Strata IQ1_M random input: the F16 scale was written at byte0 instead of being encoded in four high nibbles at bytes48..55. Both CPU and GPU produced NaNs. Owned stage stopped, cleanup verified, raw failure retained. This is not a kernel correctness result.",
+    "coder-format-parity-legal": "Only the Strata input generator uses the exact legal IQ1_M scale case already present in upstream Maya. Engine arithmetic, reference comparisons and tolerances unchanged. Maya binary unchanged; seven newly needed role pairs and two dense formats require verification. The completed uniform IQ2XXS pair is not repeated."
   },
   "runtime_guard_fix": {
     "scope": "Already owned cgroup members use kernel stat identity, UID/start-time and exact/nested cgroup checks; pidfd signals retained. Global process classification unchanged.",
@@ -511,18 +663,122 @@
       "private_proxy_commit": 4,
       "private_cleanup_signal_race": 4,
       "private_continuation_boundaries": 5,
-      "installed_server_effective_environment": 1
+      "installed_server_effective_environment": 1,
+      "private_owned_scope_exit_race": 4
     },
     "limits": "Three historical containment fixture expectations fail under the owner v5 default; all nine pass under explicit CPU-only legacy fixture opt-ins. No historical limits applied to GPU tests."
   },
   "remaining": [
-    "Coder and PLE verified downloads continue",
-    "One-off continuation converts Coder metadata and performs one short check per candidate, stopping on unsafe boundary",
-    "Inspect saved outcomes after continuation; no automatic production promotion or new recurring schedule"
+    "Observe existing per-card format stages (one pair per process, 210s each,900/990s stage caps) and conditional Coder short checks; no duplicate launch",
+    "Complete verified PLE download, then isolated short check if previous boundaries clean",
+    "Review saved outcomes, update documentation/Shared and publish reviewed results; no automatic promotion"
   ],
   "installed_sources": {
     "maya": "cbaaec5d70fde2730e251dec6b418e4b454c01bd",
     "strata_qwen": "ffa80d73133ea5c548aefe57889a16e8085a938f",
     "strata_deepseek": "8183c6b67162340c09b67360860177c577a65f2e"
-  }
+  },
+  "updated_utc": "2026-11-04T04:49:25.184666+00:00",
+  "fixture_layout_audit": {
+    "CPU_samples": 10000,
+    "old_random_embedded_scales_nonfinite": 305,
+    "legal_encoding_nonfinite": 0,
+    "low12bit_codes_preserved": true
+  },
+  "downloads": {
+    "coder": {
+      "status": "all selected backing files verified",
+      "repository": "ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-GGUF",
+      "revision": "54229d38d588a66d1c6cff08af7b281b9326c656",
+      "selected_bytes": 182718891848,
+      "verified_bytes": 182718891848
+    },
+    "ple": {
+      "status": "downloading",
+      "repository": "albucino/Qwen3.8-Flash-Next-W4A16-FP8PLE",
+      "revision": "c6af9fee7ad2cb8ef44b534a99b8c1b81fb0f6da",
+      "selected_bytes": 124825224734,
+      "verified_bytes": 51162250627
+    }
+  },
+  "Coder_layout": {
+    "experts_per_layer": 192,
+    "layers": 40,
+    "routed_expert_types": [
+      "IQ1_M",
+      "IQ2_XXS",
+      "IQ2_XS"
+    ],
+    "new_role_pairs_required": [
+      [
+        "IQ1_M",
+        "IQ1_M"
+      ],
+      [
+        "IQ2_XXS",
+        "IQ1_M"
+      ],
+      [
+        "IQ2_XS",
+        "IQ1_M"
+      ],
+      [
+        "IQ2_XXS",
+        "IQ2_XS"
+      ],
+      [
+        "IQ1_M",
+        "IQ2_XXS"
+      ],
+      [
+        "IQ2_XS",
+        "IQ2_XXS"
+      ],
+      [
+        "IQ2_XS",
+        "IQ2_XS"
+      ]
+    ],
+    "completed_uniform_IQ2XXS_pair": "reused",
+    "metadata_packs": "Maya and Strata created against one fully verified backing; no duplicate expert/table payload copy"
+  },
+  "continuation": {
+    "status": "coder-formats-strata-1",
+    "scope": "single one-off completion of requested short checks; no production promotion or recurring schedule",
+    "tasks": {
+      "coder-formats-strata-0": {
+        "status": "passed-selected-formats",
+        "guard_status": "passed",
+        "owned_cgroups_empty": true,
+        "reused_completed_record": false
+      }
+    }
+  },
+  "completed_prefix_reuse": {
+    "engine": "strata",
+    "gpu": 0,
+    "new_dense_formats": "complete",
+    "pair_ids": [
+      0,
+      1,
+      2
+    ],
+    "scope": "11 successful comparisons per shape, small and model shapes; raw combined210s timeout remains failure"
+  },
+  "format_test_build": [
+    {
+      "family": "maya",
+      "revision": "6c9a27b44fa17cab662d8bfe4885d6f865288901",
+      "binary_sha256": "af54d4f8f1480f978fc93281966b992a6dc2c5bd3820ffbbfb59cfa4d5434932",
+      "test_source_sha256": "2b719e01683f753bf53921e87ab33295ec1eaec2858cfc95e0951ad01565318b",
+      "scope": "Same legal test bodies/reference/tolerances and exact engine objects; CLI selects one pair (two shapes) or new dense formats, each <=210s; no default all-matrix run."
+    },
+    {
+      "family": "strata",
+      "revision": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+      "binary_sha256": "5a585401902a1009f905916f6b303f3dc77fcf6161dbdcb5f24c3fe9911e6165",
+      "test_source_sha256": "8d7077435224b3f999aa6d332e17549ec7cdeb480f9c7654fc8b8516f9012322",
+      "scope": "Same legal test bodies/reference/tolerances and exact engine objects; CLI selects one pair (two shapes) or new dense formats, each <=210s; no default all-matrix run."
+    }
+  ]
 }

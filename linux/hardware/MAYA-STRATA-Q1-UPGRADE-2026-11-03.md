@@ -33,14 +33,22 @@ A focused monitor fix reads kernel process identity for already owned cgroup mem
 ## Other pinned tasks
 
 - **Super INT4/vLLM:** retained full checkpoint and exact runtime used. Plain TP2 failed before model readiness: expert width 1344 per rank is not divisible by quantization group 128. The supported EP2 alternative keeps each expert's full 2688 width; actual meta-allocation and AMD parallel-selector checks pass. Its full load reached the existing 900-second startup deadline before readiness (40/64 shards in the last progress record); no tool result exists. Maximum sampled worker swap was 7.28 GiB and spill zero; minimum available RAM was 1.71 GiB. The kernel recorded host-memory workqueue and memory-pressure warnings, without GPU reset/bus-loss/OOM. A second graceful stop interrupted the controller while saving cleanup records. Independent postmortem verification found all three owned scopes inactive and removed, KFD empty and no new kernel GPU fault. The original interrupted record and added verification are retained separately. Context is 8192, one request, BF16, eager, 2 GiB KV/rank and 18 GiB CPU offload/rank. P2P remains disabled. The copied harness advertises an overlarge window; no request beyond the actual backend cap is permitted or qualified.
-- **DeepSeek Coder:** exact ISTA revision `54229d38d588a66d1c6cff08af7b281b9326c656`, approximately 182.719 GB, downloading to the designated streaming SSD with per-file SHA verification. Packing and short checks wait for all selected files to verify; no model has run from partial files.
+- **DeepSeek Coder:** exact ISTA revision `54229d38d588a66d1c6cff08af7b281b9326c656`, 182,718,891,848 bytes, now fully downloaded and SHA-verified on the designated streaming SSD. Both metadata-only packs are created against that one backing. The nominal IQ2_XXS pack actually contains IQ1_M, IQ2_XXS and IQ2_XS routed experts, with 192 experts in each of 40 layers. The earlier Q1-only test matrix is insufficient for this mixed layout; seven newly needed role pairs and the two new dense formats receive selected tests on each card and engine before its short model check.
 - **Checkpoint-backed ROCm PLE:** exact-hash AMD source overlay reproduced against retained vLLM. The actual quantization validator admits the Intel and FP8-PLE AutoRound configs as INC. Upstream `disk_offload` remains CUDA-only; it is separate from this opt-in AMD port. The compatible FP8-PLE checkpoint download has started; only the index-referenced files are selected (approximately 124.825 GB including metadata), with per-file hashes. A short TP2/EP2, 8K, no-MTP candidate is staged; no device or full-model pass exists. The explicit native AMD overlay remains isolated from the installed wheel.
 
 ## Remaining owned work
 
-Both downloads continue on the designated streaming SSD. A single one-off continuation waits for complete verification, converts the Coder metadata packs, then runs only the two Coder engine checks and the PLE check. Each uses one strict DSH read-tool round trip followed by owned unload. It checks the same boot, refuses an existing active stage, and stops the GPU queue on temperature/GPU/monitor faults or unverified cleanup. Five CPU boundary checks pass. The interrupted-cleanup signal race is corrected only in future private controllers; four real-signal/persistence/deadline CPU checks pass, retaining the 6/15-second watchdog limits. No recurring schedule or automatic production promotion was added.
+Coder backing verification and both metadata conversions are complete; the PLE download continues on the designated streaming SSD. A single one-off continuation waits for complete verification, converts the Coder metadata packs, then runs only the two Coder engine checks and the PLE check. Each uses one strict DSH read-tool round trip followed by owned unload. It checks the same boot, refuses an existing active stage, and stops the GPU queue on temperature/GPU/monitor faults or unverified cleanup. Five CPU boundary checks pass. The interrupted-cleanup signal race is corrected only in future private controllers; four real-signal/persistence/deadline CPU checks pass, retaining the 6/15-second watchdog limits. No recurring schedule or automatic production promotion was added.
 
 The remaining weight transfers are an external wait, not completed qualification. A later checkpoint must inspect their saved results; do not launch duplicate stages or repeat completed tests.
+
+
+The first Coder test gate was stopped after the older Strata synthetic IQ1_M generator produced NaNs in both CPU and GPU comparisons. Its scale lives in the high nibbles of four words at bytes 48–55; the old fixture wrote a half at byte zero. A CPU encoding audit found 305 nonfinite scales among 10,000 old random samples and none with the legal encoding, preserving the low 12 code bits. The corrected test copies only the legal scale case already in upstream Maya; engine arithmetic, reference comparisons and tolerances are unchanged. The raw failed fixture and verified owned unload remain recorded. This is not a claim of a GPU-kernel failure.
+
+The one-off continuation also initially refused an ownership check as the completed download scope exited, before any GPU model launch. Its freeze helper now waits for a terminal unit state and refuses root, wrong or unrelated populated cgroups; four CPU checks pass. No model attempt was repeated for that pre-launch refusal.
+
+
+The corrected legal combined batch reached its 210-second process limit after both new dense formats and the first three role pairs completed on Strata GPU0, with all recorded comparisons finite and matching. Its raw timeout remains a failure. An independent output audit reuses only those completed checks (11 successful comparisons for each of the small and model shapes). Remaining pairs now run as independent processes with the same 210-second limit, grouped into per-card stages with the existing 900/990-second caps. Each model check still waits for its engine to pass both cards. No completed pair is repeated for a clean log, and model first-output/request/cleanup thresholds are unchanged.
 
 ## Guards and interpretation
 
@@ -49,3 +57,20 @@ P2P remains off on both direct x16/chipset x4 cards. Free RAM 1 GiB, free VRAM 1
 An engine passing a short tool check does not establish sustained stability, full-window quality or a PSU/switch diagnosis. Failed source/model combinations are not promoted. Preserve the no-switch historical successes and thermal stop without repeating them.
 
 [Community configurations and source links](DUAL-XTX-64GB-COMMUNITY-RECIPES-2026-11-03.md). [Structured progress and corrections](results/maya-strata-q1-upgrade-2026-11-03.json). [Short-test policy](SHORT-HARNESS-TEST-POLICY-2026-11-01.md).
+
+<!-- pinned-followup:begin -->
+## Follow-up checkpoint
+
+2026-11-04T04:49:25.184666+00:00 UTC: coder-formats-strata-1. Completed records are reused.
+
+| Check | Saved status |
+| --- | --- |
+| coder-format-parity-legal | testprocess-timeout |
+| coder-formats-strata-0 | passed-selected-formats |
+| coder-formats-strata-1 | running |
+| coder-formats-maya-0 | prepared; not run |
+| coder-formats-maya-1 | prepared; not run |
+| strata-coder | prepared; not run |
+| maya-coder | prepared; not run |
+| vllm-ple-file-gather | prepared; not run |
+<!-- pinned-followup:end -->
