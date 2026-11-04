@@ -1,7 +1,7 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
 <!-- vmpt-kernel:begin -->
-**November 4 isolated VM page-table kernel:** `7.0.14-42-vmpt1` and all modules built from exact retained Ubuntu source, with only the audited two source files changed. Built and staged in an isolated workspace; administrator authentication required for host installation/reboot. Stock kernel remains available; guards, holds and paused schedules remain. [Validation and pending steps](../hardware/VM-PAGE-TABLE-KERNEL-2026-11-04.md).
+**November 4 isolated VM page-table kernel:** `7.0.14-42-vmpt1` and all modules built from exact retained Ubuntu source, with only the audited two source files changed. Candidate files installed; corrected initramfs validation and safe resume prepared; privileged final validation and one-shot reboot pending. Stock kernel remains available; guards, holds and paused schedules remain. [Validation and pending steps](../hardware/VM-PAGE-TABLE-KERNEL-2026-11-04.md).
 <!-- vmpt-kernel:end -->
 
 <!-- switch-restored-p2p:begin -->

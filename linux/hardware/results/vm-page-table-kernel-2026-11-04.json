@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "status": "built and staged in isolated workspace; administrator authentication required for host installation/reboot",
+  "status": "Candidate files installed; corrected initramfs validation and safe resume prepared; privileged final validation and one-shot reboot pending",
   "candidate_kernel": "7.0.14-42-vmpt1",
   "source_package": "linux-source-7.0.0 7.0.0-42.42",
   "source_package_sha256": "3da06804a13cbc18974a61f78ff73dbbbfe476dc9b775e99102aee15aabe55a7",
@@ -46,18 +46,40 @@
     "amdgpu_detached_CMS_cryptographic_verification": "passed with generated build certificate",
     "certificate_embedded_in_linked_kernel": true
   },
-  "install_state": "not installed",
+  "install_state": "staging-validation-pending",
   "bounded_peer_checks": {},
   "ACS_verification": "Pending candidate boot; current prebuild selectors and six kernel programming records verified",
   "qualification": "Build/source validation only; no patched-kernel P2P/inference qualification",
   "preserved": "GPU fault hold, production NCCL_P2P_DISABLE=1, model/source holds, guards and paused schedules; no promotion or model queue",
   "causality_limit": "This VM race patch differs from the earlier six-file MES candidate; applicability does not prove a local cause or fix. A concurrent slot change prevents simple causal attribution.",
-  "updated_utc": "2026-11-04T21:31:49.346820+00:00",
-  "administrator_blocker": {
+  "updated_utc": "2026-11-04T21:52:24.759742+00:00",
+  "initial_administrator_attempt": {
     "pkexec_exit_code": 127,
     "pkexec_error": "Error executing command as another user: No authentication agent found.",
     "sudo_noninteractive": "Interactive authentication is required",
     "host_installation_attempt": "No installer execution; candidate module directory and boot pin absent; current kernel remains stock",
     "next": "Run the reviewed local install-and-reboot entry point with interactive administrator authentication; then fresh candidate-boot admission and four short P2P checks"
+  },
+  "initramfs_validation_repair": {
+    "failure": "Initial installer incorrectly required amdgpu.ko inside a host-only initramfs; validation stopped before arming a reboot",
+    "observed_image": "Owner-provided privileged listing contains /init, candidate module directory and both NVMe modules",
+    "configuration": "CONFIG_EXT4_FS=y, CONFIG_DRM_SIMPLEDRM=y, CONFIG_DRM_AMDGPU=m; PlymouthUseSimpledrm=1",
+    "installed_signed_module_hashes_verified": 6901,
+    "corrected_policy": "Require /init, exact module release and root-storage modules when configured modular; GPU module can load from separately verified signed root module tree",
+    "resume": "Existing staging phase selects verify-stage, preserving original backup; rechecks original and candidate hashes, stock boot default, current ACS/IOMMU/holds before one-shot boot",
+    "regression_tests": 6,
+    "test_status": "passed in both maintained checkouts",
+    "root_validation_status": "Prepared; requires interactive administrator rerun",
+    "reboot_armed": false,
+    "patched_kernel_GPU_trials": 0
+  },
+  "privileged_preboot_routing": {
+    "selected_bridges": 6,
+    "ACS_control": "0x11",
+    "GPU_IOMMU_domains": [
+      "identity",
+      "identity"
+    ],
+    "direct_read": "passed during owner-authenticated initial staging"
   }
 }

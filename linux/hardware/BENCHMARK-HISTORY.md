@@ -1068,3 +1068,5 @@ measured builds remain unchanged. See [maintenance](WORKSPACE-MAINTENANCE-2026-1
 
 <!-- vmpt-kernel-ledger -->
 November 4: isolated `7.0.14-42-vmpt1` source/full-build validation only; built and staged in isolated workspace; administrator authentication required for host installation/reboot. No patched-kernel speed result or promotion. [Scope](VM-PAGE-TABLE-KERNEL-2026-11-04.md).
+
+November 4 staging follow-up: candidate files installed; false initramfs GPU-presence requirement corrected; six regression tests pass. Existing-stage validation and one-shot boot remain pending; no patched-kernel GPU or performance result. [Repair](VM-PAGE-TABLE-KERNEL-2026-11-04.md#initramfs-validator-repair).
