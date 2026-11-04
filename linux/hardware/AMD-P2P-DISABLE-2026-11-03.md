@@ -1,5 +1,9 @@
 # AMD peer-access disable verification — November 3, 2026
 
+<!-- switch-restored-p2p:begin -->
+**November 4 switch restored; P2P continuation authorized:** the owner reports the switch and both GPUs are now powered by one PSU. A new boot and both Navi31 cards behind the PEX switch are verified. The authenticated prior six-bridge routing policy plus `iommu=pt` is restored for the next boot; generated GRUB entries passed validation. The old P2P-disable drop-in is removed, but the current loaded driver still reports P2P off. **Owner reboot is required before testing P2P.** No GPU workload is active; the fault hold, existing resource/temperature/timing guards and paused schedules remain. After reboot: verify routing and direct peer-memory integrity/IPC/RCCL transport, then short model regressions and remaining candidates. The previous no-switch results remain historical; switch return plus PSU rewiring does not establish a unique cause. [Staged state and continuation](results/switch-restored-p2p-2026-11-04.json).
+<!-- switch-restored-p2p:end -->
+
 **Later hardware state:** the external switch has been removed; P2P stays off. See [no-switch validation and guard limits](NO-SWITCH-VALIDATION-2026-11-03.md). The switch-present measurements below are historical.
 
 **Direct GPU peer-memory access is disabled and verified for the audited dual-XTX inference stack. The initial bounded Strata attempt hit its 150-second loading deadline. A separately authorized loading-only retry increased it to 210 seconds while retaining the 240-second overall caps and all other controls. That retry became ready in 71.327 s but did not complete its first inference request; it remains unqualified.** Both GPUs and the physical PCIe switch remain present.

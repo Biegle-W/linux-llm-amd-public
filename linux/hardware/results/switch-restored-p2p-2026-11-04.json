@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-04",
+  "status": "P2P policy restored for next boot; owner reboot and runtime qualification pending",
+  "owner_authorization": "Switch is back; continue testing plan with P2P",
+  "hardware": {
+    "GPUs": "2x RX7900XTX24GB",
+    "RAM_installed_GB": 64,
+    "switch": "Broadcom PEX88096; common ancestry verified",
+    "GPU_PCI": [
+      "0000:0b:00.0",
+      "0000:13:00.0"
+    ],
+    "power": "Owner reports switch and both GPUs on same PSU; cabling not software-verifiable"
+  },
+  "staging": {
+    "method": "Existing authenticated managed-disable rollback; exact prior routing backup restored",
+    "routing_sha256": "d7ebbe558c69a8b35e978f26e8b0584fae880f36c72b851e7b1f9e07b9ade78c",
+    "selected_ACS_policy": "Six path-selected bridges, target0x11",
+    "IOMMU_policy": "iommu=pt identity domains",
+    "disable_dropin_removed": true,
+    "GRUB_generation_and_kernel_entry_validation": "passed",
+    "reboot_required": true,
+    "automatic_reboot": false,
+    "live_GPU_changes": false
+  },
+  "current_boot": {
+    "P2P_parameters": {
+      "pcie_p2p": "N",
+      "use_xgmi_p2p": "0"
+    },
+    "GPU_clients": [],
+    "new_kernel_GPU_reset_bus_loss_OOM_matches": [],
+    "peer_data_tests": "not run",
+    "inference": "not run"
+  },
+  "guards": {
+    "free_RAM_GiB": 1,
+    "free_VRAM_MiB_per_card": 128,
+    "MemoryHigh": "max",
+    "MemoryMax": "actual installed RAM minus1GiB",
+    "swap": "existing loading-swap-v5 and SSDhealth checks unchanged",
+    "GPU_edge_C": 75,
+    "GPU_junction_memory_C": 90,
+    "CPU_C": 85,
+    "fixed_TTFT_limit": null,
+    "output_budget_seconds_after_first_output": 30,
+    "decode_stall_seconds": 3,
+    "supervisor_heartbeat_seconds": 6,
+    "interrequest_idle_seconds": 20,
+    "cleanup_seconds": 15,
+    "original_loading_and_stage_budgets": "unchanged"
+  },
+  "next_order": [
+    "Owner reboot; verify active driver parameter, exact selectedACS0x11, identity GPUdomains, source/device/idle/kernel/SSD admission",
+    "Guarded bidirectional actual peer read/write, HIPIPC, RCCLdata correctness and transport logs; capability alone is insufficient",
+    "Short StrataQwenMTP and isolated latestMayaCoder/StrataCoder checks on changed physical hardware",
+    "Investigate both Q1 post-outputstall stops; complete GLMtoolcheck and inspect PLE/SuperINT4 loading budgets before blind repetition",
+    "Radiance andTensorFold: isolated source/format/memory/math admission before supportedQwen trials; no automatic promotion",
+    "Sustained stability remains unqualified after prior thermal ceiling; no automatic long run"
+  ],
+  "preserved": "Existing fault reservation, model/source holds, paused schedules, raw previous evidence and completed format/hash checks",
+  "causality": "Switch and PSU arrangement changed together; no conclusion that either caused earlier faults",
+  "updated_utc": "2026-11-04T19:37:56.960280+00:00"
+}

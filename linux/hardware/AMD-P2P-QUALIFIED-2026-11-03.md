@@ -1,5 +1,9 @@
 # Dual RX 7900 XTX P2P qualification — November 3, 2026
 
+<!-- switch-restored-p2p:begin -->
+**November 4 switch restored; P2P continuation authorized:** the owner reports the switch and both GPUs are now powered by one PSU. A new boot and both Navi31 cards behind the PEX switch are verified. The authenticated prior six-bridge routing policy plus `iommu=pt` is restored for the next boot; generated GRUB entries passed validation. The old P2P-disable drop-in is removed, but the current loaded driver still reports P2P off. **Owner reboot is required before testing P2P.** No GPU workload is active; the fault hold, existing resource/temperature/timing guards and paused schedules remain. After reboot: verify routing and direct peer-memory integrity/IPC/RCCL transport, then short model regressions and remaining candidates. The previous no-switch results remain historical; switch return plus PSU rewiring does not establish a unique cause. [Staged state and continuation](results/switch-restored-p2p-2026-11-04.json).
+<!-- switch-restored-p2p:end -->
+
 **Current mode: P2P disabled.** The following bounded correctness results are historical; see [active disable verification and qualification limits](AMD-P2P-DISABLE-2026-11-03.md).
 
 **PASS: bounded bidirectional GPU peer read/write correctness, HIP IPC and RCCL P2P/IPC correctness.** The owner-rebooted ASUS TX GAMING B760M WIFI / i5-13600KF host now uses the PEX88096 with ACS **0x11** on the four Broadcom and two AMD 1479 downstream bridges, plus **identity GPU IOMMU domains** from `iommu=pt`. Both GPUs share the Gen4 x16 upstream link; each branch includes Gen4 x8. RAM remains **30.60 GiB visible**; the planned 64 GB is still pending.
