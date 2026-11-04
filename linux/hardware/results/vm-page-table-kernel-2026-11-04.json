@@ -1,6 +1,6 @@
 {
   "date": "2026-11-04",
-  "status": "Candidate files installed; corrected initramfs validation and safe resume prepared; privileged final validation and one-shot reboot pending",
+  "status": "Patched kernel booted; all four bounded P2P correctness/transport stages passed; owned cleanup verified and fault hold restored",
   "candidate_kernel": "7.0.14-42-vmpt1",
   "source_package": "linux-source-7.0.0 7.0.0-42.42",
   "source_package_sha256": "3da06804a13cbc18974a61f78ff73dbbbfe476dc9b775e99102aee15aabe55a7",
@@ -46,13 +46,74 @@
     "amdgpu_detached_CMS_cryptographic_verification": "passed with generated build certificate",
     "certificate_embedded_in_linked_kernel": true
   },
-  "install_state": "staging-validation-pending",
-  "bounded_peer_checks": {},
-  "ACS_verification": "Pending candidate boot; current prebuild selectors and six kernel programming records verified",
-  "qualification": "Build/source validation only; no patched-kernel P2P/inference qualification",
+  "install_state": "booted-candidate",
+  "bounded_peer_checks": {
+    "peer-capability": {
+      "status": "passed",
+      "elapsed_seconds": 0.8558692590000305,
+      "samples": 3,
+      "min_available_bytes": 61917458432,
+      "min_free_VRAM_bytes": [
+        25724997632,
+        25716678656
+      ],
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "prior_hold_restored": true
+    },
+    "peer-local": {
+      "status": "passed",
+      "elapsed_seconds": 0.562360109999986,
+      "samples": 2,
+      "min_available_bytes": 61900316672,
+      "min_free_VRAM_bytes": [
+        25452359680,
+        25716711424
+      ],
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "prior_hold_restored": true
+    },
+    "peer-integrity-ipc": {
+      "status": "passed",
+      "elapsed_seconds": 0.5751658350000071,
+      "samples": 2,
+      "min_available_bytes": 61904109568,
+      "min_free_VRAM_bytes": [
+        25452208128,
+        25443889152
+      ],
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "prior_hold_restored": true
+    },
+    "peer-rccl": {
+      "status": "passed",
+      "elapsed_seconds": 8.13216182900004,
+      "samples": 29,
+      "min_available_bytes": 58993074176,
+      "min_free_VRAM_bytes": [
+        24942952448,
+        24934641664
+      ],
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "prior_hold_restored": true
+    }
+  },
+  "ACS_verification": "Six exact current-boot kernel ACS0x11 programming records plus unchanged paths/boot selectors and privileged preboot audit; direct postboot register read not obtained",
+  "qualification": "Four short P2P stages passed; no Maya/model startup, inference, sustained-stability or causal fix qualification",
   "preserved": "GPU fault hold, production NCCL_P2P_DISABLE=1, model/source holds, guards and paused schedules; no promotion or model queue",
   "causality_limit": "This VM race patch differs from the earlier six-file MES candidate; applicability does not prove a local cause or fix. A concurrent slot change prevents simple causal attribution.",
-  "updated_utc": "2026-11-04T21:52:24.759742+00:00",
+  "updated_utc": "2026-11-04T22:09:17.099171+00:00",
   "initial_administrator_attempt": {
     "pkexec_exit_code": 127,
     "pkexec_error": "Error executing command as another user: No authentication agent found.",
@@ -69,9 +130,10 @@
     "resume": "Existing staging phase selects verify-stage, preserving original backup; rechecks original and candidate hashes, stock boot default, current ACS/IOMMU/holds before one-shot boot",
     "regression_tests": 6,
     "test_status": "passed in both maintained checkouts",
-    "root_validation_status": "Prepared; requires interactive administrator rerun",
+    "root_validation_status": "passed before actual one-shot candidate boot",
     "reboot_armed": false,
-    "patched_kernel_GPU_trials": 0
+    "patched_kernel_GPU_trials": 4,
+    "completion": "Owner-authenticated resume verified existing installation and original stock hashes, then armed one-shot boot; candidate now verified running"
   },
   "privileged_preboot_routing": {
     "selected_bridges": 6,
@@ -81,5 +143,37 @@
       "identity"
     ],
     "direct_read": "passed during owner-authenticated initial staging"
+  },
+  "activation": {
+    "running_kernel": "7.0.14-42-vmpt1",
+    "loaded_amdgpu_srcversion": "140B8E9A04991D891F18CD3",
+    "module_taint": "",
+    "persistent_default_kernel": "7.0.0-42-generic",
+    "one_shot_consumed": true,
+    "original_stock_artifact_hashes_verified_preboot": true,
+    "stock_default_verified_preboot": true
+  },
+  "postboot_verification": {
+    "queues_run": 1,
+    "repeated_GPU_checks": 0,
+    "GPU_clients_after_cleanup": [],
+    "new_kernel_GPU_bus_OOM_faults": [],
+    "original_fault_hold_restored": true,
+    "profiles_unchanged": true,
+    "model_trials": 0,
+    "production_promoted": false,
+    "RCCL_logged_P2P_IPC_connections": 4,
+    "stage_scope": "Capability in three environment cases; two-card local three-pattern correctness; bidirectional 16 MiB remote read/write, peer copy and HIP IPC; two-rank RCCL all-reduce/all-gather",
+    "thermal": {
+      "samples": 36,
+      "max_gpu_temperature_C": {
+        "mem": 44.0,
+        "edge": 25.0,
+        "junction": 34.0
+      },
+      "max_CPU_package_C": 51.0,
+      "coverage_limit": "Sampled maxima during the four short checks; not a guarantee of unsampled transient peaks"
+    },
+    "nonfatal_warning": "PyTorch logged AMDSMI initialization warning32; both ranks and P2P/IPC assertions passed; independent sysfs guard telemetry remained available"
   }
 }

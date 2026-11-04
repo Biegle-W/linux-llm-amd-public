@@ -1,7 +1,7 @@
 # AMD peer-access disable verification — November 3, 2026
 
 <!-- vmpt-kernel:begin -->
-**November 4 isolated VM page-table kernel:** `7.0.14-42-vmpt1` and all modules built from exact retained Ubuntu source, with only the audited two source files changed. Candidate files installed; corrected initramfs validation and safe resume prepared; privileged final validation and one-shot reboot pending. Stock kernel remains available; guards, holds and paused schedules remain. [Validation and pending steps](VM-PAGE-TABLE-KERNEL-2026-11-04.md).
+**November 4 patched VM page-table kernel:** `7.0.14-42-vmpt1` booted with the expected driver identity. All four short peer-capability/local/direct-IPC/RCCL stages passed, with actual P2P/IPC transport, clean kernel fault scans and verified owned cleanup. The fault hold and stock persistent boot default remain; no model startup, sustained stability or causal fix is qualified. [Validation and pending steps](VM-PAGE-TABLE-KERNEL-2026-11-04.md).
 <!-- vmpt-kernel:end -->
 
 <!-- switch-restored-p2p:begin -->
