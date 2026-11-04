@@ -1,7 +1,7 @@
 # Agent entry point
 
 <!-- vmpt-models:begin -->
-**November 4 patched-kernel model checks:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard and unloaded. PLE/Super passed fresh idle admission and their single conditional queue is running. All safety holds and limits remain. [Live checkpoint and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
+**November 4 patched-kernel model checks — stopped:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard. PLE then hit the 85°C CPU guard (sampled 87°C) and unloaded; Super never started and is blocked. Final owned cleanup and idle GPUs are verified; no new journal GPU/reset/bus-loss/OOM or kernel-crash pattern was found. The thermal stop/fault hold, stock boot default, all guards, source pins, services and paused schedules remain. No PLE retry or Super launch is queued. [Final outcomes and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
 <!-- vmpt-models:end -->
 
 <!-- vmpt-kernel:begin -->

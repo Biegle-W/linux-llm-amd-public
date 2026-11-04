@@ -1,7 +1,7 @@
 {
   "date": "2026-11-04",
   "kernel": "7.0.14-42-vmpt1",
-  "status": "six prepared checks complete; conditional queue stopped; review required",
+  "status": "Stopped at PLE CPU thermal guard; Super blocked and not started; all owned cleanup verified",
   "scope": "Original six short DSH tool checks plus PLE and Super INT4 EP2 after admission; no promotion or sustained run",
   "models": {
     "strata-qwen-mtp": {
@@ -137,14 +137,68 @@
       "owned_cgroups_empty": true,
       "remaining_KFD_clients": [],
       "tool": null
+    },
+    "vllm-ple-file-gather": {
+      "status": "thermal-stop-before-load-qualification",
+      "guard_status": "failed",
+      "load_seconds": null,
+      "stop_reason": "CPU temperature ceiling",
+      "CPU_guard_C": 85,
+      "max_sampled_CPU_C": 87,
+      "finished_utc": "2026-11-04T22:36:24Z",
+      "samples": 568,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "remaining_KFD_clients": [],
+      "tool": null,
+      "complete_tool_check": false
+    },
+    "super-int4-ep2": {
+      "status": "blocked-not-started",
+      "started": false,
+      "stop_reason": "Campaign stopped at preceding PLE CPU thermal boundary",
+      "load_seconds": null,
+      "complete_tool_check": false
     }
   },
   "conditional": {
-    "PLE": "Static metadata/overlay/capacity admission passed; fresh idle RAM/VRAM and loading admission still required",
-    "Super INT4 EP2": "Full expert2688/group128layout preserved; static admission passed; original900/990budget retained"
+    "PLE": "Fresh idle admission passed; CPU thermal guard stopped launch/loading at sampled 87 C versus 85 C ceiling; unloaded; no load/tool qualification",
+    "Super INT4 EP2": "Fresh admission passed before queue; never launched after PLE thermal stop; full expert2688/group128 EP2 configuration retained; no qualification"
   },
   "preserved": "Original source/weight pins, math, custom all-reduce exclusions, hostcall settings, resource/storage/thermal/heartbeat/decode/cleanup limits, holds and paused schedules",
   "transport_limit": "System P2P and scoped NCCL P2P enabled; actual model transport must be read from logs; explicit native custom-AR exclusions remain",
-  "updated_utc": "2026-11-04T22:33:55.297308+00:00",
-  "conditional_status": "stopped; review required"
+  "updated_utc": "2026-11-04T22:43:24.727591+00:00",
+  "conditional_status": "terminal thermal stop; automatic continuation prohibited",
+  "outcome_counts": {
+    "strict_short_tool_passes": 3,
+    "decode_guard_stops": 3,
+    "CPU_thermal_stops": 1,
+    "blocked_not_started": 1
+  },
+  "final_verification": {
+    "observed_utc": "2026-11-04T22:41:57.905016+00:00",
+    "owned_scopes_checked": 19,
+    "owned_scopes_inactive_and_empty": true,
+    "queue_controllers_exited": true,
+    "GPU_busy_percent": [
+      0,
+      0
+    ],
+    "KFD_clients": [],
+    "current_boot_GPU_bus_OOM_kernel_crash_pattern_matches": [],
+    "amdgpu_srcversion": "140B8E9A04991D891F18CD3",
+    "amdgpu_module_taint": "",
+    "global_kernel_taint": 4,
+    "global_kernel_taint_limit": "Value 4 retained as an observation; cause and onset not established by this audit; do not claim globally untainted kernel",
+    "CPU_package_C": 36.0,
+    "fault_hold_and_STOP_present": true,
+    "profiles_and_scoped_inputs_unchanged": true,
+    "persistent_stock_default_override_verified": true,
+    "one_shot_entry_cleared": true,
+    "generated_GRUB_read_limit": "Current generated configuration requires administrator authentication; preboot privileged validation and unchanged current final stock-default override are retained",
+    "runtime_services_or_schedules_changed": false,
+    "new_GPU_work_started": false
+  },
+  "next_action": "Keep GPU hold and STOP latched. Resolve/review CPU thermal boundary before separately authorized fresh admission; do not retry PLE or start Super automatically.",
+  "production_promoted": false
 }
