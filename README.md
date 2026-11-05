@@ -1,11 +1,15 @@
 # Linux LLM AMD — public reference
 
+<!-- vmpt100-models:begin -->
+**November 4 PLE/Super checks at 100°C — complete:** PLE: loading-budget-exhausted; Super INT4 EP2: monitoring-guard-stop. Final owned cleanup and kernel/idle verification are recorded. The persistent hold, original STOP, other guards, stock boot default, engine/weight pins, services and paused schedules remain; no automatic retry or production promotion. [Outcomes and qualification limits](linux/hardware/PLE-SUPER-100C-2026-11-04.md).
+<!-- vmpt100-models:end -->
+
 <!-- temperature-guards:begin -->
-**Current temperature policy — November 4:** CPU, GPU edge/junction/memory and SSD software guards stop at **100°C or above**, as requested by the owner. Hardware protections, SMART health-warning checks and all other guards remain. Existing fault hold and STOP stay latched; no retry, model launch, service restart or schedule resumption occurred. The completed PLE stop remains an 85°C-policy historical result. [Policy and validation](linux/hardware/TEMPERATURE-GUARDS-2026-11-04.md).
+**Current temperature policy — November 4:** CPU, GPU edge/junction/memory and SSD software guards stop at **100°C or above**, as requested by the owner. Hardware protections, SMART health-warning checks and all other guards remain. The temperature-policy change itself retained the fault hold/STOP and launched no model; later explicitly authorized PLE/Super checks are recorded above. Services and paused schedules remain. The completed PLE stop remains an 85°C-policy historical result. [Policy and validation](linux/hardware/TEMPERATURE-GUARDS-2026-11-04.md).
 <!-- temperature-guards:end -->
 
 <!-- vmpt-models:begin -->
-**November 4 patched-kernel model checks — stopped:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard. PLE then hit the 85°C CPU guard (sampled 87°C) and unloaded; Super never started and is blocked. Final owned cleanup and idle GPUs are verified; no new journal GPU/reset/bus-loss/OOM or kernel-crash pattern was found. The thermal stop/fault hold, stock boot default, all guards, source pins, services and paused schedules remain. No PLE retry or Super launch is queued. [Final outcomes and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
+**Earlier November 4 model checks at the 85°C CPU ceiling — stopped:** Qwen MTP, Maya Coder and Strata Coder passed strict short tool checks. Both Q1 variants and GLM stopped at the retained decode guard. PLE then hit the 85°C CPU guard (sampled 87°C) and unloaded; Super never started and is blocked. Final owned cleanup and idle GPUs are verified; no new journal GPU/reset/bus-loss/OOM or kernel-crash pattern was found. The thermal stop/fault hold, stock boot default, all guards, source pins, services and paused schedules remain. No PLE retry or Super launch is queued. [Final outcomes and limits](linux/hardware/PATCHED-KERNEL-MODEL-CHECKS-2026-11-04.md).
 <!-- vmpt-models:end -->
 
 <!-- vmpt-kernel:begin -->

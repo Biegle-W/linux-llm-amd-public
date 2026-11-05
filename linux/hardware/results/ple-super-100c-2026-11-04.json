@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-04",
+  "status": "PLE: loading-budget-exhausted; Super INT4 EP2: monitoring-guard-stop",
+  "scope": "One fresh PLE attempt followed by one Super attempt across safe admitted boundaries; no automatic retry, sustained run or promotion",
+  "kernel": "7.0.14-42-vmpt1",
+  "software_temperature_limit_C": 100,
+  "models": {
+    "vllm-ple-file-gather": {
+      "status": "loading-budget-exhausted",
+      "stop_reason": "model loading deadline",
+      "started": true,
+      "guard_status": "failed",
+      "load_seconds": null,
+      "complete_tool_pass": false,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "remaining_KFD_clients": [],
+      "new_kernel_faults": [],
+      "sampled_peak_CPU_C": 87.0,
+      "sampled_peak_GPU_C": {
+        "mem": 46.0,
+        "edge": 28.0,
+        "junction": 39.0
+      },
+      "samples": 2258,
+      "min_available_RAM_GiB": 2.505828857421875,
+      "min_free_VRAM_GiB": [
+        7.265098571777344,
+        7.257343292236328
+      ],
+      "max_owned_swap_GiB": 9.399765014648438,
+      "max_dedicated_spill_bytes": 0,
+      "RCCL_logged_P2P_IPC_connections": 8,
+      "tool": null,
+      "finished_utc": "2026-11-05T00:22:46Z",
+      "last_logged_checkpoint_shards": [
+        13,
+        25
+      ]
+    },
+    "super-int4-ep2": {
+      "status": "monitoring-guard-stop",
+      "stop_reason": "supervisor heartbeat missing",
+      "started": true,
+      "guard_status": "failed",
+      "load_seconds": null,
+      "complete_tool_pass": false,
+      "owned_cgroups_empty": true,
+      "runner_exited": true,
+      "remaining_KFD_clients": [],
+      "new_kernel_faults": [],
+      "sampled_peak_CPU_C": 78.0,
+      "sampled_peak_GPU_C": {
+        "mem": 46.0,
+        "edge": 33.0,
+        "junction": 40.0
+      },
+      "samples": 842,
+      "min_available_RAM_GiB": 1.1128044128417969,
+      "min_free_VRAM_GiB": [
+        7.818695068359375,
+        7.810951232910156
+      ],
+      "max_owned_swap_GiB": 9.139450073242188,
+      "max_dedicated_spill_bytes": 0,
+      "RCCL_logged_P2P_IPC_connections": 8,
+      "tool": null,
+      "finished_utc": "2026-11-05T00:29:11Z",
+      "last_logged_checkpoint_shards": [
+        19,
+        64
+      ]
+    }
+  },
+  "guard_policy": {
+    "available_RAM_floor_GiB": 1,
+    "free_VRAM_floor_MiB_per_card": 128,
+    "memory_high_equals_memory_max": "actual MemTotal minus1GiB in isolated worker scopes",
+    "swap": "loading-swap-v5; existing capacity and no rate caps; SSD health/telemetry checks retained",
+    "dedicated_VRAM_spill_bytes_allowed": 0,
+    "CPU_GPU_SSD_numeric_ceiling_C": 100,
+    "heartbeat_seconds": 6,
+    "load_seconds": 900,
+    "stage_seconds": 990,
+    "prefill_first_token_cutoff": null,
+    "output_budget_from_first_output_seconds": 30,
+    "decode_stall_seconds": 3,
+    "idle_seconds": 20,
+    "cleanup_seconds": 15
+  },
+  "final_verification": {
+    "observed_utc": "2026-11-05T00:29:36.440449+00:00",
+    "owned_cleanup_verified": true,
+    "owned_scopes_checked": 6,
+    "KFD_clients": [],
+    "GPU_busy_percent": [
+      0,
+      0
+    ],
+    "current_boot_kernel_fault_pattern_matches": [],
+    "amdgpu_srcversion": "140B8E9A04991D891F18CD3",
+    "amdgpu_module_taint": "",
+    "global_kernel_taint": 4,
+    "model_profiles_source_pins_and_paused_schedule_files_unchanged": true,
+    "historical_STOP_preserved": true,
+    "fault_hold_retained": true,
+    "existing_services_unchanged": true,
+    "new_queue_STOP_present": true
+  },
+  "qualification_limit": "Only a strict completed tool pass qualifies this short test; loading/guard stops are inconclusive for inference. Missing supervisor heartbeat is not itself proof of a GPU freeze or hardware failure. P2P enabled is not proof of actual transport; use retained RCCL/engine logs. No sustained stability, root-cause or performance claim.",
+  "production_promoted": false,
+  "further_GPU_work_queued": false,
+  "updated_utc": "2026-11-05T00:29:57.212332+00:00"
+}

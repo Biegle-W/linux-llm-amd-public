@@ -207,5 +207,6 @@
     "GPU_work_resumed": false,
     "policy_record": "temperature-guards-2026-11-04.json",
     "updated_utc": "2026-11-04T23:06:19.671759+00:00"
-  }
+  },
+  "subsequent_100C_checks_record": "ple-super-100c-2026-11-04.json"
 }
