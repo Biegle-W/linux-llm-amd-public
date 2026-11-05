@@ -1,10 +1,11 @@
 {
   "date": "2026-11-05",
-  "scope": "Read-only recovery from saved AMD native logs; no new model requests. Short functional checks, not sustained decode benchmarks or matched model ranking.",
+  "scope": "Nine saved native-stat rows plus four newly measured native-capture routes; all13 now have short per-request native statistics. Different timing definitions and workloads; no sustained matched benchmark.",
   "coverage": {
     "enabled_routes": 13,
     "native_per_request_recovered": 9,
-    "not_captured_per_request": 4
+    "native_per_request_newly_measured": 4,
+    "not_captured_per_request": 0
   },
   "routes": [
     {
@@ -136,12 +137,20 @@
     {
       "model_id": "nemotron-3.5-bolt-vllm",
       "backend": "vllm",
-      "source_commit": null,
       "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
-      "first_native_decode_tokens_per_second": null,
-      "followup_native_decode_tokens_per_second": null,
-      "evidence_status": "not-captured-per-request",
-      "native_generated_tokens": null
+      "first_native_decode_tokens_per_second": 37.22331865798252,
+      "followup_native_decode_tokens_per_second": 37.384452216605645,
+      "evidence_status": "measured-native-capture",
+      "native_generated_tokens": [
+        65,
+        18
+      ],
+      "native_definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "speed_probe_median_native_tokens_per_second": 37.63139993332636,
+      "speed_probe_range_native_tokens_per_second": [
+        37.58089096656975,
+        37.73843455712903
+      ]
     },
     {
       "model_id": "ornith-1.5-122b",
@@ -164,22 +173,38 @@
     {
       "model_id": "qwen3.8-27b-sglang-dflash2",
       "backend": "sglang",
-      "source_commit": null,
       "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
-      "first_native_decode_tokens_per_second": null,
-      "followup_native_decode_tokens_per_second": null,
-      "evidence_status": "not-captured-per-request",
-      "native_generated_tokens": null
+      "first_native_decode_tokens_per_second": 238.52264417707892,
+      "followup_native_decode_tokens_per_second": 170.9144655911449,
+      "evidence_status": "measured-native-capture",
+      "native_generated_tokens": [
+        61,
+        19
+      ],
+      "native_definition": "(generated_tokens-1)/(native scheduler last_decode_finish_time-prefill_finished_time),TP0; excludes server startup warmups and cancelled partial requests",
+      "speed_probe_median_native_tokens_per_second": 103.29479723892783,
+      "speed_probe_range_native_tokens_per_second": [
+        95.67685501648072,
+        130.49663622611098
+      ]
     },
     {
       "model_id": "qwen3.8-27b-vllm",
       "backend": "vllm",
-      "source_commit": null,
       "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
-      "first_native_decode_tokens_per_second": null,
-      "followup_native_decode_tokens_per_second": null,
-      "evidence_status": "not-captured-per-request",
-      "native_generated_tokens": null
+      "first_native_decode_tokens_per_second": 145.60109498733226,
+      "followup_native_decode_tokens_per_second": 124.81425212149473,
+      "evidence_status": "measured-native-capture",
+      "native_generated_tokens": [
+        61,
+        19
+      ],
+      "native_definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "speed_probe_median_native_tokens_per_second": 102.44630548692223,
+      "speed_probe_range_native_tokens_per_second": [
+        98.41366479053596,
+        111.33350997628534
+      ]
     },
     {
       "model_id": "qwen3.8-flash-next-iq3_xxs",
@@ -202,12 +227,20 @@
     {
       "model_id": "sage-a1.5",
       "backend": "vllm",
-      "source_commit": null,
       "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
-      "first_native_decode_tokens_per_second": null,
-      "followup_native_decode_tokens_per_second": null,
-      "evidence_status": "not-captured-per-request",
-      "native_generated_tokens": null
+      "first_native_decode_tokens_per_second": 136.5303613476078,
+      "followup_native_decode_tokens_per_second": 136.6871555700758,
+      "evidence_status": "measured-native-capture",
+      "native_generated_tokens": [
+        61,
+        20
+      ],
+      "native_definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "speed_probe_median_native_tokens_per_second": 157.38514149439118,
+      "speed_probe_range_native_tokens_per_second": [
+        150.45311550045665,
+        157.53180673531625
+      ]
     }
   ],
   "Strata_0211_Unsloth_alternative": {
@@ -225,7 +258,7 @@
     "Second request follows tool result and may reuse cache.",
     "Output lengths, reasoning, MTP and engine rate definitions differ.",
     "GLM values are its engine-reported decode statistic, not client output throughput.",
-    "No per-request native decode figure is available here for Qwen vLLM, Qwen SGLang, Sage vLLM or Bolt vLLM; aggregate logger throughput is not substituted.",
     "The latest three unqualified candidate attempts generated zero inference requests and have no decode rate."
-  ]
+  ],
+  "new_native_capture_result": "AMD-NATIVE-DECODE-TESTS-2026-11-05.json"
 }

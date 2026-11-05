@@ -28,6 +28,8 @@ The owner authorized removal if this auxiliary was no longer needed. The selecte
 
 All four files were freshly verified against their original pinned SHA-256 values at source revision `a22a1744e85c17364dcc54a6a420af7135d4c7f6` before removal. This stronger content check resolved inode differences from the earlier metadata inventory. Only the 1,206,140,008-byte source, 522,458,112-byte Q4_0 pack, 339,694,592-byte selector pack and 1,236-byte config were removed: **2,068,293,948 logical bytes (1.926 GiB)**. This is a logical-byte total, not a filesystem free-space delta. Small provenance and the original pinned revision remain recorded. No other model, pack, engine environment or historical result was deleted.
 
-The same-root, same-threshold metadata rescan now counts **176 files of at least 4 MiB in 22 groups**, down from the earlier 179/23. The three tested candidate downloads, tested Unsloth/Flint Mix alternatives, active H3 8B/ClipProj files and selected MTP/SGLang drafter remain retained.
+The same-root, same-threshold metadata rescan now counts **176 files of at least 4 MiB in 22 groups**, down from the earlier 179/23. At that checkpoint the three tested candidate downloads were retained. A later explicit owner request removed those three candidates; tested Unsloth/Flint Mix alternatives, active H3 8B/ClipProj files and selected MTP/SGLang drafter remain retained.
 
 [Curated numeric results](results/CANDIDATE-RETESTS-2026-11-05.json) · [Current routes and measurements](REALISTIC-LARGE-MODELS-2026-11-05.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
+
+Subsequent explicit owner request removed the failed FlintAWQ, FP8-PLE and SuperINT4 downloads after dependency/identity review; [final removal and selected-route native capture](AMD-NATIVE-DECODE-TESTS-2026-11-05.md). The failure results above remain historical evidence.

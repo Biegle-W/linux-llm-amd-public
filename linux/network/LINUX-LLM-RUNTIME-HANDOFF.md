@@ -12,7 +12,7 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 
 [Current measurements, downloads and pending work](../hardware/REALISTIC-LARGE-MODELS-2026-11-05.md). Prior activation and its27cases are complete; do not repeat passed checks for publication. New-source qualifications are separately authorized.
 
-[Saved native decode evidence](../hardware/AMD-DECODE-EVIDENCE-2026-11-05.md): nine current routes have recovered short-request native statistics; four lack native per-request capture. A sustained current-source decode benchmark across all13 remains missing. No model was rerun to recover these logs.
+[Native decode evidence](../hardware/AMD-DECODE-EVIDENCE-2026-11-05.md): all13 current routes now have short native per-request statistics; four routes completed owner-requested native timing probes. A sustained matched13-route benchmark remains missing. [Latest methods and removal disposition](../hardware/AMD-NATIVE-DECODE-TESTS-2026-11-05.md): failed FlintAWQ/FP8PLE/SuperINT4 downloads removed by explicit owner request; selected13routes unchanged.
 
 ## Hardware and protected policy
 

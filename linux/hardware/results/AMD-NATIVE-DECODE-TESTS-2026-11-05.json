@@ -1,0 +1,366 @@
+{
+  "date": "2026-11-05",
+  "scope": "Four selected AMD routes; two strict tool steps and three fixed128-token speed prompts per route. Native engine/scheduler timestamps and token counters, not SSE throughput. No sustained or full-window qualification.",
+  "cases": [
+    {
+      "model_id": "qwen3.8-27b-vllm",
+      "backend": "vllm",
+      "status": "passed-native-decode-capture-and-strict-tool",
+      "configured_context_tokens": 163840,
+      "load_seconds": 89.52108172900626,
+      "requests": [
+        {
+          "kind": "tool",
+          "index": 1,
+          "prompt_tokens": 5901,
+          "generated_tokens": 61,
+          "native_decode_seconds": 0.412084812996909,
+          "native_decode_tokens_per_second": 145.60109498733226,
+          "client_TTFT_seconds": 3.387056947001838,
+          "client_elapsed_seconds": 3.7744312940048985
+        },
+        {
+          "kind": "tool",
+          "index": 2,
+          "prompt_tokens": 6069,
+          "generated_tokens": 19,
+          "native_decode_seconds": 0.14421430000220425,
+          "native_decode_tokens_per_second": 124.81425212149473,
+          "client_TTFT_seconds": 0.23423044999071863,
+          "client_elapsed_seconds": 0.4065704169915989
+        },
+        {
+          "kind": "speed",
+          "index": 1,
+          "prompt_tokens": 31,
+          "generated_tokens": 128,
+          "native_decode_seconds": 1.2904711989976931,
+          "native_decode_tokens_per_second": 98.41366479053596,
+          "client_TTFT_seconds": 0.10863570700166747,
+          "client_elapsed_seconds": 1.4259580049983924,
+          "messages_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021"
+        },
+        {
+          "kind": "speed",
+          "index": 2,
+          "prompt_tokens": 34,
+          "generated_tokens": 128,
+          "native_decode_seconds": 1.1407167529978324,
+          "native_decode_tokens_per_second": 111.33350997628534,
+          "client_TTFT_seconds": 0.1208602099941345,
+          "client_elapsed_seconds": 1.2950853499933146,
+          "messages_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e"
+        },
+        {
+          "kind": "speed",
+          "index": 3,
+          "prompt_tokens": 33,
+          "generated_tokens": 128,
+          "native_decode_seconds": 1.239673792006215,
+          "native_decode_tokens_per_second": 102.44630548692223,
+          "client_TTFT_seconds": 0.12451920901366975,
+          "client_elapsed_seconds": 1.3938315260020318,
+          "messages_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87"
+        }
+      ],
+      "median_native_speed_tokens_per_second": 102.44630548692223,
+      "native_speed_range_tokens_per_second": [
+        98.41366479053596,
+        111.33350997628534
+      ],
+      "definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "guard_passed": true,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cleanup_verified": true,
+      "production_settings_changed": false,
+      "scope": "two strict tool steps plus three fixed128-token speed prompts; no sustained or full-context qualification"
+    },
+    {
+      "model_id": "qwen3.8-27b-sglang-dflash2",
+      "backend": "sglang",
+      "status": "passed-native-decode-capture-and-strict-tool",
+      "configured_context_tokens": 163840,
+      "load_seconds_by_stage": [
+        51.47370303400385,
+        25.42236532199604
+      ],
+      "requests": [
+        {
+          "kind": "tool",
+          "index": 1,
+          "prompt_tokens": 6177,
+          "generated_tokens": 61,
+          "native_decode_seconds": 0.25154844399366993,
+          "native_decode_tokens_per_second": 238.52264417707892,
+          "client_TTFT_seconds": 3.5915661769977305,
+          "client_elapsed_seconds": 3.852215821010759,
+          "native_timestamp_end": "last_decode_finish_time"
+        },
+        {
+          "kind": "tool",
+          "index": 2,
+          "prompt_tokens": 6345,
+          "generated_tokens": 19,
+          "native_decode_seconds": 0.10531583700503688,
+          "native_decode_tokens_per_second": 170.9144655911449,
+          "client_TTFT_seconds": 0.2820067510037916,
+          "client_elapsed_seconds": 0.4311435080016963,
+          "native_timestamp_end": "last_decode_finish_time"
+        },
+        {
+          "kind": "speed",
+          "index": 1,
+          "prompt_tokens": 31,
+          "generated_tokens": 128,
+          "native_decode_seconds": 1.22949077199155,
+          "native_decode_tokens_per_second": 103.29479723892783,
+          "client_TTFT_seconds": 0.13443240799824707,
+          "client_elapsed_seconds": 1.4078327619936317,
+          "native_timestamp_end": "last_decode_finish_time",
+          "messages_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021"
+        },
+        {
+          "kind": "speed",
+          "index": 2,
+          "prompt_tokens": 34,
+          "generated_tokens": 128,
+          "native_decode_seconds": 0.9732051620085258,
+          "native_decode_tokens_per_second": 130.49663622611098,
+          "client_TTFT_seconds": 0.14075756100646686,
+          "client_elapsed_seconds": 1.1574279320047935,
+          "native_timestamp_end": "last_decode_finish_time",
+          "messages_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e"
+        },
+        {
+          "kind": "speed",
+          "index": 3,
+          "prompt_tokens": 33,
+          "generated_tokens": 128,
+          "native_decode_seconds": 1.3273847680102335,
+          "native_decode_tokens_per_second": 95.67685501648072,
+          "client_TTFT_seconds": 0.12907802399422508,
+          "client_elapsed_seconds": 1.498274429992307,
+          "native_timestamp_end": "last_decode_finish_time",
+          "messages_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87"
+        }
+      ],
+      "median_native_speed_tokens_per_second": 103.29479723892783,
+      "native_speed_range_tokens_per_second": [
+        95.67685501648072,
+        130.49663622611098
+      ],
+      "definition": "(generated_tokens-1)/(native scheduler last_decode_finish_time-prefill_finished_time),TP0; excludes server startup warmups and cancelled partial requests",
+      "initial_tool_stage_guard_status": "failed-harness-after-completed-tool-check",
+      "initial_harness_error": "nullable SSE text field in speed collector; source preserved; CPU regression fixed it",
+      "final_speed_stage_guard_passed": true,
+      "strict_tool_repeated": false,
+      "native_records_excluded": [
+        {
+          "stage": "initial",
+          "unmatched_native_records": 3,
+          "reason": "server startup warmups; initial cancelled partial speed request also excluded"
+        },
+        {
+          "stage": "continuation",
+          "unmatched_native_records": 2,
+          "reason": "server startup warmups; initial cancelled partial speed request also excluded"
+        }
+      ],
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cleanup_verified": true,
+      "production_settings_changed": false,
+      "scope": "two completed strict tool steps plus separate three fixed128-token speed prompts after collector fix; no sustained or full-context qualification"
+    },
+    {
+      "model_id": "sage-a1.5",
+      "backend": "vllm",
+      "status": "passed-native-decode-capture-and-strict-tool",
+      "configured_context_tokens": 65536,
+      "load_seconds": 82.49878033199639,
+      "requests": [
+        {
+          "kind": "tool",
+          "index": 1,
+          "prompt_tokens": 5894,
+          "generated_tokens": 61,
+          "native_decode_seconds": 0.43946269099251367,
+          "native_decode_tokens_per_second": 136.5303613476078,
+          "client_TTFT_seconds": 1.064260571001796,
+          "client_elapsed_seconds": 1.4812095840024995
+        },
+        {
+          "kind": "tool",
+          "index": 2,
+          "prompt_tokens": 6063,
+          "generated_tokens": 20,
+          "native_decode_seconds": 0.139003550997586,
+          "native_decode_tokens_per_second": 136.6871555700758,
+          "client_TTFT_seconds": 0.21155990300758276,
+          "client_elapsed_seconds": 0.38202028200612403
+        },
+        {
+          "kind": "speed",
+          "index": 1,
+          "prompt_tokens": 31,
+          "generated_tokens": 128,
+          "native_decode_seconds": 0.8061863990005804,
+          "native_decode_tokens_per_second": 157.53180673531625,
+          "client_TTFT_seconds": 0.1035669809934916,
+          "client_elapsed_seconds": 0.9383133149967762,
+          "messages_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021"
+        },
+        {
+          "kind": "speed",
+          "index": 2,
+          "prompt_tokens": 34,
+          "generated_tokens": 128,
+          "native_decode_seconds": 0.8069376740022562,
+          "native_decode_tokens_per_second": 157.38514149439118,
+          "client_TTFT_seconds": 0.10603693600569386,
+          "client_elapsed_seconds": 0.9446293219953077,
+          "messages_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e"
+        },
+        {
+          "kind": "speed",
+          "index": 3,
+          "prompt_tokens": 33,
+          "generated_tokens": 128,
+          "native_decode_seconds": 0.8441167840064736,
+          "native_decode_tokens_per_second": 150.45311550045665,
+          "client_TTFT_seconds": 0.4903038650081726,
+          "client_elapsed_seconds": 1.3642623380001169,
+          "messages_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87"
+        }
+      ],
+      "median_native_speed_tokens_per_second": 157.38514149439118,
+      "native_speed_range_tokens_per_second": [
+        150.45311550045665,
+        157.53180673531625
+      ],
+      "definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "guard_passed": true,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cleanup_verified": true,
+      "production_settings_changed": false,
+      "scope": "two strict tool steps plus three fixed128-token speed prompts; no sustained or full-context qualification"
+    },
+    {
+      "model_id": "nemotron-3.5-bolt-vllm",
+      "backend": "vllm",
+      "status": "passed-native-decode-capture-and-strict-tool",
+      "configured_context_tokens": 262144,
+      "load_seconds": 218.68643392800004,
+      "requests": [
+        {
+          "kind": "tool",
+          "index": 1,
+          "prompt_tokens": 6454,
+          "generated_tokens": 65,
+          "native_decode_seconds": 1.7193523390014889,
+          "native_decode_tokens_per_second": 37.22331865798252,
+          "client_TTFT_seconds": 3.44952152800397,
+          "client_elapsed_seconds": 5.014535082998918
+        },
+        {
+          "kind": "tool",
+          "index": 2,
+          "prompt_tokens": 6624,
+          "generated_tokens": 18,
+          "native_decode_seconds": 0.45473449501150753,
+          "native_decode_tokens_per_second": 37.384452216605645,
+          "client_TTFT_seconds": 0.2377433179935906,
+          "client_elapsed_seconds": 0.7208665179932723
+        },
+        {
+          "kind": "speed",
+          "index": 1,
+          "prompt_tokens": 35,
+          "generated_tokens": 128,
+          "native_decode_seconds": 3.3793770379998023,
+          "native_decode_tokens_per_second": 37.58089096656975,
+          "client_TTFT_seconds": 3.3319370370008983,
+          "client_elapsed_seconds": 6.739380914004869,
+          "messages_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021"
+        },
+        {
+          "kind": "speed",
+          "index": 2,
+          "prompt_tokens": 38,
+          "generated_tokens": 128,
+          "native_decode_seconds": 3.3748412290005945,
+          "native_decode_tokens_per_second": 37.63139993332636,
+          "client_TTFT_seconds": 0.11372779800149146,
+          "client_elapsed_seconds": 3.518178069993155,
+          "messages_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e"
+        },
+        {
+          "kind": "speed",
+          "index": 3,
+          "prompt_tokens": 37,
+          "generated_tokens": 128,
+          "native_decode_seconds": 3.3652694259944838,
+          "native_decode_tokens_per_second": 37.73843455712903,
+          "client_TTFT_seconds": 0.1140401140000904,
+          "client_elapsed_seconds": 3.5088959409913514,
+          "messages_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87"
+        }
+      ],
+      "median_native_speed_tokens_per_second": 37.63139993332636,
+      "native_speed_range_tokens_per_second": [
+        37.58089096656975,
+        37.73843455712903
+      ],
+      "definition": "(generated_tokens-1)/(native last-token timestamp - native first-token/prefill-finished timestamp); no SSE/client throughput substitution",
+      "guard_passed": true,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cleanup_verified": true,
+      "production_settings_changed": false,
+      "scope": "two strict tool steps plus three fixed128-token speed prompts; no sustained or full-context qualification",
+      "observations": [
+        "Engine reported inference-time Triton JIT compilation for checkpoint-store and fused-MoE kernels; all samples retained, no controlled warm-cache claim."
+      ]
+    }
+  ],
+  "candidate_removal": {
+    "status": "removed-only-three-owner-named-candidates",
+    "logical_bytes_removed": 220160068019,
+    "targets": [
+      {
+        "name": "Flint-AWQ",
+        "logical_bytes": 22414818923,
+        "file_count": 14,
+        "root_absent": true
+      },
+      {
+        "name": "Qwen-Flash-Next-W4A16-FP8PLE-20261103",
+        "logical_bytes": 124825229304,
+        "file_count": 113,
+        "root_absent": true
+      },
+      {
+        "name": "Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin",
+        "logical_bytes": 72920019792,
+        "file_count": 254,
+        "root_absent": true
+      }
+    ]
+  },
+  "guards": {
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "CPU_GPU_SSD_limit_C": 100,
+    "host_available_floor_GiB": 1,
+    "per_card_free_VRAM_floor_MiB": 128,
+    "zero_dedicated_spill": true,
+    "phase_aware_swap": "unchanged",
+    "load_prefill_generation_budget_seconds": 1800,
+    "three_second_decode_cutoff": false
+  },
+  "all_13_selected_profiles_preserved": true,
+  "new_model_downloads": false,
+  "runtime_source_modified": false
+}
