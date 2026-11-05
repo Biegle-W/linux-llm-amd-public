@@ -707,9 +707,7 @@
     "heartbeat_s": 6,
     "owned_cleanup_s": 15
   },
-  "pending": [
-    "Review corrected RDNA3 isolated build outcome before runtime qualification or promotion"
-  ],
+  "pending": [],
   "engine_updates": [
     {
       "engine": "Maya",
@@ -866,7 +864,7 @@
     "no_catchup": true,
     "next_verified": "2026-11-06 03:00 EST",
     "CPU_checks_passed": 111,
-    "publication": "Completed engine qualifications published; corrected RDNA3 build outcome tracked separately"
+    "publication": "Scoped qualification outcomes finalized; failed fork unpromoted."
   },
   "manual_candidate_checks": [
     {
@@ -1153,28 +1151,78 @@
   "RDNA3_build": {
     "source_commit": "2314df44164584f8eb59189d82c20e5362967a2c",
     "branch": "perf/rdna3_full_stack",
-    "initial_build": {
-      "status": "failed-missing-MIOpen-CMake-metadata",
-      "production_installed": false,
-      "owned_cleanup_verified": true,
-      "max_owned_swap_bytes": 0,
-      "max_owned_spill_bytes": 0,
-      "owned_hold_archived_intact_after_fresh_review": true
+    "wheel_filename": "vllm-0.1.dev23825+g2314df441.rocm72-cp312-cp312-linux_x86_64.whl",
+    "wheel_sha256": "371a1ff83b5166443f0cbc91f7586936f37d18f76236062deb287c9f792ed530",
+    "preflight_Python_requirements": {
+      "applicable": 80,
+      "satisfied": 80
     },
-    "corrected_build": {
-      "status": "running",
-      "guard_status": "starting",
-      "production_installed": false,
-      "GPU_inference_used": false,
-      "Torch_ROCm_selection_unchanged": true,
-      "matching_MIOpen_dependency": "3.5.1.70203-90~24.04",
-      "matching_hipSPARSELt_dependency": "0.2.6.70203-90~24.04",
-      "compile_jobs": 2,
+    "prior_build_outcomes": [
+      "missing-MIOpen-metadata",
+      "missing-roc::hipsparselt-imported-target",
+      "incompatible-conda-libm-linker-script",
+      "CPU100C-guard-stop-in-unbounded-Cargo-before-wheel"
+    ],
+    "isolated_corrections": {
+      "matching_MIOpen": "3.5.1.70203-90~24.04",
+      "matching_hipSPARSELt": "0.2.6.70203-90~24.04",
+      "private_host_linker_scripts": true,
+      "CMake_jobs": 2,
+      "Cargo_jobs": 1,
+      "inherited_logical_CPU_limit": 2,
+      "distinct_physical_cores": true,
+      "thermal_guard_C": 100,
+      "guards_unchanged": true
+    },
+    "completed_CPU_build": {
+      "status": "passed-isolated-CPU-build",
+      "guard_status": "passed",
+      "owned_cleanup_verified": true,
+      "remaining_KFD_clients": 0,
       "max_owned_swap_bytes": 0,
-      "max_owned_spill_bytes": 0,
-      "owned_cleanup_verified": false
+      "max_owned_spill_bytes": 0
+    },
+    "native_CLI_audit": {
+      "status": "passed-candidate-native-import-and-CLI-smoke",
+      "retained_Torch": "2.13.0+git733fca1",
+      "retained_HIP": "7.2.53211",
+      "explicit_ROCm_skinny_GPTQ_operators_verified": true,
+      "guard_status": "passed",
+      "owned_cleanup_verified": true,
+      "remaining_KFD_clients": 0,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0
+    },
+    "candidate_qualification": {
+      "model_id": "qwen3.8-27b-vllm",
+      "status": "failed-startup-warmup-before-ready",
+      "startup_error": "AttributeError: 'CommonAttentionMetadata' object has no attribute '_seq_lens_cpu'",
+      "configured_context_tokens": 163840,
+      "planned_actual_prompt_tokens": [
+        158000,
+        162000
+      ],
+      "planned_context_check_reached": false,
+      "inference_requests": 0,
+      "TP": 2,
+      "MTP_steps": 3,
+      "KV_dtype": "bfloat16",
+      "attention_sha256": "5d3cffcb8c13d6264bfe259d80f368dd1accd025c0e2af252a0b5870d77dd791",
+      "old_wheel_prefill_port_applied": false,
+      "own_hold_archived_intact_after_fresh_health_review": true,
+      "no_exact_retry": true,
+      "guard_status": "failed",
+      "owned_cleanup_verified": true,
+      "remaining_KFD_clients": 0,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0
     },
     "runtime_qualified": false,
-    "promoted": false
+    "promoted": false,
+    "all_13_route_selections_unchanged": true,
+    "original_Torch_ROCm_unchanged": true,
+    "candidate_artifacts_retained": true,
+    "active_scoped_jobs": 0,
+    "GPU_lock_remaining": false
   }
 }
