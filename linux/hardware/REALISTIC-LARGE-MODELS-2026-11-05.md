@@ -1,6 +1,6 @@
 # Current models, realistic budgets and engine updates — November 5, 2026
 
-**13 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. Correct-RDNA3 build, PLE/Super and Bolt matching long-context qualification remain pending. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; in-flight outcomes will be refreshed separately.
+**13 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. PLE and Super ended during loading on the unchanged heartbeat guard, with clean owned cleanup and no promotion. The matching Bolt long-context check is active; correct-RDNA3 build/review remains pending. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; in-flight outcomes will be refreshed separately.
 
 ## Current saved LLM measurements
 
@@ -49,6 +49,10 @@ The latest-global Bolt candidate `0.33.0rc1.dev229+g3966924d5.rocm72` passed its
 | graphics-h3-i2v | 109.363 | Normal fixed workflow on selected ComfyUI0.44/fb2b26f |
 
 The six normal rows now use the newly selected ComfyUI0.44/fb2b26f source; each passed finite tensor, saved-media and owned-cleanup checks, including full AV decoding for videos. Torch/ROCm and existing input/user state were preserved. Original seven graphics measurements remain in the numeric evidence; the separate cached-conditioning TP2 experiment was not rerun. Prompts, caches and output work differ, so no matched speed ranking is claimed. [Gallery and exact workflow limits](../graphics/results/p2p-2026-11-05/README.md).
+
+## PLE realistic-budget outcome
+
+The PLE host-file-gather attempt ended during loading when the unchanged six-second supervisor-heartbeat guard fired. The3600-second loading budget was not exhausted, and no inference request completed or model promotion occurred. Maximum recorded owned swap was6.474GiB, dedicated-VRAM spill was zero, and the minimum recorded available host RAM was1.247GiB. Owned cleanup passed with no remaining KFD client or new kernel GPU/OOM fault. Fresh thermal/storage/resource review passed; the known hold was archived intact and this exact PLE case will not be repeated. Super also stopped during loading on the same unchanged heartbeat guard. Its maximum recorded owned swap was8.363GiB and dedicated-VRAM spill was zero; owned cleanup and fresh health review passed. Neither exact case will repeat.
 
 ## Timing and protection
 

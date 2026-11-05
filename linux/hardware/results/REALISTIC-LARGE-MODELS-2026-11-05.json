@@ -701,10 +701,9 @@
     "owned_cleanup_s": 15
   },
   "pending": [
-    "PLE/Super realistic-budget retries in finite serialized queue",
-    "CorrectRDNA3 full-stack2314 isolated build/runtime review; wrongdefault2e3154 neverinstalled",
-    "Bolt latestglobalshortcheck passed; matchingnear255Kprefill check required beforemanualunpin",
-    "Final reviewedcommits/pushes and refresh after pendingengineoutcomes"
+    "Matchingnear255K Boltnewglobalcase active; olddev435pinretained untilitsresultreview",
+    "CorrectRDNA3 full-stack2314 isolated build/runtime review pending",
+    "Refresh/publishafterremainingoutcomes"
   ],
   "engine_updates": [
     {
@@ -1068,5 +1067,43 @@
     "qualified_six_normal_workflows": true,
     "Torch_ROCm_unchanged": true,
     "old_source_and_input_user_state_retained": true
-  }
+  },
+  "large_budget_retries": [
+    {
+      "case": "vllm-ple-file-gather",
+      "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72 with reviewedisolatedPLEoverlay",
+      "context_tokens": 8192,
+      "status": "guard-stopped-during-loading",
+      "reason": "supervisor heartbeat missing",
+      "promoted": false,
+      "inference_requests": 0,
+      "load_budget_seconds": 3600,
+      "load_budget_exhausted": false,
+      "max_owned_swap_bytes": 6951268352,
+      "max_owned_spill_bytes": 0,
+      "minimum_recorded_host_available_bytes": 1339412480,
+      "owned_cleanup_verified": true,
+      "remaining_KFD_clients": 0,
+      "new_kernel_GPU_OOM_faults": false,
+      "same_case_retry_planned": false
+    },
+    {
+      "case": "super-int4-ep2",
+      "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "context_tokens": 8192,
+      "status": "guard-stopped-during-loading",
+      "reason": "supervisor heartbeat missing",
+      "promoted": false,
+      "inference_requests": 0,
+      "load_budget_seconds": 1800,
+      "load_budget_exhausted": false,
+      "max_owned_swap_bytes": 8979456000,
+      "max_owned_spill_bytes": 0,
+      "minimum_recorded_host_available_bytes": 1564225536,
+      "owned_cleanup_verified": true,
+      "remaining_KFD_clients": 0,
+      "new_kernel_GPU_OOM_faults": false,
+      "same_case_retry_planned": false
+    }
+  ]
 }
