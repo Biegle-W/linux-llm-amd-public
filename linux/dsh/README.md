@@ -9,10 +9,7 @@ GUI log viewers require explicit `LOCAL_LLM_GUI_LOGS=1` opt-in; manual desktop
 launchers remain available on demand. See the
 [headless server setup](../network/HEADLESS-INFERENCE-2026-11-02.md).
 
-Eight routes are currently enabled: Empero, Super IQ3, Flint, Qwen 27B SGLang
-DFlash2, Qwen 27B vLLM MTP, Nemotron Bolt, Sage and GLM. Qwen's two routes keep
-their engine labels so the choices remain distinguishable. Ornith, Qwen Flash
-Next/Strata and both DeepSeek XS routes retain their existing RAM holds.
+Nine qualified routes are enabled after the November 5 owner-approved activation. Six failed candidates remain held; deleted XS and Super IQ3 stay retired. Use the [current handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md#exact-enabled-catalog) and authenticated `/v1/models` for the exact catalog; older availability lists are historical.
 
 `configure_local.py` migrates former local engine providers to `amd-server`,
 preserves an available selected model and unrelated providers/settings, and
@@ -21,8 +18,7 @@ retired selection falls back to an enabled model; it does not clear a hold.
 Both the web and headless profile overrides support the same catalog. Existing
 conversations and credentials remain private and are not exported.
 
-The harness remains `@deepseek-ai/dsh@0.2.1-rc.2` with Node.js 24.21.0. Its web
-settings are in ignored `data/profiles/web/cordis.patch.yml`. Refresh the browser
+The harness remains `@deepseek-ai/dsh@0.2.1-rc.2` with Node.js 24.21.0. Refresh the browser
 model selector after a configuration reload. Engine launch commands remain
 available for maintenance; they do not create separate visible providers.
 

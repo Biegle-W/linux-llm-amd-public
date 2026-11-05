@@ -11,7 +11,7 @@ It replaces the separate Shared client, Windows-network and upgrade guides;
 the original nine files are preserved in the dated Shared archive described there.
 
 The authenticated gateway uses TCP **10000** and OpenAI-compatible chat,
-completion and native Responses (`POST /v1/responses`) APIs. Request any of the **8 enabled profiles** from `/v1/models`;
+completion and native Responses (`POST /v1/responses`) APIs. Request any of the **9 enabled profiles** from `/v1/models`;
 the loopback model hub starts or switches its backend through the guarded launcher.
 Catalog/health reads do not start a model. Existing explicit Desktop/CLI launches
 remain supported.
@@ -23,7 +23,7 @@ new router code is active; authenticated health is verified on all configured
 bindings. Native capacity, access policy, worker ownership and 600-second
 inference-aware idle release remain unchanged.
 
-Credentials and live addresses stay in ignored `dsh/data/` configuration.
+Credentials and live addresses stay in private local configuration.
 Public documentation uses example paths and addresses. Never place an actual
 API key in a handoff, source file or chat. Obtain exact IDs and coordinator state
 from authenticated `/v1/models` and `/health`.
