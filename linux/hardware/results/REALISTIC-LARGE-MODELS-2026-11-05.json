@@ -20,7 +20,10 @@
       "strict_marker_correct": true,
       "tool_call_result_ids_match": true,
       "source_commit": "9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11",
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 157.16,
+      "followup_native_decode_tokens_per_second": 153.85
     },
     {
       "model_id": "ornith-1.5-122b",
@@ -40,7 +43,10 @@
       "guard_passed": true,
       "owned_cleanup_verified": true,
       "selected": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 11.1,
+      "followup_native_decode_tokens_per_second": 11.72
     },
     {
       "model_id": "flint-40b-a2.5b",
@@ -60,7 +66,10 @@
       "guard_passed": true,
       "owned_cleanup_verified": true,
       "selected": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 57.36,
+      "followup_native_decode_tokens_per_second": 57.74
     },
     {
       "model_id": "qwen3.8-27b-sglang-dflash2",
@@ -74,7 +83,10 @@
       "first_request_prompt_tokens": 6177,
       "first_request_output_tokens": 61,
       "second_request_wall_s": 0.43437666300087585,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "not-captured-per-request",
+      "first_native_decode_tokens_per_second": null,
+      "followup_native_decode_tokens_per_second": null
     },
     {
       "model_id": "qwen3.8-27b-vllm",
@@ -88,7 +100,10 @@
       "first_request_prompt_tokens": 5901,
       "first_request_output_tokens": 61,
       "second_request_wall_s": 0.48119206900082645,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "not-captured-per-request",
+      "first_native_decode_tokens_per_second": null,
+      "followup_native_decode_tokens_per_second": null
     },
     {
       "model_id": "nemotron-3.5-bolt-vllm",
@@ -109,7 +124,10 @@
       "tool_call_result_ids_match": true,
       "runtime_version": "0.33.0rc1.dev229+g3966924d5.rocm72",
       "selection_note": "Selectedaftermatchingnear255Kqualificationpassed",
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "not-captured-per-request",
+      "first_native_decode_tokens_per_second": null,
+      "followup_native_decode_tokens_per_second": null
     },
     {
       "model_id": "sage-a1.5",
@@ -123,7 +141,10 @@
       "first_request_prompt_tokens": 5894,
       "first_request_output_tokens": 61,
       "second_request_wall_s": 0.32091017899801955,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "not-captured-per-request",
+      "first_native_decode_tokens_per_second": null,
+      "followup_native_decode_tokens_per_second": null
     },
     {
       "model_id": "qwen3.8-flash-next-iq3_xxs",
@@ -137,7 +158,10 @@
       "first_request_prompt_tokens": 5680,
       "first_request_output_tokens": 63,
       "second_request_wall_s": 7.694714381999802,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 57.1,
+      "followup_native_decode_tokens_per_second": 59.2
     },
     {
       "model_id": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
@@ -151,7 +175,10 @@
       "first_request_prompt_tokens": 5796,
       "first_request_output_tokens": 84,
       "second_request_wall_s": 4.7824103189996094,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 5.76,
+      "followup_native_decode_tokens_per_second": 14.19
     },
     {
       "model_id": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
@@ -171,7 +198,10 @@
       "guard_passed": true,
       "owned_cleanup_verified": true,
       "selected": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 20.32,
+      "followup_native_decode_tokens_per_second": 15.84
     },
     {
       "model_id": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
@@ -191,7 +221,10 @@
       "guard_passed": true,
       "owned_cleanup_verified": true,
       "selected": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 3.39,
+      "followup_native_decode_tokens_per_second": 1.21
     },
     {
       "model_id": "glm-5.3-flash-maya",
@@ -211,7 +244,10 @@
       "guard_passed": true,
       "owned_cleanup_verified": true,
       "selected": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 0.64,
+      "followup_native_decode_tokens_per_second": 2.57
     },
     {
       "model_id": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
@@ -228,7 +264,10 @@
       "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
       "guard_passed": true,
       "owned_cleanup_verified": true,
-      "enabled": true
+      "enabled": true,
+      "native_decode_evidence_status": "recovered-engine-reported",
+      "first_native_decode_tokens_per_second": 1.8,
+      "followup_native_decode_tokens_per_second": 6.72
     }
   ],
   "new_native_cases": [
@@ -1400,5 +1439,236 @@
     "files_at_least4MiB": 176,
     "groups": 22,
     "removed_auxiliary": "Strata-DFlash2-a22a1744e85c"
+  },
+  "native_decode_evidence": {
+    "date": "2026-11-05",
+    "scope": "Read-only recovery from saved AMD native logs; no new model requests. Short functional checks, not sustained decode benchmarks or matched model ranking.",
+    "coverage": {
+      "enabled_routes": 13,
+      "native_per_request_recovered": 9,
+      "not_captured_per_request": 4
+    },
+    "routes": [
+      {
+        "model_id": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
+        "backend": "maya",
+        "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 20.32,
+        "followup_native_decode_tokens_per_second": 15.84,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          114,
+          16
+        ],
+        "native_definition": "engine-reported generated tokens divided by logged decode milliseconds",
+        "native_decode_ms": [
+          5610,
+          1010
+        ]
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "backend": "maya",
+        "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 3.39,
+        "followup_native_decode_tokens_per_second": 1.21,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          113,
+          16
+        ],
+        "native_definition": "engine-reported generated tokens divided by logged decode milliseconds",
+        "native_decode_ms": [
+          33363,
+          13269
+        ]
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
+        "backend": "strata",
+        "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 5.76,
+        "followup_native_decode_tokens_per_second": 14.19,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          84,
+          15
+        ],
+        "native_definition": "engine-reported generated tokens divided by logged decode milliseconds",
+        "native_decode_ms": [
+          14572,
+          1057
+        ]
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "backend": "strata",
+        "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 1.8,
+        "followup_native_decode_tokens_per_second": 6.72,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          85,
+          15
+        ],
+        "native_definition": "engine-reported generated tokens divided by logged decode milliseconds",
+        "native_decode_ms": [
+          47303,
+          2231
+        ]
+      },
+      {
+        "model_id": "empero-qwen3.8-35b-a3b",
+        "backend": "llama",
+        "source_commit": "9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 157.16,
+        "followup_native_decode_tokens_per_second": 153.85,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          64,
+          20
+        ],
+        "native_definition": "llama.cpp engine-reported eval throughput; first generated token excluded from rate denominator",
+        "native_decode_ms": [
+          400.86,
+          123.5
+        ]
+      },
+      {
+        "model_id": "flint-40b-a2.5b",
+        "backend": "llama",
+        "source_commit": "9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 57.36,
+        "followup_native_decode_tokens_per_second": 57.74,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          176,
+          106
+        ],
+        "native_definition": "llama.cpp engine-reported eval throughput; first generated token excluded from rate denominator",
+        "native_decode_ms": [
+          3050.82,
+          1818.6
+        ]
+      },
+      {
+        "model_id": "glm-5.3-flash-maya",
+        "backend": "maya",
+        "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 0.64,
+        "followup_native_decode_tokens_per_second": 2.57,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          60,
+          15
+        ],
+        "native_definition": "GLM engine-reported decode ms/token statistic",
+        "native_ms_per_token": [
+          1573.87,
+          388.95
+        ]
+      },
+      {
+        "model_id": "nemotron-3.5-bolt-vllm",
+        "backend": "vllm",
+        "source_commit": null,
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": null,
+        "followup_native_decode_tokens_per_second": null,
+        "evidence_status": "not-captured-per-request",
+        "native_generated_tokens": null
+      },
+      {
+        "model_id": "ornith-1.5-122b",
+        "backend": "llama",
+        "source_commit": "9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11",
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 11.1,
+        "followup_native_decode_tokens_per_second": 11.72,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          92,
+          19
+        ],
+        "native_definition": "llama.cpp engine-reported eval throughput; first generated token excluded from rate denominator",
+        "native_decode_ms": [
+          8194.95,
+          1535.28
+        ]
+      },
+      {
+        "model_id": "qwen3.8-27b-sglang-dflash2",
+        "backend": "sglang",
+        "source_commit": null,
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": null,
+        "followup_native_decode_tokens_per_second": null,
+        "evidence_status": "not-captured-per-request",
+        "native_generated_tokens": null
+      },
+      {
+        "model_id": "qwen3.8-27b-vllm",
+        "backend": "vllm",
+        "source_commit": null,
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": null,
+        "followup_native_decode_tokens_per_second": null,
+        "evidence_status": "not-captured-per-request",
+        "native_generated_tokens": null
+      },
+      {
+        "model_id": "qwen3.8-flash-next-iq3_xxs",
+        "backend": "strata",
+        "source_commit": null,
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": 57.1,
+        "followup_native_decode_tokens_per_second": 59.2,
+        "evidence_status": "recovered-engine-reported",
+        "native_generated_tokens": [
+          63,
+          20
+        ],
+        "native_definition": "engine-reported generated tokens divided by logged decode milliseconds",
+        "native_decode_ms": [
+          1104,
+          338
+        ]
+      },
+      {
+        "model_id": "sage-a1.5",
+        "backend": "vllm",
+        "source_commit": null,
+        "scope": "existing selected-route short strict tool check; first tool call then tool-result follow-up",
+        "first_native_decode_tokens_per_second": null,
+        "followup_native_decode_tokens_per_second": null,
+        "evidence_status": "not-captured-per-request",
+        "native_generated_tokens": null
+      }
+    ],
+    "Strata_0211_Unsloth_alternative": {
+      "selected": false,
+      "median_native_decode_tokens_per_second": 52.8947477168478,
+      "individual_speed_prompt_rates": [
+        52.8947477168478,
+        54.73828258638385,
+        50.08020658085214
+      ],
+      "speed_prompt_count": 3,
+      "source": "STRATA-0211-UNSLOTH-2026-11-05.json"
+    },
+    "limitations": [
+      "Second request follows tool result and may reuse cache.",
+      "Output lengths, reasoning, MTP and engine rate definitions differ.",
+      "GLM values are its engine-reported decode statistic, not client output throughput.",
+      "No per-request native decode figure is available here for Qwen vLLM, Qwen SGLang, Sage vLLM or Bolt vLLM; aggregate logger throughput is not substituted.",
+      "The latest three unqualified candidate attempts generated zero inference requests and have no decode rate."
+    ]
   }
 }

@@ -24,6 +24,28 @@ Load is separate from request TTFT. The second request follows a tool result and
 | `qwen3.8-flash-next-iq3_xxs` | strata | 262,144 | 66.738 | 7.566 | 8.509 | 63 | 7.695 |
 | `sage-a1.5` | vllm | 65,536 | 98.058 | 1.157 | 1.632 | 61 | 0.321 |
 
+## Recovered native decode statistics
+
+**Native decoding statistics were recovered for 9 of the 13 current routes from their saved AMD logs. Four routes have no recoverable native per-request figure. No inference was rerun.** The earlier current-route summaries exported load, TTFT, request wall time and token counts but omitted these available native timing lines; those latency fields are not decode throughput.
+
+| Current setup | First request native t/s | Tool-result follow-up native t/s | Native generated tokens, first / follow-up |
+|---|---:|---:|---:|
+| DeepSeek Coder IQ2_XXS / Maya | 20.32 | 15.84 | 114 / 16 |
+| DeepSeek Unsloth Q1 / Maya | 3.39 | 1.21 | 113 / 16 |
+| DeepSeek Coder IQ2_XXS / Strata | 5.76 | 14.19 | 84 / 15 |
+| DeepSeek Unsloth Q1 / Strata | 1.80 | 6.72 | 85 / 15 |
+| Empero Qwen3.8 35B-A3B / llama.cpp | 157.16 | 153.85 | 64 / 20 |
+| Flint 40B-A2.5B / llama.cpp | 57.36 | 57.74 | 176 / 106 |
+| GLM 5.3 Flash / Maya | 0.64 | 2.57 | 60 / 15 |
+| Nemotron Bolt / vLLM | Not captured | Not captured | — |
+| Ornith 1.5 122B / llama.cpp | 11.10 | 11.72 | 92 / 19 |
+| Qwen3.8 27B DFlash2 / SGLang | Not captured | Not captured | — |
+| Qwen3.8 27B / vLLM | Not captured | Not captured | — |
+| Qwen Flash Next GSQ IQ3_XXS / Strata | 57.10 | 59.20 | 63 / 20 |
+| Sage A1.5 / vLLM | Not captured | Not captured | — |
+
+These are two short functional tool requests per route, not sustained benchmarks or a matched performance ranking. The first request emits a tool call; the second follows its result and may reuse cache. Output lengths, reasoning, MTP and native timing definitions differ. Rates describe generated engine tokens, including reasoning where applicable, rather than visible prose alone. GLM reports its own decode-ms/token statistic; llama.cpp excludes the first generated token from its eval-rate denominator. Other native rates use generated tokens divided by logged decode duration. Keep these definitions with the numbers. [Exact IDs, source binding and missing measurements](AMD-DECODE-EVIDENCE-2026-11-05.md) · [Decode numeric evidence](results/AMD-DECODE-EVIDENCE-2026-11-05.json).
+
 Native Coder/Q1/GLM checks completed exactly one read tool and two model steps, with matching call/result IDs, the exact final marker and verified owned unload. Native settings retain 32K context, two cards, one request, requested 8 GiB reserves and normal 6 GiB startup headroom. GLM fused prefill remains disabled after two unused parity failures; 34 required per-card parity checks passed. Strata Q1 retains its tested 36 GiB SSD cache and strong 60/52 GiB physical/available host admission.
 
 ## Earlier llama.cpp qualification

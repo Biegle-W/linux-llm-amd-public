@@ -12,6 +12,8 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 
 [Current measurements, downloads and pending work](../hardware/REALISTIC-LARGE-MODELS-2026-11-05.md). Prior activation and its27cases are complete; do not repeat passed checks for publication. New-source qualifications are separately authorized.
 
+[Saved native decode evidence](../hardware/AMD-DECODE-EVIDENCE-2026-11-05.md): nine current routes have recovered short-request native statistics; four lack native per-request capture. A sustained current-source decode benchmark across all13 remains missing. No model was rerun to recover these logs.
+
 ## Hardware and protected policy
 
 - Intel i5-13600KF; ASUS TX GAMING B760M WIFI; 61.55 GiB visible RAM; two RX 7900 XTX 24 GB behind PEX880xx. Gen4 x16 common uplink, x8 branch segments. Runtime logical order is PowerColor then Sapphire (`ROCR_VISIBLE_DEVICES=1,0`, `HIP_VISIBLE_DEVICES=0,1`).
