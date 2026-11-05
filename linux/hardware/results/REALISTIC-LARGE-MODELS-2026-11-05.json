@@ -1224,5 +1224,80 @@
     "candidate_artifacts_retained": true,
     "active_scoped_jobs": 0,
     "GPU_lock_remaining": false
+  },
+  "Strata_0211_Unsloth_test": {
+    "release": "Strata0.2.11",
+    "engine_version": "0.1.57",
+    "Control_version": "0.1.57",
+    "package_target": "linux-x86_64-hip-rx7900",
+    "signed_feed_sequence": 121,
+    "signature_and_package_SHA256_verified": true,
+    "HF_repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "HF_revision": "d96201194f103c906994f283f504209dc8d2a10c",
+    "quant": "UD-IQ3_XXS Dynamicv3.1",
+    "existing_weights_and_pack_reused": true,
+    "fresh_four_shard_SHA256_verified": true,
+    "packer_byte_identical": true,
+    "configured_context_tokens": 262144,
+    "GPU_count": 2,
+    "GPU_model": "RX7900XTX24GiB",
+    "parallel": 1,
+    "split": "layer groups26/26",
+    "MTP_steps": 2,
+    "KV": "int8;32768residenttokens",
+    "prefill_chunk": 256,
+    "memory_high": "max",
+    "thermal_guard_C": 100,
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "phase_budget_seconds": 1800,
+    "enclosing_budget_seconds": 10800,
+    "decode_stall_cutoff_seconds": null,
+    "load_seconds": 102.29689690501255,
+    "strict_tool_passed": true,
+    "tool_requests": [
+      {
+        "status": "completed",
+        "TTFT_seconds": 11.952143582995632,
+        "elapsed_seconds": 12.96955519799667,
+        "usage": {
+          "prompt_tokens": 5686,
+          "completion_tokens": 66,
+          "total_tokens": 5752,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      {
+        "status": "completed",
+        "TTFT_seconds": 9.832453819006332,
+        "elapsed_seconds": 10.157319082994945,
+        "usage": {
+          "prompt_tokens": 5866,
+          "completion_tokens": 21,
+          "total_tokens": 5887,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      }
+    ],
+    "quality_correct": 5,
+    "quality_scored": 6,
+    "failed_fixture_ids": [
+      "json-math"
+    ],
+    "speed_prompt_count": 3,
+    "median_native_decode_tokens_per_second": 52.8947477168478,
+    "median_client_TTFT_seconds": 0.5363498259976041,
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "owned_cleanup_verified": true,
+    "remaining_KFD_clients": 0,
+    "no_new_kernel_faults": true,
+    "all_input_file_identities_unchanged_after_test": true,
+    "production_selection_changed": false,
+    "sustained_or_full_context_qualified": false
   }
 }

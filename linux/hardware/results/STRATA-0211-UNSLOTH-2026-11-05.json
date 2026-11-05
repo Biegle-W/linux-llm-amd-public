@@ -1,0 +1,412 @@
+{
+  "date": "2026-11-05",
+  "summary": {
+    "release": "Strata0.2.11",
+    "engine_version": "0.1.57",
+    "Control_version": "0.1.57",
+    "package_target": "linux-x86_64-hip-rx7900",
+    "signed_feed_sequence": 121,
+    "signature_and_package_SHA256_verified": true,
+    "HF_repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "HF_revision": "d96201194f103c906994f283f504209dc8d2a10c",
+    "quant": "UD-IQ3_XXS Dynamicv3.1",
+    "existing_weights_and_pack_reused": true,
+    "fresh_four_shard_SHA256_verified": true,
+    "packer_byte_identical": true,
+    "configured_context_tokens": 262144,
+    "GPU_count": 2,
+    "GPU_model": "RX7900XTX24GiB",
+    "parallel": 1,
+    "split": "layer groups26/26",
+    "MTP_steps": 2,
+    "KV": "int8;32768residenttokens",
+    "prefill_chunk": 256,
+    "memory_high": "max",
+    "thermal_guard_C": 100,
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "phase_budget_seconds": 1800,
+    "enclosing_budget_seconds": 10800,
+    "decode_stall_cutoff_seconds": null,
+    "load_seconds": 102.29689690501255,
+    "strict_tool_passed": true,
+    "tool_requests": [
+      {
+        "status": "completed",
+        "TTFT_seconds": 11.952143582995632,
+        "elapsed_seconds": 12.96955519799667,
+        "usage": {
+          "prompt_tokens": 5686,
+          "completion_tokens": 66,
+          "total_tokens": 5752,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      {
+        "status": "completed",
+        "TTFT_seconds": 9.832453819006332,
+        "elapsed_seconds": 10.157319082994945,
+        "usage": {
+          "prompt_tokens": 5866,
+          "completion_tokens": 21,
+          "total_tokens": 5887,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      }
+    ],
+    "quality_correct": 5,
+    "quality_scored": 6,
+    "failed_fixture_ids": [
+      "json-math"
+    ],
+    "speed_prompt_count": 3,
+    "median_native_decode_tokens_per_second": 52.8947477168478,
+    "median_client_TTFT_seconds": 0.5363498259976041,
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "owned_cleanup_verified": true,
+    "remaining_KFD_clients": 0,
+    "no_new_kernel_faults": true,
+    "all_input_file_identities_unchanged_after_test": true,
+    "production_selection_changed": false,
+    "sustained_or_full_context_qualified": false
+  },
+  "fixed_probe_rows": [
+    {
+      "id": "json-math",
+      "kind": "quality",
+      "quality_pass": false,
+      "TTFT_seconds": 0.4783351980004227,
+      "elapsed_seconds": 1.1800282070034882,
+      "usage": {
+        "prompt_tokens": 76,
+        "completion_tokens": 42,
+        "total_tokens": 118,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 76,
+        "prompt_ms": 424.0,
+        "prompt_per_token_ms": 5.579,
+        "prompt_per_second": 179.2,
+        "predicted_n": 42,
+        "predicted_ms": 709.9,
+        "predicted_per_token_ms": 16.902,
+        "predicted_per_second": 59.2,
+        "draft_n": 20,
+        "draft_n_accepted": 19
+      },
+      "client_decode_tokens_per_second_estimate": 62.29474593454808,
+      "prompt_sha256": "6570b1b924d210adbb53857d6bcb9a9e68b2103be6c4c0b66911f77ed1371ec9",
+      "body_sha256": "ef4ce7a8734ecd778a6cc04ea541c1be61a45ee0342c2824bbf33b18460214c0",
+      "native_decode_tokens_per_second": 59.163262431328356
+    },
+    {
+      "id": "stable-unique",
+      "kind": "quality",
+      "quality_pass": true,
+      "TTFT_seconds": 0.7192830040003173,
+      "elapsed_seconds": 1.6166642370080808,
+      "usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 53,
+        "total_tokens": 98,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 45,
+        "prompt_ms": 668.7,
+        "prompt_per_token_ms": 14.86,
+        "prompt_per_second": 67.3,
+        "predicted_n": 53,
+        "predicted_ms": 907.4,
+        "predicted_per_token_ms": 17.121,
+        "predicted_per_second": 58.4,
+        "draft_n": 26,
+        "draft_n_accepted": 26
+      },
+      "client_decode_tokens_per_second_estimate": 59.03379557097232,
+      "prompt_sha256": "aeff4aff0beccc9c5cbbda4d0ec220bc522dc1e0bbed2199b1f8b19fb11c29f9",
+      "body_sha256": "9b8dc9b714eede473d8b86315283e1ab647b6f3fcb71eed816aac336a1af1736",
+      "native_decode_tokens_per_second": 58.40864007053119
+    },
+    {
+      "id": "sql-aggregate",
+      "kind": "quality",
+      "quality_pass": true,
+      "TTFT_seconds": 1.0327146719937446,
+      "elapsed_seconds": 1.8062491599994246,
+      "usage": {
+        "prompt_tokens": 63,
+        "completion_tokens": 44,
+        "total_tokens": 107,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 63,
+        "prompt_ms": 967.5,
+        "prompt_per_token_ms": 15.357,
+        "prompt_per_second": 65.1,
+        "predicted_n": 44,
+        "predicted_ms": 783.7,
+        "predicted_per_token_ms": 17.811,
+        "predicted_per_second": 56.1,
+        "draft_n": 20,
+        "draft_n_accepted": 20
+      },
+      "client_decode_tokens_per_second_estimate": 56.822864448595354,
+      "prompt_sha256": "241b0c8b5040ea1014899218d2dfecf4ff11cbdc1e1cf2e2f871382c5c4ded77",
+      "body_sha256": "3859042bf5774f49f47cfc671ac00357d97103d14eabbea5ac49979c42b8531a",
+      "native_decode_tokens_per_second": 56.14393262728084
+    },
+    {
+      "id": "logic",
+      "kind": "quality",
+      "quality_pass": true,
+      "TTFT_seconds": 0.7944597719906596,
+      "elapsed_seconds": 0.9735932269977638,
+      "usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 11,
+        "total_tokens": 59,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 48,
+        "prompt_ms": 744.3,
+        "prompt_per_token_ms": 15.506,
+        "prompt_per_second": 64.5,
+        "predicted_n": 11,
+        "predicted_ms": 189.8,
+        "predicted_per_token_ms": 17.255,
+        "predicted_per_second": 58.0,
+        "draft_n": 5,
+        "draft_n_accepted": 5
+      },
+      "client_decode_tokens_per_second_estimate": 61.31146611481645,
+      "prompt_sha256": "1632e8c648812778a65443ff1316b4b5137e33216153dd6192f516d78b9980b0",
+      "body_sha256": "f86b59aad0df8572c029ebbe446a87eb966e7c4ac2bfe1b280c7f45c4acc9948",
+      "native_decode_tokens_per_second": 57.95574288724973
+    },
+    {
+      "id": "retrieval",
+      "kind": "quality",
+      "quality_pass": true,
+      "TTFT_seconds": 13.160687165000127,
+      "elapsed_seconds": 14.107929163001245,
+      "usage": {
+        "prompt_tokens": 6633,
+        "completion_tokens": 57,
+        "total_tokens": 6690,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 6633,
+        "prompt_ms": 13110.1,
+        "prompt_per_token_ms": 1.976,
+        "prompt_per_second": 505.9,
+        "predicted_n": 57,
+        "predicted_ms": 955.2,
+        "predicted_per_token_ms": 16.758,
+        "predicted_per_second": 59.7,
+        "draft_n": 28,
+        "draft_n_accepted": 28
+      },
+      "client_decode_tokens_per_second_estimate": 60.12062849804469,
+      "prompt_sha256": "150804b9fe20237fbf6bdc1ba640ab8cd01f3d637874a388f986a9b55f0f3154",
+      "body_sha256": "45b836e291cbfb16039667634e92e98510a154f296dc21e0cb056872b521b2a5",
+      "native_decode_tokens_per_second": 59.67336683417085
+    },
+    {
+      "id": "history",
+      "kind": "quality",
+      "quality_pass": true,
+      "TTFT_seconds": 0.4710989200102631,
+      "elapsed_seconds": 0.9987332000018796,
+      "usage": {
+        "prompt_tokens": 80,
+        "completion_tokens": 32,
+        "total_tokens": 112,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 80,
+        "prompt_ms": 428.7,
+        "prompt_per_token_ms": 5.359,
+        "prompt_per_second": 186.6,
+        "predicted_n": 32,
+        "predicted_ms": 526.4,
+        "predicted_per_token_ms": 16.45,
+        "predicted_per_second": 60.8,
+        "draft_n": 16,
+        "draft_n_accepted": 15
+      },
+      "client_decode_tokens_per_second_estimate": 65.14910526580829,
+      "prompt_sha256": "284a4506a5a422eda64eb95865c67ea17844e84dd4d157e0de447b0080dc2a0b",
+      "body_sha256": "e306b1f448a28b7a69737fe4186eb5a82e89fabf88c3e4942e689a66b3eefa23",
+      "native_decode_tokens_per_second": 60.79027355623101
+    },
+    {
+      "id": "speed-1",
+      "kind": "speed",
+      "quality_pass": null,
+      "TTFT_seconds": 0.5081060619995696,
+      "elapsed_seconds": 3.0168550929956837,
+      "usage": {
+        "prompt_tokens": 31,
+        "completion_tokens": 128,
+        "total_tokens": 159,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 31,
+        "prompt_ms": 456.6,
+        "prompt_per_token_ms": 14.729,
+        "prompt_per_second": 67.9,
+        "predicted_n": 128,
+        "predicted_ms": 2419.9,
+        "predicted_per_token_ms": 18.905,
+        "predicted_per_second": 52.9,
+        "draft_n": 58,
+        "draft_n_accepted": 50
+      },
+      "client_decode_tokens_per_second_estimate": 52.93042052633746,
+      "prompt_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021",
+      "body_sha256": "02803e6f2a23c475cfb58d6f8e7a928a57877e6d05788a465aadb7dace76c2b0",
+      "native_decode_tokens_per_second": 52.8947477168478
+    },
+    {
+      "id": "speed-2",
+      "kind": "speed",
+      "quality_pass": null,
+      "TTFT_seconds": 0.564063483994687,
+      "elapsed_seconds": 2.891993476994685,
+      "usage": {
+        "prompt_tokens": 34,
+        "completion_tokens": 128,
+        "total_tokens": 162,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 34,
+        "prompt_ms": 515.7,
+        "prompt_per_token_ms": 15.168,
+        "prompt_per_second": 65.9,
+        "predicted_n": 128,
+        "predicted_ms": 2338.4,
+        "predicted_per_token_ms": 18.269,
+        "predicted_per_second": 54.7,
+        "draft_n": 59,
+        "draft_n_accepted": 53
+      },
+      "client_decode_tokens_per_second_estimate": 54.93045020392489,
+      "prompt_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e",
+      "body_sha256": "ab0686b68f870827de3f989e31977f805478177dbd80fc2c7a6a52641a4cb523",
+      "native_decode_tokens_per_second": 54.73828258638385
+    },
+    {
+      "id": "speed-3",
+      "kind": "speed",
+      "quality_pass": null,
+      "TTFT_seconds": 0.5363498259976041,
+      "elapsed_seconds": 3.081157127991901,
+      "usage": {
+        "prompt_tokens": 33,
+        "completion_tokens": 128,
+        "total_tokens": 161,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 33,
+        "prompt_ms": 488.1,
+        "prompt_per_token_ms": 14.791,
+        "prompt_per_second": 67.6,
+        "predicted_n": 128,
+        "predicted_ms": 2555.9,
+        "predicted_per_token_ms": 19.968,
+        "predicted_per_second": 50.1,
+        "draft_n": 57,
+        "draft_n_accepted": 45
+      },
+      "client_decode_tokens_per_second_estimate": 50.20840276496127,
+      "prompt_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87",
+      "body_sha256": "b13a30f820c6bfbf7a4cd5c9c3b67fa47627ec8cb47d78816187559a11f7b69f",
+      "native_decode_tokens_per_second": 50.08020658085214
+    }
+  ],
+  "verified_weight_files": [
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ3_XXS-00001-of-00004.gguf",
+      "bytes": 10946618,
+      "sha256": "9d5644b371ffac921427c8021cc7242dab8e3ba37d7b48d1e79fe3770fbf9915"
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ3_XXS-00002-of-00004.gguf",
+      "bytes": 49946027488,
+      "sha256": "aacaff3bdb9032c2c3be428167930809735f65d3cfb204eba07d85e421e7ddf4"
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ3_XXS-00003-of-00004.gguf",
+      "bytes": 4869325888,
+      "sha256": "ef8f14e790ab471b363f146d5e8664eefbaf03e5776f317a1fb96a2bc7707b07"
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ3_XXS-00004-of-00004.gguf",
+      "bytes": 28800138432,
+      "sha256": "5de8b5dbf89409acc39468decafd4a4a95b13c29d88a14b0356107897829ec36"
+    }
+  ],
+  "release_packages": [
+    {
+      "name": "strata-control-0.1.57-linux-x86_64.tar.gz",
+      "size": 99944994,
+      "digest": "sha256:2ac78cffee4a638b4f32d3020d5a85da8bd1d32a2b12705d8c4fb706b6094d08",
+      "url": "https://github.com/Niko1221/Strata/releases/download/v0.2.11/strata-control-0.1.57-linux-x86_64.tar.gz"
+    },
+    {
+      "name": "strata-engine-0.1.57-linux-x86_64-hip-rx7900.tar.gz",
+      "size": 329144905,
+      "digest": "sha256:214114bf18cac6a9aaaf94d08876aa0bc6b97d9bdb786bb674968bdcb575b0a8",
+      "url": "https://github.com/Niko1221/Strata/releases/download/v0.2.11/strata-engine-0.1.57-linux-x86_64-hip-rx7900.tar.gz"
+    }
+  ],
+  "limits": [
+    "One new-release candidate run only; previous ffa model cases were not repeated.",
+    "No same-day engine/weight control bracket; historical figures are context, not a controlled speed ranking.",
+    "OS page caches were not deliberately evicted; loading is not a controlled cold-cache measurement.",
+    "Configured256K allocation is not full-window-quality or sustained-stability qualification.",
+    "Existing compatibility-rounded small projections and original GGUF expert/table inputs were reused without repacking.",
+    "Controller GPU-order preflight was corrected before any model load; its failed evidence and reviewed hold remain intact."
+  ]
+}

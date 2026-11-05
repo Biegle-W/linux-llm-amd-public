@@ -8,4 +8,6 @@ Four native large-model retries passed after removing the three-second decode cu
 
 [RDNA3/Radiance and true dual-card research](RDNA3-DUAL-GPU-RESEARCH-2026-11-05.md): current gfx1100 backend coverage does not establish optimized dual-XTX TP. Existing LLM TP2, layer splitting, normal graphics component placement and isolated cached-conditioning H3 TP2 remain distinct.
 
+[New Strata 0.2.11 Unsloth test](STRATA-0211-UNSLOTH-2026-11-05.md): Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged.
+
 Prior evidence: [27-case campaign](ALL-MODEL-P2P-2026-11-05.md), [numeric cases](results/ALL-MODEL-P2P-2026-11-05.json), [media gallery](../graphics/results/p2p-2026-11-05/README.md), [matched Unsloth/Flint comparisons](UNSLOTH-FLINT-COMPARISONS-2026-11-04.md). These were completed before the current update task. Use the [benchmark history](BENCHMARK-HISTORY.md) for older hardware/source/workload records.
