@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-05",
+  "scope": "Owner-requested fresh isolated latest-guard attempts of three unselected candidates; no matched speed ranking, promotion or sustained/full-window qualification",
+  "cases": [
+    {
+      "case": "flint-awq",
+      "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "context_tokens": 8192,
+      "status": "failed",
+      "guard_status": "failed",
+      "cause": "FlashInfer required by current Flint implementation; ModuleNotFoundError: flashinfer",
+      "inference_requests": 0,
+      "requests": [],
+      "load_seconds": null,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "minimum_recorded_host_available_bytes": 55564730368,
+      "owned_cgroups_empty": true,
+      "original_cleanup_deadline_passed": true,
+      "KFD_clients_at_guard_finish": 0,
+      "later_device_drain_verified": false,
+      "new_kernel_faults": false,
+      "promoted": false
+    },
+    {
+      "case": "vllm-ple-file-gather",
+      "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "context_tokens": 8192,
+      "status": "failed",
+      "guard_status": "failed",
+      "cause": "supervisor heartbeat missing",
+      "inference_requests": 0,
+      "requests": [],
+      "load_seconds": null,
+      "max_owned_swap_bytes": 8235220992,
+      "max_owned_spill_bytes": 0,
+      "minimum_recorded_host_available_bytes": 1575575552,
+      "owned_cgroups_empty": true,
+      "original_cleanup_deadline_passed": false,
+      "KFD_clients_at_guard_finish": 1,
+      "later_device_drain_verified": true,
+      "new_kernel_faults": false,
+      "promoted": false
+    },
+    {
+      "case": "super-int4-ep2",
+      "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "context_tokens": 8192,
+      "status": "failed",
+      "guard_status": "failed",
+      "cause": "RuntimeError: Owner host reserve below 1 GiB",
+      "inference_requests": 0,
+      "requests": [],
+      "load_seconds": null,
+      "max_owned_swap_bytes": 2383753216,
+      "max_owned_spill_bytes": 0,
+      "minimum_recorded_host_available_bytes": 1008168960,
+      "owned_cgroups_empty": true,
+      "original_cleanup_deadline_passed": true,
+      "KFD_clients_at_guard_finish": 0,
+      "later_device_drain_verified": false,
+      "new_kernel_faults": false,
+      "promoted": false
+    }
+  ],
+  "guards": {
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "CPU_GPU_SSD_limit_C": 100,
+    "minimum_host_available_GiB": 1,
+    "minimum_per_card_free_VRAM_MiB": 128,
+    "dedicated_spill_allowed_bytes": 0,
+    "phase_aware_swap": "unchanged canonical policy",
+    "load_seconds": {
+      "flint-awq": 1800,
+      "vllm-ple-file-gather": 3600,
+      "super-int4-ep2": 1800
+    },
+    "prefill_and_generation_phase_seconds": 1800,
+    "three_second_decode_cutoff": false
+  },
+  "Strata_DFlash2_removal": {
+    "status": "removed-unused-auxiliary-only",
+    "source_revision": "a22a1744e85c17364dcc54a6a420af7135d4c7f6",
+    "logical_bytes_removed": 2068293948,
+    "target_absent": true,
+    "selected_Strata_uses_MTP": true,
+    "separate_SGLang_drafter_preserved": true
+  },
+  "all_13_route_profiles_preserved": true,
+  "new_model_downloads": false,
+  "production_selection_changed": false
+}
