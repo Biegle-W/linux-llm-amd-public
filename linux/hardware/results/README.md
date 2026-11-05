@@ -3,16 +3,20 @@
 <!-- all-model-p2p-20261105:begin -->
 ## November 5 all-model functional and transport qualification
 
-21/27 bounded cases pass functional and guard checks, including repeated model families at distinct capacities/observation coverage. No new throughput comparison, full-window or sustained-stability qualification. All seven router, seven graphics and three extended copy-coverage cases pass; failed normal Maya Coder, both Q1 variants, GLM, PLE and Super remain held. The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision.
+21/27 bounded cases pass functional and guard checks, including repeated model families at distinct capacities/observation coverage. No new throughput comparison, full-window or sustained-stability qualification. All seven router, seven graphics and three extended copy-coverage cases pass; failed normal Maya Coder, both Q1 variants, GLM, PLE and Super remain held. The owner-approved archive of the reviewed global STOP/hold is complete. Nine qualified normal routes are enabled; the six failed/inconclusive candidates remain held and deleted XS/Super IQ3 routes remain retired. Read-only authenticated catalog/health and 401 checks pass; no inference was sent for publication.
 
 [Methods, failures, source attribution and transport](../ALL-MODEL-P2P-2026-11-05.md); [reviewed generated images/videos](../../graphics/results/p2p-2026-11-05/README.md). Original Unsloth/Flint and native checks were not rerun for documentation. Final owned cleanup/kernel/storage/temperature checks pass; all guards, pins, boot default and paused schedules remain.
 
 | Exact model API ID | Backend | Configured context |
 |---|---|---:|
+| `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | strata | 32,768 |
 | `empero-qwen3.8-35b-a3b` | llama | 262,144 |
 | `flint-40b-a2.5b` | llama | 32,768 |
 | `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
+| `ornith-1.5-122b` | llama | 32,768 |
+| `qwen3.8-27b-sglang-dflash2` | sglang | 163,840 |
 | `qwen3.8-27b-vllm` | vllm | 163,840 |
+| `qwen3.8-flash-next-iq3_xxs` | strata | 262,144 |
 | `sage-a1.5` | vllm | 65,536 |
 <!-- all-model-p2p-20261105:end -->
 

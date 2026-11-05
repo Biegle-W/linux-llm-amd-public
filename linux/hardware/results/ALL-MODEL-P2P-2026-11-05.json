@@ -2592,5 +2592,33 @@
     "mutable_download_cache_entries_excluded": 246,
     "original_pins_preserved": true,
     "exfat_inode_cache_changes_are_not_content_changes": true
+  },
+  "normal_runtime_activation": {
+    "status": "activated",
+    "summary": "Nine qualified normal routes are enabled after the owner-authorized archive of the reviewed global STOP/GPU hold. All six failed or inconclusive cases remain held, and deleted XS/SuperIQ3 routes remain retired. All guards, source/weight pins, stock boot default, unrelated services and paused schedules remain.",
+    "eligible_IDs": [
+      "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
+      "empero-qwen3.8-35b-a3b",
+      "flint-40b-a2.5b",
+      "nemotron-3.5-bolt-vllm",
+      "ornith-1.5-122b",
+      "qwen3.8-27b-sglang-dflash2",
+      "qwen3.8-27b-vllm",
+      "qwen3.8-flash-next-iq3_xxs",
+      "sage-a1.5"
+    ],
+    "production_changed": true,
+    "GPU_tests_repeated_for_publication": false,
+    "read_only_live_verification": {
+      "utc": "2026-11-05T07:03:09.955086+00:00",
+      "catalog_count": 9,
+      "unauthenticated_and_wrong_key_401": true,
+      "health_ok": true,
+      "native_seals_verified": true,
+      "inference_requests": 0
+    },
+    "CPU_checks": 160,
+    "reviewed_runtime_files": 17,
+    "public_native_reference_status": "requires-local-validation"
   }
 }

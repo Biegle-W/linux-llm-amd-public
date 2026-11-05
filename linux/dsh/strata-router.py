@@ -113,6 +113,8 @@ def ensure_worker(model):
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
         cfg=json.loads(config.read_text())
+        from qualified_native_runtime import record_for
+        if record_for(cfg,'strata') is not None:script='run-qualified-native-backend'
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
                                    *scope_properties(cfg), str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],

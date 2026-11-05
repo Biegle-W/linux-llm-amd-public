@@ -55,6 +55,9 @@ def check_settings(cfg):
 
 
 def require_profile(cfg,before_handover=False,*,require_validated=True):
+    from qualified_native_runtime import record_for,require_profile as require_qualified
+    record=record_for(cfg,'strata')
+    if record is not None:return require_qualified(cfg,record,before_handover=before_handover)
     check_settings(cfg)
     pin=json.loads(PIN.read_text())
     revision=subprocess.check_output(['git','-C',str(SOURCE),'rev-parse','HEAD'],text=True).strip()

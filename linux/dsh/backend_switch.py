@@ -112,6 +112,37 @@ def qualified_llama_binaries(root):
         return frozenset()
 
 
+def qualified_native_entries(root):
+    """Recognize only enabled, registry-qualified native binaries/configs."""
+    root = Path(root)
+    binaries, configs = set(), set()
+    try:
+        data = json.loads((root / 'dsh/qualified-native-profiles.json').read_text())
+        if data.get('schema_version') != 1:
+            return binaries, configs
+        for family in ('maya', 'strata'):
+            profiles = json.loads((root / 'dsh' / (family + '-profiles.json')).read_text())
+            for model, profile in profiles.items():
+                record = data.get('profiles', {}).get(model, {})
+                filename = profile.get('config', '')
+                source, revision = record.get('source'), record.get('source_commit')
+                relative = record.get('binary_relative')
+                if (not profile.get('enabled', False) or record.get('status') != 'passed'
+                        or record.get('family') != family or not filename or Path(filename).name != filename
+                        or not isinstance(source, str) or not Path(source).is_absolute()
+                        or not isinstance(revision, str) or not re.fullmatch(r'[0-9a-f]{40}', revision)
+                        or relative not in ('build-hip/maya', 'build-hip/maya-ds4', 'build-hip/strata-dsv41')):
+                    continue
+                binary = str(Path(source) / relative)
+                if record.get('binary') != binary:
+                    continue
+                binaries.add(binary)
+                configs.add(str(root / 'dsh' / filename))
+    except (OSError, ValueError, TypeError, AttributeError):
+        return set(), set()
+    return binaries, configs
+
+
 def is_inference(p, root=ROOT):
     if not p.args:
         return False
@@ -127,9 +158,15 @@ def is_inference(p, root=ROOT):
                  'strata-dsv41/upstream/build-hip/strata-dsv41',
                  'maya/upstream/build-hip/maya', 'maya/upstream/build-hip/maya-ds4')}
     binaries.update(qualified_llama_binaries(root))
+    native_binaries, native_configs = qualified_native_entries(root)
+    binaries.update(native_binaries)
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':
+        if entry[1] == str(root / 'dsh/qualified_native_backend.py'):
+            args = entry[2]
+            return any(arg == '--config' and i + 1 < len(args) and args[i + 1] in native_configs
+                       for i, arg in enumerate(args))
         if entry[1] == str(root / 'dsh/native-ui-server.py'):
             args = entry[2]
             return any(arg == '--project' and i + 1 < len(args) and args[i + 1] in ('strata', 'maya', 'strata-dsv41')

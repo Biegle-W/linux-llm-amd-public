@@ -2,7 +2,7 @@
 
 21/27 bounded cases passed both functional and stage guards. Cases include different capacity profiles and transport-observation checks of the same model; this is not a count of distinct models. Failed, inconclusive and retired routes remain explicit below.
 
-Nine routes have passed short functional/guard qualification and reviewed normal admission; activation remains staged. The existing global GPU hold and STOP are active, so normal serving remains blocked pending the explicit hold-release decision. Six failed or inconclusive cases remain held; retired/deleted routes remain retired.
+Nine qualified normal routes are enabled after the owner-authorized archive of the reviewed global STOP/GPU hold. All six failed or inconclusive cases remain held, and deleted XS/SuperIQ3 routes remain retired. All guards, source/weight pins, stock boot default, unrelated services and paused schedules remain.
 
 Hardware: i5-13600KF, ASUS TX GAMING B760M WIFI, 61.55 GiB visible RAM, two RX 7900 XTX 24 GB cards behind the PEX880xx switch. Current boot uses `7.0.14-42-vmpt1`, identity GPU IOMMU domains and the verified six-bridge ACS 0x11 configuration. Runtime logical order is PowerColor then Sapphire. Stock persistent boot default, source/weight pins, unrelated services and paused schedules remain.
 
@@ -14,7 +14,9 @@ Seven graphics cases complete fixed workflows; three later cases extend copy-obs
 
 CPU/GPU/SSD software guards stop at 100°C; SMART health and RAM/VRAM/spill/swap, progress/heartbeat, ownership and cleanup protections remain. 12049/12049 saved stage samples have complete CPU plus both-card edge/junction/memory temperature readings. Saved sampled peaks: CPU package 91.0°C, card0/edge 44.0°C, card0/junction 70.0°C, card0/mem 42.0°C, card1/edge 43.0°C, card1/junction 77.0°C, card1/mem 60.0°C. SSD health/temperature guards were active; a per-case SSD peak was not retained, so no SSD peak is claimed. Functional stops retain their original evidence and reviewed boundaries; failed profiles were not retried.
 
-The staged activation package passes 160 CPU checks and a read-only admission check against actual source, binary, backing, RAM/VRAM and catalog state. Historical-policy tests use isolated fixtures; operational guards were not changed for those tests.
+The applied activation package passed 160 CPU checks and read-only admission checks against actual source, binary, backing, RAM/VRAM and catalog state. After activation, all 17 runtime files match the reviewed staging copies; retained source pins and native seals verify. The authenticated live API lists exactly nine routes and health is healthy; absent or incorrect keys return 401. Verification sent no inference request. Historical-policy tests use isolated fixtures; operational guards were not changed for those tests.
+
+Public native code/profile exports are references with registry status `requires-local-validation`; admission rejects them until independently qualified and sealed on the receiving host. Source examples use `/opt/local-llm/qualified-sources`. Machine-specific inode/device/mtime seals and private runtime state are omitted; source revisions and content hashes remain as evidence.
 
 ## LLM outcomes
 
@@ -38,7 +40,7 @@ The staged activation package passes 160 CPU checks and a read-only admission ch
 | `vllm-ple-file-gather` | loading budget exhausted | — | Verified |
 | `super-int4-ep2` | Host RAM reserve below1GiB during loading; no completed inference | — | Verified |
 
-The original small-reserve Maya Coder and Strata Coder checks passed. Distinct normal-capacity checks requested 8 GiB reserve while retaining the normal 6 GiB actual startup floor: Strata Coder passed with 7.518/7.732 GiB free at readiness; Maya Coder stopped at the three-second decode-progress guard. Only the passing capacity profile is eligible for normal activation. GLM exhausted its unchanged enclosing budget before completing the full tool round trip. Both Q1 variants stopped at the decode-progress guard and remain held.
+The original small-reserve Maya Coder and Strata Coder checks passed. Distinct normal-capacity checks requested 8 GiB reserve while retaining the normal 6 GiB actual startup floor: Strata Coder passed with 7.518/7.732 GiB free at readiness; Maya Coder stopped at the three-second decode-progress guard. Only the passing Strata Coder capacity profile was activated. GLM exhausted its unchanged enclosing budget before completing the full tool round trip. Both Q1 variants stopped at the decode-progress guard and remain held.
 
 Strata Q1's prepared admission originally expected the old 1 GiB reserve. That pre-engine failure and a later exclusive-log collision were preserved before the first GPU execution. Correcting the admission expectation to the already selected 8 GiB changed no model setting or resource guard. Two mutable saved-conversation cache entries were similarly removed from an overbroad asset manifest only after source review; all original manifests and immutable pins were retained.
 
@@ -77,6 +79,6 @@ ComfyUI `0.42.0` / `8f04fd6ecf4a548937971e840af2a985529fab76`, Torch `2.15.0.dev
 
 The [reviewed forum and primary-source ledger](ALL-MODEL-P2P-RESEARCH-2026-11-05.md) keeps hardware, implementation and measurement differences explicit. AMD's [ROCm7.2 RCCL guidance](https://rocm.docs.amd.com/projects/rccl/en/docs-7.2.0/how-to/rccl-usage-tips.html#enabling-peer-to-peer-transport) requires peer-capable GPUs and proper large BAR support for PCIe peer transport. The firsthand [XTX H3 comparison](https://lcz.me/topic/2664) illustrates why sampling and whole-workflow timing differ; its numbers are not assigned to this host.
 
-Final boundary: All owned runners/scopes exited, KFD is empty, fresh kernel scan is clean and storage/temperature checks pass. Super stopped at the unchanged 1GiB host-RAM floor; it remains held. Global fault hold and STOP remain active pending the explicit normal-activation decision.
+Final boundary: All owned test runners/scopes exited, KFD was empty and fresh kernel/storage/temperature checks passed before activation. The owner authorized archiving the reviewed global STOP/GPU hold and enabling only nine qualified routes; failed/retired routes remain held. No new GPU trial or failed-profile retry was run.
 
-Normal disposition: Nine routes have passed short functional/guard qualification and reviewed normal admission; activation remains staged. The existing global GPU hold and STOP are active, so normal serving remains blocked pending the explicit hold-release decision. Six failed or inconclusive cases remain held; retired/deleted routes remain retired. Existing fault and STOP history remains preserved. No automatic retry, long benchmark, boot-default change, unrelated service reset or schedule change was performed.
+Normal disposition: Nine qualified normal routes are enabled after the owner-authorized archive of the reviewed global STOP/GPU hold. All six failed or inconclusive cases remain held, and deleted XS/SuperIQ3 routes remain retired. All guards, source/weight pins, stock boot default, unrelated services and paused schedules remain. Existing fault and STOP history remains preserved. No automatic retry, long benchmark, boot-default change, unrelated service reset or schedule change was performed.

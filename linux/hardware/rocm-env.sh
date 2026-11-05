@@ -7,7 +7,7 @@ export LD_LIBRARY_PATH="$ROCM_PATH/lib:$ROCM_PATH/lib64:$ROOT/llm-tools/rocm-sdk
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rocm-sdk/mpi4/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH:$ROOT/llm-tools/rocm-sdk/host-libs/usr/lib/x86_64-linux-gnu/pmix2/lib"
 export PATH="$ROCM_PATH/bin:$ROCM_PATH/llvm/bin:$ROOT/llm-tools/cuda-build/bin:$PATH"
 export HIP_VISIBLE_DEVICES=0,1
-export ROCR_VISIBLE_DEVICES=0,1
+export ROCR_VISIBLE_DEVICES=1,0
 unset CUDA_VISIBLE_DEVICES CUDA_HOME CUDAHOSTCXX
 export PYTORCH_ROCM_ARCH=gfx1100
 export AMDGPU_TARGET=gfx1100
@@ -17,11 +17,10 @@ export XDG_CACHE_HOME="$ROOT/llm-tools/runtime-cache/rocm"
 export VLLM_ROCM_USE_AITER=0
 export TOKENIZERS_PARALLELISM=false
 
-# Production retains host transport and existing custom-all-reduce exclusions.
-# The owner enabled driver P2P for isolated switch tests on November 4.
-# Peer checks passed, but Maya startup hit GPU reset/bus loss; all tests are held.
-# Current evidence: hardware/results/switch-restored-p2p-2026-11-04.json.
-export NCCL_P2P_DISABLE=1
+# Qualified TP2 routes use RCCL peer transport after bounded per-model checks.
+# Physical order matches qualification: PowerColor13:00.0, Sapphire0b:00.0.
+# llama.cpp enables its presence-based peer flag only for qualified model IDs.
+export NCCL_P2P_DISABLE=0
 unset GGML_CUDA_P2P
 # Isolated gfx1100 RCCL 2.27.7: retained and tested after the CPU x8/x8 migration.
 export LD_LIBRARY_PATH="$ROOT/llm-tools/rccl-nohostcall:$LD_LIBRARY_PATH"

@@ -74,7 +74,7 @@
   },
   {
     "id": "ornith-1.5-122b",
-    "enabled": false,
+    "enabled": true,
     "name": "Ornith-1.5-122B Q4_K_M (32K, dual AMD HIP, CPU experts + GPU cache, vision)",
     "quantization": "Q4_K_M",
     "path": "/mnt/shared/GGUF-Models/Ornith-1.5-122B-GGUF/Ornith-1.5-122B-Q4_K_M.gguf",
@@ -123,8 +123,13 @@
     "vision_enabled": true,
     "model_revision": "8d5893d767c449a4f18dd08f4bb6d0d6d4426175",
     "validation": "Tested October 21-22 (Codex/Claude): official Q4_K_M, 32K, MTP off; tools/JSON/code fixture, 30,988-token retrieval + cached follow-up, synthetic vision; 11.4/13.3 t/s decode, 52.7 t/s prefill; zero swap/spill. MTP3 rejected (-27%).",
-    "disabled_reason": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume.",
-    "resume_requires_owner_instruction": true
+    "historical_disabled_reason": "Paused by owner October 29 until the owner explicitly reports more RAM is available; no automatic RAM-detection resume.",
+    "qualification": {
+      "date": "2026-11-05",
+      "case": "llama-ornith",
+      "evidence": "hardware/results/ALL-MODEL-P2P-2026-11-05.json",
+      "scope": "One short strict DSH tool roundtrip plus retained admission/guards; no new sustained or full-context proof"
+    }
   },
   {
     "id": "flint-40b-a2.5b",

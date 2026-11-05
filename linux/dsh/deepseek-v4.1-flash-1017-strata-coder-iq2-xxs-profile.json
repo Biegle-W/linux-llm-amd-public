@@ -1,0 +1,86 @@
+{
+  "arch": "deepseek41",
+  "args": [
+    "--pack",
+    "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack",
+    "--max-context",
+    "32768",
+    "--tp",
+    "2",
+    "--dspark",
+    "none",
+    "--reserve-mib",
+    "8192",
+    "--expert-profile",
+    "none",
+    "--cpu-threads",
+    "14",
+    "--ssd-cache",
+    "36"
+  ],
+  "backend": "hip",
+  "cwd": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7",
+  "engine_ready_s": 900,
+  "env": {
+    "DS4_ENGRAM_CACHE_MB": "1024",
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0",
+    "DS4_YOCO": "0",
+    "HSA_USERPTR_FOR_PAGED_MEM": "0",
+    "MAYA_DS4_HIP_PEER_AR": "0",
+    "MAYA_GLM_P2P": "0",
+    "STRATA_DS4_DISK_SKIP_W": "0",
+    "STRATA_DS4_HIPK": "1",
+    "STRATA_DS4_PROMPT_SKIP": "0",
+    "STRATA_DS4_SLOT_KEEP": "0",
+    "NCCL_P2P_DISABLE": "0",
+    "FNX_PEER": "1"
+  },
+  "exe": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7/build-hip/strata-dsv41",
+  "gpu": [
+    0,
+    1
+  ],
+  "gpus_asked": true,
+  "idle_unload_s": 0,
+  "installer": {
+    "quant": "ISTA-Coder-IQ2_XXS",
+    "vision_inference_validated": false,
+    "weights_reused_from": "One verified Coder GGUF set; separate metadata pack per engine"
+  },
+  "lib_dirs": [
+    "/opt/local-llm/llm-tools/rocm-sdk/opt/rocm-7.2.3/lib"
+  ],
+  "log": "/opt/local-llm/dsh/logs/deepseek-v4.1-flash-1017-strata-coder-iq2-xxs.log",
+  "mcp_servers": {},
+  "model_name": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
+  "open_browser": false,
+  "parallel": 1,
+  "port": 30021,
+  "reasoning_effort": "none",
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "settings": "1GiB RAM /128MiB per-card VRAM; no MemoryHigh; hard RAM ceiling recalculated from installed RAM; existing swap capacity",
+    "status": "CPU resource-policy checks passed; GPU use unqualified"
+  },
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "split_skip_if_fits": false,
+  "startup_free_vram_gib": 0.125,
+  "tokenizer": "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer",
+  "worker_memory_limits": {
+    "memory.high": 65017106432,
+    "memory.max": 65017106432,
+    "memory.swap.max": 36000755712
+  },
+  "worker_swap_max_bytes": null,
+  "local_validation": {
+    "status": "requires-local-validation",
+    "evidence": "hardware/results/ALL-MODEL-P2P-2026-11-05.json",
+    "scope": "Reference of one source-host short strict read-tool round trip only. Paths and backing seals must be locally qualified; this exported profile is not admitted.",
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "binary_sha256": "581959940cff920e638a2b27241c5f8276ce92d849fc0905bf7ca58c17171acf"
+  }
+}

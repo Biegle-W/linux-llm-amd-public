@@ -1,0 +1,9 @@
+# Qualified native runtime reference — November 5, 2026
+
+The source workstation enabled nine qualified API routes after its owner approved archiving the reviewed global STOP/hold. Six failed or inconclusive candidates remain held; deleted XS and Super IQ3 routes remain retired. The dated hardware report and numeric results retain the exact test scopes and failures.
+
+The native Strata Coder profile is a **reference requiring local validation**. Its registry status is `requires-local-validation`, so `record_for()` rejects it before launch. Source examples use `/opt/local-llm/qualified-sources`; model storage uses `/opt/local-llm/models/streaming` and `/mnt/shared-nvme`. Adapt paths to the receiving host and independently verify the pinned source revision, executable/content hashes, metadata, tokenizer, profile, capacity and guarded short function before creating local seals. Do not change the status to `passed` or manufacture inode/device seals merely to bypass admission. Exported byte sizes/content hashes preserve source-host evidence, not local authorization.
+
+The guarded code retains exact source/binary/profile/backing checks, two 24 GiB cards, one request, tested 32K context and 8 GiB requested reserve, RAM/VRAM/spill/swap, storage/100°C, progress and owned cleanup protections. A short functional pass does not qualify full-context quality or sustained stability. Native layer-group handoffs have no direct-P2P claim; capability flags alone do not establish transport. Existing legacy XS pins remain separate.
+
+The public hardware environment records the qualified source-host logical GPU order and peer settings. Device order, source paths and runtime libraries must be checked on the receiving host. Public files contain no credentials, raw logs or machine-specific backing seals. No GPU test was repeated to create this export.

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs": {
+      "status": "requires-local-validation",
+      "family": "strata",
+      "source": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7",
+      "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+      "binary": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7/build-hip/strata-dsv41",
+      "binary_relative": "build-hip/strata-dsv41",
+      "binary_sha256": "581959940cff920e638a2b27241c5f8276ce92d849fc0905bf7ca58c17171acf",
+      "config_sha256": "a3e095ed0dcf46cdfe7e44f38d5dab0b3c39dc7f2776d2eb04ee05c2dfa52da2",
+      "pack": "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack",
+      "pack_metadata_sha256": {
+        "ds4.txt": "4c4cb7b0b58e8589e6b0b2960c2959a234a3850e220f62e796af135cf5bd4030",
+        "tensors.txt": "e1ff816714e54abea98bb779a4cb37393dba684a6ae8c9c882d62b417fd65629",
+        "engram.bin": "08d55d6433f389b14aa115f4ea4eb31d6a2d63df1ae40821f03facf4c2d49142"
+      },
+      "tokenizer": "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer",
+      "backing_identity": {
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/ds4.txt": {
+          "bytes": 1185
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tensors.txt": {
+          "bytes": 1814711
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/engram.bin": {
+          "bytes": 517980
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/tokenizer.json": {
+          "bytes": 80
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/chat_template.jinja": {
+          "bytes": 18509
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/merges.txt": {
+          "bytes": 1504833
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/vocab.json": {
+          "bytes": 2730577
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/token_type.json": {
+          "bytes": 387840
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00001-of-00006.gguf": {
+          "bytes": 5780704,
+          "sha256": "108e63d27240da2d99846250727a7b282e05a7fdf2448435e81904b9a98d8a4a"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00002-of-00006.gguf": {
+          "bytes": 19776064960,
+          "sha256": "75079999eb3a492ad695f3466fd6a068a1cf1920980eac1c7f51406363fadf7a"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00003-of-00006.gguf": {
+          "bytes": 19939989696,
+          "sha256": "ea964e525922f36d3b984299c1a5bb8d896f50b9c2942364cd221c37863331f2"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00004-of-00006.gguf": {
+          "bytes": 19682533472,
+          "sha256": "2d95806d186597cb0ea32635c92f0b66a9a6afae1a399ff74b13aebaa4ac7a52"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00005-of-00006.gguf": {
+          "bytes": 12719198624,
+          "sha256": "3665b48c3bd46330780caf286ee40a087ac11499e5b7df8c943b098d10f426d4"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/DeepSeek-V4.1-Flash-Engram-IQ4_NL.gguf": {
+          "bytes": 110595290816,
+          "sha256": "3dac4c54893ad7aa89103c0028500eadc78e74112cef3a2930a97e67dc9fb4f3"
+        }
+      },
+      "evidence": "hardware/results/ALL-MODEL-P2P-2026-11-05.json",
+      "transport": "Dual-card layer groups; no direct peer-copy claim",
+      "reference_note": "Source-host content references only. Local inode/device/mtime seals deliberately omitted. Do not mark passed or bypass admission without independent local qualification and fresh seals."
+    }
+  }
+}

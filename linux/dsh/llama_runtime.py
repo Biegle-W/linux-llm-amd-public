@@ -71,7 +71,9 @@ def runtime_identity(mode, model=None):
     source, commit = runtime_source(model)
     # Check even when reusing a parent: a later child may exec this path.
     verify_source_pin(source, commit)
-    return mode, str(source), commit
+    settings=json.loads((ROOT/'llama-runtime.json').read_text())
+    peer=mode=='hip-amd' and model in settings.get('p2p_models',[])
+    return mode,str(source),commit,peer
 
 
 def verify_source_pin(source, commit):
@@ -115,9 +117,10 @@ def launch_spec(backend=None, model=None):
         env = dict(item.decode().split('=', 1) for item in result.stdout.split(b'\0') if item)
         env['LD_LIBRARY_PATH'] += ':' + str(ROOT.parent / 'llm-tools/cuda-build/lib')
         env.pop('GGML_CUDA_ENABLE_UNIFIED_MEMORY', None)
-        # Owner-selected P2P-off policy. This switch is presence-based in the
-        # retained llama source: even GGML_CUDA_P2P=0 enables the peer path.
+        # Enable peer transport only for explicitly qualified model routes.
+        # The retained switch is presence-based: even value0 enables it.
         env.pop('GGML_CUDA_P2P', None)
+        if model in settings.get('p2p_models',[]):env['GGML_CUDA_P2P']='1'
     devices = amd_devices()
     if (not binary.is_file() or len(devices) != 2):
         raise RuntimeError('Selected 24 GB AMD runtime is unavailable; no backend has been stopped.')
