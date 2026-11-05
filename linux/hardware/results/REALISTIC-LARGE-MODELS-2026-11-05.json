@@ -93,15 +93,22 @@
     {
       "model_id": "nemotron-3.5-bolt-vllm",
       "backend": "vllm",
-      "configured_context_tokens": 262144,
-      "case": "vllm-bolt",
       "status": "passed-one-short-DSH-check",
-      "load_s": 148.60313418100122,
-      "first_request_TTFT_s": 2.1795878640004958,
-      "first_request_wall_s": 4.219964310999785,
-      "first_request_prompt_tokens": 6451,
-      "first_request_output_tokens": 64,
-      "second_request_wall_s": 1.2555479790025856,
+      "case": "bolt-latest41",
+      "configured_context_tokens": 262144,
+      "guard_passed": true,
+      "owned_cleanup_verified": true,
+      "selected": true,
+      "load_s": 236.69999883400305,
+      "first_request_TTFT_s": 3.4352761519985506,
+      "first_request_wall_s": 5.101313498998934,
+      "first_request_prompt_tokens": 6463,
+      "first_request_output_tokens": 68,
+      "second_request_wall_s": 0.7706196590006584,
+      "strict_marker_correct": true,
+      "tool_call_result_ids_match": true,
+      "runtime_version": "0.33.0rc1.dev229+g3966924d5.rocm72",
+      "selection_note": "Selectedaftermatchingnear255Kqualificationpassed",
       "enabled": true
     },
     {
@@ -701,9 +708,8 @@
     "owned_cleanup_s": 15
   },
   "pending": [
-    "Matchingnear255K Boltnewglobalcase active; olddev435pinretained untilitsresultreview",
-    "CorrectRDNA3 full-stack2314 isolated build/runtime review pending",
-    "Refresh/publishafterremainingoutcomes"
+    "CorrectRDNA3fullstack2314isolatedCPUbuild active; runtimequalification/review beforepromotion",
+    "Refresh/publishnewRDNAbuild/runtimeoutcomes"
   ],
   "engine_updates": [
     {
@@ -892,7 +898,7 @@
       "configured_context_tokens": 262144,
       "guard_passed": true,
       "owned_cleanup_verified": true,
-      "selected": false,
+      "selected": true,
       "load_s": 236.69999883400305,
       "first_request_TTFT_s": 3.4352761519985506,
       "first_request_wall_s": 5.101313498998934,
@@ -902,7 +908,8 @@
       "strict_marker_correct": true,
       "tool_call_result_ids_match": true,
       "runtime_version": "0.33.0rc1.dev229+g3966924d5.rocm72",
-      "selection_note": "Shortcheckonly; priornear255Kprefillhold requires matching assessment beforeunpin"
+      "selection_note": "Selectedaftermatchingnear255Kqualificationpassed",
+      "enabled": true
     }
   ],
   "graphics_latest": [
@@ -1105,5 +1112,43 @@
       "new_kernel_GPU_OOM_faults": false,
       "same_case_retry_planned": false
     }
-  ]
+  ],
+  "Bolt_near_window": {
+    "status": "passed-and-selected",
+    "runtime": "0.33.0rc1.dev229+g3966924d5.rocm72",
+    "actual_first_prompt_tokens": 255473,
+    "requests": [
+      {
+        "status": "completed",
+        "TTFT_seconds": 173.64245770899288,
+        "elapsed_seconds": 175.94467040899326,
+        "usage": {
+          "prompt_tokens": 255473,
+          "total_tokens": 255544,
+          "completion_tokens": 71,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      },
+      {
+        "status": "completed",
+        "TTFT_seconds": 3.0224141409998992,
+        "elapsed_seconds": 3.7147083390009357,
+        "usage": {
+          "prompt_tokens": 255658,
+          "total_tokens": 255679,
+          "completion_tokens": 21,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        }
+      }
+    ],
+    "guard_passed": true,
+    "owned_cleanup_verified": true,
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "old_environment_retained": true
+  }
 }

@@ -1,6 +1,6 @@
 # Current models, realistic budgets and engine updates — November 5, 2026
 
-**13 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. PLE and Super ended during loading on the unchanged heartbeat guard, with clean owned cleanup and no promotion. The matching Bolt long-context check is active; correct-RDNA3 build/review remains pending. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; in-flight outcomes will be refreshed separately.
+**13 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. PLE and Super ended during loading on the unchanged heartbeat guard, with clean owned cleanup and no promotion. Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The correct RDNA3 isolated build is running and remains uninstalled. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; in-flight outcomes will be refreshed separately.
 
 ## Current saved LLM measurements
 
@@ -15,7 +15,7 @@ Load is separate from request TTFT. The second request follows a tool result and
 | `empero-qwen3.8-35b-a3b` | llama | 262,144 | 46.717 | 2.225 | 4.194 | 64 | 1.250 |
 | `flint-40b-a2.5b` | llama | 32,768 | 50.717 | 1.273 | 4.319 | 176 | 1.996 |
 | `glm-5.3-flash-maya` | maya | 32,768 | 61.732 | 185.242 | 271.324 | 60 | 34.341 |
-| `nemotron-3.5-bolt-vllm` | vllm | 262,144 | 148.603 | 2.180 | 4.220 | 64 | 1.256 |
+| `nemotron-3.5-bolt-vllm` | vllm | 262,144 | 236.700 | 3.435 | 5.101 | 68 | 0.771 |
 | `ornith-1.5-122b` | llama | 32,768 | 155.846 | 10.694 | 18.908 | 92 | 4.347 |
 | `qwen3.8-27b-sglang-dflash2` | sglang | 163,840 | 78.510 | 3.566 | 3.819 | 61 | 0.434 |
 | `qwen3.8-27b-vllm` | vllm | 163,840 | 91.492 | 3.449 | 3.878 | 61 | 0.481 |
@@ -32,9 +32,9 @@ Source `3259ab6e5dd86fad1931962d784702cb53c7877b` was built in isolation. Flint 
 
 Maya `c1670044bbc09310f35f9d00f7596c50ae8a38f1` passed required per-card parity and exactly one strict two-step read-tool round trip for each of Coder, Q1 and GLM. Only those enabled profiles were promoted. Their newer measurements replace the selected Maya rows above; the original c01 results remain separately in the numeric evidence. Owned cleanup passed with empty cgroups, no remaining KFD clients, no dedicated-VRAM spill and 110,592 bytes maximum owned swap. All 111 targeted CPU checks passed, including publication recovery, graphics source selection, supervisor-loss cleanup and final-guard rollback. The separate llama updater promoted `9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11` after Ornith/Flint passed; Empero then passed its separate new-source strict check and selected that same build. All three llama checks had clean owned cleanup, zero dedicated-VRAM spill and zero recorded owned swap. No c01 or3259 case was repeated.
 
-## Bolt latest-global candidate
+## Bolt latest-global qualification
 
-The latest-global Bolt candidate `0.33.0rc1.dev229+g3966924d5.rocm72` passed its strict two-step tool check: load 236.700s, first TTFT 3.435s and first request 5.101s. Its prior dev435 hold was caused by near255Kprefill behavior; this short check does not resolve that condition. The manual pin remains until a matching guarded long-context check passes.
+Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The correct RDNA3 isolated build is running and remains uninstalled. The normal short sample on the same runtime had load236.700s; the matching long-context check had load230.693s, first TTFT173.642s and first request175.945s. Different prompt scopes are not a speed comparison.
 
 ## Saved graphics measurements
 
@@ -72,7 +72,7 @@ The metadata inventory covers 179 large files in 23 groups. Logical folder sizes
 | Flint-40B-A2.5B | 23.334 | Selected llama Flint GGUF. |
 | Ornith-1.5-122B-GGUF | 71.485 | Selected llama Ornith shards. |
 | Empero-Qwen3.8-35B-A3B-Distill | 18.280 | Selected Empero GGUF on qualified9c9074 source. |
-| Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16 | 40.648 | Selected Bolt checkpoint; latest-global short pass, matching near255K check pending. |
+| Nemotron-3.5-Bolt-74B-A9B-AutoRound-W4A16 | 40.648 | Selected Bolt checkpoint; globaldev229selectedaftermatchingnear255Kpass. |
 | Sage-A1.5-W4A16-AutoRound | 18.931 | Selected vLLM checkpoint. |
 | Flint-AWQ | 20.875 | Downloaded alternative; no qualified normal route. FlintForCausalLM is registered in current vLLM, so lack of architecture registration is not a supported rejection reason. |
 | Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin | 67.912 | Retained for the authorized guarded INT4 EP2 retry; not the retired IQ3 route. |
