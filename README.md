@@ -1,5 +1,9 @@
 # Linux LLM AMD — public reference
 
+<!-- quant-comparisons-20261104:begin -->
+**November 4 matched quant comparisons:** Neither candidate improved these short local checks: Unsloth tied fixture correctness with lower native decode; Flint Mix-24G missed JSON-only formatting and decoded more slowly. Selected GSQ and Flint production models remain unchanged. See the dated report for local fixture scores, load/request timings, resource/thermal coverage and qualification limits. [Results and limits](linux/hardware/UNSLOTH-FLINT-COMPARISONS-2026-11-04.md).
+<!-- quant-comparisons-20261104:end -->
+
 <!-- vmpt100-models:begin -->
 **November 4 PLE/Super checks at 100°C — complete:** PLE: loading-budget-exhausted; Super INT4 EP2: monitoring-guard-stop. Final owned cleanup and kernel/idle verification are recorded. The persistent hold, original STOP, other guards, stock boot default, engine/weight pins, services and paused schedules remain; no automatic retry or production promotion. [Outcomes and qualification limits](linux/hardware/PLE-SUPER-100C-2026-11-04.md).
 <!-- vmpt100-models:end -->
