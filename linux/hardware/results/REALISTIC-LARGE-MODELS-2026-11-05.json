@@ -708,8 +708,7 @@
     "owned_cleanup_s": 15
   },
   "pending": [
-    "CorrectRDNA3fullstack2314isolatedCPUbuild active; runtimequalification/review beforepromotion",
-    "Refresh/publishnewRDNAbuild/runtimeoutcomes"
+    "Review corrected RDNA3 isolated build outcome before runtime qualification or promotion"
   ],
   "engine_updates": [
     {
@@ -867,7 +866,7 @@
     "no_catchup": true,
     "next_verified": "2026-11-06 03:00 EST",
     "CPU_checks_passed": 111,
-    "publication": "Completed-source changes reviewed; later in-flight outcomes require another refresh"
+    "publication": "Completed engine qualifications published; corrected RDNA3 build outcome tracked separately"
   },
   "manual_candidate_checks": [
     {
@@ -1150,5 +1149,32 @@
     "max_owned_swap_bytes": 0,
     "max_owned_spill_bytes": 0,
     "old_environment_retained": true
+  },
+  "RDNA3_build": {
+    "source_commit": "2314df44164584f8eb59189d82c20e5362967a2c",
+    "branch": "perf/rdna3_full_stack",
+    "initial_build": {
+      "status": "failed-missing-MIOpen-CMake-metadata",
+      "production_installed": false,
+      "owned_cleanup_verified": true,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_hold_archived_intact_after_fresh_review": true
+    },
+    "corrected_build": {
+      "status": "running",
+      "guard_status": "starting",
+      "production_installed": false,
+      "GPU_inference_used": false,
+      "Torch_ROCm_selection_unchanged": true,
+      "matching_MIOpen_dependency": "3.5.1.70203-90~24.04",
+      "matching_hipSPARSELt_dependency": "0.2.6.70203-90~24.04",
+      "compile_jobs": 2,
+      "max_owned_swap_bytes": 0,
+      "max_owned_spill_bytes": 0,
+      "owned_cleanup_verified": false
+    },
+    "runtime_qualified": false,
+    "promoted": false
   }
 }
