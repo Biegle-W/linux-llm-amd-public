@@ -1,5 +1,9 @@
 # Local LLM consolidated handoff — Linux host and Windows clients
 
+<!-- all-model-p2p-20261105:begin -->
+**November 5 all-model P2P qualification — complete:** 21/27 bounded cases passed; counts include separate capacity and copy-observation cases of the same model. All seven router checks, seven graphics requests and three extended copy-coverage requests passed. Maya Coder (8 GiB reserve), both Q1 variants, GLM, PLE and Super remain unqualified for the exact reasons in the report. The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision. All owned jobs are finished; final KFD/kernel/storage/temperature checks are clean. 100°C, RAM/VRAM/spill/swap, progress/ownership/cleanup guards, source pins, stock boot default, unrelated services and paused schedules remain. [Results and actual transport](../hardware/ALL-MODEL-P2P-2026-11-05.md); [generated image/video outputs](../graphics/results/p2p-2026-11-05/README.md).
+<!-- all-model-p2p-20261105:end -->
+
 <!-- quant-comparisons-20261104:begin -->
 **November 4 matched quant comparisons:** Neither candidate improved these short local checks: Unsloth tied fixture correctness with lower native decode; Flint Mix-24G missed JSON-only formatting and decoded more slowly. Selected GSQ and Flint production models remain unchanged. See the dated report for local fixture scores, load/request timings, resource/thermal coverage and qualification limits. [Results and limits](../hardware/UNSLOTH-FLINT-COMPARISONS-2026-11-04.md).
 <!-- quant-comparisons-20261104:end -->
@@ -647,30 +651,13 @@ same-day session, not an equal-quality A/B. No NVIDIA community speed is claimed
 
 ## Current status and hardware
 
-- Intel **i5-13600KF (14 cores /20 threads)**, ASUS TX GAMING B760M WIFI,
-  **61.55 GiB visible RAM** after the reported RAM upgrade (consistent with 64 GB installed). Existing capacity profiles/holds remain pending separate admission. Both RX 7900 XTX 24 GB cards
-  are behind the installed PEX880xx switch fabric: Gen4 x16 common uplink,
-  Gen4 x8 segments in each GPU branch. P2P remains unqualified. Historical
-  i9/MSI/64 GB benchmark results retain their original hardware attribution.
-- Every active profile uses both cards. Empero, Sage and Flint keep all model
-  weights on GPUs; Super and Ornith retain CPU expert backing plus GPU caches. Strata streams PLE
-  and cold expert data from the new shared NVMe. SGLang/vLLM use ROCm TP2 through
-  host transport: no-hostcall RCCL 2.27.7, `NCCL_P2P_DISABLE=1`, `HSA_ENABLE_SDMA=0`
-  and custom all-reduce disabled. No direct P2P claim is made.
-- **Twelve profiles:** four llama.cpp, one SGLang, three vLLM, two Strata, two Maya. Presence in
-  the authenticated catalog does not mean weights are loaded. Only one managed
-  model/backend runs at a time. Frontends, gateway and unrelated apps are preserved.
-- The saved DSH default/provider is preserved. Super IQ3 remains selectable;
-  Muse Q4 and Super Q4 weights/setup are retired; shared target/draft weights stay. FreeToken/HyperQwen remain retired.
-- Kernel observed7.0.0-38-generic; retained native SDK7.2.3. Exact build, token counts and
-  benchmark methods are in [the post-upgrade report](../hardware/CPU-RAM-PROFILES-2026-10-20.md).
-  Historical i5/32 GB and NVIDIA measurements retain their own hardware attribution.
-- Shared SATA and the new shared NVMe are exFAT; builds/environments stay Linux ext4.
-  This machine is dual-boot: Windows boot stops the Linux service. Model-file sharing
-  does not make Linux HIP binaries or absolute paths runnable in Windows.
-  Retained model drives mount at boot through `/etc/fstab`; `local-llm-mounts.service` is a session-start fallback (current October 26 layout below).
-  Desktop login is not required for the configured headless boot mounts and lingering services.
-  [Details](#storage-and-runtime-pins).
+- Intel i5-13600KF, ASUS TX GAMING B760M WIFI,61.55 GiB visible RAM and two RX 7900 XTX 24 GB cards behind the PEX880xx switch; Gen4 x16 common uplink with x8 branch segments. Current boot `7.0.14-42-vmpt1`, six-bridge ACS 0x11 and identity GPU domains passed peer/IPC/RCCL correctness. Stock persistent boot default is unchanged.
+- The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision.
+- All 27requested bounded cases are final:21pass,6failed/inconclusive. Empero/Flint/Ornith have direct inference peer-copy evidence; Qwen/vLLM, Bolt, Sage and Qwen/SGLang have successful TP2 plus both-direction RCCL P2P/IPC. Native layer handoffs and normal graphics component placement do not gain a direct-P2P claim from capability or environment flags.
+- Strata Coder's distinct 8 GiB reserve profile passed the retained 6 GiB actual startup floor. Maya Coder (8 GiB reserve) and both Q1 variants stopped at decode progress; GLM exhausted the enclosing budget; PLE exhausted loading; Super hit the 1 GiB host reserve. Old XS backing and Super IQ3 stay retired/deleted. No failed profile was retried.
+- Normal H3 projected 8B T2V/native 32B I2V remain selected. The separate finite 39-frame fcys TP2 P2P/IPC result is isolated; cached conditioning excludes encoder cost and does not justify a speed claim or normal TP2 promotion.
+- Retain 100°C CPU/GPU/SSD, SMART, 1 GiB host / 128 MiB per-card live headroom, dedicated-VRAM spill, phase-aware swap, heartbeat/decode and owned cleanup guards. Current owner policy permits device-speed swap I/O with storage/temperature checks; older v4 rate ceilings remain historical. Saved DSH default/provider, unrelated services and paused schedules are unchanged.
+- No owned GPU test remains active; KFD is empty and final kernel/storage/temperature checks pass. Frontends/gateway and other applications are preserved. Exact source/binary/weight pins and per-case limits are in the [current report](../hardware/ALL-MODEL-P2P-2026-11-05.md), [numeric evidence](../hardware/results/ALL-MODEL-P2P-2026-11-05.json), maintained runtime files and [generated output gallery](../graphics/results/p2p-2026-11-05/README.md).
 
 ## Ornith-1.5-122B Q4 test and Sage activation — October21
 
@@ -937,6 +924,18 @@ SSD streaming (`load-mode = mmap`) was rejected. It reproducibly failed the forc
 [Trial and decision](../hardware/SUPER-NVME-LOAD-2026-10-20.md).
 
 ## Active model catalog
+
+<!-- current-catalog-20261105:begin -->
+The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision.
+
+| Exact model API ID | Backend | Configured context |
+|---|---|---:|
+| `empero-qwen3.8-35b-a3b` | llama | 262,144 |
+| `flint-40b-a2.5b` | llama | 32,768 |
+| `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
+| `qwen3.8-27b-vllm` | vllm | 163,840 |
+| `sage-a1.5` | vllm | 65,536 |
+<!-- current-catalog-20261105:end -->
 
 **Historical catalog snapshot:** 12 profiles were enabled then. Later retirements and holds supersede this snapshot; it does not describe current availability. Use the latest dated status at the top and the current profile files. These historical rows retain their original timing and build attribution.
 Earlier runtime/placement checks and the rows below retain historical settings;
@@ -1236,7 +1235,7 @@ for chunk in client.chat.completions.create(
 print()
 ```
 
-`GET /v1/models` lists all eleven enabled profiles even when their backends are
+`GET /v1/models` lists the currently enabled profiles shown in the current catalog even when their backends are
 stopped. `backend_available` means the corresponding router is available; it
 need not have loaded weights yet. Authenticated `GET /health` reports available
 profiles by backend. The gateway starts at user login and **does not start GPU
@@ -1406,7 +1405,7 @@ terminate ComfyUI; run large graphics and LLM workloads separately.
 [exact versions](../graphics/runtime-versions.json).
 The original seven-file collection and native32B weights remain on Shared SATA; the active 8B encoder/projection reuse the previously verified experimental directory. The completed isolated 124-frame comparison is separate evidence; larger normal-path sizes/durations, 8B image conditioning, Turbo and Windows execution remain unvalidated. The earlier Unsloth Q2 render remains historical.
 
-## Strata and retired setups
+## Historical Strata configurations and retired setups
 
 Current managed Strata Q3 `qwen3.8-flash-next-iq3_xxs`: HIP0.1.46.1/source9ae93f7b,
 both RX 7900 XTX, native 262,144 total context, INT8 KV with 32K GPU residency/full host

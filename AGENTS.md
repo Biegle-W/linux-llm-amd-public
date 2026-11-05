@@ -1,5 +1,9 @@
 # Agent entry point
 
+<!-- all-model-p2p-20261105:begin -->
+**November 5 all-model P2P qualification — complete:** 21/27 bounded cases passed; counts include separate capacity and copy-observation cases of the same model. All seven router checks, seven graphics requests and three extended copy-coverage requests passed. Maya Coder (8 GiB reserve), both Q1 variants, GLM, PLE and Super remain unqualified for the exact reasons in the report. The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision. All owned jobs are finished; final KFD/kernel/storage/temperature checks are clean. 100°C, RAM/VRAM/spill/swap, progress/ownership/cleanup guards, source pins, stock boot default, unrelated services and paused schedules remain. [Results and actual transport](linux/hardware/ALL-MODEL-P2P-2026-11-05.md); [generated image/video outputs](linux/graphics/results/p2p-2026-11-05/README.md).
+<!-- all-model-p2p-20261105:end -->
+
 <!-- quant-comparisons-20261104:begin -->
 **November 4 matched quant comparisons:** Neither candidate improved these short local checks: Unsloth tied fixture correctness with lower native decode; Flint Mix-24G missed JSON-only formatting and decoded more slowly. Selected GSQ and Flint production models remain unchanged. See the dated report for local fixture scores, load/request timings, resource/thermal coverage and qualification limits. [Results and limits](linux/hardware/UNSLOTH-FLINT-COMPARISONS-2026-11-04.md).
 <!-- quant-comparisons-20261104:end -->

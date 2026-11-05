@@ -1,5 +1,21 @@
 # LLM benchmark and context history
 
+<!-- all-model-p2p-20261105:begin -->
+## November 5 all-model functional and transport qualification
+
+21/27 bounded cases pass functional and guard checks, including repeated model families at distinct capacities/observation coverage. No new throughput comparison, full-window or sustained-stability qualification. All seven router, seven graphics and three extended copy-coverage cases pass; failed normal Maya Coder, both Q1 variants, GLM, PLE and Super remain held. The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision.
+
+[Methods, failures, source attribution and transport](ALL-MODEL-P2P-2026-11-05.md); [reviewed generated images/videos](../graphics/results/p2p-2026-11-05/README.md). Original Unsloth/Flint and native checks were not rerun for documentation. Final owned cleanup/kernel/storage/temperature checks pass; all guards, pins, boot default and paused schedules remain.
+
+| Exact model API ID | Backend | Configured context |
+|---|---|---:|
+| `empero-qwen3.8-35b-a3b` | llama | 262,144 |
+| `flint-40b-a2.5b` | llama | 32,768 |
+| `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
+| `qwen3.8-27b-vllm` | vllm | 163,840 |
+| `sage-a1.5` | vllm | 65,536 |
+<!-- all-model-p2p-20261105:end -->
+
 <!-- quant-comparisons-20261104:begin -->
 **November 4 matched quant comparisons:** Neither candidate improved these short local checks: Unsloth tied fixture correctness with lower native decode; Flint Mix-24G missed JSON-only formatting and decoded more slowly. Selected GSQ and Flint production models remain unchanged. See the dated report for local fixture scores, load/request timings, resource/thermal coverage and qualification limits. [Results and limits](UNSLOTH-FLINT-COMPARISONS-2026-11-04.md).
 <!-- quant-comparisons-20261104:end -->

@@ -1,5 +1,21 @@
 # Current benchmark results
 
+<!-- all-model-p2p-20261105:begin -->
+## November 5 all-model functional and transport qualification
+
+21/27 bounded cases pass functional and guard checks, including repeated model families at distinct capacities/observation coverage. No new throughput comparison, full-window or sustained-stability qualification. All seven router, seven graphics and three extended copy-coverage cases pass; failed normal Maya Coder, both Q1 variants, GLM, PLE and Super remain held. The global GPU hold remains active; normal serving is blocked while nine qualified routes await the explicit hold-release decision.
+
+[Methods, failures, source attribution and transport](../ALL-MODEL-P2P-2026-11-05.md); [reviewed generated images/videos](../../graphics/results/p2p-2026-11-05/README.md). Original Unsloth/Flint and native checks were not rerun for documentation. Final owned cleanup/kernel/storage/temperature checks pass; all guards, pins, boot default and paused schedules remain.
+
+| Exact model API ID | Backend | Configured context |
+|---|---|---:|
+| `empero-qwen3.8-35b-a3b` | llama | 262,144 |
+| `flint-40b-a2.5b` | llama | 32,768 |
+| `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
+| `qwen3.8-27b-vllm` | vllm | 163,840 |
+| `sage-a1.5` | vllm | 65,536 |
+<!-- all-model-p2p-20261105:end -->
+
 **November 3 repeat hard freeze:** the isolated dual-GPU Strata Qwen Off trial froze the system; the owner manually reset it. DFlash2 was not loaded and the compiler was frozen. The exact cause is unresolved. All GPU campaign work is stopped under a fresh persistent hold. [Evidence and containment](../STRATA-HARD-FREEZE-2026-11-03.md).
 
 **November 3 GPU campaign stopped:** the old production Maya GLM baseline stalled at 62/256 warmup tokens and hit an AMD MES/SMU queue/reset fault. GLM is disabled and a persistent GPU fault reservation blocks new campaign GPU work. Latest Maya was not installed. Restart observed; recovery and cause remain unverified. [Containment and next steps](../FINAL-HARDWARE-CAMPAIGN-2026-11-03.md#november-3-maya-fault-containment-and-revised-queue).

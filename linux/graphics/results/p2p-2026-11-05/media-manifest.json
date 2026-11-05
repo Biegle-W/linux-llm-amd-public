@@ -1,0 +1,257 @@
+{
+  "generated_utc": "2026-11-05T06:21:49.659736+00:00",
+  "method": "Existing passed outputs; PNG pixels / encoded MP4 video and audio unchanged; embedded generation/workflow metadata removed",
+  "GPU_tests_repeated": false,
+  "artifacts": [
+    {
+      "case": "graphics-flux-t2i",
+      "file": "graphics-flux-t2i.png",
+      "source_sha256": "818dba5b57d5fabdbc0331550f08e2bc92ab238e3cf68b831135a4f3ece74a43",
+      "width": 1024,
+      "height": 1024,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 1937877,
+      "sha256": "af3da54f82e288fc93d8368e31b5ce5fa27d3229282bd8c0e88e99fe87415b42"
+    },
+    {
+      "case": "graphics-flux-i2i",
+      "file": "graphics-flux-i2i.png",
+      "source_sha256": "3e11f7f963206ba33626c445b7d32eaa86687016ddd63b3c8402430fd94b70b4",
+      "width": 1248,
+      "height": 832,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 1734408,
+      "sha256": "9b08d74121fa0139806394e71af7a9d4c1cf9dc827cf8c53e0a99623e274f89e"
+    },
+    {
+      "case": "graphics-qwen-t2i",
+      "file": "graphics-qwen-t2i.png",
+      "source_sha256": "d8f956e00c26653f25305e3e596a6b1d3401b2f8a2a95aa4634fc2419bda048e",
+      "width": 512,
+      "height": 512,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 334714,
+      "sha256": "d411a89d9b624630bce1db58264d0f9ff4640d69d4b09744f2d8a15ada4db316"
+    },
+    {
+      "case": "graphics-qwen-edit",
+      "file": "graphics-qwen-edit.png",
+      "source_sha256": "0b112b8f5cc87edad5c6641ffdc12785fc6dedabb9350e95202c14b854589593",
+      "width": 640,
+      "height": 416,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 416391,
+      "sha256": "7859c5c0a677c4d37bfb1e529e30968d3feecf9be120eac9eefc506528dcb302"
+    },
+    {
+      "case": "graphics-h3-t2v",
+      "file": "graphics-h3-t2v.mp4",
+      "source_sha256": "c9ff026f52c56c111cdc1b984d5e6e1d07b2b68275604b26cfb1c12d0672f082",
+      "encoded_streams_unchanged": true,
+      "stream_hashes": "0,v,SHA256=21d96f7dc52c4c9f15871f05244683226f13af124134d1d63d17808daeee6a14\n1,a,SHA256=aeef318f4dd8895f7a7ee560a502326e8d364895e8ddbd17a0c1fd57f0a3ba12",
+      "full_AV_decode": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 608,
+            "height": 352,
+            "nb_frames": "39",
+            "tags": {
+              "language": "und",
+              "handler_name": "VideoHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "32000",
+            "channels": 2,
+            "nb_frames": "52",
+            "tags": {
+              "language": "und",
+              "handler_name": "SoundHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          }
+        ],
+        "format": {
+          "duration": "1.625000",
+          "tags": {
+            "major_brand": "isom",
+            "minor_version": "512",
+            "compatible_brands": "isomiso2avc1mp41"
+          }
+        }
+      },
+      "bytes": 104485,
+      "sha256": "b85eeb87898272fcda6c09d3e9597169cea273c28945b33b6a51cd0c621ba228"
+    },
+    {
+      "case": "graphics-h3-i2v",
+      "file": "graphics-h3-i2v.mp4",
+      "source_sha256": "4aca5744006d5b14ae9766bf204176afc3afd3b95fc7edb20ff2865b1fcb8af0",
+      "encoded_streams_unchanged": true,
+      "stream_hashes": "0,v,SHA256=f36d6e2669234ee476e576542afa6094c2b8b136aa4f884970415059c025d34a\n1,a,SHA256=1208a6606f3a4c5c6d550f21b5c7cd22069fcddc6e49d28fec9d65a88aa31fe8",
+      "full_AV_decode": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 608,
+            "height": 352,
+            "nb_frames": "39",
+            "tags": {
+              "language": "und",
+              "handler_name": "VideoHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "32000",
+            "channels": 2,
+            "nb_frames": "52",
+            "tags": {
+              "language": "und",
+              "handler_name": "SoundHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          }
+        ],
+        "format": {
+          "duration": "1.625000",
+          "tags": {
+            "major_brand": "isom",
+            "minor_version": "512",
+            "compatible_brands": "isomiso2avc1mp41"
+          }
+        }
+      },
+      "bytes": 254464,
+      "sha256": "3f1f771cfbbb3bed31f0a92a7827fc949526be901aa8f03f4a3fd0034ac3ac48"
+    },
+    {
+      "case": "graphics-h3-tp2",
+      "file": "graphics-h3-tp2.mp4",
+      "source_sha256": "72c0ba827542b52b67ab8ecc8b32910421e7df48a4ec1dde450e9e8983d7a8ea",
+      "encoded_streams_unchanged": true,
+      "stream_hashes": "0,v,SHA256=d6229723067f43c970642dd66eba4abc5dcae1ec8330dda1e1a8c9a7c48efe3f\n1,a,SHA256=3a535670ac1ace4757a98333e47c3cb8b4de6af30a9eb76cef47ffbe00fa6e2b",
+      "full_AV_decode": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 608,
+            "height": 352,
+            "nb_frames": "39",
+            "tags": {
+              "language": "und",
+              "handler_name": "VideoHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "32000",
+            "channels": 2,
+            "nb_frames": "52",
+            "tags": {
+              "language": "und",
+              "handler_name": "SoundHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          }
+        ],
+        "format": {
+          "duration": "1.625000",
+          "tags": {
+            "major_brand": "isom",
+            "minor_version": "512",
+            "compatible_brands": "isomiso2avc1mp41"
+          }
+        }
+      },
+      "bytes": 106263,
+      "sha256": "e5282830240cb968b2a39e6794056cc5f0ee49673e420e53b14b4af34ada67db"
+    },
+    {
+      "case": "graphics-copy-coverage-flux",
+      "file": "graphics-copy-coverage-flux.png",
+      "source_sha256": "0d9cef11d137db13f75b5d5c693607ee16317e95e3f11aeabb498a12ca579df5",
+      "width": 1024,
+      "height": 1024,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 1937877,
+      "sha256": "af3da54f82e288fc93d8368e31b5ce5fa27d3229282bd8c0e88e99fe87415b42"
+    },
+    {
+      "case": "graphics-copy-coverage-qwen",
+      "file": "graphics-copy-coverage-qwen.png",
+      "source_sha256": "6ee38f6e2da2192f182ebbea954a4f53a8e9896ed232b329740516b7bff2fdbd",
+      "width": 512,
+      "height": 512,
+      "pixels_unchanged": true,
+      "metadata": {},
+      "bytes": 334167,
+      "sha256": "03c13de4cd98d86242b0bdb050cf606688c6eb0204fa83621203803ec403c157"
+    },
+    {
+      "case": "graphics-copy-coverage-h3",
+      "file": "graphics-copy-coverage-h3.mp4",
+      "source_sha256": "6feb8cd66399fe464949033016d66390856f01a249a816a37e4705e915163972",
+      "encoded_streams_unchanged": true,
+      "stream_hashes": "0,v,SHA256=ea8cc3ffbccbe7de43280677890010a6c541d0a7f6bedc20423285f7c519f92e\n1,a,SHA256=af0bcd039a7e3ef0f64cac06251dcee4cf1fb0796471e5c24acf49e338cc3196",
+      "full_AV_decode": true,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 608,
+            "height": 352,
+            "nb_frames": "39",
+            "tags": {
+              "language": "und",
+              "handler_name": "VideoHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          },
+          {
+            "codec_name": "aac",
+            "sample_rate": "32000",
+            "channels": 2,
+            "nb_frames": "52",
+            "tags": {
+              "language": "und",
+              "handler_name": "SoundHandler",
+              "vendor_id": "[0][0][0][0]"
+            }
+          }
+        ],
+        "format": {
+          "duration": "1.625000",
+          "tags": {
+            "major_brand": "isom",
+            "minor_version": "512",
+            "compatible_brands": "isomiso2avc1mp41"
+          }
+        }
+      },
+      "bytes": 105241,
+      "sha256": "d4c2009f3d6ed5145727fbeb374cf62ccb2785b92ba54d4af8feb9bd44a23fbe"
+    }
+  ]
+}
