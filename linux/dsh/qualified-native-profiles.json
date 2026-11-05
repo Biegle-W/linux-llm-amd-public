@@ -243,12 +243,6 @@
         "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/native_experts.txt": {
           "bytes": 4046
         },
-        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/slots/slot-1793866461385-1.meta": {
-          "bytes": 21453
-        },
-        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/slots/slot-1793866461385-1.bin": {
-          "bytes": 225661188
-        },
         "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/tokenizer.json": {
           "bytes": 712
         },

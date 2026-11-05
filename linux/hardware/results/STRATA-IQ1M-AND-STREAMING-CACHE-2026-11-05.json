@@ -1,0 +1,549 @@
+{
+  "date": "2026-11-05",
+  "scope": "New IQ1_M short qualification and explicit incomplete cache optimization outcomes",
+  "summary": {
+    "case": "iq1m",
+    "model_id": "qwen3.8-flash-next-unsloth-iq1_m",
+    "configured_context_tokens": 262144,
+    "load_seconds": 54.47103705399786,
+    "strict_tool_passed": true,
+    "quality_correct": 5,
+    "quality_scored": 6,
+    "failed_fixture_ids": [
+      "json-math"
+    ],
+    "first_native_tokens_per_second": 59.1,
+    "followup_native_tokens_per_second": 63.6,
+    "speed_prompt_count": 3,
+    "median_native_tokens_per_second": 57.14030623632873,
+    "speed_native_range": [
+      54.20054200542006,
+      59.93351126094489
+    ],
+    "median_speed_TTFT_seconds": 0.5011672440014081,
+    "guard_passed": true,
+    "owned_cleanup_verified": true,
+    "max_owned_swap_bytes": 0,
+    "max_owned_spill_bytes": 0,
+    "sustained_or_full_context_qualified": false,
+    "release": "Strata0.2.11",
+    "engine_Control_version": "0.1.57",
+    "target": "linux-x86_64-hip-rx7900",
+    "HF_repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "HF_revision": "d96201194f103c906994f283f504209dc8d2a10c",
+    "quant": "UD-IQ1_M Dynamicv3.1",
+    "kernel_during_qualification": "7.0.14-42-vmpt1",
+    "new_route_enabled": true,
+    "existing_routes_retained": 13,
+    "listener_only_delta": "18032 test listener to30020 managed listener; log destination changed; math/runtime/input arguments retained"
+  },
+  "requests": [
+    {
+      "TTFT_seconds": 7.846789610004635,
+      "elapsed_seconds": 8.711093930003699,
+      "usage": {
+        "prompt_tokens": 5673,
+        "completion_tokens": 60,
+        "total_tokens": 5733,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "native_generated_tokens": 60,
+      "native_decode_ms": 1014.0,
+      "native_tokens_per_second": 59.1,
+      "id": "tool-1",
+      "kind": "tool"
+    },
+    {
+      "TTFT_seconds": 7.396971055000904,
+      "elapsed_seconds": 7.693301972001791,
+      "usage": {
+        "prompt_tokens": 5839,
+        "completion_tokens": 19,
+        "total_tokens": 5858,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "native_generated_tokens": 19,
+      "native_decode_ms": 299.0,
+      "native_tokens_per_second": 63.6,
+      "id": "tool-2",
+      "kind": "tool"
+    },
+    {
+      "id": "json-math",
+      "kind": "quality",
+      "TTFT_seconds": 0.3113428189972183,
+      "elapsed_seconds": 0.986816981996526,
+      "usage": {
+        "prompt_tokens": 76,
+        "completion_tokens": 42,
+        "total_tokens": 118,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": false,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 76,
+        "prompt_ms": 266.9,
+        "prompt_per_token_ms": 3.512,
+        "prompt_per_second": 284.8,
+        "predicted_n": 42,
+        "predicted_ms": 682.0,
+        "predicted_per_token_ms": 16.238,
+        "predicted_per_second": 61.6,
+        "draft_n": 18,
+        "draft_n_accepted": 18
+      },
+      "prompt_sha256": "6570b1b924d210adbb53857d6bcb9a9e68b2103be6c4c0b66911f77ed1371ec9",
+      "body_sha256": "d41f447fbc6f4e117cc4f2c12b0a44e3713176fd97ff227a071f03aa9ffd65c1",
+      "native_generated_tokens": 42,
+      "native_decode_ms": 682.0,
+      "native_tokens_per_second": 61.6
+    },
+    {
+      "id": "stable-unique",
+      "kind": "quality",
+      "TTFT_seconds": 0.6754178210103419,
+      "elapsed_seconds": 1.4696861810080009,
+      "usage": {
+        "prompt_tokens": 45,
+        "completion_tokens": 53,
+        "total_tokens": 98,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": true,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 45,
+        "prompt_ms": 629.7,
+        "prompt_per_token_ms": 13.993,
+        "prompt_per_second": 71.5,
+        "predicted_n": 53,
+        "predicted_ms": 803.2,
+        "predicted_per_token_ms": 15.155,
+        "predicted_per_second": 66.0,
+        "draft_n": 26,
+        "draft_n_accepted": 26
+      },
+      "prompt_sha256": "aeff4aff0beccc9c5cbbda4d0ec220bc522dc1e0bbed2199b1f8b19fb11c29f9",
+      "body_sha256": "b56191d79b3d2721b0e8ebf58e780fc9b844782eaf4677e87d50f7390122e606",
+      "native_generated_tokens": 53,
+      "native_decode_ms": 803.0,
+      "native_tokens_per_second": 66.0
+    },
+    {
+      "id": "sql-aggregate",
+      "kind": "quality",
+      "TTFT_seconds": 0.9358637609984726,
+      "elapsed_seconds": 1.6386382969940314,
+      "usage": {
+        "prompt_tokens": 63,
+        "completion_tokens": 44,
+        "total_tokens": 107,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": true,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 63,
+        "prompt_ms": 890.2,
+        "prompt_per_token_ms": 14.13,
+        "prompt_per_second": 70.8,
+        "predicted_n": 44,
+        "predicted_ms": 707.4,
+        "predicted_per_token_ms": 16.077,
+        "predicted_per_second": 62.2,
+        "draft_n": 21,
+        "draft_n_accepted": 20
+      },
+      "prompt_sha256": "241b0c8b5040ea1014899218d2dfecf4ff11cbdc1e1cf2e2f871382c5c4ded77",
+      "body_sha256": "67dfe7f58e492bcc4a240fb9bc5c68c9e18eeb0e72294bcbf26904393129f750",
+      "native_generated_tokens": 44,
+      "native_decode_ms": 707.0,
+      "native_tokens_per_second": 62.2
+    },
+    {
+      "id": "logic",
+      "kind": "quality",
+      "TTFT_seconds": 0.7330883630056633,
+      "elapsed_seconds": 0.9833064160047797,
+      "usage": {
+        "prompt_tokens": 48,
+        "completion_tokens": 16,
+        "total_tokens": 64,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": true,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 48,
+        "prompt_ms": 682.9,
+        "prompt_per_token_ms": 14.227,
+        "prompt_per_second": 70.3,
+        "predicted_n": 16,
+        "predicted_ms": 265.3,
+        "predicted_per_token_ms": 16.581,
+        "predicted_per_second": 60.3,
+        "draft_n": 8,
+        "draft_n_accepted": 7
+      },
+      "prompt_sha256": "1632e8c648812778a65443ff1316b4b5137e33216153dd6192f516d78b9980b0",
+      "body_sha256": "41ddce411e21ddb4d37a0d0cc2fbfaf94d1fbe0ef6295e6eb952c2d04aa124dc",
+      "native_generated_tokens": 16,
+      "native_decode_ms": 265.0,
+      "native_tokens_per_second": 60.3
+    },
+    {
+      "id": "retrieval",
+      "kind": "quality",
+      "TTFT_seconds": 8.35984470800031,
+      "elapsed_seconds": 9.213376387997414,
+      "usage": {
+        "prompt_tokens": 6633,
+        "completion_tokens": 57,
+        "total_tokens": 6690,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": true,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 6633,
+        "prompt_ms": 8309.6,
+        "prompt_per_token_ms": 1.253,
+        "prompt_per_second": 798.2,
+        "predicted_n": 57,
+        "predicted_ms": 862.7,
+        "predicted_per_token_ms": 15.135,
+        "predicted_per_second": 66.1,
+        "draft_n": 28,
+        "draft_n_accepted": 28
+      },
+      "prompt_sha256": "150804b9fe20237fbf6bdc1ba640ab8cd01f3d637874a388f986a9b55f0f3154",
+      "body_sha256": "3dcc1db34ed22836f16b5863933efc1875c6577a48d090db02d1a32ae44a9075",
+      "native_generated_tokens": 57,
+      "native_decode_ms": 863.0,
+      "native_tokens_per_second": 66.1
+    },
+    {
+      "id": "history",
+      "kind": "quality",
+      "TTFT_seconds": 0.317213444999652,
+      "elapsed_seconds": 0.8720313369994983,
+      "usage": {
+        "prompt_tokens": 80,
+        "completion_tokens": 37,
+        "total_tokens": 117,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": true,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 80,
+        "prompt_ms": 270.4,
+        "prompt_per_token_ms": 3.38,
+        "prompt_per_second": 295.9,
+        "predicted_n": 37,
+        "predicted_ms": 563.0,
+        "predicted_per_token_ms": 15.216,
+        "predicted_per_second": 65.7,
+        "draft_n": 18,
+        "draft_n_accepted": 18
+      },
+      "prompt_sha256": "284a4506a5a422eda64eb95865c67ea17844e84dd4d157e0de447b0080dc2a0b",
+      "body_sha256": "39a0993a95cfbcc15117eeadbbb4273d1da12e3c2a35f751f3e4cb94e27d25ea",
+      "native_generated_tokens": 37,
+      "native_decode_ms": 563.0,
+      "native_tokens_per_second": 65.7
+    },
+    {
+      "id": "speed-1",
+      "kind": "speed",
+      "TTFT_seconds": 0.47154911801044364,
+      "elapsed_seconds": 2.702393461004249,
+      "usage": {
+        "prompt_tokens": 31,
+        "completion_tokens": 128,
+        "total_tokens": 159,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": null,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 31,
+        "prompt_ms": 426.5,
+        "prompt_per_token_ms": 13.758,
+        "prompt_per_second": 72.7,
+        "predicted_n": 128,
+        "predicted_ms": 2240.1,
+        "predicted_per_token_ms": 17.501,
+        "predicted_per_second": 57.1,
+        "draft_n": 58,
+        "draft_n_accepted": 50
+      },
+      "prompt_sha256": "64541049c6282c2d906e4161629f44b1ce35b60296f119c5b90fcd3893cb7021",
+      "body_sha256": "30238467bfb87ee8bef7470ff938b8bef923895490f30fce48a448891659e970",
+      "native_generated_tokens": 128,
+      "native_decode_ms": 2240.0,
+      "native_tokens_per_second": 57.14030623632873
+    },
+    {
+      "id": "speed-2",
+      "kind": "speed",
+      "TTFT_seconds": 0.5228242949960986,
+      "elapsed_seconds": 2.649628325001686,
+      "usage": {
+        "prompt_tokens": 34,
+        "completion_tokens": 128,
+        "total_tokens": 162,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": null,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 34,
+        "prompt_ms": 477.4,
+        "prompt_per_token_ms": 14.041,
+        "prompt_per_second": 71.2,
+        "predicted_n": 128,
+        "predicted_ms": 2135.7,
+        "predicted_per_token_ms": 16.685,
+        "predicted_per_second": 59.9,
+        "draft_n": 57,
+        "draft_n_accepted": 54
+      },
+      "prompt_sha256": "6e6c4f89e3220505f33bf125301cb9eaf0b459e1abb779f9fd5f4b1c05b6f17e",
+      "body_sha256": "da7902bc93fc30c59c73764edccb6856c955b3883682cc81978614582547a6a0",
+      "native_generated_tokens": 128,
+      "native_decode_ms": 2136.0,
+      "native_tokens_per_second": 59.93351126094489
+    },
+    {
+      "id": "speed-3",
+      "kind": "speed",
+      "TTFT_seconds": 0.5011672440014081,
+      "elapsed_seconds": 2.851980193008785,
+      "usage": {
+        "prompt_tokens": 33,
+        "completion_tokens": 128,
+        "total_tokens": 161,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "quality_pass": null,
+      "engine_timings": {
+        "cache_n": 0,
+        "prompt_n": 33,
+        "prompt_ms": 454.1,
+        "prompt_per_token_ms": 13.761,
+        "prompt_per_second": 72.7,
+        "predicted_n": 128,
+        "predicted_ms": 2361.6,
+        "predicted_per_token_ms": 18.45,
+        "predicted_per_second": 54.2,
+        "draft_n": 60,
+        "draft_n_accepted": 46
+      },
+      "prompt_sha256": "13e5b5bb0691c944b4397e831b45bf5b53eded9abbc96193abd36566d18dfb87",
+      "body_sha256": "9441b7e6933d856ea34466ec1fbfdf6418b6eec748ba1469d8b15c392f459726",
+      "native_generated_tokens": 128,
+      "native_decode_ms": 2362.0,
+      "native_tokens_per_second": 54.20054200542006
+    }
+  ],
+  "weight_files": [
+    {
+      "bytes": 10946618,
+      "sha256": "b0d883bb9464021f31074145af74bfc2aa2d4bf0cf506f26f6f5107f4ca6ce17",
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00001-of-00003.gguf"
+    },
+    {
+      "bytes": 39196009888,
+      "sha256": "bddcd79634ccddbb2e0951345c73c6ae8bd7b12594f55a2a529474701757391e",
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00002-of-00003.gguf"
+    },
+    {
+      "bytes": 28800138432,
+      "sha256": "05716382c280d999b81afff92b2d527fadbfd926ac225ffdc273f2d1d13331c6",
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf"
+    }
+  ],
+  "runtime_guards": {
+    "thermal_C": 100,
+    "heartbeat_seconds": 6,
+    "cleanup_seconds": 15,
+    "phase_seconds": 1800,
+    "host_available_floor_GiB": 1,
+    "per_card_free_VRAM_floor_MiB": 128,
+    "zero_dedicated_spill": true,
+    "phase_aware_swap": "retained",
+    "MemoryHigh": "max"
+  },
+  "optimization": {
+    "status": "pending-first-inference",
+    "GLM_baseline_RAM_GB": 8,
+    "GLM_candidate_RAM_GB": 24,
+    "DeepSeek_Maya_candidate_store_GB": 36,
+    "DeepSeek_Strata_existing_store_GB": 36,
+    "pre_model_stale_slot_admission_retained": true,
+    "readiness_schema_stop_zero_requests": true,
+    "readiness_CPU_contract_checks": 10,
+    "both_wrapper_restores_verified": true,
+    "guard_relaxation": false
+  },
+  "inventory": {
+    "routes": 14,
+    "main_weight_sets": 11,
+    "VRAM_only": 6,
+    "CPU_RAM_offload": 1,
+    "SSD_streaming": 7,
+    "rows": [
+      {
+        "model_id": "empero-qwen3.8-35b-a3b",
+        "execution_mode": "VRAM only",
+        "engine": "llama.cpp",
+        "exact_weight_variant": "Empero Qwen3.8-35B-A3B IQ4_XS",
+        "context": 262144,
+        "main_weight_set": "empero-qwen3.8-35b-a3b"
+      },
+      {
+        "model_id": "flint-40b-a2.5b",
+        "execution_mode": "VRAM only",
+        "engine": "llama.cpp",
+        "exact_weight_variant": "Flint-40B-A2.5B Unsloth UD-Q4_K_XL",
+        "context": 32768,
+        "main_weight_set": "flint-40b-a2.5b"
+      },
+      {
+        "model_id": "qwen3.8-27b-sglang-dflash2",
+        "execution_mode": "VRAM only",
+        "engine": "SGLang",
+        "exact_weight_variant": "Qwen3.8-27B AutoRound W4A16 GPTQ; DFlash2 auxiliary",
+        "context": 163840,
+        "main_weight_set": "Qwen3.8-27B-AutoRound-W4A16-GPTQ"
+      },
+      {
+        "model_id": "nemotron-3.5-bolt-vllm",
+        "execution_mode": "VRAM only",
+        "engine": "vLLM",
+        "exact_weight_variant": "Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16",
+        "context": 262144,
+        "main_weight_set": "nemotron-3.5-bolt-vllm"
+      },
+      {
+        "model_id": "qwen3.8-27b-vllm",
+        "execution_mode": "VRAM only",
+        "engine": "vLLM",
+        "exact_weight_variant": "Qwen3.8-27B AutoRound W4A16 GPTQ; shared main weights",
+        "context": 163840,
+        "main_weight_set": "Qwen3.8-27B-AutoRound-W4A16-GPTQ"
+      },
+      {
+        "model_id": "sage-a1.5",
+        "execution_mode": "VRAM only",
+        "engine": "vLLM",
+        "exact_weight_variant": "Sage-A1.5 AutoRound W4A16",
+        "context": 65536,
+        "main_weight_set": "sage-a1.5"
+      },
+      {
+        "model_id": "ornith-1.5-122b",
+        "execution_mode": "CPU RAM offload",
+        "engine": "llama.cpp",
+        "exact_weight_variant": "Ornith-1.5-122B Q4_K_M; CPU experts + VRAM cache",
+        "context": 32768,
+        "main_weight_set": "ornith-1.5-122b"
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
+        "execution_mode": "SSD streaming",
+        "engine": "Maya",
+        "exact_weight_variant": "DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing",
+        "context": 32768,
+        "main_weight_set": "DeepSeek-Coder-IQ2_XXS"
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "execution_mode": "SSD streaming",
+        "engine": "Maya",
+        "exact_weight_variant": "DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing",
+        "context": 32768,
+        "main_weight_set": "DeepSeek-Unsloth-UD-IQ1_S"
+      },
+      {
+        "model_id": "glm-5.3-flash-maya",
+        "execution_mode": "SSD streaming",
+        "engine": "Maya",
+        "exact_weight_variant": "GLM-5.3-Flash Maya-S v2 IQ2_XXS; RAM/VRAM tiers",
+        "context": 32768,
+        "main_weight_set": "glm-5.3-flash-maya"
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
+        "execution_mode": "SSD streaming",
+        "engine": "Strata",
+        "exact_weight_variant": "DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing + RAM store",
+        "context": 32768,
+        "main_weight_set": "DeepSeek-Coder-IQ2_XXS"
+      },
+      {
+        "model_id": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "execution_mode": "SSD streaming",
+        "engine": "Strata",
+        "exact_weight_variant": "DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing +36GB store",
+        "context": 32768,
+        "main_weight_set": "DeepSeek-Unsloth-UD-IQ1_S"
+      },
+      {
+        "model_id": "qwen3.8-flash-next-iq3_xxs",
+        "execution_mode": "SSD streaming",
+        "engine": "Strata",
+        "exact_weight_variant": "Qwen3.8-Flash-Next GSQ IQ3_XXS; RAM/VRAM expert caches",
+        "context": 262144,
+        "main_weight_set": "qwen3.8-flash-next-iq3_xxs"
+      },
+      {
+        "model_id": "qwen3.8-flash-next-unsloth-iq1_m",
+        "execution_mode": "SSD streaming",
+        "engine": "Strata",
+        "exact_weight_variant": "Qwen3.8-Flash-Next Unsloth UD-IQ1_M Dynamicv3.1; RAM/VRAM caches",
+        "context": 262144,
+        "main_weight_set": "qwen3.8-flash-next-unsloth-iq1_m"
+      }
+    ]
+  },
+  "limitations": [
+    "No controlled speedup comparison with historical different-source/weight or short-tool baselines.",
+    "MTP/speculation and RAM/VRAM caches remain enabled as tested; throughput is engine-reported decoding, not a pure kernel measure.",
+    "Required BF16/F16 projection compatibility conversion is retained; original quantized expert and native table bytes are unchanged.",
+    "The current stock reboot has no new model/peer qualification result."
+  ],
+  "post_power_loss_content_verification": {
+    "files": 69,
+    "all_original_SHA256_matched": true,
+    "guard_passed": true,
+    "owned_cleanup_verified": true,
+    "only_verified_device_inode_bindings_updated": true,
+    "new_inference_run": false,
+    "admission_after_rebind": "passed"
+  }
+}

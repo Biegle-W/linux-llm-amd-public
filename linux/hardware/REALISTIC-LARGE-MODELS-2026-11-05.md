@@ -1,6 +1,8 @@
 # Current models, realistic budgets and engine updates — November 5, 2026
 
-**13 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. Fresh owner-requested latest-guard attempts ended before inference: Flint AWQ requires unavailable FlashInfer; PLE stopped on the six-second heartbeat guard; Super stopped below the 1 GiB host reserve. PLE missed its 15-second KFD drain deadline, then drained later; that failed result remains recorded. None was promoted. The unused Strata DFlash2 source/packs were removed after pinned-hash and dependency verification; the separate SGLang drafter and all 13 selected routes remain unchanged. [Fresh outcomes](CANDIDATE-RETESTS-2026-11-05.md). Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The RDNA3 fork at2314df4 built and passed native/CLI audits, but its Qwen startup warm-up failed on missing `CommonAttentionMetadata._seq_lens_cpu` before any request. The exact case is final; the fork remains isolated and unpromoted. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; all scoped outcomes are recorded and the failed fork remains unpromoted.
+**14 qualified normal routes are enabled.** Four native large-model checks passed after removing the three-second decode-progress cutoff. Llama9c9074 passed Flint, Ornith and the separate Empero strict check and is selected for all three; the earlier3259 Empero rejection remains historical evidence. Maya c167004 subsequently passed all three enabled profiles through the guarded selective updater and is selected. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected with Torch/ROCm unchanged. Fresh owner-requested latest-guard attempts ended before inference: Flint AWQ requires unavailable FlashInfer; PLE stopped on the six-second heartbeat guard; Super stopped below the 1 GiB host reserve. PLE missed its 15-second KFD drain deadline, then drained later; that failed result remains recorded. None was promoted. The unused Strata DFlash2 source/packs were removed after pinned-hash and dependency verification; the separate SGLang drafter and all 13 selected routes remain unchanged. [Fresh outcomes](CANDIDATE-RETESTS-2026-11-05.md). Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The RDNA3 fork at2314df4 built and passed native/CLI audits, but its Qwen startup warm-up failed on missing `CommonAttentionMetadata._seq_lens_cpu` before any request. The exact case is final; the fork remains isolated and unpromoted. The existing 03:00 updater timer is restored without catch-up; the completed updates have passed final source/CPU review; all scoped outcomes are recorded and the failed fork remains unpromoted.
+
+[IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 and DeepSeek36GB-store optimization remain pending after two zero-request GLM preflight/harness stops. The current stock reboot differs from the pending cases’ tested boot; no optimization or current-boot model pass is claimed.
 
 [Strata 0.2.11 with existing UnslothV3.1](STRATA-0211-UNSLOTH-2026-11-05.md): Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged.
 
@@ -8,25 +10,26 @@
 
 Load is separate from request TTFT. The second request follows a tool result and can reuse cache. Prompts, output lengths, source versions and native paths differ; these are functional samples, not a matched speed or quality ranking.
 
-| Exact model ID | Backend | Context | Load s | First TTFT s | First request s | Output tokens | Second request s |
-|---|---|---:|---:|---:|---:|---:|---:|
-| `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs` | maya | 32,768 | 37.958 | 36.924 | 42.569 | 114 | 3.409 |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | maya | 32,768 | 51.964 | 118.772 | 152.156 | 113 | 53.916 |
-| `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | strata | 32,768 | 26.171 | 86.028 | 100.624 | 84 | 4.782 |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | strata | 32,768 | 25.169 | 99.371 | 146.695 | 85 | 14.388 |
-| `empero-qwen3.8-35b-a3b` | llama | 262,144 | 46.717 | 2.225 | 4.194 | 64 | 1.250 |
-| `flint-40b-a2.5b` | llama | 32,768 | 50.717 | 1.273 | 4.319 | 176 | 1.996 |
-| `glm-5.3-flash-maya` | maya | 32,768 | 61.732 | 185.242 | 271.324 | 60 | 34.341 |
-| `nemotron-3.5-bolt-vllm` | vllm | 262,144 | 218.686 | 3.450 | 5.015 | 65 | 0.721 |
-| `ornith-1.5-122b` | llama | 32,768 | 155.846 | 10.694 | 18.908 | 92 | 4.347 |
-| `qwen3.8-27b-sglang-dflash2` | sglang | 163,840 | 51.474 | 3.592 | 3.852 | 61 | 0.431 |
-| `qwen3.8-27b-vllm` | vllm | 163,840 | 89.521 | 3.387 | 3.774 | 61 | 0.407 |
-| `qwen3.8-flash-next-iq3_xxs` | strata | 262,144 | 66.738 | 7.566 | 8.509 | 63 | 7.695 |
-| `sage-a1.5` | vllm | 65,536 | 82.499 | 1.064 | 1.481 | 61 | 0.382 |
+| Mode | Engine | Exact weight variant / API ID | Context | Load s | First TTFT s | First request s | Output tokens | Second request s |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| VRAM only | llama.cpp | Empero Qwen3.8-35B-A3B IQ4_XS / `empero-qwen3.8-35b-a3b` | 262,144 | 46.717 | 2.225 | 4.194 | 64 | 1.250 |
+| VRAM only | llama.cpp | Flint-40B-A2.5B Unsloth UD-Q4_K_XL / `flint-40b-a2.5b` | 32,768 | 50.717 | 1.273 | 4.319 | 176 | 1.996 |
+| VRAM only | SGLang | Qwen3.8-27B AutoRound W4A16 GPTQ; DFlash2 auxiliary / `qwen3.8-27b-sglang-dflash2` | 163,840 | 51.474 | 3.592 | 3.852 | 61 | 0.431 |
+| VRAM only | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 / `nemotron-3.5-bolt-vllm` | 262,144 | 218.686 | 3.450 | 5.015 | 65 | 0.721 |
+| VRAM only | vLLM | Qwen3.8-27B AutoRound W4A16 GPTQ; shared main weights / `qwen3.8-27b-vllm` | 163,840 | 89.521 | 3.387 | 3.774 | 61 | 0.407 |
+| VRAM only | vLLM | Sage-A1.5 AutoRound W4A16 / `sage-a1.5` | 65,536 | 82.499 | 1.064 | 1.481 | 61 | 0.382 |
+| CPU RAM offload | llama.cpp | Ornith-1.5-122B Q4_K_M; CPU experts + VRAM cache / `ornith-1.5-122b` | 32,768 | 155.846 | 10.694 | 18.908 | 92 | 4.347 |
+| SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing / `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs` | 32,768 | 37.958 | 36.924 | 42.569 | 114 | 3.409 |
+| SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing / `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 32,768 | 51.964 | 118.772 | 152.156 | 113 | 53.916 |
+| SSD streaming | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS; RAM/VRAM tiers / `glm-5.3-flash-maya` | 32,768 | 61.732 | 185.242 | 271.324 | 60 | 34.341 |
+| SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing + RAM store / `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | 32,768 | 26.171 | 86.028 | 100.624 | 84 | 4.782 |
+| SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing +36GB store / `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 32,768 | 25.169 | 99.371 | 146.695 | 85 | 14.388 |
+| SSD streaming | Strata | Qwen3.8-Flash-Next GSQ IQ3_XXS; RAM/VRAM expert caches / `qwen3.8-flash-next-iq3_xxs` | 262,144 | 66.738 | 7.566 | 8.509 | 63 | 7.695 |
+| SSD streaming | Strata | Qwen3.8-Flash-Next Unsloth UD-IQ1_M Dynamicv3.1; RAM/VRAM caches / `qwen3.8-flash-next-unsloth-iq1_m` | 262,144 | 54.471 | 7.847 | 8.711 | 60 | 7.693 |
 
 ## Native decode statistics
 
-All13 current routes now have short native per-request statistics. Nine saved-log rows were recovered; four routes completed new native capture. A sustained matched benchmark remains missing.
+All14 current routes now have short native per-request statistics; the new IQ1_M row is in its linked evidence. Nine saved-log rows were recovered; four routes completed new native capture. A sustained matched benchmark remains missing.
 
 | Selected route | Context | First tool request native t/s | Follow-up native t/s | Three speed prompts: median native t/s | Speed range |
 |---|---:|---:|---:|---:|---:|
@@ -75,7 +78,7 @@ Finite phase budgets now allow 1,800 seconds for native loading, prefill and gen
 
 ## Downloaded assets and sharing
 
-The original metadata inventory covered 179 large files in 23 groups; after the unused Strata DFlash2 and three failed-candidate removals, the current same-threshold rescan counts 77 files in 19 groups. Logical folder sizes include selected/alternative weights, shards and some converted caches; they are not an unused-space or duplicate-savings total. Empty direct-reference lists do not account for indirect pack and workflow references.
+The original metadata inventory covered 179 large files in 23 groups; after the unused Strata DFlash2 and three failed-candidate removals, the completed pre-IQ1_M same-threshold rescan counted77 files in19groups. The new IQ1_M tree adds five files above4MiB; no fresh combined filesystem total is claimed here. Logical folder sizes include selected/alternative weights, shards and some converted caches; they are not an unused-space or duplicate-savings total. Empty direct-reference lists do not account for indirect pack and workflow references.
 
 | Asset group | Logical GiB | Current use or disposition |
 |---|---:|---|

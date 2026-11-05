@@ -161,6 +161,20 @@ def runtime_paths(results=None):
         for model,record in registry['profiles'].items():
             if record['family']==family and record['status']=='passed' and catalog.get(model,{}).get('enabled',family!='maya'):
                 paths.append('dsh/'+catalog[model]['config'])
+    packaged=ROOT/'dsh/qualified-strata-qwen-profiles.json'
+    if packaged.exists():
+        data=json.loads(packaged.read_text())
+        catalog=json.loads((ROOT/'dsh/strata-profiles.json').read_text())
+        if data.get('schema_version')!=1:raise RuntimeError('Unknown packaged Qwen registry schema')
+        paths.append('dsh/qualified-strata-qwen-profiles.json')
+        for model,record in data['profiles'].items():
+            profile=catalog.get(model,{})
+            name=profile.get('config','')
+            if (record.get('status')!='passed' or record.get('family')!='strata-qwen'
+                    or not profile.get('qualified_qwen_package') or not name
+                    or Path(name).name!=name):
+                raise RuntimeError('Unreviewed packaged Qwen reference')
+            paths.append('dsh/'+name)
     allowed=list(dict.fromkeys(paths))
     if results is None:return allowed
     changed=list(dict.fromkeys(p for row in results for p in row.get('runtime_files',[])))
@@ -172,6 +186,12 @@ def public_runtime_references(results=None):
     mapping={str(ROOT):'/opt/local-llm','/run/media/'+getpass.getuser()+'/sharedSATA1':'/mnt/shared','/run/media/'+getpass.getuser()+'/sharedNVME1':'/mnt/shared-nvme'}
     for record in registry['profiles'].values():
         mapping[record['source']]='/opt/local-llm/qualified-sources/'+record['family']+'-'+record['source_commit'][:12]
+    packaged=ROOT/'dsh/qualified-strata-qwen-profiles.json'
+    packaged_profiles=json.loads(packaged.read_text())['profiles'] if packaged.exists() else {}
+    for record in packaged_profiles.values():
+        base='/opt/local-llm/qualified-packages/strata-qwen-'+record['binary_sha256'][:12]
+        mapping[str(Path(record['binary']).parent)]=base+'/engine'
+        mapping[record['control']]=base+'/control'
     pin=json.loads((ROOT/'dsh/llama-runtime.json').read_text())
     for value in [pin,*pin.get('source_overrides',{}).values()]:
         path=value.get('source_path',value.get('path'))
@@ -212,12 +232,16 @@ def public_runtime_references(results=None):
             if name=='graphics/runtime-versions.json' and data.get('runtime_selection'):
                 data['runtime_selection']['status']='requires-local-validation'
                 data['runtime_selection']['reference_note']='Source-host workflow qualification only; independently qualify this source, dependencies and placement before selection.'
-            if name=='dsh/qualified-native-profiles.json':
+            if name in ('dsh/qualified-native-profiles.json','dsh/qualified-strata-qwen-profiles.json'):
                 for record in data['profiles'].values():
                     if record.get('status')!='passed':raise RuntimeError('Never export an unreviewed provisional native record')
                     record['status']='requires-local-validation';record.pop('candidate_owner',None)
                     record['backing_identity']={p:{k:v for k,v in identity.items() if k in ['bytes','sha256']} for p,identity in record.get('backing_identity',{}).items()}
                     record['reference_note']='Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required.'
+            if data.get('model_name') in packaged_profiles:
+                for key in ['local_validation','runtime_validation','tuning_validation','resource_guard_validation']:
+                    if isinstance(data.get(key),dict):data[key]['status']='requires-local-validation'
+                data['validation_status']='Sanitized source-host reference; independently qualify and seal before use.'
             text=json.dumps(data,indent=2)+'\n'
         if PRIVATE.search(text) or any(v in text for v in ['CODEX_THREAD_ID','context_meter','checkpoint.private','candidate_owner']):raise RuntimeError('Private runtime reference content: '+name)
         planned.append((name,text,source.stat().st_mode&0o777))

@@ -2,9 +2,9 @@
   "date": "2026-11-05",
   "scope": "Nine saved native-stat rows plus four newly measured native-capture routes; all13 now have short per-request native statistics. Different timing definitions and workloads; no sustained matched benchmark.",
   "coverage": {
-    "enabled_routes": 13,
+    "enabled_routes": 14,
     "native_per_request_recovered": 9,
-    "native_per_request_newly_measured": 4,
+    "native_per_request_newly_measured": 5,
     "not_captured_per_request": 0
   },
   "routes": [
@@ -241,6 +241,20 @@
         150.45311550045665,
         157.53180673531625
       ]
+    },
+    {
+      "model_id": "qwen3.8-flash-next-unsloth-iq1_m",
+      "backend": "strata",
+      "source_release": "0.2.11/0.1.57",
+      "scope": "New IQ1_M strict two-step tool plus six quality and three128-token speed probes",
+      "first_native_decode_tokens_per_second": 59.1,
+      "followup_native_decode_tokens_per_second": 63.6,
+      "evidence_status": "new-qualified-native-capture",
+      "native_generated_tokens": [
+        60,
+        19
+      ],
+      "median_native_speed_tokens_per_second": 57.14030623632873
     }
   ],
   "Strata_0211_Unsloth_alternative": {
@@ -260,5 +274,6 @@
     "GLM values are its engine-reported decode statistic, not client output throughput.",
     "The latest three unqualified candidate attempts generated zero inference requests and have no decode rate."
   ],
-  "new_native_capture_result": "AMD-NATIVE-DECODE-TESTS-2026-11-05.json"
+  "new_native_capture_result": "AMD-NATIVE-DECODE-TESTS-2026-11-05.json",
+  "IQ1M_evidence": "results/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.json"
 }

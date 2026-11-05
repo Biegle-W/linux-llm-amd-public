@@ -55,6 +55,14 @@ class QualificationAdmission(unittest.TestCase):
         self.glm();self.cfg['env']['MAYA_GLM_PREFILL_FUSED']='1';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_GLM_RAM_tier_cannot_be_changed_by_resealing(self):
         self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='40';self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_GLM_24GB_tier_requires_its_own_explicit_record(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='24';self.seal();self.assertRaises(RuntimeError,self.require)
+        self.record['glm_ram_gb']=24;self.assertIs(self.require(),self.cfg)
+    def test_GLM_unsupported_tier_is_refused_even_with_a_record(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='48';self.record['glm_ram_gb']=48;self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_GLM_24GB_record_does_not_allow_lower_GPU_reserves(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='24';self.record['glm_ram_gb']=24
+        self.cfg['args'][-1]='128';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_GLM_cannot_use_strata_family(self):
         self.glm();self.record['family']='strata';self.assertRaises(RuntimeError,self.require)
     def test_GLM_later_card_reserve_cannot_be_lowered(self):

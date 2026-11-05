@@ -524,7 +524,8 @@ class Strata(Engine):
 
     def models(self):
         return [k for k, v in json.loads((ROOT/'dsh/strata-profiles.json').read_text()).items()
-                if v.get('enabled', True) and v.get('family')!='deepseek41']
+                if v.get('enabled', True) and v.get('family')!='deepseek41'
+                and not v.get('qualified_qwen_package', False)]
 
     def current(self):
         return json.loads((self.build/'local-build.json').read_text())['source_commit']

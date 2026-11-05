@@ -94,9 +94,12 @@ def require_strata(before_handover=False,model=None):
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
     if not enabled:
         raise RuntimeError('All Strata profiles are paused or disabled. Wait for owner-authorized resume; no backend has been stopped.')
-    if len([p for p in enabled.values() if p.get('family')!='deepseek41'])!=1:
-        raise RuntimeError('Exactly one validated Strata Qwen profile must be enabled. No backend has been stopped.')
-    selected=model or next(iter(enabled))
+    qwen = {k:p for k,p in enabled.items() if p.get('family')!='deepseek41'}
+    if not qwen:
+        raise RuntimeError('No validated Strata Qwen profile is enabled. No backend has been stopped.')
+    # Preserve the existing GSQ default when another independently sealed quant is added.
+    selected = model or ('qwen3.8-flash-next-iq3_xxs'
+                         if 'qwen3.8-flash-next-iq3_xxs' in qwen else next(iter(qwen)))
     if selected not in enabled:
         raise RuntimeError('Unknown or disabled Strata profile. No backend has been stopped.')
     profile=enabled[selected]
@@ -109,6 +112,12 @@ def require_strata(before_handover=False,model=None):
     # STRATA_PROFILE_CONFIG permits an isolated candidate check before promotion,
     # like LLAMA_CPP_DIR/VLLM_ENV_PATH; its own RAM gate and guards still apply.
     cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])).read_text())
+    additional = selected != 'qwen3.8-flash-next-iq3_xxs'
+    if additional:
+        if cfg.get('model_name') != selected:
+            raise RuntimeError('Strata Qwen catalog and qualified model must match.')
+        from strata_qwen_qualification import require_package
+        require_package(cfg)
     # Old managed weights may occupy the available RAM; check it strictly only
     # after handover, while always rejecting insufficient physical capacity first.
     check_config(cfg, *host_memory(), check_available=not before_handover)
@@ -123,7 +132,8 @@ def require_strata(before_handover=False,model=None):
     if not os.access('/dev/kfd', os.R_OK | os.W_OK):
         raise RuntimeError('Strata requires KFD access. No backend has been stopped.')
     engine = Path(cfg['exe'])
-    if engine != ROOT / 'strata/build-hip/strata' or not os.access(engine, os.X_OK):
+    if (not os.access(engine, os.X_OK)
+            or not additional and engine != ROOT / 'strata/build-hip/strata'):
         raise RuntimeError('The retained Strata HIP executable is unavailable.')
     args = cfg['args']
     require_weight_assets(cfg)

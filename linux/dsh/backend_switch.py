@@ -143,6 +143,38 @@ def qualified_native_entries(root):
     return binaries, configs
 
 
+def qualified_strata_qwen_entries(root):
+    """Recognize only an enabled, separately qualified packaged Qwen worker."""
+    root = Path(root)
+    binaries, configs = set(), set()
+    try:
+        data = json.loads((root / 'dsh/qualified-strata-qwen-profiles.json').read_text())
+        profiles = json.loads((root / 'dsh/strata-profiles.json').read_text())
+        if data.get('schema_version') != 1:
+            return binaries, configs
+        for model, profile in profiles.items():
+            record = data.get('profiles', {}).get(model, {})
+            filename = profile.get('config', '')
+            binary, control = record.get('binary'), record.get('control')
+            if (not profile.get('enabled', False) or record.get('status') != 'passed'
+                    or record.get('family') != 'strata-qwen'
+                    or not filename or Path(filename).name != filename
+                    or not isinstance(binary, str) or not Path(binary).is_absolute()
+                    or Path(binary).name != 'strata'
+                    or not isinstance(control, str) or not Path(control).is_absolute()
+                    or not re.fullmatch(r'[0-9a-f]{64}', record.get('binary_sha256', ''))):
+                continue
+            config = root / 'dsh' / filename
+            cfg = json.loads(config.read_text())
+            if cfg.get('model_name') != model or cfg.get('exe') != binary or cfg.get('cwd') != control:
+                continue
+            binaries.add(binary)
+            configs.add(str(config))
+    except (OSError, ValueError, TypeError, AttributeError):
+        return set(), set()
+    return binaries, configs
+
+
 def is_inference(p, root=ROOT):
     if not p.args:
         return False
@@ -160,9 +192,15 @@ def is_inference(p, root=ROOT):
     binaries.update(qualified_llama_binaries(root))
     native_binaries, native_configs = qualified_native_entries(root)
     binaries.update(native_binaries)
+    qwen_binaries, qwen_configs = qualified_strata_qwen_entries(root)
+    binaries.update(qwen_binaries)
     if p.args[0] in binaries:
         return True
     if entry and entry[0] == 'script':
+        if entry[1] == str(root / 'dsh/strata_qwen_backend.py'):
+            args = entry[2]
+            return any(arg == '--config' and i + 1 < len(args) and args[i + 1] in qwen_configs
+                       for i, arg in enumerate(args))
         if entry[1] == str(root / 'dsh/qualified_native_backend.py'):
             args = entry[2]
             return any(arg == '--config' and i + 1 < len(args) and args[i + 1] in native_configs

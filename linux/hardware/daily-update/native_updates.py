@@ -15,10 +15,14 @@ def current(family):
  revisions={r['source_commit'] for r in entries(family).values()}
  return next(iter(revisions)) if len(revisions)==1 else 'mixed:'+','.join(sorted(revisions))
 
-def install(family,stage,revision,source):
+def install(family,stage,revision,source,models=None):
  registry_path=ROOT/'dsh/qualified-native-profiles.json';catalog=json.loads((ROOT/'dsh'/(family+'-profiles.json')).read_text());registry=json.loads(registry_path.read_text())
  selected=entries(family)
  if not selected:raise RuntimeError('No independently qualified enabled native profiles')
+ if models is not None:
+  requested=set(models)
+  if not requested or requested-set(selected):raise RuntimeError('Requested native profile is not independently qualified and enabled')
+  selected={model:record for model,record in selected.items() if model in requested}
  rollback=stage/'native-rollback';rollback.mkdir();snapshots={}
  for path in [registry_path,*[ROOT/'dsh'/catalog[m]['config'] for m in selected]]:
   snapshots[str(path)]=path.read_text()

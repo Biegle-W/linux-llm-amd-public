@@ -1,10 +1,12 @@
 # Current AMD runtime handoff — November 5, 2026
 
-Read the root [maintenance policy](../README.md) first. This is the current operational summary for Linux and Windows/phone API clients. Historical narratives are linked at the end; they are not startup reading.
+Read the root [maintenance policy](../../README.md) first. This is the current operational summary for Linux and Windows/phone API clients. Historical narratives are linked at the end; they are not startup reading.
+
+[IQ1_M qualification and cache status](../hardware/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 and DeepSeek36GB-store optimization remain pending after two zero-request GLM preflight/harness stops. The current stock reboot differs from the pending cases’ tested boot; no optimization or current-boot model pass is claimed.
 
 ## State and next action
 
-**13 qualified normal routes are enabled.** The owner requested latest-engine qualification and realistic-budget retries. Maya Coder, Maya Q1, GLM and Strata Q1 passed their short tool round trips and guarded cleanup. Maya c167004 subsequently passed all three enabled profiles through the selective updater and is selected. Llama9c9074 passed Flint/Ornith through the updated updater, then passed the separate Empero strict check. It is selected for all three; the earlier3259 Empero rejection remains dated evidence.
+**14 qualified normal routes are enabled.** The owner requested latest-engine qualification and realistic-budget retries. Maya Coder, Maya Q1, GLM and Strata Q1 passed their short tool round trips and guarded cleanup. Maya c167004 subsequently passed all three enabled profiles through the selective updater and is selected. Llama9c9074 passed Flint/Ornith through the updated updater, then passed the separate Empero strict check. It is selected for all three; the earlier3259 Empero rejection remains dated evidence.
 
 Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged. [Details](../hardware/STRATA-0211-UNSLOTH-2026-11-05.md).
 
@@ -12,33 +14,34 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 
 [Current measurements, downloads and pending work](../hardware/REALISTIC-LARGE-MODELS-2026-11-05.md). Prior activation and its27cases are complete; do not repeat passed checks for publication. New-source qualifications are separately authorized.
 
-[Native decode evidence](../hardware/AMD-DECODE-EVIDENCE-2026-11-05.md): all13 current routes now have short native per-request statistics; four routes completed owner-requested native timing probes. A sustained matched13-route benchmark remains missing. [Latest methods and removal disposition](../hardware/AMD-NATIVE-DECODE-TESTS-2026-11-05.md): failed FlintAWQ/FP8PLE/SuperINT4 downloads removed by explicit owner request; selected13routes unchanged.
+[Native decode evidence](../hardware/AMD-DECODE-EVIDENCE-2026-11-05.md): all14 current routes now have short native per-request statistics; four routes completed owner-requested native timing probes. A sustained matched14-route benchmark remains missing. [Latest methods and removal disposition](../hardware/AMD-NATIVE-DECODE-TESTS-2026-11-05.md): failed FlintAWQ/FP8PLE/SuperINT4 downloads removed by explicit owner request; selected13routes unchanged.
 
 ## Hardware and protected policy
 
 - Intel i5-13600KF; ASUS TX GAMING B760M WIFI; 61.55 GiB visible RAM; two RX 7900 XTX 24 GB behind PEX880xx. Gen4 x16 common uplink, x8 branch segments. Runtime logical order is PowerColor then Sapphire (`ROCR_VISIBLE_DEVICES=1,0`, `HIP_VISIBLE_DEVICES=0,1`).
-- Current boot `7.0.14-42-vmpt1`, identity GPU IOMMU domains and six-bridge ACS `0x11` passed bounded peer/IPC/RCCL correctness checks. **Stock persistent boot default is unchanged.** Earlier crashes remain evidence; this is no sustained-stability or causal hardware verdict.
+- Current boot after a power loss is stock `7.0.0-42-generic`. Earlier bounded peer/IPC/RCCL evidence belongs to `7.0.14-42-vmpt1`; the pending cache cases retain that tested-boot requirement. **Stock persistent boot default is unchanged.** Recheck actual job and file admission after reboot; no current-boot peer or sustained-stability pass is claimed.
 - Retain **100°C** CPU/GPU edge/junction/memory/SSD stop policy, SMART health, 1 GiB available host RAM and 128 MiB free per-card live floors, dedicated-VRAM spill, supervisor heartbeat, phase timing and owned cleanup guards. Native normal readiness retains its 6 GiB actual startup floor and the qualified Coder profile requests 8 GiB reserve.
 - Current resource policy has no `MemoryHigh`, computes worker hard limits from installed RAM, retains existing swap capacity and permits device-speed swap with storage/temperature protection. Old v4 swap-rate/zero-system-swap policies are historical. Never disable global swap or interfere with unrelated applications.
 - GPU tests require the established owned `hardware/generated/GPU-LOCK` and fresh admission. Serialize GPU work and heavy I/O; unknown ownership blocks startup. Never delete another owner's lock or fault evidence. No new test is needed for documentation.
 
 ## Exact enabled catalog
 
-| Exact API model ID | Backend | Context |
-|---|---|---:|
-| `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs` | maya | 32,768 |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | maya | 32,768 |
-| `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | strata | 32,768 |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | strata | 32,768 |
-| `empero-qwen3.8-35b-a3b` | llama | 262,144 |
-| `flint-40b-a2.5b` | llama | 32,768 |
-| `glm-5.3-flash-maya` | maya | 32,768 |
-| `nemotron-3.5-bolt-vllm` | vllm | 262,144 |
-| `ornith-1.5-122b` | llama | 32,768 |
-| `qwen3.8-27b-sglang-dflash2` | sglang | 163,840 |
-| `qwen3.8-27b-vllm` | vllm | 163,840 |
-| `qwen3.8-flash-next-iq3_xxs` | strata | 262,144 |
-| `sage-a1.5` | vllm | 65,536 |
+| Execution mode | Engine | Exact weight variant | API model ID | Context |
+|---|---|---|---|---:|
+| VRAM only | llama.cpp | Empero Qwen3.8-35B-A3B IQ4_XS | `empero-qwen3.8-35b-a3b` | 262,144 |
+| VRAM only | llama.cpp | Flint-40B-A2.5B Unsloth UD-Q4_K_XL | `flint-40b-a2.5b` | 32,768 |
+| VRAM only | SGLang | Qwen3.8-27B AutoRound W4A16 GPTQ; DFlash2 auxiliary | `qwen3.8-27b-sglang-dflash2` | 163,840 |
+| VRAM only | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | `nemotron-3.5-bolt-vllm` | 262,144 |
+| VRAM only | vLLM | Qwen3.8-27B AutoRound W4A16 GPTQ; shared main weights | `qwen3.8-27b-vllm` | 163,840 |
+| VRAM only | vLLM | Sage-A1.5 AutoRound W4A16 | `sage-a1.5` | 65,536 |
+| CPU RAM offload | llama.cpp | Ornith-1.5-122B Q4_K_M; CPU experts + VRAM cache | `ornith-1.5-122b` | 32,768 |
+| SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing | `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs` | 32,768 |
+| SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 32,768 |
+| SSD streaming | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS; RAM/VRAM tiers | `glm-5.3-flash-maya` | 32,768 |
+| SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing + RAM store | `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | 32,768 |
+| SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing +36GB store | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 32,768 |
+| SSD streaming | Strata | Qwen3.8-Flash-Next GSQ IQ3_XXS; RAM/VRAM expert caches | `qwen3.8-flash-next-iq3_xxs` | 262,144 |
+| SSD streaming | Strata | Qwen3.8-Flash-Next Unsloth UD-IQ1_M Dynamicv3.1; RAM/VRAM caches | `qwen3.8-flash-next-unsloth-iq1_m` | 262,144 |
 
 Configured context is allocation capacity. The latest short checks add no full-window-quality or sustained-throughput proof. `dsh/model_catalog.py` combines the enabled backend registries; authenticated `/v1/models` is the live client source. DSH remains one AMD-server catalog; preserve its saved default/provider and private conversations/settings.
 
@@ -103,4 +106,4 @@ The existing03:00 daily engine updater timer is enabled and active with `Persist
 
 After relevant authorized work, replace current state here, update applicable dated evidence/current index, sanitize and normally publish both AMD repositories, and verify the operational copy exactly matches `/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md` (Windows `D:\LINUX-LLM-RUNTIME-HANDOFF.md`). Keep credentials and machine-specific secret locations out of handoffs and public exports. Check actual Git status, job/lock ownership and remote refs; preserve unrelated untracked work.
 
-For a historical question only: [previous full handoff](../hardware/history/documentation-2026-11-05/LINUX-LLM-RUNTIME-HANDOFF.full.md), [benchmark history](../hardware/BENCHMARK-HISTORY.md), [root maintenance policy](../README.md). Do not restore superseded historical settings or resume old plans without a new owner request.
+For a historical question only: [previous full handoff](../hardware/history/documentation-2026-11-05/LINUX-LLM-RUNTIME-HANDOFF.reference.md), [benchmark history](../hardware/BENCHMARK-HISTORY.md), [root maintenance policy](../../README.md). Do not restore superseded historical settings or resume old plans without a new owner request.

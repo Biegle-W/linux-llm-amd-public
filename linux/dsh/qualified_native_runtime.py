@@ -80,11 +80,13 @@ def require_profile(cfg,record,before_handover=False):
     if value('--max-context')!='32768':raise RuntimeError('Native context must remain the tested 32K')
     glm='--glm-pack' in args
     if glm:
+        ram_gb=record.get('glm_ram_gb',8)
         if (record['family']!='maya' or record['binary_relative']!='build-hip/maya'
                 or cfg.get('layer_split')!='auto' or value('--tp') is not None
                 or value('--vram-reserve-mib')!='8192' or value('--vram-reserve-later-mib')!='8192'
                 or cfg.get('env',{}).get('MAYA_GLM_PREFILL_FUSED')!='0'
-                or cfg.get('env',{}).get('MAYA_GLM_RAM_GB')!='8'):
+                or type(ram_gb) is not int or ram_gb not in (8,24)
+                or cfg.get('env',{}).get('MAYA_GLM_RAM_GB')!=str(ram_gb)):
             raise RuntimeError('GLM must retain its tested dual-card placement, RAM tier and disabled fused prefill')
     elif value('--tp')!='2':raise RuntimeError('Native placement must retain both tested layer groups')
     reserves=[int(value(flag)) for flag in ['--reserve-mib','--vram-reserve-mib','--vram-reserve-later-mib'] if flag in args]
