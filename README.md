@@ -6,9 +6,9 @@ Current as of November 5, 2026. This is the sanitized public reference for the s
 
 1. Read this maintenance policy and the [current runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
 2. Read the [current result index](linux/hardware/CURRENT-AMD-BENCHMARKS.md) only when measurements matter.
-3. Check both Git working trees and actual job/lock ownership before changing anything. Follow the current user request; no GPU campaign is pending.
+3. Check both Git working trees and actual job/lock ownership before changing anything. Follow the current user request; the owner-requested engine update task is in progress.
 
-Nine qualified API routes are enabled after the owner-approved archive of the reviewed global STOP/hold. Six failed candidates remain held; deleted XS and Super IQ3 routes remain retired. The handoff contains the exact catalog, runtime pins, access settings, guards and verification limits. Completed GPU checks must not be repeated for documentation.
+Thirteen qualified API routes are enabled. Four realistic-budget native retries passed; llama9c9074 passed and is selected for Flint, Ornith and Empero. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected. PLE/Super, Bolt matching long-context qualification and correct-RDNA3 build/review remain in progress. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) records exact selections, safeguards and pending work; [current results](linux/hardware/REALISTIC-LARGE-MODELS-2026-11-05.md) include all saved model/graphics timings and downloaded asset groups. Completed GPU checks are not repeated for documentation.
 
 ## Maintenance policy
 
@@ -31,4 +31,4 @@ Nine qualified API routes are enabled after the owner-approved archive of the re
 | DSH and client setup | [DSH](linux/dsh/README.md), [network](linux/network/README.md) |
 | Graphics | [Graphics setup](linux/graphics/README.md) |
 | Retired setup index | [Archives](archives/README.md) |
-| Sanitized historical guides | [Documentation history](linux/hardware/history/documentation-2026-11-05/README.md) |
+| Full previous overviews | [Documentation history](linux/hardware/history/documentation-2026-11-05/README.md) |

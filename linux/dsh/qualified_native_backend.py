@@ -5,15 +5,20 @@ from qualified_native_runtime import record_for,require_profile
 
 def main():
     parser=argparse.ArgumentParser(add_help=False);parser.add_argument('--config',required=True)
+    parser.add_argument('--engine',choices=['maya','strata'])
     selected,_=parser.parse_known_args();cfg=json.loads(Path(selected.config).read_text())
     record=record_for(cfg)
     if record is None:raise RuntimeError('This launcher requires an explicitly qualified native registry entry')
+    family=record['family']
+    if family not in ['maya','strata'] or selected.engine is not None and selected.engine!=family:
+        raise RuntimeError('Native launcher engine must match its qualified family')
     require_profile(cfg,record)
     source=Path(record['source']);sys.path.insert(0,str(source))
     server=importlib.import_module('serve.server')
     spec=importlib.util.spec_from_file_location('managed_native_ui',Path(__file__).with_name('native-ui-server.py'))
     managed=importlib.util.module_from_spec(spec);spec.loader.exec_module(managed);managed.install_guard(server)
     sys.argv[0]=str(source/'serve/server.py')
+    if selected.engine is None:sys.argv.extend(['--engine',family])
     return server.main()
 
 if __name__=='__main__':raise SystemExit(main())

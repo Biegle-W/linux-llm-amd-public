@@ -37,7 +37,7 @@
     "kv_cache_bytes": 6442450944,
     "runtime": "rocm",
     "launcher": "/opt/local-llm/vllm/start-sage-rocm",
-    "model_path": "/mnt/shared/SATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound",
+    "model_path": "/mnt/shared/vLLM-Models/Sage-A1.5-W4A16-AutoRound",
     "min_free_vram_gib": 21.0,
     "kv_cache_dtype": "bfloat16",
     "vision_enabled": false,

@@ -64,6 +64,11 @@ def runtime_source(model=None):
         if not Path(path).is_absolute() or not re.fullmatch(r'[0-9a-f]{40}', commit):
             raise RuntimeError('Invalid qualified llama source path/pin; no worker was changed.')
         return Path(path).resolve(), commit
+    if settings.get('source_path'):
+        path,commit=settings['source_path'],settings['source_commit']
+        if not Path(path).is_absolute() or not re.fullmatch(r'[0-9a-f]{40}',commit):
+            raise RuntimeError('Invalid qualified global llama source path/pin; no worker was changed.')
+        return Path(path).resolve(),commit
     return (ROOT.parent / 'llama.cpp').resolve(), None
 
 

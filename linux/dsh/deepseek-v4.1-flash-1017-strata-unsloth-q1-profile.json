@@ -1,0 +1,89 @@
+{
+  "arch": "deepseek41",
+  "args": [
+    "--pack",
+    "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack",
+    "--max-context",
+    "32768",
+    "--tp",
+    "2",
+    "--dspark",
+    "none",
+    "--reserve-mib",
+    "8192",
+    "--expert-profile",
+    "none",
+    "--cpu-threads",
+    "14",
+    "--ssd-cache",
+    "36"
+  ],
+  "backend": "hip",
+  "cwd": "/opt/local-llm/qualified-sources/strata-ffa80d73133e",
+  "engine_ready_s": 1800,
+  "env": {
+    "DS4_ENGRAM_CACHE_MB": "1024",
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0",
+    "DS4_YOCO": "0",
+    "HSA_USERPTR_FOR_PAGED_MEM": "0",
+    "MAYA_DS4_HIP_PEER_AR": "0",
+    "MAYA_GLM_P2P": "0",
+    "STRATA_DS4_DISK_SKIP_W": "0",
+    "STRATA_DS4_HIPK": "1",
+    "STRATA_DS4_PROMPT_SKIP": "0",
+    "STRATA_DS4_SLOT_KEEP": "0",
+    "NCCL_P2P_DISABLE": "0",
+    "STRATA_REQUEST_QUIET_S": "1800",
+    "STRATA_ENGINE_STALL_S": "1800"
+  },
+  "exe": "/opt/local-llm/qualified-sources/strata-ffa80d73133e/build-hip/strata-dsv41",
+  "expert_profile_seed_sha256": "82833f7218db53718a1467ac4b8825c01cf11baf7b2f5192574f23991f0086d9",
+  "gpu": [
+    0,
+    1
+  ],
+  "gpus_asked": true,
+  "idle_unload_s": 0,
+  "installer": {
+    "quant": "Maya-XS",
+    "vision_inference_validated": false,
+    "weights_reused_from": "Maya shared-NVMe assets; separate Strata pack"
+  },
+  "lib_dirs": [
+    "/opt/local-llm/llm-tools/rocm-sdk/opt/rocm-7.2.3/lib"
+  ],
+  "log": "/opt/local-llm/dsh/logs/strata-deepseek-v4.1-flash-1017-strata-unsloth-q1.log",
+  "mcp_servers": {},
+  "model_name": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+  "open_browser": false,
+  "parallel": 1,
+  "port": 18032,
+  "reasoning_effort": "none",
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "passed short owned check",
+    "settings": "100C; current RAM hard limit and device-speed swap policy; 1GiB host/128MiB live per-card floors; normal native 6GiB startup guard with8GiB requested reserve; heartbeat/spill/owned cleanup retained"
+  },
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "split_skip_if_fits": false,
+  "startup_free_vram_gib": 0.125,
+  "tokenizer": "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer",
+  "worker_memory_limits": {
+    "memory.high": "max",
+    "memory.max": 65017131008,
+    "memory.swap.max": 36000755712
+  },
+  "worker_swap_max_bytes": null,
+  "local_validation": {
+    "status": "requires-local-validation",
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "binary_sha256": "581959940cff920e638a2b27241c5f8276ce92d849fc0905bf7ca58c17171acf",
+    "config_sha256": "89ba2dc5cd9d2b08d19efaafee9889731ee1ba9503188fbf49389b8dcc92732d",
+    "evidence": "hardware/results/REALISTIC-LARGE-MODELS-2026-11-05.json",
+    "scope": "Sanitized source-host short-test reference; independently qualify and seal on the receiving host."
+  }
+}

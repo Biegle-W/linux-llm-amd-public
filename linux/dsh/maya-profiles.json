@@ -1,11 +1,9 @@
 {
   "glm-5.3-flash-maya": {
-    "name": "GLM-5.3-Flash Maya-S (v2) (dual AMD HIP, CPU/expert cache, NVMe streaming)",
-    "context": 32768,
     "config": "maya-glm-profile.json",
-    "enabled": false,
-    "disabled_reason": "Final-hardware old-runtime baseline stalled during warmup and hit an AMD MES GPU queue/reset fault. Preserve source/config and investigate dual-GPU transport after driver recovery; no automatic retry.",
-    "resume_requires_owner_instruction": true
+    "name": "GLM-5.3-Flash Maya-S v2 (32K, dual AMD, bounded CPU/NVMe tiers)",
+    "context": 32768,
+    "enabled": true
   },
   "deepseek-v4.1-flash-1017-maya": {
     "name": "DeepSeek-V4.1-Flash-1017 Maya-XS + DSpark (dual AMD HIP, CPU/expert cache, NVMe streaming)",
@@ -15,5 +13,17 @@
     "disabled_reason": "Old DeepSeek Maya-XS/shared Maya-S/DSpark/vision backing deleted by owner November 2. Await latest compatible Unsloth Q1 migration after RAM; fresh conversion, manifests and short DSH qualification required.",
     "resume_requires_owner_instruction": true,
     "weights_removed": true
+  },
+  "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs": {
+    "config": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs-profile.json",
+    "name": "DeepSeek-V4.1-Flash-1017 Maya Coder IQ2_XXS (32K, dual AMD, bounded CPU/NVMe tiers)",
+    "context": 32768,
+    "enabled": true
+  },
+  "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+    "config": "deepseek-v4.1-flash-1017-maya-unsloth-q1-profile.json",
+    "name": "DeepSeek-V4.1-Flash-1017 Maya Unsloth Q1 (32K, dual AMD, bounded CPU/NVMe tiers)",
+    "context": 32768,
+    "enabled": true
   }
 }

@@ -1,0 +1,85 @@
+{
+  "exe": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+  "args": [
+    "--pack",
+    "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack",
+    "--max-context",
+    "32768",
+    "--tp",
+    "2",
+    "--dspark",
+    "none",
+    "--reserve-mib",
+    "8192",
+    "--expert-profile",
+    "none",
+    "--cpu-threads",
+    "14"
+  ],
+  "cwd": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+  "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer",
+  "backend": "hip",
+  "model_name": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
+  "gpu": [
+    0,
+    1
+  ],
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "reasoning_effort": "none",
+  "lib_dirs": [
+    "/opt/local-llm/llm-tools/rocm-sdk/opt/rocm-7.2.3/lib"
+  ],
+  "port": 18032,
+  "host": "127.0.0.1",
+  "log": "/opt/local-llm/dsh/logs/maya-deepseek-v4.1-flash-1017-maya-coder-iq2-xxs.log",
+  "installer": {
+    "quant": "ISTA-Coder-IQ2_XXS",
+    "weights_reused_from": "One verified Coder GGUF set; separate metadata pack per engine",
+    "vision_inference_validated": false
+  },
+  "parallel": 1,
+  "split_skip_if_fits": false,
+  "layer_split": "auto",
+  "mcp_servers": {},
+  "idle_unload_s": 0,
+  "env": {
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0",
+    "DS4_WARM_CAP_GB": "28",
+    "DS4_ENGRAM_CACHE_MB": "1024",
+    "HSA_USERPTR_FOR_PAGED_MEM": "0",
+    "MAYA_DS4_HIP_PEER_AR": "0",
+    "MAYA_GLM_P2P": "0",
+    "NCCL_P2P_DISABLE": "0",
+    "FNX_PEER": "1",
+    "STRATA_REQUEST_QUIET_S": "1800",
+    "STRATA_ENGINE_STALL_S": "1800"
+  },
+  "startup_free_vram_gib": 0.125,
+  "worker_memory_limits": {
+    "memory.high": 65017106432,
+    "memory.max": 65017106432,
+    "memory.swap.max": 36000755712
+  },
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "passed short owned check",
+    "settings": "100C; current RAM hard limit and device-speed swap policy; 1GiB host/128MiB live per-card floors; normal native 6GiB startup guard with8GiB requested reserve; heartbeat/spill/owned cleanup retained"
+  },
+  "host_ram_profile": "64gb-q1-v1",
+  "open_browser": false,
+  "arch": "deepseek41",
+  "worker_swap_max_bytes": null,
+  "local_validation": {
+    "status": "requires-local-validation",
+    "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+    "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
+    "scope": "Sanitized source-host short-test reference; independently qualify and seal on the receiving host.",
+    "config_sha256": "6d128589eb4d94d3eb43081c995f8c7bee13d94701f0309b10380410e561d0cc",
+    "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya"
+  },
+  "engine_ready_s": 1800
+}

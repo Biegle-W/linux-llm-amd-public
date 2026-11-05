@@ -4,12 +4,12 @@
     "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs": {
       "status": "requires-local-validation",
       "family": "strata",
-      "source": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7",
+      "source": "/opt/local-llm/qualified-sources/strata-ffa80d73133e",
       "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
-      "binary": "/opt/local-llm/qualified-sources/strata-dsv41-ffa80d7/build-hip/strata-dsv41",
+      "binary": "/opt/local-llm/qualified-sources/strata-ffa80d73133e/build-hip/strata-dsv41",
       "binary_relative": "build-hip/strata-dsv41",
       "binary_sha256": "581959940cff920e638a2b27241c5f8276ce92d849fc0905bf7ca58c17171acf",
-      "config_sha256": "a3e095ed0dcf46cdfe7e44f38d5dab0b3c39dc7f2776d2eb04ee05c2dfa52da2",
+      "config_sha256": "90842361c9a05e5354a6d236721252109b0edbd7f556aa51dfbd1190e8aa2000",
       "pack": "/opt/local-llm/models/streaming/Strata/DeepSeek-Coder-ISTA-20261103/pack",
       "pack_metadata_sha256": {
         "ds4.txt": "4c4cb7b0b58e8589e6b0b2960c2959a234a3850e220f62e796af135cf5bd4030",
@@ -69,7 +69,280 @@
       },
       "evidence": "hardware/results/ALL-MODEL-P2P-2026-11-05.json",
       "transport": "Dual-card layer groups; no direct peer-copy claim",
-      "reference_note": "Source-host content references only. Local inode/device/mtime seals deliberately omitted. Do not mark passed or bypass admission without independent local qualification and fresh seals."
+      "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
+    },
+    "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs": {
+      "status": "requires-local-validation",
+      "family": "maya",
+      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+      "binary_relative": "build-hip/maya-ds4",
+      "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
+      "config_sha256": "6d128589eb4d94d3eb43081c995f8c7bee13d94701f0309b10380410e561d0cc",
+      "pack": "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack",
+      "pack_metadata_sha256": {
+        "ds4.txt": "4c4cb7b0b58e8589e6b0b2960c2959a234a3850e220f62e796af135cf5bd4030",
+        "tensors.txt": "31e2b3282e8dce4a0308a5885ab1f42aab50ae639d755ed0a5a9798d7a20eea3",
+        "engram.bin": "08d55d6433f389b14aa115f4ea4eb31d6a2d63df1ae40821f03facf4c2d49142"
+      },
+      "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer",
+      "backing_identity": {
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/ds4.txt": {
+          "bytes": 1185
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tensors.txt": {
+          "bytes": 1814808
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/engram.bin": {
+          "bytes": 517980
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/lt-picks.txt": {
+          "bytes": 3681
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/tokenizer.json": {
+          "bytes": 80
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/chat_template.jinja": {
+          "bytes": 5508
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/merges.txt": {
+          "bytes": 1504833
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/vocab.json": {
+          "bytes": 2730577
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer/token_type.json": {
+          "bytes": 387840
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00001-of-00006.gguf": {
+          "bytes": 5780704,
+          "sha256": "108e63d27240da2d99846250727a7b282e05a7fdf2448435e81904b9a98d8a4a"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00002-of-00006.gguf": {
+          "bytes": 19776064960,
+          "sha256": "75079999eb3a492ad695f3466fd6a068a1cf1920980eac1c7f51406363fadf7a"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00003-of-00006.gguf": {
+          "bytes": 19939989696,
+          "sha256": "ea964e525922f36d3b984299c1a5bb8d896f50b9c2942364cd221c37863331f2"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00004-of-00006.gguf": {
+          "bytes": 19682533472,
+          "sha256": "2d95806d186597cb0ea32635c92f0b66a9a6afae1a399ff74b13aebaa4ac7a52"
+        },
+        "/mnt/shared-nvme/LLM-Models/DeepSeek-Coder-ISTA-20261103/IQ2_XXS/DeepSeek-V4.1-Flash-1017-GSQ-RCO-Coder-IQ2_XXS-00005-of-00006.gguf": {
+          "bytes": 12719198624,
+          "sha256": "3665b48c3bd46330780caf286ee40a087ac11499e5b7df8c943b098d10f426d4"
+        }
+      },
+      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "transport": "Dual-card layer groups; no direct peer-copy claim",
+      "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
+    },
+    "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+      "status": "requires-local-validation",
+      "family": "maya",
+      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+      "binary_relative": "build-hip/maya-ds4",
+      "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
+      "config_sha256": "ea7d170d276b795fd75b0075b2d263bb7d59a2eb6fc82fa6dea6d8871e9c9c9b",
+      "pack": "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack",
+      "pack_metadata_sha256": {
+        "ds4.txt": "ae88e4283625824e9edac1f65628748e03a698f16bfaea4b0cd685d4430cb6bf",
+        "tensors.txt": "73ff9a449621d1277b80cf72d92d4ab55dc87f0dea157dee40a7cf6a187d8331",
+        "engram.bin": "08d55d6433f389b14aa115f4ea4eb31d6a2d63df1ae40821f03facf4c2d49142"
+      },
+      "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer",
+      "backing_identity": {
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/ds4.txt": {
+          "bytes": 1210
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tensors.txt": {
+          "bytes": 3567463
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/engram.bin": {
+          "bytes": 517980
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/lt-picks.txt": {
+          "bytes": 2609
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/tokenizer.json": {
+          "bytes": 80
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/chat_template.jinja": {
+          "bytes": 5508
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/merges.txt": {
+          "bytes": 1504833
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/vocab.json": {
+          "bytes": 2730577
+        },
+        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/token_type.json": {
+          "bytes": 387840
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00001-of-00005.gguf": {
+          "bytes": 5780868,
+          "sha256": "5197c309479c7be06e3612dc696d7f18e13e5942cfe52e70c3c586b7e585a5ac"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00002-of-00005.gguf": {
+          "bytes": 49120285248,
+          "sha256": "e83af39db628614d252d49a316af8cd5911d78ab96a9e7a5997b392ece26eaf7"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00003-of-00005.gguf": {
+          "bytes": 48899707008,
+          "sha256": "6caa1da6302b532374d55da6510fc92a9031a0ee1bd2bb5bf7defca2477f3d98"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00005-of-00005.gguf": {
+          "bytes": 110595290592,
+          "sha256": "771805301e695d72d268151dfc43043581ba904298574aa879d4349cbe67b020"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00004-of-00005.gguf": {
+          "bytes": 24358544704,
+          "sha256": "71c6c54dd1f20008e2130188cc655742d3738a365de4571d21a56de503b206b7"
+        }
+      },
+      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "transport": "Dual-card layer groups; no direct peer-copy claim",
+      "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
+    },
+    "glm-5.3-flash-maya": {
+      "status": "requires-local-validation",
+      "family": "maya",
+      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya",
+      "binary_relative": "build-hip/maya",
+      "binary_sha256": "0df418f17706d7fccbcf7becc28770f02b87eb765f18c38c232b5b68a7e16360",
+      "config_sha256": "6c67f09ec09d55810f165ed6795bd20d00042969465d4da96141d82ff90a2a4e",
+      "pack": "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack",
+      "pack_metadata_sha256": {
+        "sources.json": "83c44378cff6b648e2edb9b3e2b5b8c40c2a500114ce249396d68dc03cb0d6a3",
+        "index.txt": "9fe5a78c3f80d1151c30d8f5d560627ca1b2222cd5ca4ff0bc0d5208de805ec4",
+        "native_experts.txt": "ad42f63bcd2bfc54df603e42710ed42a2b77541afa668a30d4ead70e979d8a20",
+        "compat-bf16.json": "50a1c5cf71439737d09a18faf72de7ae1384a9d1c88fcc26b58d03cc6097eff1",
+        "dense.bin": "9dcd1dc9ff74bf483cb5d8046634e625f94b36bac6ee1d1b221e7617a6a72fac"
+      },
+      "tokenizer": "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer",
+      "backing_identity": {
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/sources.json": {
+          "bytes": 417
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/dense.bin": {
+          "bytes": 943911040
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/index.txt": {
+          "bytes": 105595
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/compat-bf16.json": {
+          "bytes": 88155
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/native_experts.txt": {
+          "bytes": 4046
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/slots/slot-1793866461385-1.meta": {
+          "bytes": 21453
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/slots/slot-1793866461385-1.bin": {
+          "bytes": 225661188
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/tokenizer.json": {
+          "bytes": 712
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/chat_template.jinja": {
+          "bytes": 10648
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/merges.txt": {
+          "bytes": 3868336
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/vocab.json": {
+          "bytes": 3186346
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack/tokenizer/token_type.json": {
+          "bytes": 464640
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00001-of-00003.gguf": {
+          "bytes": 47835993056
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00003-of-00003.gguf": {
+          "bytes": 835121120
+        },
+        "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/GLM-5.3-Flash-Maya-S-v2-IQ2_XXS-00002-of-00003.gguf": {
+          "bytes": 47797478080
+        }
+      },
+      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "transport": "Dual-card layer groups; no direct peer-copy claim",
+      "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
+    },
+    "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+      "status": "requires-local-validation",
+      "family": "strata",
+      "source": "/opt/local-llm/qualified-sources/strata-ffa80d73133e",
+      "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+      "binary": "/opt/local-llm/qualified-sources/strata-ffa80d73133e/build-hip/strata-dsv41",
+      "binary_relative": "build-hip/strata-dsv41",
+      "binary_sha256": "581959940cff920e638a2b27241c5f8276ce92d849fc0905bf7ca58c17171acf",
+      "config_sha256": "89ba2dc5cd9d2b08d19efaafee9889731ee1ba9503188fbf49389b8dcc92732d",
+      "pack": "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack",
+      "pack_metadata_sha256": {
+        "ds4.txt": "ae88e4283625824e9edac1f65628748e03a698f16bfaea4b0cd685d4430cb6bf",
+        "tensors.txt": "73ff9a449621d1277b80cf72d92d4ab55dc87f0dea157dee40a7cf6a187d8331",
+        "engram.bin": "08d55d6433f389b14aa115f4ea4eb31d6a2d63df1ae40821f03facf4c2d49142"
+      },
+      "tokenizer": "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer",
+      "backing_identity": {
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/ds4.txt": {
+          "bytes": 1210
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tensors.txt": {
+          "bytes": 3567463
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/engram.bin": {
+          "bytes": 517980
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer/tokenizer.json": {
+          "bytes": 80
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer/chat_template.jinja": {
+          "bytes": 17672
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer/merges.txt": {
+          "bytes": 1504833
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer/vocab.json": {
+          "bytes": 2730577
+        },
+        "/opt/local-llm/models/streaming/Strata/DeepSeek-V4.1-Flash-1017/Unsloth-Q1-20261103/pack/tokenizer/token_type.json": {
+          "bytes": 387840
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00001-of-00005.gguf": {
+          "bytes": 5780868,
+          "sha256": "5197c309479c7be06e3612dc696d7f18e13e5942cfe52e70c3c586b7e585a5ac"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00002-of-00005.gguf": {
+          "bytes": 49120285248,
+          "sha256": "e83af39db628614d252d49a316af8cd5911d78ab96a9e7a5997b392ece26eaf7"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00003-of-00005.gguf": {
+          "bytes": 48899707008,
+          "sha256": "6caa1da6302b532374d55da6510fc92a9031a0ee1bd2bb5bf7defca2477f3d98"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00005-of-00005.gguf": {
+          "bytes": 110595290592,
+          "sha256": "771805301e695d72d268151dfc43043581ba904298574aa879d4349cbe67b020"
+        },
+        "/opt/local-llm/models/streaming/DeepSeek-Unsloth-Q1-20261103/UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00004-of-00005.gguf": {
+          "bytes": 24358544704,
+          "sha256": "71c6c54dd1f20008e2130188cc655742d3738a365de4571d21a56de503b206b7"
+        }
+      },
+      "evidence": "hardware/results/REALISTIC-LARGE-MODELS-2026-11-05.json",
+      "transport": "Dual-card layer groups; no direct peer-copy claim",
+      "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
     }
   }
 }

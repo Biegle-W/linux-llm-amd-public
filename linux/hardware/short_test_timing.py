@@ -1,4 +1,4 @@
-"""Diagnostic timing: measure prefill latency without treating it as a defect."""
+"""Finite phase budgets without a per-token decode cutoff."""
 from dataclasses import dataclass
 import math
 import time
@@ -12,12 +12,16 @@ def violation(now, heartbeat, progress, limits):
     if phase == 'loading' and age > limits['load_seconds']:
         return 'model loading deadline'
     first_limit = limits.get('first_token_seconds')
-    # Numeric values support exact historical-policy replay only. New large-
+    # Legacy numeric decode-stall values are accepted as input but never enforced. New large-
     # model diagnostics pass None and retain their enclosing stage deadline.
     if phase == 'prefill' and first_limit is not None and age > first_limit:
         return 'first output deadline'
-    if phase == 'decode' and now - progress['last_output'] > limits['decode_stall_seconds']:
-        return 'decode progress stalled'
+    # Large offloaded models can pause between output tokens while still working.
+    # Legacy decode_stall_seconds settings are intentionally ignored: the owner
+    # removed that cutoff on November 5. Bound generation by its complete phase.
+    prefill_limit = limits.get('prefill_seconds')
+    if phase == 'prefill' and prefill_limit is not None and age > prefill_limit:
+        return 'prefill phase deadline'
     if first_limit is None:
         if phase == 'decode':
             start = progress.get('decode_started', progress['phase_started'])

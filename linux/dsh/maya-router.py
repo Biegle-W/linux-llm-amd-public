@@ -176,10 +176,12 @@ def ensure_worker(model):
         profile = PROFILES[model]
         config = ROOT / profile['config']
         cfg = json.loads(config.read_text())
+        from qualified_native_runtime import record_for
+        script='run-qualified-native-backend' if record_for(cfg,'maya') is not None else 'run-maya-backend'
         logfile = (ROOT / 'logs' / ('maya-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Maya weights are unloaded.', flush=True)
         worker = swap_guard.spawn(['systemd-run', '--user', '--scope', '--quiet',
-                                   *scope_properties(cfg), str(ROOT / 'run-maya-backend'),
+                                   *scope_properties(cfg), str(ROOT / script),
                                    '--config', str(config), '--port', str(WORKER_PORT)],
                                   stdout=logfile, stderr=subprocess.STDOUT, start_new_session=True,
                                   expected_memory_limits=scope_limits(cfg))

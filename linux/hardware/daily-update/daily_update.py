@@ -804,6 +804,11 @@ class StrataDeepSeek(Engine):
 
 ENGINES = {e.kind: e for e in (Llama(), Vllm(), Sglang(), Strata(), Maya(), StrataDeepSeek())}
 
+def active_engines():
+    """Registry-aware adapters used by the current short-test updater."""
+    from nightly import engines
+    return engines()
+
 
 # ---------------------------------------------------------------- run
 
@@ -1030,4 +1035,5 @@ def notify(results):
 
 
 if __name__ == '__main__':
-    main()
+    from nightly import main as short_main
+    raise SystemExit(short_main())

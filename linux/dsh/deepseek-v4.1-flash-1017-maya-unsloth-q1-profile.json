@@ -1,0 +1,88 @@
+{
+  "arch": "deepseek41",
+  "args": [
+    "--pack",
+    "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack",
+    "--max-context",
+    "32768",
+    "--tp",
+    "2",
+    "--dspark",
+    "none",
+    "--reserve-mib",
+    "8192",
+    "--expert-profile",
+    "none",
+    "--cpu-threads",
+    "20"
+  ],
+  "backend": "hip",
+  "cwd": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+  "env": {
+    "DS4_ENGRAM_CACHE_MB": "1024",
+    "DS4_IQ_Q8K": "0",
+    "DS4_STREAM": "0",
+    "DS4_WARM_CAP_GB": "28",
+    "HSA_USERPTR_FOR_PAGED_MEM": "0",
+    "MAYA_DS4_HIP_PEER_AR": "0",
+    "MAYA_GLM_P2P": "0",
+    "NCCL_P2P_DISABLE": "0",
+    "STRATA_REQUEST_QUIET_S": "1800",
+    "STRATA_ENGINE_STALL_S": "1800"
+  },
+  "exe": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+  "expert_profile_seed_sha256": "44144f448bdcbbdad808ffa4b9232add06b88fe3a28d034635b136ef61ae85a5",
+  "gpu": [
+    0,
+    1
+  ],
+  "host": "127.0.0.1",
+  "host_ram_profile": "64gb-q1-v1",
+  "idle_unload_s": 0,
+  "installer": {
+    "ds4_quant": "maya-xs",
+    "family": "deepseek",
+    "model_dir": "/opt/local-llm/models/streaming/Maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-XS",
+    "models_dir": "/opt/local-llm/models/streaming/Maya",
+    "quant": "DeepSeek-V4.1-Flash-1017",
+    "written": "2026-10-23T15:55:23.283061+00:00"
+  },
+  "layer_split": "auto",
+  "lib_dirs": [
+    "/opt/local-llm/llm-tools/rocm-sdk/opt/rocm-7.2.3/lib"
+  ],
+  "log": "/opt/local-llm/dsh/logs/maya-deepseek-v4.1-flash-1017-maya-unsloth-q1.log",
+  "mcp_servers": {},
+  "model_name": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+  "open_browser": false,
+  "parallel": 1,
+  "port": 18032,
+  "reasoning_effort": "none",
+  "resource_guard_policy": "owner-headroom-v1",
+  "resource_guard_validation": {
+    "status": "passed short owned check",
+    "settings": "100C; current RAM hard limit and device-speed swap policy; 1GiB host/128MiB live per-card floors; normal native 6GiB startup guard with8GiB requested reserve; heartbeat/spill/owned cleanup retained"
+  },
+  "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0
+  },
+  "split_skip_if_fits": false,
+  "startup_free_vram_gib": 0.125,
+  "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer",
+  "worker_memory_limits": {
+    "memory.high": 45097156608,
+    "memory.max": 47244640256,
+    "memory.swap.max": "max"
+  },
+  "worker_swap_max_bytes": null,
+  "local_validation": {
+    "status": "requires-local-validation",
+    "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+    "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
+    "scope": "Sanitized source-host short-test reference; independently qualify and seal on the receiving host.",
+    "config_sha256": "ea7d170d276b795fd75b0075b2d263bb7d59a2eb6fc82fa6dea6d8871e9c9c9b",
+    "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya"
+  },
+  "engine_ready_s": 1800
+}

@@ -44,6 +44,35 @@ class QualificationAdmission(unittest.TestCase):
     def test_registry_cannot_waive_reserve(self):self.cfg['args'][3]='1024';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_single_gpu_rejected(self):self.cfg['gpu']=[0];self.seal();self.assertRaises(RuntimeError,self.require)
     def test_registry_cannot_waive_dual_layer_groups(self):self.cfg['args'][-1]='1';self.seal();self.assertRaises(RuntimeError,self.require)
+    def glm(self):
+        self.binary=self.source/'build-hip/maya';self.binary.write_bytes(b'known GLM engine');self.binary.chmod(0o755)
+        self.cfg.update(exe=str(self.binary),layer_split='auto',args=['--glm-pack',str(self.pack),'--max-context','32768','--vram-reserve-mib','8192','--vram-reserve-later-mib','8192'])
+        self.cfg['env'].update(MAYA_GLM_PREFILL_FUSED='0',MAYA_GLM_RAM_GB='8')
+        self.record.update(binary=str(self.binary),binary_relative='build-hip/maya',binary_sha256=self.module.digest(self.binary));self.seal()
+    def test_accepts_tested_GLM_implicit_dual_card_layout(self):
+        self.glm();self.assertIs(self.require(),self.cfg)
+    def test_GLM_fused_prefill_cannot_be_enabled_by_resealing(self):
+        self.glm();self.cfg['env']['MAYA_GLM_PREFILL_FUSED']='1';self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_GLM_RAM_tier_cannot_be_changed_by_resealing(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='40';self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_GLM_cannot_use_strata_family(self):
+        self.glm();self.record['family']='strata';self.assertRaises(RuntimeError,self.require)
+    def test_GLM_later_card_reserve_cannot_be_lowered(self):
+        self.glm();self.cfg['args'][-1]='128';self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_direct_admission_rejects_held_record(self):
+        self.record['status']='held';self.assertRaises(RuntimeError,self.require)
+    def test_provisional_native_requires_matching_token_and_live_updater_owner(self):
+        import os
+        self.record.update(status='candidate',candidate_owner='test-owner-token')
+        lock=self.root/'hardware/generated/GPU-LOCK';lock.parent.mkdir(parents=True)
+        lock.write_text(json.dumps({'owner':'daily-update-test','pid':os.getpid()}))
+        self.assertRaises(RuntimeError,self.require)
+        with patch.dict(os.environ,{'LOCAL_LLM_UPDATE_CANDIDATE':'test-owner-token'}):
+            self.assertIs(self.require(),self.cfg)
+            lock.write_text(json.dumps({'owner':'other-owner','pid':os.getpid()}))
+            self.assertRaises(RuntimeError,self.require)
+            lock.write_text(json.dumps({'owner':'daily-update-test','pid':999999999}))
+            self.assertRaises(RuntimeError,self.require)
     def test_quality_skipping_rejected(self):self.cfg['env']['STRATA_DS4_PROMPT_SKIP']='1';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_binary_change_rejected(self):self.binary.write_bytes(b'changed binary');self.assertRaises(RuntimeError,self.require)
     def test_source_revision_change_rejected(self):

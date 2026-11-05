@@ -1,19 +1,19 @@
 {
-  "validated_on": "2026-10-18",
-  "comfyui_version": "0.42.0",
-  "comfyui_commit": "8f04fd6ecf4a548937971e840af2a985529fab76",
+  "validated_on": "2026-11-05",
+  "comfyui_version": "0.44.0",
+  "comfyui_commit": "fb2b26fdac507b7da81277c7becaf54c5e46ac6b",
   "python": "3.12.14",
   "torch": "2.15.0.dev20260827+rocm7.2",
   "torchvision": "0.30.0.dev20260831+rocm7.2",
   "torchaudio": "2.11.0.dev20260831+rocm7.2",
   "hip": "7.2.53211",
-  "comfy_kitchen": "0.2.39",
-  "comfy_aimdo": "0.5.6",
-  "frontend": "1.55.18",
-  "workflow_templates": "0.11.89",
+  "comfy_kitchen": "0.2.41",
+  "comfy_aimdo": "0.6.0",
+  "frontend": "1.58.5",
+  "workflow_templates": "0.11.102",
   "gpu": "2 x RX 7900 XTX 24 GB (gfx1100)",
-  "system_ram_GiB": 30.63,
-  "placement": "denoiser cuda:0; encoder and VAEs cuda:1; staged component placement, not TP",
+  "system_ram_GiB": 61.55,
+  "placement": "denoiser cuda:0; encoder and VAEs cuda:1; qualified physical order PowerColor thenSapphire; componentplacement, notTP",
   "custom_nodes": [
     "local_graphics_devices (maintained direct CLIP/VAE loaders)"
   ],
@@ -27,5 +27,31 @@
     "packages_unchanged": true,
     "qualification": "guarded normal39-frame API smoke; finite tensors and full AV decode pass",
     "clipproj_commit": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c"
+  },
+  "runtime_selection": {
+    "status": "requires-local-validation",
+    "source_commit": "fb2b26fdac507b7da81277c7becaf54c5e46ac6b",
+    "source_path": "/opt/local-llm/qualified-sources/comfyui-fb2b26fdac50",
+    "dependency_overlay": "/opt/local-llm/qualified-sources/comfyui-fb2b26fdac50/python-overlay",
+    "qualified_device_order": "1,0",
+    "files": {
+      "main.py": "d5f1d810946f0d26c8187c12f9cac273c4689d06466076aea360cfe405e088a2",
+      "custom_nodes/local_graphics_devices/__init__.py": "67b52279d2989e22cffbb78baf9c0954fa1828480310ca651ae6ec944ba19c65",
+      "custom_nodes/local_graphics_devices/clipproj_vendor/__init__.py": "d8e4cb5b680854a53849139ed8c24a5de34bb069e1f5286d1e5264decbc56a82",
+      "custom_nodes/local_graphics_devices/clipproj_vendor/clipproj_nodes.py": "b5dcbf4bea47692c24fd504a95cdafc714c255df3d740a0496bcb0cb3ce9494a",
+      "custom_nodes/local_graphics_devices/clipproj_vendor/clipproj_pinning.py": "3a7fb8d2b6a028355c48c5e6c0cdcfdce42144031dac84d831c1508cbe137d61",
+      "custom_nodes/local_graphics_devices/clipproj_vendor/clipproj_projection.py": "7991e2eecdf3e731ec31084298d84d9b5eda1403a6105fc2e8edc8bcced50673",
+      "custom_nodes/qualification_finite/__init__.py": "05a3eea2ab9d75b987e5d926023633bb743454cf7a3dfd73ae5d9b695c148edb"
+    },
+    "checks": [
+      "graphics-flux-t2i",
+      "graphics-flux-i2i",
+      "graphics-qwen-t2i",
+      "graphics-qwen-edit",
+      "graphics-h3-t2v",
+      "graphics-h3-i2v"
+    ],
+    "scope": "Six normal fixed workflows, finite tensors, saved image/video and full AV decode; retained Torch/ROCm and existing input/user data; no sustained-performance claim",
+    "reference_note": "Source-host workflow qualification only; independently qualify this source, dependencies and placement before selection."
   }
 }

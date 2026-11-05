@@ -35,6 +35,10 @@ def pack_metadata_fingerprint(pack):
 
 
 def check_config(cfg, before_handover=False, require_validated=True):
+    from qualified_native_runtime import record_for,require_profile
+    record=record_for(cfg,'maya')
+    if record is not None:
+        return require_profile(cfg,record,before_handover=before_handover)
     if cfg.get('backend')!='hip' or cfg.get('gpu')!=[0,1] or cfg.get('split_skip_if_fits',False):
         raise RuntimeError('Maya requires both configured AMD GPUs; single-card fallback is disabled.')
     if cfg.get('parallel',1)!=1:

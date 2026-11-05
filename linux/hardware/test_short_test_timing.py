@@ -8,7 +8,7 @@ from short_test_timing import DiagnosticBudgetExpired, StageBudget, violation
 
 class PrefillTimingTests(unittest.TestCase):
     limits = dict(heartbeat_seconds=6, load_seconds=900, first_token_seconds=None,
-                  decode_stall_seconds=3, request_seconds=30,
+                  request_seconds=30,
                   idle_seconds=20, cleanup_seconds=15)
 
     def check_phase(self, now, progress, heartbeat=None, limits=None):
@@ -25,9 +25,22 @@ class PrefillTimingTests(unittest.TestCase):
         p['last_output'] = 211
         self.assertEqual(self.check_phase(211, p), 'post-first-output request deadline')
 
-    def test_stalled_decode_still_stops(self):
+    def test_three_second_output_gap_is_allowed(self):
         p = dict(phase='decode', phase_started=180, request_started=0, last_output=181)
-        self.assertEqual(self.check_phase(184.01, p), 'decode progress stalled')
+        self.assertIsNone(self.check_phase(184.01, p))
+
+    def test_legacy_stall_setting_cannot_restore_removed_cutoff(self):
+        p = dict(phase='decode', phase_started=180, request_started=0, last_output=181)
+        limits = dict(self.limits, decode_stall_seconds=3, request_seconds=900)
+        self.assertIsNone(self.check_phase(600, p, limits=limits))
+        self.assertEqual(self.check_phase(1080.01, p, limits=limits),
+                         'post-first-output request deadline')
+
+    def test_prefill_has_its_own_realistic_budget(self):
+        p = dict(phase='prefill', phase_started=0, request_started=0, last_output=0)
+        limits = dict(self.limits, prefill_seconds=900, request_seconds=900)
+        self.assertIsNone(self.check_phase(899, p, limits=limits))
+        self.assertEqual(self.check_phase(900.01, p, limits=limits), 'prefill phase deadline')
 
     def test_independent_monitor_heartbeat_still_stops(self):
         self.assertEqual(self.check_phase(180, dict(phase='prefill', phase_started=0),

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 repo=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+if [[ -e "$repo/hardware/generated/GPU-LOCK" ]]; then
+    printf 'GPUs are reserved by an existing task/fault hold; Comfy Desktop was not started.\n' >&2
+    exit 1
+fi
 app="/opt/Comfy Desktop/comfyui-desktop-2"
 state="$repo/graphics/generated"
 mkdir -p "$state"
@@ -14,10 +18,16 @@ if ! flock -n 9; then
     command -v zenity >/dev/null && zenity --info --text='ComfyUI is already running in a terminal. Close that server with Ctrl+C, then open Comfy Desktop.' || true
     exit 1
 fi
+runtime=$(python3 "$repo/graphics/runtime_selection.py" runtime)
+overlay=$(python3 "$repo/graphics/runtime_selection.py" overlay)
+devices=$(python3 "$repo/graphics/runtime_selection.py" devices)
 unset PYTORCH_ALLOC_CONF PYTORCH_CUDA_ALLOC_CONF HIP_VISIBLE_DEVICES CUDA_VISIBLE_DEVICES HSA_OVERRIDE_GFX_VERSION
-export ROCR_VISIBLE_DEVICES=0,1 OMP_NUM_THREADS=8 PYTHONUNBUFFERED=1
-python3 "$repo/graphics/install-device-loaders.py" --runtime "$repo/runtime/comfyui"
-"$repo/runtime/comfyui/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
+export ROCR_VISIBLE_DEVICES="$devices" OMP_NUM_THREADS=8 PYTHONUNBUFFERED=1
+if [[ -n "$overlay" ]]; then
+    export PYTHONPATH="$overlay${PYTHONPATH:+:$PYTHONPATH}" HIP_VISIBLE_DEVICES=0,1
+fi
+python3 "$repo/graphics/install-device-loaders.py" --runtime "$runtime"
+"$runtime/.venv/bin/python" -c 'import torch; assert torch.version.hip and torch.cuda.device_count() == 2, "This profile requires two ROCm GPUs"'
 ulimit -c 0
 stamp=$(date +%Y%m%d-%H%M%S)
 "$app" "$@" >>"$state/desktop-$stamp.log" 2>&1 &

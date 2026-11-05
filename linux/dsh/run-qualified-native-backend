@@ -7,4 +7,4 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$LLM_ROOT/llm-tools/cuda-build/lib"
 while IFS= read -r name; do
     case "$name" in MAYA_*|STRATA_*|DS4_*) unset "$name" ;; esac
 done < <(compgen -e)
-exec "$LLM_ROOT/strata/.venv/bin/python" -B "$LLM_ROOT/dsh/qualified_native_backend.py" --engine strata --host 127.0.0.1 "$@"
+exec "$LLM_ROOT/strata/.venv/bin/python" -B "$LLM_ROOT/dsh/qualified_native_backend.py" --host 127.0.0.1 "$@"

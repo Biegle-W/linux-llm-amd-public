@@ -30,7 +30,9 @@ def save(path, value):
 
 
 def main():
-    runtime = ROOT / "runtime/comfyui"
+    from runtime_selection import selection
+    selected = selection(ROOT)
+    runtime = Path(selected["runtime"])
     assert (runtime / ".venv/bin/python").is_file(), "Existing environment missing"
     assert (runtime / "main.py").is_file(), "Existing ComfyUI missing"
     data = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")) / "comfyui-desktop-2"
@@ -39,7 +41,8 @@ def main():
     assert isinstance(records, list), "Unexpected installation schema; refusing overwrite"
     old = next((r for r in records if r.get("id") == INSTALL_ID), {})
     args = ["--cuda-device", "all", "--default-device", "0", "--listen", "127.0.0.1",
-            "--port", "8188", "--extra-model-paths-config", str(ROOT / "graphics/extra_model_paths.yaml"),
+            "--port", "8188", "--user-directory", str(ROOT / "runtime/comfyui/user"),
+            "--input-directory", str(ROOT / "runtime/comfyui/input"), "--extra-model-paths-config", str(ROOT / "graphics/extra_model_paths.yaml"),
             "--reserve-vram", "0.125", "--disable-pinned-memory", "--disable-async-offload",
             "--disable-dynamic-vram", "--cache-none", "--use-pytorch-cross-attention",
             "--disable-partner-nodes"]
@@ -50,10 +53,11 @@ def main():
               "venvPath": str(runtime / ".venv"), "launchArgs": shlex.join(args),
               "launchMode": "window", "browserPartition": "shared",
               "useSharedModels": False, "modelDirs": [], "useSharedInput": False,
-              "inputDir": str(runtime / "input"), "useSharedOutput": False,
+              "inputDir": str(ROOT / "runtime/comfyui/input"), "useSharedOutput": False,
               "outputDir": str(ROOT / "graphics/outputs"),
-              "envVars": {"ROCR_VISIBLE_DEVICES": "0,1", "OMP_NUM_THREADS": "8",
-                          "PYTHONUNBUFFERED": "1"}}
+              "envVars": {"ROCR_VISIBLE_DEVICES": selected["devices"], "OMP_NUM_THREADS": "8",
+                          "PYTHONUNBUFFERED": "1",
+                          **({"PYTHONPATH": selected["overlay"], "HIP_VISIBLE_DEVICES": "0,1"} if selected["overlay"] else {})}}
     records = [r for r in records if r.get("id") != INSTALL_ID] + [record]
     settings = load(config / "settings.json", {})
     settings.update({"autoLaunchOnStartup": INSTALL_ID, "autoInstallUpdates": False,

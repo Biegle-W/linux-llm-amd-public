@@ -6,7 +6,9 @@ if [[ -e "$repo/hardware/generated/GPU-LOCK" ]]; then
     printf 'GPUs are reserved by an existing task/fault hold; ComfyUI was not started.\n' >&2
     exit 1
 fi
-runtime=${COMFYUI_DIR:-"$repo/runtime/comfyui"}
+runtime=${COMFYUI_DIR:-$(python3 "$repo/graphics/runtime_selection.py" runtime)}
+overlay=$(python3 "$repo/graphics/runtime_selection.py" overlay)
+devices=$(python3 "$repo/graphics/runtime_selection.py" devices)
 paths=${COMFYUI_MODEL_PATHS:-"$repo/graphics/extra_model_paths.yaml"}
 state="$repo/graphics/generated"
 mkdir -p "$state" "$repo/graphics/outputs"
@@ -21,7 +23,10 @@ fi
 
 unset PYTORCH_ALLOC_CONF PYTORCH_CUDA_ALLOC_CONF
 unset HIP_VISIBLE_DEVICES CUDA_VISIBLE_DEVICES HSA_OVERRIDE_GFX_VERSION
-export ROCR_VISIBLE_DEVICES=0,1
+export ROCR_VISIBLE_DEVICES="$devices"
+if [[ -n "$overlay" && "$runtime" == "$(python3 "$repo/graphics/runtime_selection.py" runtime)" ]]; then
+    export PYTHONPATH="$overlay${PYTHONPATH:+:$PYTHONPATH}" HIP_VISIBLE_DEVICES=0,1
+fi
 export OMP_NUM_THREADS=8
 export PYTHONUNBUFFERED=1
 
@@ -30,6 +35,7 @@ cd -- "$runtime"
 "$runtime/.venv/bin/python" "$repo/graphics/guarded_comfy.py" "$runtime/.venv/bin/python" main.py \
     --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188 \
     --extra-model-paths-config "$paths" \
+    --input-directory "$repo/runtime/comfyui/input" --user-directory "$repo/runtime/comfyui/user" \
     --output-directory "$repo/graphics/outputs" \
     --reserve-vram 0.125 --disable-pinned-memory --disable-async-offload \
     --disable-dynamic-vram --cache-none --use-pytorch-cross-attention \

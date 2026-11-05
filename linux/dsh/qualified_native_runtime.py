@@ -36,6 +36,15 @@ def config_fingerprint(cfg):
     ignored={'local_validation','log','installer','expert_profile_seed_sha256','upstream_expert_profile_seed_sha256'}
     return hashlib.sha256(json.dumps({k:v for k,v in cfg.items() if k not in ignored},sort_keys=True).encode()).hexdigest()
 
+def admitted_status(record):
+    if record.get('status')=='passed':return True
+    token=os.environ.get('LOCAL_LLM_UPDATE_CANDIDATE')
+    if record.get('status')!='candidate' or not token or token!=record.get('candidate_owner'):return False
+    try:
+        lock=json.loads((ROOT/'hardware/generated/GPU-LOCK').read_text())
+        return lock['owner'].startswith('daily-update-') and Path('/proc',str(int(lock['pid']))).is_dir()
+    except (OSError,ValueError,KeyError,TypeError):return False
+
 def record_for(cfg,family=None):
     path=ROOT/'dsh/qualified-native-profiles.json'
     if not path.exists():return None
@@ -43,11 +52,13 @@ def record_for(cfg,family=None):
     if data.get('schema_version')!=1:raise RuntimeError('Unknown native qualification registry version')
     record=data.get('profiles',{}).get(cfg.get('model_name'))
     if record is None:return None
-    if record.get('status')!='passed' or family is not None and record.get('family')!=family:
+    if not admitted_status(record) or family is not None and record.get('family')!=family:
         raise RuntimeError('Native qualification is held or belongs to another backend')
     return record
 
 def require_profile(cfg,record,before_handover=False):
+    if not admitted_status(record) or record.get('family') not in ['maya','strata']:
+        raise RuntimeError('Native qualification must pass for a known backend family')
     if (cfg.get('backend')!='hip' or cfg.get('gpu')!=[0,1] or cfg.get('parallel')!=1
             or cfg.get('split_skip_if_fits',False)):
         raise RuntimeError('Qualified native profiles require both AMD cards and one request')
@@ -67,7 +78,15 @@ def require_profile(cfg,record,before_handover=False):
     args=cfg['args']
     def value(flag):return args[args.index(flag)+1] if flag in args else None
     if value('--max-context')!='32768':raise RuntimeError('Native context must remain the tested 32K')
-    if value('--tp')!='2':raise RuntimeError('Native placement must retain both tested layer groups')
+    glm='--glm-pack' in args
+    if glm:
+        if (record['family']!='maya' or record['binary_relative']!='build-hip/maya'
+                or cfg.get('layer_split')!='auto' or value('--tp') is not None
+                or value('--vram-reserve-mib')!='8192' or value('--vram-reserve-later-mib')!='8192'
+                or cfg.get('env',{}).get('MAYA_GLM_PREFILL_FUSED')!='0'
+                or cfg.get('env',{}).get('MAYA_GLM_RAM_GB')!='8'):
+            raise RuntimeError('GLM must retain its tested dual-card placement, RAM tier and disabled fused prefill')
+    elif value('--tp')!='2':raise RuntimeError('Native placement must retain both tested layer groups')
     reserves=[int(value(flag)) for flag in ['--reserve-mib','--vram-reserve-mib','--vram-reserve-later-mib'] if flag in args]
     if not reserves or min(reserves)<8192:
         raise RuntimeError('Qualified normal profile must retain its 8 GiB requested reserve')
