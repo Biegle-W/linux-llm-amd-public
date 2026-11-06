@@ -1,5 +1,7 @@
 # Current AMD results — November 5, 2026
 
+[Monitor/display investigation](MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.md): owner reports earlier successful run was headless. Current monitor is on PowerColor, while Sapphire first lost PCI/SMU access. Display remains a plausible contributor, not a proved trigger; prior display errors followed the initial SMU failure. Read-only analysis only; fault hold retained.
+
 [No-store DeepSeek failure and persistent inference kernel](MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
 
 **14 qualified normal routes are enabled.** Read the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) for exact selections and safeguards.

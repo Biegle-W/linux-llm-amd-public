@@ -1,5 +1,7 @@
 # DeepSeek no-store loading failure — November 5, 2026
 
+[Follow-up monitor/display investigation](MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.md): plausible contribution remains unproved; no new trial or runtime change.
+
 The owner-requested single Maya DeepSeek UD-IQ1_S baseline **failed during loading without `--ssd-cache36`**. It never became ready and recorded zero requests. A later reboot returned to the owner-selected patched kernel. The latest watchdog fault hold remains; no retry or promotion occurred. [Structured result](results/MAYA-DEEPSEEK-NO-STORE-2026-11-05.json).
 
 ## What ran
