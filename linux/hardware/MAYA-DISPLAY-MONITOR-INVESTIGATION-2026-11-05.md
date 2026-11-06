@@ -1,5 +1,7 @@
 # Monitor/display contribution investigation — November 5, 2026
 
+**Subsequent headless result:** [the all-model campaign](AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md) reproduced Sapphire PCI/SMU failure during SGLang startup with physical outputs disconnected. A currently connected monitor is not required. Display Core and retained boot/hotplug state remain unexcluded because there was no reboot after disconnect. The original read-only findings below precede that test; actual root cause remains unproved.
+
 **A connected monitor is a plausible contributing variable, but the available evidence does not establish it as the crash trigger.** The most specific recorded failure is loss of PCI/SMU access to Sapphire during loading. No GPU test, hold release or runtime change was made for this investigation. [Structured findings](results/MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.json).
 
 The owner reports that the successful early DeepSeek run had no physical monitor attached and that a monitor is now connected to view logs. That is a relevant difference to isolate. Historical connector/EDID/CRTC state was not saved at the successful 04:14 test, and the exact plug-in time/earlier port is not independently recorded.

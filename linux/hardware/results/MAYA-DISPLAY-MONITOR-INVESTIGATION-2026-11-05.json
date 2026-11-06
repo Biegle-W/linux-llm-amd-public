@@ -1,167 +1,182 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "date": "2026-11-05",
-  "scope": "read-only display/monitor contribution investigation; no GPU tests or runtime changes",
-  "owner_report": {
-    "successful_early_DeepSeek_test": "no physical monitor connected",
-    "historical_port_and_connection_time": "not independently recorded",
-    "current_condition": "physical monitor now connected to view logs"
+  "assessment": "Physical monitor connection is not necessary: headless SGLang startup reproduced Sapphire PCI/SMU failure. Display Core and prior boot/hotplug state remain unexcluded; root cause unresolved.",
+  "latest_headless_follow_up": {
+    "report": "hardware/AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md",
+    "model_tool_checks_passed": 4,
+    "GPU_failed_route": "qwen3.8-27b-sglang-dflash2",
+    "unrun_routes": 9,
+    "no_reboot_after_monitor_disconnect": true,
+    "Display_Core_still_loaded": true,
+    "fault_hold_retained": true,
+    "no_retry": true
   },
-  "assessment": "Monitor/display state is a plausible contributing variable, not an established initiating cause. The most specific recorded failure is loss of Sapphire PCI/SMU access.",
-  "verified_current_display": {
-    "GPU": "PowerColor",
-    "PCI": "0000:13:00.0",
-    "connector": "HDMI-A-4",
-    "enabled": true,
-    "DPMS": "On",
-    "display_manager": "inactive",
-    "no_desktop_compositor_process_observed": true
-  },
-  "failed_GPU": {
-    "GPU": "Sapphire",
-    "PCI": "0000:0b:00.0",
-    "logical_model_index": 1
-  },
-  "successful_and_failed_boot_display_initialization": {
-    "same_Display_Core_version": "3.2.369",
-    "DCN": "3.2",
-    "Display_Core_initialized_on_both_GPUs": true,
-    "primary_kernel_framebuffer": "PowerColor 13:00.0",
-    "Sapphire_boot_message": "Cannot find any crtc or sizes",
-    "physical_connector_state_at_successful_04_14_test_saved": false,
-    "inference": "Boot display initialization does not establish monitor connection at test time. Physical disconnection does not necessarily unload Display Core."
-  },
-  "prior_failure_timing_seconds_after_first_SMU": {
-    "first_SMU": 0.0,
-    "first_DMCUB": 30.6861,
-    "first_vblank": 34.850666,
-    "first_hardlockup": 58.367994
-  },
-  "prior_failure_display_error_devices": {
-    "DMCUB": "Sapphire 0b:00.0",
-    "vblank_timeout": "PowerColor 13:00.0",
-    "hardlockup_stack": "Display/vblank register-read functions; exact GPU for that stack not established"
-  },
-  "latest_source_trace": {
-    "amdgpu_device_bus_status_check": "reads PCI_COMMAND configuration dword; logs lost-from-bus on read error or PCI_POSSIBLE_ERROR result",
-    "SMU_path": "unexpected SMU response -> PCI bus-status check -> bus-error message; TransferTableSmu2Dram was metrics export",
-    "interpretation": "Shows failed PCI/SMU access; does not identify cable, power, switch, hardware or driver as root cause."
-  },
-  "saved_latest_trial_separate_AER_DPC_link_error_records": 0,
-  "saved_failed_boot_gnome_shell_records": 0,
-  "first_15s_telemetry_comparison": {
-    "successful_first15s": {
-      "samples": 54,
-      "by_PCI": {
-        "0000:0b:00.0": {
-          "power_average_w": {
-            "min": 11.0,
-            "max": 95.0,
-            "first": 12.0
+  "initial_read_only_investigation": {
+    "schema_version": 1,
+    "date": "2026-11-05",
+    "scope": "read-only display/monitor contribution investigation; no GPU tests or runtime changes",
+    "owner_report": {
+      "successful_early_DeepSeek_test": "no physical monitor connected",
+      "historical_port_and_connection_time": "not independently recorded",
+      "current_condition": "physical monitor now connected to view logs"
+    },
+    "assessment": "Monitor/display state is a plausible contributing variable, not an established initiating cause. The most specific recorded failure is loss of Sapphire PCI/SMU access.",
+    "verified_current_display": {
+      "GPU": "PowerColor",
+      "PCI": "0000:13:00.0",
+      "connector": "HDMI-A-4",
+      "enabled": true,
+      "DPMS": "On",
+      "display_manager": "inactive",
+      "no_desktop_compositor_process_observed": true
+    },
+    "failed_GPU": {
+      "GPU": "Sapphire",
+      "PCI": "0000:0b:00.0",
+      "logical_model_index": 1
+    },
+    "successful_and_failed_boot_display_initialization": {
+      "same_Display_Core_version": "3.2.369",
+      "DCN": "3.2",
+      "Display_Core_initialized_on_both_GPUs": true,
+      "primary_kernel_framebuffer": "PowerColor 13:00.0",
+      "Sapphire_boot_message": "Cannot find any crtc or sizes",
+      "physical_connector_state_at_successful_04_14_test_saved": false,
+      "inference": "Boot display initialization does not establish monitor connection at test time. Physical disconnection does not necessarily unload Display Core."
+    },
+    "prior_failure_timing_seconds_after_first_SMU": {
+      "first_SMU": 0.0,
+      "first_DMCUB": 30.6861,
+      "first_vblank": 34.850666,
+      "first_hardlockup": 58.367994
+    },
+    "prior_failure_display_error_devices": {
+      "DMCUB": "Sapphire 0b:00.0",
+      "vblank_timeout": "PowerColor 13:00.0",
+      "hardlockup_stack": "Display/vblank register-read functions; exact GPU for that stack not established"
+    },
+    "latest_source_trace": {
+      "amdgpu_device_bus_status_check": "reads PCI_COMMAND configuration dword; logs lost-from-bus on read error or PCI_POSSIBLE_ERROR result",
+      "SMU_path": "unexpected SMU response -> PCI bus-status check -> bus-error message; TransferTableSmu2Dram was metrics export",
+      "interpretation": "Shows failed PCI/SMU access; does not identify cable, power, switch, hardware or driver as root cause."
+    },
+    "saved_latest_trial_separate_AER_DPC_link_error_records": 0,
+    "saved_failed_boot_gnome_shell_records": 0,
+    "first_15s_telemetry_comparison": {
+      "successful_first15s": {
+        "samples": 54,
+        "by_PCI": {
+          "0000:0b:00.0": {
+            "power_average_w": {
+              "min": 11.0,
+              "max": 95.0,
+              "first": 12.0
+            },
+            "gfx_clock_mhz": {
+              "min": 0.0,
+              "max": 2237.0,
+              "first": 0.0
+            },
+            "memory_clock_mhz": {
+              "min": 96.0,
+              "max": 1249.0,
+              "first": 96.0
+            },
+            "busy_percent": {
+              "min": 0.0,
+              "max": 50.0,
+              "first": 0.0
+            }
           },
-          "gfx_clock_mhz": {
-            "min": 0.0,
-            "max": 2237.0,
-            "first": 0.0
-          },
-          "memory_clock_mhz": {
-            "min": 96.0,
-            "max": 1249.0,
-            "first": 96.0
-          },
-          "busy_percent": {
-            "min": 0.0,
-            "max": 50.0,
-            "first": 0.0
+          "0000:13:00.0": {
+            "power_average_w": {
+              "min": 7.0,
+              "max": 123.0,
+              "first": 8.0
+            },
+            "gfx_clock_mhz": {
+              "min": 0.0,
+              "max": 2459.0,
+              "first": 0.0
+            },
+            "memory_clock_mhz": {
+              "min": 96.0,
+              "max": 1249.0,
+              "first": 96.0
+            },
+            "busy_percent": {
+              "min": 0.0,
+              "max": 61.0,
+              "first": 0.0
+            }
           }
-        },
-        "0000:13:00.0": {
-          "power_average_w": {
-            "min": 7.0,
-            "max": 123.0,
-            "first": 8.0
+        }
+      },
+      "failed_complete_samples": {
+        "samples": 48,
+        "by_PCI": {
+          "0000:0b:00.0": {
+            "power_average_w": {
+              "min": 43.0,
+              "max": 94.0,
+              "first": 53.0
+            },
+            "gfx_clock_mhz": {
+              "min": 0.0,
+              "max": 412.0,
+              "first": 0.0
+            },
+            "memory_clock_mhz": {
+              "min": 96.0,
+              "max": 1249.0,
+              "first": 96.0
+            },
+            "busy_percent": {
+              "min": 0.0,
+              "max": 24.0,
+              "first": 0.0
+            }
           },
-          "gfx_clock_mhz": {
-            "min": 0.0,
-            "max": 2459.0,
-            "first": 0.0
-          },
-          "memory_clock_mhz": {
-            "min": 96.0,
-            "max": 1249.0,
-            "first": 96.0
-          },
-          "busy_percent": {
-            "min": 0.0,
-            "max": 61.0,
-            "first": 0.0
+          "0000:13:00.0": {
+            "power_average_w": {
+              "min": 9.0,
+              "max": 39.0,
+              "first": 10.0
+            },
+            "gfx_clock_mhz": {
+              "min": 0.0,
+              "max": 1456.0,
+              "first": 0.0
+            },
+            "memory_clock_mhz": {
+              "min": 96.0,
+              "max": 456.0,
+              "first": 96.0
+            },
+            "busy_percent": {
+              "min": 0.0,
+              "max": 35.0,
+              "first": 0.0
+            }
           }
         }
       }
     },
-    "failed_complete_samples": {
-      "samples": 48,
-      "by_PCI": {
-        "0000:0b:00.0": {
-          "power_average_w": {
-            "min": 43.0,
-            "max": 94.0,
-            "first": 53.0
-          },
-          "gfx_clock_mhz": {
-            "min": 0.0,
-            "max": 412.0,
-            "first": 0.0
-          },
-          "memory_clock_mhz": {
-            "min": 96.0,
-            "max": 1249.0,
-            "first": 96.0
-          },
-          "busy_percent": {
-            "min": 0.0,
-            "max": 24.0,
-            "first": 0.0
-          }
-        },
-        "0000:13:00.0": {
-          "power_average_w": {
-            "min": 9.0,
-            "max": 39.0,
-            "first": 10.0
-          },
-          "gfx_clock_mhz": {
-            "min": 0.0,
-            "max": 1456.0,
-            "first": 0.0
-          },
-          "memory_clock_mhz": {
-            "min": 96.0,
-            "max": 456.0,
-            "first": 96.0
-          },
-          "busy_percent": {
-            "min": 0.0,
-            "max": 35.0,
-            "first": 0.0
-          }
-        }
-      }
-    }
-  },
-  "telemetry_caveat": "Sapphire initial recorded power differs12Wvs53W, but clocks/timing, priorpeerwork and coldLt differ; not a controlled monitor A/B and not evidence that the monitor caused that state.",
-  "upstream_sources": [
-    "https://docs.kernel.org/gpu/amdgpu/display/dc-debug.html",
-    "https://docs.kernel.org/gpu/amdgpu/display/dcn-overview.html"
-  ],
-  "next_discriminating_comparison": "Only after separate owner authorization: one identical guarded case with physical monitor disconnected and remote durable logs; retain patched kernel, model/placement/guards. Do not combine with source, clock, power-cap, PCIe or Display Core parameter changes.",
-  "no_trial_prepared_or_started": true,
-  "fault_hold_unchanged": true,
-  "all41_original_failure_evidence_pins_unchanged": true,
-  "limitations": [
-    "No historical EDID/connector/CRTC snapshot at the successful test.",
-    "Latest persisted kernel journal ends at initialSMUfault, so laterpath notavailable.",
-    "Later display errors can be consequences or escalation; temporal order does not prove cause."
-  ],
-  "updated_utc": "2026-11-06T02:55:54.471099+00:00"
+    "telemetry_caveat": "Sapphire initial recorded power differs12Wvs53W, but clocks/timing, priorpeerwork and coldLt differ; not a controlled monitor A/B and not evidence that the monitor caused that state.",
+    "upstream_sources": [
+      "https://docs.kernel.org/gpu/amdgpu/display/dc-debug.html",
+      "https://docs.kernel.org/gpu/amdgpu/display/dcn-overview.html"
+    ],
+    "next_discriminating_comparison": "Only after separate owner authorization: one identical guarded case with physical monitor disconnected and remote durable logs; retain patched kernel, model/placement/guards. Do not combine with source, clock, power-cap, PCIe or Display Core parameter changes.",
+    "no_trial_prepared_or_started": true,
+    "fault_hold_unchanged": true,
+    "all41_original_failure_evidence_pins_unchanged": true,
+    "limitations": [
+      "No historical EDID/connector/CRTC snapshot at the successful test.",
+      "Latest persisted kernel journal ends at initialSMUfault, so laterpath notavailable.",
+      "Later display errors can be consequences or escalation; temporal order does not prove cause."
+    ],
+    "updated_utc": "2026-11-06T02:55:54.471099+00:00"
+  }
 }

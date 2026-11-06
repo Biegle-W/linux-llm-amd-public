@@ -1,5 +1,7 @@
 # Agent entry point
 
+[Headless model campaign](linux/hardware/AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
+
 [No-store DeepSeek failure and persistent inference kernel](linux/hardware/MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
 
 Read [README.md](README.md) for maintenance policy, then the [current runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md). Read the [current result index](linux/hardware/CURRENT-AMD-BENCHMARKS.md) only when the task needs measurements. Inspect both Git trees and actual jobs/locks before acting.
