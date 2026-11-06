@@ -4,8 +4,8 @@
   "scope": "read-only display/monitor contribution investigation; no GPU tests or runtime changes",
   "owner_report": {
     "successful_early_DeepSeek_test": "no physical monitor connected",
-    "later_failed_tests": "physical monitor connected to watch logs",
-    "historical_port_and_connection_time": "not independently recorded"
+    "historical_port_and_connection_time": "not independently recorded",
+    "current_condition": "physical monitor now connected to view logs"
   },
   "assessment": "Monitor/display state is a plausible contributing variable, not an established initiating cause. The most specific recorded failure is loss of Sapphire PCI/SMU access.",
   "verified_current_display": {

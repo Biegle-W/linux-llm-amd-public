@@ -2,7 +2,7 @@
 
 **A connected monitor is a plausible contributing variable, but the available evidence does not establish it as the crash trigger.** The most specific recorded failure is loss of PCI/SMU access to Sapphire during loading. No GPU test, hold release or runtime change was made for this investigation. [Structured findings](results/MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.json).
 
-The owner reports that the successful early DeepSeek run had no physical monitor attached, whereas a monitor was connected to watch the later failures. That is a relevant difference to isolate. Historical connector/EDID/CRTC state was not saved at the successful 04:14 test, and the exact plug-in time/earlier port is not independently recorded.
+The owner reports that the successful early DeepSeek run had no physical monitor attached and that a monitor is now connected to view logs. That is a relevant difference to isolate. Historical connector/EDID/CRTC state was not saved at the successful 04:14 test, and the exact plug-in time/earlier port is not independently recorded.
 
 ## What the evidence establishes
 
