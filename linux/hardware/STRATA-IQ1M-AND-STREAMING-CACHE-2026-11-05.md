@@ -47,12 +47,38 @@ The Qwen27B pair shares one main weight set; the two Coder routes and two DeepSe
 
 Three fixed128-token speed prompts, deterministic settings, strict tool call/result IDs and the exact returned marker were checked. Native request clocks and token counts are separate from client SSE latency. No sustained, full-window, vendor benchmark or controlled cross-quant speedup claim is made.
 
-## Why the streaming routes are slow; pending optimization
+## Cache qualification and selection
 
-Saved GLM telemetry shows65.67–87.07 disk reads/token and641–2788.65 aggregate disk ms/token, versus about10.6ms/token on the CPU lane. Overlapping disk times are not added as wall time. The baseline8GB RAM tier leaves experts on disk; RAM24 is a distinct candidate within unchanged hard limits and requested8GiB GPU reserves, with fused prefill disabled. Saved DeepSeek Maya telemetry shows94.5GB of expert weights outside VRAM,28GB read-ahead and substantial file refaults; the selected source already supports the proposed bounded36GB whole-expert RAM store. Strata's selected Q1 route already uses36GB. No arithmetic-changing expert/prompt skipping is introduced.
+| Case | Result | Selected state |
+|---|---|---|
+| GLM RAM24, Maya c167004, fused prefill disabled, requested 8 GiB per-card reserves | Strict tools passed; 5/6 local fixtures; three short speed probes median 1.995 native tokens/s | Not promoted; RAM8 restored |
+| Maya DeepSeek UD-IQ1_S, intended 36GB store | Loading failed on six-second heartbeat; original 15-second owned cleanup failed; zero inference requests | No promotion; original no-store baseline restored after reboot |
+| GLM RAM40 | Prepared only; no model run or qualification | Blocked by persistent GPU fault hold |
 
-GLM RAM24 and Maya DeepSeek36GB-store optimization remain pending. The first GLM admission stopped before engine load on two expired conversational cache slots incorrectly sealed as immutable weights; only those transient entries were removed after checking the remaining pins. A separate loaded GLM attempt issued zero requests because the harness expected `loaded:true`, while Maya reports `unloaded:false`. It was deliberately stopped with clean teardown and baseline restoration. The corrected readiness contract passed10 CPU checks. No inference result or cache optimization pass is claimed, and GLM retains RAM8. The DeepSeek36GB-store candidate has never run. After a power-loss reboot, stock7.0.0-42-generic is current; the pending cases retain their tested7.0.14-42-vmpt1 boot requirement. No previous peer test or model case was replayed.
+GLM RAM24 loaded in 73.342s. First/follow-up native decode was 1.56/0.98 tokens/s; the three speed probes ranged 1.333–3.464 tokens/s with median TTFT 14.432s. All 11 completed API output counts match saved native logs; JSON arithmetic was the failed fixture. Logical disk reads fell to 43.56–60.12/token from the earlier RAM8 sample's 65.67–87.07, but follow-up performance regressed. Different cache conditions and prompts prevent a controlled general speedup claim. Owned cleanup passed with zero recorded swap/spill, and the wrapper restored RAM8 and its passed registry record. These short tests do not qualify sustained or full-context performance.
 
-The two failed pre-request records and reviewed holds remain preserved. Both had zero owned swap/spill, clean owned cleanup and restored target profiles. The power loss occurred after those jobs had ended. The passed IQ1_M result is retained. After reboot, all69 sealed weight/package/library files were rehashed against their original content hashes under the same guards. Only verified device/inode bindings were updated, and read-only admission then passed; this is not a new inference pass. All100°C/storage/RAM/VRAM/phase-aware-swap/spill/heartbeat/cleanup/ownership protections remain. No Radiance trial, retired-asset restoration, recurring schedule or persistent boot-default change was made.
+Earlier stale-slot admission and readiness-schema stops remain historical zero-request records. The first removed only two expired conversational slots from immutable backing; the second expected `loaded:true` where Maya reports `unloaded:false`. Its corrected readiness contract passed 10 CPU checks. A later power-loss-truncated launcher also produced an empty readiness-only guard pass; that is not model qualification. The actual GLM RAM24 result above comes from the restored, nonempty, content-pinned case. The passed IQ1_M result and all prior final cases are retained; no completed model case was repeated for this review.
+
+## DeepSeek loading failure and kernel crash
+
+The first actual Maya 36 GB store case started at 18:44:48 EST on 7.0.14-42-vmpt1. The supervisor heartbeat stopped while collecting telemetry, and the original owned worker/cgroup did not drain by the 15-second deadline. The failed result remains failed even though reboot later removed the worker and KFD client. No inference or optimization pass occurred.
+
+| Saved journal time, EST | Observation |
+|---|---|
+| 18:45:06 | SMU stopped responding to metrics/fan queries |
+| 18:45:11 | MES REMOVE_QUEUE failed; kernel began GPU reset/recovery |
+| 18:45:36–37 | Power-state/display errors and DMCUB diagnostic error |
+| 18:45:41 | Display vblank wait timed out |
+| 18:46:05 | CPU19 hard lockup in `amdgpu_device_rreg` via display/vblank IRQ; multiple CPU soft lockups |
+
+Minimum recorded available host RAM was 52.57 GiB and minimum free VRAM was about 7.71 GiB per card; recorded owned swap/spill was zero. Telemetry then stopped responding, so those are not post-hang measurements. The evidence identifies a GPU/driver recovery and display-IRQ failure sequence; it does not establish a driver, PCIe or hardware root cause, and does not indicate ordinary host RAM exhaustion. Raw journals, machine IDs and client state are excluded from this report.
+
+The machine subsequently rebooted to stock 7.0.0-42-generic. KFD was observed empty, and actual disk configs/registry records retained GLM RAM8 and Maya DeepSeek without the candidate SSD store. **The persistent watchdog GPU fault hold remains. No automatic GPU work, retry, reboot or hold release is authorized; RAM40 remains unrun and blocked.** Four fresh peer capability/local/IPC-integrity/RCCL checks passed earlier on the failed 7.0.14 boot with zero recorded swap/spill and clean owned teardown. Those passes are not current-stock-boot proof or model-loading stability proof.
+
+## Reviewed filesystem admission
+
+Root filesystem device numbers changed across boots. Reviewed installation/mount provenance records the same filesystem UUID while preserving original inode, byte count, mtime and content pins. Admission accepts only a device-number alias on that verified UUID with the other identities unchanged; missing, different or unqueryable UUIDs fail closed. Existing external-file content verification is retained. Only Maya Q1's runtime-written `lt-picks.txt` algorithm-choice cache was removed from immutable backing after checking the selected c167 source writer (`src/ds4/ds4_model.cu` and append logic in `src/ds4/ds4_lt.cu`); model weights and immutable metadata remain sealed.
+
+The reviewed guard work passed 41 CPU contracts, including exact RAM40 record/reserve checks; it does not mark RAM40 passed or select it. Three export checks verify public references retain content hashes, omit local filesystem seals/UUIDs and require independent local qualification. The earlier post-power-loss 69-file IQ1_M content recheck remains identity evidence, not a new inference pass. All 100°C/storage/RAM/VRAM/phase-aware-swap/spill/heartbeat/cleanup/ownership protections, original 13 routes, retired assets, boot default and existing schedules remain preserved.
 
 [Numeric evidence](results/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.json) · [Current results](CURRENT-AMD-BENCHMARKS.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)

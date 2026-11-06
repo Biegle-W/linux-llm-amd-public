@@ -2,7 +2,7 @@
 
 Read the root [maintenance policy](../../README.md) first. This is the current operational summary for Linux and Windows/phone API clients. Historical narratives are linked at the end; they are not startup reading.
 
-[IQ1_M qualification and cache status](../hardware/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 and DeepSeek36GB-store optimization remain pending after two zero-request GLM preflight/harness stops. The current stock reboot differs from the pending cases’ tested boot; no optimization or current-boot model pass is claimed.
+[IQ1_M qualification and cache status](../hardware/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current stock7.0.0-42-generic has no fresh peer/model qualification.
 
 ## State and next action
 
@@ -19,7 +19,7 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 ## Hardware and protected policy
 
 - Intel i5-13600KF; ASUS TX GAMING B760M WIFI; 61.55 GiB visible RAM; two RX 7900 XTX 24 GB behind PEX880xx. Gen4 x16 common uplink, x8 branch segments. Runtime logical order is PowerColor then Sapphire (`ROCR_VISIBLE_DEVICES=1,0`, `HIP_VISIBLE_DEVICES=0,1`).
-- Current boot after a power loss is stock `7.0.0-42-generic`. Earlier bounded peer/IPC/RCCL evidence belongs to `7.0.14-42-vmpt1`; the pending cache cases retain that tested-boot requirement. **Stock persistent boot default is unchanged.** Recheck actual job and file admission after reboot; no current-boot peer or sustained-stability pass is claimed.
+- Current boot after the later crash is stock `7.0.0-42-generic`. Four fresh peer capability/local/IPC-integrity/RCCL checks passed on the preceding `7.0.14-42-vmpt1` boot before its later model-loading failure and hard/soft CPU lockups. Those passes establish neither current-stock-boot qualification nor sustained model stability. **Stock persistent boot default is unchanged; the persistent watchdog fault hold remains.**
 - Retain **100°C** CPU/GPU edge/junction/memory/SSD stop policy, SMART health, 1 GiB available host RAM and 128 MiB free per-card live floors, dedicated-VRAM spill, supervisor heartbeat, phase timing and owned cleanup guards. Native normal readiness retains its 6 GiB actual startup floor and the qualified Coder profile requests 8 GiB reserve.
 - Current resource policy has no `MemoryHigh`, computes worker hard limits from installed RAM, retains existing swap capacity and permits device-speed swap with storage/temperature protection. Old v4 swap-rate/zero-system-swap policies are historical. Never disable global swap or interfere with unrelated applications.
 - GPU tests require the established owned `hardware/generated/GPU-LOCK` and fresh admission. Serialize GPU work and heavy I/O; unknown ownership blocks startup. Never delete another owner's lock or fault evidence. No new test is needed for documentation.
@@ -51,6 +51,7 @@ Configured context is allocation capacity. The latest short checks add no full-w
 |---|---|
 | PLE host-file-gather | Final dev229 loading stop on the unchanged six-second heartbeat guard; no inference/promotion, clean owned cleanup. Reviewed hold archived intact; no exact retry. |
 | Super INT4 EP2 | Final dev229 loading stop on the unchanged six-second heartbeat guard; no inference/promotion, clean owned cleanup. Reviewed hold archived intact; no exact retry. |
+| Maya DeepSeek UD-IQ1_S 36GB store | Final loading failure: six-second heartbeat and original 15-second cleanup failure, followed by AMDGPU/CPU lockups. No inference or promotion. Worker drained only after reboot; persistent fault hold remains. |
 | RDNA3 full-stack fork2314 | Isolated wheel/native/CLI audits passed; Qwen startup warm-up failed on missing `_seq_lens_cpu` before requests. Exact case final; no promotion. Reviewed own hold archived intact after fresh health/ownership checks. |
 
 Four former timing-limited native candidates now passed and are enabled under their exact new source/profile seals. Deleted XS and Super IQ3 stay retired and are not fallbacks. No weights were deleted in the current update task.

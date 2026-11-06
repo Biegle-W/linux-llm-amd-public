@@ -2,7 +2,7 @@
 
 **14 qualified normal routes are enabled.** Read the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) for exact selections and safeguards.
 
-[IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 and DeepSeek36GB-store optimization remain pending after two zero-request GLM preflight/harness stops. The current stock reboot differs from the pending cases’ tested boot; no optimization or current-boot model pass is claimed.
+[IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current stock7.0.0-42-generic has no fresh peer/model qualification.
 
 [Current model/graphics timings, realistic-budget retries and all downloaded asset groups](REALISTIC-LARGE-MODELS-2026-11-05.md) · [Curated numeric results](results/REALISTIC-LARGE-MODELS-2026-11-05.json).
 

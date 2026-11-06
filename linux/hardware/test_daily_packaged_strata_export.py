@@ -14,7 +14,7 @@ class Export(unittest.TestCase):
         self.record={'status':'passed','family':'strata-qwen','binary':'/home/operator/package/engine/strata',
                      'binary_sha256':'a'*64,'control':'/home/operator/package/control',
                      'backing_identity':{'/home/operator/package/engine/libhip.so':
-                         {'bytes':10,'sha256':'b'*64,'inode':123,'device':1,'mtime_ns':2}}}
+                         {'bytes':10,'sha256':'b'*64,'inode':123,'device':1,'mtime_ns':2,'filesystem_uuid':'12345678-abcd-4321-abcd-123456789abc'}}}
         self.put('qualified-native-profiles.json',{'schema_version':1,'profiles':{}})
         self.put('qualified-strata-qwen-profiles.json',{'schema_version':1,'profiles':{self.model:self.record}})
         self.put('strata-profiles.json',{self.model:{'enabled':True,'qualified_qwen_package':True,'config':'new.json'}})

@@ -14,6 +14,14 @@ _VERIFIED_BACKING_CONTENT=set()
 def digest(path):
     with Path(path).open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 
+def filesystem_uuid(path):
+    """Block-device numbers can change across boots; filesystem UUIDs do not."""
+    value=subprocess.check_output(['findmnt','-rn','-T',str(Path(path).resolve()),'-o','UUID'],
+                                  text=True,timeout=5).strip()
+    if not re.fullmatch(r'[0-9A-Fa-f-]{8,128}',value):
+        raise RuntimeError('Cannot verify qualified backing filesystem UUID')
+    return value
+
 def backing_digest(path):
     """Keep thermal/storage monitoring active during a large identity recheck."""
     sys.path.insert(0,str(ROOT/'hardware'))
@@ -85,7 +93,7 @@ def require_profile(cfg,record,before_handover=False):
                 or cfg.get('layer_split')!='auto' or value('--tp') is not None
                 or value('--vram-reserve-mib')!='8192' or value('--vram-reserve-later-mib')!='8192'
                 or cfg.get('env',{}).get('MAYA_GLM_PREFILL_FUSED')!='0'
-                or type(ram_gb) is not int or ram_gb not in (8,24)
+                or type(ram_gb) is not int or ram_gb not in (8,24,40)
                 or cfg.get('env',{}).get('MAYA_GLM_RAM_GB')!=str(ram_gb)):
             raise RuntimeError('GLM must retain its tested dual-card placement, RAM tier and disabled fused prefill')
     elif value('--tp')!='2':raise RuntimeError('Native placement must retain both tested layer groups')
@@ -111,6 +119,12 @@ def require_profile(cfg,record,before_handover=False):
         actual={'bytes':stat.st_size,'mtime_ns':stat.st_mtime_ns,'inode':stat.st_ino,'device':stat.st_dev}
         expected={k:identity[k] for k in actual}
         if actual!=expected:
+            # A UUID must have been recorded from reviewed filesystem provenance.
+            # It admits only a device-number alias: inode, size and mtime still match.
+            if (all(actual[k]==expected[k] for k in ['bytes','mtime_ns','inode'])
+                    and identity.get('filesystem_uuid')
+                    and filesystem_uuid(path)==identity['filesystem_uuid']):
+                continue
             # exFAT assigns a fresh inode number after cache eviction. An inode-only
             # change requires the original content hash, never a blind re-seal.
             expected_hash=identity.get('sha256','')

@@ -39,6 +39,32 @@ class QualificationAdmission(unittest.TestCase):
     def seal(self):self.record['config_sha256']=self.module.config_fingerprint(self.cfg)
     def require(self,**kwargs):return self.module.require_profile(self.cfg,self.record,**kwargs)
     def test_accepts_exact_profile(self):self.assertIs(self.require(),self.cfg);self.hardware.assert_called()
+    def stable_filesystem_backing(self):
+        path=self.pack/'ds4.txt';st=path.stat()
+        self.record['backing_identity']={str(path):{'bytes':st.st_size,'mtime_ns':st.st_mtime_ns,
+            'inode':st.st_ino,'device':st.st_dev+1,'filesystem_uuid':'12345678-abcd-4321-abcd-123456789abc'}}
+        return self.record['backing_identity'][str(path)]
+    def test_device_alias_requires_verified_same_filesystem_and_same_inode(self):
+        identity=self.stable_filesystem_backing()
+        with patch.object(self.module,'filesystem_uuid',return_value=identity['filesystem_uuid']) as query:
+            self.assertIs(self.require(),self.cfg);query.assert_called_once_with(str(self.pack/'ds4.txt'))
+    def test_device_alias_on_another_filesystem_is_refused(self):
+        self.stable_filesystem_backing()
+        with patch.object(self.module,'filesystem_uuid',return_value='87654321-abcd-4321-abcd-123456789abc'):
+            self.assertRaisesRegex(RuntimeError,'backing identity changed',self.require)
+    def test_device_alias_without_recorded_filesystem_is_refused(self):
+        identity=self.stable_filesystem_backing();identity.pop('filesystem_uuid')
+        self.assertRaisesRegex(RuntimeError,'backing identity changed',self.require)
+    def test_filesystem_uuid_cannot_waive_size_time_or_inode(self):
+        for field in ['bytes','mtime_ns','inode']:
+            with self.subTest(field=field):
+                identity=self.stable_filesystem_backing();identity[field]+=1
+                with patch.object(self.module,'filesystem_uuid',return_value=identity['filesystem_uuid']):
+                    self.assertRaisesRegex(RuntimeError,'backing identity changed',self.require)
+    def test_unavailable_filesystem_query_fails_closed(self):
+        self.stable_filesystem_backing()
+        with patch.object(self.module,'filesystem_uuid',side_effect=RuntimeError('Cannot verify filesystem')):
+            self.assertRaisesRegex(RuntimeError,'Cannot verify',self.require)
     def test_changed_serving_setting_rejected(self):self.cfg['args'][1]='65536';self.assertRaises(RuntimeError,self.require)
     def test_registry_cannot_waive_context_bound(self):self.cfg['args'][1]='65536';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_registry_cannot_waive_reserve(self):self.cfg['args'][3]='1024';self.seal();self.assertRaises(RuntimeError,self.require)
@@ -62,6 +88,13 @@ class QualificationAdmission(unittest.TestCase):
         self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='48';self.record['glm_ram_gb']=48;self.seal();self.assertRaises(RuntimeError,self.require)
     def test_GLM_24GB_record_does_not_allow_lower_GPU_reserves(self):
         self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='24';self.record['glm_ram_gb']=24
+        self.cfg['args'][-1]='128';self.seal();self.assertRaises(RuntimeError,self.require)
+    def test_GLM_40GB_tier_requires_its_exact_record(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='40';self.seal()
+        self.assertRaises(RuntimeError,self.require)
+        self.record['glm_ram_gb']=40;self.assertIs(self.require(),self.cfg)
+    def test_GLM_40GB_record_cannot_waive_GPU_reserve(self):
+        self.glm();self.cfg['env']['MAYA_GLM_RAM_GB']='40';self.record['glm_ram_gb']=40
         self.cfg['args'][-1]='128';self.seal();self.assertRaises(RuntimeError,self.require)
     def test_GLM_cannot_use_strata_family(self):
         self.glm();self.record['family']='strata';self.assertRaises(RuntimeError,self.require)

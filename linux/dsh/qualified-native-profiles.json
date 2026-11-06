@@ -166,9 +166,6 @@
         "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/engram.bin": {
           "bytes": 517980
         },
-        "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/lt-picks.txt": {
-          "bytes": 2609
-        },
         "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack/tokenizer/tokenizer.json": {
           "bytes": 80
         },
