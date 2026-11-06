@@ -6,6 +6,8 @@
 
 [Strata 0.2.11 with existing UnslothV3.1](STRATA-0211-UNSLOTH-2026-11-05.md): Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged.
 
+[Read-only crash comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): an earlier stock boot also had SMU/MES recovery failure, involving a different physical card from the latest custom-boot failure. Returning to stock alone is not a proved repair. The GPU fault hold remains; the safest proposed next comparison bypasses the switch through a supported direct CPU connection or uses a separate single-GPU machine. No GPU or boot change was made.
+
 ## Current saved LLM measurements
 
 Load is separate from request TTFT. The second request follows a tool result and can reuse cache. Prompts, output lengths, source versions and native paths differ; these are functional samples, not a matched speed or quality ranking.

@@ -4,6 +4,8 @@
 
 [IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current stock7.0.0-42-generic has no fresh peer/model qualification.
 
+[Read-only crash comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): an earlier stock boot also had SMU/MES recovery failure, involving a different physical card from the latest custom-boot failure. Returning to stock alone is not a proved repair. The GPU fault hold remains; the safest proposed next comparison bypasses the switch through a supported direct CPU connection or uses a separate single-GPU machine. No GPU or boot change was made.
+
 [Current model/graphics timings, realistic-budget retries and all downloaded asset groups](REALISTIC-LARGE-MODELS-2026-11-05.md) · [Curated numeric results](results/REALISTIC-LARGE-MODELS-2026-11-05.json).
 
 [All14 short native decode statistics](AMD-DECODE-EVIDENCE-2026-11-05.md) · [New four-route native probes and three failed-model removals](AMD-NATIVE-DECODE-TESTS-2026-11-05.md). A sustained matched14-route benchmark remains missing.

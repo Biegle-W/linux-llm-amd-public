@@ -1,0 +1,110 @@
+{
+  "date": "2026-11-05",
+  "scope": "Read-only comparison of saved stock/custom failure evidence and current stock idle state",
+  "status": "no-proven-fix-persistent-GPU-hold-retained",
+  "boot_comparison": {
+    "earlier_stock": {
+      "kernel": "7.0.0-42-generic",
+      "date": "2026-11-04",
+      "first_SMU_error_local": "14:56:42 EST",
+      "signature": [
+        "SMU nonresponse",
+        "MES REMOVE_QUEUE failure",
+        "GPU recovery attempt"
+      ],
+      "involved_card_same_as_latest": false
+    },
+    "latest_custom": {
+      "kernel": "7.0.14-42-vmpt1",
+      "date": "2026-11-05",
+      "first_SMU_error_local": "18:45:06 EST",
+      "signature": [
+        "SMU nonresponse",
+        "MES REMOVE_QUEUE failure",
+        "GPU recovery attempt",
+        "DMCUB/display error",
+        "display/vblank MMIO hard-IRQ CPU19 lockup",
+        "multiple soft CPU lockups"
+      ],
+      "inference_requests": 0,
+      "original_cleanup_failed": true
+    },
+    "current_stock": {
+      "kernel": "7.0.0-42-generic",
+      "no_comparable_GPU_fault_found_during_inspection": true,
+      "new_GPU_load": false,
+      "KFD_observed_empty": true,
+      "loaded_module_matches_installed_stock": true
+    },
+    "controlled_A_B": false,
+    "different_workloads_and_exposure": true
+  },
+  "shared_factors": {
+    "boot_arguments_identical_except_kernel_image": true,
+    "ACS_programming_records_same": 6,
+    "ACS_value": "0x0011",
+    "IOMMU_domain": "passthrough",
+    "OverDrive_enablement": true,
+    "SMU_DMUB_BIOS_microcode_reported_versions_same": true,
+    "firmware_interface_warning_proves_bad_firmware": false,
+    "CPU_OUT_OF_SPEC_taint_can_be_set_by_OverDrive": true,
+    "current_link_observation": "Gen4, x16 endpoints/shared uplink, matching x8 branch segments; not failure-time proof"
+  },
+  "kernel_config_differing_keys": [
+    "CONFIG_LOCALVERSION",
+    "CONFIG_SYSTEM_REVOCATION_KEYS",
+    "CONFIG_SYSTEM_TRUSTED_KEYS"
+  ],
+  "reported_faults_in_selected_failed_journals": {
+    "GPU_VM": false,
+    "IOMMU": false,
+    "PCIe_AER": false,
+    "OOM": false,
+    "absence_proves_hardware_good": false
+  },
+  "latest_saved_telemetry": {
+    "samples": 49,
+    "min_available_GiB": 52.56883239746094,
+    "min_per_card_free_VRAM_GiB": [
+      7.706539154052734,
+      7.7139129638671875
+    ],
+    "max_CPU_C": 53.0,
+    "max_GPU_sensor_C": 46.0,
+    "max_owned_swap": 0,
+    "max_owned_spill": 0,
+    "worker_last_memory_GiB": 8.045185089111328
+  },
+  "last_completed_telemetry_before_first_SMU_error_seconds_approx": 3,
+  "RAM_store_initialization_or_full_expert_load_logged": false,
+  "hypothesis_assessment": {
+    "custom_patch_sole_general_cause": "contradicted by earlier stock failure; latest case is not a controlled comparison",
+    "ordinary_RAM_or_thermal_exhaustion": "not supported by saved samples/cgroup events",
+    "one_defective_card": "not established; distinct cards have initial failures across boots",
+    "common_driver_firmware_PCIe_or_power_interaction": "candidate causal family, unresolved",
+    "mixed_desktop_compute": "vendor-documented relevant risk, not proved local trigger",
+    "specific_RAM_cache_or_P2P_root_cause": "not established"
+  },
+  "recommended_next_direction": {
+    "current_action": "Keep hold and stock persistent default; no GPU work/retry/reboot/configuration changes",
+    "first_isolation": "Previously working direct CPU/bifurcated topology with switch bypassed if supported by current hardware, or separate direct single-GPU machine",
+    "later_separate_comparison": "Vendor-documented matched OS/kernel/driver/firmware/userspace on alternate boot device or bench host",
+    "avoid_shared_desktop_diagnostic_load": true,
+    "needs_separate_authorization_for_hardware_boot_or_GPU_work": true,
+    "all_guards_retained": true,
+    "no_validated_repair_claim": true
+  },
+  "limits": [
+    "Seven recent journals inspected; absence of a persisted fault is not proof a boot was stable",
+    "No new privileged extended PCI/BERT capture; interactive terminal authentication unavailable",
+    "No live GPU sensor/debugfs/runtime calls or model loads",
+    "No single faulty component or repair established"
+  ],
+  "sources": {
+    "amdgpu_OverDrive_taint": "https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c",
+    "SMU_interface_mismatch": "https://github.com/torvalds/linux/blob/v7.0/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c",
+    "AMD_mGPU": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/mgpu.html",
+    "ROCm_7_2_3_matrix": "https://rocm.docs.amd.com/en/docs-7.2.3/compatibility/compatibility-matrix.html",
+    "AER": "https://docs.kernel.org/PCI/pcieaer-howto.html"
+  }
+}

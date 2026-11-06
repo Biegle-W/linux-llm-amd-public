@@ -82,3 +82,5 @@ Root filesystem device numbers changed across boots. Reviewed installation/mount
 The reviewed guard work passed 41 CPU contracts, including exact RAM40 record/reserve checks; it does not mark RAM40 passed or select it. Three export checks verify public references retain content hashes, omit local filesystem seals/UUIDs and require independent local qualification. The earlier post-power-loss 69-file IQ1_M content recheck remains identity evidence, not a new inference pass. All 100°C/storage/RAM/VRAM/phase-aware-swap/spill/heartbeat/cleanup/ownership protections, original 13 routes, retired assets, boot default and existing schedules remain preserved.
 
 [Numeric evidence](results/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.json) · [Current results](CURRENT-AMD-BENCHMARKS.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
+
+[Stock/custom kernel comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): earlier stock failure has a similar SMU/MES sequence on the other physical card. No single fix is established; persistent GPU hold remains.
