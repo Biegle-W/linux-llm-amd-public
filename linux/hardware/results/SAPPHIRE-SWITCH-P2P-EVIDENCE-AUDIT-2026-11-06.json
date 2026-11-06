@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "status": "read-only-audit-cause-unproved",
+  "scope": "Existing saved evidence only; no GPU/runtime action",
+  "finding": "Repeated recent Sapphire PCI/SMU loss on the switch is established; actual P2P execution at the failure instant is unlogged. Successful direct transfers exist. An older driver-P2P-disabled Strata qualification also failed; site-specific failure evidence remains private.",
+  "identity": {
+    "current": "PowerColor13 logical0; Sapphire0b logical1",
+    "compared_pre_swap": "Sapphire13 logical1",
+    "card_vs_role_isolated": false,
+    "nov3_counterexample_physical_card_reidentified": false
+  },
+  "controls": {
+    "headless_peer_direct": {
+      "directions": 2,
+      "bytes_per_pattern": 16777216,
+      "patterns": 3,
+      "remote_read_write_peer_copy": "passed",
+      "HIP_IPC": "passed-both-directions"
+    },
+    "headless_rccl": {
+      "transport_logged": "P2P/IPC-both-ranks",
+      "protocol_forced": "Simple",
+      "operations": [
+        "all-reduce",
+        "all-gather"
+      ],
+      "dtypes": [
+        "float32",
+        "bfloat16"
+      ],
+      "element_counts": [
+        1,
+        4096,
+        1048576
+      ],
+      "correctness": "passed-both-ranks"
+    },
+    "headless_models": {
+      "tools_completed": 4,
+      "first_three_guards": "passed",
+      "qwen_vllm": "two-requests-clean-owned-cleanup-preserved-administrative-guard-failure",
+      "qwen_RCCL_channel_transport_logged": false
+    },
+    "older_driver_P2P_off": {
+      "date": "2026-11-03",
+      "same_boot_driver_proof": true,
+      "negative_HIP_cases": 3,
+      "peer_enable_refused_both_directions_each": true,
+      "outcome": "failed-first-request-no-completed-response; site-specific-failure-evidence-private",
+      "matched_latest_workload_kernel_card_identity_control": false
+    }
+  },
+  "latest_failure": {
+    "model": "SGLang Qwen DFlash2",
+    "stage": "graph-warmup-to-idle/API-startup",
+    "requests": 0,
+    "PCI": "0b:00.0",
+    "physical_card": "Sapphire",
+    "actual_faulting_operation": "unlogged",
+    "actual_RCCL_transport_and_protocol": "unlogged",
+    "connected_monitor_required": false,
+    "remaining_routes": 9
+  },
+  "limits": [
+    "Peer capability alone proves admission, not data movement.",
+    "Selecting RCCL or setting a P2P environment flag does not prove the selected transport.",
+    "Passed small bounded tests do not qualify sustained workload stability or all message sizes/protocols.",
+    "The older P2P-off failure is a different workload/software state; it cannot identify the latest SGLang trigger or merge all interruptions into one cause.",
+    "No powered-off matched switch bypass or independent logical-role isolation is supplied by this audit."
+  ],
+  "preserved": {
+    "headless_evidence_pins_checked": 273,
+    "managed_input_pins_checked": 20,
+    "fault_events": 1847,
+    "hold_unchanged": true,
+    "routes_retained": 14
+  },
+  "new_GPU_test_started": false,
+  "runtime_changed": false,
+  "Simple_pin_experiment_prepared_or_run": false,
+  "references": [
+    "AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md",
+    "QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md",
+    "AMD-P2P-DISABLE-2026-11-03.md",
+    "RCCL-P2P-CONTROL-AUDIT-2026-11-03.md",
+    "AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md",
+    "AMD-DAY-REVIEW-2026-11-05.md"
+  ]
+}

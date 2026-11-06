@@ -1,6 +1,6 @@
 # Headless known-passed model campaign — November 5, 2026
 
-[Qwen backend trigger comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md): failure aligns with SGLang DFlash warm-up to idle/API transition. Both backends used graphs; vLLM survived graph capture and a full-utilization burst. Protocol defaults, draft/verification path and Triton build differ, but no trigger is proved. Read-only investigation; no retry or runtime change.
+[Sapphire switch/P2P evidence audit](SAPPHIRE-SWITCH-P2P-EVIDENCE-AUDIT-2026-11-06.md): completed direct HIP/IPC and RCCL P2P transfers passed before the headless failure. The model faulting operation and transport remain unlogged. An older driver-P2P-disabled Strata qualification also failed; its workload/software state differs and site-specific failure evidence remains private. Recent Sapphire/logical-GPU1 identity correction and all guard failures remain preserved. [Qwen backend comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md). Read-only audit; no retry or runtime change.
 
 **The headless campaign reproduced Sapphire PCI/SMU failure during SGLang Qwen DFlash2 startup.** Four model tool checks completed first; three had clean guard passes and Qwen vLLM had a separately preserved harness result-path guard failure after its successful tool check and clean cleanup. SGLang was the fifth route attempted. Nine routes were never run. The campaign is stopped, the new fault hold remains, and no model was retried. [Structured result](results/AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.json).
 
