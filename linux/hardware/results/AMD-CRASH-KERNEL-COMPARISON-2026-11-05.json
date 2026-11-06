@@ -12,7 +12,7 @@
         "MES REMOVE_QUEUE failure",
         "GPU recovery attempt"
       ],
-      "involved_card_same_as_latest": false
+      "involved_card_same_as_latest": true
     },
     "latest_custom": {
       "kernel": "7.0.14-42-vmpt1",
@@ -80,14 +80,15 @@
   "hypothesis_assessment": {
     "custom_patch_sole_general_cause": "contradicted by earlier stock failure; latest case is not a controlled comparison",
     "ordinary_RAM_or_thermal_exhaustion": "not supported by saved samples/cgroup events",
-    "one_defective_card": "not established; distinct cards have initial failures across boots",
+    "one_defective_card": "Both compared initial failures identify Sapphire across the slot change, but it retained logical GPU1 and is reported stable alone; defect is not proved.",
     "common_driver_firmware_PCIe_or_power_interaction": "candidate causal family, unresolved",
     "mixed_desktop_compute": "vendor-documented relevant risk, not proved local trigger",
-    "specific_RAM_cache_or_P2P_root_cause": "not established"
+    "specific_RAM_cache_or_P2P_root_cause": "not established",
+    "fixed_switch_branch_only": "Weakened by the same card failing after the recorded branch change; wider switch/routing interaction remains unresolved."
   },
   "recommended_next_direction": {
     "current_action": "Keep hold and stock persistent default; no GPU work/retry/reboot/configuration changes",
-    "first_isolation": "Previously working direct CPU/bifurcated topology with switch bypassed if supported by current hardware, or separate direct single-GPU machine",
+    "first_isolation": "Audit per-card loading/placement from saved evidence, then only a separately authorized matched physical-card versus runtime-role comparison on a diagnostic setup; switch bypass is a separate optional topology comparison.",
     "later_separate_comparison": "Vendor-documented matched OS/kernel/driver/firmware/userspace on alternate boot device or bench host",
     "avoid_shared_desktop_diagnostic_load": true,
     "needs_separate_authorization_for_hardware_boot_or_GPU_work": true,
@@ -106,5 +107,22 @@
     "AMD_mGPU": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/mgpu.html",
     "ROCm_7_2_3_matrix": "https://rocm.docs.amd.com/en/docs-7.2.3/compatibility/compatibility-matrix.html",
     "AER": "https://docs.kernel.org/PCI/pcieaer-howto.html"
+  },
+  "physical_identity_review": {
+    "status": "corrected-stale-board-to-PCI-address-mapping",
+    "earlier_claim_different_cards_failed": "withdrawn",
+    "earlier_stock_physical_board": "Sapphire",
+    "latest_custom_physical_board": "Sapphire",
+    "switch_branch_changed": true,
+    "logical_model_GPU_in_both_cases": 1,
+    "monitoring_GPU_index_is_not_runtime_index": true,
+    "always_first_GPU_established": false,
+    "owner_reports_stable_alone": true,
+    "remaining_confounders": [
+      "physical card",
+      "retained runtime GPU1 role",
+      "power connections not independently isolated",
+      "multi-GPU software/firmware interaction"
+    ]
   }
 }

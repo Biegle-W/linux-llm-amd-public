@@ -83,4 +83,4 @@ The reviewed guard work passed 41 CPU contracts, including exact RAM40 record/re
 
 [Numeric evidence](results/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.json) · [Current results](CURRENT-AMD-BENCHMARKS.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
 
-[Stock/custom kernel comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): earlier stock failure has a similar SMU/MES sequence on the other physical card. No single fix is established; persistent GPU hold remains.
+[Stock/custom kernel comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): corrected records identify Sapphire in both similar SMU/MES failures across the slot swap, still logical GPU1; the earlier different-card claim is withdrawn. No single fix is established; persistent GPU hold remains.
