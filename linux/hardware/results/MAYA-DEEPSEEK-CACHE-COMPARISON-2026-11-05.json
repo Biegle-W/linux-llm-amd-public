@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-05",
+  "scope": "Read-only source/log comparison plus explicitly requested model-specific regenerable cache cleanup; no GPU test",
+  "morning": {
+    "time_local": "04:14:18-04:18:39 EST",
+    "model": "DeepSeek UD-IQ1_S via Maya",
+    "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+    "load_seconds": 51.96365726499789,
+    "strict_tool_pass": true,
+    "owned_cleanup_verified": true,
+    "explicit_ssd_cache_GB": null
+  },
+  "evening": {
+    "start_local": "18:44:48 EST",
+    "first_SMU_error_local": "18:45:06 EST",
+    "same_source_executable_target_and_backing": true,
+    "intended_model_profile_delta": [
+      "--ssd-cache",
+      "36"
+    ],
+    "environment_updates": {},
+    "inference_requests": 0,
+    "ready": false,
+    "RAM_store_initialization_success_logged": false,
+    "original_owned_cleanup_failed": true,
+    "exact_initial_cause": "unresolved"
+  },
+  "implementation": {
+    "RAM_store": "Anonymous process-owned memory; original GGUF reads; no persistent36GBcache data file",
+    "init_order": "GPU experts load through host staging/copy before init_store branch",
+    "RAM_chunks": "os::anon_alloc / os::anon_free; grown as needed",
+    "GPU_runtime_inside_ExpertStore": "none; host code only",
+    "Lt_tuning": "Separate persistent algorithm choices keyed by architecture/library version/shape, supported algorithm/workspace checked before use",
+    "conversation_slots": "Default disabled; no affected-pack slots directory",
+    "expert_profile": "none"
+  },
+  "cleanup": {
+    "removed_live_files": 1,
+    "removed_file": "affected Maya DeepSeek UD-IQ1_S pack/lt-picks.txt",
+    "removed_bytes": 3046,
+    "tuning_record_count": 69,
+    "mtime_during_successful_morning_run": true,
+    "unchanged_from_pre_failure_copy": true,
+    "corrupted_by_latest_crash_proven": false,
+    "reason": "Owner-requested precautionary reset, not a proved repair",
+    "private_evidence_copy_retained_outside_runtime_paths": true,
+    "no_open_owner_found_before_removal": true,
+    "completed": true,
+    "config_registry_source_binary_metadata_pins_unchanged": true,
+    "backing_size_inode_mtime_unchanged": true
+  },
+  "preserved": [
+    "Model weights and tokenizer/pack metadata",
+    "Passed baseline configuration without --ssd-cache",
+    "All other selected routes and guards",
+    "Shared desktop/vLLM/comgr and application caches",
+    "Private pre-failure and failed-result evidence",
+    "Persistent watchdog GPU fault hold"
+  ],
+  "limits": {
+    "different_boot_and_page_cache_conditions": true,
+    "cache_option_causal_defect_proven": false,
+    "full36GBallocation_proven": false,
+    "cache_reset_is_validated_repair": false,
+    "future_missing_Lt_cache_can_trigger_retuning": true,
+    "new_GPU_or_sensor_work": false,
+    "reset_reboot_service_restart_or_page_cache_drop": false,
+    "fresh_qualification_before_any_hold_release_required": true
+  },
+  "status": "affected-tuning-cache-cleared-GPU-held-no-retry"
+}

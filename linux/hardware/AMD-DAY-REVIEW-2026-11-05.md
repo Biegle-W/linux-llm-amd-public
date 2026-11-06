@@ -77,3 +77,5 @@ The strongest supported statement is: **a new Maya DeepSeek load was followed by
 The persistent GPU fault hold remains unchanged. RAM40 is prepared but unrun and blocked. No model, GPU sensor query, peer test, reset, setting change or reboot was performed for this review.
 
 [Stock/custom comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md) · [Latest qualification evidence](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
+
+[Follow-up source comparison and requested cache cleanup](MAYA-DEEPSEEK-CACHE-COMPARISON-2026-11-05.md):36GBstore is anonymous process RAM; one separate regenerable tuning file cleared without changing weights/configs or releasing the hold. No verified fix or GPU test.

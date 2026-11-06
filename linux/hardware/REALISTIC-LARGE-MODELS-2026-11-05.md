@@ -6,6 +6,8 @@
 
 [Strata 0.2.11 with existing UnslothV3.1](STRATA-0211-UNSLOTH-2026-11-05.md): Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged.
 
+[DeepSeek cache comparison and cleanup](MAYA-DEEPSEEK-CACHE-COMPARISON-2026-11-05.md): the36GBoption creates temporary RAM state, not a persistent disk store. One regenerable Maya Q1 tuning file was cleared as requested; weights/configuration/failure evidence and the GPU hold remain intact. No GPU test or repair claim.
+
 [Full-day workload review](AMD-DAY-REVIEW-2026-11-05.md): many model/graphics checks passed on the switch/custom-kernel setup, including Maya DeepSeek UD-IQ1_S at04:14-04:18. The later36GB-store candidate failed loading; the first SMU error preceded the watchdog stop. The16:50 power interruption has no identified journal cause and is separate from the18:45 GPU/kernel failure. Exact initial trigger remains unresolved; GPU hold retained.
 
 [Read-only crash comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): the corrected placement records identify Sapphire in both stock/custom failures, across different switch branches but the same logical model GPU1 role. The earlier different-card claim is withdrawn. No root cause or repair is proved; keep the GPU hold and distinguish card identity from runtime role before another attempt. No GPU or boot change was made.
