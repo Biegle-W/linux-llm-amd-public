@@ -90,6 +90,8 @@ def require_weight_assets(cfg):
 
 
 def require_strata(before_handover=False,model=None):
+    from inference_kernel import require_inference_kernel
+    require_inference_kernel()
     profiles = json.loads((ROOT / 'dsh/strata-profiles.json').read_text())
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
     if not enabled:

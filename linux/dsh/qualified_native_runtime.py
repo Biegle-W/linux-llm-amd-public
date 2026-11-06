@@ -65,6 +65,8 @@ def record_for(cfg,family=None):
     return record
 
 def require_profile(cfg,record,before_handover=False):
+    from inference_kernel import require_inference_kernel
+    require_inference_kernel()
     if not admitted_status(record) or record.get('family') not in ['maya','strata']:
         raise RuntimeError('Native qualification must pass for a known backend family')
     if (cfg.get('backend')!='hip' or cfg.get('gpu')!=[0,1] or cfg.get('parallel')!=1

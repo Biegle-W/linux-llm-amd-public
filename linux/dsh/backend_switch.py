@@ -383,6 +383,8 @@ class Startup:
 
 @contextmanager
 def startup_handover(kind, root=ROOT, grace=50):
+    from inference_kernel import require_inference_kernel
+    require_inference_kernel()
     state = root / 'dsh/data/backend-owner.json'
     state.parent.mkdir(parents=True, exist_ok=True)
     with (state.parent / 'backend-start.lock').open('a') as lock:

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "failed-loading-no-inference",
+  "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+  "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+  "kernel": "7.0.14-42-vmpt1",
+  "persistent_inference_kernel_default": true,
+  "installed_modules_verified_before_reboot": 6901,
+  "stock_installed_fallback_retained": true,
+  "fresh_same_boot_peer_prerequisites": 4,
+  "RCCL_preparation_error": "Missing helper stopped launcher before RCCL; original failed case retained. Owner explicitly approved corrected distinct case; it passed P2P/IPC all-reduce/all-gather.",
+  "ssd_cache_argument_present": false,
+  "context_tokens": 32768,
+  "profile_delta": {
+    "args_append": [],
+    "env_updates": {},
+    "record_updates": {}
+  },
+  "cold_Lt_cache": true,
+  "first_recorded_fault": {
+    "local_time": "2026-11-05T21:33:39.831128-05:00",
+    "message": "amdgpu 0000:0b:00.0: device lost from bus!",
+    "PCI": "0000:0b:00.0",
+    "board": "Sapphire",
+    "logical_model_GPU": 1,
+    "followed_by": "SMU bus error response0xFFFFFFFF; SMU hanged state"
+  },
+  "watchdog": {
+    "reason": "supervisor heartbeat missing",
+    "seconds_after_first_fault": 6.665798,
+    "heartbeat_limit_seconds": 6
+  },
+  "cleanup": {
+    "limit_seconds": 15,
+    "passed": false,
+    "owned_cgroups_empty": false,
+    "remaining_KFD_client_at_failure": true,
+    "drained_only_after_later_reboot": true
+  },
+  "resources": {
+    "min_available_host_GiB": 57.256,
+    "min_free_VRAM_GiB_by_telemetry_PCI": {
+      "0000:0b:00.0": 20.346,
+      "0000:13:00.0": 20.439
+    },
+    "max_recorded_owned_swap_bytes": 0,
+    "max_recorded_owned_spill_bytes": 0,
+    "max_recorded_CPU_package_C": 48.0,
+    "max_recorded_GPU_temperature_C": 42.0,
+    "valid_telemetry_samples": 48,
+    "incomplete_telemetry_lines": 1
+  },
+  "requests_recorded": 0,
+  "readiness_reached": false,
+  "live_original_profile_and_registry_record_exact_after_reboot": true,
+  "latest_fault_hold_retained": true,
+  "original_36GB_failure_preserved": true,
+  "no_automatic_retry": true,
+  "evidence_limits": [
+    "Several trial-local profile/engine/wrapper/rollback artifacts are zero length after abrupt reboot; left intact.",
+    "Persisted kernel journal ends at the initial SMU fault; no new CPU-lockup trace is established for this boot.",
+    "Guard saved additional repeated fault messages; last telemetry line is incomplete.",
+    "Cold Lt cache and different boot prevent treating this as a controlled morning-versus-evening A/B."
+  ],
+  "interpretation": [
+    "Failure reproduced without the36GBRAMstore; that option is not necessary for this observed failure.",
+    "Patched kernel and passed short peers did not prevent this model-loading failure.",
+    "Driver-reported lost-bus/SMU symptoms do not prove defective card, fixed slot, power fault or driver root cause; same Sapphire/logicalGPU1 correlation remains."
+  ],
+  "next_action": "Keep GPU fault hold. No retry, hold release or further runtime change without owner review."
+}

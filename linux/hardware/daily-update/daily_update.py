@@ -120,6 +120,11 @@ def git_clone_at(source_repo, url, rev, dest, logfile):
 
 def busy():
     """Reason not to start now, or None."""
+    from inference_kernel import require_inference_kernel
+    try:
+        require_inference_kernel()
+    except RuntimeError as error:
+        return str(error)
     if LOCK.exists():
         try:
             holder = json.loads(LOCK.read_text()).get('owner', '?')

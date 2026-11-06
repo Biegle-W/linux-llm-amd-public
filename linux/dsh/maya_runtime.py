@@ -110,6 +110,8 @@ def check_config(cfg, before_handover=False, require_validated=True):
 
 
 def require_maya(model=None,before_handover=False):
+    from inference_kernel import require_inference_kernel
+    require_inference_kernel()
     ensure_streaming_models()
     active=profiles()
     if not active or (model is not None and model not in active):

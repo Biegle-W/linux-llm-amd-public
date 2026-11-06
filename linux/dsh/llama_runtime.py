@@ -90,6 +90,8 @@ def verify_source_pin(source, commit):
 
 
 def launch_spec(backend=None, model=None):
+    from inference_kernel import require_inference_kernel
+    require_inference_kernel()
     config = ROOT / 'llama-runtime.json'
     settings = json.loads(config.read_text()) if config.exists() else {}
     paused = settings.get('paused_models', {})

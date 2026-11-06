@@ -23,6 +23,8 @@ class QualificationAdmission(unittest.TestCase):
         cls.backing_function=staticmethod(cls.module.backing_digest)
 
     def setUp(self):
+        kernel=patch('inference_kernel.require_inference_kernel')
+        kernel.start();self.addCleanup(kernel.stop)
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);m=self.module
         self.source=self.root/'source';self.binary=self.source/'build-hip/maya-ds4';self.binary.parent.mkdir(parents=True);self.binary.write_bytes(b'known tested engine');self.binary.chmod(0o755)
         self.pack=self.root/'models/Maya/Coder/pack';self.pack.mkdir(parents=True);(self.pack/'tokenizer').mkdir();(self.pack/'ds4.txt').write_text('known pack metadata')
