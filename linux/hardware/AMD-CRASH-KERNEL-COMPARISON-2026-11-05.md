@@ -63,3 +63,5 @@ No GPU runtime, sensor query, workload, reset, unbind, reboot, hold release or c
 The supported conclusion is recurring loss of GPU responsiveness and failed recovery that can escalate into host lockup. **No single software fix or failed component is proved.** The next direction is to distinguish the physical-card and retained-runtime-role hypotheses outside the active workstation session, with topology and matched software comparisons kept separate. The GPU hold remains in place.
 
 [Curated comparison](results/AMD-CRASH-KERNEL-COMPARISON-2026-11-05.json) · [Latest case and original cleanup failure](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md) · [Runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
+
+[Full-day journal and workload review](AMD-DAY-REVIEW-2026-11-05.md) distinguishes the earlier power interruption from the evening GPU/kernel failure and confirms the same-source DeepSeek baseline passed earlier that day.
