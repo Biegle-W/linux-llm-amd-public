@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-05",
+  "status": "trigger-window-narrowed-root-cause-unproved",
+  "scope": "Read-only successful Qwen vLLM versus failed headless SGLang DFlash2 comparison; no trial or runtime change",
+  "shared": {
+    "target_weight_path_same": true,
+    "context_tokens": 163840,
+    "tensor_parallel_size": 2,
+    "GPU_order": "PowerColor13 then Sapphire0b",
+    "headless": true,
+    "kernel": "7.0.14-42-vmpt1",
+    "KV_dtype": "bfloat16",
+    "ROCm_SDK": "7.2.3",
+    "RCCL": "2.27.7 same retained library",
+    "torch_build": {
+      "__version__": "2.13.0+git733fca1",
+      "cuda": null,
+      "git_version": "733fca1901cfa5094481cfa9dfc8f8483e18f491",
+      "hip": "7.2.53211"
+    },
+    "HSA_ENABLE_SDMA": "0",
+    "custom_all_reduce_disabled": true,
+    "AITER_disabled": true
+  },
+  "differences": {
+    "vllm": {
+      "actual_logged_engine_version": "0.33.0rc1.dev229+g3966924d5",
+      "speculation": "shared target MTP,3tokens",
+      "KV_cache_bytes_per_GPU": 6442450944,
+      "graphs": "compiled FULL_DECODE_ONLY, capture sizes1/4",
+      "triton_metadata": "3.8.0+git669b31ac",
+      "RCCL_launcher_default": "Simple, unless inherited override/LOCAL_LLM_NCCL_PROTO auto",
+      "outcome": "two tool requests completed; separate administrative guard-path failure after clean cleanup preserved"
+    },
+    "sglang": {
+      "retained_editable_source_HEAD": "f84475ccf593087df3d1da13c9e675eadee12352",
+      "retained_local_modified_source_files": 6,
+      "speculation": "separate DFlash2 compressed-tensors drafter,8drafttokens,2048draftwindow",
+      "memory_fraction_static": 0.85,
+      "graphs": "target verification and draft verification, batch1",
+      "verification": "local optimized RDNA target verification with KV-walk repair enabled; fused draft KV materialization logged",
+      "triton_metadata": "3.8.0",
+      "RCCL_launcher_default": "no NCCL_PROTO pin; automatic/inherited selection",
+      "outcome": "PCI/SMU fault around startup; no outer readiness attestation or requests"
+    }
+  },
+  "failure_window_local_EST": {
+    "23:01:25-26": "SGLang target verify graph capture",
+    "23:01:26-29": "draft verify graph capture",
+    "23:01:29.188876": "start timestamp of final sampling window: Sapphire sensor values returnNone while PowerColor remains readable",
+    "23:01:30.761818": "Sapphire lost-from-bus message after PCI configuration access check",
+    "23:01:30.765334": "SMU metrics TransferTableSmu2Dram(18), response0xFFFFFFFF"
+  },
+  "timing_limit": "Telemetry UTC is stamped before sequential blocking sysfs reads. The final sample spans failure; it is not a proved1.57secondearlywarning. Worker logs have second resolution. No faulting GPU-instruction/queue trace was saved.",
+  "counterexamples": {
+    "vllm_graph_capture_passed": true,
+    "vllm_post_graph_idle_Sapphire_power_W": [
+      59,
+      63
+    ],
+    "vllm_post_graph_idle_GFX_MHz": 0,
+    "vllm_post_graph_idle_memory_MHz": 96,
+    "vllm_later_recorded_power_W_by_GPU": [
+      302,
+      304
+    ],
+    "vllm_later_recorded_busy_percent": [
+      100,
+      100
+    ]
+  },
+  "interpretation": [
+    "Distinct SGLang DFlash verification/warm-up to idle/API-ready transition is the best localized trigger window for this run; not a proved faulting operation.",
+    "Generic graph presence, generic idle clock drop, steady high load or simple memory capacity alone do not explain the contrast: vLLM survived them. Fast power transients remain unmeasured.",
+    "A launcher-level RCCL protocol coverage gap exists: vLLM defaultsSimple and the fresh RCCL probe explicitlytestedSimple; SGLangdoesnotpin. ActualselectedSGLangprotocolwasnotlogged; do not claimLL/LL128wasusedorbroken.",
+    "SGLang specificdraft/verification kernels and differentTritonbuild are other concrete uncontrolled differences. None is proven to explain earlier Maya failures.",
+    "UnderlyingSapphire PCI/SMUaccessloss remains compatible with PCIe/powerstate/firmware/driver orcard/roleinteraction; physicalcardversusretainedGPU1role remainsconfounded."
+  ],
+  "configuration_files_checked": "standard user/system rccl.conf and nccl.conf absent; failed-boot inherited environment was not captured",
+  "recommended_first_isolation_if_separately_authorized": "One new SGLang case explicitly pinning NCCL_PROTO=Simple and recording actual collective/protocol selection; all model/draft/graph/source/guards unchanged. No automatic retry. A single pass would not prove a fix.",
+  "other_isolations": "Only separately: optimized RDNA verification path or drafter/graph implementation; one variable at a time. No multi-change trial matrix prepared.",
+  "no_GPU_test_started": true,
+  "fault_hold_retained": true,
+  "runtime_and_source_unchanged": true,
+  "primary_documentation": "https://rocm.docs.amd.com/projects/rccl/en/docs-7.2.1/api-reference/env-variables.html",
+  "updated_utc": "2026-11-06T04:56:23.729139+00:00"
+}

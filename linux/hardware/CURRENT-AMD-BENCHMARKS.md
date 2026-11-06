@@ -1,5 +1,7 @@
 # Current AMD results — November 5, 2026
 
+[Qwen backend trigger comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md): failure aligns with SGLang DFlash warm-up to idle/API transition. Both backends used graphs; vLLM survived graph capture and a full-utilization burst. Protocol defaults, draft/verification path and Triton build differ, but no trigger is proved. Read-only investigation; no retry or runtime change.
+
 [Headless model campaign](AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
 
 [Monitor/display investigation](MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.md): owner reports earlier successful run was headless. Current monitor is on PowerColor, while Sapphire first lost PCI/SMU access. Display remains a plausible contributor, not a proved trigger; prior display errors followed the initial SMU failure. Read-only analysis only; fault hold retained.
