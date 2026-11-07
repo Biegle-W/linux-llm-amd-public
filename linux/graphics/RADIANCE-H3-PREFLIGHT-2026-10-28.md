@@ -1,5 +1,7 @@
 # Radiance H3 on two 7900 XTX cards — October 28 preflight
 
+> **Update, November 7, 2026:** this preflight covers only Bunsei's native `libr4d` kernels, which remain gfx12-only. H3 does have a working RDNA3 path: fcys's community `tp2-comfy` port (RCCL TP2). It runs on these 7900 XTX cards and now uses direct P2P; see [Diffusion, H3 P2P and Radiance](DIFFUSION-P2P-RADIANCE-2026-11-07.md).
+
 **The tested Radiance H3 source cannot provide accelerated inference on gfx1100 as shipped.** This is a device-kernel compatibility blocker before model loading; no memory guard fired, no GPU inference was launched and no Radiance output or timing exists.
 
 ## Verified attempt

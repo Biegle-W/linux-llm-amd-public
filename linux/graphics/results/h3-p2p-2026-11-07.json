@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "date": "2026-11-07",
+  "implementation": "fcys tp2-comfy (RCCL TP2, CK attention), local copy fcys-rccl-ck-20261028",
+  "workload": {"model": "MiniMax H3 INT8 plugin-tp", "resolution": "608x352", "frames": 39, "steps": 20, "seed": 42, "conditioning": "hash-pinned teapot fixture sha256 24e1c0d4..."},
+  "rccl": {"version": "2.27.7-HEAD:96a25b5", "channels": 1, "buffsize_bytes": 1048576, "proto": "Simple", "HSA_ENABLE_SDMA": "0"},
+  "ranks": {"0": "PowerColor 0b:00.0", "1": "Sapphire 13:00.0"},
+  "runs": [
+    {"tag": "canary-tequality-w4a8-hip-teapot-39-s1", "date": "2026-10-28", "transport": "SHM/direct/direct", "lifecycle_s": 146.19, "sampler_s": 94, "steady_step_s": 1.33, "latent_vs_reference": "reference"},
+    {"tag": "canary-p2pcmp-p2p-teapot-39", "NCCL_P2P_DISABLE": "0", "transport": "P2P/IPC", "isAllDirectP2p": 1, "lifecycle_s": 42.2, "sampler_s": 27, "steady_step_s": 1.05, "latent_cosine": 1.0, "latent_rel_l2": 0.0},
+    {"tag": "canary-p2pcmp-nop2p-teapot-39", "NCCL_P2P_DISABLE": "1", "transport": "P2P/IPC (flag ignored)", "lifecycle_s": 57.2, "note": "first run, cold cache", "sampler_s": 27, "steady_step_s": 1.05, "latent_cosine": 0.99979, "latent_rel_l2": 0.0207},
+    {"tag": "canary-p2pcmp-shm-teapot-39", "NCCL_P2P_DISABLE": "1", "NCCL_P2P_LEVEL": "LOC", "transport": "P2P/IPC (flags ignored)", "lifecycle_s": 41.7, "sampler_s": 27, "steady_step_s": 1.06, "latent_cosine": 0.99979, "latent_rel_l2": 0.0207}
+  ],
+  "health": {"guard_faults": 0, "worker_swap_bytes": 0, "amdgpu_errors": 0, "min_free_vram_GiB": [7.0, 12.5]},
+  "conclusions": [
+    "RCCL 2.27.7 selects P2P/IPC whenever KFD reports a direct peer link and ignores NCCL_P2P_DISABLE/NCCL_P2P_LEVEL; same-day SHM control not possible via env",
+    "steady step 1.05 s vs 1.33 s host-SHM (about 21% faster)",
+    "lifecycle 42 s vs 146 s, mostly from swap-free loading",
+    "P2P_DISABLE=0 latent bit-identical to Oct 28 reviewed reference"
+  ]
+}
