@@ -115,19 +115,12 @@ The test methods and engine builds also differed between those dates, so these a
 
 | Candidate | State |
 |---|---|
-| Nemotron 3.5 Super | IQ3 weights removed November 2. INT4 vLLM attempts (EP2, PLE host-file-gather) stopped on the loading heartbeat guard; no weights on disk now |
-| Maya DeepSeek UD-IQ1_S with the 36 GB store | Loading failure followed by AMDGPU/CPU lockups (November 5). The same model without the store is the enabled `deepseek-v4.1-flash-1017-maya-unsloth-q1` route |
+| Nemotron 3.5 Super | All weights removed: IQ3 deleted November 2; the INT4 vLLM attempts (EP2, PLE host-file-gather) stopped on the loading heartbeat guard. A search of both drives on November 7 found no Super weights, only logs and configs. Nemotron 3.5 Bolt is a different model and stays enabled |
+| Maya DeepSeek UD-IQ1_S with the 36 GB store | Loading failure followed by AMDGPU/CPU lockups (November 5, before the working layout). Not retested in the current layout. The same weights without the store are the enabled `deepseek-v4.1-flash-1017-maya-unsloth-q1` route, which passed on November 7 |
 | RDNA3 full-stack fork2314 (vLLM) | Qwen startup warm-up failed (`_seq_lens_cpu`); final |
-| H3 image-to-video through P2P | Not tested: there is no saved I2V workflow |
+| H3 image-to-video through P2P | Not possible with the projected-8B encoder (text-only). Image-to-video uses the native-32B encoder, staged; passed November 7 in 175.5 s ([report](../graphics/H3-TP2-PRODUCTION-2026-11-07.md)) |
 
-**Downloaded but not used by any route** (kept on purpose, nothing to qualify):
-- Graphics experimental assets:
-  - `h3-hoststage-20261028`: 20 GB of host-staged rank shards, superseded by the November 7 TP2 halves.
-  - `h3-encoder-formats-20261028`: 16 GB, a W4A8 32B encoder trial.
-  - `h3-8b-comparison-20261031`: 10 GB. This is the projected-8B encoder that production uses.
-  - `h3-tp2-halves-20261107`: 20 GB, the TP2 halves that production uses.
-- `Unsloth/hub/models--unsloth--MiniMax-H3-FP8`: an incomplete 1.9 GB Hugging Face download (`.incomplete` blob); nothing uses it.
-- `LLM-ARCHIVE/NVIDIA/2026-10-18`: an 11 GB NVIDIA-host recovery archive, not a model.
+**Downloaded but not used by any route:** removed on November 7 at the owner's request: the H3 host-staged shards (20 GB), the W4A8 32B encoder trial (16 GB) and the incomplete MiniMax-H3-FP8 download (1.8 GB). Remaining experimental graphics files are both used by production: `h3-8b-comparison-20261031` (projected-8B encoder) and `h3-tp2-halves-20261107` (TP2 halves). `LLM-ARCHIVE/NVIDIA/2026-10-18` (11 GB) is the only copy of the retired NVIDIA setup and is kept pending the owner's confirmation.
 
 No GPU hold is active. The owner released the fault hold on November 7 at 03:56. The daily updater is enabled (next run 03:00), and the hub serves all routes.
 

@@ -1,5 +1,7 @@
 # Current LLM model storage — November 3, 2026
 
+**November 7 removal (owner request):** deleted from sharedSATA1: `Graphics-Models/experimental/h3-hoststage-20261028` (20 GB host-staged H3 rank shards, superseded by `experimental/h3-tp2-halves-20261107`), `Graphics-Models/experimental/h3-encoder-formats-20261028` (16 GB W4A8 32B encoder trial) and the incomplete `Unsloth/hub/models--unsloth--MiniMax-H3-FP8` download (1.8 GB). Nothing in production used them. About 38 GB freed.
+
 **November 3 cleanup:** current model locations below are retained. Unused environments/build/cache payloads are removed; the additional H3 derived rank shards now use sharedSATA1 `Graphics-Models/experimental/h3-hoststage-20261028/shards`. Maya/Strata streaming weights stay on system NVMe. [Scope and verification](SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
 
 Qwen main and DFlash2 now use sharedSATA1; retained Maya/Strata streaming assets use the system drive. Super IQ3 and old DeepSeek weight backing are removed. Seven enabled engine routes share six enabled base weight sets; Ornith and Strata Qwen remain configured but paused. Super W4A16 and Flint AWQ are retained experimental candidates. No new inference or performance result is implied. [Qwen relocation](QWEN-SATA-MIGRATION-2026-11-02.md) · [Streaming relocation](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
@@ -8,7 +10,7 @@ Current sizes below are logical bytes of each retained directory, including smal
 
 | Root | Current location |
 |---|---|
-| System models | `/opt/local-llm/models` |
+| System models | `models` |
 | Shared SATA | `/mnt/shared` |
 
 ## VRAM only models — selected loading configurations
@@ -41,7 +43,7 @@ Current sizes below are logical bytes of each retained directory, including smal
 | Super W4A16 Merlin mixed INT4/INT8 | 72.920 | `vLLM-Models/Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin` |
 | Flint AWQ | 22.415 | `vLLM-Models/Flint-AWQ` |
 
-New DeepSeek Unsloth Q1 weights are not downloaded. Runtime/source pins, guards, holds and the paused updater remain. No task copy/GPU job or reservation remains. The image/video collection is separate at `/mnt/shared/Graphics-Models`.
+New DeepSeek Unsloth Q1 weights are not downloaded. Runtime/source pins, guards, holds and the paused updater remain. No task copy/GPU job or reservation remains. The image/video collection is separate at `<model drive>/Graphics-Models`.
 
 ---
 
@@ -83,7 +85,7 @@ excluded. [Exact byte counts](results/model-storage-2026-10-27.json).
 
 | Drive | Root |
 |---|---|
-| System | `/opt/local-llm/models` |
+| System | `models` |
 | SATA | `/mnt/shared` |
 | NVMe | `/mnt/shared-nvme/LLM-Models` |
 

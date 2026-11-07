@@ -55,7 +55,13 @@
     "qwen_image_2_1": {
       "tp2_server": 90.33,
       "staged": 90.4
-    }
+    },
+    "h3_i2v_native32b_staged_on_tp2_server": {
+      "tp2_server": 175.47,
+      "first_frame": "FLUX lighthouse",
+      "status": "success"
+    },
+    "h3_i2v_projected8b": "refused by design: projected-8B encoder is text-only"
   },
   "fixes": [
     "dropped --enable-triton-backend (breaks native32B NVFP4 encoder: sunset instead of teapot)",

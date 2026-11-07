@@ -46,6 +46,8 @@ Health: no guard faults, no amdgpu or AER kernel errors, and the RCCL transport 
 
 **Where P2P helps:** H3 sampling is 25–27% faster per step, and each card holds only half the DiT (10 GB instead of 20 GB). That leaves more room for larger frames and longer clips. For small, warm 608×352 jobs end-to-end time is about the same as staged; the gain grows with resolution.
 
-**Not covered:** H3 image-to-video through P2P (no saved I2V workflow; the rewrite treats it the same and it uses the same input directory), sustained load, and concurrent users. The Desktop ComfyUI app still uses its own staged installation.
+**Image-to-video:** the projected-8B encoder is text-only by design (its node refuses an image and points to the native-32B workflow), so H3 image-to-video always uses the native-32B encoder, which production keeps staged. Tested November 7: the FLUX lighthouse image as first frame, 608×352×39, 175.5 s, the first frame matches the input and the beam and waves move coherently. A P2P image-to-video path would need the native-32B encoder on both ranks, measured slower (246 s vs 93 s for text-to-video).
+
+**Not covered:** sustained load and concurrent users. The Desktop ComfyUI app still uses its own staged installation.
 
 Numbers: `results/h3-tp2-production-2026-11-07.json` and the raw runs in `results/h3-tp2-production-2026-11-07/`.
