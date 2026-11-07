@@ -1,6 +1,12 @@
 # Current AMD results — November 5, 2026
 
-[Sapphire switch/P2P evidence audit](SAPPHIRE-SWITCH-P2P-EVIDENCE-AUDIT-2026-11-06.md): completed direct HIP/IPC and RCCL P2P transfers passed before the headless failure. The model faulting operation and transport remain unlogged. An older driver-P2P-disabled Strata qualification also failed; its workload/software state differs and site-specific failure evidence remains private. Recent Sapphire/logical-GPU1 identity correction and all guard failures remain preserved. [Qwen backend comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md). Read-only audit; no retry or runtime change.
+[All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
+
+[AMD working setup, November 7](AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and tests that passed.
+
+[Sapphire post-crash link training](SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md): after the November 5 failure, Sapphire's switch path was absent at power-on in one boot and trained at x2 in the next, then returned to x8. Link training precedes driver and workload, pointing to the Sapphire-to-switch link or its power. Failures occur only with Sapphire behind the switch; the no-switch topology had none. Read-only; hold retained.
+
+[Sapphire switch/P2P evidence audit](SAPPHIRE-SWITCH-P2P-EVIDENCE-AUDIT-2026-11-06.md): completed direct HIP/IPC and RCCL P2P transfers passed before the headless failure. The model faulting operation and transport remain unlogged. An older driver-P2P-disabled Strata crash limits a universal P2P-only explanation; its workload/software state differs. Recent Sapphire/logical-GPU1 identity correction and all guard failures remain preserved. [Qwen backend comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md). Read-only audit; no retry or runtime change.
 
 [Headless model campaign](AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
 

@@ -1,0 +1,400 @@
+{
+  "date": "2026-11-07",
+  "boot_id": "d81d1623-0003-4909-83d3-4988534975ab",
+  "campaign": "<local path>,
+  "layout": "hardware/AMD-WORKING-SETUP-2026-11-07.md",
+  "peers": "passed x2 (capability, local, integrity-ipc, rccl P2P/IPC)",
+  "routes_passed": 14,
+  "routes_total": 14,
+  "benchmark": [
+    {
+      "route": "empero-qwen3.8-35b-a3b",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 46.7,
+      "tool_prompt": 7082,
+      "tool_ttft_s": 2.46,
+      "tool_total_s": 2.92,
+      "tool_out_tok": 79,
+      "tool_tok_s": 174.5,
+      "tool_prefill_tok_s": 2874,
+      "answer_prompt": 7287,
+      "answer_ttft_s": 0.17,
+      "answer_total_s": 0.33,
+      "answer_out_tok": 20,
+      "answer_tok_s": 126.3,
+      "answer_prefill_tok_s": 43622,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        12.0,
+        10.7
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "flint-40b-a2.5b",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 50.7,
+      "tool_prompt": 6502,
+      "tool_ttft_s": 1.31,
+      "tool_total_s": 4.1,
+      "tool_out_tok": 181,
+      "tool_tok_s": 64.8,
+      "tool_prefill_tok_s": 4980,
+      "answer_prompt": 6770,
+      "answer_ttft_s": 0.18,
+      "answer_total_s": 1.68,
+      "answer_out_tok": 96,
+      "answer_tok_s": 63.8,
+      "answer_prefill_tok_s": 37431,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        9.6,
+        11.2
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "ornith-1.5-122b",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 151.9,
+      "tool_prompt": 7073,
+      "tool_ttft_s": 10.87,
+      "tool_total_s": 18.5,
+      "tool_out_tok": 86,
+      "tool_tok_s": 11.3,
+      "tool_prefill_tok_s": 651,
+      "answer_prompt": 7281,
+      "answer_ttft_s": 2.75,
+      "answer_total_s": 4.19,
+      "answer_out_tok": 18,
+      "answer_tok_s": 12.5,
+      "answer_prefill_tok_s": 2646,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        4.3,
+        5.0
+      ],
+      "max_swap_spill": [
+        9809920,
+        0
+      ]
+    },
+    {
+      "route": "qwen3.8-27b-vllm",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 89.5,
+      "tool_prompt": 7074,
+      "tool_ttft_s": 4.11,
+      "tool_total_s": 4.61,
+      "tool_out_tok": 77,
+      "tool_tok_s": 153.7,
+      "tool_prefill_tok_s": 1723,
+      "answer_prompt": 7274,
+      "answer_ttft_s": 0.23,
+      "answer_total_s": 0.4,
+      "answer_out_tok": 19,
+      "answer_tok_s": 116.1,
+      "answer_prefill_tok_s": 31069,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.1,
+        7.1
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "qwen3.8-27b-sglang-dflash2",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 34.4,
+      "tool_prompt": 7359,
+      "tool_ttft_s": 4.23,
+      "tool_total_s": 4.59,
+      "tool_out_tok": 80,
+      "tool_tok_s": 218.6,
+      "tool_prefill_tok_s": 1741,
+      "answer_prompt": 7566,
+      "answer_ttft_s": 0.27,
+      "answer_total_s": 0.44,
+      "answer_out_tok": 20,
+      "answer_tok_s": 113.3,
+      "answer_prefill_tok_s": 28203,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        4.4,
+        4.4
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "nemotron-3.5-bolt-vllm",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 224.4,
+      "tool_prompt": 7668,
+      "tool_ttft_s": 3.67,
+      "tool_total_s": 6.41,
+      "tool_out_tok": 81,
+      "tool_tok_s": 29.6,
+      "tool_prefill_tok_s": 2092,
+      "answer_prompt": 7871,
+      "answer_ttft_s": 0.68,
+      "answer_total_s": 1.59,
+      "answer_out_tok": 19,
+      "answer_tok_s": 20.7,
+      "answer_prefill_tok_s": 11642,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        1.0,
+        1.1
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "sage-a1.5",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 113.0,
+      "tool_prompt": 7049,
+      "tool_ttft_s": 1.24,
+      "tool_total_s": 1.76,
+      "tool_out_tok": 71,
+      "tool_tok_s": 136.5,
+      "tool_prefill_tok_s": 5698,
+      "answer_prompt": 7236,
+      "answer_ttft_s": 0.21,
+      "answer_total_s": 0.38,
+      "answer_out_tok": 18,
+      "answer_tok_s": 106.5,
+      "answer_prefill_tok_s": 33913,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        6.8,
+        6.9
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "qwen3.8-flash-next-iq3_xxs",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 107.5,
+      "tool_prompt": 6847,
+      "tool_ttft_s": 9.21,
+      "tool_total_s": 10.37,
+      "tool_out_tok": 77,
+      "tool_tok_s": 66.5,
+      "tool_prefill_tok_s": 744,
+      "answer_prompt": 7046,
+      "answer_ttft_s": 8.47,
+      "answer_total_s": 8.78,
+      "answer_out_tok": 18,
+      "answer_tok_s": 58.7,
+      "answer_prefill_tok_s": 832,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        1.7,
+        0.5
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "qwen3.8-flash-next-unsloth-iq1_m",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 59.0,
+      "tool_prompt": 6855,
+      "tool_ttft_s": 9.43,
+      "tool_total_s": 10.55,
+      "tool_out_tok": 79,
+      "tool_tok_s": 70.1,
+      "tool_prefill_tok_s": 727,
+      "answer_prompt": 7060,
+      "answer_ttft_s": 8.89,
+      "answer_total_s": 9.21,
+      "answer_out_tok": 20,
+      "answer_tok_s": 61.6,
+      "answer_prefill_tok_s": 794,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        2.5,
+        3.5
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "glm-5.3-flash-maya",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 64.2,
+      "tool_prompt": 6600,
+      "tool_ttft_s": 188.92,
+      "tool_total_s": 214.68,
+      "tool_out_tok": 54,
+      "tool_tok_s": 2.1,
+      "tool_prefill_tok_s": 35,
+      "answer_prompt": 6750,
+      "answer_ttft_s": 27.56,
+      "answer_total_s": 34.3,
+      "answer_out_tok": 17,
+      "answer_tok_s": 2.5,
+      "answer_prefill_tok_s": 245,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.5,
+        7.6
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 317.8,
+      "tool_prompt": 6980,
+      "tool_ttft_s": 92.42,
+      "tool_total_s": 98.59,
+      "tool_out_tok": 107,
+      "tool_tok_s": 17.3,
+      "tool_prefill_tok_s": 76,
+      "answer_prompt": 7205,
+      "answer_ttft_s": 2.38,
+      "answer_total_s": 3.47,
+      "answer_out_tok": 17,
+      "answer_tok_s": 15.6,
+      "answer_prefill_tok_s": 3030,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.3,
+        7.3
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 687.8,
+      "tool_prompt": 6980,
+      "tool_ttft_s": 34.23,
+      "tool_total_s": 53.46,
+      "tool_out_tok": 107,
+      "tool_tok_s": 5.6,
+      "tool_prefill_tok_s": 204,
+      "answer_prompt": 7204,
+      "answer_ttft_s": 4.8,
+      "answer_total_s": 6.25,
+      "answer_out_tok": 16,
+      "answer_tok_s": 11.0,
+      "answer_prefill_tok_s": 1501,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.5,
+        7.5
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 62.2,
+      "tool_prompt": 6968,
+      "tool_ttft_s": 87.06,
+      "tool_total_s": 118.78,
+      "tool_out_tok": 104,
+      "tool_tok_s": 3.3,
+      "tool_prefill_tok_s": 80,
+      "answer_prompt": 7184,
+      "answer_ttft_s": 13.26,
+      "answer_total_s": 15.87,
+      "answer_out_tok": 14,
+      "answer_tok_s": 5.4,
+      "answer_prefill_tok_s": 542,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.5,
+        7.6
+      ],
+      "max_swap_spill": [
+        0,
+        0
+      ]
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 50.2,
+      "tool_prompt": 6968,
+      "tool_ttft_s": 180.57,
+      "tool_total_s": 267.73,
+      "tool_out_tok": 104,
+      "tool_tok_s": 1.2,
+      "tool_prefill_tok_s": 39,
+      "answer_prompt": 7188,
+      "answer_ttft_s": 12.18,
+      "answer_total_s": 18.21,
+      "answer_out_tok": 18,
+      "answer_tok_s": 3.0,
+      "answer_prefill_tok_s": 590,
+      "tool": null,
+      "min_free_VRAM_GiB": [
+        7.3,
+        7.3
+      ],
+      "max_swap_spill": [
+        665817088,
+        0
+      ]
+    }
+  ],
+  "kernel_amdgpu_errors": 0,
+  "aer": {
+    "0b:00.0": "0/0/0",
+    "13:00.0": "0/0/0"
+  },
+  "stops": [
+    "peer tooling x4 (no GPU fault)",
+    "route 9 registry fingerprint + st_dev",
+    "route 12 transient backing-content mismatch; files verified intact; passed on fresh attempt"
+  ],
+  "hold": "GPU-LOCK latched (owner daily-update-fault-qualification, boot d81d1623); hub and updater blocked"
+}

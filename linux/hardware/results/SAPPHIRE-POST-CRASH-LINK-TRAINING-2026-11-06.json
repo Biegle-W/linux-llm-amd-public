@@ -1,0 +1,465 @@
+{
+  "report": "SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md",
+  "date": "2026-11-06",
+  "method": "read-only persisted kernel journal and current sysfs; no GPU work",
+  "timezone": "America/Toronto",
+  "kernel": "7.0.14-42-vmpt1",
+  "topology": {
+    "sapphire_path": {
+      "switch_port": "02:04.0",
+      "downstream_port": "08:00.0",
+      "endpoint": "0b:00.0",
+      "subsystem": "1da2:471e"
+    },
+    "powercolor_path": {
+      "switch_port": "02:08.0",
+      "downstream_port": "10:00.0",
+      "endpoint": "13:00.0",
+      "subsystem": "148c:2422"
+    },
+    "vbios_both": "113-3E4710U-O54"
+  },
+  "boots": [
+    {
+      "start": "2026-11-05T21:41:17",
+      "sapphire_link": "x8",
+      "powercolor_link": "x8",
+      "end": "0b:00.0 lost from bus 23:01:30.761818 during SGLang startup"
+    },
+    {
+      "start": "2026-11-05T23:29:11",
+      "sapphire_link": "x8",
+      "powercolor_link": "x8",
+      "end": "interactive sudo reboot 2026-11-06T01:18:02"
+    },
+    {
+      "start": "2026-11-06T01:20:29",
+      "sapphire_link": "x8",
+      "powercolor_link": "x8",
+      "end": "journal stops 01:20:35 without shutdown sequence"
+    },
+    {
+      "start": "2026-11-06T01:21:50",
+      "sapphire_link": "absent",
+      "powercolor_link": "x8",
+      "kfd_devices": 1,
+      "note": "02:04.0 bus range 07-0c instead of 07-0e",
+      "end": "desktop-session reboot 01:23:23"
+    },
+    {
+      "start": "2026-11-06T01:28:00",
+      "sapphire_link": "x2",
+      "powercolor_link": "x8",
+      "note": "amdgpu and SMU initialized on 0b:00.0",
+      "end": "interactive sudo systemctl poweroff 01:32:15"
+    },
+    {
+      "start": "2026-11-06T12:59:55",
+      "sapphire_link": "x8",
+      "powercolor_link": "x8",
+      "aer_counters": "all zero at inspection",
+      "end": "running"
+    }
+  ],
+  "prior_boots_with_logged_widths": {
+    "range": "2026-11-03T02:34 to 2026-11-06T01:20",
+    "count": 24,
+    "all_x8_both_paths": true
+  },
+  "bus_loss_events": [
+    {
+      "time": "2026-11-03T04:25",
+      "device": "13:00.0",
+      "board": "not individually reidentified"
+    },
+    {
+      "time": "2026-11-03T15:38",
+      "device": "13:00.0",
+      "board": "not individually reidentified"
+    },
+    {
+      "time": "2026-11-04T14:57",
+      "device": "13:00.0",
+      "board": "Sapphire (pre-swap)"
+    },
+    {
+      "time": "2026-11-05T23:01",
+      "device": "0b:00.0",
+      "board": "Sapphire (post-swap)"
+    }
+  ],
+  "aer_dpc_hotplug_errors_logged": false,
+  "assessment": "Fault is specific to Sapphire behind the PEX88096 switch: no bus loss in the no-switch topology, owner reports Sapphire stable direct on the motherboard, PowerColor and a prior NVIDIA pair are stable on the switch, and failures followed Sapphire across both switch branches. Power-on training failures place it at the Sapphire-to-switch link or power level; link margin, switch-board slot power and a Sapphire power-state interaction are not distinguished.",
+  "identity_assumption": "degraded boots attributed to Sapphire assuming no board moved between the failure boot and the current boot",
+  "changes_made": "none",
+  "fault_hold": "retained",
+  "bios_change_2026-11-06T14:15": {
+    "verified": "FADT declares ASPM unsupported; OS uses BIOS config (ASPM disabled); _OSC retains AER/DPC/hotplug/PME/LTR; addresses unchanged; both GPU paths 16GT/s x8; AER zero",
+    "recommended_not_verifiable_from_os": [
+      "PCI Express Clock Gating disabled",
+      "SR-IOV disabled",
+      "PEG slot Gen4 x16"
+    ],
+    "qualification": "none; idle boot only; hold retained"
+  },
+  "software_exclusions_2026-11-06": {
+    "pcie_dpm": "single 16GT/s x8 level on both cards",
+    "overdrive": "stock clocks, 0 mV offset, 303 W default cap",
+    "baco_runtime_pm": "configured, no suspension observed this boot; earlier activity unrecorded"
+  },
+  "switch_power_topology_owner_2026-11-06": {
+    "switch_board": "requires own dedicated PSU, on/off synced with PC",
+    "gpu_aux_and_system": "PC PSU",
+    "history": "same connection worked with NVIDIA pair and previously with these AMD cards (owner)",
+    "status": "not a standalone explanation: both switched GPUs are powered identically and only Sapphire fails"
+  },
+  "next_test": "Sapphire switch downstream port at Gen3 target speed, then unchanged SGLang startup x3; fallback: reduced Sapphire power cap",
+  "sapphire_idle_power_state": {
+    "source": "Prometheus server_gpu_power_watts with utilization==0",
+    "normal_W": "10-12 (Nov 4 17:02 - Nov 5 16:50, only long stable switch boot)",
+    "high_W": "50-61 (all other switch boots incl. every bus-loss boot; every boot since Nov 5 16:53)",
+    "step": "16:50 last normal sample; 16:53 restart first sample 53 W",
+    "unchanged_in_high_state": [
+      "utilization 0",
+      "core clock 0",
+      "memory clock 96 MHz",
+      "vddgfx ~0.05 V",
+      "fan PWM/RPM",
+      "edge temperature"
+    ],
+    "identical_between_working_and_crashing_boots": [
+      "kernel",
+      "BIOS 1836",
+      "microcode 0x133",
+      "VBIOS",
+      "SMU fw 0x004e8300",
+      "cmdline",
+      "packages",
+      "CoolerControl profiles",
+      "motherboard rails"
+    ],
+    "gate": "require Sapphire idle ~10-13 W before GPU work",
+    "history": [
+      {
+        "until": "2026-10-29T18:05-04:00",
+        "state": "normal ~12 W",
+        "layout": "motherboard, Sapphire 03:00.0"
+      },
+      {
+        "from": "2026-10-29T18:07-04:00",
+        "until": "2026-11-04T17:01-05:00",
+        "state": "high 55-76 W",
+        "layout": "motherboard then switch",
+        "bus_loss": "only behind switch"
+      },
+      {
+        "from": "2026-11-04T17:02-05:00",
+        "until": "2026-11-05T16:50-05:00",
+        "state": "normal 10-12 W",
+        "layout": "switch",
+        "bus_loss": "none"
+      },
+      {
+        "from": "2026-11-05T16:53-05:00",
+        "state": "high ~55 W",
+        "layout": "switch",
+        "bus_loss": "18:45, 23:01"
+      }
+    ],
+    "flips_only_at_boot": true,
+    "os_config_changed_at_flips": false,
+    "reboot_checks_2026-11-06": [
+      {
+        "boot": "14:56",
+        "type": "warm",
+        "sapphire_W": "44-53"
+      },
+      {
+        "boot": "15:11",
+        "type": "full power-off, both PSUs off ~10 min",
+        "sapphire_W": "46-55"
+      }
+    ],
+    "motherboard_check_2026-11-06": {
+      "boot": "20:31",
+      "layout": "Sapphire alone, CPU x16 slot 03:00.0, no switch, no PowerColor",
+      "link": "Gen4 x16",
+      "aer": "0/0/0",
+      "idle_W": "61-67",
+      "sclk_MHz": 0,
+      "mclk_MHz": 96,
+      "temps_C": {
+        "edge": 26,
+        "junction": 31,
+        "memory": 24
+      },
+      "fan_rpm": 0,
+      "vddgfx_mV": 55,
+      "conclusion": "high state persists without the switch; not switch-induced"
+    }
+  },
+  "retest_2026-11-06": {
+    "owner_request": "test know good models now",
+    "campaign": "known-good-retest-2026-11-06-48 (campaign 47 inputs, zero pin drift)",
+    "sapphire_idle_at_start_W": "47-57",
+    "preflight": "passed",
+    "peers": "4/4 passed incl. RCCL P2P/IPC",
+    "route_1": {
+      "model": "empero-qwen3.8-35b-a3b",
+      "load_seconds": 47.71,
+      "outcome": "Sapphire stalled ~1 s into first prefill (busy 0, sclk 0, mclk stuck 1249, 76-84 W), lost from bus 15:31:58.396, host froze"
+    },
+    "kernel": [
+      "device lost from bus 0b:00.0",
+      "SMU TransferTableSmu2Dram bus error",
+      "~23700 SMU hang messages",
+      "MES REMOVE_QUEUE/reset",
+      "CPU workqueue stalls",
+      "NMI backtrace",
+      "journal ends 15:32:28"
+    ],
+    "aer_dpc": "none logged",
+    "new_fault_hold": "latched by guard before freeze, retained",
+    "unrun_routes": 13
+  },
+  "single_card_27b_motherboard_2026-11-06": {
+    "owner_request": "test models that would run on one card, qwen 3.8 27B",
+    "layout": "Sapphire alone, CPU x16 slot, Gen4 x16, high idle state",
+    "engine": "vLLM TP=1, W4A16, 32K ctx, 2.5 GiB BF16 KV, mem 0.95, no MTP (unqualified single-card config)",
+    "first_attempt": "config error: KV 2 GiB < 2.15 GiB needed; no requests",
+    "steps": {
+      "load_s": 26,
+      "short": "391 correct",
+      "tool": "read_file correct",
+      "prefill_tokens": 15859,
+      "prefill_s": 15.4,
+      "prefill_answer": "3584 correct",
+      "decode_tokens": 1022,
+      "decode_tok_s": 40.3
+    },
+    "telemetry": {
+      "peak_W": 326,
+      "peak_junction_C": 73,
+      "peak_mem_C": 64,
+      "max_fan_rpm": 968,
+      "peak_vram_GiB": 21.12,
+      "device_missing_samples": 0
+    },
+    "kernel": "no amdgpu warnings/errors",
+    "aer": "0/0/0",
+    "idle_after_W": "67-71",
+    "gpu_lock": "retained throughout"
+  },
+  "single_card_motherboard_long_runs_2026-11-06": {
+    "empero": {
+      "engine": "llama.cpp HIP pinned build, 32K, MTP draft",
+      "load_s": 52,
+      "prefill_15859_s": 4.53,
+      "decode_tok_s": 148.6,
+      "all_correct": true,
+      "peak_W": 307,
+      "peak_junction_C": 65
+    },
+    "vllm_27b": {
+      "ctx": 131072,
+      "kv": "fp8 4.4 GiB",
+      "prompt_tokens": 122218,
+      "needles": "2/2",
+      "prefill_tok_s": 95.9,
+      "followup_s": 14.0,
+      "decode_tok_s": 39.4,
+      "minutes": 46.2,
+      "peak_W": 406,
+      "peak_junction_C": 93,
+      "peak_mem_C": 82
+    },
+    "sglang_27b": {
+      "ctx": 131072,
+      "kv": "fp8_e4m3",
+      "dflash2": false,
+      "dflash2_pool_tokens_when_enabled": 43040,
+      "prompt_tokens": 122218,
+      "needles": "2/2",
+      "prefill_tok_s": 64.0,
+      "followup_s": 11.5,
+      "decode_tok_s": 34.7,
+      "minutes": 65.6,
+      "peak_W": 358,
+      "peak_junction_C": 88,
+      "peak_mem_C": 78
+    },
+    "strata_flash_next": {
+      "ctx": 262144,
+      "prefill": "auto (256 aborted at ~34 tok/s)",
+      "prompt_tokens": 238126,
+      "needles": "2/2",
+      "prefill_tok_s": [
+        508.2,
+        471.0
+      ],
+      "followup_s": 445.3,
+      "decode_tok_s": 15.9,
+      "minutes": 35.8,
+      "peak_W": 358,
+      "peak_junction_C": 85,
+      "nvme_read_GBps": 1.3
+    },
+    "faults": "none: device present all samples, no amdgpu errors, AER 0/0/0",
+    "idle_after_W": "86-91",
+    "gpu_lock": "retained",
+    "next": "owner-proposed: Sapphire alone behind the switch, same port, same single-card checks"
+  },
+  "sapphire_alone_on_switch_2026-11-07": {
+    "layout": "Sapphire alone at 11:00.0 under switch port 0e:00.0 (02:08.0 branch, PowerColor's usual); PowerColor removed",
+    "idle_W": "51-56 (high state)",
+    "link": "Gen4 x8 at switch port",
+    "aer": "0/0/0",
+    "empero": {
+      "load_s": 48.1,
+      "prefill_15859_s": 4.6,
+      "decode_tok_s": 145.0,
+      "all_correct": true,
+      "peak_W": 314
+    },
+    "vllm_27b_32k": {
+      "load_s": 108,
+      "prefill_15859_s": 14.63,
+      "decode_tok_s": 40.2,
+      "all_correct": true,
+      "peak_W": 317
+    },
+    "vllm_27b_128k_sustained": {
+      "needles": "2/2",
+      "prompt_tokens": 122218,
+      "prefill_tok_s": 95.7,
+      "followup_s": 14.0,
+      "decode_tok_s": 39.2,
+      "minutes": 44.2,
+      "peak_W": 399,
+      "peak_junction_C": 91,
+      "peak_mem_C": 84
+    },
+    "faults": "none",
+    "interpretation": "failure requires both cards behind the switch; P2P alone insufficient given the Nov 3 driver-P2P-disabled Strata crash",
+    "next": "both cards behind switch, two independent single-card models loaded simultaneously (no inter-GPU traffic)"
+  },
+  "both_cards_independent_load_on_switch_2026-11-07": {
+    "layout": {
+      "powercolor": "0b:00.0, branch 02:04.0, port 08:00.0",
+      "sapphire": "13:00.0, branch 02:08.0, port 10:00.0"
+    },
+    "idle_W": {
+      "powercolor": 4,
+      "sapphire": "52-56 (high state)"
+    },
+    "isolation": "each server saw only its own card (ROCR_VISIBLE_DEVICES, BDFID-verified); driver pcie_p2p=Y but no peer access possible",
+    "workloads": {
+      "sapphire": "Empero llama.cpp 32K",
+      "powercolor": "27B vLLM TP1 32K"
+    },
+    "synchronized_rounds": {
+      "rounds": 10,
+      "prefills_correct": "20/20",
+      "decodes_completed": "20/20"
+    },
+    "sustained_15min": {
+      "sapphire": "76/76",
+      "powercolor": "23/23"
+    },
+    "peaks": {
+      "combined_W": 628,
+      "both_above_200W_s": 124,
+      "sapphire": {
+        "W": 359,
+        "junction_C": 80
+      },
+      "powercolor": {
+        "W": 339,
+        "junction_C": 78
+      }
+    },
+    "faults": "none; AER 0/0/0 both",
+    "interpretation": "simultaneous load on the switch is not sufficient; every bus loss involved one workload spanning both cards, including the Nov 3 driver-P2P-disabled Strata case",
+    "next": "cooperative dual-card run (Empero layer split) with P2P disabled vs enabled"
+  },
+  "dual_empero_p2p_off_on_switch_2026-11-07": {
+    "layout": "same as independent-load test; ROCm0=PowerColor 0b:00.0 (token_embd), ROCm1=Sapphire 13:00.0",
+    "route": "qualified Empero hip-amd layer split 1:1, 262144 ctx, MTP, GGML_CUDA_P2P unset",
+    "p2p_state": "process-level off: peer access only via GGML_CUDA_P2P; GGML_HIP_NO_VMM=ON, GGML_HIP_RCCL=OFF; driver pcie_p2p=Y unchanged",
+    "load_s": 46.1,
+    "short_tool": "correct",
+    "rounds": {
+      "n": 10,
+      "prefill_tokens": 15864,
+      "prefills_correct": "10/10",
+      "prefill_s": "4.96-5.01",
+      "decode_tok_s": "97.7-106.2"
+    },
+    "peaks": {
+      "sapphire": {
+        "W": 214,
+        "junction_C": 61
+      },
+      "powercolor": {
+        "W": 182,
+        "junction_C": 50
+      }
+    },
+    "faults": "none; AER 0/0/0 both",
+    "interpretation": "direct peer traffic through the switch is the leading trigger; caveats: Nov 6 failure had Sapphire in branch 02:04.0, Nov 3 Strata crash with driver P2P disabled",
+    "next": "same layout and route with GGML_CUDA_P2P=1"
+  },
+  "dual_empero_p2p_on_on_switch_2026-11-07": {
+    "change_from_p2p_off": "GGML_CUDA_P2P=1 (verified in process environment); KFD p2p_links node1<->node2",
+    "load_s": 46.0,
+    "short_tool": "correct",
+    "rounds": {
+      "n": 10,
+      "prefills_correct": "10/10",
+      "prefill_s": "4.96-5.02",
+      "decode_tok_s": "92.8-105.0"
+    },
+    "peaks": {
+      "sapphire": {
+        "W": 299,
+        "junction_C": 61
+      },
+      "powercolor": {
+        "W": 293,
+        "junction_C": 54
+      }
+    },
+    "faults": "none; AER 0/0/0 both",
+    "interpretation": "P2P alone not sufficient; no configuration reproduced the failure in this boot/layout",
+    "untested_differences_vs_nov6_failure": [
+      "Sapphire switch branch 02:04.0 vs 02:08.0",
+      "preceding RCCL P2P/IPC peer checks",
+      "monitor on PowerColor vs Sapphire",
+      "heavy TP2 RCCL P2P traffic",
+      "intermittency/boot condition"
+    ]
+  },
+  "vllm_27b_tp2_rccl_on_switch_2026-11-07": {
+    "route": "qualified qwen3.8-27b-vllm: TP2, 163840 ctx, MTP3, BF16 KV 6 GiB, util 0.82; RCCL 2.27.7 PyNCCL, NCCL_P2P_DISABLE=0, NCCL_PROTO=Simple",
+    "ranks": {
+      "0": "PowerColor 0b:00.0",
+      "1": "Sapphire 13:00.0"
+    },
+    "load_s": 34.0,
+    "short_tool": "correct",
+    "rounds": {
+      "n": 10,
+      "prefills_correct": "10/10",
+      "prefill_s": "9.03-9.11",
+      "decode_tok_s": "80.3-86.8"
+    },
+    "faults": "none; AER 0/0/0 both",
+    "interpretation": "heavy all-reduce P2P through the switch not sufficient in this boot/layout",
+    "untested_differences_vs_nov6_failure": [
+      "Sapphire branch 02:04.0 vs 02:08.0",
+      "preceding guarded RCCL peer checks",
+      "monitor placement",
+      "longer dual-card duration"
+    ]
+  }
+}

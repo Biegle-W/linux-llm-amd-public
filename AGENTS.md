@@ -1,5 +1,11 @@
 # Agent entry point
 
+[AMD working setup, November 7](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and the tests that passed after the Sapphire switch investigation.
+
+[All-models short tool-call benchmark, November 7](linux/hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout; GPU fault hold released by the owner.
+
+[Sapphire post-crash investigation](linux/hardware/SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md): idle-power state, motherboard and switch isolation tests, P2P on/off and TP2 results.
+
 [Headless model campaign](linux/hardware/AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
 
 [No-store DeepSeek failure and persistent inference kernel](linux/hardware/MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
