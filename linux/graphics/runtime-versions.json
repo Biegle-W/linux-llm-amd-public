@@ -13,7 +13,7 @@
   "workflow_templates": "0.11.102",
   "gpu": "2 x RX 7900 XTX 24 GB (gfx1100)",
   "system_ram_GiB": 61.55,
-  "placement": "denoiser cuda:0; encoder and VAEs cuda:1; qualified physical order PowerColor thenSapphire; componentplacement, notTP",
+  "placement": "default COMFY_MODE=tp2: H3 projected-8B T2V = fcys tp2-comfy TP2 over RCCL P2P/IPC (rank0 PowerColor :8188, rank1 Sapphire :18189); FLUX, Qwen-Image and native32B H3 = staged component placement (denoiser cuda:0; encoder and VAEs cuda:1) on the same server; COMFY_MODE=staged = previous single-process server",
   "custom_nodes": [
     "local_graphics_devices (maintained direct CLIP/VAE loaders)"
   ],
@@ -29,11 +29,11 @@
     "clipproj_commit": "c01ba8fb8f41b4f2094dbd0b185cdc238fb6134c"
   },
   "runtime_selection": {
-    "status": "requires-local-validation",
+    "status": "passed-six-normal-workflows",
     "source_commit": "fb2b26fdac507b7da81277c7becaf54c5e46ac6b",
-    "source_path": "/opt/local-llm/qualified-sources/comfyui-fb2b26fdac50",
-    "dependency_overlay": "/opt/local-llm/qualified-sources/comfyui-fb2b26fdac50/python-overlay",
-    "qualified_device_order": "1,0",
+    "source_path": "<local path>,
+    "dependency_overlay": "<local path>,
+    "qualified_device_order": "0,1",
     "files": {
       "main.py": "d5f1d810946f0d26c8187c12f9cac273c4689d06466076aea360cfe405e088a2",
       "custom_nodes/local_graphics_devices/__init__.py": "67b52279d2989e22cffbb78baf9c0954fa1828480310ca651ae6ec944ba19c65",
@@ -52,6 +52,33 @@
       "graphics-h3-i2v"
     ],
     "scope": "Six normal fixed workflows, finite tensors, saved image/video and full AV decode; retained Torch/ROCm and existing input/user data; no sustained-performance claim",
-    "reference_note": "Source-host workflow qualification only; independently qualify this source, dependencies and placement before selection."
+    "device_order_note": "November 7 working layout: PowerColor 0b:00.0 is ROCm 0 (see hardware/AMD-WORKING-SETUP-2026-11-07.md)"
+  },
+  "h3_tp2_production": {
+    "date": "2026-11-07",
+    "report": "H3-TP2-PRODUCTION-2026-11-07.md",
+    "status": "production-default",
+    "rollback": "COMFY_MODE=staged",
+    "rank0_attention": "--use-ck-attention",
+    "triton_backend": "disabled (breaks native32B NVFP4 encoder)",
+    "glue_sha256": {
+      "h3-tp2/custom_nodes/h3_tp2/__init__.py": "65e374f3b21ae11d46956ac3cf8189d29144a5229c3f81f53de774b6eec56b62",
+      "h3-tp2/extra_model_paths.yaml": "b60a96f78596f602646ce8241444870b2e8062252c7ecf9caddf7c994e20dc4b",
+      "h3-tp2/make_halves.py": "da64ea1a13e5cb7f5041573a50a4a7865dcc1912eb2b59809bf85af75ffabbc5",
+      "h3-tp2/test_rewrite.py": "75dfa38a94e0b340b808d5f8be95ccf2bc57035955127397c0379bec0a4bfd7b",
+      "h3-tp2/tp2_pair.py": "744eccac535a1df3acf12696c6d8e5521df9139ab80c1f883c362d45e623dc8e",
+      "h3-tp2/tp_boot.py": "15d03741ea367a28b6722475b47682c1aae6a46c13b8342f740d3a6efb01d577",
+      "h3-tp2/vendor-sha256.txt": "0c8d3efe4aa7de31fcf7ab211e38349266b841ecdac752fad20015bc32a310f4",
+      "h3-tp2/verify_vendor.py": "ecf39f2f75cbec1b6c4e7895bca787ed3f796b849a32d576272a50b2f28692d8"
+    },
+    "vendor": "runtime/h3-tp2 (fcys tp2-comfy core + INT8-Fast-ROCM 6b28bf6, updater disabled); hashes in h3-tp2/vendor-sha256.txt",
+    "halves": {
+      "dir": "<model drive>/Graphics-Models/experimental/h3-tp2-halves-20261107",
+      "source_sha256": "e889202c41dafb67b10d67b97f0d8541508036a6090af23425a5c2615d03c47a",
+      "rank_sha256": {
+        "0": "21f4b01e6fb9aab57d1b6b7ade70dd9b05f4320971e43ec27ed0741cbde4dec8",
+        "1": "62ce238b1422720b1a888179a6fc23b3ff89c279a62a73705af02e5a66b15a6d"
+      }
+    }
   }
 }

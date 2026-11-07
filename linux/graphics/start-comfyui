@@ -9,7 +9,16 @@ fi
 runtime=${COMFYUI_DIR:-$(python3 "$repo/graphics/runtime_selection.py" runtime)}
 overlay=$(python3 "$repo/graphics/runtime_selection.py" overlay)
 devices=$(python3 "$repo/graphics/runtime_selection.py" devices)
-paths=${COMFYUI_MODEL_PATHS:-"$repo/graphics/extra_model_paths.yaml"}
+# Production mode (November 7): H3 runs two-card tensor parallel over direct P2P (fcys tp2-comfy);
+# every other workflow keeps the staged two-card placement on the same :8188 server.
+# COMFY_MODE=staged restores the previous single-process server.
+mode=${COMFY_MODE:-tp2}
+case "$mode" in
+    tp2) default_paths="$repo/graphics/h3-tp2/extra_model_paths.yaml" ;;
+    staged) default_paths="$repo/graphics/extra_model_paths.yaml" ;;
+    *) printf 'Unknown COMFY_MODE %s (tp2 or staged)\n' "$mode" >&2; exit 2 ;;
+esac
+paths=${COMFYUI_MODEL_PATHS:-$default_paths}
 state="$repo/graphics/generated"
 mkdir -p "$state" "$repo/graphics/outputs"
 exec 9>"$state/server.lock"
@@ -32,11 +41,21 @@ export PYTHONUNBUFFERED=1
 
 python3 "$repo/graphics/install-device-loaders.py" --runtime "$runtime"
 cd -- "$runtime"
-"$runtime/.venv/bin/python" "$repo/graphics/guarded_comfy.py" "$runtime/.venv/bin/python" main.py \
-    --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188 \
-    --extra-model-paths-config "$paths" \
-    --input-directory "$repo/runtime/comfyui/input" --user-directory "$repo/runtime/comfyui/user" \
-    --output-directory "$repo/graphics/outputs" \
-    --reserve-vram 0.125 --disable-pinned-memory --disable-async-offload \
-    --disable-dynamic-vram --cache-none --use-pytorch-cross-attention \
-    --disable-partner-nodes "$@" 2>&1 | tee "$state/comfyui-$(date +%Y%m%d-%H%M%S).log"
+common=(--extra-model-paths-config "$paths"
+    --input-directory "$repo/runtime/comfyui/input" --user-directory "$repo/runtime/comfyui/user"
+    --output-directory "$repo/graphics/outputs"
+    --reserve-vram 0.125 --disable-pinned-memory --disable-async-offload
+    --disable-dynamic-vram --cache-none --disable-partner-nodes)
+if [[ "$mode" == tp2 ]]; then
+    python3 "$repo/graphics/h3-tp2/verify_vendor.py"
+    export COMFY_ROOT="$runtime" H3_TP2_CORE="$repo/runtime/h3-tp2/core" H3_TP2_DEVICES="$devices"
+    cmd=("$runtime/.venv/bin/python" "$repo/graphics/h3-tp2/tp2_pair.py"
+        --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188
+        "${common[@]}" --use-ck-attention)
+else
+    cmd=("$runtime/.venv/bin/python" main.py
+        --cuda-device all --default-device 0 --listen 127.0.0.1 --port 8188
+        "${common[@]}" --use-pytorch-cross-attention)
+fi
+"$runtime/.venv/bin/python" "$repo/graphics/guarded_comfy.py" "${cmd[@]}" "$@" 2>&1 \
+    | tee "$state/comfyui-$mode-$(date +%Y%m%d-%H%M%S).log"

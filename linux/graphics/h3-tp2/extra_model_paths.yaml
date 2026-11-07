@@ -1,0 +1,25 @@
+# H3 TP2 production mode: the normal model paths plus the TP custom nodes.
+# Actual model files stay on Shared SATA; no shortcuts or duplicated weights.
+shared_graphics:
+  base_path: <model drive>/Graphics-Models
+  is_default: true
+  diffusion_models: diffusion_models
+  text_encoders: text_encoders
+  vae: vae
+
+h3_projected_encoder:
+  base_path: <model drive>/Graphics-Models/experimental/h3-8b-comparison-20261031
+  text_encoders: .
+  clip_projections: .
+
+h3_tp2_glue:
+  base_path: graphics/h3-tp2
+  custom_nodes: custom_nodes
+
+h3_tp2_vendor:
+  base_path: runtime/h3-tp2
+  custom_nodes: custom_nodes
+
+h3_tp2_halves:
+  base_path: <model drive>/Graphics-Models/experimental/h3-tp2-halves-20261107
+  diffusion_models: .

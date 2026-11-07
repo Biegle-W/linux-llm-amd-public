@@ -1,5 +1,7 @@
 # Graphics model collection
 
+**November 7 production change:** `start-comfyui` now runs H3 two-card tensor parallel over direct P2P (fcys tp2-comfy) for projected-8B text-to-video; FLUX, Qwen-Image and native-32B H3 keep staged placement on the same :8188 server. Sampling is 25-27% faster per step; `COMFY_MODE=staged` rolls back. [Production report](H3-TP2-PRODUCTION-2026-11-07.md)
+
 **November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).
 
 **November 3 storage cleanup:** the remaining 21.06 GB H3 experimental rank shards moved to shared SATA after complete SHA-256 and original-pin comparison. Normal models/workflows and current environments are preserved; the TP2 candidate remains build-only/disabled. [Registry](staged-weight-locations.json) · [Cleanup and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
@@ -80,7 +82,7 @@ new host-staged trial and current control RAM-floor failures are recorded above.
 The saved validated
 workflows use the denoiser on GPU 0 and encoder/VAEs on GPU 1. Direct loaders set
 the target at construction to avoid native retargeting's second encoder copy.
-This is staged component placement, not TP or a combined 48 GB allocation.
+This is staged component placement, not TP or a combined 48 GB allocation. Since November 7 the production server runs projected-8B H3 as two-card TP over RCCL P2P instead; see the [production report](H3-TP2-PRODUCTION-2026-11-07.md).
 
 Qwen passed 512x512 / 40 steps in 100.9 seconds total (about 13 seconds denoising).
 H3 passed 608x352 / 39 frames / 20 steps in 232.4 seconds total (about 29 seconds

@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "date": "2026-11-07",
+  "production_mode": "tp2 (default); COMFY_MODE=staged rolls back",
+  "rccl": {
+    "version": "2.27.7-HEAD:96a25b5",
+    "transport": "P2P/IPC",
+    "HSA_ENABLE_SDMA": "0",
+    "NCCL_PROTO": "Simple",
+    "channels": 1,
+    "buffsize_bytes": 1048576,
+    "timeout_s": 300
+  },
+  "results_s": {
+    "h3_projected_608x352x39_warm": {
+      "tp2": 56.42,
+      "staged": 54.14,
+      "step_s": {
+        "tp2": 1.06,
+        "staged": 1.4
+      }
+    },
+    "h3_projected_cold_after_qwen": {
+      "tp2": 122.41,
+      "staged_morning": 126.27
+    },
+    "h3_projected_960x544x39": {
+      "tp2": 132.31,
+      "staged": 148.31,
+      "step_s": {
+        "tp2": 2.67,
+        "staged": 3.65
+      }
+    },
+    "h3_queued_behind_flux": {
+      "tp2": 155.92
+    },
+    "h3_after_interrupt": {
+      "tp2": 119.61
+    },
+    "h3_native32b_kept_staged": {
+      "tp2_server": 114.31,
+      "staged": 92.57
+    },
+    "flux3_klein_t2i": {
+      "tp2_server": [
+        96.49,
+        98.71
+      ],
+      "staged": 92.7
+    },
+    "flux3_klein_i2i": {
+      "tp2_server": 42.11
+    },
+    "qwen_image_2_1": {
+      "tp2_server": 90.33,
+      "staged": 90.4
+    }
+  },
+  "fixes": [
+    "dropped --enable-triton-backend (breaks native32B NVFP4 encoder: sunset instead of teapot)",
+    "joint interrupt via all_reduce(MAX) at each DiT forward (cancel deadlock reproduced, then fixed)",
+    "early follower start on idle server (178.8 s -> 122.4 s cold)",
+    "pre-sliced per-rank halves (warm 113.6 s -> 56.4 s)",
+    "native32B encoder prompts stay staged (246 s in TP2 vs 93 s staged)"
+  ],
+  "halves_manifest": {
+    "schema": 1,
+    "source": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+    "source_bytes": 20970379616,
+    "source_mtime_ns": 1792368813930000000,
+    "source_sha256": "e889202c41dafb67b10d67b97f0d8541508036a6090af23425a5c2615d03c47a",
+    "method": "fcys tp2-comfy core.slice_state_dict (world 2)",
+    "halves": {
+      "0": {
+        "file": "minimax_h3_fl2va_pruned_int8_convrot.tp2-rank0.safetensors",
+        "bytes": 10560866088,
+        "sha256": "21f4b01e6fb9aab57d1b6b7ade70dd9b05f4320971e43ec27ed0741cbde4dec8"
+      },
+      "1": {
+        "file": "minimax_h3_fl2va_pruned_int8_convrot.tp2-rank1.safetensors",
+        "bytes": 10560866088,
+        "sha256": "62ce238b1422720b1a888179a6fc23b3ff89c279a62a73705af02e5a66b15a6d"
+      }
+    }
+  },
+  "health": {
+    "guard_faults": 0,
+    "amdgpu_aer_errors": 0
+  }
+}
