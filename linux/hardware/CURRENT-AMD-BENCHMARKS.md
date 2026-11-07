@@ -2,7 +2,7 @@
 
 [All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
 
-[AMD working setup, November 7](AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and tests that passed.
+[AMD working setup, November 7](AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.
 
 [Sapphire post-crash link training](SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md): after the November 5 failure, Sapphire's switch path was absent at power-on in one boot and trained at x2 in the next, then returned to x8. Link training precedes driver and workload, pointing to the Sapphire-to-switch link or its power. Failures occur only with Sapphire behind the switch; the no-switch topology had none. Read-only; hold retained.
 

@@ -1,6 +1,6 @@
 # Current AMD runtime handoff — November 5, 2026
 
-[AMD working setup, November 7](../hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and tests that passed.
+[AMD working setup, November 7](../hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.
 
 [All-models short tool-call benchmark, November 7](../hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout; GPU fault hold released.
 
@@ -69,7 +69,7 @@ Configured context is allocation capacity. The latest short checks add no full-w
 |---|---|
 | PLE host-file-gather | Final dev229 loading stop on the unchanged six-second heartbeat guard; no inference/promotion, clean owned cleanup. Reviewed hold archived intact; no exact retry. |
 | Super INT4 EP2 | Final dev229 loading stop on the unchanged six-second heartbeat guard; no inference/promotion, clean owned cleanup. Reviewed hold archived intact; no exact retry. |
-| Maya DeepSeek UD-IQ1_S 36GB store | Final loading failure: six-second heartbeat and original 15-second cleanup failure, followed by AMDGPU/CPU lockups. No inference or promotion. Worker drained only after reboot; persistent fault hold remains. |
+| Maya DeepSeek UD-IQ1_S 36GB store | Final loading failure: six-second heartbeat and original 15-second cleanup failure, followed by AMDGPU/CPU lockups. No inference or promotion. Worker drained only after reboot; that fault hold was released by the owner on November 7 at 03:56. The same model without the store is the enabled `deepseek-v4.1-flash-1017-maya-unsloth-q1` route. |
 | RDNA3 full-stack fork2314 | Isolated wheel/native/CLI audits passed; Qwen startup warm-up failed on missing `_seq_lens_cpu` before requests. Exact case final; no promotion. Reviewed own hold archived intact after fresh health/ownership checks. |
 
 Four former timing-limited native candidates now passed and are enabled under their exact new source/profile seals. Deleted XS and Super IQ3 stay retired and are not fallbacks. No weights were deleted in the current update task.
