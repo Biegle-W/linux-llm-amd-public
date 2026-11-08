@@ -43,18 +43,5 @@
     "name": "DeepSeek-V4.1-Flash-1017 Strata Unsloth Q1 (32K, dual AMD, bounded CPU/NVMe tiers)",
     "context": 32768,
     "enabled": true
-  },
-  "qwen3.8-flash-next-unsloth-iq1_m": {
-    "name": "Qwen3.8-Flash-Next Unsloth UD-IQ1_M (256K, Strata0.2.11, dual AMD, MTP)",
-    "context": 262144,
-    "config": "strata-unsloth-iq1_m-profile.json",
-    "enabled": true,
-    "qualified_qwen_package": true,
-    "qualification": {
-      "status": "passed",
-      "date": "2026-11-05",
-      "evidence": "hardware/results/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.json",
-      "scope": "Strict two-step tool pass, six fixed local quality fixtures and three short128-token probes; sustained/full-context use unqualified"
-    }
   }
 }

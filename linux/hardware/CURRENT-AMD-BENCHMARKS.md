@@ -2,6 +2,8 @@
 
 [All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
 
+[Quant quality comparison, November 8](QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 at 3.4 tok/s vs Coder IQ2_XXS 51/54 at 15.3 tok/s (Strata); owner choice pending. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
+
 [Ripple-65B on vLLM INT4, November 7](RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
 
 [AMD working setup, November 7](AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.

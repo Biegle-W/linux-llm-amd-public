@@ -47,8 +47,9 @@ def require_package(cfg, *, root=None):
         actual = {'bytes': stat.st_size, 'mtime_ns': stat.st_mtime_ns,
                   'inode': stat.st_ino, 'device': stat.st_dev}
         if actual != {k: identity[k] for k in actual}:
-            # exFAT can assign another inode without changing file content.
-            if any(actual[k] != identity[k] for k in ('bytes', 'mtime_ns', 'device')):
+            # exFAT can assign another inode, and engine reinstalls (daily updater) can rewrite
+            # mtime, without changing file content: those fall back to the sealed sha256.
+            if any(actual[k] != identity[k] for k in ('bytes', 'device')):
                 raise RuntimeError('Qualified Strata Qwen backing identity changed.')
             key = (name, *actual.values(), identity['sha256'])
             if key not in _VERIFIED_BACKING_CONTENT:

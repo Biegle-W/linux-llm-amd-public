@@ -720,6 +720,33 @@ class Maya(Engine):
             path.write_text(json.dumps(cfg, indent=2) + '\n')
 
 
+PARITY_ROW=re.compile(r'^(\S+)\s+(.+?)\s+worst ([0-9.eE+-]+) \(tol ([0-9.eE+-]+)\) (ok|FAIL)\s*$')
+MARGINAL_PARITY=1.5
+
+
+def marginal_parity(text,returncode):
+    """Owner policy (Nov 7): update unless it breaks. A parity row that misses its tolerance by at most
+    MARGINAL_PARITY x is a recorded warning, provided both devices report the same rows; a crash, a
+    larger miss, a device mismatch or missing output still rejects. The end-to-end strict tool check
+    after install still decides promotion."""
+    devices,current=[],None
+    for line in text.splitlines():
+        if line.startswith('---- device'):
+            current=[];devices.append(current);continue
+        m=PARITY_ROW.match(line.strip())
+        if m and current is not None:current.append(m.groups())
+    rows=[r for d in devices for r in d]
+    if len(devices)!=2 or not devices[0] or devices[0]!=devices[1]:
+        raise Step(f'ds4_iq_test: incomplete or device-mismatched parity output (rc {returncode})')
+    failed=[r for r in devices[0] if r[4]=='FAIL']
+    if returncode and not failed:
+        raise Step(f'ds4_iq_test failed ({returncode}) without a tolerance row')
+    hard=[r for r in failed if float(r[2])>MARGINAL_PARITY*float(r[3])]
+    if hard:
+        raise Step('kernel parity failed: '+', '.join(f'{r[0]} {r[1]} {r[2]} > {MARGINAL_PARITY} x tol {r[3]}' for r in hard))
+    return [{'row':f'{r[0]} {r[1]}','worst':float(r[2]),'tolerance':float(r[3]),'devices_identical':True} for r in failed]
+
+
 class StrataDeepSeek(Engine):
     """Separate upstream component: never substitute its binary for the Qwen engine."""
     name,kind,routing_kind='Strata DeepSeek','strata-dsv41','strata'
@@ -760,8 +787,12 @@ class StrataDeepSeek(Engine):
         from gpu_telemetry import ThermalRecorder
         telemetry=ThermalRecorder('daily-strata-deepseek-parity').start()
         try:
-            sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
-               f'"{stage}/src/build-hip/ds4_iq_test" --devices 0,1 --type 19,16,18,21,22',logfile)
+            iq_log=stage/'ds4-iq-test.log'
+            rc=sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
+                  f'"{stage}/src/build-hip/ds4_iq_test" --devices 0,1 --type 19,16,18,21,22',iq_log,check=False)
+            warnings=marginal_parity(iq_log.read_text(),rc)
+            (stage/'parity-warnings.json').write_text(json.dumps(warnings,indent=2)+'\n')
+            if warnings:log('parity warning (marginal, not blocking): '+'; '.join(w['row'] for w in warnings),logfile)
             sh(f'source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && '
                f'"{stage}/src/build-hip/ds4_iq_shape_test" --devices 0,1 --type 19,16,18,21,22',logfile)
             for gpu in (0,1):

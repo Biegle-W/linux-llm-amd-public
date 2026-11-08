@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Compare candidate benchmark-current-amd.py records with the current baseline.
 
-Applies the fixed promotion thresholds: prefill and code/prose decode medians
->= 95% of baseline; short TTFT <= max(1.25 x baseline, baseline + 0.05 s);
+Applies the promotion thresholds (owner policy Nov 7: always update unless the update breaks
+something; minor slowdowns never block): only a severe slowdown fails, prefill and code/prose
+decode medians below 50% of baseline or short TTFT above max(3 x baseline, baseline + 1 s);
 marker checks no fewer than baseline; effective swap policy and zero VRAM spill. Prints a table and exits
 non-zero if any compared profile misses a threshold. It changes nothing.
 """
@@ -32,9 +33,9 @@ def metrics(profile):
 
 def verdict(old, new, memory):
     failures = [name for name in ('prefill_tps', 'code_decode_tps', 'prose_decode_tps')
-                if new[name] < 0.95 * old[name]]
+                if new[name] < 0.5 * old[name]]
     failures += [name for name in ('code_ttft_s', 'prose_ttft_s')
-                 if new[name] > max(1.25 * old[name], old[name] + 0.05)]
+                 if new[name] > max(3 * old[name], old[name] + 1)]
     if new['markers'] < old['markers']:
         failures.append('markers')
     return failures + memory_failures(memory)

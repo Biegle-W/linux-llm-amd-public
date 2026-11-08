@@ -1,5 +1,7 @@
 # Current AMD runtime handoff — November 5, 2026
 
+[Quant quality comparison, November 8](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 at 3.4 tok/s vs Coder IQ2_XXS 51/54 at 15.3 tok/s (Strata); owner choice pending. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
+
 [Ripple-65B on vLLM INT4, November 7](../hardware/RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
 
 [AMD working setup, November 7](../hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.
@@ -61,7 +63,6 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 | SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing + RAM store | `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | 32,768 |
 | SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing +36GB store | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 32,768 |
 | SSD streaming | Strata | Qwen3.8-Flash-Next GSQ IQ3_XXS; RAM/VRAM expert caches | `qwen3.8-flash-next-iq3_xxs` | 262,144 |
-| SSD streaming | Strata | Qwen3.8-Flash-Next Unsloth UD-IQ1_M Dynamicv3.1; RAM/VRAM caches | `qwen3.8-flash-next-unsloth-iq1_m` | 262,144 |
 
 Configured context is allocation capacity. The latest short checks add no full-window-quality or sustained-throughput proof. `dsh/model_catalog.py` combines the enabled backend registries; authenticated `/v1/models` is the live client source. DSH remains one AMD-server catalog; preserve its saved default/provider and private conversations/settings.
 

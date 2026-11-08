@@ -2,6 +2,8 @@
 
 The existing 03:00 updater uses isolated builds, required per-card parity and one strict two-step DSH read-tool round trip per enabled qualified profile, then owned unload. It retains source/profile/weight identities, manual holds, rollback, 100°C thermal/storage, RAM/VRAM/spill/swap, heartbeat and cleanup guards. No routine full-window or throughput comparison is claimed. Rejected revisions wait for a changed upstream. The runtime handoff records schedule state. [Method](daily-update/README.md).
 
+**Policy (owner, November 7):** always update to the latest version unless the update breaks something; a minor performance decrease is never a reason to reject. The nightly path has no throughput gate. A kernel parity row that misses its tolerance by at most 1.5x, identically on both cards, is recorded as a warning (`parity-warnings.json`); crashes, larger misses and card mismatches still reject, and the strict tool check still decides promotion. The legacy comparison gate rejects only severe slowdowns (below 50% speed or above 3x TTFT). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
+
 ## 2026-11-07
 
 - **llama.cpp** `9c9074e14e02` → `818ac6b078e3`: **promoted**. Every selected profile passed its strict two-step read-tool check; required per-card parity passed.

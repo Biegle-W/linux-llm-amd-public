@@ -107,7 +107,7 @@ class PackageAdmission(unittest.TestCase):
 
     def test_modified_weights_are_refused(self):
         (self.root / 'a.gguf').write_bytes(b'modified weights')
-        with self.assertRaisesRegex(RuntimeError, 'backing identity'):
+        with self.assertRaisesRegex(RuntimeError, 'backing (identity|content)'):
             self.admit()
 
     def test_unsealed_gguf_shard_is_refused(self):

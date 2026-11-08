@@ -183,7 +183,7 @@ class Comparator(BoundedPolicyCase):
         self.assertNotEqual(self.compare(candidate, True).returncode, 0)
 
     def test_small_regression_and_exact_performance_floor_pass_but_below_floor_fails(self):
-        for ratio, passes in ((.999, True), (.95, True), (.94999, False)):
+        for ratio, passes in ((.999, True), (.9, True), (.5, True), (.49999, False)):
             with self.subTest(ratio=ratio):
                 candidate = record()
                 profile = candidate['profiles'][0]
@@ -200,7 +200,7 @@ class Comparator(BoundedPolicyCase):
                 if change == 'spill':
                     candidate['profiles'][0]['memory']['max_nonresident_vram_bytes'] = 1
                 elif change == 'speed':
-                    candidate['profiles'][0]['short']['code']['median_decode_tps'] = 94
+                    candidate['profiles'][0]['short']['code']['median_decode_tps'] = 49
                 elif change == 'missing':
                     candidate['profiles'] = []
                 else:
