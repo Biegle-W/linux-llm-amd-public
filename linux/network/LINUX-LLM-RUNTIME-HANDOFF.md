@@ -1,6 +1,6 @@
 # Current AMD runtime handoff — November 5, 2026
 
-[Quant quality comparison, November 8](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 at 3.4 tok/s vs Coder IQ2_XXS 51/54 at 15.3 tok/s (Strata); owner choice pending. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
+[Quant quality comparison, November 8](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 vs Coder IQ2_XXS 51/54, then 64/64 vs 59/64 on a harder rerun, plus an intermittent Coder NaN lock-up -> UD-IQ1_S kept (4-6 tok/s), both Coder IQ2_XXS routes (Strata, Maya) removed. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
 
 [Ripple-65B on vLLM INT4, November 7](../hardware/RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
 
@@ -28,7 +28,7 @@ Read the root [maintenance policy](../../README.md) first. This is the current o
 
 ## State and next action
 
-**14 qualified normal routes are enabled.** The owner requested latest-engine qualification and realistic-budget retries. Maya Coder, Maya Q1, GLM and Strata Q1 passed their short tool round trips and guarded cleanup. Maya c167004 subsequently passed all three enabled profiles through the selective updater and is selected. Llama9c9074 passed Flint/Ornith through the updated updater, then passed the separate Empero strict check. It is selected for all three; the earlier3259 Empero rejection remains dated evidence.
+**12 qualified normal routes are enabled** (Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes were removed November 8). The owner requested latest-engine qualification and realistic-budget retries. Maya Coder, Maya Q1, GLM and Strata Q1 passed their short tool round trips and guarded cleanup. Maya c167004 subsequently passed all three enabled profiles through the selective updater and is selected. Llama9c9074 passed Flint/Ornith through the updated updater, then passed the separate Empero strict check. It is selected for all three; the earlier3259 Empero rejection remains dated evidence.
 
 Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged. [Details](../hardware/STRATA-0211-UNSLOTH-2026-11-05.md).
 
@@ -42,7 +42,7 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 
 - Intel i5-13600KF; ASUS TX GAMING B760M WIFI; 61.55 GiB visible RAM; two RX 7900 XTX 24 GB behind PEX880xx. Gen4 x16 common uplink, x8 branch segments. Runtime logical order is PowerColor then Sapphire (`ROCR_VISIBLE_DEVICES=1,0`, `HIP_VISIBLE_DEVICES=0,1`).
 - Current post-crash kernel remains `7.0.14-42-vmpt1`, the owner-selected persistent inference default with stock installed fallback. Fresh peers passed on the preceding headless trial boot, followed by four completed model tool checks and a SGLang startup lost-bus/SMU failure on Sapphire. No current-boot qualification is claimed. **Latest hardware fault hold remains; no automatic retry or GPU continuation.**
-- Retain **100°C** CPU/GPU edge/junction/memory/SSD stop policy, SMART health, 1 GiB available host RAM and 128 MiB free per-card live floors, dedicated-VRAM spill, supervisor heartbeat, phase timing and owned cleanup guards. Native normal readiness retains its 6 GiB actual startup floor and the qualified Coder profile requests 8 GiB reserve.
+- Retain **100°C** CPU/GPU edge/junction/memory/SSD stop policy, SMART health, 1 GiB available host RAM and 128 MiB free per-card live floors, dedicated-VRAM spill, supervisor heartbeat, phase timing and owned cleanup guards. Native normal readiness retains its 6 GiB actual startup floor.
 - Current resource policy has no `MemoryHigh`, computes worker hard limits from installed RAM, retains existing swap capacity and permits device-speed swap with storage/temperature protection. Old v4 swap-rate/zero-system-swap policies are historical. Never disable global swap or interfere with unrelated applications.
 - GPU tests require the established owned `hardware/generated/GPU-LOCK` and fresh admission. Serialize GPU work and heavy I/O; unknown ownership blocks startup. Never delete another owner's lock or fault evidence. No new test is needed for documentation.
 
@@ -57,10 +57,8 @@ ComfyUI0.44/fb2b26f passed all six new-source normal workflows and is selected f
 | VRAM only | vLLM | Qwen3.8-27B AutoRound W4A16 GPTQ; shared main weights | `qwen3.8-27b-vllm` | 163,840 |
 | VRAM only | vLLM | Sage-A1.5 AutoRound W4A16 | `sage-a1.5` | 65,536 |
 | CPU RAM offload | llama.cpp | Ornith-1.5-122B Q4_K_M; CPU experts + VRAM cache | `ornith-1.5-122b` | 32,768 |
-| SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing | `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs` | 32,768 |
 | SSD streaming | Maya | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 32,768 |
 | SSD streaming | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS; RAM/VRAM tiers | `glm-5.3-flash-maya` | 32,768 |
-| SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Coder IQ2_XXS; shared GGUF backing + RAM store | `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs` | 32,768 |
 | SSD streaming | Strata | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S; shared GGUF backing +36GB store | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 32,768 |
 | SSD streaming | Strata | Qwen3.8-Flash-Next GSQ IQ3_XXS; RAM/VRAM expert caches | `qwen3.8-flash-next-iq3_xxs` | 262,144 |
 

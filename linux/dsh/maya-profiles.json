@@ -14,12 +14,6 @@
     "resume_requires_owner_instruction": true,
     "weights_removed": true
   },
-  "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs": {
-    "config": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs-profile.json",
-    "name": "DeepSeek-V4.1-Flash-1017 Maya Coder IQ2_XXS (32K, dual AMD, bounded CPU/NVMe tiers)",
-    "context": 32768,
-    "enabled": true
-  },
   "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
     "config": "deepseek-v4.1-flash-1017-maya-unsloth-q1-profile.json",
     "name": "DeepSeek-V4.1-Flash-1017 Maya Unsloth Q1 (32K, dual AMD, bounded CPU/NVMe tiers)",

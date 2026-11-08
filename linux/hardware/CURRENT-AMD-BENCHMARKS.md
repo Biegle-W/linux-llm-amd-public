@@ -2,7 +2,7 @@
 
 [All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
 
-[Quant quality comparison, November 8](QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 at 3.4 tok/s vs Coder IQ2_XXS 51/54 at 15.3 tok/s (Strata); owner choice pending. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
+[Quant quality comparison, November 8](QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 vs Coder IQ2_XXS 51/54, then 64/64 vs 59/64 on a harder rerun, plus an intermittent Coder NaN lock-up -> UD-IQ1_S kept (4-6 tok/s), both Coder IQ2_XXS routes (Strata, Maya) removed. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
 
 [Ripple-65B on vLLM INT4, November 7](RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
 
@@ -18,7 +18,7 @@
 
 [No-store DeepSeek failure and persistent inference kernel](MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
 
-**14 qualified normal routes are enabled.** Read the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) for exact selections and safeguards.
+**12 qualified normal routes are enabled.** Read the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) for exact selections and safeguards.
 
 [IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current post-crash patched boot has no fresh peer/model qualification.
 

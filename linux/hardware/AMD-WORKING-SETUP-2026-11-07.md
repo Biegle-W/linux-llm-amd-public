@@ -108,8 +108,8 @@ The test methods and engine builds also differed between those dates, so these a
 | vLLM | `nemotron-3.5-bolt-vllm`, `sage-a1.5` | two-card vLLM |
 | vLLM (plugin) | `ripple-65b-vllm` (November 7, [notes](RIPPLE-65B-VLLM-2026-11-07.md)) | TP2 over RCCL P2P/IPC |
 | llama.cpp | `empero-qwen3.8-35b-a3b`, `flint-40b-a2.5b`, `ornith-1.5-122b` | layer split, peer copies on |
-| Strata | `qwen3.8-flash-next-iq3_xxs`, `deepseek-v4.1-flash-1017-strata-coder-iq2-xxs`, `deepseek-v4.1-flash-1017-strata-unsloth-q1` | layer groups with NVMe expert streaming |
-| Maya | `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-coder-iq2-xxs`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` | layer groups with NVMe expert streaming |
+| Strata | `qwen3.8-flash-next-iq3_xxs`, `deepseek-v4.1-flash-1017-strata-unsloth-q1` | layer groups with NVMe expert streaming |
+| Maya | `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` | layer groups with NVMe expert streaming |
 | ComfyUI | H3 INT8 with projected-8B encoder (TP2 P2P); H3 with native-32B encoder, FLUX 3 Klein t2i/i2i, Qwen-Image 2.1 BF16 | staged component placement |
 
 **Held or retired (no automatic retry; each needs a new owner decision):**

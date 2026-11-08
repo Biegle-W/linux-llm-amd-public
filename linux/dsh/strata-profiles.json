@@ -22,21 +22,6 @@
     "resume_requires_owner_instruction": true,
     "weights_removed": true
   },
-  "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs": {
-    "name": "DeepSeek-V4.1-Flash-1017 Strata Coder IQ2_XXS (32K, dual AMD layer groups, CPU/RAM store)",
-    "context": 32768,
-    "config": "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs-profile.json",
-    "family": "deepseek41",
-    "enabled": true,
-    "manual_runtime_pin": "ffa80d73133ea5c548aefe57889a16e8085a938f",
-    "runtime_pin_reason": "Independent registry-sealed qualified source/binary; retain legacy XS source pin separately; updater remains paused",
-    "qualification": {
-      "date": "2026-11-05",
-      "case": "strata-coder-normal-admission",
-      "evidence": "hardware/results/ALL-MODEL-P2P-2026-11-05.json",
-      "scope": "One short strict DSH tool roundtrip plus retained admission/guards; no new sustained or full-context proof"
-    }
-  },
   "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
     "family": "deepseek41",
     "config": "deepseek-v4.1-flash-1017-strata-unsloth-q1-profile.json",
