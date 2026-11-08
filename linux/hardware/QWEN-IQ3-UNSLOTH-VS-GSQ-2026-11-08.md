@@ -52,4 +52,4 @@ Decode on short prompts is nearly level, as on November 4. The new probe adds a 
 
 ## Unsloth files
 
-The Unsloth download (78 GB GGUF and a 1.4 GB pack) is on sharedNVME1, which has 830 GB free. No route uses it, so it can be deleted with the owner's OK.
+The Unsloth download (78 GB GGUF and a 1.4 GB pack) is on sharedNVME1, which has 830 GB free. No route uses it. **Deleted later on November 8 at the owner's request**, after the comparison engine was unloaded.
