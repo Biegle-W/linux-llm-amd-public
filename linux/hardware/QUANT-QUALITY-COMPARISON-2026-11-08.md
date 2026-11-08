@@ -46,7 +46,7 @@ The Coder pack keeps 192 of the 384 routed experts: an expert-pruned, coding-foc
   - **Speed:** IQ1_M decodes about 10% faster.
   - **Updates:** IQ3_XXS runs on the production Strata engine, which the nightly updater keeps current. IQ1_M was pinned to an isolated Strata 0.2.11 package (`strata-0211-unsloth42`) that never received updates.
   - **What was removed:** the route `qwen3.8-flash-next-unsloth-iq1_m`, from `dsh/strata-profiles.json`, `dsh/qualified-strata-qwen-profiles.json` and `dsh/strata-unsloth-iq1_m-profile.json`.
-  - **Pending deletion (needs owner confirmation):** the 65 GB weights folder `sharedNVME1/LLM-Models/Strata-Unsloth-Qwen3.8-Flash-Next-UD-IQ1_M-V3.1-d96201194f10` and the 2.1 GB isolated engine package.
+  - **Deleted (owner confirmed November 8, "IQ3_XXS, remove IQ1_M"):** the 65 GB weights folder `sharedNVME1/LLM-Models/Strata-Unsloth-Qwen3.8-Flash-Next-UD-IQ1_M-V3.1-d96201194f10` and the 2.1 GB isolated engine package `strata-0211-unsloth42`.
 - **DeepSeek: pending owner choice.**
   - **UD-IQ1_S** has the better quality (54/54 against 51/54), with the difference all in general knowledge.
   - **Coder IQ2_XXS** is about 4.5 times faster on Strata (15.3 against 3.4 tok/s): a 1,000-token answer takes about 1 minute against 5 minutes. On Maya the gap is larger: 17.3 against 1.2 tok/s on November 7.
