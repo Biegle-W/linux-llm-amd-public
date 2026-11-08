@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Ripple-65B-Preview GPTQ W4A16 on both RX 7900 XTX cards, vLLM TP2 over RCCL P2P.
+# The installed vLLM (dev229) predates Ripple support, so the out-of-tree plugin in
+# vllm/ripple-plugin (backport of vllm-project/vllm PR #65745) is added to PYTHONPATH for
+# this route only; the production vLLM environment is unchanged.
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+python3 "$ROOT/dsh/shared_storage.py"
+export PYTHONPATH="$ROOT/vllm/ripple-plugin${PYTHONPATH:+:$PYTHONPATH}"
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+export VLLM_ENGINE_READY_TIMEOUT_S=1800
+exec "$ROOT/vllm/run-rocm" serve <model drive>/vLLM-Models/Ripple-65B-Preview-GPTQ-W4A16-v2 \
+ --host 127.0.0.1 --port 30011 --served-model-name ripple-65b-vllm \
+ --tensor-parallel-size 2 --disable-custom-all-reduce --dtype bfloat16 \
+ --max-model-len 65536 --max-num-seqs 1 --max-num-batched-tokens 2048 \
+ --gpu-memory-utilization 0.92 --kv-cache-memory-bytes 3221225472 \
+ --kv-cache-dtype bfloat16 --attention-backend TRITON_ATTN \
+ --compilation-config '{"mode":3,"cudagraph_mode":"FULL_DECODE_ONLY"}' \
+ --cudagraph-capture-sizes 1 4 \
+ --enable-auto-tool-choice --tool-call-parser hermes \
+ --reasoning-parser-plugin "$ROOT/vllm/ripple-plugin/vllm_ripple/reasoning.py" --reasoning-parser ripple_optional_think "$@"

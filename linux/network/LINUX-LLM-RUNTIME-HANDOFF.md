@@ -1,5 +1,7 @@
 # Current AMD runtime handoff — November 5, 2026
 
+[Ripple-65B on vLLM INT4, November 7](../hardware/RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
+
 [AMD working setup, November 7](../hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.
 
 [All-models short tool-call benchmark, November 7](../hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout; GPU fault hold released.
