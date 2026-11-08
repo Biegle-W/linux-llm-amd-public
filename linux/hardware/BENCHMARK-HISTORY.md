@@ -1,6 +1,14 @@
 # LLM benchmark and context history
 
 <!-- ram-reserve-20261108:begin -->
+## November 8 Qwen3.8-Flash-Next IQ3_XXS: Unsloth vs GSQ-RCO
+
+Owner-requested repeat of the [November 4 comparison](UNSLOTH-FLINT-COMPARISONS-2026-11-04.md) with the full suites. Details: [report](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md). Raw results: [`qwen-iq3-unsloth-vs-gsq-2026-11-08.json`](results/qwen-iq3-unsloth-vs-gsq-2026-11-08.json).
+
+- Quality: 54-item suite 53/54 for both; 64-item suite GSQ 62/64, Unsloth 63/64.
+- Speed: short-prompt decode level (about 50-52 tok/s); 5.5K-token prompt read GSQ 777-821 vs Unsloth 512-530 tok/s; decode after it 49-50 vs 40-43 tok/s.
+- Kept GSQ-RCO. The temporary Unsloth route and record were removed.
+
 ## November 8 GLM and DeepSeek RAM and reserve tuning
 
 Owner-approved. Details: [tuning report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md). Raw results: [`glm-deepseek-ram-reserve-tuning-2026-11-08.json`](results/glm-deepseek-ram-reserve-tuning-2026-11-08.json).

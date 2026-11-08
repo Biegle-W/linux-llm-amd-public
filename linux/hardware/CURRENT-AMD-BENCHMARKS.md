@@ -1,5 +1,7 @@
 # Current AMD results — November 5, 2026
 
+[Qwen3.8-Flash-Next IQ3_XXS, Unsloth vs GSQ-RCO, November 8](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md): owner-requested. Quality level: both 53/54; on the harder suite GSQ 62/64, Unsloth 63/64. Unsloth reads a 5.5K-token prompt about 35% slower (512-530 vs 777-821 tok/s) and decodes about 17% slower after it; short-prompt decode is level (about 50-52 tok/s). Keep GSQ-RCO. Also fixed a Strata router bug from f332a6d that broke Qwen route readiness.
+
 [GLM and DeepSeek RAM/reserve tuning, November 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): owner-approved. GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s decode, 396 tok/s prompt (was 2.6 and 6), 62/64 on the harder suite. DeepSeek Strata expert profile + 2 GiB reserve: 7.5-10.1 tok/s, 120 tok/s prompt (was 4.2-6.3 and 51); `--mmap-experts off` rejected; 64/64 on a second run after one NaN event on CUDA1 in the first. Maya DeepSeek route with the same changes: 9.5-17.1 tok/s (was 5.0-9.3), 64/64. Reserve floor lowered to 2 GiB.
 
 [All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.

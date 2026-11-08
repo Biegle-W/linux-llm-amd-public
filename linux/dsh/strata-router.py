@@ -151,8 +151,7 @@ def ensure_worker(model):
                 raise RuntimeError('Strata worker has an unexpected model or context capacity')
             readings = vram_snapshot()
             reason = startup_vram_blocker(readings)
-            floor=deepseek_startup_floor(cfg)
-            if profile.get('family')=='deepseek41' and min(r['free'] for r in readings)<floor:
+            if profile.get('family')=='deepseek41' and min(r['free'] for r in readings)<(floor:=deepseek_startup_floor(cfg)):
                 reason=f'Strata DeepSeek needs at least {floor/1024**3:g} GiB actual free VRAM on each card at readiness'
             if reason:
                 raise RuntimeError(reason)

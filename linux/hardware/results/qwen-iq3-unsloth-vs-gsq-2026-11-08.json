@@ -1,0 +1,15 @@
+{
+ "date": "2026-11-08",
+ "routes": {"gsq": "qwen3.8-flash-next-iq3_xxs", "unsloth": "qwen3.8-flash-next-unsloth-iq3_xxs (temporary, removed)"},
+ "quality": {
+  "suite54": {"gsq": "53/54", "unsloth": "53/54", "misses": {"gsq": ["k08"], "unsloth": ["k08"]}, "length_reruns_2048": ["m03", "m16"]},
+  "suite64": {"gsq": "62/64", "unsloth": "63/64", "misses": {"gsq": ["a01", "r10"], "unsloth": ["r10"]}}
+ },
+ "speed": {
+  "gsq": {"load_and_first_s": 96.8, "decode_400_tps": [50.18, 52.37], "prefill_5515_tps": [776.8, 820.7], "decode_after_long_tps": [50.01, 49.44]},
+  "unsloth": {"load_and_first_s": 99.2, "decode_400_tps": [46.87, 52.21], "prefill_5515_tps": [511.6, 530.3], "decode_after_long_tps": [39.87, 43.36]}
+ },
+ "gguf_bytes": {"gsq": 75839998528, "unsloth": 83626438426},
+ "health": {"aer_fatal": 0, "aer_nonfatal": 0, "links": "Gen4 x8 both", "kernel": "2x 'Failed to upload overdrive table' on 13:00.0 at 16:09:39, no reset"},
+ "router_fix": "strata-router.py: DeepSeek startup floor only evaluated for family deepseek41"
+}

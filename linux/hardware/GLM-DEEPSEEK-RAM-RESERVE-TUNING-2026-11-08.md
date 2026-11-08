@@ -81,6 +81,7 @@ The harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-20
 
 - `dsh/qualified_native_runtime.py`: the minimum requested reserve per card went from 8 GiB to 2 GiB (`MIN_RESERVE_MIB=2048`). GLM may use 2, 4, 6 or 8 GiB, and its later reserve must equal its first.
 - `dsh/maya-router.py` and `dsh/strata-router.py`: the fixed 6 GiB whole-card free-VRAM check at startup now scales with the profile's reserve: reserve minus 1 GiB, between 1 and 6 GiB. Without this change the routers refused the 4 GiB and 2 GiB steps.
+  - Correction, later on November 8: the Strata router computed this floor for every route, so Qwen routes (which have no `--reserve-mib`) failed at readiness. The floor is now computed only for DeepSeek routes. See [the IQ3_XXS comparison](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md#router-fix-found-during-this-run).
 - The GLM profile now uses `MAYA_GLM_RAM_GB=40` with no `host_ram_profile`, and both GLM reserves are 2048 MiB.
 - The Strata DeepSeek profile uses `--reserve-mib 2048` and the expert profile, and leaves `--mmap-experts` at the engine default.
 - Both registry records were resealed (`config_sha256`).

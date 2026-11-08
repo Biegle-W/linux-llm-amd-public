@@ -1,5 +1,7 @@
 # Agent entry point
 
+[Qwen3.8-Flash-Next IQ3_XXS, Unsloth vs GSQ-RCO, November 8](linux/hardware/QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md): owner-requested. Quality level: both 53/54; on the harder suite GSQ 62/64, Unsloth 63/64. Unsloth reads a 5.5K-token prompt about 35% slower (512-530 vs 777-821 tok/s) and decodes about 17% slower after it; short-prompt decode is level (about 50-52 tok/s). Keep GSQ-RCO. Also fixed a Strata router bug from f332a6d that broke Qwen route readiness.
+
 [GLM and DeepSeek RAM/reserve tuning, November 8](linux/hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s (was 2.6), 396 tok/s prompt; DeepSeek expert profile + 2 GiB reserve: 7.5-10.1 tok/s (was 4.2-6.3), 120 tok/s prompt; Maya DeepSeek route 9.5-17.1 tok/s (was 5.0-9.3).
 
 [AMD working setup, November 7](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and the tests that passed after the Sapphire switch investigation.
