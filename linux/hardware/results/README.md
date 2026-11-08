@@ -1,5 +1,20 @@
 # Current benchmark results
 
+<!-- quant-quality-20261108:begin -->
+## November 8 quant quality and speed comparison
+
+The owner asked which quant to keep for Flash-Next and for DeepSeek-V4.1-Flash-1017, then asked for the two DeepSeek quants to be compared again. All runs went through the hub on Strata, at temperature 0 with thinking off, and every answer was graded automatically. Full method, misses and events: [report](../QUANT-QUALITY-COMPARISON-2026-11-08.md). Raw results: [`quant-quality-2026-11-08.json`](quant-quality-2026-11-08.json) and [`quant-quality-deepseek-rerun-2026-11-08.json`](quant-quality-deepseek-rerun-2026-11-08.json).
+
+| Route (quant) | 54-item suite | Harder 64-item suite | Generation | Prompt read (4.8K tokens) | Cold load | Decision |
+|---|---:|---:|---:|---:|---:|---|
+| `qwen3.8-flash-next-iq3_xxs` (GSQ-RCO IQ3_XXS) | 53/54 | — | 52.5 tok/s | — | 107.5 s | **kept** |
+| Flash-Next Unsloth UD-IQ1_M | 52/54 | — | 57.9 tok/s | — | 59.0 s | removed, weights deleted |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` (Unsloth UD-IQ1_S) | 54/54 | 64/64 | 4.2 tok/s median; 5.6–6.3 on 400-token answers | 51 tok/s | 47 s | **kept** (Strata and Maya) |
+| DeepSeek ISTA Coder IQ2_XXS | 51/54 | 59/64 | 16.9 tok/s median; 9.6–14.2 on 400-token answers | 261 tok/s | 442–1,174 s | removed, weights deleted |
+
+The Coder's misses were basic knowledge and one crashing program. It also had one intermittent NaN failure, after which every request failed until the engine restarted. UD-IQ1_S had no errors. Not covered: thinking mode, long multi-turn agent sessions and sustained throughput.
+<!-- quant-quality-20261108:end -->
+
 <!-- all-model-p2p-20261105:begin -->
 ## November 5 all-model functional and transport qualification
 
