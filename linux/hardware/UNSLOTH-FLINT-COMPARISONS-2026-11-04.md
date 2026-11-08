@@ -41,3 +41,5 @@ Sources: [pinned Unsloth GGUF](https://huggingface.co/unsloth/Qwen3.8-Flash-Next
 [Curated numeric evidence](results/unsloth-flint-comparisons-2026-11-04.json).
 
 Boot verification limit: the readable final GRUB drop-in still selects stock, the one-shot entry is empty, and the generated GRUB timestamp predates these comparisons. A fresh content read of the administrator-only generated file was unavailable because noninteractive sudo required authentication; no boot configuration was modified.
+
+**Update, November 8:** at the owner's request, the downloaded candidates were deleted: Unsloth UD-IQ3_XXS after the [full-suite repeat](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md), and Flint Mix-24G (23 GB). The empty GSQ control folder was removed too. Production GSQ-RCO and Flint weights are unchanged.
