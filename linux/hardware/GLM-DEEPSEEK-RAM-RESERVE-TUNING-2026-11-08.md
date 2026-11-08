@@ -44,6 +44,20 @@ Disk time per token fell from 618 ms (RAM 8) to 114–178 ms at RAM 40. With the
   - During that run the kernel logged `amdgpu 0000:13:00.0: Failed to upload overdrive table!` twice, on the Sapphire card. There was no AER error, reset or link change. It did not recur after the setting was reverted and RAM returned to 57 GB available.
 - DeepSeek is about twice as fast as before but still about 20% behind NVIDIA on decode. The remaining gap fits the host side (i5 CPU lane, 64 GB RAM, P3 drives), which these steps did not change.
 
+## Maya DeepSeek route (`deepseek-v4.1-flash-1017-maya-unsloth-q1`), later the same morning
+
+At the owner's request the same two changes went onto the Maya DeepSeek route: an expert profile, and a reserve stepped down to 2 GiB. The profile is a copy of Maya's shipped `data/expert-profile-ds4.bin`, stored at `dsh/data/maya/deepseek-q1-expert-profile.bin` (gitignored). The route's `64gb-q1-v1` host-RAM tier, 28 GB warm cache and 20 threads are unchanged. The method and prompts were the same as above.
+
+| Setting | Decode, 400-token answers (tok/s) | Prompt read, 4.8K tokens (tok/s) | Decode after the long prompt (tok/s) | Load + first answer |
+|---|---:|---:|---:|---:|
+| Before: no expert profile, reserve 8 GiB | 5.0 / 9.3 | 108 | 2.9 | 58 s |
+| Expert profile, reserve 4 GiB | 7.0 / 11.8 | 139 | 1.6 | 51 s |
+| **Expert profile, reserve 2 GiB (kept)** | **9.5 / 17.1** | **125** | **3.2 (19.6 cached)** | **133 s** |
+
+- Quality: **64/64** on the harder suite, with no errors and no NaN events.
+- AER, link width and kernel logs were clean after every step.
+- On this box the Maya route is now faster than the Strata route on short-answer decode (9.5–17.1 vs 7.5–10.1 tok/s), with a similar prompt-read speed.
+
 ## Quality check on the kept settings
 
 The harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md) was run through the hub at temperature 0 with thinking off, and graded automatically.
@@ -70,5 +84,5 @@ The harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-20
 - The GLM profile now uses `MAYA_GLM_RAM_GB=40` with no `host_ram_profile`, and both GLM reserves are 2048 MiB.
 - The Strata DeepSeek profile uses `--reserve-mib 2048` and the expert profile, and leaves `--mmap-experts` at the engine default.
 - Both registry records were resealed (`config_sha256`).
-- Unchanged: the Maya DeepSeek route (`deepseek-v4.1-flash-1017-maya-unsloth-q1`) still uses an 8 GiB reserve and no expert profile.
+- The Maya DeepSeek profile uses `--reserve-mib 2048` and its own expert profile (see above); its registry record was resealed.
 - These runs were short. A longer owned soak at the new settings is still the main open check.

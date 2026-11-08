@@ -1,6 +1,6 @@
 # Current AMD results — November 5, 2026
 
-[GLM and DeepSeek RAM/reserve tuning, November 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): owner-approved. GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s decode, 396 tok/s prompt (was 2.6 and 6), 62/64 on the harder suite. DeepSeek Strata expert profile + 2 GiB reserve: 7.5-10.1 tok/s, 120 tok/s prompt (was 4.2-6.3 and 51); `--mmap-experts off` rejected; 64/64 on a second run after one NaN event on CUDA1 in the first. Reserve floor lowered to 2 GiB.
+[GLM and DeepSeek RAM/reserve tuning, November 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): owner-approved. GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s decode, 396 tok/s prompt (was 2.6 and 6), 62/64 on the harder suite. DeepSeek Strata expert profile + 2 GiB reserve: 7.5-10.1 tok/s, 120 tok/s prompt (was 4.2-6.3 and 51); `--mmap-experts off` rejected; 64/64 on a second run after one NaN event on CUDA1 in the first. Maya DeepSeek route with the same changes: 9.5-17.1 tok/s (was 5.0-9.3), 64/64. Reserve floor lowered to 2 GiB.
 
 [All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
 

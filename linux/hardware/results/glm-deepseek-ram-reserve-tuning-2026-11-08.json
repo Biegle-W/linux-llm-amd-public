@@ -274,12 +274,130 @@
      }
     ]
    }
+  },
+  "mds-base": {
+   "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+    "load_and_first": 58.4,
+    "short": [
+     {
+      "ttft": 6.91,
+      "decode_tps": 5.0,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 86.64
+     },
+     {
+      "ttft": 0.67,
+      "decode_tps": 9.25,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 43.79
+     }
+    ],
+    "long": [
+     {
+      "ttft": 44.2,
+      "decode_tps": 2.89,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 57.71,
+      "prefill_tps": 108.3
+     },
+     {
+      "ttft": 0.52,
+      "decode_tps": 3.41,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 11.95,
+      "prefill_tps": 9203.8
+     }
+    ]
+   }
+  },
+  "mds-prof-r2048": {
+   "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+    "load_and_first": 132.9,
+    "short": [
+     {
+      "ttft": 1.99,
+      "decode_tps": 9.48,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 44.06
+     },
+     {
+      "ttft": 0.41,
+      "decode_tps": 17.12,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 23.72
+     }
+    ],
+    "long": [
+     {
+      "ttft": 38.29,
+      "decode_tps": 3.21,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 50.44,
+      "prefill_tps": 125.0
+     },
+     {
+      "ttft": 0.48,
+      "decode_tps": 19.6,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 2.47,
+      "prefill_tps": 9970.8
+     }
+    ]
+   }
+  },
+  "mds-prof-r4096": {
+   "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+    "load_and_first": 50.9,
+    "short": [
+     {
+      "ttft": 3.29,
+      "decode_tps": 7.03,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 60.01
+     },
+     {
+      "ttft": 0.58,
+      "decode_tps": 11.8,
+      "prompt_tokens": 23,
+      "completion_tokens": 400,
+      "total": 34.4
+     }
+    ],
+    "long": [
+     {
+      "ttft": 34.52,
+      "decode_tps": 1.56,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 59.55,
+      "prefill_tps": 138.6
+     },
+     {
+      "ttft": 3.47,
+      "decode_tps": 3.98,
+      "prompt_tokens": 4786,
+      "completion_tokens": 40,
+      "total": 13.28,
+      "prefill_tps": 1379.3
+     }
+    ]
+   }
   }
  },
  "quality_suite2": {
   "glm-5.3-flash-maya": "62/64",
   "deepseek-v4.1-flash-1017-strata-unsloth-q1 first run": "55/64 (9 NaN-guard errors after one NaN event on CUDA1)",
   "deepseek rerun of the 13 affected items": "12/13, no NaN",
-  "deepseek second full run": "64/64, no NaN"
+  "deepseek second full run": "64/64, no NaN",
+  "deepseek-v4.1-flash-1017-maya-unsloth-q1 (expert profile, reserve 2 GiB)": "64/64, no NaN"
  }
 }
