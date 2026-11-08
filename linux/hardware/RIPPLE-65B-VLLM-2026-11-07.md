@@ -2,7 +2,7 @@
 
 Owner request: "Why so slow? Can is run int4 in vllam or sglang?", then "Yes. Run the daily updater first. Then set up the int4 in vllm".
 
-New hub route **`ripple-65b-vllm`**, which passed the guarded short tool-call check. The llama.cpp route `ripple-65b` (from a separate session, [deploy notes](RIPPLE-65B-DEPLOY-2026-11-07.md)) is unchanged; both are listed by the hub.
+New hub route **`ripple-65b-vllm`**, which passed the guarded short tool-call check. It is now the only Ripple route: on the owner's request the llama.cpp route `ripple-65b` (from a separate session, [deploy notes](RIPPLE-65B-DEPLOY-2026-11-07.md)), its `llama.cpp-b12189` worktree and its 38 GB AD-Q4_K_M GGUF were removed the same evening. The llama.cpp column below is the comparison measured before removal.
 
 ## Why llama.cpp was slow
 

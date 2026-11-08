@@ -1,5 +1,7 @@
 # Current LLM model storage — November 3, 2026
 
+**November 7 Ripple change (owner request):** added `sharedSATA1/vLLM-Models/Ripple-65B-Preview-GPTQ-W4A16-v2` (35.2 GB, route `ripple-65b-vllm`); removed `sharedSATA1/GGUF-Models/Ripple-65B-Preview-GGUF` (38 GB AD-Q4_K_M, route `ripple-65b`), the `llama.cpp-b12189` worktree and the empty `sharedNVME1/models` download folder.
+
 **November 7 removal (owner request):** deleted from sharedSATA1: `Graphics-Models/experimental/h3-hoststage-20261028` (20 GB host-staged H3 rank shards, superseded by `experimental/h3-tp2-halves-20261107`), `Graphics-Models/experimental/h3-encoder-formats-20261028` (16 GB W4A8 32B encoder trial) and the incomplete `Unsloth/hub/models--unsloth--MiniMax-H3-FP8` download (1.8 GB). Nothing in production used them. About 38 GB freed.
 
 **November 3 cleanup:** current model locations below are retained. Unused environments/build/cache payloads are removed; the additional H3 derived rank shards now use sharedSATA1 `Graphics-Models/experimental/h3-hoststage-20261028/shards`. Maya/Strata streaming weights stay on system NVMe. [Scope and verification](SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
