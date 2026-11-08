@@ -1,5 +1,18 @@
 # LLM benchmark and context history
 
+<!-- ram-reserve-20261108:begin -->
+## November 8 GLM and DeepSeek RAM and reserve tuning
+
+Owner-approved. Details: [tuning report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md). Raw results: [`glm-deepseek-ram-reserve-tuning-2026-11-08.json`](results/glm-deepseek-ram-reserve-tuning-2026-11-08.json).
+
+| Route | Before | After (kept) | Prompt read, before -> after | Harder 64-item suite |
+|---|---:|---:|---:|---:|
+| `glm-5.3-flash-maya` (RAM 8 -> 40 GB, reserve 8 -> 2 GiB) | 2.6 tok/s | 17.8-22.1 tok/s | 6 -> 396 tok/s | 62/64 |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` (expert profile, reserve 8 -> 2 GiB) | 4.2-6.3 tok/s | 7.5-10.1 tok/s | 51 -> 120 tok/s | 55/64 with one NaN event, then 64/64 |
+
+`--mmap-experts off` was tested and rejected: it filled host RAM, cut prompt reads to 43 tok/s and coincided with two Sapphire overdrive-table kernel messages.
+<!-- ram-reserve-20261108:end -->
+
 <!-- quant-quality-20261108:begin -->
 ## November 8 quant quality and speed comparison
 

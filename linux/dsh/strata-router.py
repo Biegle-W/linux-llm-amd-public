@@ -90,6 +90,13 @@ def stop_worker(timeout=40):
         logfile = None
 
 
+def deepseek_startup_floor(cfg):
+    """Whole-card free VRAM required at readiness: the requested --reserve-mib less 1 GiB, between 1 and 6 GiB.
+    Owner choice, November 8 2026: per-card reserves may step down to 2 GiB; 8 GiB profiles keep the 6 GiB floor."""
+    args=cfg['args'];reserve=int(args[args.index('--reserve-mib')+1])*1024**2
+    return min(6*1024**3,max(1024**3,reserve-1024**3))
+
+
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile, startup_free_vram
@@ -144,8 +151,9 @@ def ensure_worker(model):
                 raise RuntimeError('Strata worker has an unexpected model or context capacity')
             readings = vram_snapshot()
             reason = startup_vram_blocker(readings)
-            if profile.get('family')=='deepseek41' and min(r['free'] for r in readings)<6*1024**3:
-                reason='Strata DeepSeek needs at least6GiB actual free VRAM on each card at readiness'
+            floor=deepseek_startup_floor(cfg)
+            if profile.get('family')=='deepseek41' and min(r['free'] for r in readings)<floor:
+                reason=f'Strata DeepSeek needs at least {floor/1024**3:g} GiB actual free VRAM on each card at readiness'
             if reason:
                 raise RuntimeError(reason)
             with lifecycle:

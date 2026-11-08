@@ -40,6 +40,10 @@ def backing_digest(path):
             if time.monotonic()-last>=5:health();last=time.monotonic()
     health();return h.hexdigest()
 
+# Owner choice, November 8 2026: requested per-card reserve may step down from 8 GiB to 2 GiB.
+MIN_RESERVE_MIB=2048
+RESERVE_STEPS=('2048','4096','6144','8192')
+
 def config_fingerprint(cfg):
     ignored={'local_validation','log','installer','expert_profile_seed_sha256','upstream_expert_profile_seed_sha256'}
     return hashlib.sha256(json.dumps({k:v for k,v in cfg.items() if k not in ignored},sort_keys=True).encode()).hexdigest()
@@ -93,15 +97,15 @@ def require_profile(cfg,record,before_handover=False):
         ram_gb=record.get('glm_ram_gb',8)
         if (record['family']!='maya' or record['binary_relative']!='build-hip/maya'
                 or cfg.get('layer_split')!='auto' or value('--tp') is not None
-                or value('--vram-reserve-mib')!='8192' or value('--vram-reserve-later-mib')!='8192'
+                or value('--vram-reserve-mib') not in RESERVE_STEPS or value('--vram-reserve-later-mib')!=value('--vram-reserve-mib')
                 or cfg.get('env',{}).get('MAYA_GLM_PREFILL_FUSED')!='0'
                 or type(ram_gb) is not int or ram_gb not in (8,24,40)
                 or cfg.get('env',{}).get('MAYA_GLM_RAM_GB')!=str(ram_gb)):
             raise RuntimeError('GLM must retain its tested dual-card placement, RAM tier and disabled fused prefill')
     elif value('--tp')!='2':raise RuntimeError('Native placement must retain both tested layer groups')
     reserves=[int(value(flag)) for flag in ['--reserve-mib','--vram-reserve-mib','--vram-reserve-later-mib'] if flag in args]
-    if not reserves or min(reserves)<8192:
-        raise RuntimeError('Qualified normal profile must retain its 8 GiB requested reserve')
+    if not reserves or min(reserves)<MIN_RESERVE_MIB:
+        raise RuntimeError('Qualified normal profile must retain at least its 2 GiB requested per-card reserve')
     for key,env_value in cfg.get('env',{}).items():
         if key.endswith(('DISK_SKIP_W','DS4_PROMPT_SKIP','DS4_SLOT_KEEP','DS4_YOCO')) and float(env_value)!=0:
             raise RuntimeError('Quality-changing expert/prompt skipping must remain disabled')

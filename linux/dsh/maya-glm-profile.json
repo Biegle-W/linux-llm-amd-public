@@ -13,9 +13,9 @@
     "--expert-profile",
     "/opt/local-llm/dsh/data/maya/glm-expert-profile.bin",
     "--vram-reserve-mib",
-    "8192",
+    "2048",
     "--vram-reserve-later-mib",
-    "8192"
+    "2048"
   ],
   "backend": "hip",
   "cwd": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
@@ -23,10 +23,10 @@
     "MAYA_GLM_PREFILL_FUSED": "0",
     "MAYA_GLM_PREFILL_MB": "4096",
     "MAYA_GLM_PREFILL_SUB": "1024",
-    "MAYA_GLM_RAM_GB": "8",
+    "MAYA_GLM_RAM_GB": "40",
     "MAYA_GLM_RAM_HEADROOM_GB": "1",
-    "MAYA_GLM_RESERVE_LATER_MB": "8192",
-    "MAYA_GLM_RESERVE_MB": "8192",
+    "MAYA_GLM_RESERVE_LATER_MB": "2048",
+    "MAYA_GLM_RESERVE_MB": "2048",
     "MAYA_HIPBLASLT_TUNING": "/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100202.txt:/opt/local-llm/maya/upstream/tools/hip/gfx1100-glm-hipblaslt-100500.txt",
     "NCCL_P2P_DISABLE": "0",
     "STRATA_REQUEST_QUIET_S": "1800",
@@ -39,7 +39,6 @@
     1
   ],
   "host": "127.0.0.1",
-  "host_ram_profile": "32gb-v1",
   "idle_unload_s": 0,
   "installer": {
     "draft": "mtp",

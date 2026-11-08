@@ -158,6 +158,14 @@ def stop_worker(timeout=40):
         logfile = None
 
 
+def startup_floor(cfg):
+    """Whole-card free VRAM required once loaded: the profile's requested reserve less 1 GiB, between 1 and 6 GiB.
+    Owner choice, November 8 2026: per-card reserves may step down to 2 GiB; 8 GiB profiles keep the 6 GiB floor."""
+    args=cfg['args'];flag='--vram-reserve-mib' if '--glm-pack' in args else '--reserve-mib'
+    reserve=int(args[args.index(flag)+1])*1024**2
+    return min(6*1024**3,max(1024**3,reserve-1024**3))
+
+
 @inference_request
 def ensure_worker(model):
     global worker, active, logfile, memory_fault, startup_whole_card_free_bytes
@@ -207,8 +215,9 @@ def ensure_worker(model):
                 if stopping.is_set():
                     raise RuntimeError('Maya is shutting down')
                 free=[row['free'] for row in vram_snapshot()]
-                if len(free)!=2 or min(free)<6*1024**3:
-                    memory_fault='Maya whole-card startup headroom is below 6 GiB; close unrelated GPU apps before explicit reload'
+                floor=startup_floor(cfg)
+                if len(free)!=2 or min(free)<floor:
+                    memory_fault=f'Maya whole-card startup headroom is below {floor/1024**3:g} GiB; close unrelated GPU apps before explicit reload'
                     raise RuntimeError(memory_fault)
                 startup_whole_card_free_bytes=free
                 swap_guard.ready(proc, phase='idle')

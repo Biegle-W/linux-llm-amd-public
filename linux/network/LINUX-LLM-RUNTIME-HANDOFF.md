@@ -1,5 +1,7 @@
 # Current AMD runtime handoff — November 5, 2026
 
+[GLM and DeepSeek RAM/reserve tuning, November 8](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s (was 2.6), 396 tok/s prompt; DeepSeek expert profile + 2 GiB reserve: 7.5-10.1 tok/s (was 4.2-6.3), 120 tok/s prompt.
+
 [Quant quality comparison, November 8](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 vs Coder IQ2_XXS 51/54, then 64/64 vs 59/64 on a harder rerun, plus an intermittent Coder NaN lock-up -> UD-IQ1_S kept (4-6 tok/s), both Coder IQ2_XXS routes (Strata, Maya) removed. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
 
 [Ripple-65B on vLLM INT4, November 7](../hardware/RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.

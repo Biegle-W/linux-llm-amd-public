@@ -1,5 +1,7 @@
 # Agent entry point
 
+[GLM and DeepSeek RAM/reserve tuning, November 8](linux/hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s (was 2.6), 396 tok/s prompt; DeepSeek expert profile + 2 GiB reserve: 7.5-10.1 tok/s (was 4.2-6.3), 120 tok/s prompt.
+
 [AMD working setup, November 7](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and the tests that passed after the Sapphire switch investigation.
 
 [All-models short tool-call benchmark, November 7](linux/hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout; GPU fault hold released by the owner.
