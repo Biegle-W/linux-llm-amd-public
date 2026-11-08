@@ -11,7 +11,7 @@ It replaces the separate Shared client, Windows-network and upgrade guides;
 the original nine files are preserved in the dated Shared archive described there.
 
 The authenticated gateway uses TCP **10000** and OpenAI-compatible chat,
-completion and native Responses (`POST /v1/responses`) APIs. Request any of the **9 enabled profiles** from `/v1/models`;
+completion and native Responses (`POST /v1/responses`) APIs. Request any of the **12 enabled routes** from `/v1/models`;
 the loopback model hub starts or switches its backend through the guarded launcher.
 Catalog/health reads do not start a model. Existing explicit Desktop/CLI launches
 remain supported.

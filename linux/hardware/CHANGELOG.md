@@ -1,0 +1,26 @@
+# Changelog
+
+Newest first. One line per change, with a link to the dated report holding its evidence. Current state lives in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md), not here. Nightly engine updates have their own [ledger](DAILY-UPDATES.md).
+
+## November 2026
+
+- **Nov 8, docs cleanup.** Rewrote the entry docs (AGENTS, README, handoff, current results) as short current-state pages and moved all dated notes here; earlier versions are in Git history and the [November 5 snapshot](history/documentation-2026-11-05/README.md). Fixed stale statements: route count 12 (not 13 or 14), hold released, RAM40 selected, current pins, device order `0,1`, kernel default, storage targets.
+- **Nov 8, Qwen IQ3 Unsloth vs GSQ-RCO.** Same quality (53/54 both; 62/64 GSQ, 63/64 Unsloth), but Unsloth reads long prompts 35% slower. GSQ-RCO kept; the Unsloth copy (80 GB) deleted. Fixed a Strata router readiness bug from `f332a6d`. [Report](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md)
+- **Nov 8, GLM and DeepSeek RAM/reserve tuning.** GLM RAM 40 GB + 2 GiB reserve: 17.8–22.1 tok/s (was 2.6). Strata DeepSeek expert profile + 2 GiB: 7.5–10.1 tok/s (was 4.2–6.3). Maya DeepSeek with the same changes: 9.5–17.1 tok/s. `--mmap-experts off` rejected. Native reserve floor lowered to 2 GiB. One NaN event on Sapphire in the first DeepSeek run. [Report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)
+- **Nov 8, quant quality comparison.** Flash-Next IQ3_XXS kept over UD-IQ1_M. DeepSeek UD-IQ1_S kept over Coder IQ2_XXS (64/64 vs 59/64, plus Coder NaN lock-ups). Three routes removed. Updater policy: always update unless broken. [Report](QUANT-QUALITY-COMPARISON-2026-11-08.md)
+- **Nov 8, Flint Mix-24G deleted** at the owner's request. [Storage inventory](MODEL-STORAGE-INVENTORY.md)
+- **Nov 7, all-models short tool-call benchmark.** All 14 routes enabled at the time passed in the working layout. The owner then released the GPU fault hold (03:56). [Report](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)
+- **Nov 7, AMD working setup.** Card positions, device order `ROCR_VISIBLE_DEVICES=0,1`, tests that passed and the crash-recovery runbook. [Report](AMD-WORKING-SETUP-2026-11-07.md)
+- **Nov 7, Ripple-65B on vLLM INT4.** New `ripple-65b-vllm` route, TP2 over P2P, 28–29 tok/s (llama.cpp reached 14–17; that route was removed). [Report](RIPPLE-65B-VLLM-2026-11-07.md)
+- **Nov 7, H3 TP2 in production ComfyUI.** Projected-8B H3 runs two-card TP over RCCL P2P; `COMFY_MODE=staged` rolls back. [Report](../graphics/H3-TP2-PRODUCTION-2026-11-07.md)
+- **Nov 7, daily update.** llama.cpp `818ac6b078e3`, Strata `146df3c46873` and Maya `7bf15ac68f9b` promoted; Strata DeepSeek candidate rejected. [Ledger](DAILY-UPDATES.md)
+- **Nov 6, Sapphire link training after the crash.** The switch link was absent in one boot and trained at x2 in the next, then returned to x8. Failures happen only with Sapphire behind the switch. [Report](SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md)
+- **Nov 6, Sapphire switch/P2P evidence audit.** Direct HIP/IPC and RCCL P2P passed before the headless failure; P2P alone does not explain it. [Report](SAPPHIRE-SWITCH-P2P-EVIDENCE-AUDIT-2026-11-06.md) · [Qwen backend comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md)
+- **Nov 5, headless campaign.** Stopped on SGLang Qwen DFlash2 startup when Sapphire lost PCI/SMU access. A monitor is not required for the failure. [Report](AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md) · [Display investigation](MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.md)
+- **Nov 5, no-store DeepSeek failure; vmpt1 kernel made default.** Patched `7.0.14-42-vmpt1` became the persistent default with stock as fallback. [Report](MAYA-DEEPSEEK-NO-STORE-2026-11-05.md)
+- **Nov 5, IQ1_M qualification and DeepSeek 36 GB store failure.** UD-IQ1_M passed (later removed Nov 8). GLM RAM24 passed but was not selected. The 36 GB store failed loading, followed by lockups. [Report](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md) · [Cache comparison](MAYA-DEEPSEEK-CACHE-COMPARISON-2026-11-05.md)
+- **Nov 5, full-day review and crash comparison.** Both kernel families failed; corrected records identify Sapphire (logical GPU1) both times. [Day review](AMD-DAY-REVIEW-2026-11-05.md) · [Crash comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md)
+- **Nov 5, candidate retests and native decode evidence.** Four native realistic-budget retries passed; Bolt moved to globaldev229; Flint AWQ, PLE, Super INT4 and the RDNA3 fork `2314df4` ended before inference and were not promoted. ComfyUI 0.44/`fb2b26f` selected. [Candidates](CANDIDATE-RETESTS-2026-11-05.md) · [Decode evidence](AMD-DECODE-EVIDENCE-2026-11-05.md) · [Native tests](AMD-NATIVE-DECODE-TESTS-2026-11-05.md) · [Realistic large models](REALISTIC-LARGE-MODELS-2026-11-05.md) · [Strata 0.2.11 Unsloth](STRATA-0211-UNSLOTH-2026-11-05.md) · [RDNA3 research](RDNA3-DUAL-GPU-RESEARCH-2026-11-05.md) · [27-case P2P campaign](ALL-MODEL-P2P-2026-11-05.md)
+- **Nov 4, Unsloth and Flint comparisons.** [Report](UNSLOTH-FLINT-COMPARISONS-2026-11-04.md)
+
+Older changes: the [benchmark history](BENCHMARK-HISTORY.md) and the [November 5 documentation snapshot](history/documentation-2026-11-05/README.md).

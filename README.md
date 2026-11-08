@@ -1,58 +1,68 @@
 # Local LLM on dual AMD RX 7900 XTX
 
-[Qwen3.8-Flash-Next IQ3_XXS, Unsloth vs GSQ-RCO, November 8](linux/hardware/QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md): owner-requested. Quality level: both 53/54; on the harder suite GSQ 62/64, Unsloth 63/64. Unsloth reads a 5.5K-token prompt about 35% slower (512-530 vs 777-821 tok/s) and decodes about 17% slower after it; short-prompt decode is level (about 50-52 tok/s). Keep GSQ-RCO. Also fixed a Strata router bug from f332a6d that broke Qwen route readiness.
+Sanitized public reference for a separately maintained private operational repository. The Linux tree is in [`linux/`](linux/); example paths use `/opt/local-llm`, `/mnt/shared` and `/mnt/shared-nvme`. Configure them locally.
 
-[GLM and DeepSeek RAM/reserve tuning, November 8](linux/hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s (was 2.6), 396 tok/s prompt; DeepSeek expert profile + 2 GiB reserve: 7.5-10.1 tok/s (was 4.2-6.3), 120 tok/s prompt; Maya DeepSeek route 9.5-17.1 tok/s (was 5.0-9.3).
+Twelve qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins.
 
-[AMD working setup, November 7](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md): card positions, device order and the tests that passed after the Sapphire switch investigation.
+## Rules
 
-[All-models short tool-call benchmark, November 7](linux/hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout; GPU fault hold released by the owner.
+**Scope and publishing**
+- This server maintains only the two AMD repos above. Other Linux NVIDIA and Windows repos, and old snapshots, are references unless the owner assigns them.
+- After authorized changes, keep both repos, the results and the handoff in step. Reviewed commits and normal (non-force) pushes to both `origin/main` branches are authorized. Verify the remote refs afterwards, preserve unrelated changes, and report exact blockers.
+- The operational handoff has a byte-identical private copy on the shared SATA drive (Windows `D:\LINUX-LLM-RUNTIME-HANDOFF.md`). That copy is the private text, not this public one.
+- Public edits are targeted and hand-sanitized: no home or mount paths, LAN or tailnet addresses, or identity names. Public profiles use `/opt/local-llm` paths. The nightly publisher's `PRIVATE` regex in `linux/hardware/daily-update/publish.py` is the check.
+- Never publish credentials, personal or client settings, chat state, raw private logs, model weights, environments or runtime binaries. Private agent workflow, checkpoints and context tools stay out of public exports and the Shared handoff.
 
-[Sapphire post-crash investigation](linux/hardware/SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md): idle-power state, motherboard and switch isolation tests, P2P on/off and TP2 results.
+**Runtime safety**
+- Preserve installed paths, exact source and weight pins, manual runtime pins, every guard, the owner-selected kernel default (`7.0.14-42-vmpt1`, stock installed as fallback), unrelated applications and paused schedules. Documentation upkeep never authorizes a trial, engine upgrade, restart, hold release or schedule change.
+- GPU work is serialized behind an owned `hardware/generated/GPU-LOCK`. A lock you do not own, or unknown KFD ownership, blocks you. After a GPU fault the lock is a fault hold: no GPU work, retries or reboots until the owner releases it.
+- Qualified native profiles are sealed (`config_sha256`) in `dsh/qualified-native-profiles.json` and `dsh/qualified-strata-qwen-profiles.json`. Editing a sealed profile breaks admission until it is requalified and resealed; never fake a seal.
 
-[Headless model campaign](linux/hardware/AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
+**Engines and models**
+- Daily updater policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject. Details are in [the updater README](linux/hardware/daily-update/README.md).
+- New engines or models need isolated qualification before promotion. For a new model, check a gfx1100 vLLM or SGLang INT4 route before keeping it on GGUF.
+- Deleting weights or data is the owner's call.
 
-[No-store DeepSeek failure and persistent inference kernel](linux/hardware/MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
+**Storage (90% limit)**
+- No drive may go above 90% used. Before any download or copy, run `python3 dsh/shared_storage.py --place static|streaming --size-gb N`. It refuses when the drive would pass 90%, and it creates the target folder.
+  - `static` goes to the shared SATA drive's `vLLM-Models`.
+  - `streaming` goes to the shared NVMe drive's `LLM-Models`.
+- Existing streaming packs stay in `models/streaming/` on the system drive. Never move validated assets as housekeeping.
+- The check is advisory: downloaders do not call it themselves.
 
-Current as of November5,2026. Sanitized public reference for the separately maintained private operational AMD repository; configure example paths locally.
+**Writing**
+- Use English for all communication and GitHub content.
+- Keep current docs short and current. Replace superseded state instead of adding to it. Each change gets one line in the [changelog](linux/hardware/CHANGELOG.md) and a dated report for its evidence.
 
-[IQ1_M qualification and cache status](linux/hardware/STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current post-crash patched boot has no fresh peer/model qualification.
+## Layout
 
-[DeepSeek cache comparison and cleanup](linux/hardware/MAYA-DEEPSEEK-CACHE-COMPARISON-2026-11-05.md): the36GBoption creates temporary RAM state, not a persistent disk store. One regenerable Maya Q1 tuning file was cleared as requested; weights/configuration/failure evidence and the GPU hold remain intact. No GPU test or repair claim.
+Paths below are inside `linux/`.
 
-[Full-day workload review](linux/hardware/AMD-DAY-REVIEW-2026-11-05.md): many model/graphics checks passed on the switch/custom-kernel setup, including Maya DeepSeek UD-IQ1_S at04:14-04:18. The later36GB-store candidate failed loading; the first SMU error preceded the watchdog stop. The16:50 power interruption has no identified journal cause and is separate from the18:45 GPU/kernel failure. Exact initial trigger remains unresolved; GPU hold retained.
-
-[Read-only crash comparison](linux/hardware/AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): the corrected placement records identify Sapphire in both stock/custom failures, across different switch branches but the same logical model GPU1 role. The earlier different-card claim is withdrawn. No root cause or repair is proved; keep the GPU hold and distinguish card identity from runtime role before another attempt. No GPU or boot change was made.
-
-## Take over in a few minutes
-
-1. Read this maintenance policy and the [current runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md).
-2. Read the [current result index](linux/hardware/CURRENT-AMD-BENCHMARKS.md) only when measurements matter.
-3. Check both Git working trees and actual job/lock ownership before changing anything. Follow the current user request; the owner-requested qualification outcomes are now recorded below.
-
-Fourteen qualified API routes are enabled. Four realistic-budget native retries passed; llama9c9074 passed and is selected for Flint, Ornith and Empero. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected. Fresh owner-requested latest-guard attempts ended before inference: Flint AWQ requires unavailable FlashInfer; PLE stopped on the six-second heartbeat guard; Super stopped below the 1 GiB host reserve. PLE missed its 15-second KFD drain deadline, then drained later; that failed result remains recorded. None was promoted. The unused Strata DFlash2 source/packs were removed after pinned-hash and dependency verification; the separate SGLang drafter and all 13 selected routes remain unchanged. [Fresh candidate attempts and drafter removal](linux/hardware/CANDIDATE-RETESTS-2026-11-05.md). Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The RDNA3 fork at2314df4 built and passed native/CLI audits, but its Qwen startup warm-up failed on missing `CommonAttentionMetadata._seq_lens_cpu` before any request. The exact case is final; the fork remains isolated and unpromoted. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) records exact selections, safeguards and pending work; [current results](linux/hardware/REALISTIC-LARGE-MODELS-2026-11-05.md) include all saved model/graphics timings and downloaded asset groups. Completed GPU checks are not repeated for documentation.
-
-[Native decode capture and candidate removal](linux/hardware/AMD-NATIVE-DECODE-TESTS-2026-11-05.md): all13 selected routes now have short native per-request decode statistics; the four newly tested routes also have three fixed128-token speed probes each. Failed FlintAWQ, FP8-PLE and SuperINT4 downloads were removed by explicit owner request. Selected routes/guards remain unchanged; no sustained full-catalog benchmark is claimed.
-
-## Maintenance policy
-
-- This server maintains only `Biegle-W/linux-llm-amd` and `Biegle-W/linux-llm-amd-public`. Other Linux NVIDIA/Windows repositories and old snapshots are references unless explicitly assigned.
-- After authorized changes, keep both AMD repos, applicable results and the current handoff synchronized. Reviewed intended commits and normal non-force pushes to both `origin/main` branches are authorized. Verify actual remote refs; preserve unrelated changes and report exact blockers.
-- Keep the Shared runtime handoff byte-for-byte equal to the operational `network/LINUX-LLM-RUNTIME-HANDOFF.md`. The operational destination is configured on the Shared SATA drive (Windows `D:\LINUX-LLM-RUNTIME-HANDOFF.md`). Public references use sanitized paths/addresses.
-- Never publish credentials, personal/client settings, chat state, raw private logs, model weights, environments or runtime binaries. Private agent workflow, checkpoints and context tools stay out of public exports and Shared handoffs. Preserve existing public historical snapshots; retired source belongs in the established central archive.
-- Preserve installed paths, exact source/weight pins and manual runtime pins, all guards, owner-selected persistent inference-kernel default and installed stock fallback, unrelated applications and paused schedules. Documentation upkeep does not authorize a trial, engine upgrade, restart, hold release or schedule change.
-- Engine changes prefer current upstream development builds, including prereleases, but require isolated hardware/profile qualification before promotion. Check a suitable gfx1100 vLLM/SGLang INT4 route before keeping a new model on GGUF; change selection only on measured qualified evidence. Keep required fork/runtime versions isolated.
-- New static weights use configured SATA storage; streaming packs use system `models/streaming/`. Before downloads/copies, run `python3 dsh/shared_storage.py --place static|streaming --size-gb N`; retain the 90% storage admission limit. Never relocate existing validated assets as housekeeping.
-- Keep communication and GitHub content in English. Keep current docs concise: replace superseded state and link dated evidence; do not prepend chronological snapshots.
-
-## Find details when needed
-
-| Area | Reference |
+| Path | What it holds |
 |---|---|
-| API, exact routes, guards, holds, current pins | [Runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) |
-| Latest qualification and measurement limits | [Current result index](linux/hardware/CURRENT-AMD-BENCHMARKS.md) |
-| Historical benchmarks | [Benchmark history](linux/hardware/BENCHMARK-HISTORY.md) |
-| DSH and client setup | [DSH](linux/dsh/README.md), [network](linux/network/README.md) |
-| Graphics | [Graphics setup](linux/graphics/README.md) |
-| Retired setup index | [Archives](archives/README.md) |
-| Full previous overviews | [Documentation history](linux/hardware/history/documentation-2026-11-05/README.md) |
+| `dsh/` | Hub (`model_hub.py`), routers, runtimes, route registries and profiles, DSH frontend |
+| `network/` | API gateway, systemd units, the runtime handoff |
+| `hardware/` | Operational scripts (`rocm-env.sh`, guards, updater), unit tests `test_*.py`, dated reports `*-2026-*.md`, `results/` JSON |
+| `hardware/daily-update/` | Nightly updater, publisher and systemd unit sources |
+| `hardware/generated/` | Ignored live state: `GPU-LOCK`, updater runs (some hold live engine builds) |
+| `vllm/`, `sglang/`, `maya/`, `strata-dsv41/`, `graphics/` | Engine launchers and pins; ignored venvs and sources sit beside them |
+| `bin/`, `launchers/` | `llm-*` CLI wrappers and Desktop launchers |
+| `models/streaming/` | Ignored streaming weights for Strata and Maya |
+| `llm-tools/` | Ignored toolchains: Python, ROCm SDK, RCCL, caches |
+
+Dated reports stay flat in `hardware/` because many links and a few code strings point at them; find them through the [changelog](linux/hardware/CHANGELOG.md).
+
+## Doc map
+
+| Need | Read |
+|---|---|
+| Current state, routes, guards, pins, open items | [Runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) |
+| Current measurements | [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md) |
+| What changed and when | [Changelog](linux/hardware/CHANGELOG.md) |
+| Nightly engine updates | [Ledger](linux/hardware/DAILY-UPDATES.md) (written by `publish.py`), [method](linux/hardware/daily-update/README.md) |
+| Drives and weight files | [Storage inventory](linux/hardware/MODEL-STORAGE-INVENTORY.md) |
+| Card layout and crash runbook | [AMD working setup](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md) |
+| Clients and gateway | [Network](linux/network/README.md), [DSH](linux/dsh/README.md) |
+| Image and video | [Graphics](linux/graphics/README.md) |
+| Older measurements | [Benchmark history](linux/hardware/BENCHMARK-HISTORY.md) |
+| Retired setups | [Archives](archives/README.md) |

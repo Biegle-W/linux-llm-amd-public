@@ -9,7 +9,7 @@ GUI log viewers require explicit `LOCAL_LLM_GUI_LOGS=1` opt-in; manual desktop
 launchers remain available on demand. See the
 [headless server setup](../network/HEADLESS-INFERENCE-2026-11-02.md).
 
-Nine qualified routes are enabled after the November 5 owner-approved activation. Six failed candidates remain held; deleted XS and Super IQ3 stay retired. Use the [current handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md#exact-enabled-catalog) and authenticated `/v1/models` for the exact catalog; older availability lists are historical.
+Twelve qualified routes are enabled. Use the [current handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md#enabled-routes) and authenticated `/v1/models` for the exact catalog; older availability lists are historical.
 
 `configure_local.py` migrates former local engine providers to `amd-server`,
 preserves an available selected model and unrelated providers/settings, and
@@ -25,4 +25,4 @@ available for maintenance; they do not create separate visible providers.
 Follow the [short harness testing policy](../hardware/SHORT-HARNESS-TEST-POLICY-2026-11-01.md):
 calculate context from RAM/VRAM and engine allocations, run one short tool-call
 round trip through the harness, then unload. No routine full-context tests.
-Daily engine updates remain paused until explicitly resumed by the owner.
+The 03:00 daily engine updater is enabled; see the [updater README](../hardware/daily-update/README.md).

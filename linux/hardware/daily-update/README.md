@@ -4,6 +4,12 @@ The existing `llm-daily-update.timer` targets **03:00 local time**, with `Persis
 
 The scheduled CLI is `daily_update.py`; it dispatches to `nightly.py`. The older builder APIs remain available to isolated preparation tools. The scheduled path uses **one strict two-step DSH read-tool round trip per enabled qualified profile**, then owned unload. It does not run the former same-night baseline, routine full-window tests or throughput promotion gates.
 
+## Promotion policy (owner, November 7)
+
+Always update to the latest version unless the update breaks something; a minor performance decrease is never a reason to reject. The nightly path has no throughput gate. A kernel parity row that misses its tolerance by at most 1.5x, identically on both cards, is recorded as a warning (`parity-warnings.json`); crashes, larger misses and card mismatches still reject, and the strict tool check still decides promotion. The legacy comparison gate rejects only severe slowdowns (below 50% speed or above 3x TTFT).
+
+The nightly run skips while any inference process or KFD owner exists, including the resident ComfyUI worker. `publish.py` rewrites everything above the first `## ` heading of `hardware/DAILY-UPDATES.md` with its fixed header, so keep policy text here, not in the ledger.
+
 ## Scope and selection
 
 - Six existing components: llama.cpp, the global ROCm vLLM wheel, the gfx1100 SGLang fork, Strata Qwen, Maya and separately qualified Strata DeepSeek.

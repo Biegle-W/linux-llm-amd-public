@@ -1,17 +1,5 @@
 # Documentation index
 
-[Current CPU/RAM inventory: i9-13900KS / 64 GB](CPU-RAM-UPGRADE-2026-10-19.md).
+This index moved. Start at the [root README](../../README.md) (rules, layout and doc map) and the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md). Recent changes are in the [changelog](CHANGELOG.md).
 
-- [Current setup and launch commands](../../README.md)
-- [Single Linux/Windows client handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)
-- [All ten current AMD profiles and measured results](CURRENT-AMD-BENCHMARKS.md)
-- [Machine-readable result index](results/README.md)
-- [Dated benchmark history](BENCHMARK-HISTORY.md)
-- [Image/video setup](../graphics/README.md)
-- [NVIDIA archive](https://github.com/Biegle-W/retired-llm-setting/blob/main/linux-amd-public/archives/ubuntu-nvidia/README.md)
-
-Dated reports describe their original hardware/build/workload. Legacy DSH
-recipes and HyperQwen reports are retained for historical references; they are
-not current launch instructions. Current configuration comes from the enabled
-profile files and canonical handoff. The public Windows/NVIDIA snapshots remain
-separate historical distributions.
+Dated reports describe the hardware, build and workload of their own date. Legacy DSH recipes (`dsh/docs/`, `dsh/research/`) and HyperQwen reports are NVIDIA-era history, not current launch instructions.

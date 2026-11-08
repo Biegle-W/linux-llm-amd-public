@@ -4,7 +4,7 @@
 
 **November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).
 
-**November 3 storage cleanup:** the remaining 21.06 GB H3 experimental rank shards moved to shared SATA after complete SHA-256 and original-pin comparison. Normal models/workflows and current environments are preserved; the TP2 candidate remains build-only/disabled. [Registry](staged-weight-locations.json) · [Cleanup and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
+**November 3 storage cleanup:** the remaining 21.06 GB H3 experimental rank shards moved to shared SATA after complete SHA-256 and original-pin comparison. Normal models/workflows and current environments are preserved; the TP2 candidate was build-only then; it has been production since November 7 (see above). [Registry](staged-weight-locations.json) · [Cleanup and verification](../hardware/SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
 
 **October 31 normal H3 activation:** projected 8B FP8 + v3.1 projection is now the default for text-to-video. One guarded actual-normal-ComfyUI 39-frame request passes API, finite-tensor and full AV-decode checks. Exact Native32B workflows remain for image-conditioned work/rollback. Component placement, attention, guards and other runtime selections are preserved. [Activation and rollback](H3-PROJECTED-8B-ACTIVATION-2026-10-31.md).
 

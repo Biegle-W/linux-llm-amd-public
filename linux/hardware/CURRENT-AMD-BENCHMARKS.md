@@ -1,47 +1,26 @@
-# Current AMD results — November 5, 2026
+# Current AMD results — November 8, 2026
 
-[Qwen3.8-Flash-Next IQ3_XXS, Unsloth vs GSQ-RCO, November 8](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md): owner-requested. Quality level: both 53/54; on the harder suite GSQ 62/64, Unsloth 63/64. Unsloth reads a 5.5K-token prompt about 35% slower (512-530 vs 777-821 tok/s) and decodes about 17% slower after it; short-prompt decode is level (about 50-52 tok/s). Keep GSQ-RCO. Also fixed a Strata router bug from f332a6d that broke Qwen route readiness.
+One row per enabled route, with the latest measurement at the current settings. Every number comes from a short guarded check; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md).
 
-[GLM and DeepSeek RAM/reserve tuning, November 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md): owner-approved. GLM RAM 40 GB + 2 GiB reserve: 17.8-22.1 tok/s decode, 396 tok/s prompt (was 2.6 and 6), 62/64 on the harder suite. DeepSeek Strata expert profile + 2 GiB reserve: 7.5-10.1 tok/s, 120 tok/s prompt (was 4.2-6.3 and 51); `--mmap-experts off` rejected; 64/64 on a second run after one NaN event on CUDA1 in the first. Maya DeepSeek route with the same changes: 9.5-17.1 tok/s (was 5.0-9.3), 64/64. Reserve floor lowered to 2 GiB.
+| Route | Engine | Decode tok/s | Prompt read tok/s | Load s | Quality (graded suite) | Source |
+|---|---|---:|---:|---:|---|---|
+| `empero-qwen3.8-35b-a3b` | llama.cpp | 174.5 | 2,874 (7K) | 46.7 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `flint-40b-a2.5b` | llama.cpp | 64.8 | 4,980 (6.5K) | 50.7 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `ornith-1.5-122b` | llama.cpp | 11.3 | 651 (7K) | 151.9 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `qwen3.8-27b-vllm` | vLLM TP2 | 153.7 | 1,723 (7K) | 89.5 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | 218.6 | 1,741 (7.4K) | 34.4 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `nemotron-3.5-bolt-vllm` | vLLM | 29.6 | 2,092 (7.7K) | 224.4 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `sage-a1.5` | vLLM | 136.5 | 5,698 (7K) | 113.0 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
+| `ripple-65b-vllm` | vLLM TP2 | 28–29 | ~755 (8K) | — | 12/12 known-answer | [Nov 7](RIPPLE-65B-VLLM-2026-11-07.md) |
+| `qwen3.8-flash-next-iq3_xxs` | Strata | 50.2–52.4 | 777–821 (5.5K) | 96.8 | 53/54; 62/64 harder | [Nov 8](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md) |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | 7.5–10.1 | 120 (4.8K) | 57–157 | 64/64 harder (one NaN event in an earlier run) | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | 9.5–17.1 | 125 (4.8K) | 133 | 64/64 harder | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
+| `glm-5.3-flash-maya` | Maya | 17.8–22.1 | 396 (4.9K) | 83 | 62/64 harder | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
 
-[All-models short tool-call benchmark, November 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md): all 14 routes passed in the working layout.
+How to read it:
+- November 7 rows: one DSH read-tool round trip with about 7K prompt tokens and 25 tool definitions. Decode is measured on a short tool-call answer.
+- November 8 rows: two 400-token answers (cold, then warm) and a 4.8–5.5K-token document prompt through the hub.
+- Quality: the 54-item and harder 64-item suites from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md), at temperature 0 with thinking off.
+- Machine-readable results are in [results/](results/README.md).
 
-[Quant quality comparison, November 8](QUANT-QUALITY-COMPARISON-2026-11-08.md): 54-item graded test. Flash-Next IQ3_XXS 53/54 vs UD-IQ1_M 52/54 (IQ1_M ~10% faster) -> IQ3_XXS kept, IQ1_M route removed. DeepSeek UD-IQ1_S 54/54 vs Coder IQ2_XXS 51/54, then 64/64 vs 59/64 on a harder rerun, plus an intermittent Coder NaN lock-up -> UD-IQ1_S kept (4-6 tok/s), both Coder IQ2_XXS routes (Strata, Maya) removed. Daily updater policy: always update unless broken; marginal parity misses and minor slowdowns are warnings.
-
-[Ripple-65B on vLLM INT4, November 7](RIPPLE-65B-VLLM-2026-11-07.md): `ripple-65b-vllm` route, TP2 over P2P, 28-29 tok/s decode vs 14-17 on llama.cpp; guarded tool check passed.
-
-[AMD working setup, November 7](AMD-WORKING-SETUP-2026-11-07.md): card positions, device order, tests that passed, crash-recovery runbook and model status.
-
-[Sapphire post-crash link training](SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md): after the November 5 failure, Sapphire's switch path was absent at power-on in one boot and trained at x2 in the next, then returned to x8. Link training precedes driver and workload, pointing to the Sapphire-to-switch link or its power. Failures occur only with Sapphire behind the switch; the no-switch topology had none. Read-only; hold retained.
-
-[Sapphire switch/P2P evidence audit](SAPPHIRE-SWITCH-P2P-EVIDENCE-AUDIT-2026-11-06.md): completed direct HIP/IPC and RCCL P2P transfers passed before the headless failure. The model faulting operation and transport remain unlogged. An older driver-P2P-disabled Strata crash limits a universal P2P-only explanation; its workload/software state differs. Recent Sapphire/logical-GPU1 identity correction and all guard failures remain preserved. [Qwen backend comparison](QWEN-VLLM-SGLANG-TRIGGER-COMPARISON-2026-11-05.md). Read-only audit; no retry or runtime change.
-
-[Headless model campaign](AMD-HEADLESS-KNOWN-PASSED-MODELS-2026-11-05.md): Headless campaign stopped on SGLang Qwen DFlash2 startup: Sapphire `0b:00.0` lost PCI/SMU access. Four model tool checks completed first (three clean guard passes; one preserved Qwen vLLM harness-path failure after successful tools/cleanup). Nine routes, including Maya DeepSeek no-store, were not run. A connected physical monitor is not required for this failure. Latest fault hold retained; no retry or further GPU work.
-
-[Monitor/display investigation](MAYA-DISPLAY-MONITOR-INVESTIGATION-2026-11-05.md): owner reports earlier successful run was headless. Current monitor is on PowerColor, while Sapphire first lost PCI/SMU access. Display remains a plausible contributor, not a proved trigger; prior display errors followed the initial SMU failure. Read-only analysis only; fault hold retained.
-
-[No-store DeepSeek failure and persistent inference kernel](MAYA-DEEPSEEK-NO-STORE-2026-11-05.md): The single no-store DeepSeek baseline also failed loading: Sapphire `0b:00.0` was reported lost from the bus, followed by SMU errors, then heartbeat/owned-cleanup failure; no requests. Patched `7.0.14-42-vmpt1` is now the owner-selected persistent inference default, with stock installed as fallback. New fault hold retained; no automatic retry or further GPU work. The current post-crash boot has no fresh peer/model qualification.
-
-**12 qualified normal routes are enabled.** Read the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) for exact selections and safeguards.
-
-[IQ1_M qualification and cache status](STRATA-IQ1M-AND-STREAMING-CACHE-2026-11-05.md): new Unsloth UD-IQ1_M passed strict tools,5/6 local quality fixtures and57.140native tokens/s median across three short probes. All13 original routes remain;14routes/11 main weight sets are grouped below. GLM RAM24 completed strict tools and 5/6 local fixtures, with a 1.995 native tokens/s median across three short speed probes; it was not selected because follow-up performance regressed, so RAM8 remains selected. Maya DeepSeek36GB-store failed during loading on the six-second heartbeat guard and missed its 15-second owned cleanup deadline; the boot later suffered AMDGPU/CPU lockups. The persistent GPU fault hold remains: no automatic GPU work, retry, reboot or hold release. RAM40 is prepared but unrun and blocked. Current post-crash patched boot has no fresh peer/model qualification.
-
-[DeepSeek cache comparison and cleanup](MAYA-DEEPSEEK-CACHE-COMPARISON-2026-11-05.md): the36GBoption creates temporary RAM state, not a persistent disk store. One regenerable Maya Q1 tuning file was cleared as requested; weights/configuration/failure evidence and the GPU hold remain intact. No GPU test or repair claim.
-
-[Full-day workload review](AMD-DAY-REVIEW-2026-11-05.md): many model/graphics checks passed on the switch/custom-kernel setup, including Maya DeepSeek UD-IQ1_S at04:14-04:18. The later36GB-store candidate failed loading; the first SMU error preceded the watchdog stop. The16:50 power interruption has no identified journal cause and is separate from the18:45 GPU/kernel failure. Exact initial trigger remains unresolved; GPU hold retained.
-
-[Read-only crash comparison](AMD-CRASH-KERNEL-COMPARISON-2026-11-05.md): the corrected placement records identify Sapphire in both stock/custom failures, across different switch branches but the same logical model GPU1 role. The earlier different-card claim is withdrawn. No root cause or repair is proved; keep the GPU hold and distinguish card identity from runtime role before another attempt. No GPU or boot change was made.
-
-[Current model/graphics timings, realistic-budget retries and all downloaded asset groups](REALISTIC-LARGE-MODELS-2026-11-05.md) · [Curated numeric results](results/REALISTIC-LARGE-MODELS-2026-11-05.json).
-
-[All14 short native decode statistics](AMD-DECODE-EVIDENCE-2026-11-05.md) · [New four-route native probes and three failed-model removals](AMD-NATIVE-DECODE-TESTS-2026-11-05.md). A sustained matched14-route benchmark remains missing.
-
-Four native large-model retries passed after removing the three-second decode cutoff. Maya c167 passed all three selected profiles through the guarded updater. Llama9c9074 passed and is selected for all three llama routes. ComfyUI0.44/fb2b26f passed all six normal workflows and is selected. Fresh owner-requested latest-guard attempts ended before inference: Flint AWQ requires unavailable FlashInfer; PLE stopped on the six-second heartbeat guard; Super stopped below the 1 GiB host reserve. PLE missed its 15-second KFD drain deadline, then drained later; that failed result remains recorded. None was promoted. The unused Strata DFlash2 source/packs were removed after pinned-hash and dependency verification; the separate SGLang drafter and all 13 selected routes remain unchanged. Bolt now selects globaldev229 after a strict matching255473-token prefill/tool check (255658 tokens on its second request), with clean owned cleanup and zero recorded swap or VRAM spill. Its old dev435 environment is retained. The RDNA3 fork at2314df4 built and passed native/CLI audits, but its Qwen startup warm-up failed on missing `CommonAttentionMetadata._seq_lens_cpu` before any request. The exact case is final; the fork remains isolated and unpromoted. The existing 03:00 timer is restored without catch-up. The unused Strata DFlash2 auxiliary and the explicitly named failed FlintAWQ/FP8PLE/SuperINT4 downloads were removed by owner request. 111 targeted CPU checks pass; short tests do not qualify full-window quality or sustained throughput.
-
-[RDNA3/Radiance and true dual-card research](RDNA3-DUAL-GPU-RESEARCH-2026-11-05.md): current gfx1100 backend coverage does not establish optimized dual-XTX TP. Existing LLM TP2, layer splitting, normal graphics component placement and isolated cached-conditioning H3 TP2 remain distinct.
-
-[New Strata 0.2.11 Unsloth test](STRATA-0211-UNSLOTH-2026-11-05.md): Strata 0.2.11/engine+Control 0.1.57 with the already downloaded Unsloth V3.1 IQ3_XXS passed the strict tool test and completed6 quality fixtures (5/6) plus3 short timing prompts (median native 52.895 tokens/s). Owned cleanup passed with zero recorded swap/spill; production GSQ/source selections remain unchanged.
-
-[Fresh candidate outcomes](CANDIDATE-RETESTS-2026-11-05.md) · [Numeric candidate outcomes](results/CANDIDATE-RETESTS-2026-11-05.json).
-
-Prior evidence: [27-case campaign](ALL-MODEL-P2P-2026-11-05.md), [numeric cases](results/ALL-MODEL-P2P-2026-11-05.json), [media gallery](../graphics/results/p2p-2026-11-05/README.md), [matched Unsloth/Flint comparisons](UNSLOTH-FLINT-COMPARISONS-2026-11-04.md). These were completed before the current update task. Use the [benchmark history](BENCHMARK-HISTORY.md) for older hardware/source/workload records.
+Not measured yet: a sustained, matched benchmark across all 12 routes, and full-context quality.
