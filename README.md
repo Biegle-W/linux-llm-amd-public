@@ -16,7 +16,7 @@ Twelve qualified routes are served through one OpenAI-compatible API on TCP 1000
 **Runtime safety**
 - Preserve installed paths, exact source and weight pins, manual runtime pins, every guard, the owner-selected kernel default (`7.0.14-42-vmpt1`, stock installed as fallback), unrelated applications and paused schedules. Documentation upkeep never authorizes a trial, engine upgrade, restart, hold release or schedule change.
 - GPU work is serialized behind an owned `hardware/generated/GPU-LOCK`. A lock you do not own, or unknown KFD ownership, blocks you. After a GPU fault the lock is a fault hold: no GPU work, retries or reboots until the owner releases it.
-- Qualified native profiles are sealed (`config_sha256`) in `dsh/qualified-native-profiles.json` and `dsh/qualified-strata-qwen-profiles.json`. Editing a sealed profile breaks admission until it is requalified and resealed; never fake a seal.
+- Qualified native profiles are sealed (`config_sha256`) in `dsh/qualified-native-profiles.json` and `dsh/qualified-strata-qwen-profiles.json` (currently empty). Editing a sealed profile breaks admission until it is requalified and resealed; never fake a seal.
 
 **Engines and models**
 - Daily updater policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject. Details are in [the updater README](linux/hardware/daily-update/README.md).
@@ -24,7 +24,7 @@ Twelve qualified routes are served through one OpenAI-compatible API on TCP 1000
 - Deleting weights or data is the owner's call.
 
 **Storage (90% limit)**
-- No drive may go above 90% used. Before any download or copy, run `python3 dsh/shared_storage.py --place static|streaming --size-gb N`. It refuses when the drive would pass 90%, and it creates the target folder.
+- No drive may go above 90% used. Before any download or copy, run `python3 dsh/shared_storage.py --place static|streaming --size-gb N`. It refuses when the drive would pass 90%. For `streaming` it creates the target folder; for `static` the folder must already exist.
   - `static` goes to the shared SATA drive's `vLLM-Models`.
   - `streaming` goes to the shared NVMe drive's `LLM-Models`.
 - Existing streaming packs stay in `models/streaming/` on the system drive. Never move validated assets as housekeeping.

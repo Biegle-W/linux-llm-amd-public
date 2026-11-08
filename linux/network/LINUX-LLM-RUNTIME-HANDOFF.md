@@ -35,7 +35,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | same DeepSeek UD-IQ1_S backing | SSD streaming | 32,768 | expert profile, `64gb-q1-v1` tier, reserve 2048 MiB, 20 threads |
 | `glm-5.3-flash-maya` | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS | SSD streaming | 32,768 | `MAYA_GLM_RAM_GB=40`, expert profile, reserves 2048/2048 MiB |
 
-- The registries are `dsh/models.json` and `dsh/models-hip.ini` (llama), `dsh/llama-runtime.json` (active and paused llama models), `dsh/vllm-profiles.json`, `dsh/sglang-profiles.json`, `dsh/strata-profiles.json`, `dsh/maya-profiles.json`, and the sealed `dsh/qualified-native-profiles.json` / `dsh/qualified-strata-qwen-profiles.json`. `dsh/model_catalog.py` combines them; authenticated `/v1/models` is the live list.
+- The registries are `dsh/models.json` and `dsh/models-hip.ini` (llama), `dsh/llama-runtime.json` (active and paused llama models), `dsh/vllm-profiles.json`, `dsh/sglang-profiles.json`, `dsh/strata-profiles.json`, `dsh/maya-profiles.json`, and the sealed `dsh/qualified-native-profiles.json` / `dsh/qualified-strata-qwen-profiles.json` (currently empty). `dsh/model_catalog.py` combines them; authenticated `/v1/models` is the live list.
 - Context is allocation capacity. Short checks prove neither full-window quality nor sustained throughput.
 - Disabled rows kept for reference (weights removed): `nemotron-3.5-super-iq3`, `deepseek-v4.1-flash-1017-strata-xs`, `deepseek-v4.1-flash-1017-maya`. Removed November 8: Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes. Final failed candidates (no retry without new evidence): PLE host-file-gather, Super INT4 EP2, the Maya DeepSeek 36 GB store, RDNA3 full-stack fork `2314df4`.
 
@@ -50,7 +50,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 - 100°C stop for CPU, GPU edge/junction/memory and SSD; SMART health checks.
 - Host floor 1 GiB available RAM; 128 MiB free per card while live; dedicated-VRAM spill check; supervisor heartbeat (6 s); phase budgets of 1800 s for loading, prefill and generation; owned cleanup within 15 s.
-- Native VRAM reserve: at least 2048 MiB requested per card (`MIN_RESERVE_MIB` in `dsh/qualified_native_runtime.py`). The Maya and Strata routers require free VRAM of the reserve minus 1 GiB, between 1 and 6 GiB, at startup.
+- Native VRAM reserve: at least 2048 MiB requested per card (`MIN_RESERVE_MIB` in `dsh/qualified_native_runtime.py`). At startup the Maya router (all routes) and the Strata router (DeepSeek routes only) require free VRAM of the reserve minus 1 GiB, between 1 and 6 GiB.
 - Resource policy `loading-swap-v5`: worker hard limits come from installed RAM; device-speed swap is allowed with storage and temperature protection. Never disable global swap or touch unrelated applications.
 - The hub unloads an owned idle backend after 600 s. It never stops active, queued, starting or unknown work.
 
@@ -100,7 +100,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 1. **Updater starved.** The daily updater skips while a resident ComfyUI worker owns the KFD. Ask the owner before stopping that worker.
 2. **One DeepSeek NaN event** on Sapphire (CUDA1) at the new settings, in about 141 requests. If it recurs, raise the Strata DeepSeek reserve to 4 GiB first.
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
-4. **Strata Qwen reserve is 1024 MiB**, below the 2 GiB floor for native profiles. It is a separate sealed registry; leave it unless the owner asks.
+4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` (currently empty) is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.
 5. **Stale metadata inside sealed profiles** (for example "8GiB requested reserve" in their `settings` text). Editing them would change the seals; leave them.
 6. **Stale unit tests.** `python3 -m unittest discover -s hardware -p "test_*.py"` gives 40 failures and 8 errors out of 655 tests (November 8). The failing tests assert older guard values (8 GiB or 5 GiB reserves, swap policy v4, old RAM tiers) that the owner has since changed. Update the tests to the current policy before relying on them; do not relax a guard to make one pass.
 ## Keep this handoff small
