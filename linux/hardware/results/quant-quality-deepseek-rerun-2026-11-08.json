@@ -1,0 +1,729 @@
+{
+ "date": "2026-11-08",
+ "suite": "hardware/quant-eval/suite2.py",
+ "settings": "temperature 0, thinking off, Strata via hub",
+ "graded": {
+  "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs": {
+   "k01": [
+    "know",
+    true,
+    "Canberra"
+   ],
+   "k02": [
+    "know",
+    false,
+    "Tw"
+   ],
+   "k03": [
+    "know",
+    false,
+    "Chekhov"
+   ],
+   "k04": [
+    "know",
+    true,
+    "Titan"
+   ],
+   "k05": [
+    "know",
+    true,
+    "1989"
+   ],
+   "k06": [
+    "know",
+    true,
+    "Ohm"
+   ],
+   "k07": [
+    "know",
+    true,
+    "Salvador Dalí"
+   ],
+   "k08": [
+    "know",
+    true,
+    "101"
+   ],
+   "k09": [
+    "know",
+    true,
+    "Gold"
+   ],
+   "k10": [
+    "know",
+    true,
+    "Amazon"
+   ],
+   "k11": [
+    "know",
+    true,
+    "Mandarin Chinese"
+   ],
+   "k12": [
+    "know",
+    true,
+    "Albert Einstein"
+   ],
+   "k13": [
+    "know",
+    true,
+    "Ottawa"
+   ],
+   "k14": [
+    "know",
+    true,
+    "Diamond"
+   ],
+   "k15": [
+    "know",
+    true,
+    "Jupiter"
+   ],
+   "k16": [
+    "know",
+    true,
+    "Antonio Vivaldi"
+   ],
+   "k17": [
+    "know",
+    true,
+    "Yen"
+   ],
+   "k18": [
+    "know",
+    true,
+    "Neil Armstrong"
+   ],
+   "k19": [
+    "know",
+    true,
+    "Mitochondria"
+   ],
+   "k20": [
+    "know",
+    true,
+    "Ankara"
+   ],
+   "k21": [
+    "know",
+    true,
+    "Charles Darwin"
+   ],
+   "k22": [
+    "know",
+    true,
+    "Nitrogen"
+   ],
+   "k23": [
+    "know",
+    true,
+    "1789"
+   ],
+   "k24": [
+    "know",
+    true,
+    "Jane Austen"
+   ],
+   "k25": [
+    "know",
+    true,
+    "NaCl"
+   ],
+   "k26": [
+    "know",
+    true,
+    "Louvre Museum"
+   ],
+   "k27": [
+    "know",
+    true,
+    "Potassium"
+   ],
+   "k28": [
+    "know",
+    true,
+    "206"
+   ],
+   "k29": [
+    "know",
+    true,
+    "Copernicus"
+   ],
+   "k30": [
+    "know",
+    false,
+    "Rio de Janeiro"
+   ],
+   "r01": [
+    "reason",
+    true,
+    "5"
+   ],
+   "r02": [
+    "reason",
+    true,
+    "47"
+   ],
+   "r03": [
+    "reason",
+    true,
+    "9"
+   ],
+   "r04": [
+    "reason",
+    true,
+    "3"
+   ],
+   "r05": [
+    "reason",
+    true,
+    "Carol"
+   ],
+   "r06": [
+    "reason",
+    true,
+    "Saturday"
+   ],
+   "r07": [
+    "reason",
+    true,
+    "7.5"
+   ],
+   "r08": [
+    "reason",
+    true,
+    "Mary"
+   ],
+   "r09": [
+    "reason",
+    true,
+    "9"
+   ],
+   "r10": [
+    "reason",
+    false,
+    "yessecen"
+   ],
+   "r11": [
+    "reason",
+    true,
+    "Friday"
+   ],
+   "r12": [
+    "reason",
+    true,
+    "3"
+   ],
+   "c01": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c02": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c03": [
+    "code",
+    false,
+    "UnboundLocalError: cannot access local variable 'pos' where it is not associated with a value"
+   ],
+   "c04": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c05": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c06": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c07": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c08": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c09": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c10": [
+    "code",
+    true,
+    "pass"
+   ],
+   "f01": [
+    "format",
+    true,
+    "[1,4,9,16,25]"
+   ],
+   "f02": [
+    "format",
+    true,
+    "Mercury,Venus,Earth,Mars,Jupiter,Saturn,Uranus,Neptune"
+   ],
+   "f03": [
+    "format",
+    true,
+    "4 rows"
+   ],
+   "f04": [
+    "format",
+    true,
+    "DONE"
+   ],
+   "a01": [
+    "agent",
+    true,
+    "write_file {\"path\": \"calc.py\", \"content\": \"def add(a, b):\\n    return a + b\\n\\n\\ndef mul(a, b):\\n    "
+   ],
+   "a02": [
+    "agent",
+    true,
+    "get_weather {\"city\": \"Paris\"}"
+   ],
+   "a03": [
+    "agent",
+    true,
+    "250 US dollars is approximately **€231.75** (assuming a conversion rat"
+   ],
+   "a04": [
+    "agent",
+    true,
+    "book_hotel {\"city\": \"Lisbon\", \"nights\": 3}"
+   ],
+   "a05": [
+    "agent",
+    true,
+    "read_file {\"path\": \"test_text.py\"}"
+   ],
+   "L1": [
+    "long",
+    true,
+    "4719-ALPHA"
+   ],
+   "L2": [
+    "long",
+    true,
+    "Tartu"
+   ],
+   "L3": [
+    "long",
+    true,
+    "2016, Legal"
+   ]
+  },
+  "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+   "k01": [
+    "know",
+    true,
+    "Canberra"
+   ],
+   "k02": [
+    "know",
+    true,
+    "W"
+   ],
+   "k03": [
+    "know",
+    true,
+    "Fyodor Dostoevsky"
+   ],
+   "k04": [
+    "know",
+    true,
+    "Titan"
+   ],
+   "k05": [
+    "know",
+    true,
+    "1989"
+   ],
+   "k06": [
+    "know",
+    true,
+    "Ohm"
+   ],
+   "k07": [
+    "know",
+    true,
+    "Salvador Dalí"
+   ],
+   "k08": [
+    "know",
+    true,
+    "101"
+   ],
+   "k09": [
+    "know",
+    true,
+    "Gold"
+   ],
+   "k10": [
+    "know",
+    true,
+    "Amazon River"
+   ],
+   "k11": [
+    "know",
+    true,
+    "Mandarin Chinese"
+   ],
+   "k12": [
+    "know",
+    true,
+    "Albert Einstein"
+   ],
+   "k13": [
+    "know",
+    true,
+    "Ottawa"
+   ],
+   "k14": [
+    "know",
+    true,
+    "Diamond"
+   ],
+   "k15": [
+    "know",
+    true,
+    "Jupiter"
+   ],
+   "k16": [
+    "know",
+    true,
+    "Antonio Vivaldi"
+   ],
+   "k17": [
+    "know",
+    true,
+    "Yen"
+   ],
+   "k18": [
+    "know",
+    true,
+    "Neil Armstrong"
+   ],
+   "k19": [
+    "know",
+    true,
+    "Mitochondria"
+   ],
+   "k20": [
+    "know",
+    true,
+    "Ankara"
+   ],
+   "k21": [
+    "know",
+    true,
+    "Charles Darwin"
+   ],
+   "k22": [
+    "know",
+    true,
+    "Nitrogen"
+   ],
+   "k23": [
+    "know",
+    true,
+    "1789"
+   ],
+   "k24": [
+    "know",
+    true,
+    "Jane Austen"
+   ],
+   "k25": [
+    "know",
+    true,
+    "NaCl"
+   ],
+   "k26": [
+    "know",
+    true,
+    "Louvre Museum"
+   ],
+   "k27": [
+    "know",
+    true,
+    "Potassium"
+   ],
+   "k28": [
+    "know",
+    true,
+    "206"
+   ],
+   "k29": [
+    "know",
+    true,
+    "Copernicus"
+   ],
+   "k30": [
+    "know",
+    true,
+    "Brasília"
+   ],
+   "r01": [
+    "reason",
+    true,
+    "5"
+   ],
+   "r02": [
+    "reason",
+    true,
+    "47"
+   ],
+   "r03": [
+    "reason",
+    true,
+    "9"
+   ],
+   "r04": [
+    "reason",
+    true,
+    "3"
+   ],
+   "r05": [
+    "reason",
+    true,
+    "Carol"
+   ],
+   "r06": [
+    "reason",
+    true,
+    "Saturday"
+   ],
+   "r07": [
+    "reason",
+    true,
+    "7.5"
+   ],
+   "r08": [
+    "reason",
+    true,
+    "Mary"
+   ],
+   "r09": [
+    "reason",
+    true,
+    "9"
+   ],
+   "r10": [
+    "reason",
+    true,
+    "yrassecen"
+   ],
+   "r11": [
+    "reason",
+    true,
+    "Friday"
+   ],
+   "r12": [
+    "reason",
+    true,
+    "3"
+   ],
+   "c01": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c02": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c03": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c04": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c05": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c06": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c07": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c08": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c09": [
+    "code",
+    true,
+    "pass"
+   ],
+   "c10": [
+    "code",
+    true,
+    "pass"
+   ],
+   "f01": [
+    "format",
+    true,
+    "[1,4,9,16,25]"
+   ],
+   "f02": [
+    "format",
+    true,
+    "Mercury,Venus,Earth,Mars,Jupiter,Saturn,Uranus,Neptune"
+   ],
+   "f03": [
+    "format",
+    true,
+    "4 rows"
+   ],
+   "f04": [
+    "format",
+    true,
+    "DONE"
+   ],
+   "a01": [
+    "agent",
+    true,
+    "write_file {\"path\": \"calc.py\", \"content\": \"def add(a, b):\\n    return a + b\\n\\n\\ndef mul(a, b):\\n    "
+   ],
+   "a02": [
+    "agent",
+    true,
+    "get_weather {\"city\": \"Paris\"}"
+   ],
+   "a03": [
+    "agent",
+    true,
+    "250 US dollars is approximately **231.75 euros**."
+   ],
+   "a04": [
+    "agent",
+    true,
+    "book_hotel {\"city\": \"Lisbon\", \"nights\": 3}"
+   ],
+   "a05": [
+    "agent",
+    true,
+    "read_file {\"path\": \"test_text.py\"}"
+   ],
+   "L1": [
+    "long",
+    true,
+    "4719-ALPHA"
+   ],
+   "L2": [
+    "long",
+    true,
+    "Tartu"
+   ],
+   "L3": [
+    "long",
+    true,
+    "2016, Legal"
+   ]
+  }
+ },
+ "speed": {
+  "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+   "load_and_first": 2.2,
+   "short": [
+    {
+     "ttft": 6.82,
+     "decode_tps": 5.61,
+     "prompt_tokens": 23,
+     "completion_tokens": 400,
+     "total": 77.91
+    },
+    {
+     "ttft": 0.43,
+     "decode_tps": 6.3,
+     "prompt_tokens": 23,
+     "completion_tokens": 400,
+     "total": 63.81
+    }
+   ],
+   "long": [
+    {
+     "ttft": 94.65,
+     "decode_tps": 4.36,
+     "prompt_tokens": 4786,
+     "completion_tokens": 40,
+     "total": 103.6,
+     "prefill_tps": 50.6
+    },
+    {
+     "ttft": 0.32,
+     "decode_tps": 11.91,
+     "prompt_tokens": 4786,
+     "completion_tokens": 40,
+     "total": 3.59,
+     "prefill_tps": 14956.2
+    }
+   ]
+  },
+  "deepseek-v4.1-flash-1017-strata-coder-iq2-xxs": {
+   "load_and_first": 441.7,
+   "short": [
+    {
+     "ttft": 5.66,
+     "decode_tps": 9.61,
+     "prompt_tokens": 23,
+     "completion_tokens": 400,
+     "total": 47.18
+    },
+    {
+     "ttft": 0.42,
+     "decode_tps": 14.16,
+     "prompt_tokens": 23,
+     "completion_tokens": 400,
+     "total": 28.6
+    }
+   ],
+   "long": [
+    {
+     "ttft": 18.33,
+     "decode_tps": 8.39,
+     "prompt_tokens": 4786,
+     "completion_tokens": 40,
+     "total": 22.98,
+     "prefill_tps": 261.1
+    },
+    {
+     "ttft": 0.27,
+     "decode_tps": 17.1,
+     "prompt_tokens": 4786,
+     "completion_tokens": 40,
+     "total": 2.55,
+     "prefill_tps": 17725.9
+    }
+   ]
+  }
+ },
+ "coder_nan_event": "After the 64-item suite, the first 400-token streaming answer on the Coder hit NaN at layer 39 after 276 tokens; every later request failed at token 0 until the engine was restarted. Not reproduced after a fresh load.",
+ "coder_backing_event": "The first Coder launch was refused: SHA-256 of an exFAT backing file did not match (inode-change path). The relaunch passed; a full rehash afterwards matched all six files."
+}

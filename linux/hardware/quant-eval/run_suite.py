@@ -1,7 +1,8 @@
 import json, sys, time, urllib.request, urllib.error
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
-from suite import requests
+import importlib, os
+requests = importlib.import_module(os.environ.get("SUITE", "suite")).requests
 URL = "http://127.0.0.1:30100/v1/chat/completions"
 out_dir = Path(sys.argv[1]); out_dir.mkdir(exist_ok=True)
 only = sys.argv[3].split(",") if len(sys.argv) > 3 else None
