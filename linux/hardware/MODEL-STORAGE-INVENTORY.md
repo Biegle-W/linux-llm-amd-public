@@ -1,5 +1,7 @@
 # Current LLM model storage — November 3, 2026
 
+**November 8 DeepSeek change (owner request):** kept UD-IQ1_S (`deepseek-v4.1-flash-1017-strata-unsloth-q1`, `deepseek-v4.1-flash-1017-maya-unsloth-q1`); removed both Coder IQ2_XXS routes and deleted `sharedNVME1/LLM-Models/DeepSeek-Coder-ISTA-20261103` (171 GB: IQ2_XXS shards and the 110 GB Engram IQ4_NL), the Strata and Maya Coder metadata packs and the Coder Engram view. See [Quant quality comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md).
+
 **November 8 Flash-Next change (owner request):** kept the GSQ-RCO IQ3_XXS route `qwen3.8-flash-next-iq3_xxs`; removed the `qwen3.8-flash-next-unsloth-iq1_m` route, deleted `sharedNVME1/LLM-Models/Strata-Unsloth-Qwen3.8-Flash-Next-UD-IQ1_M-V3.1-d96201194f10` (65 GB) and its isolated Strata 0.2.11 package (2.1 GB). See [Quant quality comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md).
 
 **November 7 Ripple change (owner request):** added `sharedSATA1/vLLM-Models/Ripple-65B-Preview-GPTQ-W4A16-v2` (35.2 GB, route `ripple-65b-vllm`); removed `sharedSATA1/GGUF-Models/Ripple-65B-Preview-GGUF` (38 GB AD-Q4_K_M, route `ripple-65b`), the `llama.cpp-b12189` worktree and the empty `sharedNVME1/models` download folder.
