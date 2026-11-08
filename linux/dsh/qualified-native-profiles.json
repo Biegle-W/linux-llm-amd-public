@@ -74,12 +74,12 @@
     "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs": {
       "status": "requires-local-validation",
       "family": "maya",
-      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
-      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
-      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+      "source": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
+      "source_commit": "7bf15ac68f9bb5026bd5298849608c83be4ff6c2",
+      "binary": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b/build-hip/maya-ds4",
       "binary_relative": "build-hip/maya-ds4",
-      "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
-      "config_sha256": "6d128589eb4d94d3eb43081c995f8c7bee13d94701f0309b10380410e561d0cc",
+      "binary_sha256": "6f838f15683179253d33363cb4913acb6b0a1ceba4dcb0ca5f5f208bd0fac9ae",
+      "config_sha256": "5f0fca7e512f63ae668cbdcd136eaeae00fcb6d6d20c42341cbe7e9608ec9404",
       "pack": "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack",
       "pack_metadata_sha256": {
         "ds4.txt": "4c4cb7b0b58e8589e6b0b2960c2959a234a3850e220f62e796af135cf5bd4030",
@@ -136,19 +136,19 @@
           "sha256": "3665b48c3bd46330780caf286ee40a087ac11499e5b7df8c943b098d10f426d4"
         }
       },
-      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "evidence": "hardware/generated/daily-update/2026-11-07T183647-192f02/maya",
       "transport": "Dual-card layer groups; no direct peer-copy claim",
       "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
     },
     "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
       "status": "requires-local-validation",
       "family": "maya",
-      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
-      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
-      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+      "source": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
+      "source_commit": "7bf15ac68f9bb5026bd5298849608c83be4ff6c2",
+      "binary": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b/build-hip/maya-ds4",
       "binary_relative": "build-hip/maya-ds4",
-      "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
-      "config_sha256": "ea7d170d276b795fd75b0075b2d263bb7d59a2eb6fc82fa6dea6d8871e9c9c9b",
+      "binary_sha256": "6f838f15683179253d33363cb4913acb6b0a1ceba4dcb0ca5f5f208bd0fac9ae",
+      "config_sha256": "208e8f53b545f572dadda923328b9152931adecbecb79357834bdb22c6afed8c",
       "pack": "/opt/local-llm/models/streaming/Maya/DeepSeek-Unsloth-Q1-20261103/pack",
       "pack_metadata_sha256": {
         "ds4.txt": "ae88e4283625824e9edac1f65628748e03a698f16bfaea4b0cd685d4430cb6bf",
@@ -202,19 +202,19 @@
           "sha256": "71c6c54dd1f20008e2130188cc655742d3738a365de4571d21a56de503b206b7"
         }
       },
-      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "evidence": "hardware/generated/daily-update/2026-11-07T183647-192f02/maya",
       "transport": "Dual-card layer groups; no direct peer-copy claim",
       "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
     },
     "glm-5.3-flash-maya": {
       "status": "requires-local-validation",
       "family": "maya",
-      "source": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
-      "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
-      "binary": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya",
+      "source": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
+      "source_commit": "7bf15ac68f9bb5026bd5298849608c83be4ff6c2",
+      "binary": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b/build-hip/maya",
       "binary_relative": "build-hip/maya",
-      "binary_sha256": "0df418f17706d7fccbcf7becc28770f02b87eb765f18c38c232b5b68a7e16360",
-      "config_sha256": "6c67f09ec09d55810f165ed6795bd20d00042969465d4da96141d82ff90a2a4e",
+      "binary_sha256": "5b562972ec071f53150d06b324c43a4d7d74a1304dcaac071ac72e235734d0b4",
+      "config_sha256": "3a0a6e9e30832657e3f2b0148bc2241cb7de98b63c8d0a13db88116870b52943",
       "pack": "/opt/local-llm/models/streaming/Maya/Maya-S-v2-IQ2_XXS/pack",
       "pack_metadata_sha256": {
         "sources.json": "83c44378cff6b648e2edb9b3e2b5b8c40c2a500114ce249396d68dc03cb0d6a3",
@@ -265,7 +265,7 @@
           "bytes": 47797478080
         }
       },
-      "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya",
+      "evidence": "hardware/generated/daily-update/2026-11-07T183647-192f02/maya",
       "transport": "Dual-card layer groups; no direct peer-copy claim",
       "reference_note": "Source-host content references; local device/inode/mtime seals omitted. Independent local qualification required."
     },

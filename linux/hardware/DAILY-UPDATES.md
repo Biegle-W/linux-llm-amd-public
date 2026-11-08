@@ -1,21 +1,13 @@
 # Daily engine updates
 
-**November 1 enabled-model DSH checks:** the seven remaining enabled routes each received one short harness tool-call attempt; combined with the earlier Empero result, **4/8 passed and 4/8 did not pass**. Every tested backend was unloaded. No full-context test, new throughput benchmark, context change or retry. Historical speed figures remain historical; daily updates stay paused. [Per-route results and failures](DSH-ENABLED-TOOL-CHECKS-2026-11-01.md).
+The existing 03:00 updater uses isolated builds, required per-card parity and one strict two-step DSH read-tool round trip per enabled qualified profile, then owned unload. It retains source/profile/weight identities, manual holds, rollback, 100°C thermal/storage, RAM/VRAM/spill/swap, heartbeat and cleanup guards. No routine full-window or throughput comparison is claimed. Rejected revisions wait for a changed upstream. The runtime handoff records schedule state. [Method](daily-update/README.md).
 
-**November 1 DSH and testing policy:** all enabled models use one **AMD server** provider. Calculate context limits from RAM/VRAM and engine allocations; run only a short tool-call check through the harness and unload. No routine full-context, near-window or long benchmark tests. This owner instruction supersedes older routine qualification requirements below. The daily updater remains paused. [Current policy](SHORT-HARNESS-TEST-POLICY-2026-11-01.md).
+## 2026-11-07
 
-**November 1 daily updater paused by owner:** the 03:00 timer is inactive, not enabled for automatic startup, and has no next run. The updater service is inactive. Resume only on an explicit owner request. Selected runtimes, RAM holds and guards remain. [Pause and verification](ENGINE-UPDATER-PAUSED-2026-11-01.md).
-
-The configured updater checks candidate engine builds in isolation. Its timer/hold
-status is recorded in the canonical runtime handoff; this text does not enable it.
-Promotion retains fixed performance/marker/quality gates and valid lifecycle
-memory evidence under loading-swap-v4: loading/parked swap is allowed. Sustained
-inference swap writes are limited to 128 MiB/s and combined reads+writes to 160 MiB/s
-over 30-second windows. Pressure alone does not stop work. These are operational
-ceilings, not SSD endurance guarantees. Dedicated-VRAM spill remains guarded. Independent RAM,
-GPU headroom, ownership and thermal protections remain. Manually pinned model
-runtimes are excluded from global update comparisons and reported separately.
-Anything else is rolled back. Newest entries first. Method: [daily-update/README.md](daily-update/README.md).
+- **llama.cpp** `9c9074e14e02` → `818ac6b078e3`: **promoted**. Every selected profile passed its strict two-step read-tool check; required per-card parity passed.
+- **Strata** `ffa80d73133e` → `146df3c46873`: **promoted**. Every selected profile passed its strict two-step read-tool check; required per-card parity passed.
+- **Maya** `c1670044bbc0` → `7bf15ac68f9b`: **promoted**. Every selected profile passed its strict two-step read-tool check; required per-card parity passed.
+- **Strata DeepSeek** `ffa80d73133e` → `146df3c46873`: **rejected**. Step: command failed (2): source hardware/rocm-env.sh && export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/llm-tools/cuda-build/lib" && "hardware/generated/daily-update/2026-11-07T190550-1c1377/strata-dsv41/src/build-hip/ds4_iq_test" --devices 0,1 --type 19,16,18,21,22
 
 ## 2026-10-30
 

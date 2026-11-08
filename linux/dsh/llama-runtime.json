@@ -4,9 +4,10 @@
     "empero-qwen3.8-35b-a3b",
     "nemotron-3.5-super-iq3",
     "ornith-1.5-122b",
-    "flint-40b-a2.5b"
+    "flint-40b-a2.5b",
+    "ripple-65b"
   ],
-  "source_commit": "9c9074e14e029a16fc3298e6bc6a3ef00a0b9c11",
+  "source_commit": "818ac6b078e345e59ffa4b1ed3b1ce1b0ae83827",
   "runtime_overrides": {},
   "source_overrides": {},
   "paused_models": {
@@ -17,7 +18,7 @@
     "flint-40b-a2.5b",
     "ornith-1.5-122b"
   ],
-  "source_path": "/opt/local-llm/hardware/generated/daily-update/2026-11-05T042531-ca43ea/llama/llama.cpp",
+  "source_path": "/opt/local-llm/hardware/generated/daily-update/2026-11-07T181342-144d82/llama/llama.cpp",
   "qualification": {
     "evidence": "hardware/results/REALISTIC-LARGE-MODELS-2026-11-05.json",
     "models": [

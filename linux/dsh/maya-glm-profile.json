@@ -18,7 +18,7 @@
     "8192"
   ],
   "backend": "hip",
-  "cwd": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+  "cwd": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
   "env": {
     "MAYA_GLM_PREFILL_FUSED": "0",
     "MAYA_GLM_PREFILL_MB": "4096",
@@ -32,7 +32,7 @@
     "STRATA_REQUEST_QUIET_S": "1800",
     "STRATA_ENGINE_STALL_S": "1800"
   },
-  "exe": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya",
+  "exe": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b/build-hip/maya",
   "expert_profile_seed_sha256": "53b03a13482b6fedc599d149be2d69f88c38d9edc4611a740da46314ab1dc5a7",
   "gpu": [
     0,
@@ -55,11 +55,11 @@
   ],
   "local_validation": {
     "status": "requires-local-validation",
-    "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
-    "binary_sha256": "0df418f17706d7fccbcf7becc28770f02b87eb765f18c38c232b5b68a7e16360",
+    "source_commit": "7bf15ac68f9bb5026bd5298849608c83be4ff6c2",
+    "binary_sha256": "5b562972ec071f53150d06b324c43a4d7d74a1304dcaac071ac72e235734d0b4",
     "scope": "Sanitized source-host short-test reference; independently qualify and seal on the receiving host.",
-    "config_sha256": "6c67f09ec09d55810f165ed6795bd20d00042969465d4da96141d82ff90a2a4e",
-    "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya"
+    "config_sha256": "3a0a6e9e30832657e3f2b0148bc2241cb7de98b63c8d0a13db88116870b52943",
+    "evidence": "hardware/generated/daily-update/2026-11-07T183647-192f02/maya"
   },
   "log": "/opt/local-llm/dsh/logs/maya-glm-5.3-flash-maya.log",
   "mcp_servers": {},

@@ -1,5 +1,5 @@
 {
-  "exe": "/opt/local-llm/qualified-sources/maya-c1670044bbc0/build-hip/maya-ds4",
+  "exe": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b/build-hip/maya-ds4",
   "args": [
     "--pack",
     "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack",
@@ -16,7 +16,7 @@
     "--cpu-threads",
     "14"
   ],
-  "cwd": "/opt/local-llm/qualified-sources/maya-c1670044bbc0",
+  "cwd": "/opt/local-llm/qualified-sources/maya-7bf15ac68f9b",
   "tokenizer": "/opt/local-llm/models/streaming/Maya/DeepSeek-Coder-ISTA-20261103/pack/tokenizer",
   "backend": "hip",
   "model_name": "deepseek-v4.1-flash-1017-maya-coder-iq2-xxs",
@@ -75,11 +75,11 @@
   "worker_swap_max_bytes": null,
   "local_validation": {
     "status": "requires-local-validation",
-    "source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
-    "binary_sha256": "3a01fdc7125c7f8000fc9526c5bf811f534c8239c8e2d1b6e369231d02dee8b7",
+    "source_commit": "7bf15ac68f9bb5026bd5298849608c83be4ff6c2",
+    "binary_sha256": "6f838f15683179253d33363cb4913acb6b0a1ceba4dcb0ca5f5f208bd0fac9ae",
     "scope": "Sanitized source-host short-test reference; independently qualify and seal on the receiving host.",
-    "config_sha256": "6d128589eb4d94d3eb43081c995f8c7bee13d94701f0309b10380410e561d0cc",
-    "evidence": "hardware/generated/daily-update/2026-11-05T040120-ffa2b0/maya"
+    "config_sha256": "5f0fca7e512f63ae668cbdcd136eaeae00fcb6d6d20c42341cbe7e9608ec9404",
+    "evidence": "hardware/generated/daily-update/2026-11-07T183647-192f02/maya"
   },
   "engine_ready_s": 1800
 }

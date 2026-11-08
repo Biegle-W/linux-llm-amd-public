@@ -77,19 +77,19 @@ Four former timing-limited native candidates now passed and are enabled under th
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-11-05 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions after the 2026-11-07 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `9c9074e14e02` |
+| llama.cpp | `818ac6b078e3` |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `ffa80d73133e` |
-| Maya | `c1670044bbc0` |
+| Strata | `146df3c46873` |
+| Maya | `7bf15ac68f9b` |
 | Strata DeepSeek | `ffa80d73133e` |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last run: Maya promoted c167 after three strict tool checks; llama.cpp promoted9c9074 for all three enabled profiles.
+Last run: llama.cpp promoted; Strata promoted; Maya promoted; Strata DeepSeek rejected.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Selected Maya uses `c1670044bbc09310f35f9d00f7596c50ae8a38f1`; its GLM fused prefill remains disabled. Native profiles retain32K context, requested8GiB reserves and the normal6GiB startup guard. Strata Q1 retains its36GiB cache and60/52GiB physical/available RAM admission. Retired legacy pins remain separate.
