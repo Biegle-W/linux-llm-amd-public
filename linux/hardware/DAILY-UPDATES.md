@@ -13,8 +13,9 @@ Installed by hand with the owner's OK (ComfyUI stopped for the GPU checks, resta
 | llama.cpp | `818ac6b078e3` → `0a94a3f28968` | empero, Ornith, Flint | **Promoted.** Tool-call decode 172.6 / 11.3 / 64.9 tok/s (this morning 173.3 / 11.6 / 64.0). |
 | Strata | `146df3c46873` → `504b143342a9` (0.1.59.1) | Flash Next | **Promoted.** The tool check showed 27.3 tok/s decode, timed over only 76 tokens. A 400-token A/B through the hub showed no regression: old 52.1 / 51.8, new 49.5 / 51.9 tok/s decode; prompt read 791–841 vs 788–831 tok/s. A read-only review of the 220 commits found no decode-path cause. |
 | Maya | `7bf15ac68f9b` → `00655481ce2b` (1.1.57) | GLM, Maya DeepSeek | **Promoted.** Parity 34/36 pass; `hip_prefill_fused_parity` failed on both cards (non-blocking by rule; the GLM profile runs with `MAYA_GLM_PREFILL_FUSED=0`). Tool step: DeepSeek 106 s (was 198 s), GLM 31 s (was 116 s). Load: DeepSeek 72 s, GLM 243 s (was 119 s). `maya/runtime.json` pin reconciled to 1.1.57. |
+| Strata DeepSeek | `ffa80d73133e` → `504b143342a9` (0.1.59.1) | Strata DeepSeek | **Promoted** (owner OK, same evening). CPU tests 64 pass. Parity passed except the same marginal row as November 7, `IQ3_XXS wmma vs scalar y` 3.14e-3 vs 3e-3, identical on both cards (warning by the November 7 policy). Tool step: TTFT 54.7 s (was 57.2), decode 5.5 tok/s (was 5.6), answer step 12.5 s (was 12.5); load 68 s (was 140 s). `strata-dsv41/runtime.json` pin (stale at `8183c6b`) reconciled. |
 
-Not updated: Strata DeepSeek (far behind upstream; its November 7 candidate failed `ds4_iq_test`). vLLM and SGLang were current. llama.cpp upstream had already moved to `3d94ffe452f4` by the end of the session. Evidence: `hardware/generated/daily-update/2026-11-09T-manual/`.
+vLLM and SGLang were current. llama.cpp upstream had already moved to `3d94ffe452f4` by the end of the session. Evidence: `hardware/generated/daily-update/2026-11-09T-manual/`.
 
 ## 2026-11-09 — scripted updater retired; first manual check
 

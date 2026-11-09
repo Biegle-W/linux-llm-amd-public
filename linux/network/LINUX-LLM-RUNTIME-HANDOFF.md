@@ -72,10 +72,10 @@ uname -r   # expect 7.0.14-42-vmpt1
 | SGLang | `f84475ccf593` |
 | Strata | `504b143342a9` |
 | Maya | `00655481ce2b` (1.1.57) |
-| Strata DeepSeek | `ffa80d73133e` |
+| Strata DeepSeek | `504b143342a9` (0.1.59.1) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last update (November 9, manual): llama.cpp, Strata and Maya promoted after strict short tool checks; Strata DeepSeek not attempted.
+Last update (November 9, manual): llama.cpp, Strata, Maya and Strata DeepSeek promoted after strict short tool checks.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Retired legacy pins remain separate; they are not the selected native sources.
@@ -97,7 +97,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 
 ## Open items
 
-1. **Engine updates (checked and installed by hand).** November 9: llama.cpp, Strata and Maya updated and verified. Still behind: Strata DeepSeek (far behind upstream; its November 7 candidate failed `ds4_iq_test`, so it needs a careful build and parity run). Check upstream each session; GPU work needs the owner's OK while ComfyUI is resident. The old engine stage folders `hardware/generated/daily-update/2026-11-07T181342-*` (llama) and `2026-11-07T183647-*` (Maya) are no longer referenced by production; deleting them is the owner's call.
+1. **Engine updates (checked and installed by hand).** November 9: llama.cpp, Strata, Maya and Strata DeepSeek updated and verified; all engines were current at that point except llama.cpp, whose upstream had moved on to `3d94ffe`. Check upstream each session; GPU work needs the owner's OK while ComfyUI is resident. The old engine stage folders `hardware/generated/daily-update/2026-11-07T181342-*` (llama) and `2026-11-07T183647-*` (Maya) are no longer referenced by production; deleting them is the owner's call.
 2. **One DeepSeek NaN event** on Sapphire (CUDA1) at the new settings, in about 141 requests. If it recurs, raise the Strata DeepSeek reserve to 4 GiB first.
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
 4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.
