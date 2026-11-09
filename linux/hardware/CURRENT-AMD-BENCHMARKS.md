@@ -1,26 +1,29 @@
-# Current AMD results — November 8, 2026
+# Current AMD results — November 9, 2026
 
-One row per enabled route, with the latest measurement at the current settings. Every number comes from a short guarded check; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md).
+One row per enabled route, all from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md).
 
-| Route | Engine | Decode tok/s | Prompt read tok/s | Load s | Quality (graded suite) | Source |
-|---|---|---:|---:|---:|---|---|
-| `empero-qwen3.8-35b-a3b` | llama.cpp | 174.5 | 2,874 (7K) | 46.7 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `flint-40b-a2.5b` | llama.cpp | 64.8 | 4,980 (6.5K) | 50.7 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `ornith-1.5-122b` | llama.cpp | 11.3 | 651 (7K) | 151.9 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `qwen3.8-27b-vllm` | vLLM TP2 | 153.7 | 1,723 (7K) | 89.5 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | 218.6 | 1,741 (7.4K) | 34.4 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `nemotron-3.5-bolt-vllm` | vLLM | 29.6 | 2,092 (7.7K) | 224.4 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `sage-a1.5` | vLLM | 136.5 | 5,698 (7K) | 113.0 | — | [Nov 7](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md) |
-| `ripple-65b-vllm` | vLLM TP2 | 28–29 | ~755 (8K) | — | 12/12 known-answer | [Nov 7](RIPPLE-65B-VLLM-2026-11-07.md) |
-| `qwen3.8-flash-next-iq3_xxs` | Strata | 50.2–52.4 | 777–821 (5.5K) | 96.8 | 53/54; 62/64 harder | [Nov 8](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md) |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | 7.5–10.1 | 120 (4.8K) | 57–157 | 64/64 harder (one NaN event in an earlier run) | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | 9.5–17.1 | 125 (4.8K) | 133 | 64/64 harder | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
-| `glm-5.3-flash-maya` | Maya | 17.8–22.1 | 396 (4.9K) | 83 | 62/64 harder | [Nov 8](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md) |
+| Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite |
+|---|---|---|---:|---:|---:|---:|---:|
+| `empero-qwen3.8-35b-a3b` | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 |
+| `flint-40b-a2.5b` | llama.cpp | passed | 64.0 | 4,653 | 50.7 | 43* | 36* |
+| `ornith-1.5-122b` | llama.cpp | passed | 11.6 | 602 | 167.9 | 53 | 62 |
+| `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 |
+| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 |
+| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 |
+| `sage-a1.5` | vLLM | passed | 140.0 | 5,619 | 88.5 | 51 | 61 |
+| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 50* | 56* |
+| `qwen3.8-flash-next-iq3_xxs` | Strata | passed | 66.3 | 710 | 69.5 | 51 | 62 |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 |
+| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 |
 
 How to read it:
-- November 7 rows: one DSH read-tool round trip with about 7K prompt tokens and 25 tool definitions. Decode is measured on a short tool-call answer.
-- November 8 rows: two 400-token answers (cold, then warm) and a 4.8–5.5K-token document prompt through the hub.
-- Quality: the 54-item and harder 64-item suites from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md), at temperature 0 with thinking off.
-- Machine-readable results are in [results/](results/README.md).
+- **Tool call:** one DSH read-tool round trip with about 6.4K prompt tokens and 25 tool definitions, under the guarded harness ([standard](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)).
+- **Decode** is measured on that short tool-call answer (54–171 tokens). **Prompt read** is that prompt divided by time to first token, from a cold start.
+- **Suites:** the 54-item suite and the harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md), through the hub at temperature 0 with thinking off.
+- \* Flint and Ripple keep reasoning with thinking off and run out of the 60-token budget on short-answer items. Their low scores are mostly empty answers, not wrong ones; they are not comparable with the other routes.
+- † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)).
+- ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
+- Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json).
 
-Not measured yet: a sustained, matched benchmark across all 12 routes, and full-context quality.
+Not measured yet: a sustained, matched benchmark across all 12 routes, thinking mode, and full-context quality.

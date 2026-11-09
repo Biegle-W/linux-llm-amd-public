@@ -1,0 +1,982 @@
+{
+  "date": "2026-11-09",
+  "boot_id": "d81d1623-0003-4909-83d3-4988534975ab",
+  "campaign": "campaign 50 (hardware/generated, private)",
+  "standard": "hardware/AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md",
+  "peers": "passed (capability, local, integrity-ipc, rccl P2P/IPC), rerun before each attempt",
+  "routes_passed": 12,
+  "routes_total": 12,
+  "deviations": [
+    "glm-5.3-flash-maya: watchdog heartbeat 30 s instead of 6 s (owner choice, Nov 9)"
+  ],
+  "quality_method": "hardware/quant-eval suite.py (54) and suite2.py (64) through the hub, temperature 0, thinking off; graded by grade.py / grade2.py",
+  "benchmark": [
+    {
+      "route": "empero-qwen3.8-35b-a3b",
+      "engine": "llama.cpp",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 47.7,
+      "tool_prompt": 6428,
+      "tool_ttft_s": 2.22,
+      "tool_total_s": 2.68,
+      "tool_out_tok": 79,
+      "tool_tok_s": 173.3,
+      "tool_prefill_tok_s": 2893,
+      "answer_prompt": 6631,
+      "answer_ttft_s": 0.15,
+      "answer_total_s": 0.31,
+      "answer_out_tok": 18,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 97,
+        "initial_input_tokens": 6428,
+        "usage_per_step": [
+          {
+            "inputTokens": 6428,
+            "outputTokens": 79,
+            "totalTokens": 6507
+          },
+          {
+            "inputTokens": 125,
+            "outputTokens": 18,
+            "totalTokens": 6649,
+            "cacheReadTokens": 6506
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        11.98,
+        10.68
+      ],
+      "startup_free_VRAM_GiB": [
+        12.22,
+        11.08
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 174.5,
+      "nov7_load_s": 46.7,
+      "nov7_prefill_tok_s": 2874,
+      "suite54": {
+        "math": "18/18",
+        "code": "12/12",
+        "know": "13/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "53/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "12/12",
+        "code": "9/10",
+        "format": "4/4",
+        "agent": "4/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 0,
+      "quality_seconds": 124
+    },
+    {
+      "route": "flint-40b-a2.5b",
+      "engine": "llama.cpp",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 50.7,
+      "tool_prompt": 5895,
+      "tool_ttft_s": 1.27,
+      "tool_total_s": 3.94,
+      "tool_out_tok": 171,
+      "tool_tok_s": 64.0,
+      "tool_prefill_tok_s": 4653,
+      "answer_prompt": 6153,
+      "answer_ttft_s": 0.19,
+      "answer_total_s": 1.86,
+      "answer_out_tok": 106,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 277,
+        "initial_input_tokens": 5895,
+        "usage_per_step": [
+          {
+            "inputTokens": 5895,
+            "outputTokens": 171,
+            "totalTokens": 6066
+          },
+          {
+            "inputTokens": 88,
+            "outputTokens": 106,
+            "totalTokens": 6259,
+            "cacheReadTokens": 6065
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        9.59,
+        11.19
+      ],
+      "startup_free_VRAM_GiB": [
+        9.85,
+        11.41
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 64.8,
+      "nov7_load_s": 50.7,
+      "nov7_prefill_tok_s": 4980,
+      "suite54": {
+        "math": "17/18",
+        "code": "12/12",
+        "know": "6/14",
+        "format": "4/6",
+        "tool": "4/4",
+        "total": "43/54"
+      },
+      "suite64": {
+        "know": "17/30",
+        "reason": "0/12",
+        "code": "10/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "0/3",
+        "total": "36/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 36,
+      "quality_seconds": 263
+    },
+    {
+      "route": "ornith-1.5-122b",
+      "engine": "llama.cpp",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 167.9,
+      "tool_prompt": 6419,
+      "tool_ttft_s": 10.66,
+      "tool_total_s": 18.01,
+      "tool_out_tok": 85,
+      "tool_tok_s": 11.6,
+      "tool_prefill_tok_s": 602,
+      "answer_prompt": 6629,
+      "answer_ttft_s": 2.72,
+      "answer_total_s": 4.4,
+      "answer_out_tok": 21,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 106,
+        "initial_input_tokens": 6419,
+        "usage_per_step": [
+          {
+            "inputTokens": 6419,
+            "outputTokens": 85,
+            "totalTokens": 6504
+          },
+          {
+            "inputTokens": 126,
+            "outputTokens": 21,
+            "totalTokens": 6650,
+            "cacheReadTokens": 6503
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        4.29,
+        5.03
+      ],
+      "startup_free_VRAM_GiB": [
+        4.79,
+        5.55
+      ],
+      "max_owned_swap_MiB": 1302.2,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 11.3,
+      "nov7_load_s": 151.9,
+      "nov7_prefill_tok_s": 651,
+      "suite54": {
+        "math": "17/18",
+        "code": "12/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "53/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "10/10",
+        "format": "4/4",
+        "agent": "4/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 0,
+      "quality_seconds": 970
+    },
+    {
+      "route": "qwen3.8-27b-vllm",
+      "engine": "vLLM TP2",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 89.5,
+      "tool_prompt": 6420,
+      "tool_ttft_s": 3.64,
+      "tool_total_s": 4.13,
+      "tool_out_tok": 77,
+      "tool_tok_s": 155.1,
+      "tool_prefill_tok_s": 1766,
+      "answer_prompt": 6619,
+      "answer_ttft_s": 0.32,
+      "answer_total_s": 0.49,
+      "answer_out_tok": 18,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 95,
+        "initial_input_tokens": 6420,
+        "usage_per_step": [
+          {
+            "inputTokens": 6420,
+            "outputTokens": 77,
+            "totalTokens": 6497
+          },
+          {
+            "inputTokens": 6619,
+            "outputTokens": 18,
+            "totalTokens": 6637
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        7.1,
+        7.14
+      ],
+      "startup_free_VRAM_GiB": [
+        7.31,
+        7.35
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 153.7,
+      "nov7_load_s": 89.5,
+      "nov7_prefill_tok_s": 1723,
+      "suite54": {
+        "math": "16/18",
+        "code": "12/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "52/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "9/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 2,
+      "quality_seconds": 198
+    },
+    {
+      "route": "qwen3.8-27b-sglang-dflash2",
+      "engine": "SGLang TP2",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 34.4,
+      "tool_prompt": 6705,
+      "tool_ttft_s": 3.86,
+      "tool_total_s": 4.24,
+      "tool_out_tok": 80,
+      "tool_tok_s": 211.2,
+      "tool_prefill_tok_s": 1736,
+      "answer_prompt": 6908,
+      "answer_ttft_s": 0.29,
+      "answer_total_s": 0.41,
+      "answer_out_tok": 16,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 96,
+        "initial_input_tokens": 6705,
+        "usage_per_step": [
+          {
+            "inputTokens": 6705,
+            "outputTokens": 80,
+            "totalTokens": 6785
+          },
+          {
+            "inputTokens": 252,
+            "outputTokens": 16,
+            "totalTokens": 6924,
+            "cacheReadTokens": 6656
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        4.38,
+        4.42
+      ],
+      "startup_free_VRAM_GiB": [
+        5.02,
+        5.06
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 218.6,
+      "nov7_load_s": 34.4,
+      "nov7_prefill_tok_s": 1741,
+      "suite54": {
+        "math": "16/18",
+        "code": "12/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "52/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "9/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 2,
+      "quality_seconds": 120
+    },
+    {
+      "route": "nemotron-3.5-bolt-vllm",
+      "engine": "vLLM",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 219.4,
+      "tool_prompt": 6978,
+      "tool_ttft_s": 3.55,
+      "tool_total_s": 5.57,
+      "tool_out_tok": 81,
+      "tool_tok_s": 40.1,
+      "tool_prefill_tok_s": 1963,
+      "answer_prompt": 7183,
+      "answer_ttft_s": 0.36,
+      "answer_total_s": 0.94,
+      "answer_out_tok": 21,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 102,
+        "initial_input_tokens": 6978,
+        "usage_per_step": [
+          {
+            "inputTokens": 6978,
+            "outputTokens": 81,
+            "totalTokens": 7059
+          },
+          {
+            "inputTokens": 7183,
+            "outputTokens": 21,
+            "totalTokens": 7204
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        1.02,
+        1.06
+      ],
+      "startup_free_VRAM_GiB": [
+        1.5,
+        1.54
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 29.6,
+      "nov7_load_s": 224.4,
+      "nov7_prefill_tok_s": 2092,
+      "suite54": {
+        "math": "17/18",
+        "code": "11/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "52/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "8/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "3/3",
+        "total": "61/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 0,
+      "quality_seconds": 410
+    },
+    {
+      "route": "sage-a1.5",
+      "engine": "vLLM",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 88.5,
+      "tool_prompt": 6395,
+      "tool_ttft_s": 1.14,
+      "tool_total_s": 1.65,
+      "tool_out_tok": 71,
+      "tool_tok_s": 140.0,
+      "tool_prefill_tok_s": 5619,
+      "answer_prompt": 6582,
+      "answer_ttft_s": 0.19,
+      "answer_total_s": 0.32,
+      "answer_out_tok": 18,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 89,
+        "initial_input_tokens": 6395,
+        "usage_per_step": [
+          {
+            "inputTokens": 6395,
+            "outputTokens": 71,
+            "totalTokens": 6466
+          },
+          {
+            "inputTokens": 6582,
+            "outputTokens": 18,
+            "totalTokens": 6600
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        6.78,
+        6.82
+      ],
+      "startup_free_VRAM_GiB": [
+        7.17,
+        7.21
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 136.5,
+      "nov7_load_s": 113.0,
+      "nov7_prefill_tok_s": 5698,
+      "suite54": {
+        "math": "16/18",
+        "code": "11/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "51/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "8/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "3/3",
+        "total": "61/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 2,
+      "quality_seconds": 169
+    },
+    {
+      "route": "ripple-65b-vllm",
+      "engine": "vLLM TP2",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 117.6,
+      "tool_prompt": 6244,
+      "tool_ttft_s": 8.18,
+      "tool_total_s": 10.89,
+      "tool_out_tok": 76,
+      "tool_tok_s": 28.0,
+      "tool_prefill_tok_s": 764,
+      "answer_prompt": 6423,
+      "answer_ttft_s": 0.42,
+      "answer_total_s": 0.87,
+      "answer_out_tok": 13,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 89,
+        "initial_input_tokens": 6244,
+        "usage_per_step": [
+          {
+            "inputTokens": 6244,
+            "outputTokens": 76,
+            "totalTokens": 6320
+          },
+          {
+            "inputTokens": 6423,
+            "outputTokens": 13,
+            "totalTokens": 6436
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        2.19,
+        2.23
+      ],
+      "startup_free_VRAM_GiB": [
+        2.75,
+        2.79
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": null,
+      "nov7_load_s": null,
+      "nov7_prefill_tok_s": null,
+      "suite54": {
+        "math": "18/18",
+        "code": "12/12",
+        "know": "11/14",
+        "format": "5/6",
+        "tool": "4/4",
+        "total": "50/54"
+      },
+      "suite64": {
+        "know": "28/30",
+        "reason": "9/12",
+        "code": "9/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "1/3",
+        "total": "56/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 12,
+      "quality_seconds": 451
+    },
+    {
+      "route": "qwen3.8-flash-next-iq3_xxs",
+      "engine": "Strata",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 69.5,
+      "tool_prompt": 6193,
+      "tool_ttft_s": 8.73,
+      "tool_total_s": 9.89,
+      "tool_out_tok": 77,
+      "tool_tok_s": 66.3,
+      "tool_prefill_tok_s": 710,
+      "answer_prompt": 6394,
+      "answer_ttft_s": 7.76,
+      "answer_total_s": 8.09,
+      "answer_out_tok": 20,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 97,
+        "initial_input_tokens": 6193,
+        "usage_per_step": [
+          {
+            "inputTokens": 6193,
+            "outputTokens": 77,
+            "totalTokens": 6270
+          },
+          {
+            "inputTokens": 6394,
+            "outputTokens": 20,
+            "totalTokens": 6414
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        1.7,
+        0.78
+      ],
+      "startup_free_VRAM_GiB": [
+        1.77,
+        0.84
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 66.5,
+      "nov7_load_s": 107.5,
+      "nov7_prefill_tok_s": 744,
+      "suite54": {
+        "math": "16/18",
+        "code": "12/12",
+        "know": "13/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "51/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "11/12",
+        "code": "10/10",
+        "format": "4/4",
+        "agent": "4/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 2,
+      "quality_seconds": 348
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "engine": "Strata DeepSeek",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 140.1,
+      "tool_prompt": 6323,
+      "tool_ttft_s": 57.21,
+      "tool_total_s": 75.74,
+      "tool_out_tok": 104,
+      "tool_tok_s": 5.6,
+      "tool_prefill_tok_s": 111,
+      "answer_prompt": 6541,
+      "answer_ttft_s": 9.61,
+      "answer_total_s": 12.46,
+      "answer_out_tok": 16,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 120,
+        "initial_input_tokens": 6323,
+        "usage_per_step": [
+          {
+            "inputTokens": 6323,
+            "outputTokens": 104,
+            "totalTokens": 6427
+          },
+          {
+            "inputTokens": 115,
+            "outputTokens": 16,
+            "totalTokens": 6557,
+            "cacheReadTokens": 6426
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        0.5,
+        1.57
+      ],
+      "startup_free_VRAM_GiB": [
+        1.67,
+        1.74
+      ],
+      "max_owned_swap_MiB": 317.5,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 3.3,
+      "nov7_load_s": 62.2,
+      "nov7_prefill_tok_s": 80,
+      "suite54": {
+        "math": "18/18",
+        "code": "12/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "54/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "12/12",
+        "code": "10/10",
+        "format": "3/4",
+        "agent": "5/5",
+        "long": "2/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 1,
+      "quality_seconds": 1514
+    },
+    {
+      "route": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "engine": "Maya",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 72.7,
+      "tool_prompt": 6323,
+      "tool_ttft_s": 182.22,
+      "tool_total_s": 197.54,
+      "tool_out_tok": 104,
+      "tool_tok_s": 6.8,
+      "tool_prefill_tok_s": 35,
+      "answer_prompt": 6539,
+      "answer_ttft_s": 5.48,
+      "answer_total_s": 6.76,
+      "answer_out_tok": 14,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 118,
+        "initial_input_tokens": 6323,
+        "usage_per_step": [
+          {
+            "inputTokens": 6323,
+            "outputTokens": 104,
+            "totalTokens": 6427
+          },
+          {
+            "inputTokens": 113,
+            "outputTokens": 14,
+            "totalTokens": 6553,
+            "cacheReadTokens": 6426
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        1.25,
+        1.34
+      ],
+      "startup_free_VRAM_GiB": [
+        1.58,
+        1.66
+      ],
+      "max_owned_swap_MiB": 0.0,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 6,
+      "nov7_tool_tok_s": 1.2,
+      "nov7_load_s": 50.2,
+      "nov7_prefill_tok_s": 39,
+      "suite54": {
+        "math": "18/18",
+        "code": "12/12",
+        "know": "14/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "54/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "12/12",
+        "code": "10/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "2/3",
+        "total": "63/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 0,
+      "quality_seconds": 1226
+    },
+    {
+      "route": "glm-5.3-flash-maya",
+      "engine": "Maya",
+      "status": "passed-one-short-DSH-check",
+      "guard": "passed",
+      "load_s": 119.0,
+      "tool_prompt": 5986,
+      "tool_ttft_s": 105.75,
+      "tool_total_s": 116.19,
+      "tool_out_tok": 54,
+      "tool_tok_s": 5.2,
+      "tool_prefill_tok_s": 57,
+      "answer_prompt": 6137,
+      "answer_ttft_s": 12.66,
+      "answer_total_s": 15.94,
+      "answer_out_tok": 18,
+      "tool": {
+        "exit_code": 0,
+        "tool_calls": 1,
+        "tool_names": [
+          "read"
+        ],
+        "tool_result_statuses": [
+          "completed"
+        ],
+        "model_steps": 2,
+        "generated_tokens": 72,
+        "initial_input_tokens": 5986,
+        "usage_per_step": [
+          {
+            "inputTokens": 5986,
+            "outputTokens": 54,
+            "totalTokens": 6040
+          },
+          {
+            "inputTokens": 152,
+            "outputTokens": 18,
+            "totalTokens": 6155,
+            "cacheReadTokens": 5985
+          }
+        ],
+        "final_marker_correct": true,
+        "tool_call_result_ids_match": true
+      },
+      "min_free_VRAM_GiB": [
+        1.57,
+        1.56
+      ],
+      "startup_free_VRAM_GiB": [
+        1.75,
+        1.74
+      ],
+      "max_owned_swap_MiB": 3364.8,
+      "max_owned_spill_bytes": 0,
+      "owned_cgroups_empty": true,
+      "remaining_KFD_clients": [],
+      "heartbeat_s": 30,
+      "nov7_tool_tok_s": 2.1,
+      "nov7_load_s": 64.2,
+      "nov7_prefill_tok_s": 35,
+      "suite54": {
+        "math": "18/18",
+        "code": "12/12",
+        "know": "13/14",
+        "format": "6/6",
+        "tool": "4/4",
+        "total": "53/54"
+      },
+      "suite64": {
+        "know": "30/30",
+        "reason": "10/12",
+        "code": "10/10",
+        "format": "4/4",
+        "agent": "5/5",
+        "long": "3/3",
+        "total": "62/64"
+      },
+      "quality_errors": 0,
+      "quality_length_capped": 0,
+      "quality_seconds": 674
+    }
+  ]
+}

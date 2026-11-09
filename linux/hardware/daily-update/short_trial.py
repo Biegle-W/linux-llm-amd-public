@@ -154,7 +154,8 @@ try:
     from strata_memory import vram_snapshot
     result['normal_startup_VRAM']=vram_snapshot()
     if cfg.get('normal_native_startup'):
-        assert len(result['normal_startup_VRAM'])==2 and min(x['free'] for x in result['normal_startup_VRAM'])>=6*2**30,'Normal6GiBper-card startup headroom not met'
+        import resource_policy  # owner headroom policy; the pre-November 3 6 GiB floor was dropped on November 9
+        assert len(result['normal_startup_VRAM'])==2 and min(x['free'] for x in result['normal_startup_VRAM'])>=resource_policy.VRAM_RESERVE_BYTES,'Per-card startup VRAM headroom below the owner policy'
     guard.ready(proc, phase='idle')
     phase('idle')
     save()
