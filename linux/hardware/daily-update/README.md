@@ -1,6 +1,6 @@
 # Daily engine updater
 
-The existing `llm-daily-update.timer` targets **03:00 local time**, with `Persistent=false`: a missed night does not start a daytime catch-up run. The owner requested its restoration on November 5. Check actual timer state; the current runtime handoff records completed restoration and qualification outcomes. Other paused schedules are separate.
+**Retired November 9, 2026 (owner): "instead of using a script to upgrade, you should actively monitor the updates from now on".** `llm-daily-update.timer` is disabled. Engine updates are checked and installed by hand. The read-only `current()`/`latest()` methods in `daily_update.py` may still be used to compare versions, but the script is not run to upgrade. The unit sources stay in `systemd/`. The recovery service `llm-daily-update-recover.service` stays enabled; it only rolls back a build that an interrupted run left provisionally installed. What follows describes the retired script.
 
 The scheduled CLI is `daily_update.py`; it dispatches to `nightly.py`. The older builder APIs remain available to isolated preparation tools. The scheduled path uses **one strict two-step DSH read-tool round trip per enabled qualified profile**, then owned unload. It does not run the former same-night baseline, routine full-window tests or throughput promotion gates.
 

@@ -4,7 +4,7 @@ This is the current operational summary for Linux, Windows and phone API clients
 
 ## State in one paragraph
 
-Twelve qualified routes are enabled and all passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. A resident ComfyUI TP2 worker currently holds the GPUs, so the nightly updater skips until it exits.
+Twelve qualified routes are enabled and all passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. Engine updates are no longer scripted: the owner retired the nightly updater on November 9, and the agent checks upstream and upgrades each engine by hand with the guarded short tool check.
 
 ## First five minutes
 
@@ -58,12 +58,12 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 | Timer | When | Notes |
 |---|---|---|
-| `llm-daily-update.timer` | 03:00, `Persistent=false` | Skips while any inference or KFD owner exists. November 8 skipped because of the resident ComfyUI worker. |
+| `llm-daily-update.timer` | **Disabled November 9** (owner) | Retired after repeated skips and failures. The unit source stays in `hardware/daily-update/systemd/`. Updates are checked and installed by hand ([update watch](../hardware/DAILY-UPDATES.md)). |
 
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions after the 2026-11-07 daily update** (`llm-daily-update.timer`, 03:00; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions in production** (last scripted update November 7; the updater is retired; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
@@ -97,7 +97,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 
 ## Open items
 
-1. **Updater starved.** The daily updater skips while a resident ComfyUI worker owns the KFD. Ask the owner before stopping that worker.
+1. **Pending engine updates (November 9 check).** llama.cpp `0a94a3f` (40 commits: MoE-cache, MTP and tool-call fixes), Strata `504b143` (engine 0.1.59; the changes are for other hardware and packaging), Maya `0065548` (v1.1.57: GLM-5.3 on AMD, model API fixes). Strata DeepSeek is far behind upstream; its November 7 candidate failed a parity test. vLLM and SGLang are current. Installing needs a GPU window, so ask the owner before stopping the resident ComfyUI worker. Maya's `maya/runtime.json` pin (`cbaaec5`) disagrees with the native registry (`7bf15ac`); reconcile it during the Maya update.
 2. **One DeepSeek NaN event** on Sapphire (CUDA1) at the new settings, in about 141 requests. If it recurs, raise the Strata DeepSeek reserve to 4 GiB first.
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
 4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.

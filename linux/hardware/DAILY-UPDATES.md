@@ -4,6 +4,21 @@ The existing 03:00 updater uses isolated builds, required per-card parity and on
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-09 — scripted updater retired; first manual check
+
+The owner retired the scripted updater; its timer is disabled, and updates are now monitored and installed by hand. Upstream check:
+
+| Engine | Production | Upstream | Assessment |
+|---|---|---|---|
+| llama.cpp | `818ac6b078e3` | `0a94a3f28968` (40 commits) | Take. Relevant: MoE-cache CPU wait fix, MTP hidden states read from a device buffer, invalid UTF-8 in tool-call arguments sanitized, `json_schema` response-format fix. |
+| Strata | `146df3c46873` | `504b143342a9` | Take; low risk. Engine 0.1.59; changes are Intel Arc, Strix Halo, Blackwell, Mac and packaging. The discrete gfx1100 path is unchanged. |
+| Strata DeepSeek | pin `8183c6b67162`, registry `ffa80d73133e` | `504b143342a9` | Large gap. The November 7 candidate failed `ds4_iq_test`. Needs a careful build and parity run. |
+| Maya | registry `7bf15ac68f9b` (pin `cbaaec5d70fd`) | `00655481ce2b` (v1.1.57) | Take; directly relevant: GLM-5.3 on Maya's GLM engine for AMD, model API fixes. Reconcile the pin. |
+| vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` | same | Current. |
+| SGLang | `f84475ccf593` | same | Current. |
+
+Nothing installed yet. Installing needs a GPU window (the resident ComfyUI worker must stop, with the owner's OK).
+
 ## 2026-11-07
 
 - **llama.cpp** `9c9074e14e02` → `818ac6b078e3`: **promoted**. Every selected profile passed its strict two-step read-tool check; required per-card parity passed.
