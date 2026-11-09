@@ -8,13 +8,18 @@ from unittest.mock import patch, Mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'dsh'))
 import moe_memory
+import resource_policy
 
 GIB = 1024**3
+MIB = 1024**2
+# Owner headroom policy (99ec1b1, hardware/RESOURCE-GUARDS-2026-11-03.md): 1 GiB available RAM,
+# 128 MiB free VRAM on each card for every profile, replacing the 3 GiB / per-profile values.
+VRAM_FLOOR = resource_policy.VRAM_RESERVE_BYTES
 PROFILE = {'host_expert_bytes': 9*GIB, 'minimum_host_ram_gib': 28}
 
 
 class MoeMemoryTests(unittest.TestCase):
-    def run_monitor(self, active, available):
+    def run_monitor(self, active, available, vram_reason=None):
         proc = Mock()
         proc.poll.return_value = None
         event = Mock()
@@ -27,36 +32,48 @@ class MoeMemoryTests(unittest.TestCase):
         with patch.object(moe_memory, 'profiles', return_value={'moe': PROFILE}), \
              patch.object(moe_memory, 'host_memory', return_value=(30*GIB, available)), \
              patch.object(moe_memory, 'worker_memory', return_value=(0, 0)), \
+             patch.object(moe_memory, 'vram_headroom_reason', return_value=vram_reason), \
              patch.object(moe_memory.threading, 'Event', return_value=event), \
              patch.object(moe_memory.threading, 'Thread', side_effect=make_thread):
             moe_memory.watch_worker(proc, lambda: active, stopped.append)
         return proc, stopped
 
     def test_sustained_low_ram_stops_only_the_owned_native_worker(self):
-        proc, stopped = self.run_monitor('moe', 2*GIB)
+        proc, stopped = self.run_monitor('moe', GIB-1)
         self.assertEqual(stopped, [proc])
-
-    def test_memory_watch_does_not_stop_dense_models(self):
-        _, stopped = self.run_monitor('dense', 2*GIB)
+        _, stopped = self.run_monitor('moe', GIB)
         self.assertEqual(stopped, [])
 
-    def test_profile_without_explicit_vram_reserve_keeps_existing_behavior(self):
-        self.assertIsNone(moe_memory.vram_headroom_reason(PROFILE))
+    def test_memory_watch_does_not_stop_dense_models(self):
+        _, stopped = self.run_monitor('dense', GIB-1)
+        self.assertEqual(stopped, [])
+
+    def card_free(self, free):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        device = Path(directory.name)/'gpu'
+        device.mkdir()
+        (device/'mem_info_vram_total').write_text(str(24*GIB))
+        (device/'mem_info_vram_used').write_text(str(24*GIB - free))
+        return patch('amd_device.amd_devices', return_value=[device])
+
+    def test_profile_without_explicit_vram_reserve_still_gets_policy_floor(self):
+        with self.card_free(VRAM_FLOOR):
+            self.assertIsNone(moe_memory.vram_headroom_reason(PROFILE))
+        with self.card_free(VRAM_FLOOR-1):
+            self.assertIn('free VRAM', moe_memory.vram_headroom_reason(PROFILE))
 
     def test_whole_card_reserve_counts_other_gpu_consumers(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            device = root/'gpu'
-            device.mkdir()
-            (device/'mem_info_vram_total').write_text(str(24*GIB))
-            (device/'mem_info_vram_used').write_text(str(22*GIB))
-            with patch('amd_device.amd_devices', return_value=[device]):
-                self.assertIn('free VRAM', moe_memory.vram_headroom_reason({'min_free_vram_gib':3}))
-                self.assertIsNone(moe_memory.vram_headroom_reason({'min_free_vram_gib':1}))
+        self.assertEqual(VRAM_FLOOR, 128*MIB)
+        for profile in ({'min_free_vram_gib':3}, {'min_free_vram_gib':1}):
+            with self.subTest(profile=profile):
+                with self.card_free(VRAM_FLOOR-1):
+                    self.assertIn('free VRAM', moe_memory.vram_headroom_reason(profile))
+                with self.card_free(VRAM_FLOOR):
+                    self.assertIsNone(moe_memory.vram_headroom_reason(profile))
 
     def test_sustained_vram_reserve_violation_stops_only_owned_worker(self):
-        with patch.object(moe_memory, 'vram_headroom_reason', return_value='Low whole-card VRAM'):
-            proc, stopped = self.run_monitor('moe', 10*GIB)
+        proc, stopped = self.run_monitor('moe', 10*GIB, 'Low whole-card VRAM')
         self.assertEqual(stopped, [proc])
 
     def test_actual_32gb_can_admit_bounded_experts(self):
@@ -67,7 +84,8 @@ class MoeMemoryTests(unittest.TestCase):
 
     def test_loaded_model_does_not_reserve_its_weights_twice(self):
         self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, 6*GIB, True))
-        self.assertIsNotNone(moe_memory.memory_reason(PROFILE, 30*GIB, 2*GIB, True))
+        self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, GIB, True))
+        self.assertIsNotNone(moe_memory.memory_reason(PROFILE, 30*GIB, GIB-1, True))
 
     def test_64gb_candidate_refuses_32gb_before_unload(self):
         future = {**PROFILE, 'minimum_host_ram_gib': 60}

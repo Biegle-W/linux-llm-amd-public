@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 8, unit tests refreshed.** Updated 17 stale test files to the November 3 owner resource policy and later route changes; tests of the older guard values run with `LOCAL_LLM_LEGACY_RESOURCE_VALIDATION=1`. No guard code changed; 660 tests pass.
 - **Nov 8, docs cleanup.** Rewrote the entry docs (AGENTS, README, handoff, current results) as short current-state pages and moved all dated notes here; earlier versions are in Git history and the [November 5 snapshot](history/documentation-2026-11-05/README.md). Fixed stale statements: route count 12 (not 13 or 14), hold released, RAM40 selected, current pins, device order `0,1`, kernel default, storage targets.
 - **Nov 8, Qwen IQ3 Unsloth vs GSQ-RCO.** Same quality (53/54 both; 62/64 GSQ, 63/64 Unsloth), but Unsloth reads long prompts 35% slower. GSQ-RCO kept; the Unsloth copy (80 GB) deleted. Fixed a Strata router readiness bug from `f332a6d`. [Report](QWEN-IQ3-UNSLOTH-VS-GSQ-2026-11-08.md)
 - **Nov 8, GLM and DeepSeek RAM/reserve tuning.** GLM RAM 40 GB + 2 GiB reserve: 17.8–22.1 tok/s (was 2.6). Strata DeepSeek expert profile + 2 GiB: 7.5–10.1 tok/s (was 4.2–6.3). Maya DeepSeek with the same changes: 9.5–17.1 tok/s. `--mmap-experts off` rejected. Native reserve floor lowered to 2 GiB. One NaN event on Sapphire in the first DeepSeek run. [Report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)

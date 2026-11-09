@@ -1,8 +1,13 @@
-import sys,unittest
+import os,sys,unittest
+from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'dsh'))
 from streaming_memory import GIB,scope_limits,scope_properties,check_32gb,check_64gb
 class FinalHardwareAdmission(unittest.TestCase):
+ # Historical 64gb-q1-v1 sealed 42/44 GiB replay; commit 99ec1b1 moved live admission to
+ # resource_policy (covered by test_owner_resource_policy). Explicit replay opt-in only.
+ def setUp(self):
+  env=patch.dict(os.environ,{'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION':'1'});env.start();self.addCleanup(env.stop)
  def cfg(self):
   return {'host_ram_profile':'64gb-q1-v1','worker_memory_limits':{'memory.high':42*GIB,'memory.max':44*GIB,'memory.swap.max':'max'},'args':['--max-context','32768','--cpu-threads','20'],'env':{'DS4_WARM_CAP_GB':'28','DS4_ENGRAM_CACHE_MB':'1024'}}
  def test_available_memory_is_reserved_beyond_enforced_cgroup(self):

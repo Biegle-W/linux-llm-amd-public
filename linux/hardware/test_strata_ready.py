@@ -30,7 +30,11 @@ class StrataMemoryTests(unittest.TestCase):
         cfg = {'args':['--max-context','262144','--kv-resident','32768','--kv','int8']}
         backing = strata_runtime.kv_backing_gib(cfg)
         self.assertAlmostEqual(backing, 3.3515625)
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB,22*GIB,budget=14,kv_gib=backing))
+        # Owner headroom policy (99ec1b1): expert budget + full host KV + 1 GiB (was 6 GiB).
+        required = int((14 + backing + 1) * GIB)
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB,required-1,budget=14,kv_gib=backing))
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB,int((14+backing)*GIB),budget=14,kv_gib=backing))
+        self.assertEqual(strata_runtime.memory_blockers(30*GIB,required,budget=14,kv_gib=backing), [])
         self.assertEqual(strata_runtime.memory_blockers(30*GIB,24*GIB,budget=14,kv_gib=backing), [])
 
     def test_fully_resident_kv_needs_no_host_context_copy(self):
@@ -45,13 +49,17 @@ class StrataMemoryTests(unittest.TestCase):
         cfg = {'backend':'hip','gpu':[0,1],'parallel':1,'worker_swap_max_bytes':None,
                'minimum_host_ram_gib':29,
                'args':['--resident-cpu-experts','--resident-budget-gib','10',
-                       '--vram-reserve-mib','3072']}
-        with self.assertRaisesRegex(RuntimeError, '6 GiB'):
+                       '--vram-reserve-mib','127']}
+        # Owner headroom policy (99ec1b1): per-card reserve floor is 128 MiB (was 6144 MiB).
+        with self.assertRaisesRegex(RuntimeError, 'active resource policy'):
             strata_runtime.check_config(cfg,30*GIB,24*GIB)
-        cfg['args'][-1]='6144'
+        cfg['args'] = cfg['args'][:-2]
+        with self.assertRaisesRegex(RuntimeError, 'active resource policy'):
+            strata_runtime.check_config(cfg,30*GIB,24*GIB)
+        cfg['args'] += ['--vram-reserve-mib','128']
         strata_runtime.check_config(cfg,30*GIB,24*GIB)
-        cfg['args'] += ['--vram-reserve-later-mib','1024']
-        with self.assertRaisesRegex(RuntimeError, '6 GiB'):
+        cfg['args'] += ['--vram-reserve-later-mib','127']
+        with self.assertRaisesRegex(RuntimeError, 'active resource policy'):
             strata_runtime.check_config(cfg,30*GIB,24*GIB)
 
     def test_owned_hip_engine_is_stopped_but_comfyui_is_not(self):

@@ -309,7 +309,10 @@ class HTTP(unittest.TestCase):
  def test_auth_and_held_model_validation_precede_search(self):
   with patch.object(w,'provider_search') as provider:
    self.assertEqual(self.request(path='/v1/responses',data=request(),auth=False)[0],401)
-   self.assertEqual(self.request(path='/v1/responses',data=request(model='qwen3.8-flash-next-iq3_xxs'))[0],404)
+   # qwen3.8-flash-next-iq3_xxs (held when c8dd699 wrote this) is now a live route; use the
+   # UD-IQ1_M route retired in e65e559 as the unknown/retired model.
+   retired='qwen3.8-flash-next-unsloth-iq1_m';self.assertNotIn(retired,fixture.gw.catalog())
+   self.assertEqual(self.request(path='/v1/responses',data=request(model=retired))[0],404)
   provider.assert_not_called()
  def test_gpu_reservation_rejection_never_runs_search(self):
   with patch.object(fixture.mh.hub,'serving',return_value=False),patch.object(w,'provider_search') as provider:

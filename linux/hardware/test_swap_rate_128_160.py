@@ -19,7 +19,9 @@ def reading(t,write=0,read=0,psi=0):
 
 class OwnerRateLimits(unittest.TestCase):
     def setUp(self):
-        p=patch.dict(os.environ,{'LOCAL_LLM_SWAP_POLICY':'loading-swap-v4'});p.start();self.addCleanup(p.stop)
+        # 99ec1b1 made full-speed v5 the default; the 128/160 MiB/s v4 ceilings remain
+        # replayable only with the explicit legacy validation opt-in.
+        p=patch.dict(os.environ,{'LOCAL_LLM_SWAP_POLICY':'loading-swap-v4','LOCAL_LLM_LEGACY_SWAP_VALIDATION':'1'});p.start();self.addCleanup(p.stop)
 
     def series(self,write,read=0):
         a=policy.SwapActivity();a.observe(reading(0),'inference',12*1024**3)
@@ -28,7 +30,11 @@ class OwnerRateLimits(unittest.TestCase):
 
     def test_default_is_new_policy_and_exact_ceilings_are_inclusive(self):
         with patch.dict(os.environ):
-            os.environ.pop('LOCAL_LLM_SWAP_POLICY',None)
+            os.environ.pop('LOCAL_LLM_SWAP_POLICY',None);os.environ.pop('LOCAL_LLM_LEGACY_SWAP_VALIDATION',None)
+            self.assertEqual(policy.selected_policy(),'loading-swap-v5')
+            os.environ['LOCAL_LLM_SWAP_POLICY']='loading-swap-v4'
+            self.assertEqual(policy.selected_policy(),'loading-swap-v5')
+            os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1'
             self.assertEqual(policy.selected_policy(),'loading-swap-v4')
         a=self.series(128*MiB*30,32*MiB*30)
         self.assertEqual(a.failures(),[]);self.assertEqual(policy.validate_summary(a.summary(),True),[])

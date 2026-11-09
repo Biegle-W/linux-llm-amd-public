@@ -25,9 +25,10 @@ class UserSwapPolicy(unittest.TestCase):
   self.assertEqual(a.failures(),[]);self.assertEqual(p.validate_summary(a.summary(),True),[])
  def test_default_and_inherited_old_modes(self):
   os.environ.pop('LOCAL_LLM_SWAP_POLICY',None);os.environ.pop('LOCAL_LLM_LEGACY_SWAP_VALIDATION',None)
-  self.assertEqual(p.selected_policy(),'loading-swap-v4')
-  for old in ['loading-swap-v3','loading-swap-v2','low-churn-v1','bounded-64mib']:
-   os.environ['LOCAL_LLM_SWAP_POLICY']=old;self.assertEqual(p.selected_policy(),'loading-swap-v4');self.assertIsNone(memory.worker_swap_limit_bytes())
+  # 99ec1b1: default is full-speed v5; inherited older modes, v4 included, cannot restore stops.
+  self.assertEqual(p.selected_policy(),'loading-swap-v5')
+  for old in ['loading-swap-v4','loading-swap-v3','loading-swap-v2','low-churn-v1','bounded-64mib']:
+   os.environ['LOCAL_LLM_SWAP_POLICY']=old;self.assertEqual(p.selected_policy(),'loading-swap-v5');self.assertIsNone(memory.worker_swap_limit_bytes())
   os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1';self.assertEqual(p.selected_policy(),'bounded-64mib')
  def test_loading_then_parked_swap(self):
   a=p.SwapActivity();a.observe(host())
@@ -58,7 +59,10 @@ class UserSwapPolicy(unittest.TestCase):
   a=p.SwapActivity()
   for t in [0,1,2]:a.observe(host(t,psi=90),phase='inference')
   self.assertEqual(a.failures(),[]);self.assertIn('active_memory_pressure_observed',a.summary()['advisories'])
+  # 99ec1b1: physical floor is 1 GiB; exactly 1 GiB passes, one byte below is refused.
   for t in [3,4,5]:a.observe(host(t,ram=G))
+  self.assertEqual(a.failures(),[])
+  for t in [6,7,8]:a.observe(host(t,ram=G-1))
   self.assertIn('low_host_memory',a.failures())
  def test_phase_change_cannot_join_short_compute_windows(self):
   a=p.SwapActivity(write_budget_bytes_per_second=M);a.observe(host(),phase='inference',progress=progress(0));a.observe(host(29,so=200*M),phase='inference',progress=progress(1))

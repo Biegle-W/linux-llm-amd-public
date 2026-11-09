@@ -4,9 +4,11 @@ import os
 from unittest.mock import patch
 import json
 import tempfile
+import sys
 import unittest
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 policy = importlib.import_module('swap_activity')
 
 GiB = 1024**3
@@ -171,7 +173,7 @@ class SwapPolicyTests(unittest.TestCase):
         self.assertEqual(set(activity.failures()), {'worker_swap_limit', 'swapout_budget'})
 
     def test_pressure_needs_three_consecutive_samples_and_latches_after_recovery(self):
-        cases = [('available', 2*GiB-1, 2*GiB, 'low_host_memory',
+        cases = [('available', GiB-1, GiB, 'low_host_memory',
                   'max_low_memory_consecutive_samples'),
                  ('psi', 10.001, 10.0, 'memory_full_psi',
                   'max_full_psi_consecutive_samples')]
@@ -335,7 +337,7 @@ class SwapPolicyTests(unittest.TestCase):
                  dict(max_inference_swapout_bytes_per_second=1),
                  dict(max_inference_swap_io_bytes_per_second=1),
                  dict(max_low_memory_consecutive_samples=1),
-                 dict(min_available_bytes=GiB),
+                 dict(min_available_bytes=GiB-1),
                  dict(max_full_psi_consecutive_samples=1),
                  dict(max_memory_full_psi_avg10=11)]
         for changes in cases:
@@ -449,7 +451,10 @@ class SwapPolicyTests(unittest.TestCase):
                         SWAPOUT_BUDGET_BYTES=4*GiB,
                         INFERENCE_SWAPOUT_RATE_LIMIT_BYTES=MiB,
                         INFERENCE_IO_RATE_LIMIT_BYTES=8*MiB,
-                        RATE_WINDOW_SECONDS=30, MIN_AVAILABLE_BYTES=2*GiB,
+                        RATE_WINDOW_SECONDS=30,
+                        # 99ec1b1: owner RAM floor is 1 GiB (2 GiB only under
+                        # LOCAL_LLM_LEGACY_RESOURCE_VALIDATION=1 replay).
+                        MIN_AVAILABLE_BYTES=GiB,
                         MIN_PRESSURE_SAMPLES=3, MEMORY_FULL_PSI_AVG10_LIMIT=10.0)
         for key, value in expected.items():
             self.assertEqual(getattr(policy, key, None), value, key)

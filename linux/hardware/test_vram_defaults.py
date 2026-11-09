@@ -5,13 +5,20 @@ from unittest.mock import Mock,patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'dsh'),str(ROOT/'hardware')]
 import moe_memory
+import resource_policy
 GIB=1024**3
+# Owner headroom policy (99ec1b1, hardware/RESOURCE-GUARDS-2026-11-03.md): worker scopes are recomputed
+# as MemoryHigh=max / MemoryMax=MemTotal-1GiB / SwapMax=SwapTotal; RAM floor 1 GiB, VRAM floor 128 MiB.
+POLICY_LIMITS={'memory.high':'max','memory.max':63*GIB,'memory.swap.max':36000755712}
 IDS=('empero-qwen3.8-35b-a3b','flint-40b-a2.5b')
 
 class VramDefaults(unittest.TestCase):
     def setUp(self):
         self.plans=json.loads((ROOT/'dsh/moe-offload.json').read_text())['models']
         self.plan=copy.deepcopy(self.plans[IDS[0]])
+        # Hermetic: never derive scope limits from this host's /proc/meminfo.
+        patcher=patch.object(resource_policy,'scope_limits',return_value=dict(POLICY_LIMITS))
+        patcher.start();self.addCleanup(patcher.stop)
 
     def test_installed_profiles_explicitly_validate_and_other_moe_stays_cpu_backed(self):
         moe_memory.validate_profiles(ROOT/'dsh')
@@ -22,20 +29,24 @@ class VramDefaults(unittest.TestCase):
 
     def test_gpu_weights_still_need_physical_staging_headroom(self):
         self.assertIsNone(moe_memory.memory_reason(self.plan,14*GIB,7*GIB))
-        self.assertIn('staging',moe_memory.memory_reason(self.plan,14*GIB,6*GIB))
+        self.assertIsNone(moe_memory.memory_reason(self.plan,14*GIB,GIB))
+        self.assertIn('staging',moe_memory.memory_reason(self.plan,14*GIB,GIB-1))
         self.assertIn('OS-visible',moe_memory.memory_reason(self.plan,10*GIB,8*GIB))
-        self.assertIsNone(moe_memory.memory_reason(self.plan,14*GIB,3*GIB,True))
-        self.assertIsNotNone(moe_memory.memory_reason(self.plan,14*GIB,2*GIB,True))
+        self.assertIsNone(moe_memory.memory_reason(self.plan,14*GIB,GIB,True))
+        self.assertIsNotNone(moe_memory.memory_reason(self.plan,14*GIB,GIB-1,True))
 
     def test_vram_label_cannot_relax_cgroup_cpu_weight_or_vram_guards(self):
-        changes=[{'worker_memory_limits':{'memory.high':4*GIB,'memory.max':0,'memory.swap.max':0}},
-                 {'host_expert_bytes':GIB},{'cpu_expert_layers':[0]},
-                 {'gpu_expert_cache_mib':1},{'minimum_available_ram_gib':1},
+        changes=[{'host_expert_bytes':GIB},{'cpu_expert_layers':[0]},
+                 {'gpu_expert_cache_mib':1},{'minimum_available_ram_gib':0.5},
                  {'memory_placement':'unknown'},
-                 {'min_free_vram_gib':0},{'min_start_vram_gib':0}]
+                 {'min_free_vram_gib':0},{'min_free_vram_gib':0.1},{'min_start_vram_gib':0}]
         for changeset in changes:
             with self.subTest(changeset=changeset),self.assertRaises(RuntimeError):
                 moe_memory.vram_worker_limits({**self.plan,**changeset})
+        # A profile label cannot set its own cgroup: the policy-derived scope always wins.
+        for limits in ({'memory.high':4*GIB,'memory.max':0,'memory.swap.max':0},{}):
+            with self.subTest(worker_memory_limits=limits):
+                self.assertEqual(moe_memory.vram_worker_limits({**self.plan,'worker_memory_limits':limits}),POLICY_LIMITS)
 
     def test_preset_mutations_reject_before_launch(self):
         base=(ROOT/'dsh/models-hip.ini').read_text()
@@ -84,9 +95,10 @@ class VramDefaults(unittest.TestCase):
         with patch.object(moe_memory,'host_memory',return_value=(14*GIB,8*GIB)):
             m.activate_native.__wrapped__('hip-amd',(Path('/fake/binary'),Path('/fake/preset'),{},set(IDS)),model=IDS[0])
         args=m.swap_guard.spawn.call_args.args[0];kwargs=m.swap_guard.spawn.call_args.kwargs
-        self.assertIn('--property=MemoryHigh='+str(4*GIB),args)
-        self.assertIn('--property=MemoryMax='+str(5*GIB),args)
+        self.assertIn('--property=MemoryHigh=max',args)
+        self.assertIn('--property=MemoryMax='+str(63*GIB),args)
         self.assertIn('--property=MemorySwapMax=infinity',args)
+        self.assertEqual(kwargs['expected_memory_limits'],POLICY_LIMITS)
         self.assertEqual(kwargs['expected_memory_limits'],moe_memory.vram_worker_limits(self.plan))
 
 if __name__=='__main__':unittest.main()

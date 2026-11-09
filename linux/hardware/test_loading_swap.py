@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'hardware'),str(ROOT/'dsh')]
 import inference_memory as mem
-from swap_activity import SwapActivity, validate_summary
+from swap_activity import MIN_AVAILABLE_BYTES, SwapActivity, validate_summary
 from inference_swap import OwnedWorkerWatch, WorkerSwapGuard
 from strata_memory import MemoryGuard
 
@@ -25,6 +25,8 @@ class HistoricalLoadingSwapV2(unittest.TestCase):
         env.start(); self.addCleanup(env.stop)
         os.environ['LOCAL_LLM_SWAP_POLICY']='loading-swap-v2'
         os.environ['LOCAL_LLM_LEGACY_SWAP_VALIDATION']='1'
+        # Commit 99ec1b1 gave resource-policy replay its own opt-in; v2 used the old RAM floors.
+        os.environ['LOCAL_LLM_LEGACY_RESOURCE_VALIDATION']='1'
 
     def test_loading_large_swap_and_pressure_then_parked_inference_pass(self):
         activity=SwapActivity()
@@ -64,7 +66,9 @@ class HistoricalLoadingSwapV2(unittest.TestCase):
 
     def test_available_ram_and_telemetry_remain_fail_closed_during_loading(self):
         activity=SwapActivity()
-        for t in (0,1,2): activity.observe(reading(t,available=G))
+        # The RAM floor is fixed at import (2 GiB legacy, 1 GiB owner-headroom-v1 since 99ec1b1);
+        # one byte below whichever floor is active must still fail closed.
+        for t in (0,1,2): activity.observe(reading(t,available=MIN_AVAILABLE_BYTES-1))
         self.assertIn('low_host_memory',activity.failures())
         activity.observe(None)
         self.assertIn('invalid_observation',activity.failures())

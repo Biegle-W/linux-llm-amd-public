@@ -8,7 +8,8 @@ import maya_runtime,backend_switch
 
 class SelectedAdmission(unittest.TestCase):
  def test_launcher_admits_only_requested_profile_before_any_handover(self):
-  model='deepseek-v4.1-flash-1017-maya'
+  # Old Maya-XS id was disabled (weights removed); 8a1d073 added the enabled Unsloth Q1 profile.
+  model='deepseek-v4.1-flash-1017-maya-unsloth-q1'
   with patch.object(sys,'argv',[str(W/'dsh/launch-backend.py'),'maya','--model',model]),patch.object(maya_runtime,'require_maya') as require,patch.object(backend_switch,'startup_handover',side_effect=RuntimeError('fixture boundary')),patch.object(backend_switch,'clear_owner'),contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
    with self.assertRaises(SystemExit):runpy.run_path(str(W/'dsh/launch-backend.py'),run_name='__main__')
   require.assert_called_once_with(model,before_handover=True)

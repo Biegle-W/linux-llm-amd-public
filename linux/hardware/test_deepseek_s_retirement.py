@@ -12,10 +12,20 @@ class Retirement(unittest.TestCase):
         models = catalog(ROOT)
         self.assertEqual(len(models), 12)
         self.assertIn('flint-40b-a2.5b', models)
-        self.assertIn('deepseek-v4.1-flash-1017-maya', models)
-        self.assertIn('deepseek-v4.1-flash-1017-strata-xs', models)
+        # Old XS backing was deleted Nov 2 (044d689): both XS aliases stay registered but disabled,
+        # and the Unsloth Q1 replacements (8a1d073) are the selectable DeepSeek routes.
+        registry = {**json.loads((ROOT / 'dsh/maya-profiles.json').read_text()),
+                    **json.loads((ROOT / 'dsh/strata-profiles.json').read_text())}
+        for model in ['deepseek-v4.1-flash-1017-maya', 'deepseek-v4.1-flash-1017-strata-xs']:
+            self.assertIn(model, registry)
+            self.assertIs(registry[model].get('enabled'), False)
+            self.assertTrue(registry[model].get('disabled_reason'))
+            self.assertNotIn(model, models)
+        self.assertIn('deepseek-v4.1-flash-1017-maya-unsloth-q1', models)
+        self.assertIn('deepseek-v4.1-flash-1017-strata-unsloth-q1', models)
         for model in ['deepseek-v4.1-flash-1017-maya-s', 'deepseek-v4.1-flash-1017-strata-s']:
             self.assertNotIn(model, models)
+            self.assertNotIn(model, registry)
 
     def test_active_manifest_keeps_shared_engram_and_excludes_retired_assets(self):
         files = [row['file'] for row in json.loads((ROOT / 'maya/models.json').read_text())['files']]

@@ -71,16 +71,40 @@ class UpgradeTests(unittest.TestCase):
             self.assertEqual(selected, binary)
 
     def test_rocm_profile_headroom_can_be_stricter_than_default(self):
+        # Historical replay (LOCAL_LLM_LEGACY_RESOURCE_VALIDATION=1): a profile may
+        # demand more free VRAM than the 21 GiB default.
+        import inference_kernel
         with tempfile.TemporaryDirectory() as directory:
             amd = Path(directory)
             (amd / 'mem_info_vram_total').write_text(str(24 * 1024**3))
             (amd / 'mem_info_vram_used').write_text(str(int(1.5 * 1024**3)))
-            with patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
+            with patch.dict(rocm_runtime.resource_policy.os.environ, {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '1'}), \
+                 patch.object(inference_kernel, 'require_inference_kernel') as kernel, \
+                 patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
                 rocm_runtime.require_rocm_headroom()
                 with self.assertRaisesRegex(RuntimeError, '23 GiB'):
                     rocm_runtime.require_rocm_headroom(23)
                 (amd / 'mem_info_vram_used').write_text(str(int(.5 * 1024**3)))
                 rocm_runtime.require_rocm_headroom(23)
+                self.assertEqual(kernel.call_count, 3)
+
+    def test_rocm_headroom_uses_owner_floor_under_current_policy(self):
+        # 99ec1b1: the owner headroom policy replaces profile-era headroom with
+        # 128 MiB free per card; below that the load is still refused.
+        import inference_kernel
+        with tempfile.TemporaryDirectory() as directory:
+            amd = Path(directory)
+            total = 24 * 1024**3
+            (amd / 'mem_info_vram_total').write_text(str(total))
+            (amd / 'mem_info_vram_used').write_text(str(total - 128 * 1024**2))
+            with patch.dict(rocm_runtime.resource_policy.os.environ, {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '0'}), \
+                 patch.object(inference_kernel, 'require_inference_kernel') as kernel, \
+                 patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
+                rocm_runtime.require_rocm_headroom(23)
+                (amd / 'mem_info_vram_used').write_text(str(total - 128 * 1024**2 + 1))
+                with self.assertRaisesRegex(RuntimeError, '0.125 GiB'):
+                    rocm_runtime.require_rocm_headroom(23)
+                self.assertEqual(kernel.call_count, 2)
 
     def test_disabled_hyperqwen_preserves_active_backend(self):
         with self.assertRaisesRegex(RuntimeError, 'HyperQwen is retired'):
@@ -169,8 +193,14 @@ class UpgradeTests(unittest.TestCase):
         future = candidates.strata_candidate(source, 64)
         self.assertEqual(future['minimum_host_ram_gib'], 60)
         self.assertIn('262144', future['args'])
+        # 99ec1b1/ef6107a lowered the Strata Qwen reserves (now 1024 MiB, documented in the
+        # runtime handoff); candidates must keep the source reserves and never drop below
+        # the owner 128 MiB per-card VRAM floor.
         for candidate in (cfg, future):
-            self.assertGreaterEqual(int(candidate['args'][candidate['args'].index('--vram-reserve-mib')+1]), 6144)
+            for option in ('--vram-reserve-mib', '--vram-reserve-later-mib'):
+                value = candidate['args'][candidate['args'].index(option)+1]
+                self.assertEqual(value, source['args'][source['args'].index(option)+1])
+                self.assertGreaterEqual(int(value), 128)
             self.assertEqual(candidate['layer_split'], source['layer_split'])
             self.assertEqual(candidate['env'], source['env'])
 

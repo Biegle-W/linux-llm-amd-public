@@ -1,10 +1,16 @@
-import copy,sys,unittest
+import copy,os,sys,unittest
+from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'dsh'))
 from streaming_memory import GIB,check_32gb,scope_limits,scope_properties
 
 class BoundedTiers(unittest.TestCase):
+ # Historical 32 GB tier replay. Commit 99ec1b1 (owner-headroom-v1, RESOURCE-GUARDS-2026-11-03.md)
+ # replaced profile-era scope limits with MemTotal-1GiB; current policy is covered by
+ # test_owner_resource_policy. These sealed-tier checks run only under the explicit replay opt-in.
+ def setUp(self):
+  env=patch.dict(os.environ,{'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION':'1'});env.start();self.addCleanup(env.stop)
  def cfg(self,family='deepseek',maximum=20):
   cfg={'host_ram_profile':'32gb-v1','worker_memory_limits':{'memory.high':(maximum-2)*GIB,'memory.max':maximum*GIB,'memory.swap.max':'max'},'args':['--max-context','32768']}
   if family=='qwen':cfg.update(minimum_host_ram_gib=29,args=['--max-context','262144','--kv-resident','32768','--resident-budget-gib','8'])
