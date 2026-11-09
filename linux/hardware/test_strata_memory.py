@@ -8,7 +8,6 @@ import signal
 import subprocess
 import threading
 import tempfile
-import os
 import unittest
 from unittest.mock import Mock, patch
 
@@ -21,7 +20,6 @@ MIB = 1024**2
 # Owner headroom policy (commit 99ec1b1, Nov 3 2026, hardware/RESOURCE-GUARDS-2026-11-03.md):
 # 128 MiB free VRAM per card and 1 GiB available RAM, for startup and the runtime guard.
 FLOOR = resource_policy.VRAM_RESERVE_BYTES
-LEGACY = {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '1'}
 
 
 def load_profiles():
@@ -110,28 +108,11 @@ class StrataGuardTests(unittest.TestCase):
             MemoryGuard().check(10*GIB, 0, 0, [{'free':2.8*GIB}, {'free':5*GIB}])
         self.assertIn('Both AMD', MemoryGuard().check(10*GIB, 0, 0, [{'free':5*GIB}]))
 
-    def test_legacy_replay_hard_floor_unloads_immediately(self):
-        with patch.dict(os.environ, LEGACY):
-            self.assertIn('VRAM', self.sample(MemoryGuard(), free=1))
-
-    def test_legacy_replay_soft_floor_requires_two_samples_and_recovers(self):
-        guard = MemoryGuard()
-        with patch.dict(os.environ, LEGACY):
-            self.assertIsNone(self.sample(guard, free=2.8))
-            self.assertIsNone(self.sample(guard, free=4))
-            self.assertIsNone(self.sample(guard, free=2.8))
-            self.assertIn('VRAM', self.sample(guard, free=2.8))
-
     def test_missing_telemetry_fails_closed(self):
         guard = MemoryGuard()
         self.assertIsNone(guard.check(10*GIB, 0, 0, None))
         self.assertIsNone(guard.check(10*GIB, 0, 0, None))
         self.assertIn('telemetry', guard.check(10*GIB, 0, 0, None))
-
-    def test_legacy_replay_owned_swap_and_spill_trigger(self):
-        with patch.dict(os.environ, LEGACY):
-            self.assertIsNone(self.sample(MemoryGuard(), swap=12*GIB))
-            self.assertIn('unsafe', self.sample(MemoryGuard(), spill=257*1024**2))
 
     def test_router_stops_only_its_worker_and_latches_reload(self):
         spec = importlib.util.spec_from_file_location('strata_router', ROOT/'dsh/strata-router.py')

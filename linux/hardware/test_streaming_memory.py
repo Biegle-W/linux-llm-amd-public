@@ -1,62 +1,57 @@
-import copy,os,sys,unittest
+import sys,unittest
 from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'dsh'))
-from streaming_memory import GIB,check_32gb,scope_limits,scope_properties
+import resource_policy
+from streaming_memory import GIB,check_32gb
+
+LIMITS={'memory.high':'max','memory.max':31*GIB,'memory.swap.max':8*GIB}
 
 class BoundedTiers(unittest.TestCase):
- # Historical 32 GB tier replay. Commit 99ec1b1 (owner-headroom-v1, RESOURCE-GUARDS-2026-11-03.md)
- # replaced profile-era scope limits with MemTotal-1GiB; current policy is covered by
- # test_owner_resource_policy. These sealed-tier checks run only under the explicit replay opt-in.
+ # 32 GB tier admission under owner-headroom-v1 (commit 99ec1b1, RESOURCE-GUARDS-2026-11-03.md).
+ # Worker scope limits (MemTotal-1GiB) are covered by test_owner_resource_policy.
  def setUp(self):
-  env=patch.dict(os.environ,{'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION':'1'});env.start();self.addCleanup(env.stop)
- def cfg(self,family='deepseek',maximum=20):
-  cfg={'host_ram_profile':'32gb-v1','worker_memory_limits':{'memory.high':(maximum-2)*GIB,'memory.max':maximum*GIB,'memory.swap.max':'max'},'args':['--max-context','32768']}
+  p=patch.object(resource_policy,'scope_limits',return_value=dict(LIMITS));p.start();self.addCleanup(p.stop)
+ def cfg(self,family='deepseek'):
+  cfg={'host_ram_profile':'32gb-v1','args':['--max-context','32768']}
   if family=='qwen':cfg.update(minimum_host_ram_gib=29,args=['--max-context','262144','--kv-resident','32768','--resident-budget-gib','8'])
-  if family=='glm':cfg['env']={'MAYA_GLM_RAM_GB':'8','MAYA_GLM_RAM_HEADROOM_GB':'12'}
+  if family=='glm':cfg['env']={'MAYA_GLM_RAM_GB':'8','MAYA_GLM_RAM_HEADROOM_GB':'1'}
   return cfg
- def test_legacy64_scope_and_admission_unchanged(self):
-  self.assertEqual(scope_limits({}),{'memory.max':52*GIB,'memory.swap.max':'max'})
+ def test_no_tier_is_not_a_32gb_profile(self):
   self.assertFalse(check_32gb({},1,1,'deepseek'))
- def test_all_families_both_bounded_tiers(self):
+ def test_all_families_admitted(self):
   for f in ['qwen','glm','deepseek']:
-   for cap in [20,22]:
-    c=self.cfg(f,cap);self.assertTrue(check_32gb(c,30.56*GIB,(cap+3)*GIB,f));self.assertIn('--property=MemoryMax='+str(cap*GIB),scope_properties(c))
+   self.assertTrue(check_32gb(self.cfg(f),30.56*GIB,9*GIB,f))
  def test_old32_rejects_insufficient_physical_ram(self):
   for f in ['qwen','glm','deepseek']:
    with self.assertRaises(RuntimeError):check_32gb(self.cfg(f),28.99*GIB,26*GIB,f)
- def test_reserve_three_gib_beyond_cap(self):
-  for cap in [20,22]:
-   with self.assertRaises(RuntimeError):check_32gb(self.cfg(maximum=cap),31*GIB,(cap+2.99)*GIB,'deepseek')
+ def test_available_ram_floor(self):
+  # Qwen: expert budget + 1 GiB; GLM/DeepSeek: 9 GiB. Swap is not capacity.
+  for f,budget,need in [('qwen','8',9),('qwen','12',13),('glm',None,9),('deepseek',None,9)]:
+   c=self.cfg(f)
+   if budget:c['args'][-1]=budget
+   self.assertTrue(check_32gb(c,31*GIB,need*GIB,f))
+   with self.assertRaisesRegex(RuntimeError,'available RAM'):check_32gb(c,31*GIB,need*GIB-1,f)
  def test_pre_handover_keeps_physical_gate(self):
   self.assertTrue(check_32gb(self.cfg(),31*GIB,1,'deepseek',check_available=False))
   with self.assertRaises(RuntimeError):check_32gb(self.cfg(),28*GIB,1,'deepseek',check_available=False)
- def test_memory_cap_cannot_be_increased_or_omitted(self):
-  for v in [0,24*GIB,52*GIB,'max',20.0*GIB,True]:
-   c=self.cfg();c['worker_memory_limits']['memory.max']=v
-   with self.assertRaises(RuntimeError):scope_limits(c)
-  c=self.cfg();c.pop('worker_memory_limits')
-  with self.assertRaises(RuntimeError):scope_limits(c)
- def test_high_boundary_cannot_be_changed(self):
-  c=self.cfg();c['worker_memory_limits']['memory.high']=20*GIB
-  with self.assertRaises(RuntimeError):scope_limits(c)
- def test_phase_aware_swap_is_preserved(self):
-  for v in [0,1,None]:
-   c=self.cfg();c['worker_memory_limits']['memory.swap.max']=v
-   with self.assertRaises(RuntimeError):scope_limits(c)
  def test_unknown_tier_rejected(self):
   c=self.cfg();c['host_ram_profile']='unchecked'
-  with self.assertRaises(RuntimeError):scope_limits(c)
+  with self.assertRaisesRegex(RuntimeError,'Unknown streaming RAM profile'):check_32gb(c,31*GIB,26*GIB,'deepseek')
  def test_qwen_cannot_fake_unbounded_profile(self):
   c=self.cfg('qwen');c['args'][-1]='24'
   with self.assertRaises(RuntimeError):check_32gb(c,31*GIB,26*GIB,'qwen')
- def test_glm_cannot_lower_native_headroom(self):
-  c=self.cfg('glm');c['env']['MAYA_GLM_RAM_HEADROOM_GB']='6'
-  with self.assertRaises(RuntimeError):check_32gb(c,31*GIB,26*GIB,'glm')
+ def test_glm_native_headroom_is_policy_value(self):
+  for v in ['6','12',None]:
+   c=self.cfg('glm');c['env']['MAYA_GLM_RAM_HEADROOM_GB']=v
+   with self.assertRaises(RuntimeError):check_32gb(c,31*GIB,26*GIB,'glm')
  def test_context_must_remain_qualified(self):
   for f in ['qwen','glm','deepseek']:
    c=self.cfg(f);c['args'][1]='8192'
    with self.assertRaises(RuntimeError):check_32gb(c,31*GIB,26*GIB,f)
+ def test_invalid_host_capacity_refuses(self):
+  with patch.object(resource_policy,'scope_limits',side_effect=RuntimeError('Invalid physical RAM/swap capacity')):
+   with self.assertRaisesRegex(RuntimeError,'Invalid physical'):check_32gb(self.cfg(),31*GIB,26*GIB,'deepseek')
 
 if __name__=='__main__':unittest.main()

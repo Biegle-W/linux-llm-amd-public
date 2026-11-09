@@ -5,12 +5,11 @@ from pathlib import Path
 import unittest
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'dsh'))
-import resource_policy
 from strata_ds41_runtime import check_settings
 
 # Owner headroom policy (99ec1b1): the unqualified-profile path requires --reserve-mib 128 and
-# 0.125 GiB startup headroom; 8192/6 apply only under explicit legacy replay.
-RESERVE, STARTUP = ('128', 0.125) if resource_policy.active() else ('8192', 6)
+# 0.125 GiB startup headroom.
+RESERVE, STARTUP = '128', 0.125
 
 
 class Settings(unittest.TestCase):

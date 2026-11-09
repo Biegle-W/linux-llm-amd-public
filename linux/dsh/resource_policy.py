@@ -1,5 +1,4 @@
 """Owner-selected headroom policy; hardware-free except explicit inventory reads."""
-import os
 from pathlib import Path
 
 GIB = 1024**3
@@ -7,11 +6,6 @@ MIB = 1024**2
 NAME = 'owner-headroom-v1'
 RAM_RESERVE_BYTES = GIB
 VRAM_RESERVE_BYTES = 128 * MIB
-
-
-def active():
-    # Explicit replay only: historical tests must not rewrite current policy.
-    return os.environ.get('LOCAL_LLM_LEGACY_RESOURCE_VALIDATION') != '1'
 
 
 def scope_limits(meminfo=None):

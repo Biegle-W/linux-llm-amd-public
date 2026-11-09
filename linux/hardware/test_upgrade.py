@@ -70,24 +70,6 @@ class UpgradeTests(unittest.TestCase):
                 selected, _, _, _ = llama_runtime.launch_spec()
             self.assertEqual(selected, binary)
 
-    def test_rocm_profile_headroom_can_be_stricter_than_default(self):
-        # Historical replay (LOCAL_LLM_LEGACY_RESOURCE_VALIDATION=1): a profile may
-        # demand more free VRAM than the 21 GiB default.
-        import inference_kernel
-        with tempfile.TemporaryDirectory() as directory:
-            amd = Path(directory)
-            (amd / 'mem_info_vram_total').write_text(str(24 * 1024**3))
-            (amd / 'mem_info_vram_used').write_text(str(int(1.5 * 1024**3)))
-            with patch.dict(rocm_runtime.resource_policy.os.environ, {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '1'}), \
-                 patch.object(inference_kernel, 'require_inference_kernel') as kernel, \
-                 patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
-                rocm_runtime.require_rocm_headroom()
-                with self.assertRaisesRegex(RuntimeError, '23 GiB'):
-                    rocm_runtime.require_rocm_headroom(23)
-                (amd / 'mem_info_vram_used').write_text(str(int(.5 * 1024**3)))
-                rocm_runtime.require_rocm_headroom(23)
-                self.assertEqual(kernel.call_count, 3)
-
     def test_rocm_headroom_uses_owner_floor_under_current_policy(self):
         # 99ec1b1: the owner headroom policy replaces profile-era headroom with
         # 128 MiB free per card; below that the load is still refused.
@@ -97,8 +79,7 @@ class UpgradeTests(unittest.TestCase):
             total = 24 * 1024**3
             (amd / 'mem_info_vram_total').write_text(str(total))
             (amd / 'mem_info_vram_used').write_text(str(total - 128 * 1024**2))
-            with patch.dict(rocm_runtime.resource_policy.os.environ, {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '0'}), \
-                 patch.object(inference_kernel, 'require_inference_kernel') as kernel, \
+            with patch.object(inference_kernel, 'require_inference_kernel') as kernel, \
                  patch.object(rocm_runtime, 'amd_devices', return_value=[amd, amd]), patch.object(rocm_runtime.time, 'sleep'):
                 rocm_runtime.require_rocm_headroom(23)
                 (amd / 'mem_info_vram_used').write_text(str(total - 128 * 1024**2 + 1))

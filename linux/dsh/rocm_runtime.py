@@ -25,8 +25,7 @@ def require_rocm(kind):
 def require_rocm_headroom(min_free_gib=21.0):
     from inference_kernel import require_inference_kernel
     require_inference_kernel()
-    if resource_policy.active():
-        min_free_gib = resource_policy.VRAM_RESERVE_BYTES / 1024**3
+    min_free_gib = resource_policy.VRAM_RESERVE_BYTES / 1024**3
     devices = amd_devices()
     for _ in range(50):
         free = min(int((d / 'mem_info_vram_total').read_text()) - int((d / 'mem_info_vram_used').read_text()) for d in devices)

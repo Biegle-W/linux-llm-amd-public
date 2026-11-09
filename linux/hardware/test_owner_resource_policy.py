@@ -29,7 +29,7 @@ def healthy():
 
 class OwnerPolicy(unittest.TestCase):
     def setUp(self):
-        patcher = patch.dict(os.environ, {'LOCAL_LLM_LEGACY_RESOURCE_VALIDATION': '0',
+        patcher = patch.dict(os.environ, {
             'LOCAL_LLM_LEGACY_SWAP_VALIDATION': '0', 'LOCAL_LLM_SWAP_POLICY': 'loading-swap-v4'})
         patcher.start()
         self.addCleanup(patcher.stop)

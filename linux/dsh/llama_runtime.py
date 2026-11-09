@@ -147,7 +147,7 @@ def launch_spec(backend=None, model=None):
 
 def require_amd_headroom():
     devices = amd_devices()
-    required = resource_policy.VRAM_RESERVE_BYTES if resource_policy.active() else 18 * 1024**3
+    required = resource_policy.VRAM_RESERVE_BYTES
     for _ in range(50):
         free = [int((d / 'mem_info_vram_total').read_text()) -
                 int((d / 'mem_info_vram_used').read_text()) for d in devices]

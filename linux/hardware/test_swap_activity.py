@@ -452,8 +452,7 @@ class SwapPolicyTests(unittest.TestCase):
                         INFERENCE_SWAPOUT_RATE_LIMIT_BYTES=MiB,
                         INFERENCE_IO_RATE_LIMIT_BYTES=8*MiB,
                         RATE_WINDOW_SECONDS=30,
-                        # 99ec1b1: owner RAM floor is 1 GiB (2 GiB only under
-                        # LOCAL_LLM_LEGACY_RESOURCE_VALIDATION=1 replay).
+                        # 99ec1b1: owner RAM floor is 1 GiB.
                         MIN_AVAILABLE_BYTES=GiB,
                         MIN_PRESSURE_SAMPLES=3, MEMORY_FULL_PSI_AVG10_LIMIT=10.0)
         for key, value in expected.items():

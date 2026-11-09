@@ -1,7 +1,6 @@
 """Admit separately qualified native profiles while retaining legacy source pins."""
 from pathlib import Path
 import hashlib,json,os,re,subprocess,sys,time
-import resource_policy
 from amd_device import amd_devices
 from llama_runtime import require_worker_scope
 from moe_memory import host_memory
@@ -145,7 +144,6 @@ def require_profile(cfg,record,before_handover=False):
         raise RuntimeError('Qualified tokenizer identity changed')
     if cfg.get('worker_swap_max_bytes') is not None or cfg.get('startup_free_vram_gib')!=0.125:
         raise RuntimeError('Retain current phase-aware swap and per-card resource guard')
-    if not resource_policy.active():raise RuntimeError('This qualification requires the current owner resource policy')
     ensure_streaming_models()
     total,available=host_memory()
     if total<60*GIB or not before_handover and available<52*GIB:

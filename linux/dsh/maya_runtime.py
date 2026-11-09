@@ -1,5 +1,4 @@
 """Admit only validated, bounded Maya profiles on both AMD cards."""
-import resource_policy
 import hashlib
 import json
 from pathlib import Path
@@ -64,10 +63,10 @@ def check_config(cfg, before_handover=False, require_validated=True):
         raise RuntimeError('Maya model packs must use the configured system-drive streaming model folder.')
     if int(value('--max-context'))<=0:
         raise RuntimeError('Maya context must be explicitly bounded.')
-    if int(value('--vram-reserve-mib' if glm else '--reserve-mib'))<(128 if resource_policy.active() else 6144):
+    if int(value('--vram-reserve-mib' if glm else '--reserve-mib'))<128:
         raise RuntimeError('Maya reserve is below the active per-card resource policy.')
     if require_validated:
-        required=128 if resource_policy.active() else 8192
+        required=128
         if int(value('--vram-reserve-mib' if glm else '--reserve-mib'))<required or (glm and int(value('--vram-reserve-later-mib'))<required):
             raise RuntimeError('Maya per-card reserve is below the selected resource policy.')
     env=cfg.get('env',{})

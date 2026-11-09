@@ -16,19 +16,15 @@ def vram_worker_limits(profile):
         raise RuntimeError('Unknown MoE memory placement; no worker was changed.')
     if placement != 'vram_only':
         return None
-    limits = profile.get('worker_memory_limits', {})
-    expected = {'memory.high': 4*GIB, 'memory.max': 5*GIB, 'memory.swap.max': 'max'}
-    if not resource_policy.active() and (limits != expected or any(type(limits.get(k)) is not int for k in ('memory.high', 'memory.max'))):
-        raise RuntimeError('VRAM-only worker limits must match the validated 4/5 GiB RAM scope with phase-aware swap.')
     if (profile.get('host_expert_bytes') != 0 or profile.get('cpu_expert_layers') != [] or
             profile.get('gpu_expert_cache_mib') != 0 or
             profile.get('backend') != 'hip-amd' or
             profile.get('minimum_host_ram_gib', 0) < 12 or
-            profile.get('minimum_available_ram_gib', 0) < (1 if resource_policy.active() else 7) or
+            profile.get('minimum_available_ram_gib', 0) < 1 or
             profile.get('min_start_vram_gib', 0) < 21 or
-            profile.get('min_free_vram_gib', 0) < (0.125 if resource_policy.active() else 3)):
+            profile.get('min_free_vram_gib', 0) < 0.125):
         raise RuntimeError('VRAM-only placement must retain zero CPU experts and physical staging headroom.')
-    return resource_policy.scope_limits() if resource_policy.active() else dict(limits)
+    return resource_policy.scope_limits()
 
 
 def worker_limits_for_model(model):
@@ -57,10 +53,7 @@ def memory_reason(profile, total, available, already_loaded=False):
     if total < minimum:
         return f'MoE profile requires at least {minimum/GIB:g} GiB OS-visible RAM; found {total/GIB:.1f} GiB.'
     gpu = vram_worker_limits(profile) is not None
-    reserve = (3*GIB if already_loaded else profile['minimum_available_ram_gib']*GIB) if gpu else (
-        3*GIB if already_loaded else profile['host_expert_bytes'] + 4*GIB)
-    if resource_policy.active():
-        reserve = GIB if already_loaded else (profile.get('host_expert_bytes', 0) + GIB if not gpu else GIB)
+    reserve = GIB if already_loaded else (profile['host_expert_bytes'] + GIB if not gpu else GIB)
     if available < reserve:
         purpose = 'VRAM-only loading/staging' if gpu else 'MoE CPU expert storage'
         return (f'{purpose} requires {reserve/GIB:.1f} GiB available RAM '
@@ -198,8 +191,7 @@ def worker_memory(pid, *, proc_root=Path('/proc')):
 
 def vram_headroom_reason(profile, reserve_key='min_free_vram_gib'):
     """Optional whole-card reserve, including desktop and unrelated GPU users."""
-    reserve = (resource_policy.VRAM_RESERVE_BYTES if resource_policy.active()
-               else profile.get(reserve_key, 0) * GIB)
+    reserve = resource_policy.VRAM_RESERVE_BYTES
     if not reserve:
         return None
     from amd_device import amd_devices
@@ -248,7 +240,7 @@ def watch_worker(proc, active_model, stop):
                     return
                 continue
             vram_reason = vram_headroom_reason(profile)
-            low = low + 1 if available < (GIB if resource_policy.active() else 3*GIB) or vram_reason else 0
+            low = low + 1 if available < GIB or vram_reason else 0
             spill_count = spill_count + 1 if spill > 256*1024**2 else 0
             if low >= 3 or spill_count >= 3:
                 print(f'MoE memory guard: available={available/GIB:.2f} GiB, '

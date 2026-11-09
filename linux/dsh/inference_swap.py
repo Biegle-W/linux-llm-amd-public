@@ -146,19 +146,18 @@ def spawn_owned(args, *, expected_memory_limits=None, **kwargs):
             raise RuntimeError('Unsupported owned-worker scope options')
     if not command or kwargs.get('shell') or 'executable' in kwargs or 'preexec_fn' in kwargs:
         raise RuntimeError('Unsupported owned-worker spawn; explicit argv required')
-    if resource_policy.active():
-        # The owner's current policy supersedes profile-era RAM/swap ceilings.
-        kept = []
-        while properties:
-            prop = properties.pop(0)
-            if prop in ('-p', '--property'):
-                value = properties.pop(0)
-                if not value.startswith(('MemoryHigh=', 'MemoryMax=', 'MemorySwapMax=')):
-                    kept.extend((prop, value))
-            elif not prop.startswith(('--property=MemoryHigh=', '--property=MemoryMax=', '--property=MemorySwapMax=')):
-                kept.append(prop)
-        expected_memory_limits = resource_policy.scope_limits()
-        properties = kept + resource_policy.properties(expected_memory_limits)
+    # The owner's current policy supersedes profile-era RAM/swap ceilings.
+    kept = []
+    while properties:
+        prop = properties.pop(0)
+        if prop in ('-p', '--property'):
+            value = properties.pop(0)
+            if not value.startswith(('MemoryHigh=', 'MemoryMax=', 'MemorySwapMax=')):
+                kept.extend((prop, value))
+        elif not prop.startswith(('--property=MemoryHigh=', '--property=MemoryMax=', '--property=MemorySwapMax=')):
+            kept.append(prop)
+    expected_memory_limits = resource_policy.scope_limits()
+    properties = kept + resource_policy.properties(expected_memory_limits)
     unit = 'dsh-worker-' + uuid.uuid4().hex + '.scope'
     read_fd, write_fd = os.pipe()
     scope = proc = None
@@ -370,12 +369,9 @@ class WorkerSwapGuard:
         self.memory_reader = memory_reader
         self.terminator = terminator
         self.write_budget = write_budget_bytes_per_second
-        self.storage_monitor = StorageHealthMonitor() if resource_policy.active() else None
-        if resource_policy.active():
-            from strata_memory import vram_snapshot
-            self.headroom_reader = vram_snapshot
-        else:
-            self.headroom_reader = None
+        self.storage_monitor = StorageHealthMonitor()
+        from strata_memory import vram_snapshot
+        self.headroom_reader = vram_snapshot
         self.lock = threading.RLock()
         self.watch = None
         self.fault = None
