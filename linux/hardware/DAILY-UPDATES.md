@@ -4,6 +4,18 @@ The existing 03:00 updater uses isolated builds, required per-card parity and on
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-09 — manual update: llama.cpp, Strata, Maya promoted
+
+Installed by hand with the owner's OK (ComfyUI stopped for the GPU checks, restarted after). Each engine: isolated CPU build, then one guarded stage (per-card parity where the engine has it, provisional install, one strict two-step DSH read-tool check per enabled route, rollback on failure), then review and promotion. No fault, hold or spill.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| llama.cpp | `818ac6b078e3` → `0a94a3f28968` | empero, Ornith, Flint | **Promoted.** Tool-call decode 172.6 / 11.3 / 64.9 tok/s (this morning 173.3 / 11.6 / 64.0). |
+| Strata | `146df3c46873` → `504b143342a9` (0.1.59.1) | Flash Next | **Promoted.** The tool check showed 27.3 tok/s decode, timed over only 76 tokens. A 400-token A/B through the hub showed no regression: old 52.1 / 51.8, new 49.5 / 51.9 tok/s decode; prompt read 791–841 vs 788–831 tok/s. A read-only review of the 220 commits found no decode-path cause. |
+| Maya | `7bf15ac68f9b` → `00655481ce2b` (1.1.57) | GLM, Maya DeepSeek | **Promoted.** Parity 34/36 pass; `hip_prefill_fused_parity` failed on both cards (non-blocking by rule; the GLM profile runs with `MAYA_GLM_PREFILL_FUSED=0`). Tool step: DeepSeek 106 s (was 198 s), GLM 31 s (was 116 s). Load: DeepSeek 72 s, GLM 243 s (was 119 s). `maya/runtime.json` pin reconciled to 1.1.57. |
+
+Not updated: Strata DeepSeek (far behind upstream; its November 7 candidate failed `ds4_iq_test`). vLLM and SGLang were current. llama.cpp upstream had already moved to `3d94ffe452f4` by the end of the session. Evidence: `hardware/generated/daily-update/2026-11-09T-manual/`.
+
 ## 2026-11-09 — scripted updater retired; first manual check
 
 The owner retired the scripted updater; its timer is disabled, and updates are now monitored and installed by hand. Upstream check:
@@ -17,7 +29,7 @@ The owner retired the scripted updater; its timer is disabled, and updates are n
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` | same | Current. |
 | SGLang | `f84475ccf593` | same | Current. |
 
-Nothing installed yet. Installing needs a GPU window (the resident ComfyUI worker must stop, with the owner's OK).
+Installed the same day; see the entry above.
 
 ## 2026-11-07
 

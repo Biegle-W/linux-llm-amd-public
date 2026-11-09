@@ -63,19 +63,19 @@ uname -r   # expect 7.0.14-42-vmpt1
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions in production** (last scripted update November 7; the updater is retired; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions in production** (last update November 9, by hand; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `818ac6b078e3` |
+| llama.cpp | `0a94a3f28968` |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `146df3c46873` |
-| Maya | `7bf15ac68f9b` |
+| Strata | `504b143342a9` |
+| Maya | `00655481ce2b` (1.1.57) |
 | Strata DeepSeek | `ffa80d73133e` |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last run: llama.cpp promoted; Strata promoted; Maya promoted; Strata DeepSeek rejected.
+Last update (November 9, manual): llama.cpp, Strata and Maya promoted after strict short tool checks; Strata DeepSeek not attempted.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Retired legacy pins remain separate; they are not the selected native sources.
@@ -97,7 +97,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 
 ## Open items
 
-1. **Pending engine updates (November 9 check).** llama.cpp `0a94a3f` (40 commits: MoE-cache, MTP and tool-call fixes), Strata `504b143` (engine 0.1.59; the changes are for other hardware and packaging), Maya `0065548` (v1.1.57: GLM-5.3 on AMD, model API fixes). Strata DeepSeek is far behind upstream; its November 7 candidate failed a parity test. vLLM and SGLang are current. Installing needs a GPU window, so ask the owner before stopping the resident ComfyUI worker. Maya's `maya/runtime.json` pin (`cbaaec5`) disagrees with the native registry (`7bf15ac`); reconcile it during the Maya update.
+1. **Engine updates (checked and installed by hand).** November 9: llama.cpp, Strata and Maya updated and verified. Still behind: Strata DeepSeek (far behind upstream; its November 7 candidate failed `ds4_iq_test`, so it needs a careful build and parity run). Check upstream each session; GPU work needs the owner's OK while ComfyUI is resident. The old engine stage folders `hardware/generated/daily-update/2026-11-07T181342-*` (llama) and `2026-11-07T183647-*` (Maya) are no longer referenced by production; deleting them is the owner's call.
 2. **One DeepSeek NaN event** on Sapphire (CUDA1) at the new settings, in about 141 requests. If it recurs, raise the Strata DeepSeek reserve to 4 GiB first.
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
 4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.

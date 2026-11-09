@@ -6,7 +6,7 @@
     "ornith-1.5-122b",
     "flint-40b-a2.5b"
   ],
-  "source_commit": "818ac6b078e345e59ffa4b1ed3b1ce1b0ae83827",
+  "source_commit": "0a94a3f289687883617b9a2abbc7e0ade2d6b6c4",
   "runtime_overrides": {},
   "source_overrides": {},
   "paused_models": {
@@ -17,7 +17,7 @@
     "flint-40b-a2.5b",
     "ornith-1.5-122b"
   ],
-  "source_path": "hardware/generated/daily-update/2026-11-07T181342-144d82/llama/llama.cpp",
+  "source_path": "hardware/generated/daily-update/2026-11-09T-manual/llama/llama.cpp",
   "qualification": {
     "evidence": "hardware/results/REALISTIC-LARGE-MODELS-2026-11-05.json",
     "models": [
