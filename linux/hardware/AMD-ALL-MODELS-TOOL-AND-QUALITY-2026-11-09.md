@@ -62,7 +62,7 @@ On 400-token hub answers these three routes reach 7.5–22 tok/s (November 8). T
 - On short-answer items (60-token limit), they use the whole budget reasoning and return an empty answer.
 - This hit 36 Flint answers and 12 Ripple answers. Flint's reasoning text often already contains the right answer, for example "Fyodor Dostoe…" for Crime and Punishment.
 - Where the budget is larger, they do well. Flint: 12/12 and 10/10 code, all tool and agent items. Ripple: 18/18 math, 12/12 code, 5/5 agent.
-- Their scores here are not comparable with the other routes. Rerunning these two with a larger answer budget would be the fair comparison; it was not done.
+- Their scores here are not comparable with the other routes. The fair comparison was run on November 10 with a larger answer budget: Flint 51/54 and 62/64, Ripple 53/54 and 63/64 ([report](FLINT-RIPPLE-BUDGET-RERUN-2026-11-10.md)).
 
 ## Stops during the campaign (none were GPU faults)
 

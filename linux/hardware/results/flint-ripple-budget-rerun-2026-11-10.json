@@ -1,0 +1,46 @@
+{
+ "date": "2026-11-10",
+ "method": "hardware/quant-eval suite.py (54) and suite2.py (64) through the hub, temperature 0, thinking off, every max_tokens raised to at least 4096; graded by grade.py / grade2.py",
+ "requests": 236,
+ "errors": 0,
+ "routes": [
+  {
+   "route": "flint-40b-a2.5b",
+   "suite54": 51,
+   "suite64": 62,
+   "capped": 0,
+   "max_completion_tokens": 560,
+   "request_seconds": 284,
+   "nov9": {
+    "suite54": 43,
+    "suite64": 36,
+    "capped": 36
+   },
+   "misses": {
+    "m03": "1448, expected 2318",
+    "f01": "JSON repeated with a stray </think> tag",
+    "f05": "gracias muy mucho",
+    "k09": "Mercury, expected gold",
+    "r02": "47th day (correct; grader wants bare 47)"
+   }
+  },
+  {
+   "route": "ripple-65b-vllm",
+   "suite54": 53,
+   "suite64": 63,
+   "capped": 1,
+   "max_completion_tokens": 4096,
+   "max_completion_tokens_finished": 721,
+   "request_seconds": 579,
+   "nov9": {
+    "suite54": 50,
+    "suite64": 56,
+    "capped": 12
+   },
+   "misses": {
+    "f05": "gracias",
+    "c03": "reasoned through 4096 tokens, no answer"
+   }
+  }
+ ]
+}
