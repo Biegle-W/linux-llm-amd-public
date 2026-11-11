@@ -1,4 +1,4 @@
-# Current AMD runtime handoff — November 8, 2026
+# Current AMD runtime handoff — November 11, 2026
 
 This is the current operational summary for Linux, Windows and phone API clients. Read the root [rules](../../README.md) first. Dated history is in the [changelog](../hardware/CHANGELOG.md); it is not startup reading.
 
@@ -55,7 +55,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 | Timer | When | Notes |
 |---|---|---|
-| `llm-daily-update.timer` | **Disabled November 9** (owner) | Retired after repeated skips and failures. The unit source stays in `hardware/daily-update/systemd/`. Updates are checked and installed by hand ([update watch](../hardware/DAILY-UPDATES.md)). |
+| `llm-daily-update.timer` | **Removed November 9** (owner; the timer is no longer installed) | Retired after repeated skips and failures. The unit source stays in `hardware/daily-update/systemd/`. `llm-daily-update-recover.service` is still enabled; at login it only rolls back an interrupted install. Updates are checked and installed by hand ([update watch](../hardware/DAILY-UPDATES.md)). |
 
 ## Runtime and source identities
 
@@ -95,13 +95,13 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 ## Open items
 
 1. **Engine updates (checked and installed by hand).** November 9: llama.cpp, Strata, Maya and Strata DeepSeek updated and verified; all engines were current at that point except llama.cpp, whose upstream had moved on to `3d94ffe`. Check upstream each session; GPU work needs the owner's OK while ComfyUI is running. The old engine stage folders `hardware/generated/daily-update/2026-11-07T181342-*` (llama) and `2026-11-07T183647-*` (Maya) are no longer referenced by production; deleting them is the owner's call.
-2. **One DeepSeek NaN event** on Sapphire (CUDA1) at the new settings, in about 141 requests. If it recurs, raise the Strata DeepSeek reserve to 4 GiB first.
+2. **DeepSeek NaN on Strata is recurring.** The November 11 replay at the 2 GiB reserve stopped after 88 of 216 items with 5 NaN errors ([current results](../hardware/CURRENT-AMD-BENCHMARKS.md)). Investigation is open; the [changelog](../hardware/CHANGELOG.md) lists the tests run so far.
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
 4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.
 5. **Stale metadata inside sealed profiles** (for example "8GiB requested reserve" in their `settings` text). Editing them would change the seals; leave them.
 6. **Untested spill stop.** Unit tests pass (`python3 -m unittest discover -s hardware -p "test_*.py"`: 652 tests, 2 skipped, November 9). The pre-November 3 guard replay was removed on November 9; the owner policy (1 GiB RAM, 128 MiB VRAM per card) is tested in `hardware/test_owner_resource_policy.py`. No test covers the Strata worker VRAM-spill stop in `dsh/inference_swap.py` (`WorkerSwapGuard`); add one before changing it.
 ## Keep this handoff small
 
-After authorized work, replace the state above, add one changelog line, sanitize and publish both repos, and keep the private operational copy byte-identical on the shared drive (`/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md`). `hardware/daily-update/publish.py` rewrites the block between the `daily-update` markers and depends on the `## Runtime and source identities` heading, the `Public native exports` paragraph after it, and this file's name; keep all three.
+After authorized work, replace the state above, add one changelog line, sanitize and publish both repos, and keep the private operational copy byte-identical on the shared drive (`/mnt/shared/LINUX-LLM-RUNTIME-HANDOFF.md`). The retired `hardware/daily-update/publish.py` rewrote the block between the `daily-update` markers and depends on the `## Runtime and source identities` heading, the `Public native exports` paragraph after it, and this file's name; keep all three in case it is reused.
 
 History only: [November 5 handoff](../hardware/history/documentation-2026-11-05/LINUX-LLM-RUNTIME-HANDOFF.reference.md), Git history for the November 8 pre-cleanup version, [benchmark history](../hardware/BENCHMARK-HISTORY.md). Do not restore superseded settings or resume old plans without a new owner request.

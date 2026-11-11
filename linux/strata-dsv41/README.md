@@ -1,5 +1,7 @@
 # Strata DeepSeek component
 
+> **Historical setup notes (October 24, 2026).** The enabled route is now `deepseek-v4.1-flash-1017-strata-unsloth-q1`, and engine updates have been installed by hand since November 9. Current pin and settings are in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) and `runtime.json`.
+
 S-only weights, old drafter and S pack are removed. Shared S Engram shards5/6
 remain required by XS in both engines. The XS pack and configuration are unchanged.
 [Retirement proof and current RAM hold](../hardware/DEEPSEEK-S-RETIREMENT-2026-10-26.md).

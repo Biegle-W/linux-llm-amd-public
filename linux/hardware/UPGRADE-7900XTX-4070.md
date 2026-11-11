@@ -9,7 +9,7 @@ The planned next hardware change is documented in
 validated; the notes below describe the earlier mixed-vendor setup.
 
 **Latest October 16 status:** all five retained llama.cpp GGUF profiles are activated
-on AMD alone; see [migration validation](LLAMA-MIGRATION-2026-10-16.md).
+on AMD alone; see migration validation (not in this mirror).
 Qwen SGLang/vLLM ROCm profiles are also active. HyperQwen is disabled because
 its CUDA-only 14.707 GiB target cannot fit the remaining 12 GB NVIDIA card.
 The unused HyperQwen target has now been removed. Strata remains deferred;
@@ -23,7 +23,7 @@ the active launcher state. Earlier Vulkan-first preparation below is historical.
 
 **Later October 16 update:** Bolt replaced Lightning and is the first activated
 AMD-only model, through the existing llama.cpp launcher. Other migrations remain
-deferred. See [Bolt validation](NEMOTRON-BOLT-2026-10-16.md). The earlier test-only
+deferred. See Bolt validation (not in this mirror). The earlier test-only
 status below describes the state before this replacement.
 
 Prepared 2026-10-15; status updated 2026-10-16. **GPUs installed; normal launcher
@@ -31,7 +31,7 @@ migration not activated.** AMD Vulkan sees RX 7900 XTX at x16 and RTX 4070 at x4
 This test configuration uses 32 GB system RAM. Work in this historical phase is
 explicitly limited to GPU-resident models. Prefer AMD alone; add the 4070 only
 when a model cannot fit safely on AMD with a usable context. All six selected
-October 16 test presets fit on AMD alone (Nemotron without MTP). See [October 16 GPU tests](GPU-RESIDENT-2026-10-16.md).
+October 16 test presets fit on AMD alone (Nemotron without MTP). See October 16 GPU tests (not in this mirror).
 The plans below were prepared for 64 GB; do not activate CPU-resident Strata expert
 caching against the reduced RAM. Existing 4070/3060 launcher profiles are guarded
 and are not usable on this new topology until deliberately migrated.
@@ -178,7 +178,7 @@ NVIDIA cards. No model was loaded into that build. Five upgrade regression tests
 and all 13 existing automatic-handover tests passed. The real current topology
 passed its guard, and the existing Strata Q3 service still reported healthy after
 preparation. `llm-upgrade-check` was installed as an actual PATH command file.
-Details and executable checksum: [validation record](validation-2026-10-15.json).
+Details and executable checksum: validation record (not in this mirror).
 
 Read-only Vulkan enumeration from the repository root:
 

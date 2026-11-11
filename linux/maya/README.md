@@ -1,6 +1,8 @@
 # Project Maya on two RX 7900 XTX cards
 
-**Current October26 selection:** GLM and DeepSeek-XS only. S-only assets and its
+> **Historical setup notes (October 26, 2026).** Current version, routes, paths and reserves are in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md) and `maya/runtime.json`.
+
+**October 26 selection (historical):** GLM and DeepSeek-XS only. S-only assets and its
 unused drafter are removed; XS still requires S Engram shards5/6 at their original
 paths. `deepseek-s` installation is rejected. Source pins are retained in
 [runtime.json](runtime.json); no runtime update accompanies retirement. RAM-offloaded

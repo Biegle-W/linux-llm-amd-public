@@ -11,10 +11,7 @@ No source-repository commits or raw audit reports are included. Check fresh Git
 history as well as working files before making changes public. Keep local
 credentials, private configuration and model weights outside tracked files.
 
-The `linux-nvidia/` addition is the sanitized pre-AMD configuration, checked with
-37 Python and 29 shell syntax checks, nine JSON parses, and 19 retained
-backend-shutdown and shared-mount unit tests (all passed). Historical GPU checks are described in its README; no NVIDIA runtime
-or throughput tests were repeated on the current mixed-vendor machine.
+The former `linux-nvidia/` snapshot (sanitized pre-AMD configuration) is no longer in this tree; retired settings are indexed in [archives/README.md](archives/README.md). No NVIDIA runtime or throughput tests were repeated on the current dual RX 7900 XTX machine.
 
 
 October 17 vLLM tuning: the operational profile passed dual-GPU numerical/graph,

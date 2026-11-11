@@ -365,7 +365,7 @@ All 18 CPU memory/promotion/rollback tests pass. Saved October25 llama.cpp,
 Maya and Strata DeepSeek baselines pass the new memory gate; vLLM dev466 still
 fails major swap and Qwen prose regression. No new GPU test, runtime promotion
 or performance measurement. Original nightly results below are unchanged.
-[Exact policy and replay limits](daily-update/README.md#minor-worker-swap-allowance--october-25).
+[Exact policy and replay limits](BENCHMARK-HISTORY.md#minor-worker-swap-allowance--october25-validation-only).
 
 ## 2026-10-25
 
@@ -431,7 +431,7 @@ no new inference benchmark or runtime promotion/rollback was performed.
 The October24 vLLM candidate records below were promoted under the older gate;
 their nonzero swap fields now fail replay. Historical byte totals may double-count
 descendants and are retained as reported, without rewriting old timings/results.
-[Policy, coverage and limits](daily-update/README.md#zero-swap-gate-correction--october-24).
+[Policy, coverage and limits](BENCHMARK-HISTORY.md#daily-updater-zero-swap-gate--october24-validation-only).
 
 ## 2026-10-24
 

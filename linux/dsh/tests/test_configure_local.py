@@ -61,8 +61,8 @@ class ConfigureLocalTests(unittest.TestCase):
         provider = result['llm-pi-ai']['providers']['amd-server']
         self.assertEqual(provider['displayName'], 'AMD server')
         self.assertEqual(provider['baseURL'], 'http://127.0.0.1:30100/v1')
-        self.assertEqual(len(provider['models']), 7)
-        self.assertEqual(len({m['id'] for m in provider['models']}), 7)
+        self.assertEqual(len(provider['models']), 9)
+        self.assertEqual(len({m['id'] for m in provider['models']}), 9)
 
     def test_external_selection_is_preserved(self):
         selection = {'provider': 'external-test', 'model': 'keep'}
@@ -79,7 +79,7 @@ class ConfigureLocalTests(unittest.TestCase):
         self.assertEqual(result['agent-default-model']['provider'], 'amd-server')
 
     def test_paused_models_stay_hidden_and_cannot_be_default(self):
-        result = self.refresh({'provider': 'strata-local', 'model': 'qwen3.8-flash-next-iq3_xxs'})
+        result = self.refresh({'provider': 'llama-local', 'model': 'nemotron-3.5-super-iq3'})
         ids = {m['id'] for m in result['llm-pi-ai']['providers']['amd-server']['models']}
         self.assertNotIn('ornith-1.5-122b', ids)
         self.assertNotIn('nemotron-3.5-super-iq3', ids)

@@ -1,4 +1,4 @@
-# Current LLM model storage — November 3, 2026
+# LLM model storage — change notes and November 3 inventory
 
 **November 11 removal (owner request):** removed the routes `ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b`. Weight folders deleted (114 GB freed): `sharedSATA1/GGUF-Models/Ornith-1.5-122B-GGUF` (72 GB, Q4_K_M and mmproj), `sharedSATA1/GGUF-Models/Flint-40B-A2.5B` (24 GB, UD-Q4_K_XL) and `sharedSATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound` (19 GB). No remaining route uses them. Mentions of these three below are historical.
 
@@ -11,6 +11,8 @@
 **November 7 removal (owner request):** deleted from sharedSATA1: `Graphics-Models/experimental/h3-hoststage-20261028` (20 GB host-staged H3 rank shards, superseded by `experimental/h3-tp2-halves-20261107`), `Graphics-Models/experimental/h3-encoder-formats-20261028` (16 GB W4A8 32B encoder trial) and the incomplete `Unsloth/hub/models--unsloth--MiniMax-H3-FP8` download (1.8 GB). Nothing in production used them. About 38 GB freed.
 
 **November 3 cleanup:** current model locations below are retained. Unused environments/build/cache payloads are removed; the additional H3 derived rank shards now use sharedSATA1 `Graphics-Models/experimental/h3-hoststage-20261028/shards`. Maya/Strata streaming weights stay on system NVMe. [Scope and verification](SYSTEM-STORAGE-CLEANUP-2026-11-03.md).
+
+**From here down is the November 3 inventory, kept as history.** It predates the changes listed above and still names removed routes and deleted folders. Current routes and weight locations are in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md).
 
 Qwen main and DFlash2 now use sharedSATA1; retained Maya/Strata streaming assets use the system drive. Super IQ3 and old DeepSeek weight backing are removed. Seven enabled engine routes share six enabled base weight sets; Ornith and Strata Qwen remain configured but paused. Super W4A16 and Flint AWQ are retained experimental candidates. No new inference or performance result is implied. [Qwen relocation](QWEN-SATA-MIGRATION-2026-11-02.md) · [Streaming relocation](SABRENT-SYSTEM-MIGRATION-2026-11-02.md).
 

@@ -1,5 +1,7 @@
 # Public local quality harness
 
+> **Frozen for the November 11 run on twelve routes.** `ornith-1.5-122b`, `flint-40b-a2.5b` and `sage-a1.5` were removed afterwards; drop them from `ROUTES` and `FAST_ROUTES` before any rerun. Current route ids are in the runtime handoff.
+
 Python 3.14, standard library only. Copy this entire harness folder to the Linux server; no council workspace, pip packages, dataset caches, credentials, Docker image or other council files are needed. Source downloads use unauthenticated HTTPS. The server must have the chair-approved working unprivileged `bwrap` and its `/usr/bin/python3` runtime. `../DESIGN.md` documents the experiment; the commands below stand alone.
 
 The frozen suite contains 216 core items for all twelve routes and 84 disjoint additional items for the eight routes at least 28 tok/s. No model has been measured here.

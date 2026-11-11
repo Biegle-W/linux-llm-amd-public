@@ -31,7 +31,7 @@ These are two short local inventory-writing samples: 3,424 input tokens and 256
 output tokens, greedy decoding, warm kernels, unique prompts. Decode is externally
 timed after first visible text. Prefill proxy is input tokens divided by TTFT;
 it includes scheduling and first decode and is not a pure kernel benchmark.
-See [machine-readable results](results.json). Speeds vary with content, acceptance
+See machine-readable results (not in this mirror). Speeds vary with content, acceptance
 rate and context; neither result is a guarantee for an entire context window.
 The earlier llama.cpp Qwen Q4 MTP test (~80.6 t/s) remains faster on this hardware
 for its recorded workload; changing backend is not automatically an upgrade.
@@ -57,7 +57,7 @@ inference used about 21.6 GiB whole-card VRAM in the final test. The launchers r
 - Isolated PyTorch 2.13.0+git733fca1 / HIP 7.2; private ROCm 7.2.3 SDK.
 - Shared checkpoint: `GGUF-Models/Qwen3.8-27B-W4A16-AutoRound-GPTQ` on SATA,
   18.68 GiB including retained vision/extra tensors. Source revision and hashes:
-  [model-source.json](model-source.json).
+  model-source.json (not in this mirror).
 - Target linear weights are GPTQ INT4/group64; embedding/output head and MTP remain
   unquantized. Activations and Mamba state use BF16. This is a text-only profile.
 - Existing LowLatency compressed-tensors checkpoint and HyperQwen drafter are retained.
@@ -92,7 +92,7 @@ existing port-10000 gateway and existing key. No firewall or authentication chan
 Starting a backend closes only the configured inference workers, preserving DSH,
 Turnstone, the gateway and unrelated applications.
 
-[Installation/pins/local patches](INSTALL.md) · [lcz.me DFlash2 findings](DFLASH.md)
+Installation/pins/local patches (not in this mirror) · lcz.me DFlash2 findings (not in this mirror)
 
 DFlash2 is researched but not activated. The forum's advertised performance and
 196K/217K examples use two 7900 XTX GPUs; they cannot be copied onto this card.
