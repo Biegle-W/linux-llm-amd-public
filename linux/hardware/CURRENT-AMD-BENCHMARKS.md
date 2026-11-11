@@ -22,7 +22,7 @@ How to read it:
 - **Quality rank:** position by public-suite score; see [Quality ranking](#quality-ranking) for which differences are real.
 - **Public suite:** correct answers out of 216 items sampled from MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL and MuSR ([report](PUBLIC-QUALITY-SUITE-2026-11-11.md)). The 95% interval is about ±6 points (±13 items); the top four routes are not separated.
 - § 65 of Ripple's 216 answers were cut off by the 2,048–4,096-token limit while still reasoning.
-- ¶ DeepSeek on Strata returned NaN errors after four items and was not retried.
+- ¶ DeepSeek on Strata returned NaN errors after four items. A replay on November 11 stopped after 88 of 216 items with 5 NaN errors, the last three in a row; it has no full score.
 - † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)).
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
@@ -46,7 +46,7 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 - **Ranks 1–4 are a tie.** No difference among DeepSeek on Maya, Flash-Next and the two Qwen3.8-27B routes is statistically detected. The same holds among ranks 5–8.
 - **Measurably better than** lists the routes a route beats on the paired test (exact McNemar, Holm-corrected over the 55 pairs of the eleven routes scored on November 11, before three were removed). An empty cell means the suite cannot tell the route from any route below it.
 - **Cut off** counts answers that hit the 2,048–4,096-token limit and were scored wrong. Ripple (65) is held down by this; its rank is a lower bound.
-- DeepSeek on Strata uses the same weights as DeepSeek on Maya but returned NaN errors and has no score.
+- DeepSeek on Strata uses the same weights as DeepSeek on Maya but has no score: both attempts stopped on NaN errors. On the 82 items it did answer in the November 11 replay it got 64 right; Maya got 66 right on the same items. The answers are as good as Maya's when the engine does not fail.
 - **Removed November 11 (owner request):** `ornith-1.5-122b` (146, rank 6 of 11), `sage-a1.5` (142, rank 8) and `flint-40b-a2.5b` (121, rank 11). Ranks here are renumbered among the remaining routes; the removed routes' results stay in the report.
 - One attempt per item, temperature 0, thinking off. Details and per-pair numbers: [report](PUBLIC-QUALITY-SUITE-2026-11-11.md).
 Not measured yet: a sustained, matched benchmark across all 9 routes, thinking mode, and full-context quality.
