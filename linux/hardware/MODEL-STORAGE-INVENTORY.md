@@ -1,6 +1,6 @@
 # Current LLM model storage — November 3, 2026
 
-**November 11 removal (owner request):** removed the routes `ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b`. Weight folders pending deletion on owner confirmation (still on disk): `sharedSATA1/GGUF-Models/Ornith-1.5-122B-GGUF` (72 GB, Q4_K_M and mmproj), `sharedSATA1/GGUF-Models/Flint-40B-A2.5B` (24 GB, UD-Q4_K_XL) and `sharedSATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound` (19 GB). No remaining route uses them. Mentions of these three below are historical.
+**November 11 removal (owner request):** removed the routes `ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b`. Weight folders deleted (114 GB freed): `sharedSATA1/GGUF-Models/Ornith-1.5-122B-GGUF` (72 GB, Q4_K_M and mmproj), `sharedSATA1/GGUF-Models/Flint-40B-A2.5B` (24 GB, UD-Q4_K_XL) and `sharedSATA1/vLLM-Models/Sage-A1.5-W4A16-AutoRound` (19 GB). No remaining route uses them. Mentions of these three below are historical.
 
 **November 8 DeepSeek change (owner request):** kept UD-IQ1_S (`deepseek-v4.1-flash-1017-strata-unsloth-q1`, `deepseek-v4.1-flash-1017-maya-unsloth-q1`); removed both Coder IQ2_XXS routes and deleted `sharedNVME1/LLM-Models/DeepSeek-Coder-ISTA-20261103` (171 GB: IQ2_XXS shards and the 110 GB Engram IQ4_NL), the Strata and Maya Coder metadata packs and the Coder Engram view. See [Quant quality comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md).
 

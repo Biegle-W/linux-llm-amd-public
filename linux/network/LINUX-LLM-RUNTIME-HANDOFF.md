@@ -34,7 +34,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 - The registries are `dsh/models.json` and `dsh/models-hip.ini` (llama), `dsh/llama-runtime.json` (active and paused llama models), `dsh/vllm-profiles.json`, `dsh/sglang-profiles.json`, `dsh/strata-profiles.json`, `dsh/maya-profiles.json`, and the sealed `dsh/qualified-native-profiles.json` / `dsh/qualified-strata-qwen-profiles.json` (currently empty). `dsh/model_catalog.py` combines them; authenticated `/v1/models` is the live list.
 - Context is allocation capacity. Short checks prove neither full-window quality nor sustained throughput.
-- Disabled rows kept for reference (weights removed): `nemotron-3.5-super-iq3`, `deepseek-v4.1-flash-1017-strata-xs`, `deepseek-v4.1-flash-1017-maya`. Removed November 11 (owner request): `ornith-1.5-122b`, `sage-a1.5`, `flint-40b-a2.5b` — routes, profiles and the Sage launcher gone, weight folders still on disk until the owner confirms the deletion. Removed November 8: Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes. Final failed candidates (no retry without new evidence): PLE host-file-gather, Super INT4 EP2, the Maya DeepSeek 36 GB store, RDNA3 full-stack fork `2314df4`.
+- Disabled rows kept for reference (weights removed): `nemotron-3.5-super-iq3`, `deepseek-v4.1-flash-1017-strata-xs`, `deepseek-v4.1-flash-1017-maya`. Removed November 11 (owner request): `ornith-1.5-122b`, `sage-a1.5`, `flint-40b-a2.5b` — routes, profiles and the Sage launcher gone, weights deleted (114 GB freed on sharedSATA1). Removed November 8: Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes. Final failed candidates (no retry without new evidence): PLE host-file-gather, Super INT4 EP2, the Maya DeepSeek 36 GB store, RDNA3 full-stack fork `2314df4`.
 
 ## Hardware and kernel
 
