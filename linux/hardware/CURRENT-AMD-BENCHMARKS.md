@@ -2,26 +2,27 @@
 
 One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md).
 
-| Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) |
-|---|---|---|---:|---:|---:|---:|---:|---:|
-| `empero-qwen3.8-35b-a3b` | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 |
-| `flint-40b-a2.5b` | llama.cpp | passed | 64.0 | 4,653 | 50.7 | 51* | 62* | 121 |
-| `ornith-1.5-122b` | llama.cpp | passed | 11.6 | 602 | 167.9 | 53 | 62 | 146 |
-| `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 |
-| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 |
-| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 |
-| `sage-a1.5` | vLLM | passed | 140.0 | 5,619 | 88.5 | 51 | 61 | 142 |
-| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ |
-| `qwen3.8-flash-next-iq3_xxs` | Strata | passed | 66.3 | 710 | 69.5 | 51 | 62 | 164 |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | not run¶ |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 |
-| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 |
+| Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Quality rank |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|
+| `empero-qwen3.8-35b-a3b` | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 5 |
+| `flint-40b-a2.5b` | llama.cpp | passed | 64.0 | 4,653 | 50.7 | 51* | 62* | 121 | 11 |
+| `ornith-1.5-122b` | llama.cpp | passed | 11.6 | 602 | 167.9 | 53 | 62 | 146 | 6 |
+| `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 4 |
+| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 3 |
+| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 7 |
+| `sage-a1.5` | vLLM | passed | 140.0 | 5,619 | 88.5 | 51 | 61 | 142 | 8 |
+| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 |
+| `qwen3.8-flash-next-iq3_xxs` | Strata | passed | 66.3 | 710 | 69.5 | 51 | 62 | 164 | 2 |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | not run¶ | — |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 1 |
+| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 |
 
 How to read it:
 - **Tool call:** one DSH read-tool round trip with about 6.4K prompt tokens and 25 tool definitions, under the guarded harness ([standard](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)).
 - **Decode** is measured on that short tool-call answer (54–171 tokens). **Prompt read** is that prompt divided by time to first token, from a cold start.
 - **Suites:** the 54-item suite and the harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md), through the hub at temperature 0 with thinking off.
 - \* Flint and Ripple scores are from the [November 10 rerun](FLINT-RIPPLE-BUDGET-RERUN-2026-11-10.md) with every answer budget raised to at least 4,096 tokens. Both keep reasoning with thinking off, so under the suites' 60-token short-answer limit they returned empty answers and scored 43 and 36 (Flint) and 50 and 56 (Ripple) on November 9. Give these two routes about a thousand answer tokens.
+- **Quality rank:** position by public-suite score; see [Quality ranking](#quality-ranking) for which differences are real.
 - **Public suite:** correct answers out of 216 items sampled from MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL and MuSR ([report](PUBLIC-QUALITY-SUITE-2026-11-11.md)). The 95% interval is about ±6 points (±13 items); the top four routes are not separated.
 - § 65 of Ripple's 216 answers were cut off by the 2,048–4,096-token limit while still reasoning.
 - ¶ DeepSeek on Strata returned NaN errors after four items and was not retried.
@@ -29,4 +30,28 @@ How to read it:
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
 
+## Quality ranking
+
+Ranked by correct answers on the 216-item public suite, the only quality test here that spreads the routes out. The 54- and 64-item suites do not rank them: all twelve routes score 51–54 and 61–63.
+
+| Rank | Route | Correct / 216 | Score | 95% interval | Cut off | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Measurably better than |
+|---:|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 1 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 168 | 77.8% | 71.8–82.8% | 13 | 12 | 28 | 51 | 29 | 22 | 26 | Nemotron, Sage, GLM, Ripple, Flint |
+| 2 | `qwen3.8-flash-next-iq3_xxs` | 164 | 75.9% | 69.8–81.1% | 20 | 12 | 30 | 47 | 31 | 22 | 22 | Sage, GLM, Ripple, Flint |
+| 3 | `qwen3.8-27b-sglang-dflash2` | 163 | 75.5% | 69.3–80.7% | 21 | 8 | 31 | 47 | 32 | 18 | 27 | Sage, Ripple, Flint |
+| 4 | `qwen3.8-27b-vllm` | 157 | 72.7% | 66.4–78.2% | 26 | 10 | 28 | 45 | 31 | 19 | 24 | Ripple, Flint |
+| 5 | `empero-qwen3.8-35b-a3b` | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | Flint |
+| 6 | `ornith-1.5-122b` | 146 | 67.6% | 61.1–73.5% | 3 | 10 | 23 | 45 | 22 | 21 | 25 | — |
+| 7 | `nemotron-3.5-bolt-vllm` | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
+| 8 | `sage-a1.5` | 142 | 65.7% | 59.2–71.7% | 34 | 9 | 24 | 45 | 24 | 18 | 22 | — |
+| 9 | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3–69.1% | 0 | 10 | 25 | 43 | 11 | 21 | 26 | — |
+| 10 | `ripple-65b-vllm` | 134 | 62.0% | 55.4–68.2% | 65 | 5 | 17 | 42 | 32 | 14 | 24 | — |
+| 11 | `flint-40b-a2.5b` | 121 | 56.0% | 49.4–62.5% | 6 | 10 | 26 | 31 | 13 | 21 | 20 | — |
+| — | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | not measured | | | | | | | | | | |
+
+- **Ranks 1–4 are a tie.** No difference among DeepSeek on Maya, Flash-Next and the two Qwen3.8-27B routes is statistically detected. The same holds among ranks 5–10.
+- **Measurably better than** lists the routes a route beats on the paired test (exact McNemar, Holm-corrected over all 55 pairs). An empty cell means the suite cannot tell the route from any route below it.
+- **Cut off** counts answers that hit the 2,048–4,096-token limit and were scored wrong. Ripple (65) and Sage (34) are held down by this; their rank is a lower bound.
+- DeepSeek on Strata uses the same weights as DeepSeek on Maya but returned NaN errors and has no score.
+- One attempt per item, temperature 0, thinking off. Details and per-pair numbers: [report](PUBLIC-QUALITY-SUITE-2026-11-11.md).
 Not measured yet: a sustained, matched benchmark across all 12 routes, thinking mode, and full-context quality.
