@@ -13,11 +13,23 @@ Installed by hand at the owner's request. Each engine: isolated CPU build, then 
 | llama.cpp | `0a94a3f28968` → `cb44fdb1892e` (69 commits) | empero | **Promoted.** Both tool steps completed: first token 2.2 s on a 6,425-token prompt, second step 0.3 s. No swap, no kernel message. |
 | Strata | `504b143342a9` → `c1ff07f1a181` | Flash Next | **Promoted.** Both tool steps completed in 9.9 s and 8.3 s. No swap, no kernel message. |
 | Maya | `00655481ce2b` → `6fba6be98125` | Maya DeepSeek (GLM not reached) | **Failed; rolled back to `00655481ce2b`.** Parity 34/36, the same `hip_prefill_fused_parity` failure on both cards as November 9. The model loaded in 67 s. The first tool request returned no output after 65 s, and the kernel then logged GPU page faults from the new `maya-ds4` process on the second card (PCI `13:00.0`). The guard stopped the stage and latched a GPU hold. The stage was killed before its own rollback ran, so the profiles were restored by hand from the stage's rollback record. |
-| Strata DeepSeek | `504b143342a9` → `c1ff07f1a181` (0.1.59.1) | Strata DeepSeek | **Promoted** (owner cleared the hold and asked for the run). CPU tests 64 pass. Parity passed except the same marginal row as November 9, `IQ3_XXS wmma vs scalar y` 3.14e-3 vs 3e-3, identical on both cards. Both tool steps completed with no NaN, swap or kernel fault; load 65 s (was 68 s). **Warning:** the first, uncached step was slower: first token 69.2 s (was 54.7 s) and 109 tokens in 48.6 s after it, 2.2 tok/s (was 5.5). The cached second step was unchanged: 11.5 s (was 12.5 s). One short sample; not yet measured again. |
+| Strata DeepSeek | `504b143342a9` → `c1ff07f1a181` (0.1.59.1) | Strata DeepSeek | **Promoted** (owner cleared the hold and asked for the run). CPU tests 64 pass. Parity passed except the same marginal row as November 9, `IQ3_XXS wmma vs scalar y` 3.14e-3 vs 3e-3, identical on both cards. Both tool steps completed with no NaN, swap or kernel fault; load 65 s (was 68 s). **Warning:** the first, uncached step was slower: first token 69.2 s (was 54.7 s) and 109 tokens in 48.6 s after it, 2.2 tok/s (was 5.5). The cached second step was unchanged: 11.5 s (was 12.5 s). A longer check the same afternoon found no lasting slowdown (below). |
 
 vLLM and SGLang were current. An earlier attempt the same afternoon was refused before any install because the hub still held an idle Strata DeepSeek router whose engine had already exited; the hub's idle unloader could not retire it because it could not reach the engine's status port. It was stopped with the hub's own unload routine. Evidence: `hardware/generated/daily-update/2026-11-11T-manual/`.
 
-The owner cleared the GPU hold after the Maya fault; no GPU reset was logged and the hub serves normally. **Open:** Maya stays on `00655481ce2b` until the `6fba6be98125` page fault is understood, and the Strata DeepSeek first-step slowdown needs a longer measurement.
+The owner cleared the GPU hold after the Maya fault; no GPU reset was logged and the hub serves normally. **Open:** Maya stays on `00655481ce2b` until the `6fba6be98125` page fault is understood,.
+
+**Strata DeepSeek speed after the update** (ten requests through the hub, the November 8 method plus extra uncached samples; [results](results/strata-dsv41-speed-2026-11-11.json)). Only the first answers after a load are slow, as they were before; warm speed matches November 8.
+
+| Measure | November 11, new build | November 8 |
+|---|---:|---:|
+| Decode, first 400-token answer after load (tok/s) | 4.2 | 7.5 (3.8 in another run) |
+| Decode, later 400-token answers (tok/s) | 8.0–10.2 (four samples) | 10.1 |
+| Prompt read, 4.8K tokens uncached (tok/s) | 119, 63, 132 | 120 |
+| Decode after the long prompt, uncached / cached (tok/s) | 5.6–11.9 / 13.0 | 5.6 / 15.8 |
+| Load and first token (s) | 71 | 57–157 |
+
+No error, NaN, swap, kernel GPU fault or hold. One of three uncached prompt reads was half speed (63 tok/s); the cause is not known.
 
 ## 2026-11-09 — manual update: llama.cpp, Strata, Maya promoted
 

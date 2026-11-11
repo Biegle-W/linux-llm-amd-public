@@ -23,7 +23,7 @@ How to read it:
 - **Public suite:** correct answers out of 216 items sampled from MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL and MuSR ([report](PUBLIC-QUALITY-SUITE-2026-11-11.md)). The 95% interval is about ±6 points (±13 items); the top four routes are not separated.
 - § 65 of Ripple's 216 answers were cut off by the 2,048–4,096-token limit while still reasoning.
 - ¶ DeepSeek on Strata returned NaN errors after four items. A replay on November 11 stopped after 88 of 216 items with 5 NaN errors, the last three in a row; it has no full score. A [test with the idle settle off](STRATA-DEEPSEEK-SETTLE-OFF-2026-11-11.md) still faulted once in 91 requests.
-- † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)).
+- † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Strata DeepSeek measured the same way after the November 11 engine update: 4.2 for the first answer after load, then 8.0–10.2; prompt read 119–132 tok/s with one sample at 63 ([results](results/strata-dsv41-speed-2026-11-11.json)).
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
 
