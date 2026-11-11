@@ -4,6 +4,21 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-11 — manual update: llama.cpp and Strata promoted; Maya faulted and was rolled back
+
+Installed by hand at the owner's request. Each engine: isolated CPU build, then one guarded stage (per-card parity where the engine has it, provisional install, one strict two-step DSH read-tool check per enabled route), then review and promotion.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| llama.cpp | `0a94a3f28968` → `cb44fdb1892e` (69 commits) | empero | **Promoted.** Both tool steps completed: first token 2.2 s on a 6,425-token prompt, second step 0.3 s. No swap, no kernel message. |
+| Strata | `504b143342a9` → `c1ff07f1a181` | Flash Next | **Promoted.** Both tool steps completed in 9.9 s and 8.3 s. No swap, no kernel message. |
+| Maya | `00655481ce2b` → `6fba6be98125` | Maya DeepSeek (GLM not reached) | **Failed; rolled back to `00655481ce2b`.** Parity 34/36, the same `hip_prefill_fused_parity` failure on both cards as November 9. The model loaded in 67 s. The first tool request returned no output after 65 s, and the kernel then logged GPU page faults from the new `maya-ds4` process on the second card (PCI `13:00.0`). The guard stopped the stage and latched a GPU hold. The stage was killed before its own rollback ran, so the profiles were restored by hand from the stage's rollback record. |
+| Strata DeepSeek | `504b143342a9` → `c1ff07f1a181` | — | **Not run** (GPU hold after the Maya fault). The isolated build succeeded. |
+
+vLLM and SGLang were current. An earlier attempt the same afternoon was refused before any install because the hub still held an idle Strata DeepSeek router whose engine had already exited; the hub's idle unloader could not retire it because it could not reach the engine's status port. It was stopped with the hub's own unload routine. Evidence: `hardware/generated/daily-update/2026-11-11T-manual/`.
+
+**Open:** the GPU hold file is still in place, so the hub answers 503 to requests that need a model loaded until the owner clears it. No GPU reset was logged.
+
 ## 2026-11-09 — manual update: llama.cpp, Strata, Maya promoted
 
 Installed by hand with the owner's OK (ComfyUI stopped for the GPU checks, restarted after). Each engine: isolated CPU build, then one guarded stage (per-card parity where the engine has it, provisional install, one strict two-step DSH read-tool check per enabled route, rollback on failure), then review and promotion. No fault, hold or spill.
