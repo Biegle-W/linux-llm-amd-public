@@ -69,10 +69,10 @@ uname -r   # expect 7.0.14-42-vmpt1
 | SGLang | `f84475ccf593` |
 | Strata | `c1ff07f1a181` |
 | Maya | `00655481ce2b` (1.1.57) |
-| Strata DeepSeek | `504b143342a9` (0.1.59.1) |
+| Strata DeepSeek | `c1ff07f1a181` (0.1.59.1) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last update (November 11, manual): llama.cpp and Strata promoted after strict short tool checks. The Maya candidate `6fba6be98125` faulted the second GPU and was rolled back; Strata DeepSeek was not attempted. Maya and Strata DeepSeek stay on their November 9 builds.
+Last update (November 11, manual): llama.cpp, Strata and Strata DeepSeek promoted after strict short tool checks. The Maya candidate `6fba6be98125` faulted the second GPU and was rolled back; Maya stays on its November 9 build.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Retired legacy pins remain separate; they are not the selected native sources.
