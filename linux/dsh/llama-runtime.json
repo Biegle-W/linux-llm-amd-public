@@ -2,9 +2,7 @@
   "backend": "hip-amd",
   "models": [
     "empero-qwen3.8-35b-a3b",
-    "nemotron-3.5-super-iq3",
-    "ornith-1.5-122b",
-    "flint-40b-a2.5b"
+    "nemotron-3.5-super-iq3"
   ],
   "source_commit": "0a94a3f289687883617b9a2abbc7e0ade2d6b6c4",
   "runtime_overrides": {},
@@ -13,17 +11,7 @@
     "nemotron-3.5-super-iq3": "Removed by owner November 2 to reclaim storage; IQ3 retired. Await RAM and separate guarded vLLM INT4 qualification; no automatic fallback or resume."
   },
   "p2p_models": [
-    "empero-qwen3.8-35b-a3b",
-    "flint-40b-a2.5b",
-    "ornith-1.5-122b"
+    "empero-qwen3.8-35b-a3b"
   ],
-  "source_path": "hardware/generated/daily-update/2026-11-09T-manual/llama/llama.cpp",
-  "qualification": {
-    "evidence": "hardware/results/REALISTIC-LARGE-MODELS-2026-11-05.json",
-    "models": [
-      "flint-40b-a2.5b",
-      "ornith-1.5-122b"
-    ],
-    "scope": "One strict two-step DSH read-tool round trip per profile on latestsource; guards and owned cleanup passed. Empero manual pin retained."
-  }
+  "source_path": "hardware/generated/daily-update/2026-11-09T-manual/llama/llama.cpp"
 }

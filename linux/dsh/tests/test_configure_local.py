@@ -75,7 +75,7 @@ class ConfigureLocalTests(unittest.TestCase):
                          {'enable_thinking': False})
         self.assertNotIn('compat', models['qwen3.8-27b-vllm'])
         self.assertEqual(models['qwen3.8-27b-vllm']['contextWindow'], 163840)
-        self.assertEqual(models['sage-a1.5']['contextWindow'], 65536)
+        self.assertNotIn('sage-a1.5', models)
         self.assertEqual(result['agent-default-model']['provider'], 'amd-server')
 
     def test_paused_models_stay_hidden_and_cannot_be_default(self):

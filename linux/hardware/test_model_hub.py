@@ -22,7 +22,7 @@ def routing_catalog_fixture():
     with tempfile.TemporaryDirectory() as tmp:
         root=Path(tmp); (root/'dsh').mkdir()
         sources={'models.json':[{'id':'empero','name':'Empero','context':32}],
-                 'vllm-profiles.json':{'nemotron-3.5-bolt-vllm':{'name':'Bolt','context':32},'sage-a1.5':{'name':'Sage','context':32}},
+                 'vllm-profiles.json':{'nemotron-3.5-bolt-vllm':{'name':'Bolt','context':32},'qwen3.8-27b-vllm':{'name':'Sage','context':32}},
                  'strata-profiles.json':{'qwen3.8-flash-next-iq3_xxs':{'name':'Qwen Next','context':32}},
                  'sglang-profiles.json':{'qwen-dflash':{'name':'Qwen','context':32}}}
         for name,data in sources.items(): (root/'dsh'/name).write_text(json.dumps(data))
@@ -52,7 +52,7 @@ class HubTests(unittest.TestCase):
     def test_catalog_maps_every_active_model_to_its_backend(self):
         models = routing_catalog_fixture()
         self.assertEqual(models['nemotron-3.5-bolt-vllm']['backend'], 'vllm')
-        self.assertEqual(models['sage-a1.5']['backend'], 'vllm')
+        self.assertEqual(models['qwen3.8-27b-vllm']['backend'], 'vllm')
         self.assertEqual(models['qwen3.8-flash-next-iq3_xxs']['backend'], 'strata')
         self.assertNotIn('nemotron-3.5-bolt', models)
         self.assertNotIn('qwen3.8-27b-q4', models)
@@ -159,7 +159,7 @@ class HttpTests(unittest.TestCase):
     def test_streaming_start_failure_becomes_an_sse_error_event(self):
         error = mh.HubError(503, 'GPUs are reserved for a test (X); no backend was started.', 'gpu_reserved')
         with patch.object(mh.hub, 'acquire', side_effect=error):
-            status, body = self.post({'model': 'sage-a1.5', 'stream': True, 'messages': []})
+            status, body = self.post({'model': 'qwen3.8-27b-vllm', 'stream': True, 'messages': []})
         self.assertEqual(status, 200)
         event = json.loads(body.split(b'\n\n')[0].removeprefix(b'data: '))
         self.assertEqual(event['error']['code'], 'gpu_reserved')

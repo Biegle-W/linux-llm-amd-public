@@ -270,7 +270,7 @@ class HttpTests(unittest.TestCase):
                 inner.send_header('Content-Length', str(len(self.payload)))
                 inner.send_header('Retry-After', '7'); inner.end_headers(); inner.wfile.write(self.payload)
         self.backend = self.server(Backend)
-        self.backend_status = 200; self.backend_type = 'application/json'; self.payload = b'{"model":"sage-a1.5","choices":[]}'
+        self.backend_status = 200; self.backend_type = 'application/json'; self.payload = b'{"model":"qwen3.8-27b-vllm","choices":[]}'
         self.patches.append(patch.dict(mh.BACKENDS, {'vllm': ('vllm-profiles.json', self.backend.server_port, 'fixture')}))
         self.patches[-1].start(); self.addCleanup(self.patches[-1].stop)
 
@@ -286,7 +286,7 @@ class HttpTests(unittest.TestCase):
         c = http.client.HTTPConnection('127.0.0.1', s.server_port, timeout=5)
         headers = {'Content-Type': 'application/json'}
         if auth: headers['Authorization'] = 'Bearer fixture-external-secret'
-        c.request(method, path, json.dumps(data or {'model': 'sage-a1.5', 'messages': []}) if method == 'POST' else None, headers)
+        c.request(method, path, json.dumps(data or {'model': 'qwen3.8-27b-vllm', 'messages': []}) if method == 'POST' else None, headers)
         r = c.getresponse(); body = r.read(); result = (r.status, dict(r.getheaders()), body); c.close(); return result
 
     def test_health_requires_authentication(self):
@@ -311,7 +311,7 @@ class HttpTests(unittest.TestCase):
     def test_external_credentials_not_forwarded_and_alias_body_intact(self):
         status, _, _ = self.request()
         self.assertEqual(status, 200); self.assertNotIn('Authorization', self.headers)
-        self.assertEqual(json.loads(self.body)['model'], 'sage-a1.5')
+        self.assertEqual(json.loads(self.body)['model'], 'qwen3.8-27b-vllm')
 
     def test_backend_http_json_status_and_code_survive_gateway(self):
         self.backend_status = 422; self.payload = b'{"error":{"message":"too long", "code":"context_length"}}'
@@ -327,25 +327,25 @@ class HttpTests(unittest.TestCase):
 
     def test_streamed_http_error_keeps_status_code_and_done(self):
         self.backend_status = 429; self.payload = b'{"error":{"message":"busy", "code":"limit", "type":"rate_limit_error"}}'
-        status, _, data = self.request(data={'model': 'sage-a1.5', 'stream': True})
+        status, _, data = self.request(data={'model': 'qwen3.8-27b-vllm', 'stream': True})
         self.assertEqual(status, 200); e = json.loads(data.split(b'\n\n')[0][6:])['error']
         self.assertEqual((e['status'], e['code'], e['type']), (429, 'limit', 'rate_limit_error'))
         self.assertEqual(data.count(b'[DONE]'), 1); until(lambda: mh.hub.inflight == 0)
 
     def test_streamed_plaintext_backend_failure(self):
         self.backend_status = 500; self.payload = b'worker refused /tmp/private/file'
-        _, _, data = self.request(data={'model': 'sage-a1.5', 'stream': True})
+        _, _, data = self.request(data={'model': 'qwen3.8-27b-vllm', 'stream': True})
         self.assertIn(b'worker refused', data); self.assertIn(b'500', data); self.assertNotIn(b'/tmp', data)
 
     def test_tool_sse_survives_both_hops(self):
         self.backend_type = 'text/event-stream'
-        self.payload = b'data: {"model":"sage-a1.5","choices":[{"delta":{"tool_calls":[]}}]}\n\ndata: [DONE]\n\n'
-        self.assertEqual(self.request(data={'model': 'sage-a1.5', 'stream': True})[2], self.payload)
+        self.payload = b'data: {"model":"qwen3.8-27b-vllm","choices":[{"delta":{"tool_calls":[]}}]}\n\ndata: [DONE]\n\n'
+        self.assertEqual(self.request(data={'model': 'qwen3.8-27b-vllm', 'stream': True})[2], self.payload)
         until(lambda: mh.hub.inflight == 0)
 
     def test_error_inside_200_sse_preserves_code_and_redacts_external_key(self):
         self.backend_type = 'text/event-stream'; self.payload = b'data: {"error":{"message":"fixture-external-secret", "code":"native_failure", "status":500}}\n\n'
-        data = self.request(data={'model': 'sage-a1.5', 'stream': True})[2]
+        data = self.request(data={'model': 'qwen3.8-27b-vllm', 'stream': True})[2]
         self.assertNotIn(b'fixture-external-secret', data); self.assertIn(b'native_failure', data)
         self.assertEqual(data.count(b'[DONE]'), 1)
 
@@ -362,7 +362,7 @@ class HttpTests(unittest.TestCase):
     def test_external_stream_disconnect_removes_hub_waiter(self):
         mh.hub.acquire('llama', 'A')
         c = http.client.HTTPConnection('127.0.0.1', self.gateway.server_port)
-        c.request('POST', '/v1/chat/completions', json.dumps({'model':'sage-a1.5','stream':True}),
+        c.request('POST', '/v1/chat/completions', json.dumps({'model':'qwen3.8-27b-vllm','stream':True}),
                   {'Authorization':'Bearer fixture-external-secret'})
         try:
             response = c.getresponse()
@@ -375,7 +375,7 @@ class HttpTests(unittest.TestCase):
     def test_external_nonstream_disconnect_removes_hub_waiter(self):
         mh.hub.acquire('llama', 'A')
         c = http.client.HTTPConnection('127.0.0.1', self.gateway.server_port)
-        c.request('POST', '/v1/chat/completions', json.dumps({'model':'sage-a1.5'}),
+        c.request('POST', '/v1/chat/completions', json.dumps({'model':'qwen3.8-27b-vllm'}),
                   {'Authorization':'Bearer fixture-external-secret'})
         try:
             until(lambda: mh.hub.snapshot()['queued'] == 1); c.close()
@@ -384,14 +384,14 @@ class HttpTests(unittest.TestCase):
 
     def test_stream_request_json_error_with_http_200_is_reported(self):
         self.payload = b'{"error":{"message":"native refused","code":"native_error"}}'
-        _, _, data = self.request(data={'model':'sage-a1.5','stream':True})
+        _, _, data = self.request(data={'model':'qwen3.8-27b-vllm','stream':True})
         self.assertIn(b'native refused', data); self.assertIn(b'native_error', data)
         self.assertEqual(data.count(b'[DONE]'), 1)
 
     def test_nonstream_disconnected_waiter_is_removed(self):
         mh.hub.acquire('llama', 'A')
         c = http.client.HTTPConnection('127.0.0.1', self.hub_server.server_port)
-        c.request('POST', '/v1/chat/completions', json.dumps({'model':'sage-a1.5'}))
+        c.request('POST', '/v1/chat/completions', json.dumps({'model':'qwen3.8-27b-vllm'}))
         try:
             until(lambda: mh.hub.snapshot()['queued'] == 1); c.close()
             until(lambda: mh.hub.snapshot()['queued'] == 0)

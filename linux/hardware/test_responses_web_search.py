@@ -30,7 +30,7 @@ def call():
 def answer():
  return {'id':'msg1','type':'message','role':'assistant','status':'completed','content':[{'type':'output_text','text':'It was released October7,2025.[1]','annotations':[],'logprobs':[]}]}
 def request(**values):
- return {'model':'sage-a1.5','input':'Search the official Python release date.','tools':[{'type':'web_search'}],'max_output_tokens':256,**values}
+ return {'model':'qwen3.8-27b-vllm','input':'Search the official Python release date.','tools':[{'type':'web_search'}],'max_output_tokens':256,**values}
 def mixed_tools():
  return [{'type':'function','name':'client_lookup','description':'Executed by the client.',
           'parameters':{'type':'object','properties':{},'additionalProperties':False},'strict':False},

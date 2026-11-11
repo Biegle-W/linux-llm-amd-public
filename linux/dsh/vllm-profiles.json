@@ -26,23 +26,6 @@
     "kv_cache_dtype": "bfloat16",
     "context_validation": "Fresh 254,994-input three-marker retrieval and 255,034-token full-history follow-up at 262,144; arithmetic/SSE; both cards, zero owned swap/spill (October 21)"
   },
-  "sage-a1.5": {
-    "name": "Sage-A1.5 W4A16 INT4 (64K, dual AMD vLLM, MTP3, text-only)",
-    "context": 65536,
-    "mtp": true,
-    "mtp_steps": 3,
-    "memory_fraction": 0.82,
-    "kv_cache_bytes": 6442450944,
-    "runtime": "rocm",
-    "launcher": "vllm/start-sage-rocm",
-    "model_path": "<model drive>/vLLM-Models/Sage-A1.5-W4A16-AutoRound",
-    "min_free_vram_gib": 21.0,
-    "kv_cache_dtype": "bfloat16",
-    "vision_enabled": false,
-    "memory_category": "vram_only",
-    "context_validation": "October27 dev602: fresh 62009 input/history 62051; API/JSON/tools/SSE, ordered markers/history, both GPUs, loading-swap-v2, zero observed dedicated-VRAM spill. See hardware/VLLM-DEV602-PROMOTION-2026-10-27.md; narrow checks, not exhaustive full-window quality.",
-    "vision_limitation": "Native image check failed on both dev435 and dev602; language-only runtime. GGUF/projector retired at user request."
-  },
   "ripple-65b-vllm": {
     "name": "Ripple-65B-Preview vLLM dual AMD (64K, GPTQ W4A16, TP2 over RCCL P2P)",
     "context": 65536,

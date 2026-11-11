@@ -4,7 +4,7 @@ This is the current operational summary for Linux, Windows and phone API clients
 
 ## State in one paragraph
 
-Twelve qualified routes are enabled and all passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. Engine updates are no longer scripted: the owner retired the nightly updater on November 9, and the agent checks upstream and upgrades each engine by hand with the guarded short tool check.
+Nine qualified routes are enabled (`ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b` were removed on November 11 at the owner's request). All nine passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. Engine updates are no longer scripted: the owner retired the nightly updater on November 9, and the agent checks upstream and upgrades each engine by hand with the guarded short tool check.
 
 ## First five minutes
 
@@ -23,12 +23,9 @@ uname -r   # expect 7.0.14-42-vmpt1
 | API model ID | Engine | Weights | Mode | Context | Key settings |
 |---|---|---|---|---:|---|
 | `empero-qwen3.8-35b-a3b` | llama.cpp | Empero Qwen3.8-35B-A3B IQ4_XS | VRAM | 262,144 | layer split, MTP |
-| `flint-40b-a2.5b` | llama.cpp | Flint-40B-A2.5B Unsloth UD-Q4_K_XL | VRAM | 32,768 | layer split, bounded reasoning |
-| `ornith-1.5-122b` | llama.cpp | Ornith-1.5-122B Q4_K_M + mmproj | CPU-RAM offload | 32,768 | CPU experts + VRAM cache, vision |
 | `qwen3.8-27b-vllm` | vLLM TP2 | Qwen3.8-27B AutoRound W4A16 | VRAM | 163,840 | compiled MTP3, BF16 KV |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | same Qwen3.8-27B weights + DFlash2 drafter | VRAM | 163,840 | BF16 KV, prefix cache |
 | `nemotron-3.5-bolt-vllm` | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | VRAM | 262,144 | runtime globaldev229 |
-| `sage-a1.5` | vLLM | Sage-A1.5 AutoRound W4A16 | VRAM | 65,536 | MTP3, text only |
 | `ripple-65b-vllm` | vLLM TP2 | Ripple-65B-Preview GPTQ W4A16 | VRAM | 65,536 | P2P, out-of-tree `vllm/ripple-plugin` |
 | `qwen3.8-flash-next-iq3_xxs` | Strata | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | SSD streaming | 262,144 | RAM/VRAM expert caches, reserve 1024 MiB |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S | SSD streaming | 32,768 | expert profile, 36 GB RAM store, reserve 2048 MiB, 14 threads |
@@ -37,7 +34,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 - The registries are `dsh/models.json` and `dsh/models-hip.ini` (llama), `dsh/llama-runtime.json` (active and paused llama models), `dsh/vllm-profiles.json`, `dsh/sglang-profiles.json`, `dsh/strata-profiles.json`, `dsh/maya-profiles.json`, and the sealed `dsh/qualified-native-profiles.json` / `dsh/qualified-strata-qwen-profiles.json` (currently empty). `dsh/model_catalog.py` combines them; authenticated `/v1/models` is the live list.
 - Context is allocation capacity. Short checks prove neither full-window quality nor sustained throughput.
-- Disabled rows kept for reference (weights removed): `nemotron-3.5-super-iq3`, `deepseek-v4.1-flash-1017-strata-xs`, `deepseek-v4.1-flash-1017-maya`. Removed November 8: Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes. Final failed candidates (no retry without new evidence): PLE host-file-gather, Super INT4 EP2, the Maya DeepSeek 36 GB store, RDNA3 full-stack fork `2314df4`.
+- Disabled rows kept for reference (weights removed): `nemotron-3.5-super-iq3`, `deepseek-v4.1-flash-1017-strata-xs`, `deepseek-v4.1-flash-1017-maya`. Removed November 11 (owner request): `ornith-1.5-122b`, `sage-a1.5`, `flint-40b-a2.5b` — routes, profiles and the Sage launcher gone, weight folders still on disk until the owner confirms the deletion. Removed November 8: Flash-Next UD-IQ1_M and both DeepSeek Coder IQ2_XXS routes. Final failed candidates (no retry without new evidence): PLE host-file-gather, Super INT4 EP2, the Maya DeepSeek 36 GB store, RDNA3 full-stack fork `2314df4`.
 
 ## Hardware and kernel
 

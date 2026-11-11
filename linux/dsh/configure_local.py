@@ -26,12 +26,9 @@ REPLACEMENTS = {
 NAMES = {
     'empero-qwen3.8-35b-a3b': 'Empero Qwen3.8 35B A3B',
     'nemotron-3.5-super-iq3': 'Nemotron 3.5 Super VL 120B · IQ3',
-    'ornith-1.5-122b': 'Ornith 1.5 122B',
-    'flint-40b-a2.5b': 'Flint 40B A2.5B',
     'qwen3.8-27b-sglang-dflash2': 'Qwen3.8 27B · SGLang DFlash2',
     'qwen3.8-27b-vllm': 'Qwen3.8 27B · vLLM MTP',
     'nemotron-3.5-bolt-vllm': 'Nemotron 3.5 Bolt 74B A9B',
-    'sage-a1.5': 'Sage A1.5',
     'qwen3.8-flash-next-iq3_xxs': 'Qwen3.8 Flash Next · Strata',
     'glm-5.3-flash-maya': 'GLM 5.3 Flash',
     'deepseek-v4.1-flash-1017-maya': 'DeepSeek V4.1 Flash 1017 XS · Maya',

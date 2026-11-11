@@ -10,8 +10,10 @@ from model_catalog import catalog
 class Retirement(unittest.TestCase):
     def test_both_xs_aliases_remain_and_retired_s_cannot_be_selected(self):
         models = catalog(ROOT)
-        self.assertEqual(len(models), 12)
-        self.assertIn('flint-40b-a2.5b', models)
+        self.assertEqual(len(models), 9)
+        self.assertIn('empero-qwen3.8-35b-a3b', models)
+        for model in ['flint-40b-a2.5b', 'ornith-1.5-122b', 'sage-a1.5']:  # removed by owner Nov 11
+            self.assertNotIn(model, models)
         # Old XS backing was deleted Nov 2 (044d689): both XS aliases stay registered but disabled,
         # and the Unsloth Q1 replacements (8a1d073) are the selectable DeepSeek routes.
         registry = {**json.loads((ROOT / 'dsh/maya-profiles.json').read_text()),

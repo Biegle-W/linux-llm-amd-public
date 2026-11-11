@@ -10,7 +10,7 @@ GIB=1024**3
 # Owner headroom policy (99ec1b1, hardware/RESOURCE-GUARDS-2026-11-03.md): worker scopes are recomputed
 # as MemoryHigh=max / MemoryMax=MemTotal-1GiB / SwapMax=SwapTotal; RAM floor 1 GiB, VRAM floor 128 MiB.
 POLICY_LIMITS={'memory.high':'max','memory.max':63*GIB,'memory.swap.max':36000755712}
-IDS=('empero-qwen3.8-35b-a3b','flint-40b-a2.5b')
+IDS=('empero-qwen3.8-35b-a3b',)
 
 class VramDefaults(unittest.TestCase):
     def setUp(self):
@@ -23,7 +23,7 @@ class VramDefaults(unittest.TestCase):
     def test_installed_profiles_explicitly_validate_and_other_moe_stays_cpu_backed(self):
         moe_memory.validate_profiles(ROOT/'dsh')
         for ident in IDS:self.assertEqual(self.plans[ident]['memory_placement'],'vram_only')
-        for ident in ['nemotron-3.5-super-iq3','ornith-1.5-122b']:
+        for ident in ['nemotron-3.5-super-iq3']:
             self.assertTrue(self.plans[ident]['cpu_expert_layers'])
             self.assertGreater(self.plans[ident]['host_expert_bytes'],0)
 
@@ -54,7 +54,6 @@ class VramDefaults(unittest.TestCase):
                         ('moe-cache-mib = 0','moe-cache-mib = 4096'),
                         ('load-mode = dio','load-mode = mmap'),
                         ('spec-type = draft-mtp','spec-type = none'),
-                        ('reasoning-budget = 128','reasoning-budget = -1'),
                         ('ctx-size = 262144','ctx-size = 32768'),
                         ('device = ROCm0,ROCm1','device = ROCm0')]:
             with self.subTest(setting=old),tempfile.TemporaryDirectory() as tmp:
@@ -85,9 +84,9 @@ class VramDefaults(unittest.TestCase):
 
     def test_compatible_gpu_switch_keeps_bounded_worker(self):
         m=self.router();m.native=Mock();m.native.poll.return_value=None;m.active_mode='hip-amd';m.active_limits=moe_memory.vram_worker_limits(self.plan)
-        m.active_runtime=m.runtime_identity('hip-amd','flint-40b-a2.5b')
+        m.active_runtime=m.runtime_identity('hip-amd',IDS[0])
         with patch.object(moe_memory,'host_memory',return_value=(14*GIB,8*GIB)):
-            m.activate_native.__wrapped__('hip-amd',model='flint-40b-a2.5b')
+            m.activate_native.__wrapped__('hip-amd',model=IDS[0])
         m.stop_process.assert_not_called();m.swap_guard.spawn.assert_not_called()
 
     def test_gpu_spawn_carries_and_requires_exact_limits(self):

@@ -66,7 +66,7 @@ class ResponsesHttpTests(unittest.TestCase):
                 super().do_POST()
         self.backend.RequestHandlerClass=Backend
         self.payload=json.dumps({'object':'response','id':'resp_1','status':'completed','output':[{'type':'message','content':[{'type':'output_text','text':'Hi'}]}]}).encode()
-        data={'model':'sage-a1.5','input':[{'role':'user','content':'Hi'}],'instructions':'Be brief','previous_response_id':'resp_previous','store':False,'max_output_tokens':32}
+        data={'model':'qwen3.8-27b-vllm','input':[{'role':'user','content':'Hi'}],'instructions':'Be brief','previous_response_id':'resp_previous','store':False,'max_output_tokens':32}
         status,headers,body=self.request(path='/v1/responses',data=data)
         self.assertEqual(status,200);self.assertEqual(body,self.payload)
         self.assertEqual(self.backend_path,'/v1/responses');self.assertEqual(json.loads(self.body),data)
@@ -77,7 +77,7 @@ class ResponsesHttpTests(unittest.TestCase):
         self.payload=(event('response.created',response={'status':'in_progress'})+
                       event('response.output_text.delta',delta='Hi')+
                       event('response.completed',response={'status':'completed','output':[]}))
-        status,headers,body=self.request(path='/v1/responses',data={'model':'sage-a1.5','input':'Hi','stream':True})
+        status,headers,body=self.request(path='/v1/responses',data={'model':'qwen3.8-27b-vllm','input':'Hi','stream':True})
         self.assertEqual(status,200);self.assertEqual(body,self.payload);self.assertNotIn(b'[DONE]',body)
 
     def test_responses_require_authentication_and_enabled_model(self):
@@ -86,19 +86,19 @@ class ResponsesHttpTests(unittest.TestCase):
 
     def test_reservation_failure_uses_typed_error_and_never_launches(self):
         with patch.object(fixture.mh.hub,'serving',return_value=False),patch.object(fixture.mh.hub,'launch') as launch:
-            status,_,body=self.request(path='/v1/responses',data={'model':'sage-a1.5','input':'Hi','stream':True})
+            status,_,body=self.request(path='/v1/responses',data={'model':'qwen3.8-27b-vllm','input':'Hi','stream':True})
             self.assertEqual(status,200);self.assertIn(b'gpu_reserved',body);self.assertIn(b'"type": "error"',body)
             self.assertNotIn(b'[DONE]',body);launch.assert_not_called()
 
     def test_backend_http_error_keeps_status_and_redacts_body(self):
         self.backend_status=422;self.payload=b'{"error":{"message":"/home/person/model Bearer fixture-external-secret","code":"bad_input"}}'
-        status,_,body=self.request(path='/v1/responses',data={'model':'sage-a1.5','input':'Hi'})
+        status,_,body=self.request(path='/v1/responses',data={'model':'qwen3.8-27b-vllm','input':'Hi'})
         self.assertEqual(status,422);self.assertIn(b'bad_input',body);self.assertNotIn(b'/home/',body)
         self.assertNotIn(b'fixture-external-secret',body)
 
     def test_truncated_native_stream_surfaces_typed_failure(self):
         self.backend_type='text/event-stream';self.payload=event('response.created',response={'status':'in_progress'})
-        _,_,body=self.request(path='/v1/responses',data={'model':'sage-a1.5','input':'Hi','stream':True})
+        _,_,body=self.request(path='/v1/responses',data={'model':'qwen3.8-27b-vllm','input':'Hi','stream':True})
         self.assertIn(b'backend_unavailable',body);self.assertIn(b'"type": "error"',body);self.assertNotIn(b'[DONE]',body)
 
     def test_maya_responses_uses_same_guarded_native_route(self):
