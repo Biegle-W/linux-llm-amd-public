@@ -1,6 +1,6 @@
-# Daily engine updates
+# Engine updates
 
-The existing 03:00 updater uses isolated builds, required per-card parity and one strict two-step DSH read-tool round trip per enabled qualified profile, then owned unload. It retains source/profile/weight identities, manual holds, rollback, 100°C thermal/storage, RAM/VRAM/spill/swap, heartbeat and cleanup guards. No routine full-window or throughput comparison is claimed. Rejected revisions wait for a changed upstream. The runtime handoff records schedule state. [Method](daily-update/README.md).
+**Manual since November 9, 2026 (owner).** Upstream is checked by hand and each update is installed and qualified by hand: isolated build, per-card parity where the engine has it, a provisional install, one strict two-step DSH read-tool check per enabled route, then review and promotion, with rollback on failure. The scheduled 03:00 updater is retired and no timer runs it; entries dated before November 9 are from that script. No routine full-window or throughput comparison is claimed. [Method and the retired script](daily-update/README.md)
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 

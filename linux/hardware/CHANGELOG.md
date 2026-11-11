@@ -1,9 +1,10 @@
 # Changelog
 
-Newest first. One line per change, with a link to the dated report holding its evidence. Current state lives in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md), not here. Nightly engine updates have their own [ledger](DAILY-UPDATES.md).
+Newest first. One line per change, with a link to the dated report holding its evidence. Current state lives in the [runtime handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md), not here. Engine updates, manual since November 9, have their own [ledger](DAILY-UPDATES.md).
 
 ## November 2026
 
+- **Nov 11, docs aligned with manual engine updates.** The top README, this file's header and the update ledger still described a scheduled nightly updater. They now say what has been true since November 9: updates are checked, installed and qualified by hand, and no timer runs the old script. The README route count is corrected to nine. No engine, route or schedule changed. [Ledger](DAILY-UPDATES.md)
 - **Nov 11, DeepSeek Strata replay stopped on NaN again.** The 216-item public suite was replayed on `deepseek-v4.1-flash-1017-strata-unsloth-q1` at the 2 GiB reserve: 88 items attempted, 5 NaN errors (two isolated, then three in a row with no tokens generated), run aborted by the harness. No kernel GPU messages and no hold. 64 of the 82 answered items were correct against 66 for Maya on the same items. No setting changed. [Benchmark list](CURRENT-AMD-BENCHMARKS.md)
 - **Nov 11, three routes removed (owner request).** `ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b` are gone from the route list, llama.cpp and vLLM profiles, offload plans and client names, and the Sage launcher is deleted; nine routes remain. Tests that used Sage as a stand-in route now use `qwen3.8-27b-vllm`. No engine changed and the hub was not restarted. The three weight folders were deleted after owner confirmation (114 GB freed on sharedSATA1). They ranked 6, 8 and 11 of 11 on the public suite. [Benchmark list](CURRENT-AMD-BENCHMARKS.md)
 - **Nov 11, quality ranking added to the current results.** The benchmark list now has a quality-rank column and a ranking table from the 216-item public suite: DeepSeek on Maya, Flash-Next and both Qwen3.8-27B routes tie for the top; Flint is last. No new measurement. [Table](CURRENT-AMD-BENCHMARKS.md#quality-ranking)

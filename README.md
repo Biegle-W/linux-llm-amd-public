@@ -2,7 +2,7 @@
 
 Sanitized public reference for a separately maintained private operational repository. The Linux tree is in [`linux/`](linux/); example paths use `/opt/local-llm`, `/mnt/shared` and `/mnt/shared-nvme`. Configure them locally.
 
-Twelve qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins.
+Nine qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins.
 
 ## Rules
 
@@ -10,7 +10,7 @@ Twelve qualified routes are served through one OpenAI-compatible API on TCP 1000
 - This server maintains only the two AMD repos above. Other Linux NVIDIA and Windows repos, and old snapshots, are references unless the owner assigns them.
 - After authorized changes, keep both repos, the results and the handoff in step. Reviewed commits and normal (non-force) pushes to both `origin/main` branches are authorized. Verify the remote refs afterwards, preserve unrelated changes, and report exact blockers.
 - The operational handoff has a byte-identical private copy on the shared SATA drive (Windows `D:\LINUX-LLM-RUNTIME-HANDOFF.md`). That copy is the private text, not this public one.
-- Public edits are targeted and hand-sanitized: no home or mount paths, LAN or tailnet addresses, or identity names. Public profiles use `/opt/local-llm` paths. The nightly publisher's `PRIVATE` regex in `linux/hardware/daily-update/publish.py` is the check.
+- Public edits are targeted and hand-sanitized: no home or mount paths, LAN or tailnet addresses, or identity names. Public profiles use `/opt/local-llm` paths. The `PRIVATE` regex of the retired publisher in `linux/hardware/daily-update/publish.py` is the check.
 - Never publish credentials, personal or client settings, chat state, raw private logs, model weights, environments or runtime binaries. Private agent workflow, checkpoints and context tools stay out of public exports and the Shared handoff.
 
 **Runtime safety**
@@ -19,7 +19,8 @@ Twelve qualified routes are served through one OpenAI-compatible API on TCP 1000
 - Qualified native profiles are sealed (`config_sha256`) in `dsh/qualified-native-profiles.json` and `dsh/qualified-strata-qwen-profiles.json` (currently empty). Editing a sealed profile breaks admission until it is requalified and resealed; never fake a seal.
 
 **Engines and models**
-- Daily updater policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject. Details are in [the updater README](linux/hardware/daily-update/README.md).
+- Engine update policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject.
+- Engine updates are manual since November 9 (owner): upstream is checked by hand, and each update is built in isolation, qualified and promoted by hand. The scheduled nightly updater is retired and no timer runs it. Method and the retired script are in [the updater README](linux/hardware/daily-update/README.md).
 - New engines or models need isolated qualification before promotion. For a new model, check a gfx1100 vLLM or SGLang INT4 route before keeping it on GGUF.
 - Deleting weights or data is the owner's call.
 
@@ -43,7 +44,7 @@ Paths below are inside `linux/`.
 | `dsh/` | Hub (`model_hub.py`), routers, runtimes, route registries and profiles, DSH frontend |
 | `network/` | API gateway, systemd units, the runtime handoff |
 | `hardware/` | Operational scripts (`rocm-env.sh`, guards, updater), unit tests `test_*.py`, dated reports `*-2026-*.md`, `results/` JSON |
-| `hardware/daily-update/` | Nightly updater, publisher and systemd unit sources |
+| `hardware/daily-update/` | Retired nightly updater, publisher and systemd unit sources (kept for version checks and reference) |
 | `hardware/generated/` | Ignored live state: `GPU-LOCK`, updater runs (some hold live engine builds) |
 | `vllm/`, `sglang/`, `maya/`, `strata-dsv41/`, `graphics/` | Engine launchers and pins; ignored venvs and sources sit beside them |
 | `bin/`, `launchers/` | `llm-*` CLI wrappers and Desktop launchers |
@@ -59,7 +60,7 @@ Dated reports stay flat in `hardware/` because many links and a few code strings
 | Current state, routes, guards, pins, open items | [Runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) |
 | Current measurements | [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md) |
 | What changed and when | [Changelog](linux/hardware/CHANGELOG.md) |
-| Nightly engine updates | [Ledger](linux/hardware/DAILY-UPDATES.md) (written by `publish.py`), [method](linux/hardware/daily-update/README.md) |
+| Engine updates (manual since November 9) | [Ledger](linux/hardware/DAILY-UPDATES.md), [method](linux/hardware/daily-update/README.md) |
 | Drives and weight files | [Storage inventory](linux/hardware/MODEL-STORAGE-INVENTORY.md) |
 | Card layout and crash runbook | [AMD working setup](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md) |
 | Clients and gateway | [Network](linux/network/README.md), [DSH](linux/dsh/README.md) |
