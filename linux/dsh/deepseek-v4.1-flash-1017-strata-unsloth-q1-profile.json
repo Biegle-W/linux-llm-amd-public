@@ -16,7 +16,7 @@
     "--cpu-threads",
     "14",
     "--ssd-cache",
-    "36"
+    "0"
   ],
   "backend": "hip",
   "cwd": "/opt/local-llm/qualified-sources/strata-ffa80d73133e",

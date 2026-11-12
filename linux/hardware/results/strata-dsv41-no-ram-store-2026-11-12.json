@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-12",
+ "route": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+ "engine": "c1ff07f1a181",
+ "setting": "--ssd-cache 0",
+ "suite": "public core, 216 items",
+ "items_sha256": "9c7929bf318384bfbdca675e381662c1706e0fca5e06ed36265c36008c6117de",
+ "answered": 216,
+ "errors": 0,
+ "correct": 169,
+ "wrong": 32,
+ "capped": 13,
+ "malformed": 2,
+ "score_pct": 78.2,
+ "wilson95_pct": [
+  72.3,
+  83.2
+ ],
+ "by_category_correct": {
+  "code": 13,
+  "instruction": 29,
+  "knowledge": 49,
+  "math": 32,
+  "reasoning": 19,
+  "tools": 27
+ },
+ "vs_maya": {
+  "both": 158,
+  "strata_only": 11,
+  "maya_only": 10
+ },
+ "suite_tok_s": 8.62,
+ "same_82_items_tok_s": {
+  "store_off": 8.93,
+  "store_on_nov11": 7.38
+ }
+}
