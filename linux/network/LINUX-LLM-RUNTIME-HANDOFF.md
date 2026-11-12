@@ -68,11 +68,11 @@ uname -r   # expect 7.0.14-42-vmpt1
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `c1ff07f1a181` |
-| Maya | `00655481ce2b` (1.1.57) |
+| Maya | `6fba6be98125` (1.1.59) |
 | Strata DeepSeek | `c1ff07f1a181` (0.1.59.1) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last update (November 11, manual): llama.cpp, Strata and Strata DeepSeek promoted after strict short tool checks. The Maya candidate `6fba6be98125` faulted the second GPU and was rolled back; Maya stays on its November 9 build.
+Last update (November 11, manual): llama.cpp, Strata and Strata DeepSeek promoted after strict short tool checks. The Maya candidate `6fba6be98125` faulted the second GPU that day and was rolled back; a rerun on November 12 passed on both Maya routes and it was promoted. Upstream Maya is now at `c5842c5e5be0`, not installed. If a Maya route page-faults again, record it and roll back to `00655481ce2b`.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Retired legacy pins remain separate; they are not the selected native sources.
@@ -95,7 +95,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 ## Open items
 
 1. **Engine updates (checked and installed by hand).** November 9: llama.cpp, Strata, Maya and Strata DeepSeek updated and verified; all engines were current at that point except llama.cpp, whose upstream had moved on to `3d94ffe`. Check upstream each session; GPU work needs the owner's OK while ComfyUI is running. The old engine stage folders `hardware/generated/daily-update/2026-11-07T181342-*` (llama) and `2026-11-07T183647-*` (Maya) are no longer referenced by production; deleting them is the owner's call.
-2. **DeepSeek NaN on Strata: gone with the RAM store off (November 12).** With `--ssd-cache 36` the route failed with NaN errors in every long run on November 8–11, and the server's kernel crashed during the last one (a general protection fault in the page-cache lookup on the model file). With `--ssd-cache 0` the 216-item suite ran to the end with no NaN and no kernel fault and scored 169, the same as Maya ([report](../hardware/STRATA-DEEPSEEK-NO-RAM-STORE-2026-11-12.md)). Keep the store off; do not turn it back on without a long-run test. The cause is inferred from one clean run, so treat a new NaN on this route as a reason to stop and record. Speed with the store off is the same or better (400-token answers 10.7–12.2 tok/s; cold first answer 82 s against 71). Still open: the Maya candidate `6fba6be` has not been rerun.
+2. **DeepSeek NaN on Strata: gone with the RAM store off (November 12).** With `--ssd-cache 36` the route failed with NaN errors in every long run on November 8–11, and the server's kernel crashed during the last one (a general protection fault in the page-cache lookup on the model file). With `--ssd-cache 0` the 216-item suite ran to the end with no NaN and no kernel fault and scored 169, the same as Maya ([report](../hardware/STRATA-DEEPSEEK-NO-RAM-STORE-2026-11-12.md)). Keep the store off; do not turn it back on without a long-run test. The cause is inferred from one clean run, so treat a new NaN on this route as a reason to stop and record. Speed with the store off is the same or better (400-token answers 10.7–12.2 tok/s; cold first answer 82 s against 71).
 3. **No sustained benchmark.** All route numbers are short checks. A longer owned soak at the November 8 settings is the main open check.
 4. **Strata Qwen reserve is 1024 MiB** (`dsh/strata-iq3-profile.json`), below the 2 GiB floor for sealed native profiles. That floor does not apply to it: the route has no sealed record (`dsh/qualified-strata-qwen-profiles.json` is empty since the UD-IQ1_M route was removed). Leave it unless the owner asks.
 5. **Stale metadata inside sealed profiles** (for example "8GiB requested reserve" in their `settings` text). Editing them would change the seals; leave them.
