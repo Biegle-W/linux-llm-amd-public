@@ -1,0 +1,92 @@
+{
+ "model": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+ "started": "2026-11-12 12:23:52",
+ "steps": [
+  {
+   "ttft": 81.8,
+   "decode_tps": 3.6,
+   "prompt_tokens": 7,
+   "completion_tokens": 2,
+   "total": 82.08,
+   "name": "load+first (4 tokens)"
+  },
+  {
+   "ttft": 7.6,
+   "decode_tps": 4.23,
+   "prompt_tokens": 23,
+   "completion_tokens": 400,
+   "total": 101.83,
+   "name": "short-1 essay, first after load"
+  },
+  {
+   "ttft": 0.37,
+   "decode_tps": 12.21,
+   "prompt_tokens": 23,
+   "completion_tokens": 400,
+   "total": 33.06,
+   "name": "short-2 essay, repeated"
+  },
+  {
+   "ttft": 38.39,
+   "decode_tps": 4.48,
+   "prompt_tokens": 4786,
+   "completion_tokens": 40,
+   "total": 47.09,
+   "prefill_tps": 124.7,
+   "name": "long-1 document, uncached"
+  },
+  {
+   "ttft": 0.42,
+   "decode_tps": 12.46,
+   "prompt_tokens": 4786,
+   "completion_tokens": 40,
+   "total": 3.55,
+   "prefill_tps": 11395.2,
+   "name": "long-2 document, cached"
+  },
+  {
+   "ttft": 6.03,
+   "decode_tps": 10.69,
+   "prompt_tokens": 23,
+   "completion_tokens": 400,
+   "total": 43.35,
+   "name": "short-3 new topic"
+  },
+  {
+   "ttft": 2.3,
+   "decode_tps": 11.52,
+   "prompt_tokens": 21,
+   "completion_tokens": 400,
+   "total": 36.93,
+   "name": "short-4 new topic"
+  },
+  {
+   "ttft": 61.08,
+   "decode_tps": 1.38,
+   "prompt_tokens": 4792,
+   "completion_tokens": 40,
+   "total": 89.26,
+   "prefill_tps": 78.5,
+   "name": "long-3 document, new prefix (uncached)"
+  },
+  {
+   "ttft": 33.57,
+   "decode_tps": 9.33,
+   "prompt_tokens": 4793,
+   "completion_tokens": 40,
+   "total": 37.75,
+   "prefill_tps": 142.8,
+   "name": "long-4 document, second new prefix (uncached)"
+  },
+  {
+   "ttft": 4.63,
+   "decode_tps": 11.82,
+   "prompt_tokens": 23,
+   "completion_tokens": 400,
+   "total": 38.4,
+   "name": "short-5 essay, repeated late"
+  }
+ ],
+ "finished": "2026-11-12 12:32:26",
+ "kernel_or_hold": null
+}
