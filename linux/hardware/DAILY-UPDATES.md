@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-12 — manual update: Maya 1.1.61 promoted
+
+Installed by hand at the owner's request, after the rerun below. Six upstream commits: releases 1.1.60 and 1.1.61, which change the DeepSeek GPU kernels, the GLM fast path and the EXL3 decode.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| Maya | `6fba6be98125` (1.1.59) → `c5842c5e5be0` (1.1.61) | Maya DeepSeek, GLM | **Promoted.** Parity 34/36, the same `hip_prefill_fused_parity` failure on both cards. Maya DeepSeek: load 148 s; first tool step 110.5 s (first token 94.3 s on a 6,326-token prompt, 104 tokens), second step 8.3 s (was 33.3 s). GLM: load 120 s; first tool step 35.6 s, second step 5.0 s. No owned swap. No GPU page fault, reset or hold; the guard passed with its cgroups empty. |
+
+All engines are current as of this check for Maya; the others were not re-checked today. Evidence: `hardware/generated/daily-update/2026-11-12T-manual/`.
+
 ## 2026-11-12 — Maya `6fba6be98125` rerun: passed and promoted
 
 Rerun of the candidate that faulted on November 11, at the owner's request. Same procedure and same revision: a fresh isolated build, then one guarded stage.
@@ -12,7 +22,7 @@ Rerun of the candidate that faulted on November 11, at the owner's request. Same
 |---|---|---|---|
 | Maya | `00655481ce2b` (1.1.57) → `6fba6be98125` (1.1.59) | Maya DeepSeek, GLM | **Promoted.** Parity 34/36, the same `hip_prefill_fused_parity` failure on both cards as on November 9 and 11. Maya DeepSeek: load 58 s; first tool step 119.7 s (first token 85.6 s on a 6,335-token prompt, 108 tokens), second step 33.3 s. GLM: load 159 s; first tool step 35.9 s (first token 31.6 s), second step 5.4 s. Peak owned swap 148 MiB. No GPU page fault, reset or hold; the guard passed with its cgroups empty. |
 
-The November 11 page fault on the second card did not recur. The code review had found no change that could explain it, so it is treated as a one-off; one clean rerun cannot rule out a rare fault, so a repeat on a Maya route should be recorded and Maya rolled back to `00655481ce2b`. Upstream Maya has since moved to `c5842c5e5be0`; that revision is not installed. Evidence: `hardware/generated/daily-update/2026-11-12T-maya-rerun/`.
+The November 11 page fault on the second card did not recur. The code review had found no change that could explain it, so it is treated as a one-off; one clean rerun cannot rule out a rare fault, so a repeat on a Maya route should be recorded and Maya rolled back to `00655481ce2b`. Evidence: `hardware/generated/daily-update/2026-11-12T-maya-rerun/`.
 
 ## 2026-11-11 — manual update: llama.cpp, Strata and Strata DeepSeek promoted; Maya faulted and was rolled back
 
