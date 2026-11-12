@@ -4,6 +4,18 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-12 — manual update: llama.cpp, Strata and Strata DeepSeek promoted
+
+Installed by hand at the owner's request after an upstream check the same afternoon; vLLM, SGLang and Maya were current. One engine at a time, each with its own isolated build and guarded stage.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| llama.cpp | `cb44fdb1892e` → `892b40b9101b` (46 commits) | empero | **Promoted.** Load 47 s. Both tool steps completed: first token 2.1 s on a 6,425-token prompt, second step 0.3 s. No kernel fault. |
+| Strata | `c1ff07f1a181` → `13eedf552417` (8 commits) | Flash Next | **Promoted.** Load 68 s. Both tool steps completed in 9.6 s and 8.1 s. No kernel fault. |
+| Strata DeepSeek | `c1ff07f1a181` → `13eedf552417` | Strata DeepSeek | **Promoted**, with the RAM store still off (`--ssd-cache 0`). Parity passed except the same marginal row as before, `IQ3_XXS wmma vs scalar y` 3.14e-3 vs 3e-3. Load 83 s. First tool step 83.2 s (first token 58.9 s on a 6,338-token prompt, 107 tokens), second step 12.3 s. No NaN, no kernel fault. |
+
+The Strata update includes three fixes for a read past the end of a row-id table in kernels borrowed from llama.cpp, one of them in the DeepSeek draft step. Whether that bug was behind the NaN faults seen with the RAM store on is not known; the store stays off. Evidence: `hardware/generated/daily-update/2026-11-12T-manual/`.
+
 ## 2026-11-12 — manual update: Maya 1.1.61 promoted
 
 Installed by hand at the owner's request, after the rerun below. Six upstream commits: releases 1.1.60 and 1.1.61, which change the DeepSeek GPU kernels, the GLM fast path and the EXL3 decode.
@@ -12,7 +24,7 @@ Installed by hand at the owner's request, after the rerun below. Six upstream co
 |---|---|---|---|
 | Maya | `6fba6be98125` (1.1.59) → `c5842c5e5be0` (1.1.61) | Maya DeepSeek, GLM | **Promoted.** Parity 34/36, the same `hip_prefill_fused_parity` failure on both cards. Maya DeepSeek: load 148 s; first tool step 110.5 s (first token 94.3 s on a 6,326-token prompt, 104 tokens), second step 8.3 s (was 33.3 s). GLM: load 120 s; first tool step 35.6 s, second step 5.0 s. No owned swap. No GPU page fault, reset or hold; the guard passed with its cgroups empty. |
 
-All engines are current as of this check for Maya; the others were not re-checked today. Evidence: `hardware/generated/daily-update/2026-11-12T-manual/`.
+Evidence: `hardware/generated/daily-update/2026-11-12T-manual/`.
 
 ## 2026-11-12 — Maya `6fba6be98125` rerun: passed and promoted
 
