@@ -4,7 +4,7 @@
     "empero-qwen3.8-35b-a3b",
     "nemotron-3.5-super-iq3"
   ],
-  "source_commit": "9daa0aa22b8aa0143344d7549dee1f0e32f048bb",
+  "source_commit": "ded522f8304554317e7ff8f88698dbbbca5425aa",
   "runtime_overrides": {},
   "source_overrides": {},
   "paused_models": {

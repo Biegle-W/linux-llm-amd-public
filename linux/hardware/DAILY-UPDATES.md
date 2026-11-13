@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-13 (afternoon) — manual update: llama.cpp `ded522f83045` promoted
+
+Upstream check that afternoon: llama.cpp was 5 commits behind; vLLM, SGLang, Strata, Maya and Strata DeepSeek were current. Installed by hand at the owner's request with an isolated build and one guarded stage.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| llama.cpp | `9daa0aa22b8a` → `ded522f83045` (5 commits) | empero | **Promoted.** Strict tool gate passed on the first stage: bare marker. Load 48 s. First tool step 2.7 s (first token 2.2 s on a 6,431-token prompt), second step 0.3 s. No kernel fault, no hold. |
+
+One of the five commits touches the AMD GPU path (a retune of the quantized matrix-multiply configuration table for older GCN cards); the rest are a Hexagon backend addition, a Python requirements fix, a CI timeout change and a web-UI package setting. The short-check timings match the morning build. Evidence: `hardware/generated/daily-update/2026-11-13T-manual-4/`.
+
 ## 2026-11-13 — llama.cpp 1.0.0 promoted at `9daa0aa22b8a` on the third stage, after two strict-gate failures
 
 Upstream released v1.0.0 that morning; the other five engines were current. Two separate builds and guarded stages of upstream head `fe14cad51bbf` (17 commits past `892b40b9101b`, three past the v1.0.0 tag).
