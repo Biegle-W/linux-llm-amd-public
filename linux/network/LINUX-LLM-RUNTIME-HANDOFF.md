@@ -64,7 +64,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `892b40b9101b` |
+| llama.cpp | `9daa0aa22b8a` (1.0.0) |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `13eedf552417` |
@@ -72,7 +72,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 | Strata DeepSeek | `13eedf552417` |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
-Last update (November 12, manual): llama.cpp, Strata, Strata DeepSeek and Maya promoted after strict short tool checks; all six engines were current that evening. November 13: llama.cpp 1.0.0 (`fe14cad51bbf`) failed the strict tool gate twice on `empero` (correct marker, wrapped in a sentence) and was not promoted; llama.cpp is one release behind on purpose ([ledger](../hardware/DAILY-UPDATES.md)). On November 11 llama.cpp, Strata and Strata DeepSeek had been promoted. The Maya candidate `6fba6be98125` faulted the second GPU that day and was rolled back; a rerun on November 12 passed on both Maya routes and it was promoted, then Maya was updated to `c5842c5e5be0` (1.1.61) the same day after the same checks. If a Maya route page-faults again, record it and roll back to `00655481ce2b`.
+Last update (November 12, manual): llama.cpp, Strata, Strata DeepSeek and Maya promoted after strict short tool checks; all six engines were current that evening. November 13: llama.cpp 1.0.0 (`fe14cad51bbf`) failed the strict tool gate twice on `empero` (correct marker, wrapped in a sentence); a third stage at `9daa0aa22b8a` passed the strict gate and was promoted, so all six engines are current. The `empero` tool check can fail on answer wording alone because the route samples at temperature 0.6 ([ledger](../hardware/DAILY-UPDATES.md)). On November 11 llama.cpp, Strata and Strata DeepSeek had been promoted. The Maya candidate `6fba6be98125` faulted the second GPU that day and was rolled back; a rerun on November 12 passed on both Maya routes and it was promoted, then Maya was updated to `c5842c5e5be0` (1.1.61) the same day after the same checks. If a Maya route page-faults again, record it and roll back to `00655481ce2b`.
 <!-- daily-update:end -->
 
 Enabled native source/binary/profile/backing identities are sealed per profile in `dsh/qualified-native-profiles.json`. Retired legacy pins remain separate; they are not the selected native sources.

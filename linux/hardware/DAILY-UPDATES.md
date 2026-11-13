@@ -4,7 +4,7 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
-## 2026-11-13 — llama.cpp 1.0.0 (`fe14cad51bbf`): failed the strict tool gate twice, not promoted
+## 2026-11-13 — llama.cpp 1.0.0 promoted at `9daa0aa22b8a` on the third stage, after two strict-gate failures
 
 Upstream released v1.0.0 that morning; the other five engines were current. Two separate builds and guarded stages of upstream head `fe14cad51bbf` (17 commits past `892b40b9101b`, three past the v1.0.0 tag).
 
@@ -12,8 +12,11 @@ Upstream released v1.0.0 that morning; the other five engines were current. Two 
 |---|---|---:|---:|---:|---|---|
 | 1 | ok | 49 s | 2.7 s (first token 2.3 s, 6,425-token prompt) | 0.5 s | correct marker, wrapped in "The marker is:" and a code block | **Failed gate; rolled back** |
 | 2 | ok | — | completed | completed | correct marker, wrapped in "The marker is:" and inline code | **Failed gate; rolled back** |
+| 3 (`9daa0aa22b8a`) | ok | 48 s | 2.6 s (first token 2.1 s, 6,431-token prompt) | 0.3 s | bare marker | **Passed the strict gate; promoted** |
 
-The engine itself worked both times: one correct `read` tool call, matching call ids, the right marker, no kernel fault, no hold. The gate failed because it requires the bare marker as the whole answer, which the three earlier builds (November 9, 11, 12) gave. The route samples at temperature 0.6 with no fixed seed, so wording can vary; two wrapped answers out of two on the new build against none out of three before suggests a change in the model's output but does not prove one. Among the 17 commits, the ones that could change this MoE model's output are the MoE-cache refactor in the graph code, the grammar-matching rewrite and the BF16 RMS-norm change. Not bisected. llama.cpp stays on `892b40b9101b`. Evidence: `hardware/generated/daily-update/2026-11-13T-manual/` and `2026-11-13T-manual-2/`.
+The engine itself worked both times: one correct `read` tool call, matching call ids, the right marker, no kernel fault, no hold. The gate failed because it requires the bare marker as the whole answer, which the three earlier builds (November 9, 11, 12) gave. The route samples at temperature 0.6 with no fixed seed, so wording can vary; two wrapped answers out of two on the new build against none out of three before suggests a change in the model's output but does not prove one. Among the 17 commits, the ones that could change this MoE model's output are the MoE-cache refactor in the graph code, the grammar-matching rewrite and the BF16 RMS-norm change. Not bisected.
+
+The owner then chose to promote anyway. The third stage was set up to accept a wrapped but correct marker, with every other part of the gate unchanged. The relaxation was not needed: upstream had moved by one unrelated commit (a Hexagon backend change) to `9daa0aa22b8a`, and on that build the model answered with the bare marker, so the strict gate passed as written. With one bare answer in three on 1.0.0, the two failures look like wording variation at temperature 0.6, not a break; whether 1.0.0 makes the wrapped wording more likely than before is not settled by three samples. llama.cpp is on `9daa0aa22b8a` (18 commits past `892b40b9101b`). Evidence: `hardware/generated/daily-update/2026-11-13T-manual/`, `2026-11-13T-manual-2/` and `2026-11-13T-manual-3/`.
 
 ## 2026-11-12 — manual update: llama.cpp, Strata and Strata DeepSeek promoted
 
