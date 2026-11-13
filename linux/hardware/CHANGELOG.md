@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 13, llama.cpp 1.0.0 (`fe14cad`) not promoted.** Two guarded stages both failed the strict tool gate on `empero`: the tool call and marker were correct, but the model wrapped the marker in a sentence instead of answering with it alone. No engine or GPU fault. llama.cpp stays on `892b40b`. [Ledger](DAILY-UPDATES.md)
 - **Nov 12, manual engine update: llama.cpp `892b40b`, Strata `13eedf5` and Strata DeepSeek `13eedf5` promoted.** All three passed the guarded stage with both tool steps completed and no fault; Strata DeepSeek ran with the RAM store off and returned no NaN. vLLM, SGLang and Maya were current. [Ledger](DAILY-UPDATES.md)
 - **Nov 12, manual engine update: Maya `c5842c5` (1.1.61) promoted.** From `6fba6be` (1.1.59), six commits including DeepSeek kernel changes. Parity 34/36 as before; both tool steps completed on Maya DeepSeek and on GLM with no GPU fault and no swap. [Ledger](DAILY-UPDATES.md)
 - **Nov 12, Maya `6fba6be` (1.1.59) rerun passed and was promoted.** The candidate that page-faulted the second card on November 11 was rebuilt and put through the same guarded stage (owner request): parity 34/36 as before, both tool steps completed on Maya DeepSeek and on GLM, no GPU fault. The November 11 fault is treated as a one-off. [Ledger](DAILY-UPDATES.md)
