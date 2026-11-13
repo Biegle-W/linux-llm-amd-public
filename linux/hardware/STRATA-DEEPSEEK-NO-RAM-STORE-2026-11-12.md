@@ -42,6 +42,30 @@
 - No NaN and no kernel message during the speed test either.
 - Engine log: no new NaN line. Kernel log: no GPU reset, page fault or crash. The only kernel messages were "Failed to upload overdrive table" pairs from the fan controller, which also appear on earlier days.
 
+## Rerun on engine `13eedf552417` (November 13)
+
+The same 216 items were run again after the engine update of November 12, with the RAM store still off.
+
+| | November 12, `c1ff07f1a181` | November 13, `13eedf552417` |
+|---|---:|---:|
+| Items answered | 216 | 216 |
+| Request errors | 0 | 0 |
+| New NaN lines in the engine log | 0 | 0 |
+| Correct | 169 (78.2%, 72.3–83.2%) | 166 (76.9%, 70.8–82.0%) |
+| Wrong | 32 | 36 |
+| Cut off at the token limit | 13 | 12 |
+| Malformed | 2 | 2 |
+| Code | 13 | 11 |
+| Instructions | 29 | 27 |
+| Knowledge | 49 | 52 |
+| Math | 32 | 31 |
+| Reasoning | 19 | 19 |
+| Tools | 27 | 26 |
+| Generation time | 12,372 s | 11,982 s |
+| Suite pace | 8.62 tok/s | 8.67 tok/s |
+
+155 items were right in both runs, 11 only in the new one and 14 only in the old one. A three-point gap with 25 items changing sides is run-to-run variation at this route's sampling settings, not a detected change from the new build. Against DeepSeek on Maya (168): 160 right on both, 6 only on Strata, 8 only on Maya. No GPU hold and no kernel fault; the driver logged two "Failed to upload overdrive table" lines an hour in, a power-tuning message, and the run continued. Two clean full runs now support keeping the store off. The RAM store was not retried on the new build.
+
 ## Limits
 
 - This is one clean run. At the earlier failure rate (7 errors in about 200 requests) a clean run of 216 by chance is very unlikely, but the cause is inferred, not proven: the test shows the fault goes away with the store off, not why the store triggers it.
