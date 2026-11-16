@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-16 — manual update: llama.cpp `a946eb541a6d` promoted
+
+Upstream check after midnight: llama.cpp was 2 commits behind; vLLM, SGLang, Strata and Maya were current, ComfyUI 0.45.4 is the newest release, and Strata DeepSeek stays frozen. Researched before install: one commit fixes a mixture-of-experts regression on HIP in the quantized matrix-multiply code (`mmq.cuh`), which is the path the `empero` route uses; the other makes the server answer a `reasoning_effort` level the chat template rejects with HTTP 400.
+
+| Engine | From → to | Routes checked | Result |
+|---|---|---|---|
+| llama.cpp | `9fba51d2c9a1` → `a946eb541a6d` (2 commits) | empero | **Promoted.** Strict tool gate passed first time, bare marker. Load 48 s; tool steps 2.7 s (first token 2.2 s) and 0.4 s, unchanged. No kernel fault, no hold. |
+
+Whether the regression that the HIP fix addresses was present in the build installed on November 15 was not checked; the short tool check showed the same timings before and after, and decode speed was not remeasured. Evidence: `hardware/generated/daily-update/2026-11-16T-manual/`.
+
 ## 2026-11-15 — manual update: llama.cpp, Strata and Maya 1.1.65 promoted; Strata DeepSeek frozen upstream
 
 Upstream check that evening: llama.cpp, Strata and Maya were behind; vLLM and SGLang were current. From this run on, the owner asked that the newer version's bug fixes and performance changes be researched before any install; the findings are in the last column. Each engine got an isolated build and one guarded stage. The server had been shut down cleanly from 03:07 to 21:07 that day (no GPU fault in the previous boot's kernel log, no hold).

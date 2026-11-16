@@ -60,11 +60,11 @@ uname -r   # expect 7.0.14-42-vmpt1
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions in production** (last update November 15, by hand; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions in production** (last update November 16, by hand; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `9fba51d2c9a1` (65 commits past 1.0.0) |
+| llama.cpp | `a946eb541a6d` (67 commits past 1.0.0) |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata | `baf16363b440` (release 0.2.14) |

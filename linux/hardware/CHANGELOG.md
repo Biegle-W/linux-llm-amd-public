@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 16, llama.cpp `a946eb5` promoted.** Two commits, one a fix for a mixture-of-experts regression on HIP; strict tool gate passed first time with unchanged timings. [Ledger](DAILY-UPDATES.md)
 - **Nov 16, all generated image and video samples added to the repository.** 72 files (93 MB) from every ComfyUI run since October 18, with a manifest and a contact sheet; embedded workflow metadata removed. [Samples](../graphics/samples/README.md)
 - **Nov 15, MiniMax H3 Image added (INT8); ComfyUI 0.44.0 → 0.45.4.** 2048×2048 in 36 s with files cached (about 115 s from SATA), 4096×4096 in 126 s; all existing image and video workflows re-run on the new version; one fix so the two-card H3 video loader leaves the image model alone. [Report](../graphics/MINIMAX-H3-IMAGE-2026-11-15.md)
 - **Nov 15, 216-item suite rerun on Strata `baf1636` (Flash-Next): 164 of 216, unchanged.** 157 items right in both runs, 7 only in each; no error, no fault; 54.3 tok/s against 53.6. [Benchmarks](CURRENT-AMD-BENCHMARKS.md)
