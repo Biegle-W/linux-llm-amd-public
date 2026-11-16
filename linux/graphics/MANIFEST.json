@@ -90,6 +90,22 @@
       "precision": "BF16",
       "origin": "black-forest-labs/flux-3-image-klein-comfy feef60b0aaf63a4773ace96636ebbcf43b881312 (FLUX Kommunity License, gated)",
       "verification": "full SHA-256 matched authenticated upstream LFS metadata after download (October 23)"
+    },
+    {
+      "path": "diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors",
+      "bytes": 20979314802,
+      "sha256": "83eb140f1ff95c068f8a6886e6d3f3d0d4ab2e07bb2fe6d2ef992a51146ee622",
+      "precision": "INT8 ConvRot",
+      "origin": "Comfy-Org/MiniMax-H3-Image 0bb149f51e3156ed4b90dd45d5620346bfe1df8f",
+      "verification": "full upstream SHA-256 verified after download, before the move into place (2026-11-15)"
+    },
+    {
+      "path": "vae/minimax_h3_image_vae_fp16.safetensors",
+      "bytes": 1168505312,
+      "sha256": "d80e9c2e5cfc9844869961ff5a58c9a9e52182df6bfb30b26018dd7f348721af",
+      "precision": "FP16",
+      "origin": "Comfy-Org/MiniMax-H3-Image 0bb149f51e3156ed4b90dd45d5620346bfe1df8f",
+      "verification": "full upstream SHA-256 verified after download, before the move into place (2026-11-15)"
     }
   ],
   "original_weight_bytes": 100050424232,

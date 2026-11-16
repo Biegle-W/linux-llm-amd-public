@@ -1,0 +1,10 @@
+{
+  "unet": {"class_type": "UNETLoader", "inputs": {"unet_name": "minimax_h3_image_pruned_int8_convrot.safetensors", "weight_dtype": "default"}},
+  "clip": {"class_type": "GraphicsCLIPLoader", "inputs": {"clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors", "type": "minimax", "device": "cuda:1"}},
+  "vae": {"class_type": "GraphicsVAELoader", "inputs": {"vae_name": "minimax_h3_image_vae_fp16.safetensors", "device": "cuda:1"}},
+  "cond": {"class_type": "MiniMaxH3ImageConditioning", "inputs": {"clip": ["clip", 0], "vae": ["vae", 0], "prompt": "A red enamel teapot on a sunlit wooden table beside a potted fern, steam rising from its spout, with a small paper tag on the handle that reads \"LOCAL LLM\". Full-color indoor photograph.", "width": 2048, "height": 2048}},
+  "neg": {"class_type": "ConditioningZeroOut", "inputs": {"conditioning": ["cond", 0]}},
+  "sample": {"class_type": "KSampler", "inputs": {"model": ["unet", 0], "seed": 42, "steps": 6, "cfg": 1.0, "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0, "positive": ["cond", 0], "negative": ["neg", 0], "latent_image": ["cond", 1]}},
+  "decode": {"class_type": "VAEDecode", "inputs": {"samples": ["sample", 0], "vae": ["vae", 0]}},
+  "save": {"class_type": "SaveImage", "inputs": {"images": ["decode", 0], "filename_prefix": "validation/minimax_h3_image_t2i"}}
+}

@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 15, MiniMax H3 Image added (INT8); ComfyUI 0.44.0 → 0.45.4.** 2048×2048 in 36 s with files cached (about 115 s from SATA), 4096×4096 in 126 s; all existing image and video workflows re-run on the new version; one fix so the two-card H3 video loader leaves the image model alone. [Report](../graphics/MINIMAX-H3-IMAGE-2026-11-15.md)
 - **Nov 15, 216-item suite rerun on Strata `baf1636` (Flash-Next): 164 of 216, unchanged.** 157 items right in both runs, 7 only in each; no error, no fault; 54.3 tok/s against 53.6. [Benchmarks](CURRENT-AMD-BENCHMARKS.md)
 - **Nov 15, llama.cpp `9fba51d`, Strata `baf1636` (0.2.14) and Maya 1.1.65 promoted; Strata DeepSeek frozen upstream.** All three passed the strict tool gate first time with no fault. Strata upstream dropped its DeepSeek engine, so that route stays on `13eedf5`. Upstream changes are now researched before each install. [Ledger](DAILY-UPDATES.md)
 - **Nov 13, llama.cpp `ded522f` promoted.** Five commits past the morning build; strict tool gate passed first time (bare marker, tool steps 2.7 s and 0.3 s), no fault. The other five engines were current. [Ledger](DAILY-UPDATES.md)

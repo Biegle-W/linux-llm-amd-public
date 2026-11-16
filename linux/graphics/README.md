@@ -1,5 +1,7 @@
 # Graphics model collection
 
+**November 15: MiniMax H3 Image added; ComfyUI moved to 0.45.4.** The INT8 denoiser and the new image VAE were added, reusing the installed 32B encoder. 2048×2048 takes 36 s with the files cached in RAM (about 100 to 115 s read from SATA) and 4096×4096 takes 126 s. Every existing workflow was re-run on 0.45.4, including two-card H3 video. [Report and rollback](MINIMAX-H3-IMAGE-2026-11-15.md)
+
 **November 7 production change:** `start-comfyui` now runs H3 two-card tensor parallel over direct P2P (fcys tp2-comfy) for projected-8B text-to-video; FLUX, Qwen-Image and native-32B H3 keep staged placement on the same :8188 server. Sampling is 25-27% faster per step; `COMFY_MODE=staged` rolls back. [Production report](H3-TP2-PRODUCTION-2026-11-07.md)
 
 **November 3 final-hardware campaign:** the owner authorized restoration of paused models, latest-engine upgrades, standard LLM/diffusion benchmarks and forum research on the final 64 GB/dual-XTX system. Preparation is in progress: isolated builds, compatible-runtime review and hash-verified Q1 restoration; full results and profile restoration are pending. Existing guards remain. [Scope, progress and sources](../hardware/FINAL-HARDWARE-CAMPAIGN-2026-11-03.md).
@@ -42,6 +44,9 @@ normal startup with the official Ubuntu sandbox passed October21;
 | H3 native32B fallback encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | Retained NVFP4 storage baseline, with eager dequantization on gfx1100 |
 | H3 video VAE | `vae/minimax_h3_video_vae_fp16.safetensors` | Existing downloaded file, moved intact |
 | H3 audio VAE | `vae/minimax_h3_audio_vae_fp32.safetensors` | Existing downloaded file, moved intact |
+| H3 Image base (distilled to 6 steps) | `diffusion_models/minimax_h3_image_pruned_int8_convrot.safetensors` | Official Comfy-Org release, INT8 ConvRot (November 15) |
+| H3 Image encoder | `text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors` | The H3 native-32B encoder already installed; same published SHA-256 |
+| H3 Image VAE | `vae/minimax_h3_image_vae_fp16.safetensors` | Official Comfy-Org release, FP16 |
 | FLUX 3 Image Klein (distilled) | `diffusion_models/flux3-image-klein-bf16.safetensors` | Official BFL ComfyUI release, BF16 (October 23) |
 | Klein encoder | `text_encoders/qwen3vl_4b_bf16.safetensors` | Official BFL ComfyUI release, BF16 |
 | Klein prompt upsampler | `text_encoders/qwen3.5_9b_flux3_prompt_upsampler_int8_convrot.safetensors` | Official BFL ComfyUI release, INT8 ConvRot |
