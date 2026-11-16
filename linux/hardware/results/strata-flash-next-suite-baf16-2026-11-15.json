@@ -1,0 +1,39 @@
+{
+ "date": "2026-11-15",
+ "route": "qwen3.8-flash-next-iq3_xxs",
+ "engine": "baf16363b440",
+ "release": "0.2.14",
+ "tier": "core",
+ "items": 216,
+ "answered": 216,
+ "request_errors": 0,
+ "correct": 164,
+ "wrong": 31,
+ "capped": 20,
+ "malformed": 1,
+ "percent": 75.9,
+ "wilson95": [
+  69.8,
+  81.1
+ ],
+ "by_category": {
+  "code": 13,
+  "instruction": 29,
+  "knowledge": 49,
+  "math": 31,
+  "reasoning": 20,
+  "tools": 22
+ },
+ "generation_seconds": 3370,
+ "completion_tokens": 182823,
+ "tok_per_s": 54.25,
+ "vs_2026_11_10_previous_build": {
+  "old_correct": 164,
+  "both": 157,
+  "new_only": 7,
+  "old_only": 7,
+  "old_generation_seconds": 3328,
+  "old_completion_tokens": 178331,
+  "old_tok_per_s": 53.59
+ }
+}
