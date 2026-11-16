@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 15, llama.cpp `9fba51d`, Strata `baf1636` (0.2.14) and Maya 1.1.65 promoted; Strata DeepSeek frozen upstream.** All three passed the strict tool gate first time with no fault. Strata upstream dropped its DeepSeek engine, so that route stays on `13eedf5`. Upstream changes are now researched before each install. [Ledger](DAILY-UPDATES.md)
 - **Nov 13, llama.cpp `ded522f` promoted.** Five commits past the morning build; strict tool gate passed first time (bare marker, tool steps 2.7 s and 0.3 s), no fault. The other five engines were current. [Ledger](DAILY-UPDATES.md)
 - **Nov 13, 216-item suite rerun on Strata DeepSeek `13eedf5` (RAM store off): 166 of 216, no NaN, no fault.** Within run-to-run variation of the 169 scored on the previous build; 8.67 tok/s. [Report](STRATA-DEEPSEEK-NO-RAM-STORE-2026-11-12.md)
 - **Nov 13, llama.cpp 1.0.0 (`9daa0aa`) promoted (owner: promote anyway).** A third guarded stage passed the strict tool gate unchanged: bare marker, tool steps 2.6 s and 0.3 s, no fault. The two earlier failures look like wording variation at temperature 0.6. [Ledger](DAILY-UPDATES.md)
