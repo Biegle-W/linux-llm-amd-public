@@ -1,0 +1,509 @@
+{
+  "id": "a5f463d0-1c2a-4252-a658-86a32bd30deb",
+  "revision": 0,
+  "last_node_id": 0,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": "unet",
+      "type": "UNETLoader",
+      "pos": [
+        100,
+        130
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "minimax_h3_image_pruned_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "minimax_h3_image_pruned_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": "clip",
+      "type": "GraphicsCLIPLoader",
+      "pos": [
+        100,
+        342
+      ],
+      "size": [
+        309.2916015625,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GraphicsCLIPLoader"
+      },
+      "widgets_values": [
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax",
+        "cuda:1"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "type": "minimax",
+        "device": "cuda:1"
+      }
+    },
+    {
+      "id": "vae",
+      "type": "GraphicsVAELoader",
+      "pos": [
+        100,
+        578
+      ],
+      "size": [
+        280.983984375,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            2,
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GraphicsVAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_image_vae_fp16.safetensors",
+        "cuda:1"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_image_vae_fp16.safetensors",
+        "device": "cuda:1"
+      }
+    },
+    {
+      "id": "cond",
+      "type": "MiniMaxH3ImageConditioning",
+      "pos": [
+        509.2916015625,
+        130
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 1
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 2
+        },
+        {
+          "name": "images.image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "images.image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            3,
+            5
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ImageConditioning"
+      },
+      "widgets_values": [
+        "Edit <Picture 1>. Make the teapot cobalt blue instead of red and replace the fern with a small lemon tree. Keep the table, the light, the steam and the paper tag unchanged.",
+        0,
+        0
+      ],
+      "widgets_values_named": {
+        "prompt": "Edit <Picture 1>. Make the teapot cobalt blue instead of red and replace the fern with a small lemon tree. Keep the table, the light, the steam and the paper tag unchanged.",
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "id": "neg",
+      "type": "ConditioningZeroOut",
+      "pos": [
+        1009.2916015625,
+        130
+      ],
+      "size": [
+        204.134765625,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ConditioningZeroOut"
+      }
+    },
+    {
+      "id": "sample",
+      "type": "KSampler",
+      "pos": [
+        1313.4263671875,
+        130
+      ],
+      "size": [
+        270,
+        262
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 4
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "randomize",
+        6,
+        1,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 42,
+        "control_after_generate": "randomize",
+        "steps": 6,
+        "cfg": 1,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": "decode",
+      "type": "VAEDecode",
+      "pos": [
+        1683.4263671875,
+        130
+      ],
+      "size": [
+        140,
+        46
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": "save",
+      "type": "SaveImage",
+      "pos": [
+        1923.4263671875,
+        130
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "validation/MiniMax-H3-Image-Edit-INT8"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "validation/MiniMax-H3-Image-Edit-INT8"
+      }
+    },
+    {
+      "id": "ref",
+      "type": "LoadImage",
+      "pos": [
+        100,
+        790
+      ],
+      "size": [
+        282.798828125,
+        102
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "h3_image_edit_reference.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "h3_image_edit_reference.png",
+        "upload": "image"
+      }
+    }
+  ],
+  "links": [
+    [
+      3,
+      "cond",
+      0,
+      "neg",
+      0,
+      "CONDITIONING"
+    ],
+    [
+      4,
+      "unet",
+      0,
+      "sample",
+      0,
+      "MODEL"
+    ],
+    [
+      5,
+      "cond",
+      0,
+      "sample",
+      1,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      "neg",
+      0,
+      "sample",
+      2,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      "cond",
+      1,
+      "sample",
+      3,
+      "LATENT"
+    ],
+    [
+      8,
+      "sample",
+      0,
+      "decode",
+      0,
+      "LATENT"
+    ],
+    [
+      9,
+      "vae",
+      0,
+      "decode",
+      1,
+      "VAE"
+    ],
+    [
+      10,
+      "decode",
+      0,
+      "save",
+      0,
+      "IMAGE"
+    ],
+    [
+      1,
+      "clip",
+      0,
+      "cond",
+      0,
+      "CLIP"
+    ],
+    [
+      2,
+      "vae",
+      0,
+      "cond",
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      "ref",
+      0,
+      "cond",
+      2,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "frontendVersion": "1.58.5"
+  },
+  "version": 0.4
+}

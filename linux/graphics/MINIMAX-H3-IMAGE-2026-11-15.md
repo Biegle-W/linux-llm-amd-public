@@ -43,7 +43,13 @@ Sampling itself takes about 13 s at 2048×2048; the rest is loading 37 GB of wei
 teapot scene in both, and the 4096 image renders the requested "LOCAL LLM" tag text correctly (the 2048 one garbles it).
 The upstream mixed-dtype attention bug (ComfyUI issue 17713) did not occur. No kernel fault, no GPU hold.
 
-Not tested: image editing with reference pictures, sizes other than these two, the INT8 text encoder, and quality against BF16.
+Not tested: sizes other than these two, more than one reference picture, the INT8 text encoder, and quality against BF16.
+
+## Image editing and editor workflows (added the same evening)
+
+One edit with a single reference picture ran through the production launcher: the 2048×2048 teapot image above as `<Picture 1>`, with the instruction to make the teapot cobalt blue and replace the fern with a small lemon tree. API success in 110.3 s read from SATA (64.9 s for a second run with the files cached); peak VRAM 21.6 / 19.4 GiB; no error. The result keeps the scene, light, steam and tag and turns the teapot blue, but the fern was **not** replaced, and the picture is visibly sharper and harsher than its source. One prompt and one seed: this shows the reference path works on these cards, not how well the model follows edits.
+
+Editor workflows are saved in the ComfyUI workflow list as **MiniMax H3 Image INT8** and **MiniMax H3 Image Edit INT8** (`graphics/workflows/minimax-h3-image.json`, `minimax-h3-image-edit.json`; API graphs `minimax-h3-image-t2i-api.json`, `minimax-h3-image-edit-api.json`). They were made by loading the tested API graphs in the 0.45.4 editor; the text-to-image one converts back to the same API graph, and the edit one was queued from the editor and succeeded. The edit workflow expects a picture named `h3_image_edit_reference.png` in the input folder; choose your own in its Load Image node.
 
 ## ComfyUI 0.44.0 → 0.45.4
 

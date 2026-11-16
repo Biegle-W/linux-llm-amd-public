@@ -23,7 +23,7 @@ ssh -L 8188:127.0.0.1:8188 user@linux-host
 Then open the same loopback address on the client. The server binds to loopback;
 this installation does not expose a new unauthenticated LAN service.
 
-Choose **Workflows**, then **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**. For MiniMax H3 Image, load `graphics/workflows/minimax-h3-image-t2i-api.json` (an API-format graph; no editor workflow has been saved for it yet). H3 defaults to the projected 8B text-only encoder; use **MiniMax H3 Native32B** for image conditioning or rollback.
+Choose **Workflows**, then **Qwen-Image 2.1 BF16** or **MiniMax H3 INT8**. For MiniMax H3 Image choose **MiniMax H3 Image INT8** (text to image) or **MiniMax H3 Image Edit INT8** (edit a reference picture). H3 defaults to the projected 8B text-only encoder; use **MiniMax H3 Native32B** for image conditioning or rollback.
 Refresh the list if needed. Edit the prompt, keep batch count 1 and click Run.
 Use the saved base-model schedules; neither workflow needs a prompt enhancer,
 Turbo adapter, GGUF loader or third-party node pack. The small maintained
