@@ -1,6 +1,6 @@
 {
  "method": "Every file from the ComfyUI output folder; PNG pixels and encoded MP4 video/audio unchanged; embedded generation/workflow metadata removed",
- "count": 72,
+ "count": 79,
  "artifacts": [
   {
    "file": "comfy-latest-20261105/graphics-flux-i2i_00001_.png",
@@ -123,6 +123,17 @@
    "sha256": "3917333bdcd33d92dbc1c105e66a4baa9164e112083999db9035bbe58093f79b"
   },
   {
+   "file": "flux3_klein_i2i_test_00005_.png",
+   "generated": "2026-11-16",
+   "source_sha256": "6237fca22bb3b09a9ff2987f22635587f4aa2981f02e9639ba029929f959f365",
+   "kind": "image",
+   "width": 1248,
+   "height": 832,
+   "pixels_unchanged": true,
+   "bytes": 1738027,
+   "sha256": "3917333bdcd33d92dbc1c105e66a4baa9164e112083999db9035bbe58093f79b"
+  },
+  {
    "file": "flux3_klein_t2i_test_00001_.png",
    "generated": "2026-10-23",
    "source_sha256": "5733621e2591dbd0db4ed56ed30ae6da15bad48f09eeeb763bfade399fe97800",
@@ -176,6 +187,17 @@
    "pixels_unchanged": true,
    "bytes": 1937222,
    "sha256": "75aa490d1f98b1378dd9ee3066a9a0bc315782cebbe19637bd6110a67830d910"
+  },
+  {
+   "file": "flux3_klein_t2i_test_00006_.png",
+   "generated": "2026-11-16",
+   "source_sha256": "7190cb864290e6d30d7cf888a761694021ca26fa5d16d46b1cd39a7101dac068",
+   "kind": "image",
+   "width": 1024,
+   "height": 1024,
+   "pixels_unchanged": true,
+   "bytes": 1947558,
+   "sha256": "ed8a1871d3c5650f224ff2c37f29e2b3266bbd79fb4b076dcdd3bb0aacbbdb6a"
   },
   {
    "file": "no-switch-validation/graphics-flux-i2i_00001_.png",
@@ -848,6 +870,38 @@
    "sha256": "482a97f389b1309d7ff938c8a458c1cb8d23fe461134626d9eeeb036246f5995"
   },
   {
+   "file": "validation/MiniMax-H3-INT8_00026_.mp4",
+   "generated": "2026-11-16",
+   "source_sha256": "10b679b8cb0bb7b0e986c75b9dc6afbbe3653c5b6e436322aa53dc147543a841",
+   "kind": "video",
+   "width": 608,
+   "height": 352,
+   "frames": 39,
+   "streams": [
+    "h264",
+    "aac"
+   ],
+   "streams_copied": true,
+   "bytes": 105363,
+   "sha256": "df425d0e59a7d1605e3a05474488a814262cc7963c4c06acb159076cac138320"
+  },
+  {
+   "file": "validation/MiniMax-H3-INT8_00027_.mp4",
+   "generated": "2026-11-16",
+   "source_sha256": "4a7427b84df2b52aa53038ea5d9d6af28fbc5599d3d2729562c821d99685ddd6",
+   "kind": "video",
+   "width": 608,
+   "height": 352,
+   "frames": 39,
+   "streams": [
+    "h264",
+    "aac"
+   ],
+   "streams_copied": true,
+   "bytes": 103249,
+   "sha256": "8f5dff2029bd5e4b94d690ea335467b2349a227e0f374b3d6887bd5ff6177803"
+  },
+  {
    "file": "validation/MiniMax-H3-Image-Edit-INT8_00001_.png",
    "generated": "2026-11-15",
    "source_sha256": "dbcbc2edc44e1b0b5977e7287527800cfdd9cdcfe6b51686e8492d61f744f8db",
@@ -914,6 +968,17 @@
    "sha256": "15c4d1dccaeace936fcead2080931a43af934cf549653e66f4f297600e72be6f"
   },
   {
+   "file": "validation/Qwen-Image-2.1-BF16_00006_.png",
+   "generated": "2026-11-16",
+   "source_sha256": "51588203aa992dfdeba5655946b9ad28902c0e0e0c880409207af2636888620f",
+   "kind": "image",
+   "width": 512,
+   "height": 512,
+   "pixels_unchanged": true,
+   "bytes": 334427,
+   "sha256": "443186e2c941732e13ff8f34a2e506bd97ec227fa2d2b210739d2a031791a7b2"
+  },
+  {
    "file": "validation/minimax_h3_image_edit_00001_.png",
    "generated": "2026-11-15",
    "source_sha256": "30a432db37d8e3642173f7a86774c2eea86f14214a011ca580da36f41e64fba6",
@@ -923,6 +988,17 @@
    "pixels_unchanged": true,
    "bytes": 6722390,
    "sha256": "6a578ae93cf162ad7671a754de46d06277a496e1c29ba3c627e9b601883addec"
+  },
+  {
+   "file": "validation/minimax_h3_image_edit_00002_.png",
+   "generated": "2026-11-16",
+   "source_sha256": "869c9f04c3fb82440f7824a3a5893c069bcaa9c4a338a6564c33c34a2b909729",
+   "kind": "image",
+   "width": 2048,
+   "height": 2048,
+   "pixels_unchanged": true,
+   "bytes": 6721741,
+   "sha256": "18e6ec79846007f6771f9bc5ccc35488c516b7d7570c377410ffa5ad5f1eb187"
   },
   {
    "file": "validation/minimax_h3_image_t2i_00001_.png",
@@ -967,6 +1043,17 @@
    "pixels_unchanged": true,
    "bytes": 5769791,
    "sha256": "d4817ff094175ca757ae74570c96e61a77195462a359c86124c054e1509c815e"
+  },
+  {
+   "file": "validation/minimax_h3_image_t2i_04100_.png",
+   "generated": "2026-11-16",
+   "source_sha256": "37d69d9790bb59adb06488d46fe027691b3426243e203bce2552f852eaac52d0",
+   "kind": "image",
+   "width": 2048,
+   "height": 2048,
+   "pixels_unchanged": true,
+   "bytes": 5865826,
+   "sha256": "cc1f7ad98fc9b42f286c43d78f76f3e6d8400d53762bf999edcb48c59f16f38c"
   },
   {
    "file": "validation/minimax_h3_image_t2i_4096_00001_.png",

@@ -1,5 +1,7 @@
 # Graphics model collection
 
+**November 16: ComfyUI moved to 0.45.5** (a partner-node and templates release; all seven saved workflows re-run, see [the update ledger](../hardware/DAILY-UPDATES.md)).
+
 **November 15: MiniMax H3 Image added; ComfyUI moved to 0.45.4.** The INT8 denoiser and the new image VAE were added, reusing the installed 32B encoder. 2048×2048 takes 36 s with the files cached in RAM (about 100 to 115 s read from SATA) and 4096×4096 takes 126 s. Every existing workflow was re-run on 0.45.4, including two-card H3 video. [Report and rollback](MINIMAX-H3-IMAGE-2026-11-15.md)
 
 **November 7 production change:** `start-comfyui` now runs H3 two-card tensor parallel over direct P2P (fcys tp2-comfy) for projected-8B text-to-video; FLUX, Qwen-Image and native-32B H3 keep staged placement on the same :8188 server. Sampling is 25-27% faster per step; `COMFY_MODE=staged` rolls back. [Production report](H3-TP2-PRODUCTION-2026-11-07.md)

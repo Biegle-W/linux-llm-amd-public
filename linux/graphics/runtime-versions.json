@@ -1,7 +1,7 @@
 {
-  "validated_on": "2026-11-15",
-  "comfyui_version": "0.45.4",
-  "comfyui_commit": "2aa4d535a76e4b6acf6a94f263bc482430c396dd",
+  "validated_on": "2026-11-16",
+  "comfyui_version": "0.45.5",
+  "comfyui_commit": "03d670becbc2b198c19a150d436eeea2b853e2a0",
   "python": "3.12.14",
   "torch": "2.15.0.dev20260827+rocm7.2",
   "torchvision": "0.30.0.dev20260831+rocm7.2",
@@ -10,7 +10,7 @@
   "comfy_kitchen": "0.2.41",
   "comfy_aimdo": "0.6.0",
   "frontend": "1.58.5",
-  "workflow_templates": "0.11.109",
+  "workflow_templates": "0.11.110",
   "gpu": "2 x RX 7900 XTX 24 GB (gfx1100)",
   "system_ram_GiB": 61.55,
   "placement": "default COMFY_MODE=tp2: H3 projected-8B T2V = fcys tp2-comfy TP2 over RCCL P2P/IPC (rank0 PowerColor :8188, rank1 Sapphire :18189); FLUX, Qwen-Image and native32B H3 = staged component placement (denoiser cuda:0; encoder and VAEs cuda:1) on the same server; COMFY_MODE=staged = previous single-process server",
@@ -30,7 +30,7 @@
   },
   "runtime_selection": {
     "status": "passed-six-normal-workflows",
-    "source_commit": "2aa4d535a76e4b6acf6a94f263bc482430c396dd",
+    "source_commit": "03d670becbc2b198c19a150d436eeea2b853e2a0",
     "source_path": "<local path>,
     "dependency_overlay": "<local path>,
     "qualified_device_order": "0,1",

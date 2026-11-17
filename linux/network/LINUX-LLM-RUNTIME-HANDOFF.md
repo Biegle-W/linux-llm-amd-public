@@ -64,11 +64,11 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `a946eb541a6d` (67 commits past 1.0.0) |
+| llama.cpp | `9581154a2250` (99 commits past 1.0.0) |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata | `baf16363b440` (release 0.2.14) |
-| Maya | `c81fab6c9d63` (1.1.65) |
+| Strata | `c77572806996` (release 0.2.15) |
+| Maya | `c89ebef32cdb` (10 commits past 1.1.65) |
 | Strata DeepSeek | `13eedf552417` (frozen: upstream removed this engine) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 
@@ -90,7 +90,7 @@ Use the existing private bearer key and access policy. Retrieve credentials thro
 - OpenAI-compatible Chat Completions and native Responses `POST /v1/responses` are supported. Stream with a 600-second client timeout for cold loading, and start with 2,048 output tokens. OpenCat mixed tools and self-hosted SearXNG/RSS search are available; see [network details](README.md).
 - The gateway on TCP 10000 forwards to `local-llm-hub.service` on `127.0.0.1:30100`. An inference request starts or switches a backend through the managed launchers; catalog and health GETs do not load models or reset idle time.
 - Use the `bin/` and installed `llm-*` entry points and the Desktop launchers. DSH and Turnstone are optional frontends. Switching may interrupt owned replies but must preserve DSH, the gateway, unrelated Python, training or graphics applications and unknown port owners. Never blanket-kill Python or GPU processes.
-- Production ComfyUI (`graphics/start-comfyui`) runs projected-8B H3 as two-card TP over RCCL P2P; FLUX, Qwen-Image, native-32B H3 and MiniMax H3 Image (added November 15 with ComfyUI 0.45.4; [report](../graphics/MINIMAX-H3-IMAGE-2026-11-15.md)) use staged placement; `COMFY_MODE=staged` rolls back ([report](../graphics/H3-TP2-PRODUCTION-2026-11-07.md)). Do not load a second model worker while it holds the GPUs. Like the hub's LLM engines, it stops itself after 600 s idle (empty queue and no browser tab connected; `COMFY_IDLE_TIMEOUT_S` in the environment changes it, 0 disables); start it again with `graphics/start-comfyui` or the ComfyUI desktop icon.
+- Production ComfyUI (`graphics/start-comfyui`) runs projected-8B H3 as two-card TP over RCCL P2P; FLUX, Qwen-Image, native-32B H3 and MiniMax H3 Image (added November 15 with ComfyUI 0.45.4; ComfyUI is 0.45.5 since November 16; [report](../graphics/MINIMAX-H3-IMAGE-2026-11-15.md)) use staged placement; `COMFY_MODE=staged` rolls back ([report](../graphics/H3-TP2-PRODUCTION-2026-11-07.md)). Do not load a second model worker while it holds the GPUs. Like the hub's LLM engines, it stops itself after 600 s idle (empty queue and no browser tab connected; `COMFY_IDLE_TIMEOUT_S` in the environment changes it, 0 disables); start it again with `graphics/start-comfyui` or the ComfyUI desktop icon.
 
 ## Open items
 

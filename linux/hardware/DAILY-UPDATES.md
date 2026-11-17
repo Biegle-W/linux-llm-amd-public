@@ -4,6 +4,23 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-16 (evening) — manual update: llama.cpp, Strata 0.2.15, Maya and ComfyUI 0.45.5 promoted
+
+Upstream check that evening: llama.cpp, Strata and Maya were behind and ComfyUI had a new release; vLLM and SGLang were current; Strata DeepSeek stays frozen. The server had been shut down cleanly from 02:23 to 21:52 (no GPU fault in the previous boot's kernel log, no hold). Changes were researched before install, as the last column records.
+
+| Engine | From → to | Routes checked | Result | What the new version changes (researched before install) |
+|---|---|---|---|---|
+| llama.cpp | `a946eb541a6d` → `9581154a2250` (32 commits) | empero | **Promoted.** Bare marker. Load 50 s; tool steps 2.7 s (first token 2.2 s) and 0.3 s, unchanged. | Fix for an abort in the mixture-of-experts matrix multiply on AMD cards (odd column counts), the path `empero` uses. Faster KV-cell cleanup when a sequence is removed. The server moved to a new batch API. `--tensor-split` accepts as many entries as there are devices. The rest is other backends, new audio and vision models and the web UI. |
+| Strata | `baf16363b440` → `c77572806996` (release 0.2.15, 45 commits) | qwen3.8-flash-next-iq3_xxs | **Promoted.** Bare marker. First token 7.0 s and 6.3 s, unchanged; load 135 s cold. | Almost all app, installer and Terminal fixes; upstream's engine packages stay at the 0.2.14 build. Server: a boolean tool argument written `True`/`False` is treated as a boolean; a stop refuses new requests while the engine closes. |
+| Maya | `c81fab6c9d63` → `c89ebef32cdb` (10 commits) | deepseek-v4.1-flash-1017-maya-unsloth-q1, glm-5.3-flash-maya | **Promoted.** Both bare markers. See the timing note below. | DeepSeek: after a stop during prompt reading, the next turn takes its conversation back correctly. An opt-in cap on parallel requests (`MAYA_PAR_MAX`). Setup counts AMD cards in its model recommendation. The rest is docs and tests. |
+| ComfyUI | 0.45.4 → 0.45.5 (3 commits) | seven saved workflows | **Promoted.** All seven succeeded through the production launcher. | One partner-node change (partner nodes are disabled on this server) and workflow templates 0.11.109 → 0.11.110. Nothing functional changes here. |
+
+**Maya timing note.** The gate ran minutes after the restart and was slow: DeepSeek first token 148 s and 5.5 s, GLM 87 s and 12.8 s (the day before: 94 s and 5.3 s, 31 s and 4.0 s). A second short check of the same promoted build, run right after, gave DeepSeek 71 s and 5.6 s and GLM 32 s and 4.3 s. The first result was a cold file cache, not a regression.
+
+**ComfyUI 0.45.5** was set up as another side-by-side checkout sharing the Python environment, as on November 15. Re-run on it: H3 Image text-to-image (109 s) and edit (136 s), FLUX text-to-image (94 s) and edit (42 s), Qwen-Image (92 s), default H3 video in two-card mode (137 s) and H3 native-32B video (145 s). Both videos decode fully. The 0.45.4 checkout is kept; the previous selection is saved in `graphics/runtime-versions.json` under `selection_before_0_45_5`. The new outputs are in `graphics/samples/`.
+
+No kernel fault and no hold in any stage. The 216-item suite and the speed table were not rerun. Evidence: `hardware/generated/daily-update/2026-11-16T-evening/` and `2026-11-16T-maya-recheck/`.
+
 ## 2026-11-16 — manual update: llama.cpp `a946eb541a6d` promoted
 
 Upstream check after midnight: llama.cpp was 2 commits behind; vLLM, SGLang, Strata and Maya were current, ComfyUI 0.45.4 is the newest release, and Strata DeepSeek stays frozen. Researched before install: one commit fixes a mixture-of-experts regression on HIP in the quantized matrix-multiply code (`mmq.cuh`), which is the path the `empero` route uses; the other makes the server answer a `reasoning_effort` level the chat template rejects with HTTP 400.
