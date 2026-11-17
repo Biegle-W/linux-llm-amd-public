@@ -1,0 +1,53 @@
+{
+ "date": "2026-11-17",
+ "route": "qwen3.8-flash-next-iq3_xxs",
+ "engine": "c77572806996",
+ "release": "0.2.15",
+ "profile": "tuned-2026-11-17",
+ "suite": {
+  "items": 216,
+  "correct": 167,
+  "wrong": 30,
+  "capped": 19,
+  "malformed": 0,
+  "request_errors": 0,
+  "percent": 77.3,
+  "wilson95": [
+   71.3,
+   82.4
+  ],
+  "by_category": {
+   "code": 11,
+   "instruction": 28,
+   "knowledge": 50,
+   "math": 31,
+   "reasoning": 22,
+   "tools": 25
+  },
+  "generation_seconds": 2648,
+  "completion_tokens": 175390,
+  "tok_per_s": 66.23,
+  "vs_before": {
+   "before_correct": 164,
+   "both": 158,
+   "new_only": 9,
+   "old_only": 6,
+   "before_tok_per_s": 54.25
+  }
+ },
+ "strict_tool_gate": {
+  "load_seconds": 108.7,
+  "ttft_seconds": [
+   5.07,
+   4.27
+  ],
+  "elapsed_seconds": [
+   5.9,
+   4.52
+  ],
+  "before_ttft_seconds": [
+   7.01,
+   6.29
+  ]
+ }
+}

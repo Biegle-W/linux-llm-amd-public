@@ -27,7 +27,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | same Qwen3.8-27B weights + DFlash2 drafter | VRAM | 163,840 | BF16 KV, prefix cache |
 | `nemotron-3.5-bolt-vllm` | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | VRAM | 262,144 | runtime globaldev229 |
 | `ripple-65b-vllm` | vLLM TP2 | Ripple-65B-Preview GPTQ W4A16 | VRAM | 65,536 | P2P, out-of-tree `vllm/ripple-plugin` |
-| `qwen3.8-flash-next-iq3_xxs` | Strata | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | SSD streaming | 262,144 | RAM/VRAM expert caches, reserve 1024 MiB |
+| `qwen3.8-flash-next-iq3_xxs` | Strata | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | SSD streaming | 262,144 | RAM/VRAM expert caches, reserve 1536 MiB; tuned profile since November 17 |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S | SSD streaming | 32,768 | expert profile, RAM store off (`--ssd-cache 0`), reserve 2048 MiB, 14 threads |
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | same DeepSeek UD-IQ1_S backing | SSD streaming | 32,768 | expert profile, `64gb-q1-v1` tier, reserve 2048 MiB, 20 threads |
 | `glm-5.3-flash-maya` | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS | SSD streaming | 32,768 | `MAYA_GLM_RAM_GB=40`, expert profile, reserves 2048/2048 MiB |

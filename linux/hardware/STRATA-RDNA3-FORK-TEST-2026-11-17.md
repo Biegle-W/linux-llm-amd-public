@@ -49,6 +49,26 @@ and the three codes of the long prompt. No NaN line in any engine log, no kernel
 - The public warning that the fork reads short tool-result prompts about three times slower did not show here, but both
   arms re-read the whole 13K prompt (prompt cache off in every arm), so this test does not isolate a short append.
 
+## Tuned settings applied to production (same day, owner approved)
+
+The owner chose to apply the tuned settings to the production Flash-Next profile on the current build. A further run showed the 24 GiB RAM budget made no difference (identical speeds, the same 18.9 GiB in use), so the profile keeps its **12 GiB** budget and stays inside the existing memory guard; no guard code changed.
+
+Changed in `dsh/strata-iq3-profile.json`: `--prefill` 256 → auto, `--spec` 2 → 4, `--spec-min-p` 0.7 → 0.5, `--pipeline-windows` 0 → 2, `--adapt-every` 0 → 1 with `--adapt-swaps 48`, `--pool-workers` 6 → 8, both VRAM reserves 1024 → 1536 MiB, `--no-spec-split` removed.
+
+| Check on the tuned production profile, through the hub | Before | Tuned |
+|---|---:|---:|
+| Strict tool gate: first token, steps 1 / 2 | 7.0 s / 6.3 s | 5.1 s / 4.3 s (bare marker) |
+| Agent turn, 12,862-token prompt: prompt read | 909 tok/s | 1,755 tok/s |
+| Same turn, start to finish | 14.8 s | 7.8 s |
+| Long prompt, 47,716 tokens: prompt read | 932 tok/s | 2,673 tok/s |
+| Long prompt, 256-token answer, start to finish | 56.0 s | 21.9 s |
+| Prose / code decode | 50 / 58 tok/s | 52 / 74 tok/s |
+| Public suite, 216 items | 164 (75.9%, 69.8–81.1%) | 167 (77.3%, 71.3–82.4%) |
+| Suite: wrong / cut off / malformed / request errors | 31 / 20 / 1 / 0 | 30 / 19 / 0 / 0 |
+| Suite pace | 54.3 tok/s | 66.2 tok/s |
+
+Item by item the suite has 158 right in both runs, 9 only after and 6 only before: no quality change is detected. Through the hub the prompt rates are 12–15% below the standalone tuned run above. No NaN line, no kernel fault, no hold. To revert, restore the profile from the commit before this one. The fork was **not** installed; its decode advantage remains available as a separate decision.
+
 ## Limits
 
 Six requests, one run each. No 216-item suite, nothing past 48K tokens, no sustained run, no thinking mode. The fork lacks

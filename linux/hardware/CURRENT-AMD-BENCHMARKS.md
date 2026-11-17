@@ -9,8 +9,8 @@ One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-Q
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 |
 | `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 7 |
 | `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 9 |
-| `qwen3.8-flash-next-iq3_xxs` | Strata | passed | 66.3 | 710 | 69.5 | 51 | 62 | 164 | 3 |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 2 |
+| `qwen3.8-flash-next-iq3_xxs` | Strata | passed | 66.3‖ | 710‖ | 69.5 | 51 | 62 | 167‖ | 2 |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 |
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 1 |
 | `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 8 |
 
@@ -23,6 +23,7 @@ How to read it:
 - **Public suite:** correct answers out of 216 items sampled from MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL and MuSR ([report](PUBLIC-QUALITY-SUITE-2026-11-11.md)). The 95% interval is about ±6 points (±13 items); the top four routes are not separated.
 - § 65 of Ripple's 216 answers were cut off by the 2,048–4,096-token limit while still reasoning.
 - ¶ DeepSeek on Strata, measured November 13 on engine `13eedf552417` with its RAM store turned off (`--ssd-cache 0`): all 216 items answered, no NaN error ([report](STRATA-DEEPSEEK-NO-RAM-STORE-2026-11-12.md)). The first store-off run, on November 12 with engine `c1ff07f1a181`, scored 169; the two runs agree within run-to-run variation (155 items right in both, 11 only in the new run, 14 only in the old). With the 36 GB RAM store on, three earlier attempts stopped on NaN errors (after 4 items, after 88 with 5 errors, and after 17 when the server's kernel crashed). The tool-call figures in this row (5.6, 111, 140.1) were measured with the store on; † has the speed with it off. The suite ran at 8.7 tok/s end to end with the store off (8.6 on November 12), against 7.4 with it on.
+- ‖ Flash-Next on Strata runs a tuned profile since November 17 (automatic prompt chunks, 4-token drafts, pipelined windows, adaptive expert swaps; same build, same 12 GiB RAM budget). On the tuned profile: 167 of 216 on the public suite (158 items right both before and after, 9 only after, 6 only before, which is run-to-run variation), suite pace 66.2 tok/s against 54.3, and on the strict tool check first token in 5.1 s against 7.0 s. The decode and prompt-read columns in this row are still the old profile's; on a fixed set of requests the tuned profile read prompts at 1,755–2,673 tok/s through the hub against 909–932 before, and decoded at 52–99 tok/s against 50–74 ([report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)). The pairwise "measurably better than" test was not rerun.
 - Flash-Next on Strata was rerun on November 15 on engine `baf16363b440` (release 0.2.14, prompt reading on Strata's own kernels): 164 of 216 again, with 157 items right in both runs, 7 only in the new run and 7 only in the old; no request error and no fault. The category counts in the quality table are from this rerun. Suite pace 54.3 tok/s against 53.6 on the same items before. The speed columns in the first table were not remeasured on the new build.
 - † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Strata DeepSeek measured the same way after the November 11 engine update: 4.2 for the first answer after load, then 8.0–10.2; prompt read 119–132 tok/s with one sample at 63 ([results](results/strata-dsv41-speed-2026-11-11.json)). With the RAM store off on November 12, same method: 4.2 for the first answer after load, then 10.7–12.2; prompt read 125–143 tok/s with one sample at 79; the first answer from a cold start came after 82 s, against 71 ([results](results/strata-dsv41-speed-no-ram-store-2026-11-12.json)).
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
@@ -35,8 +36,8 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 | Rank | Route | Correct / 216 | Score | 95% interval | Cut off | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Measurably better than |
 |---:|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---|
 | 1 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 168 | 77.8% | 71.8–82.8% | 13 | 12 | 28 | 51 | 29 | 22 | 26 | Nemotron, GLM, Ripple |
-| 2 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 166 | 76.9% | 70.8–82.0% | 12 | 11 | 27 | 52 | 31 | 19 | 26 | not tested |
-| 3 | `qwen3.8-flash-next-iq3_xxs` | 164 | 75.9% | 69.8–81.1% | 20 | 13 | 29 | 49 | 31 | 20 | 22 | GLM, Ripple |
+| 2 | `qwen3.8-flash-next-iq3_xxs` | 167 | 77.3% | 71.3–82.4% | 19 | 11 | 28 | 50 | 31 | 22 | 25 | not retested |
+| 3 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 166 | 76.9% | 70.8–82.0% | 12 | 11 | 27 | 52 | 31 | 19 | 26 | not tested |
 | 4 | `qwen3.8-27b-sglang-dflash2` | 163 | 75.5% | 69.3–80.7% | 21 | 8 | 31 | 47 | 32 | 18 | 27 | Ripple |
 | 5 | `qwen3.8-27b-vllm` | 157 | 72.7% | 66.4–78.2% | 26 | 10 | 28 | 45 | 31 | 19 | 24 | Ripple |
 | 6 | `empero-qwen3.8-35b-a3b` | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | — |
