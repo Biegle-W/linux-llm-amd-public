@@ -50,8 +50,9 @@ class NemotronCandidates(unittest.TestCase):
 
     def test_swap_is_not_added_to_admission_capacity(self):
         profile = self.profiles['nemotron-3.5-super-iq3']
-        self.assertIsNotNone(moe_memory.memory_reason(profile,30*GIB,20*GIB))
-        self.assertIsNone(moe_memory.memory_reason(profile,30*GIB,24*GIB))
+        # Owner choice, November 18 2026: the one 1 GiB free-RAM floor (was CPU expert bytes + 1 GiB).
+        self.assertIsNotNone(moe_memory.memory_reason(profile,30*GIB,GIB-1))
+        self.assertIsNone(moe_memory.memory_reason(profile,30*GIB,GIB))
 
     def test_failed_or_unmeasured_profile_cannot_be_activated(self):
         profile = self.profiles['nemotron-3.5-super-iq3']

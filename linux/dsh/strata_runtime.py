@@ -6,7 +6,8 @@ import subprocess
 from pathlib import Path
 from amd_device import amd_devices
 from moe_memory import host_memory
-from streaming_memory import ALL_OFF_CARD_ADMISSION_GIB, check_32gb
+from streaming_memory import check_32gb
+import resource_policy
 
 ROOT = Path(__file__).resolve().parent.parent
 GIB = 1024**3
@@ -32,27 +33,25 @@ def kv_backing_gib(cfg):
 
 
 def expert_budget_gib(cfg):
-    """The expert RAM figure used for admission: the fixed budget, or the counted figure of the all-off-card mode."""
+    """The fixed expert RAM budget of the profile, or None in the all-off-card mode (no budget)."""
     args = cfg['args']
     if cfg.get('expert_ram_mode') == 'all-off-card' and cfg.get('host_ram_profile') == '64gb-qwen-v1':
         if '--resident-cpu-experts' not in args or '--resident-budget-gib' in args:
             raise RuntimeError('The all-off-card mode takes --resident-cpu-experts and no fixed expert budget.')
-        return float(ALL_OFF_CARD_ADMISSION_GIB)
+        return None
     if '--resident-cpu-experts' not in args or '--resident-budget-gib' not in args:
         raise RuntimeError('Strata requires bounded CPU expert backing plus GPU expert caching.')
     return float(args[args.index('--resident-budget-gib') + 1])
 
 
-def memory_blockers(total, available, minimum=29, budget=8, *, check_available=True, kv_gib=0):
+def memory_blockers(total, available, minimum=29, *, check_available=True):
+    """Physical RAM for the profile, then the one host-wide free-RAM floor (no per-model figure)."""
     problems = []
     if total < minimum * GIB:
         problems.append(f'Strata needs {minimum:g} GiB OS-visible RAM for this profile; found {total/GIB:.1f}.')
-    required = budget + kv_gib + 1
-    if check_available and available < required * GIB:
-        problems.append(f'Strata needs {required:.2f} GiB available RAM before loading '
-                        f'({budget:g} GiB expert budget, {kv_gib:.2f} GiB host KV and 1 GiB headroom); '
-                        f'found {available/GIB:.1f}. '
-                        'Swap does not replace physical RAM.')
+    reason = resource_policy.free_ram_blocker(available) if check_available else None
+    if reason:
+        problems.append(reason)
     return problems
 
 
@@ -68,11 +67,11 @@ def check_config(cfg, total, available, *, check_available=True):
     if min(reserve, later) < 128:
         raise RuntimeError('Strata per-card reserve is below the active resource policy.')
     budget = expert_budget_gib(cfg)
-    if not 0 < budget <= 24:
+    if budget is not None and not 0 < budget <= 24:
         raise RuntimeError('Unexpected Strata expert RAM budget.')
     check_32gb(cfg, total, available, 'qwen', check_available=check_available)
-    problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], budget,
-                               check_available=check_available, kv_gib=kv_backing_gib(cfg))
+    kv_backing_gib(cfg)   # still refuses an unsupported KV format
+    problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], check_available=check_available)
     if problems:
         raise RuntimeError(' '.join(problems))
 

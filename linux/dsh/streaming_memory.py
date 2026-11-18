@@ -1,7 +1,13 @@
-"""Explicit bounded streaming tiers; legacy admission stays intact."""
+"""Explicit streaming tiers: layout checks per tier, one host-wide free-RAM floor for loading."""
 GIB = 1024**3
-ALL_OFF_CARD_ADMISSION_GIB = 24   # RAM counted at admission when a profile sets expert_ram_mode all-off-card
 import resource_policy
+
+
+def require_free_ram(available, check_available=True):
+    """Every tier is admitted on the one host-wide free-RAM floor; no per-model figure is counted."""
+    reason = resource_policy.free_ram_blocker(available) if check_available else None
+    if reason:
+        raise RuntimeError(reason)
 
 
 def is_32gb(cfg):
@@ -51,12 +57,10 @@ def check_32gb(cfg, total, available, family, *, check_available=True):
     else:
         raise RuntimeError('Unknown 32 GB streaming family.')
     # A lower-cache tier changes resource demand, never the independent floors.
-    # owner-headroom-v1: Qwen needs its expert budget + 1 GiB; GLM/DeepSeek need 9 GiB available.
+    # Owner choice, November 18 2026: one free-RAM floor for every model instead of a per-model figure.
     if total < 29*GIB:
         raise RuntimeError('32 GB streaming tier requires at least 29 GiB OS-visible physical RAM.')
-    required = float(arg('--resident-budget-gib') or 8) * GIB + GIB if family == 'qwen' else 9*GIB
-    if check_available and available < required:
-        raise RuntimeError(f'32 GB streaming tier needs {required/GIB:g} GiB available RAM before loading; swap is not capacity.')
+    require_free_ram(available, check_available)
     return True
 
 
@@ -76,9 +80,7 @@ def check_64gb(cfg, total, available, family, *, check_available=True):
         raise RuntimeError('64 GB Q1 requires DeepSeek 32K, 14/20 threads and explicit 28 GB expert/1024 MB Engram caches.')
     if total < 60*GIB:
         raise RuntimeError('64 GB Q1 tier requires at least 60 GiB OS-visible physical RAM.')
-    required = 29*GIB
-    if check_available and available < required:
-        raise RuntimeError('64 GB Q1 tier needs 29 GiB available RAM before loading; swap is not capacity.')
+    require_free_ram(available, check_available)
     return True
 
 
@@ -97,19 +99,16 @@ def check_64gb_qwen(cfg, total, available, family, *, check_available=True):
     whole = cfg.get('expert_ram_mode') == 'all-off-card'
     if whole:
         # Owner choice, later on November 17: no fixed budget. The engine keeps every expert the cards do not
-        # hold in RAM (measured 21.42 GiB) and the file cache serves the prompt path; admission counts 24 GiB.
+        # hold in RAM (measured 21.42 GiB) and the file cache serves the prompt path.
         if '--resident-budget-gib' in args or '--resident-cpu-experts' not in args:
             raise RuntimeError('The all-off-card Qwen mode takes --resident-cpu-experts and no fixed expert budget.')
     elif cfg.get('expert_ram_mode') is not None:
         raise RuntimeError('Unknown Qwen expert RAM mode; no worker was started.')
-    budget = str(ALL_OFF_CARD_ADMISSION_GIB) if whole else value('--resident-budget-gib')
     if (family != 'qwen' or cfg.get('minimum_host_ram_gib') != 60
-            or budget not in ('12', '20', '24')
+            or not whole and value('--resident-budget-gib') not in ('12', '20', '24')
             or value('--max-context') != '262144' or value('--kv-resident') != '32768'):
-        raise RuntimeError('64 GB Qwen requires a 12/20/24 GiB expert tier, a 60 GiB host floor and the retained 256K/32K KV layout.')
+        raise RuntimeError('64 GB Qwen requires a 12/20/24 GiB expert tier or the all-off-card mode, a 60 GiB host floor and the retained 256K/32K KV layout.')
     if total < 60*GIB:
         raise RuntimeError('64 GB Qwen tier requires at least 60 GiB OS-visible physical RAM.')
-    required = float(budget) * GIB + GIB
-    if check_available and available < required:
-        raise RuntimeError(f'64 GB Qwen tier needs {required/GIB:g} GiB available RAM before loading; swap is not capacity.')
+    require_free_ram(available, check_available)
     return True

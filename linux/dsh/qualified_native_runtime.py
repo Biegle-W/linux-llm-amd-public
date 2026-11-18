@@ -146,8 +146,10 @@ def require_profile(cfg,record,before_handover=False):
         raise RuntimeError('Retain current phase-aware swap and per-card resource guard')
     ensure_streaming_models()
     total,available=host_memory()
-    if total<60*GIB or not before_handover and available<52*GIB:
-        raise RuntimeError('Qualified native loading requires 60 GiB physical / 52 GiB available RAM')
+    if total<60*GIB:
+        raise RuntimeError('Qualified native loading requires 60 GiB physical RAM')
+    from streaming_memory import require_free_ram
+    require_free_ram(available,not before_handover)
     devices=amd_devices()
     if len(devices)!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in devices):
         raise RuntimeError('Qualified native profiles require both 24 GiB AMD cards')

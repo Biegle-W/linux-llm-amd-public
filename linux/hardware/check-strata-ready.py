@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GIB = 1024**3
 sys.path.insert(0, str(ROOT / "dsh"))
 from strata_runtime import memory_blockers, kv_backing_gib
+import resource_policy
 from strata_runtime import expert_budget_gib
 
 
@@ -23,8 +24,8 @@ def inspect(ram=None, profile=None):
     source = json.loads(source_path.read_text())
     args = source['args']
     budget = expert_budget_gib(source)
-    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'], budget,
-                               kv_gib=kv_backing_gib(source))
+    kv_backing_gib(source)   # still refuses an unsupported KV format
+    problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'])
     args = source['args']
     paths = {option: Path(args[args.index(option)+1]) for option in ('--pack', '--native', '--ple-gguf', '--mtp')}
     required = [paths['--native'], paths['--ple-gguf'], paths['--pack'] / 'dense.bin',
@@ -62,6 +63,7 @@ def inspect(ram=None, profile=None):
             'profile': selected, 'requested_ram_alias': ram,
             'minimum_physical_ram_gib': source['minimum_host_ram_gib'],
             'expert_budget_gib': budget,
+            'free_ram_floor_gib': resource_policy.RAM_RESERVE_BYTES/GIB,
             'note': 'Read-only readiness, not a benchmark or proof of maximum context. No inference was started.'}
 
 

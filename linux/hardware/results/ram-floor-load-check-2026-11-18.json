@@ -1,0 +1,102 @@
+{
+ "date": "2026-11-18",
+ "change": "One host-wide free-RAM floor (1 GiB, resource_policy.RAM_RESERVE_BYTES) replaces every per-model available-RAM figure at load admission.",
+ "request": "one short chat request per model through the hub, 64-token limit, temperature 0",
+ "unit_tests": {
+  "hardware": "662 run, 2 skipped, OK",
+  "dsh": "62 run, OK"
+ },
+ "scope": "Loads started with 15-58 GiB available, so they exercise the changed admission code, not the 1 GiB boundary; the boundary is covered by unit tests only.",
+ "refused_switch": "Flash-Next to Maya DeepSeek was refused twice by the unchanged VRAM check (16 GiB free per card), which Maya reads once right after the previous backend stops. Not a RAM refusal; the older, stricter RAM check ran at the same point. No hold, no kernel fault.",
+ "runs": [
+  {
+   "model": "qwen3.8-flash-next-iq3_xxs",
+   "available_before_gib": 58.22,
+   "ok": true,
+   "status": 200,
+   "text": "READY",
+   "completion_tokens": 2,
+   "seconds": 65.3,
+   "lowest_available_gib": 26.33,
+   "peak_swap_gib": 0.38,
+   "hold_after": false,
+   "sequence": "1: from idle, then a switch straight to Maya"
+  },
+  {
+   "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+   "available_before_gib": 26.33,
+   "ok": false,
+   "error": "HTTPError: HTTP Error 503: Service Unavailable",
+   "detail": "{\"error\": {\"message\": \"Maya could not start: Project Maya startup failed: Qualified native loading requires 16 GiB free per card\", \"code\": \"backend_start_failed\", \"type\": \"backend_error\"}}",
+   "seconds": 10.2,
+   "lowest_available_gib": 26.28,
+   "peak_swap_gib": 0.38,
+   "hold_after": false,
+   "sequence": "1: from idle, then a switch straight to Maya"
+  },
+  {
+   "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+   "available_before_gib": 58.24,
+   "ok": true,
+   "status": 200,
+   "text": "READY",
+   "completion_tokens": 3,
+   "seconds": 225.2,
+   "lowest_available_gib": 51.76,
+   "peak_swap_gib": 0.38,
+   "hold_after": false,
+   "sequence": "2: from idle, then three switches"
+  },
+  {
+   "model": "glm-5.3-flash-maya",
+   "available_before_gib": 51.84,
+   "ok": true,
+   "status": 200,
+   "text": "READY",
+   "completion_tokens": 3,
+   "seconds": 165.4,
+   "lowest_available_gib": 15.02,
+   "peak_swap_gib": 0.78,
+   "hold_after": false,
+   "sequence": "2: from idle, then three switches"
+  },
+  {
+   "model": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+   "available_before_gib": 15.02,
+   "ok": true,
+   "status": 200,
+   "text": "READY",
+   "completion_tokens": 3,
+   "seconds": 83.9,
+   "lowest_available_gib": 15.02,
+   "peak_swap_gib": 0.76,
+   "hold_after": false,
+   "sequence": "2: from idle, then three switches"
+  },
+  {
+   "model": "qwen3.8-flash-next-iq3_xxs",
+   "available_before_gib": 50.48,
+   "ok": true,
+   "status": 200,
+   "text": "READY",
+   "completion_tokens": 2,
+   "seconds": 149.1,
+   "lowest_available_gib": 27.4,
+   "peak_swap_gib": 1.97,
+   "hold_after": false,
+   "sequence": "2: from idle, then three switches"
+  },
+  {
+   "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+   "available_before_gib": 27.28,
+   "ok": false,
+   "error": "HTTPError: HTTP Error 503: Service Unavailable",
+   "detail": "{\"error\": {\"message\": \"Maya could not start: Project Maya startup failed: Qualified native loading requires 16 GiB free per card\", \"code\": \"backend_start_failed\", \"type\": \"backend_error\"}}",
+   "seconds": 2.0,
+   "lowest_available_gib": 27.28,
+   "peak_swap_gib": 1.97,
+   "hold_after": false,
+   "sequence": "3: repeat of the switch from loaded Flash-Next"
+  }
+ ]
+}

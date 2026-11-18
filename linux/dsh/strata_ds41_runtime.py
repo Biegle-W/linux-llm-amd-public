@@ -8,7 +8,7 @@ import subprocess
 from amd_device import amd_devices
 from llama_runtime import require_worker_scope
 from moe_memory import host_memory
-from streaming_memory import check_32gb
+from streaming_memory import check_32gb, require_free_ram
 from shared_storage import STREAM_MODELS, ensure_streaming_models
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -79,8 +79,10 @@ def require_profile(cfg,before_handover=False,*,require_validated=True):
         raise RuntimeError('Strata DeepSeek pack/tokenizer differs from the validated system-drive weight pack.')
     total,available=host_memory()
     bounded=check_32gb(cfg,total,available,'deepseek',check_available=not before_handover)
-    if not bounded and (total<60*GIB or (not before_handover and available<52*GIB)):
-        raise RuntimeError('Strata DeepSeek needs 60GiB physical / 52GiB available RAM; swap is not capacity.')
+    if not bounded:
+        if total<60*GIB:
+            raise RuntimeError('Strata DeepSeek needs 60GiB physical RAM; swap is not capacity.')
+        require_free_ram(available,not before_handover)
     devices=amd_devices()
     if len(devices)!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in devices):
         raise RuntimeError('Strata DeepSeek requires both 24GiB AMD cards.')

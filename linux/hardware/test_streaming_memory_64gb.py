@@ -13,8 +13,9 @@ class FinalHardwareAdmission(unittest.TestCase):
  def cfg(self):
   return {'host_ram_profile':'64gb-q1-v1','args':['--max-context','32768','--cpu-threads','20'],'env':{'DS4_WARM_CAP_GB':'28','DS4_ENGRAM_CACHE_MB':'1024'}}
  def test_available_memory_floor(self):
-  c=self.cfg();self.assertTrue(check_32gb(c,61.55*GIB,29*GIB,'deepseek'))
-  with self.assertRaises(RuntimeError):check_32gb(c,61.55*GIB,29*GIB-1,'deepseek')
+  # Owner choice, November 18 2026: the one 1 GiB free-RAM floor (was 29 GiB for this tier).
+  c=self.cfg();self.assertTrue(check_32gb(c,61.55*GIB,GIB,'deepseek'))
+  with self.assertRaisesRegex(RuntimeError,'available RAM'):check_32gb(c,61.55*GIB,GIB-1,'deepseek')
  def test_swap_never_substitutes_for_final_physical_capacity(self):
   with self.assertRaises(RuntimeError):check_64gb(self.cfg(),60*GIB-1,100*GIB,'deepseek')
  def test_pre_handover_keeps_physical_admission(self):

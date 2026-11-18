@@ -13,29 +13,28 @@ class StrataMemoryTests(unittest.TestCase):
         self.assertEqual(strata_runtime.memory_blockers(30*GIB, 14*GIB), [])
 
     def test_swap_does_not_replace_physical_headroom(self):
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB, 8*GIB))
+        # Owner choice, November 18 2026: one 1 GiB free-RAM floor, no per-model figure.
+        self.assertEqual(strata_runtime.memory_blockers(30*GIB, GIB), [])
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB, GIB-1))
 
     def test_reclaimable_old_worker_does_not_block_handover_but_new_load_is_gated(self):
-        self.assertEqual(strata_runtime.memory_blockers(30*GIB, 8*GIB, check_available=False), [])
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB, 8*GIB))
+        self.assertEqual(strata_runtime.memory_blockers(30*GIB, GIB-1, check_available=False), [])
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB, GIB-1))
         self.assertTrue(strata_runtime.memory_blockers(20*GIB, 18*GIB, check_available=False))
 
     def test_64gb_profile_refuses_32gb(self):
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB, 29*GIB, 60, 20))
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB, 29*GIB, 60))
 
-    def test_64gb_profile_accepts_restored_ram_and_budget(self):
-        self.assertEqual(strata_runtime.memory_blockers(62*GIB, 40*GIB, 60, 20), [])
+    def test_64gb_profile_accepts_restored_ram(self):
+        self.assertEqual(strata_runtime.memory_blockers(62*GIB, 40*GIB, 60), [])
 
-    def test_streamed_context_reserves_full_host_kv_beside_experts(self):
+    def test_streamed_context_host_kv_is_not_counted_at_admission(self):
         cfg = {'args':['--max-context','262144','--kv-resident','32768','--kv','int8']}
         backing = strata_runtime.kv_backing_gib(cfg)
         self.assertAlmostEqual(backing, 3.3515625)
-        # Owner headroom policy (99ec1b1): expert budget + full host KV + 1 GiB (was 6 GiB).
-        required = int((14 + backing + 1) * GIB)
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB,required-1,budget=14,kv_gib=backing))
-        self.assertTrue(strata_runtime.memory_blockers(30*GIB,int((14+backing)*GIB),budget=14,kv_gib=backing))
-        self.assertEqual(strata_runtime.memory_blockers(30*GIB,required,budget=14,kv_gib=backing), [])
-        self.assertEqual(strata_runtime.memory_blockers(30*GIB,24*GIB,budget=14,kv_gib=backing), [])
+        # November 18 2026: admission no longer adds the expert budget and host KV; the floor alone decides.
+        self.assertEqual(strata_runtime.memory_blockers(30*GIB,GIB), [])
+        self.assertTrue(strata_runtime.memory_blockers(30*GIB,GIB-1))
 
     def test_fully_resident_kv_needs_no_host_context_copy(self):
         cfg = {'args':['--max-context','32768','--kv-resident','32768','--kv','int8']}

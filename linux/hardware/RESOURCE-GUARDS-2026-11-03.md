@@ -31,6 +31,27 @@ RAM/VRAM telemetry loss, actual dedicated VRAM eviction, owned-process containme
 
 The managed ComfyUI CLI uses the shared owned resource/SSD guard and a 0.125 GiB native VRAM reserve. Its hold check runs before framework initialization. The existing desktop application's native reserve is also 0.125 GiB; its direct native launch is not represented as having the CLI wrapper's SSD/cgroup monitor. Use the managed CLI when those checks are required. No ComfyUI workload or application restart was performed for this change.
 
+## November 18, 2026: one free-RAM floor for loading (owner decision)
+
+The owner asked for a plain free-RAM floor for every model, as on the NVIDIA server, instead of a per-model figure. Before a model loads, the only available-RAM requirement is now the **1 GiB host reserve** above (`free_ram_blocker` in `dsh/resource_policy.py`). Nothing is added for expert budgets, host KV copies or CPU expert bytes.
+
+| Route | Available RAM needed before loading, until November 17 | Now |
+|---|---:|---:|
+| Flash-Next on Strata (`64gb-qwen-v1`) | 28.4 GiB (24 counted + 3.35 host KV + 1) | 1 GiB |
+| DeepSeek Q1 on Maya (qualified native) | 52 GiB | 1 GiB |
+| GLM on Maya | 52 GiB | 1 GiB |
+| DeepSeek Q1 on Strata | 52 GiB | 1 GiB |
+| `64gb-q1-v1` tier | 29 GiB | 1 GiB |
+| `32gb-v1` tier | expert budget + 1 GiB (Qwen), 9 GiB (GLM, DeepSeek) | 1 GiB |
+| llama.cpp MoE with CPU experts (none enabled) | CPU expert bytes + 1 GiB | 1 GiB |
+| llama.cpp VRAM-only, vLLM, SGLang | 1 GiB or no RAM figure | unchanged |
+
+Unchanged: the physical-RAM floors (60 GiB installed for the large profiles), the layout checks of each tier, every VRAM check, the worker hard ceiling of `MemTotal − 1 GiB`, and the running guards, which stop only the owned worker when available RAM falls below 1 GiB. What this means in practice: a load that used to be refused up front when other programs held the RAM is now started, and if the RAM does run out it is the running guard that stops that worker (a router-local fault, not a GPU hold).
+
+Checked with the unit tests (hardware: 662 run, 2 skipped; dsh: 62) and one short request per affected model through the hub: Flash-Next, DeepSeek Q1 on Maya, GLM on Maya and DeepSeek Q1 on Strata all loaded and answered ([result](results/ram-floor-load-check-2026-11-18.json)). Those loads began with 15–58 GiB available, so the 1 GiB boundary itself is covered by unit tests only.
+
+Found during the check, not caused by it: switching straight from a loaded Flash-Next to a Maya model is refused with "16 GiB free per card". Maya reads free VRAM once, right after the previous backend stops, while the Strata start waits up to 10 s for it. The request returns 503 and a retry succeeds. This check was not changed.
+
 ## Validation and activation
 
 Eight new CPU-only tests exercise inclusive headroom boundaries, legacy-environment normalization, high-rate swap, storage warnings/freshness, ordinary wear and owned shutdown. Historical replay checks cover 12 streaming-memory cases and nine earlier rate-policy cases. The ownership/lifecycle suite passes 32 CPU-only cases on the host user bus; a stale SGLang fixture was corrected to mock storage preflight consistently with its VLLM counterpart.

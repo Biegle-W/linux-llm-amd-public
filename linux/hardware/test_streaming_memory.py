@@ -27,12 +27,12 @@ class BoundedTiers(unittest.TestCase):
   for f in ['qwen','glm','deepseek']:
    with self.assertRaises(RuntimeError):check_32gb(self.cfg(f),28.99*GIB,26*GIB,f)
  def test_available_ram_floor(self):
-  # Qwen: expert budget + 1 GiB; GLM/DeepSeek: 9 GiB. Swap is not capacity.
-  for f,budget,need in [('qwen','8',9),('qwen','12',13),('glm',None,9),('deepseek',None,9)]:
+  # Owner choice, November 18 2026: one 1 GiB free-RAM floor for every family and budget (was budget + 1 / 9 GiB).
+  for f,budget in [('qwen','8'),('qwen','12'),('glm',None),('deepseek',None)]:
    c=self.cfg(f)
    if budget:c['args'][-1]=budget
-   self.assertTrue(check_32gb(c,31*GIB,need*GIB,f))
-   with self.assertRaisesRegex(RuntimeError,'available RAM'):check_32gb(c,31*GIB,need*GIB-1,f)
+   self.assertTrue(check_32gb(c,31*GIB,GIB,f))
+   with self.assertRaisesRegex(RuntimeError,'available RAM'):check_32gb(c,31*GIB,GIB-1,f)
  def test_pre_handover_keeps_physical_gate(self):
   self.assertTrue(check_32gb(self.cfg(),31*GIB,1,'deepseek',check_available=False))
   with self.assertRaises(RuntimeError):check_32gb(self.cfg(),28*GIB,1,'deepseek',check_available=False)

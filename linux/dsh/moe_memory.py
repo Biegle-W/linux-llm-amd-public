@@ -53,12 +53,13 @@ def memory_reason(profile, total, available, already_loaded=False):
     if total < minimum:
         return f'MoE profile requires at least {minimum/GIB:g} GiB OS-visible RAM; found {total/GIB:.1f} GiB.'
     gpu = vram_worker_limits(profile) is not None
-    reserve = GIB if already_loaded else (profile['host_expert_bytes'] + GIB if not gpu else GIB)
+    # Owner choice, November 18 2026: one host-wide free-RAM floor; the CPU expert bytes are not counted.
+    reserve = resource_policy.RAM_RESERVE_BYTES
     if available < reserve:
-        purpose = 'VRAM-only loading/staging' if gpu else 'MoE CPU expert storage'
+        purpose = 'VRAM-only loading/staging' if gpu else 'MoE loading'
         return (f'{purpose} requires {reserve/GIB:.1f} GiB available RAM '
                 f'({available/GIB:.1f} GiB available). Close memory-heavy applications and retry; '
-                'swap is not counted as expert capacity.')
+                'swap is not counted as capacity.')
     return None
 
 

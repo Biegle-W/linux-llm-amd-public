@@ -80,7 +80,9 @@ class MoeMemoryTests(unittest.TestCase):
         self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, 14*GIB))
 
     def test_extra_swap_does_not_replace_available_ram(self):
-        self.assertIn('available', moe_memory.memory_reason(PROFILE, 30*GIB, 5*GIB))
+        # Owner choice, November 18 2026: the one 1 GiB free-RAM floor (was CPU expert bytes + 1 GiB).
+        self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, GIB))
+        self.assertIn('available', moe_memory.memory_reason(PROFILE, 30*GIB, GIB-1))
 
     def test_loaded_model_does_not_reserve_its_weights_twice(self):
         self.assertIsNone(moe_memory.memory_reason(PROFILE, 30*GIB, 6*GIB, True))
@@ -117,7 +119,7 @@ class MoeMemoryTests(unittest.TestCase):
             calls.append((path, args))
             return {'data': [{'id': 'old', 'status': {'value': 'loaded'}}]} if path == '/v1/models' else {'success': True}
         with patch.object(moe_memory, 'profiles', return_value={'moe': PROFILE}), \
-             patch.object(moe_memory, 'host_memory', side_effect=[(30*GIB, 5*GIB), (30*GIB, 20*GIB)]):
+             patch.object(moe_memory, 'host_memory', side_effect=[(30*GIB, GIB-1), (30*GIB, 20*GIB)]):
             moe_memory.admit_model('moe', api, 8081)
         self.assertEqual(calls[1], ('/models/unload', ({'model':'old'},)))
 

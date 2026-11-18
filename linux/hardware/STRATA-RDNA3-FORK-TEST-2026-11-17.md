@@ -120,7 +120,7 @@ What this showed:
 What changed in the repository:
 
 - **Profile** `dsh/strata-iq3-profile.json`: `--resident-budget-gib 24` removed, `expert_ram_mode: all-off-card` added.
-- **Memory guard** `dsh/streaming_memory.py`: in tier `64gb-qwen-v1` the mode `all-off-card` takes `--resident-cpu-experts` and no budget flag, and counts 24 GiB at admission, so the same 25 GiB (28.4 GiB with the host KV copy) must be available before loading. `dsh/strata_runtime.py`, `hardware/check-strata-ready.py` and `hardware/prepare-candidates.py` read the figure through one helper. Tests in `hardware/test_streaming_memory_qwen64.py`; the hardware unit tests pass (661 run, 2 skipped).
+- **Memory guard** `dsh/streaming_memory.py`: in tier `64gb-qwen-v1` the mode `all-off-card` takes `--resident-cpu-experts` and no budget flag, and counts 24 GiB at admission, so the same 25 GiB (28.4 GiB with the host KV copy) must be available before loading. (Replaced on November 18 by one 1 GiB free-RAM floor for every model: [guard policy](RESOURCE-GUARDS-2026-11-03.md).) `dsh/strata_runtime.py`, `hardware/check-strata-ready.py` and `hardware/prepare-candidates.py` read the figure through one helper. Tests in `hardware/test_streaming_memory_qwen64.py`; the hardware unit tests pass (661 run, 2 skipped).
 
 | Check through the hub | 24 GiB cap | No fixed budget |
 |---|---:|---:|

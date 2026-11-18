@@ -89,7 +89,9 @@ class MayaTests(unittest.TestCase):
                 bad=copy.deepcopy(cfg);bad['env']['MAYA_GLM_MISS_SKIP_W']='0.1'
                 bad['local_validation']['config_sha256']=runtime.config_fingerprint(bad)
                 with self.assertRaisesRegex(RuntimeError,'expert skipping'):runtime.check_config(bad)
-                with patch.object(runtime,'host_memory',return_value=(64*runtime.GIB,35*runtime.GIB)):
+                with patch.object(runtime,'host_memory',return_value=(64*runtime.GIB,runtime.GIB)):runtime.check_config(cfg)
+                with patch.object(runtime,'host_memory',return_value=(64*runtime.GIB,runtime.GIB-1)):
+                    runtime.check_config(cfg,before_handover=True)   # old weights may still hold the RAM
                     with self.assertRaisesRegex(RuntimeError,'available RAM'):runtime.check_config(cfg)
                 with patch.object(runtime.subprocess,'check_output',return_value='different\n'):
                     with self.assertRaisesRegex(RuntimeError,'source changed'):runtime.check_config(cfg)

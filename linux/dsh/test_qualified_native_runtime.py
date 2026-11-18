@@ -127,7 +127,8 @@ class QualificationAdmission(unittest.TestCase):
     def test_low_physical_RAM_always_rejected(self):
         with patch.object(self.module,'host_memory',return_value=(32*2**30,28*2**30)):self.assertRaises(RuntimeError,self.require,before_handover=True)
     def test_available_RAM_enforced_after_handover(self):
-        with patch.object(self.module,'host_memory',return_value=(64*2**30,40*2**30)):
+        with patch.object(self.module,'host_memory',return_value=(64*2**30,2**30)):self.assertIs(self.require(),self.cfg)
+        with patch.object(self.module,'host_memory',return_value=(64*2**30,2**30-1)):
             self.assertIs(self.require(before_handover=True),self.cfg);self.assertRaises(RuntimeError,self.require)
     def test_startup_GPU_admission_enforced(self):
         (self.cards[0]/'mem_info_vram_used').write_text(str(12*2**30));self.assertRaises(RuntimeError,self.require)

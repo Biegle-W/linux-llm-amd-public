@@ -26,6 +26,20 @@ def properties(limits=None):
             for k, v in (scope_limits() if limits is None else limits).items()]
 
 
+def free_ram_blocker(available):
+    """The one free-RAM floor for every model load (owner choice, November 18 2026).
+
+    No per-model figure is counted before loading: a load needs the host reserve available and nothing
+    more. The worker scope limit above and the running guards bound what happens after that.
+    """
+    if type(available) not in (int, float) or available < 0:
+        raise ValueError('Invalid available-RAM telemetry')
+    if available < RAM_RESERVE_BYTES:
+        return (f'Loading needs {RAM_RESERVE_BYTES/GIB:g} GiB available RAM (the host reserve); '
+                f'found {available/GIB:.2f} GiB. Swap is not capacity.')
+    return None
+
+
 def headroom_failure(available, cards):
     if type(available) is not int or available < 0 or not cards or len(cards) != 2 or any(
             type(c.get('free')) is not int or c['free'] < 0 for c in cards):
