@@ -106,7 +106,8 @@ def check_config(cfg, before_handover=False, require_validated=True):
     if len(amd_devices())!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in amd_devices()):
         raise RuntimeError('Maya requires both 24 GB AMD cards.')
     require_worker_scope()
-    if not before_handover and any(int((d/'mem_info_vram_total').read_text())-int((d/'mem_info_vram_used').read_text())<16*GIB for d in amd_devices()):
+    from amd_device import free_vram_short
+    if not before_handover and free_vram_short(amd_devices(),16*GIB):
         raise RuntimeError('Maya needs 16 GiB free VRAM on each card before loading.')
 
 

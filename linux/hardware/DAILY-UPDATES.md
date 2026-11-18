@@ -6,7 +6,7 @@
 
 ## 2026-11-18 — one free-RAM floor for loading (owner decision; not an engine update)
 
-No engine changed. The memory guards now admit every model load on the 1 GiB host reserve alone, with no per-model available-RAM figure. Unit tests pass (662 and 62). One short request each through the hub: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s, all answered; no hold, no kernel fault. A switch straight from Flash-Next to Maya was refused twice by the unchanged VRAM check and works on retry. [Guard policy](RESOURCE-GUARDS-2026-11-03.md#november-18-2026-one-free-ram-floor-for-loading-owner-decision)
+No engine changed. The memory guards now admit every model load on the 1 GiB host reserve alone, with no per-model available-RAM figure. Unit tests pass (662 and 62). One short request each through the hub: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s, all answered; no hold, no kernel fault. A switch straight from Flash-Next to Maya was refused twice by the single-read VRAM check; that check now waits up to 15 s for the release (fixed the same day; in the retest it passed, and the load then stopped on the whole-card headroom check because a game was using the display card). [Guard policy](RESOURCE-GUARDS-2026-11-03.md#november-18-2026-one-free-ram-floor-for-loading-owner-decision)
 
 ## 2026-11-17 — Flash-Next moved to the Strata RDNA3 fork (owner decision)
 

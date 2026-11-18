@@ -131,7 +131,10 @@ class QualificationAdmission(unittest.TestCase):
         with patch.object(self.module,'host_memory',return_value=(64*2**30,2**30-1)):
             self.assertIs(self.require(before_handover=True),self.cfg);self.assertRaises(RuntimeError,self.require)
     def test_startup_GPU_admission_enforced(self):
-        (self.cards[0]/'mem_info_vram_used').write_text(str(12*2**30));self.assertRaises(RuntimeError,self.require)
+        import amd_device
+        (self.cards[0]/'mem_info_vram_used').write_text(str(12*2**30))
+        with patch.object(amd_device,'VRAM_RELEASE_WAIT_SECONDS',0):self.assertRaises(RuntimeError,self.require)
+        self.assertIs(self.require(before_handover=True),self.cfg)
     def test_missing_telemetry_fails_closed(self):(self.cards[0]/'mem_info_vram_total').unlink();self.assertRaises(FileNotFoundError,self.require)
     def test_registry_holds_and_family_binding(self):
         p=self.root/'dsh/qualified-native-profiles.json';p.parent.mkdir();p.write_text(json.dumps({'schema_version':1,'profiles':{'qualified-coder':self.record}}))

@@ -7,7 +7,7 @@
   "dsh": "62 run, OK"
  },
  "scope": "Loads started with 15-58 GiB available, so they exercise the changed admission code, not the 1 GiB boundary; the boundary is covered by unit tests only.",
- "refused_switch": "Flash-Next to Maya DeepSeek was refused twice by the unchanged VRAM check (16 GiB free per card), which Maya reads once right after the previous backend stops. Not a RAM refusal; the older, stricter RAM check ran at the same point. No hold, no kernel fault.",
+ "refused_switch": "Flash-Next to Maya DeepSeek was refused twice by the unchanged VRAM check (16 GiB free per card), which Maya reads once right after the previous backend stops. Not a RAM refusal; the older, stricter RAM check ran at the same point. No hold, no kernel fault. Fixed later the same day with a bounded wait; see vram_release_wait.",
  "runs": [
   {
    "model": "qwen3.8-flash-next-iq3_xxs",
@@ -98,5 +98,38 @@
    "hold_after": false,
    "sequence": "3: repeat of the switch from loaded Flash-Next"
   }
- ]
+ ],
+ "vram_release_wait": {
+  "change": "The 16 GiB-per-card check of Maya, qualified native and Strata DeepSeek polls for up to 15 s after a switch instead of reading once.",
+  "unit_tests": {
+   "hardware": "667 run, 2 skipped, OK",
+   "dsh": "62 run, OK"
+  },
+  "retest": "Flash-Next loaded, then a request for DeepSeek Q1 on Maya. Cards reported the VRAM free 0.6 s after the stop; the 16 GiB check passed and Maya loaded for about 145 s. The load then ended on the unchanged whole-card startup headroom check (below 1 GiB) because a game on the display card held about 850 MiB more VRAM than during the earlier successful load. Not retested to a finished answer.",
+  "runs": [
+   {
+    "model": "qwen3.8-flash-next-iq3_xxs",
+    "available_before_gib": 57.35,
+    "ok": true,
+    "status": 200,
+    "text": "READY",
+    "completion_tokens": 2,
+    "seconds": 75.1,
+    "lowest_available_gib": 25.47,
+    "peak_swap_gib": 0.36,
+    "hold_after": false
+   },
+   {
+    "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+    "available_before_gib": 25.47,
+    "ok": false,
+    "error": "HTTPError: HTTP Error 503: Service Unavailable",
+    "detail": "{\"error\": {\"message\": \"Maya could not start: RuntimeError: Maya whole-card startup headroom is below 1 GiB; close unrelated GPU apps before explicit reload\", \"code\": \"backend_start_failed\", \"type\": \"backend_error\"}}",
+    "seconds": 149.1,
+    "lowest_available_gib": 25.47,
+    "peak_swap_gib": 0.36,
+    "hold_after": false
+   }
+  ]
+ }
 }

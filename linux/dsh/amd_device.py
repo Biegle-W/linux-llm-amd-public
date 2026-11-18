@@ -1,7 +1,9 @@
 """Discover the two AMD inference devices without relying on a PCI bus number."""
 from pathlib import Path
+import time
 
 PCI_ROOT = Path('/sys/bus/pci/devices')
+VRAM_RELEASE_WAIT_SECONDS = 15   # the driver reports a stopped worker's VRAM as free a few seconds after it exits
 
 
 def graphics_devices(vendor, pci_root=None):
@@ -26,3 +28,19 @@ def amd_devices():
             or int((device / 'mem_info_vram_total').read_text()) < 23 * 1024**3):
             raise RuntimeError('The detected AMD device is not the expected 24 GB Navi 31 GPU.')
     return devices
+
+
+def free_vram_short(devices, need_bytes, wait=None):
+    """True if a card still has less than need_bytes free after a bounded wait for the previous worker's release.
+
+    The requirement itself is unchanged; only the single early read is replaced by a short poll, as the
+    ROCm routes already do. Invalid or missing telemetry raises as before.
+    """
+    deadline = time.monotonic() + (VRAM_RELEASE_WAIT_SECONDS if wait is None else wait)
+    while True:
+        if all(int((d/'mem_info_vram_total').read_text()) - int((d/'mem_info_vram_used').read_text()) >= need_bytes
+               for d in devices):
+            return False
+        if time.monotonic() >= deadline:
+            return True
+        time.sleep(0.2)

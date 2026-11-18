@@ -86,8 +86,8 @@ def require_profile(cfg,before_handover=False,*,require_validated=True):
     devices=amd_devices()
     if len(devices)!=2 or any(int((d/'mem_info_vram_total').read_text())<23*GIB for d in devices):
         raise RuntimeError('Strata DeepSeek requires both 24GiB AMD cards.')
-    if not before_handover and any(int((d/'mem_info_vram_total').read_text())-
-            int((d/'mem_info_vram_used').read_text())<16*GIB for d in devices):
+    from amd_device import free_vram_short
+    if not before_handover and free_vram_short(devices,16*GIB):
         raise RuntimeError('Strata DeepSeek needs 16GiB free on each card before loading.')
     require_worker_scope()
     return cfg
