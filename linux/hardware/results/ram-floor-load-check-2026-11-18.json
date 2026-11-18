@@ -130,6 +130,50 @@
     "peak_swap_gib": 0.36,
     "hold_after": false
    }
-  ]
+  ],
+  "switch_verified": {
+   "note": "Later on November 18 with the display card free (140 MiB in use before the first load). Three requests in a row through the hub with no pause: each one switches from the model loaded before it. All answered; no GPU hold; no kernel GPU fault.",
+   "runs": [
+    {
+     "model": "qwen3.8-flash-next-iq3_xxs",
+     "available_before_gib": 58.12,
+     "ok": true,
+     "status": 200,
+     "text": "READY",
+     "reasoning": false,
+     "completion_tokens": 2,
+     "seconds": 97.8,
+     "lowest_available_gib": 26.96,
+     "peak_swap_gib": 1.38,
+     "hold_after": false
+    },
+    {
+     "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+     "available_before_gib": 27.03,
+     "ok": true,
+     "status": 200,
+     "text": "READY",
+     "reasoning": false,
+     "completion_tokens": 3,
+     "seconds": 77.0,
+     "lowest_available_gib": 26.75,
+     "peak_swap_gib": 1.37,
+     "hold_after": false
+    },
+    {
+     "model": "qwen3.8-flash-next-iq3_xxs",
+     "available_before_gib": 51.79,
+     "ok": true,
+     "status": 200,
+     "text": "READY",
+     "reasoning": false,
+     "completion_tokens": 2,
+     "seconds": 147.7,
+     "lowest_available_gib": 26.52,
+     "peak_swap_gib": 0.46,
+     "hold_after": false
+    }
+   ]
+  }
  }
 }
