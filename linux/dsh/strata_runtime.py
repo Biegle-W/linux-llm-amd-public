@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from amd_device import amd_devices
 from moe_memory import host_memory
-from streaming_memory import check_32gb
+from streaming_memory import ALL_OFF_CARD_ADMISSION_GIB, check_32gb
 
 ROOT = Path(__file__).resolve().parent.parent
 GIB = 1024**3
@@ -29,6 +29,18 @@ def kv_backing_gib(cfg):
     if cell is None:
         raise RuntimeError('Unsupported KV format in the bounded Strata profile.')
     return context * (12 * cell + 1056) / GIB
+
+
+def expert_budget_gib(cfg):
+    """The expert RAM figure used for admission: the fixed budget, or the counted figure of the all-off-card mode."""
+    args = cfg['args']
+    if cfg.get('expert_ram_mode') == 'all-off-card' and cfg.get('host_ram_profile') == '64gb-qwen-v1':
+        if '--resident-cpu-experts' not in args or '--resident-budget-gib' in args:
+            raise RuntimeError('The all-off-card mode takes --resident-cpu-experts and no fixed expert budget.')
+        return float(ALL_OFF_CARD_ADMISSION_GIB)
+    if '--resident-cpu-experts' not in args or '--resident-budget-gib' not in args:
+        raise RuntimeError('Strata requires bounded CPU expert backing plus GPU expert caching.')
+    return float(args[args.index('--resident-budget-gib') + 1])
 
 
 def memory_blockers(total, available, minimum=29, budget=8, *, check_available=True, kv_gib=0):
@@ -55,9 +67,7 @@ def check_config(cfg, total, available, *, check_available=True):
     later = int(args[args.index('--vram-reserve-later-mib') + 1]) if '--vram-reserve-later-mib' in args else reserve
     if min(reserve, later) < 128:
         raise RuntimeError('Strata per-card reserve is below the active resource policy.')
-    if '--resident-cpu-experts' not in args or '--resident-budget-gib' not in args:
-        raise RuntimeError('Strata requires bounded CPU expert backing plus GPU expert caching.')
-    budget = float(args[args.index('--resident-budget-gib') + 1])
+    budget = expert_budget_gib(cfg)
     if not 0 < budget <= 24:
         raise RuntimeError('Unexpected Strata expert RAM budget.')
     check_32gb(cfg, total, available, 'qwen', check_available=check_available)

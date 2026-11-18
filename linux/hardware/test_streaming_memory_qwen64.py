@@ -37,4 +37,22 @@ class QwenLargeBudget(unittest.TestCase):
  def test_32gb_tier_still_refuses_24(self):
   c=self.cfg();c['host_ram_profile']='32gb-v1';c['minimum_host_ram_gib']=29
   with self.assertRaises(RuntimeError):check_32gb(c,64*GIB,60*GIB,'qwen')
+ def whole(self):
+  return {'host_ram_profile':'64gb-qwen-v1','minimum_host_ram_gib':60,'expert_ram_mode':'all-off-card',
+          'args':['--max-context','262144','--kv-resident','32768','--resident-cpu-experts']}
+ def test_all_off_card_mode_counts_24_at_admission(self):
+  self.assertTrue(check_32gb(self.whole(),61.5*GIB,25*GIB,'qwen'))
+  with self.assertRaisesRegex(RuntimeError,'available RAM'):check_32gb(self.whole(),61.5*GIB,25*GIB-1,'qwen')
+  with self.assertRaises(RuntimeError):check_64gb_qwen(self.whole(),60*GIB-1,100*GIB,'qwen')
+ def test_all_off_card_mode_refuses_a_budget_or_missing_backing(self):
+  c=self.whole();c['args']+=['--resident-budget-gib','24']
+  with self.assertRaises(RuntimeError):check_64gb_qwen(c,64*GIB,60*GIB,'qwen')
+  c=self.whole();c['args'].remove('--resident-cpu-experts')
+  with self.assertRaises(RuntimeError):check_64gb_qwen(c,64*GIB,60*GIB,'qwen')
+  c=self.whole();c['expert_ram_mode']='everything'
+  with self.assertRaises(RuntimeError):check_64gb_qwen(c,64*GIB,60*GIB,'qwen')
+  c=self.cfg();del c['args'][4:]
+  with self.assertRaises(RuntimeError):check_64gb_qwen(c,64*GIB,60*GIB,'qwen')
+ def test_other_engines_cannot_use_the_all_off_card_mode(self):
+  with self.assertRaises(RuntimeError):check_32gb(self.whole(),64*GIB,60*GIB,'deepseek')
 if __name__=='__main__':unittest.main()

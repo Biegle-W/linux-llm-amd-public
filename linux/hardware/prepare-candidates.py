@@ -17,7 +17,8 @@ def strata_candidate(source, ram_gib=32):
     # RAM restoration must not regenerate the obsolete 32K/128K presets.
     if ram_gib == 64:
         args[args.index('--max-context') + 1] = '262144'
-        args[args.index('--resident-budget-gib') + 1] = '20'
+        if '--resident-budget-gib' in args:   # absent in the all-off-card mode
+            args[args.index('--resident-budget-gib') + 1] = '20'
     cfg.update(log=str(ROOT / 'dsh/logs/strata-amd-candidate.log'), port=18030)
     # Candidates never activate automatically when memory capacity changes.
     cfg['minimum_host_ram_gib'] = 29 if ram_gib == 32 else 60

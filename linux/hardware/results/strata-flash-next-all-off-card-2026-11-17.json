@@ -1,0 +1,138 @@
+{
+ "date": "2026-11-17",
+ "route": "qwen3.8-flash-next-iq3_xxs",
+ "engine": {
+  "repository": "nicejunjie/Strata-rdna3",
+  "commit": "8b01b0c8512d388552e8601b3aff6753d05286e0",
+  "engine_version": "0.1.49.1"
+ },
+ "memory_tier": "64gb-qwen-v1",
+ "expert_ram_mode": "all-off-card",
+ "resident_budget_gib": null,
+ "admission_counts_gib": 24,
+ "experts_in_ram_gib": 21.43,
+ "experts_in_ram_locked": false,
+ "borrowed_prompt_slots_without_ram_copy": [
+  5390,
+  10830
+ ],
+ "candidates_outside_production": [
+  {
+   "name": "no-budget",
+   "agent_turn_s": 7.249,
+   "follow_up_s": 5.279,
+   "long_prompt_s": 22.928,
+   "long_prompt_tok_s": 2303.9,
+   "prose_decode_tok_s": 98.2,
+   "code_decode_tok_s": 161.2,
+   "swap_used_mib": 974
+  },
+  {
+   "name": "budget-34",
+   "agent_turn_s": 8.508,
+   "follow_up_s": 7.711,
+   "long_prompt_s": 69.73,
+   "long_prompt_tok_s": 709.8,
+   "prose_decode_tok_s": 136.2,
+   "code_decode_tok_s": 178.2,
+   "swap_used_mib": 58
+  }
+ ],
+ "strict_tool_gate": {
+  "load_seconds": 86.8,
+  "ttft_seconds": [
+   8.38,
+   3.54
+  ],
+  "elapsed_seconds": [
+   9.3,
+   3.73
+  ],
+  "final_marker_correct": true,
+  "run_utc": "2026-11-18T05:16:40Z"
+ },
+ "hub_benchmark": [
+  {
+   "name": "prose-256",
+   "prompt_tokens": 27,
+   "decode_tok_s": 96.3,
+   "total_s": 2.835
+  },
+  {
+   "name": "code-256",
+   "prompt_tokens": 31,
+   "decode_tok_s": 163.7,
+   "total_s": 1.769
+  },
+  {
+   "name": "agent-turn1",
+   "prompt_tokens": 12862,
+   "prompt_tok_s": 1737.7,
+   "decode_tok_s": 173.5,
+   "ttft_s": 7.402,
+   "total_s": 7.696,
+   "codes_found": 3
+  },
+  {
+   "name": "agent-turn2-tool-result",
+   "prompt_tokens": 13281,
+   "prompt_tok_s": 2303.5,
+   "decode_tok_s": 170.3,
+   "ttft_s": 5.766,
+   "total_s": 6.006,
+   "marker_ok": true
+  },
+  {
+   "name": "long-prompt",
+   "prompt_tokens": 47716,
+   "prompt_tok_s": 2018.1,
+   "decode_tok_s": 98.2,
+   "ttft_s": 23.644,
+   "total_s": 26.252,
+   "codes_found": 3
+  }
+ ],
+ "suite": {
+  "items": 216,
+  "correct": 169,
+  "wrong": 30,
+  "capped": 17,
+  "malformed": 0,
+  "request_errors": 0,
+  "percent": 78.2,
+  "wilson95": [
+   72.3,
+   83.2
+  ],
+  "by_category": {
+   "code": 12,
+   "instruction": 30,
+   "knowledge": 48,
+   "math": 33,
+   "reasoning": 23,
+   "tools": 23
+  },
+  "generation_seconds": 1446,
+  "tok_per_s": 120.0,
+  "vs_24_gib_cap": {
+   "previous_correct": 166,
+   "both": 162,
+   "no_budget_only": 7,
+   "cap_only": 4,
+   "previous_tok_per_s": 94.59
+  }
+ },
+ "ram_used_mib_while_loaded": 37701,
+ "ram_available_mib_while_loaded": 25327,
+ "swap_used_mib": 715,
+ "hold": {
+  "latched_utc": "2026-11-18T03:40:50Z",
+  "cause": "strict tool gate started while the hub still had the model loaded; guard refused",
+  "kernel_faults": [],
+  "released_by": "owner",
+  "released_utc": "2026-11-18T05:16:23Z"
+ },
+ "unit_tests": {
+  "hardware": "661 run, 2 skipped, all pass"
+ }
+}

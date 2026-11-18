@@ -1,5 +1,6 @@
 """Explicit bounded streaming tiers; legacy admission stays intact."""
 GIB = 1024**3
+ALL_OFF_CARD_ADMISSION_GIB = 24   # RAM counted at admission when a profile sets expert_ram_mode all-off-card
 import resource_policy
 
 
@@ -93,13 +94,22 @@ def check_64gb_qwen(cfg, total, available, family, *, check_available=True):
     args = cfg.get('args', [])
     def value(flag):
         return args[args.index(flag)+1] if flag in args else None
+    whole = cfg.get('expert_ram_mode') == 'all-off-card'
+    if whole:
+        # Owner choice, later on November 17: no fixed budget. The engine keeps every expert the cards do not
+        # hold in RAM (measured 21.42 GiB) and the file cache serves the prompt path; admission counts 24 GiB.
+        if '--resident-budget-gib' in args or '--resident-cpu-experts' not in args:
+            raise RuntimeError('The all-off-card Qwen mode takes --resident-cpu-experts and no fixed expert budget.')
+    elif cfg.get('expert_ram_mode') is not None:
+        raise RuntimeError('Unknown Qwen expert RAM mode; no worker was started.')
+    budget = str(ALL_OFF_CARD_ADMISSION_GIB) if whole else value('--resident-budget-gib')
     if (family != 'qwen' or cfg.get('minimum_host_ram_gib') != 60
-            or value('--resident-budget-gib') not in ('12', '20', '24')
+            or budget not in ('12', '20', '24')
             or value('--max-context') != '262144' or value('--kv-resident') != '32768'):
         raise RuntimeError('64 GB Qwen requires a 12/20/24 GiB expert tier, a 60 GiB host floor and the retained 256K/32K KV layout.')
     if total < 60*GIB:
         raise RuntimeError('64 GB Qwen tier requires at least 60 GiB OS-visible physical RAM.')
-    required = float(value('--resident-budget-gib')) * GIB + GIB
+    required = float(budget) * GIB + GIB
     if check_available and available < required:
         raise RuntimeError(f'64 GB Qwen tier needs {required/GIB:g} GiB available RAM before loading; swap is not capacity.')
     return True

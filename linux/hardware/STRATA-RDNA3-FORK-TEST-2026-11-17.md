@@ -101,6 +101,50 @@ What this costs: prompt-heavy turns are 14% to 67% slower than on the tuned upst
 
 Rollback: restore the previous engine tree and binaries from the saved set, then restore `dsh/strata-iq3-profile.json` from the commit before this one. The guard tier can stay; the old profile does not use it.
 
+## No fixed expert RAM budget (later the same evening, owner decision)
+
+The owner asked for the RAM policy of the NVIDIA server on this route: keep every expert the cards do not hold in RAM, with no fixed budget. Two candidates were run outside production first, six fixed requests each.
+
+| Candidate | Experts held in RAM | Agent turn | Follow-up turn | Long prompt, 256-token answer |
+|---|---:|---:|---:|---:|
+| 24 GiB cap (installed that evening) | 21.42 GiB, page-locked | 8.9 s | 8.7 s | 36.5 s |
+| 34 GiB cap | 21.42 GiB, page-locked | 8.5 s | 7.7 s | 69.7 s |
+| No budget (`--resident-cpu-experts` alone) | 21.42 GiB, pageable | 7.2 s | 5.3 s | 22.9 s |
+
+What this showed:
+
+- **The engine's RAM copy has a ceiling of 21.4 GiB on this layout.** A larger cap holds nothing more. In every arm 5,390 of the 10,830 cache slots the prompt path borrows have no RAM copy, and their experts are read from the model file on each chunk.
+- **Without a budget those reads go through the operating system's file cache** (the engine reports 12.3 GiB available for it) instead of unbuffered from the drive. That is where the prompt-path gain comes from.
+- **The RAM copy is no longer page-locked**, so the kernel may swap it. Swap use reached 0.6–1.0 GiB in these runs.
+
+What changed in the repository:
+
+- **Profile** `dsh/strata-iq3-profile.json`: `--resident-budget-gib 24` removed, `expert_ram_mode: all-off-card` added.
+- **Memory guard** `dsh/streaming_memory.py`: in tier `64gb-qwen-v1` the mode `all-off-card` takes `--resident-cpu-experts` and no budget flag, and counts 24 GiB at admission, so the same 25 GiB (28.4 GiB with the host KV copy) must be available before loading. `dsh/strata_runtime.py`, `hardware/check-strata-ready.py` and `hardware/prepare-candidates.py` read the figure through one helper. Tests in `hardware/test_streaming_memory_qwen64.py`; the hardware unit tests pass (661 run, 2 skipped).
+
+| Check through the hub | 24 GiB cap | No fixed budget |
+|---|---:|---:|
+| Strict tool gate: first token, steps 1 / 2 | 5.8 s / 5.0 s | 8.4 s / 3.5 s (bare marker) |
+| Load before the gate | 87 s | 87 s |
+| Prose / code decode | 133 / 174 tok/s | 96 / 164 tok/s |
+| Agent turn, 12,862-token prompt: prompt read | 1,484 tok/s | 1,738 tok/s |
+| Same turn, start to finish | 8.9 s | 7.7 s |
+| Follow-up turn, 13,281 tokens: start to finish | 8.7 s | 6.0 s |
+| Long prompt, 47,716 tokens: prompt read | 1,368 tok/s | 2,018 tok/s |
+| Long prompt, 256-token answer, start to finish | 36.5 s | 26.3 s |
+| Public suite, 216 items | 166 (76.9%, 70.8–82.0%) | 169 (78.2%, 72.3–83.2%) |
+| Suite: wrong / cut off / malformed / request errors | 31 / 19 / 0 / 0 | 30 / 17 / 0 / 0 |
+| Suite pace | 94.6 tok/s | 120.0 tok/s |
+| Suite generation time | 32 min | 24 min |
+| RAM in use while loaded | 37.4 GiB | 36.8 GiB, plus about 25 GiB of file cache |
+| Swap in use | 0 | 0.6–0.7 GiB |
+
+Item by item the suite has 162 right on both settings, 7 only without the budget and 4 only with it: no quality change is detected. All benchmark answers were correct. No NaN line and no kernel fault. The short prose decode was slower in both runs without the budget (98 and 96 tok/s against 133–136), while the suite as a whole ran faster; the cause was not investigated. The first tool-gate step is slower (8.4 s against 5.8 s) with a cold file cache.
+
+**Hold latched by an operator mistake, released by the owner.** The first strict tool gate for this setting did not run: its stage folder from the earlier fork run already existed. The rerun was started while the hub still had Flash-Next loaded from the suite. The updater's guard refused to run beside it ("Unrelated inference active; preserve it"), could not clear the hub's GPU client, and latched `GPU-LOCK` at 03:40 UTC on November 18 with no kernel fault listed. Work stopped. The owner released the hold; the file was archived as `GPU-LOCK.released-20261118T051623Z.private.json`. The gate then ran with the hub idle and passed.
+
+Rollback of this step alone: put `--resident-budget-gib 24` back in the profile and remove `expert_ram_mode`.
+
 ## Limits
 
 Six requests, one run each per arm; one 216-item suite run per installed configuration. Nothing past 48K tokens, no sustained run, no thinking mode. The fork lacks

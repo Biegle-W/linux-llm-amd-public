@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GIB = 1024**3
 sys.path.insert(0, str(ROOT / "dsh"))
 from strata_runtime import memory_blockers, kv_backing_gib
+from strata_runtime import expert_budget_gib
 
 
 def inspect(ram=None, profile=None):
@@ -21,7 +22,7 @@ def inspect(ram=None, profile=None):
     source_path = ROOT / ('dsh/strata-iq3-profile.json' if selected == 'active' else 'dsh/strata-iq3-64gb-candidate.json')
     source = json.loads(source_path.read_text())
     args = source['args']
-    budget = float(args[args.index('--resident-budget-gib')+1])
+    budget = expert_budget_gib(source)
     problems = memory_blockers(mem['MemTotal'], mem['MemAvailable'], source['minimum_host_ram_gib'], budget,
                                kv_gib=kv_backing_gib(source))
     args = source['args']

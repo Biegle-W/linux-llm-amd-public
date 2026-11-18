@@ -14,6 +14,10 @@ Not an upstream update: the owner chose to run `qwen3.8-flash-next-iq3_xxs` only
 
 The memory guard gained the tier `64gb-qwen-v1` for this (owner approved). **From now on the update check shows Strata as behind upstream; that is expected and upstream Strata must not be installed over the fork.** Updates for this route come from the fork's repository, checked by hand. Strata DeepSeek is a separate tree and is not affected. No kernel fault, no hold. Evidence: `hardware/generated/daily-update/2026-11-17T-strata-fork/` and `results/strata-rdna3-fork-installed-2026-11-17.json`.
 
+### Later on 2026-11-17: no fixed expert RAM budget for Flash-Next (owner decision)
+
+Not an engine update. The owner asked for the NVIDIA server's RAM policy on this route. `--resident-budget-gib 24` was removed and the memory guard gained the mode `all-off-card`. Strict tool gate passed, bare marker, first token 8.4 s and 3.5 s, load 87 s. Agent turn 8.9 → 7.7 s, long prompt 36.5 → 26.3 s, public suite 169 of 216 (166 before). The first gate attempt was started while the hub still had the model loaded; the guard refused and latched `GPU-LOCK` with no kernel fault. The owner released it and the gate was rerun with the hub idle. Evidence: `hardware/generated/daily-update/2026-11-17T-strata-ramall2/` and `results/strata-flash-next-all-off-card-2026-11-17.json` ([report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)).
+
 ## 2026-11-16 (evening) — manual update: llama.cpp, Strata 0.2.15, Maya and ComfyUI 0.45.5 promoted
 
 Upstream check that evening: llama.cpp, Strata and Maya were behind and ComfyUI had a new release; vLLM and SGLang were current; Strata DeepSeek stays frozen. The server had been shut down cleanly from 02:23 to 21:52 (no GPU fault in the previous boot's kernel log, no hold). Changes were researched before install, as the last column records.
