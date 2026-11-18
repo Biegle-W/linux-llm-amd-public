@@ -1,0 +1,109 @@
+{
+ "date": "2026-11-17",
+ "route": "qwen3.8-flash-next-iq3_xxs",
+ "engine": {
+  "repository": "nicejunjie/Strata-rdna3",
+  "commit": "8b01b0c8512d388552e8601b3aff6753d05286e0",
+  "engine_version": "0.1.49.1",
+  "binary_sha256": "faefe8bd6242585a194705b0f148da788bca675f70080ea02e4f0eb7b6fee602"
+ },
+ "previous": {
+  "repository": "Niko1221/Strata",
+  "commit": "c77572806996349b49995e4f98d41b5294d36a21",
+  "release": "0.2.15"
+ },
+ "memory_tier": "64gb-qwen-v1",
+ "resident_budget_gib": 24,
+ "thinking": "off (reasoning_effort none in the profile)",
+ "strict_tool_gate": {
+  "load_seconds": 86.5,
+  "ttft_seconds": [
+   5.76,
+   4.99
+  ],
+  "elapsed_seconds": [
+   6.17,
+   5.13
+  ],
+  "final_marker_correct": true
+ },
+ "hub_benchmark": [
+  {
+   "name": "prose-256",
+   "prompt_tokens": 27,
+   "decode_tok_s": 133.3,
+   "total_s": 2.072
+  },
+  {
+   "name": "code-256",
+   "prompt_tokens": 31,
+   "decode_tok_s": 174.4,
+   "total_s": 1.626
+  },
+  {
+   "name": "agent-turn1",
+   "prompt_tokens": 12862,
+   "prompt_tok_s": 1484.2,
+   "decode_tok_s": 203.4,
+   "ttft_s": 8.666,
+   "total_s": 8.917,
+   "codes_found": 3
+  },
+  {
+   "name": "agent-turn2-tool-result",
+   "prompt_tokens": 13281,
+   "prompt_tok_s": 1570.9,
+   "decode_tok_s": 193.7,
+   "ttft_s": 8.455,
+   "total_s": 8.666,
+   "marker_ok": true
+  },
+  {
+   "name": "long-prompt",
+   "prompt_tokens": 47716,
+   "prompt_tok_s": 1367.6,
+   "decode_tok_s": 154.3,
+   "ttft_s": 34.89,
+   "total_s": 36.549,
+   "codes_found": 3
+  }
+ ],
+ "suite": {
+  "items": 216,
+  "correct": 166,
+  "wrong": 31,
+  "capped": 19,
+  "malformed": 0,
+  "request_errors": 0,
+  "percent": 76.9,
+  "wilson95": [
+   70.8,
+   82.0
+  ],
+  "by_category": {
+   "code": 11,
+   "instruction": 30,
+   "knowledge": 50,
+   "math": 30,
+   "reasoning": 22,
+   "tools": 23
+  },
+  "generation_seconds": 1900,
+  "completion_tokens": 179759,
+  "tok_per_s": 94.59,
+  "vs_previous_build": {
+   "previous_correct": 167,
+   "both": 158,
+   "fork_only": 8,
+   "previous_only": 9,
+   "previous_tok_per_s": 66.23
+  }
+ },
+ "ram_used_mib_while_loaded": 38273,
+ "ram_available_mib_while_loaded": 24755,
+ "swap_used_mib": 0,
+ "unit_tests": {
+  "hardware": "658 run, 2 skipped, all pass",
+  "dsh_tests": "45 run, 15 fail or error both with and without this change"
+ }
+}

@@ -7,7 +7,7 @@ def is_32gb(cfg):
     tier = cfg.get('host_ram_profile')
     if tier is None:
         return False
-    if tier == '64gb-q1-v1':
+    if tier in ('64gb-q1-v1', '64gb-qwen-v1'):
         return False
     if tier != '32gb-v1':
         raise RuntimeError('Unknown streaming RAM profile; no worker was started.')
@@ -26,6 +26,8 @@ def check_32gb(cfg, total, available, family, *, check_available=True):
     # Preserve the callers' legacy entrypoint; the new tier is explicit and family-checked.
     if cfg.get('host_ram_profile') == '64gb-q1-v1':
         return check_64gb(cfg, total, available, family, check_available=check_available)
+    if cfg.get('host_ram_profile') == '64gb-qwen-v1':
+        return check_64gb_qwen(cfg, total, available, family, check_available=check_available)
     if not is_32gb(cfg):
         return False
     scope_limits(cfg)
@@ -76,4 +78,28 @@ def check_64gb(cfg, total, available, family, *, check_available=True):
     required = 29*GIB
     if check_available and available < required:
         raise RuntimeError('64 GB Q1 tier needs 29 GiB available RAM before loading; swap is not capacity.')
+    return True
+
+
+def check_64gb_qwen(cfg, total, available, family, *, check_available=True):
+    """Owner choice, November 17 2026: Qwen Flash-Next may hold up to 24 GiB of experts in RAM on the 64 GB host.
+
+    Only the expert budget is larger than the 32 GB tier; the 256K/32K KV layout, the physical-RAM floor
+    and the rule that swap is not capacity are unchanged in kind.
+    """
+    if cfg.get('host_ram_profile') != '64gb-qwen-v1':
+        return False
+    scope_limits(cfg)
+    args = cfg.get('args', [])
+    def value(flag):
+        return args[args.index(flag)+1] if flag in args else None
+    if (family != 'qwen' or cfg.get('minimum_host_ram_gib') != 60
+            or value('--resident-budget-gib') not in ('12', '20', '24')
+            or value('--max-context') != '262144' or value('--kv-resident') != '32768'):
+        raise RuntimeError('64 GB Qwen requires a 12/20/24 GiB expert tier, a 60 GiB host floor and the retained 256K/32K KV layout.')
+    if total < 60*GIB:
+        raise RuntimeError('64 GB Qwen tier requires at least 60 GiB OS-visible physical RAM.')
+    required = float(value('--resident-budget-gib')) * GIB + GIB
+    if check_available and available < required:
+        raise RuntimeError(f'64 GB Qwen tier needs {required/GIB:g} GiB available RAM before loading; swap is not capacity.')
     return True

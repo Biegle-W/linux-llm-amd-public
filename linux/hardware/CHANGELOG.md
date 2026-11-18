@@ -4,6 +4,7 @@ Newest first. One line per change, with a link to the dated report holding its e
 
 ## November 2026
 
+- **Nov 17, Flash-Next moved to the Strata RDNA3 fork (owner decision); memory guard gains a 24 GiB Qwen tier.** Decode 52–74 → 133–174 tok/s, agent turn 7.8 → 8.9 s, long prompt 21.9 → 36.5 s; strict tool gate passed; public suite 166 of 216 (167 before, no change detected). Upstream Strata updates no longer apply to this route. [Report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)
 - **Nov 17, Flash-Next profile tuned on the current Strata build.** Prompt read 909–932 → 1,755–2,673 tok/s through the hub, agent turn 14.8 → 7.8 s; strict tool gate passed; public suite 167 of 216 (164 before, no change detected). RAM budget unchanged. [Report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)
 - **Nov 17, Strata RDNA3 fork tested beside the current build (production unchanged).** On Flash-Next the fork decodes 2.2–2.5× faster; the current build with tuned settings reads prompts 2.2–3.3× faster than production and faster than the fork. [Report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)
 - **Nov 16 (evening), llama.cpp `9581154`, Strata `c775728` (0.2.15), Maya `c89ebef` and ComfyUI 0.45.5 promoted.** All gates passed first time; Maya's slow first check was a cold file cache (normal on a second check); seven image and video workflows re-run on ComfyUI 0.45.5. [Ledger](DAILY-UPDATES.md)

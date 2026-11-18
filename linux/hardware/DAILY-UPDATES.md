@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-17 — Flash-Next moved to the Strata RDNA3 fork (owner decision)
+
+Not an upstream update: the owner chose to run `qwen3.8-flash-next-iq3_xxs` only on `nicejunjie/Strata-rdna3`, a fork of Strata tuned for the RX 7900 XTX, after a side-by-side test the same day ([report](STRATA-RDNA3-FORK-TEST-2026-11-17.md)).
+
+| Engine | From → to | Routes checked | Result | What the fork changes (researched before install) |
+|---|---|---|---|---|
+| Strata (Flash-Next) | Strata 0.2.15 `c77572806996` → RDNA3 fork `8b01b0c8512d` (engine 0.1.49.1) | qwen3.8-flash-next-iq3_xxs | **Installed.** Strict tool gate passed, bare marker; first token 5.8 s and 5.0 s (5.1 s and 4.3 s before), load 87 s. Public suite 166 of 216 (167 before). | Gains: two-card tensor-parallel decode and RDNA3 kernels (rocWMMA, fused draft paths), measured here at 2.4–2.6× the decode speed. Losses: it is based on engine 0.1.49, so it lacks upstream's separate prompt-reading kernels from 0.2.14 (prompt reading is 14–49% slower than the tuned 0.2.15 build) and upstream's server fixes since then; it needs a 24 GiB expert RAM budget to read prompts acceptably, and its server thinks by default (turned off in the profile). |
+
+The memory guard gained the tier `64gb-qwen-v1` for this (owner approved). **From now on the update check shows Strata as behind upstream; that is expected and upstream Strata must not be installed over the fork.** Updates for this route come from the fork's repository, checked by hand. Strata DeepSeek is a separate tree and is not affected. No kernel fault, no hold. Evidence: `hardware/generated/daily-update/2026-11-17T-strata-fork/` and `results/strata-rdna3-fork-installed-2026-11-17.json`.
+
 ## 2026-11-16 (evening) — manual update: llama.cpp, Strata 0.2.15, Maya and ComfyUI 0.45.5 promoted
 
 Upstream check that evening: llama.cpp, Strata and Maya were behind and ComfyUI had a new release; vLLM and SGLang were current; Strata DeepSeek stays frozen. The server had been shut down cleanly from 02:23 to 21:52 (no GPU fault in the previous boot's kernel log, no hold). Changes were researched before install, as the last column records.

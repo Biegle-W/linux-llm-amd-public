@@ -2,7 +2,7 @@
 
 Owner request: research Radiance for the two RX 7900 XTX cards with the council, then test the lead it found. The council's
 answer was that no Radiance route beats this server's LLM numbers, and that the one lead worth testing is not Radiance but
-`nicejunjie/Strata-rdna3`, a fork of Strata tuned for the 7900 XTX. This is that test. **Production was not changed.**
+`nicejunjie/Strata-rdna3`, a fork of Strata tuned for the 7900 XTX. This is that test. The test itself changed nothing in production; the last two sections record what the owner then chose to apply.
 
 ## What was compared
 
@@ -67,11 +67,43 @@ Changed in `dsh/strata-iq3-profile.json`: `--prefill` 256 → auto, `--spec` 2 �
 | Suite: wrong / cut off / malformed / request errors | 31 / 20 / 1 / 0 | 30 / 19 / 0 / 0 |
 | Suite pace | 54.3 tok/s | 66.2 tok/s |
 
-Item by item the suite has 158 right in both runs, 9 only after and 6 only before: no quality change is detected. Through the hub the prompt rates are 12–15% below the standalone tuned run above. No NaN line, no kernel fault, no hold. To revert, restore the profile from the commit before this one. The fork was **not** installed; its decode advantage remains available as a separate decision.
+Item by item the suite has 158 right in both runs, 9 only after and 6 only before: no quality change is detected. Through the hub the prompt rates are 12–15% below the standalone tuned run above. No NaN line, no kernel fault, no hold. To revert, restore the profile from the commit before this one. At that point the fork was not installed; the next section records its installation.
+
+## Fork installed as the only Flash-Next engine (same evening, owner decision)
+
+The owner asked to keep only the fork for Flash-Next. Two facts were put to them first. The hub's memory guard allowed this route an 8 or 12 GiB expert RAM budget, and at 12 GiB the fork reads prompts at 567–726 tok/s, slower than the profile before today (agent turn 18.9 s, long prompt 86 s). At 24 GiB it reads at 1,289–1,609 tok/s. The owner approved a 24 GiB budget.
+
+What changed:
+
+- **Memory guard.** A new tier `64gb-qwen-v1` in `dsh/streaming_memory.py`: Qwen only, expert budget 12, 20 or 24 GiB, at least 60 GiB of physical RAM, the same 256K/32K KV layout, and budget plus 1 GiB available before loading (the Strata launcher adds the host KV copy, so this profile needs about 28.4 GiB available). The 32 GB tier is unchanged and still refuses 24. Tests: `hardware/test_streaming_memory_qwen64.py`.
+- **Engine.** The fork at `8b01b0c8512d` (engine 0.1.49.1) replaces Strata 0.2.15 in the engine tree, built with the server's ROCm 7.2.3 toolchain, `STRATA_MMQ_KQUANTS=ON` and the rocWMMA headers at the commit the fork pins. The engine tree's tracked files, its `.git` and both binaries moved together, as the updater does. The previous build is kept whole outside the repository for rollback.
+- **Profile** `dsh/strata-iq3-profile.json`: 24 GiB budget, two-card tensor-parallel decode, `--mtp-q4 all`, `--mtp-window 4096`, the fork's draft vocabulary, layer split 24, the fork's documented two-card IQ3 environment switches, `--lookup-max-t` removed (unknown to this engine), and `reasoning_effort: none` because the fork's server would otherwise think by default.
+
+| Check through the hub | Previous build, tuned | Fork |
+|---|---:|---:|
+| Strict tool gate: first token, steps 1 / 2 | 5.1 s / 4.3 s | 5.8 s / 5.0 s (bare marker) |
+| Load before the gate | 109 s | 87 s |
+| Prose / code decode | 52 / 74 tok/s | 133 / 174 tok/s |
+| Agent turn, 12,862-token prompt: prompt read | 1,755 tok/s | 1,484 tok/s |
+| Same turn, start to finish | 7.8 s | 8.9 s |
+| Follow-up turn, 13,281 tokens: start to finish | 7.5 s | 8.7 s |
+| Long prompt, 47,716 tokens: prompt read | 2,673 tok/s | 1,368 tok/s |
+| Long prompt, 256-token answer, start to finish | 21.9 s | 36.5 s |
+| Public suite, 216 items | 167 (77.3%, 71.3–82.4%) | 166 (76.9%, 70.8–82.0%) |
+| Suite: wrong / cut off / malformed / request errors | 30 / 19 / 0 / 0 | 31 / 19 / 0 / 0 |
+| Suite pace | 66.2 tok/s | 94.6 tok/s |
+| Suite generation time | 44 min | 32 min |
+| RAM in use while loaded | 18.9 GiB | 37.4 GiB |
+
+Item by item the suite has 158 right on both builds, 8 only on the fork and 9 only on the previous build: no quality change is detected. All benchmark answers were correct (three codes in the tool call, the marker, three codes in the long prompt). No NaN line, no kernel fault, no hold, no swap used. With the model loaded about 24 GiB of RAM stays available.
+
+What this costs: prompt-heavy turns are 14% to 67% slower than on the tuned upstream build; the engine is based on 0.1.49 and lacks upstream's later fixes; upstream Strata updates no longer apply to this route. The update check will report Strata as behind upstream; that is expected. Updates for this route come from the fork's repository and are checked by hand.
+
+Rollback: restore the previous engine tree and binaries from the saved set, then restore `dsh/strata-iq3-profile.json` from the commit before this one. The guard tier can stay; the old profile does not use it.
 
 ## Limits
 
-Six requests, one run each. No 216-item suite, nothing past 48K tokens, no sustained run, no thinking mode. The fork lacks
+Six requests, one run each per arm; one 216-item suite run per installed configuration. Nothing past 48K tokens, no sustained run, no thinking mode. The fork lacks
 upstream's server fixes since engine 0.1.49. The tuned settings were taken from the fork's documentation and one public
 64 GB report, not searched for this server. RAM use of the production arm was not sampled.
 
