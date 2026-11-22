@@ -17,7 +17,9 @@ The 216-item public suite takes 15 to 206 minutes per route (measured), and only
 
 ## What it is for
 
-A routine check after an engine update, a new route or a profile change. It answers two questions: is tool use in the harness intact, and did quality move a lot? Each route is compared with its own earlier result. It does not rank routes that are close; the 216-item suite stays for that and is run only when a decision depends on a small difference. The 54- and 64-item suites no longer separate the routes (all score 51–54 and 61–63) and are retired from routine use.
+**Owner rule (November 22): the test runs only for a new model or new weights. Nothing is rerun.** Existing routes keep the results they already have; they are not run again for a baseline, a pilot or a variance check. Engine updates keep the strict one-step tool check and nothing more.
+
+For a new model it answers two questions: does it use tools correctly inside the harness, and roughly where does it sit against the routes already here? The comparison with existing routes uses blocks B and C, which are rescored from their saved answers without running anything. Existing routes have no harness-task score, so the new model's tool score stands alone until other new models have one. The test does not rank routes that are close; the 216-item suite stays for that and is run only when the owner asks. The 54- and 64-item suites no longer separate the routes (all score 51–54 and 61–63) and are retired from routine use.
 
 ## The test: blocks in priority order
 
@@ -57,7 +59,7 @@ Each task starts the DSH harness headless, as the strict tool check does, with t
 - **Same limits for every route.** A step limit per task (the reference solution's steps plus two) and one answer-token limit. Wall-clock is only a safety net, set per route from its measured speed.
 - **Grading.** By the final folder, the answer written to a file, and the harness's own record of the tool calls. The grader keeps its own copy of each test and adds hidden tests, so editing the test or hard-coding a value fails. Fixture values come from a fixed seed so they cannot be guessed.
 - **Two numbers.** A task that hits its step or token limit counts as wrong. A task stopped only by the safety clock is reported as "not finished" and shown separately, so a slow model reads as slow, not as wrong. Tool calls per task and rejected calls are reported beside the score.
-- **Repeats.** One route gave two different wordings for the same harness prompt on November 21, so one attempt is not reliable. Fast routes run A-core twice and report both; slow routes run it once, and tasks known to flip are marked.
+- **Repeats.** One route gave two different wordings for the same harness prompt on November 21, so one attempt is not reliable. A fast new model runs A-core twice inside its budget and reports both; a slow one runs it once.
 
 ### Blocks B and C: kept from the public suite
 
@@ -83,20 +85,20 @@ The clock starts when the route reports ready. Load time, one warm-up call that 
 
 | Class | Routes | Budget | Block limits |
 |---|---|---|---|
-| Fast | `empero`, both Qwen3.8-27B routes, Flash-Next | 15 min | A-core twice within 6 min, B within 2, C-core within 3, then A-extra and C-extra with what is left |
-| Slow | Inkling, Nemotron, GLM, Ripple, both DeepSeek routes | 60 min | A-core within 30 min, B within 15, C-core with the rest, A-extra only if 10 minutes remain |
+| Fast | a new model that decodes at about 80 tok/s or more (like `empero`, the Qwen3.8-27B routes, Flash-Next) | 15 min | A-core twice within 6 min, B within 2, C-core within 3, then A-extra and C-extra with what is left |
+| Slow | a slower new model (like Inkling, Nemotron, GLM, Ripple, DeepSeek) | 60 min | A-core within 30 min, B within 15, C-core with the rest, A-extra only if 10 minutes remain |
 
 When a block reaches its limit, its remaining items are marked "not run" and the next block starts. "Not run" is never counted as wrong. Missing the budget is reported as its own pass or fail.
 
-Expected, for the slowest route (DeepSeek on Maya): B 14 minutes and C-core about 11 are measured. A-core is the unknown. Its answers are short tool calls, but each step also has to read the tool's result at 35–110 tok/s, and an edit has to write the changed text at 5–10 tok/s, so 1.5 to 2.5 minutes per task is likely: 18 to 30 minutes. That is why the pilot comes before anything is frozen. Flash-Next's place in the fast class also needs measuring on its current engine.
+Expected, for a model as slow as DeepSeek on Maya: B 14 minutes and C-core about 11, from its saved run. A-core is the unknown. Its answers are short tool calls, but each step also has to read the tool's result at 35–110 tok/s, and an edit has to write the changed text at 5–10 tok/s, so 1.5 to 2.5 minutes per task is likely: 18 to 30 minutes. This is an estimate and stays one until a new model that slow arrives, because existing routes are not rerun to measure it.
 
 ## Build steps
 
 1. Write about 26 candidate harness tasks with graders and the sandbox. No network use; no item content from the public datasets is added to the repository.
-2. **Pilot** one task of each kind on one fast route, one DeepSeek route and Inkling. Log per step: answer tokens, newly read prompt tokens, cached tokens, time. Confirm the harness prompt stays cached from task to task. Drop only tasks that are broken, judged from the transcripts and not from who passed. Set the limits and the class budgets from these numbers and freeze 12 core plus 8 extra.
-3. Add the harness runner beside the strict tool check, reusing its guarded launch, with one model load per route for the whole run.
-4. Freeze the B and C lists by the half-and-half rule and add a `quick` tier to the existing runner and grader.
-5. Run A-core three times on every route to learn how often each task flips. Then run the whole test once per route and check the budgets hold.
-6. Report one table per run: tool score, B, general score, not-finished and not-run counts, tool calls per task, minutes, and load time.
+2. **Pilot on the newest model only** (`inkling-2-mini-q8`, which is new): one task of each kind. Log per step: answer tokens, newly read prompt tokens, cached tokens, time. Confirm the harness prompt stays cached from task to task. Drop only tasks that are broken, judged from the transcripts. Set the limits from these numbers and freeze 12 core plus 8 extra.
+3. Add the harness runner beside the strict tool check, reusing its guarded launch, with one model load for the whole run.
+4. Freeze the B and C lists by the half-and-half rule, using saved results only, and add a `quick` tier to the existing runner and grader. Rescore the saved runs of the existing routes on B and C-core for the comparison table; no route is run.
+5. Run the whole test once on Inkling as the first real use, and from then on once for each new model or new weight file.
+6. Report one table per run: tool score, B, general score, not-finished and not-run counts, tool calls per task, minutes, and load time, beside the rescored B and C-core of the existing routes.
 
-**Alarm rule**, set after step 5: a route is flagged when its tool score drops by more than its own measured run-to-run variation, or when every task of one kind fails.
+**Limits of this rule, stated plainly:** how often a harness task flips between runs is not measured, because that would need reruns. A single harness score therefore carries unknown run-to-run noise of at least a task or two; a fast model's two passes give a first indication.
