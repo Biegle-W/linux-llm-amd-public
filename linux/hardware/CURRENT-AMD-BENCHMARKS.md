@@ -57,4 +57,12 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 - One attempt per item, temperature 0, thinking off. Details and per-pair numbers: [report](PUBLIC-QUALITY-SUITE-2026-11-11.md).
 Not measured yet: a sustained, matched benchmark across all 10 routes, thinking mode, and full-context quality.
 
+## Quick quality test (new models, from November 22)
+
+| Model | State | Harness tasks, core (12) | Harness extra (8) | Function calls (16) | General (10) | Decode tok/s | Minutes |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Hy4-Flash SQ-64 on Strata 0.2.18 | trial on a side install, not a hub route | 12 | 8 | 9 | 5 | 26–30 | 11 |
+
+The function-call and general columns use 26 items shared with the 216-item suite. Rescored from saved answers, without rerunning, the existing routes get 8–14 and 3–10 on them (Flash-Next 9 and 7, DeepSeek on Maya 12 and 10, GLM 12 and 4, Inkling 10 and 4). Twenty-six items do not rank models. [Hy4-Flash report](HY4-FLASH-SQ64-2026-11-22.md) · [How the test works](quant-eval/quick/README.md)
+
 **From November 22 (owner):** routes already in this table are not rerun. A new model or new weight file gets the [quick quality test](quant-eval/quick/README.md) once: harness tool tasks first, 15 minutes for a fast model and 60 for a slow one. Its scores will be shown in their own columns; they are not comparable with the 216-item column above except through the 60 items both share.

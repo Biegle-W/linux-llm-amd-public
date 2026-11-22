@@ -1,0 +1,91 @@
+{
+ "date": "2026-11-22",
+ "owner_request": "Setup sq64",
+ "model": "tencent/Hy4-flash (220B, about 12B active)",
+ "pack": "strata-engine/Hy4-Flash-Strata SQ-64",
+ "files_bytes": {
+  "Hy4-Flash-SQ-64.strata": 62030467072,
+  "Hy4-Flash-Engram-Q8.strata": 67584905216,
+  "Hy4-Flash-Vision.strata": 934092800
+ },
+ "checksums": "verified against the publisher's SHA256SUMS and again by Strata's setup",
+ "engine": {
+  "name": "strata-hy4",
+  "version": "0.1.64",
+  "release": "Strata v0.2.18",
+  "source": "6e38f588a646",
+  "package": "strata-hy4-0.1.64-linux-x86_64-hip-rx7900.tar.gz"
+ },
+ "settings": {
+  "context": 32768,
+  "card": "second card only",
+  "drafter": "dfly2",
+  "vision": "on",
+  "vram_experts_gb": 12.6,
+  "ram_experts_gb": 43.44
+ },
+ "load_seconds": 50,
+ "decode_tok_s": {
+  "short_answer": 30.4,
+  "400_token_answer": 26.2,
+  "after_6624_token_prompt": 23.6
+ },
+ "prompt_read_tok_s": 1146,
+ "memory": {
+  "engine_rss_gb": 54,
+  "available_ram_gb_min": 4.1,
+  "swap_used_gb": [
+   0.8,
+   0.9
+  ],
+  "vram_mib": {
+   "display_card": 96,
+   "second_card": 24384
+  }
+ },
+ "placement": {
+  "experts_static_vram": 271,
+  "experts_adaptive_vram_slots": 3685,
+  "experts_in_ram_on_cpu": 20720,
+  "ram_gb": 55.03,
+  "cpu_threads": 10
+ },
+ "quick_quality_test": {
+  "class": "slow",
+  "minutes_total": 11,
+  "harness_core": [
+   12,
+   12
+  ],
+  "harness_extra": [
+   8,
+   8
+  ],
+  "harness_minutes": 8.2,
+  "tool_calls_per_passed_task": 3.7,
+  "rejected_calls": 0,
+  "not_finished": 0,
+  "prompt_tokens_read": 421583,
+  "cached_tokens_reported": 0,
+  "answer_tokens": 3457,
+  "B": [
+   9,
+   16
+  ],
+  "C_core": [
+   5,
+   10
+  ],
+  "conditions": "temperature 0, thinking off, one attempt"
+ },
+ "not_tested": [
+  "131072 context",
+  "long reasoning",
+  "vision",
+  "sustained load",
+  "the 216-item suite"
+ ],
+ "hub_route": false,
+ "gpu_hold": "none",
+ "kernel_gpu_fault": "none"
+}

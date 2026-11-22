@@ -1,6 +1,6 @@
 # Quick quality test plan — November 22, 2026
 
-Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. **Status, November 22:** the harness tasks, their graders, the no-network jail, the runner and the frozen item lists are built and tested without running any model ([how to run it](quant-eval/quick/README.md)). It has not been run against a model yet: the first new model is the pilot, and the harness-task times stay estimates until then.
+Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. **Status, November 22:** the harness tasks, their graders, the no-network jail, the runner and the frozen item lists are built and tested without running any model ([how to run it](quant-eval/quick/README.md)). **First run, November 22:** Hy4-Flash SQ-64, a new model, in 11 minutes: all 20 harness tasks passed, function calls 9 of 16, general 5 of 10 ([report](HY4-FLASH-SQ64-2026-11-22.md)). Nothing in the runner, jail or graders needed changing. Two things it showed: one model passing everything cannot say whether the harness tasks are hard enough, and that engine did not cache the harness prompt between steps, which a slow prompt reader would not survive within its budget.
 
 ## Why change
 
