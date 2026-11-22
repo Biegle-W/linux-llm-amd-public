@@ -1,12 +1,14 @@
 """Conservative campaign watchdog policy; no GPU/framework imports."""
 from pathlib import Path
-import json,os,time,signal,sys
+import json,os,time,signal,sys,threading
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 DEFAULT={'heartbeat_seconds':6,'load_seconds':1800,'first_token_seconds':None,'prefill_seconds':1800,'request_seconds':1800,'idle_seconds':20,'cleanup_seconds':15}
 from short_test_timing import violation as timing_violation
 def violation(now,heartbeat,progress,limits=DEFAULT):return timing_violation(now,heartbeat,progress,limits)
 def durable(path,value):
- path=Path(path);tmp=path.with_name(path.name+'.tmp-'+str(os.getpid()))
+ # One temp name per process AND thread: the short-check proxy writes progress from request threads while the
+ # main thread writes phases, and a shared name let one thread rename the other's file away (seen November 21-22).
+ path=Path(path);tmp=path.with_name(path.name+'.tmp-'+str(os.getpid())+'-'+str(threading.get_ident()))
  with tmp.open('w') as f:json.dump(value,f);f.write('\n');f.flush();os.fsync(f.fileno())
  tmp.replace(path)
  # Also persist the rename, so a reset is less likely to lose the latest record.

@@ -62,15 +62,15 @@ uname -r   # expect 7.0.14-42-vmpt1
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions in production** (last update November 21, by hand, llama.cpp only; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions in production** (last update November 22, by hand: llama.cpp, Maya and the Flash-Next engine; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `19bc41dbb41e` (258 commits past 1.0.0); the Inkling route alone runs `GodGMN/llama.cpp` `inkling-rdna3` at `cb0e469607c1` |
+| llama.cpp | `1fb8a269603b` (265 commits past 1.0.0); the Inkling route alone runs `GodGMN/llama.cpp` `inkling-rdna3` at `cb0e469607c1` |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
-| Strata (Flash-Next) | `8b01b0c8512d`, the RDNA3 fork `nicejunjie/Strata-rdna3`, engine 0.1.49.1 (owner choice November 17; upstream Strata does not apply) |
-| Maya | `c89ebef32cdb` (10 commits past 1.1.65) |
+| Strata (Flash-Next) | `238d6a79966c`, branch `rows2-20261116` of the RDNA3 fork `nicejunjie/Strata-rdna3`, engine 0.1.49.1: the fork author's two-card production build (owner rule November 22; upstream Strata does not apply) |
+| Maya | `f9a053dcb5a9` (1.1.73) |
 | Strata DeepSeek | `13eedf552417` (frozen: upstream removed this engine) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
 

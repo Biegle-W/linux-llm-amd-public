@@ -20,6 +20,8 @@ Ten qualified routes are served through one OpenAI-compatible API on TCP 10000. 
 
 **Engines and models**
 - Engine update policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject.
+- Which version (owner, November 22): the target is the latest version best supported on these RDNA3 cards, not simply the newest release. Check RX 7900-specific forks and branches and what their authors run in production, and prefer a version tested on gfx1100 over an untested newer head.
+- Engine update steps run one at a time (November 22): never start a guarded GPU stage while a build is running or the CPU is hot, and never reuse a stage folder after a failed stage. Both mistakes latched a hold that day.
 - Engine updates are manual since November 9 (owner): upstream is checked by hand, and each update is built in isolation, qualified and promoted by hand. The scheduled nightly updater is retired and no timer runs it. Method and the retired script are in [the updater README](linux/hardware/daily-update/README.md).
 - Quality testing (owner, November 22): a new model or new weight file gets the [quick quality test](linux/hardware/quant-eval/quick/README.md) once. Existing routes are not rerun, and the 216-item suite runs only when the owner asks.
 - New engines or models need isolated qualification before promotion. For a new model, check a gfx1100 vLLM or SGLang INT4 route before keeping it on GGUF.

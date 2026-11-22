@@ -4,6 +4,28 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-22 (later) — manual update: llama.cpp, Maya 1.1.73 and the Flash-Next engine promoted
+
+Upstream check: llama.cpp, Maya and the Strata RDNA3 fork were behind and ComfyUI had a new release (0.46.0); vLLM and SGLang were current; Strata DeepSeek stays frozen; the Inkling route's llama.cpp branch had not moved. Changes were researched before install. **New owner rule that day: use the latest version best supported on these RDNA3 cards, not simply the newest release.**
+
+| Engine | From → to | Routes checked | Result | What the new version changes (researched before install) |
+|---|---|---|---|---|
+| llama.cpp | `19bc41dbb41e` → `1fb8a269603b` (7 commits) | empero | **Promoted.** Bare marker. Load 47 s; tool steps 2.5 s (first token 2.1 s) and 0.3 s, unchanged. | Nothing in the AMD code path: two Vulkan fixes, one OpenCL addition, two models not used here, a batch cap for non-causal models, and `reasoning_effort: none` now reaching templates that support it. Upstream's speed and memory work for Inkling 2 Mini is still unmerged, so that route stays on its pinned branch. |
+| Maya | `c89ebef32cdb` → `f9a053dcb5a9` (1.1.65 → 1.1.73, 383 commits) | deepseek-v4.1-flash-1017-maya-unsloth-q1, glm-5.3-flash-maya | **Promoted.** Both bare markers. DeepSeek: load 69 s, first token 169 s and 5.6 s. GLM: load 191 s, first token 31.5 s and 4.1 s. | Two fixes for two AMD cards on DeepSeek (peer buffers that the other card could not see on gfx1100; a hang when the expert cache is on), GLM expert-tier fixes (wrong weights after a double promotion, a drafting stall), the VRAM reserve held for the whole run, and new engines for Hy4-Flash and Inkling 2 Mini that are not used here. |
+| Strata (Flash-Next, RDNA3 fork) | `8b01b0c8512d` → `238d6a79966c` (fork branch `rows2-20261116`, 1 commit) | qwen3.8-flash-next-iq3_xxs | **Installed.** Bare marker. Load 164 s; first token 10.8 s and 4.0 s (87 s; 8.4 s and 3.5 s before). | The fork author's stated production build for two RX 7900 XTX. Its one commit adds an optional start-up table of two-card thresholds and changes nothing unless a table is supplied; none is. The fork's `main` head (7 more commits, mostly Windows fixes plus two error-path changes its author has not yet put through the regression suite) was not taken. |
+
+**DeepSeek on the new Maya, after promotion:** upstream has one report of a hang on two Radeon cards with a prompt over 8,192 tokens followed by a warm turn. Checked here through the hub: a 9,671-token prompt answered in 111 s including the load, all three hidden codes right, and the follow-up turn in 2.8 s. The slow first token in the gate (169 s; 71–94 s on earlier days) came right after builds and a large download had displaced the file cache, as on November 16; it was not remeasured warm. The Flash-Next load time (164 s) was taken while a 130 GB download was running and is not a comparison.
+
+**Two fault holds, both the operator's mistakes, no GPU fault in either.**
+1. The llama.cpp GPU stage was started while Maya was still compiling. The CPU reached the guard's 100 °C limit and the guard latched the hold. The compile alone had the cores at 90–94 °C; alone, the GPU stage later ran at 44–46 °C.
+2. After the owner released that hold, the stage was rerun in the same folder, which still held the interrupted run's stop marker. The stage's watchdog exited at once, which the guard treats as a fault.
+
+Each time the stage had already switched the llama.cpp pin; it was put back to the last qualified build before anything else. The owner released both holds (archived as `GPU-LOCK.released-20261122T080135Z` and `…T080358Z`). Every later stage used a new folder, with no build running and the CPU at or below 60 °C before the start.
+
+**Harness fix.** Two checks (one on November 21, one on November 22) failed with a correct answer from the model because `durable()` in `hardware/daily-update/prevention_guard.py` used one temporary file name per process while two threads wrote the same progress file. The name now includes the thread; a new unit test (`hardware/test_durable_threads.py`) fails on the old code (5 of 6 threads) and passes on the new.
+
+**Not done in this run:** ComfyUI 0.46.0 (researched: no AMD-specific change; the seven workflows still need rerunning on it). No kernel fault at any point. Evidence: `hardware/generated/daily-update/2026-11-22T-llama/`, `2026-11-22T-maya2/`, `2026-11-22T-strata-rows2/` and `2026-11-22T-strata-rows2-gate/`; the interrupted attempts are in `2026-11-22T-daily/` and `2026-11-22T-maya/`.
+
 ## 2026-11-22 — Inkling route moved to the RDNA3 llama.cpp branch (owner decision)
 
 Not an upstream update: the owner chose to run `inkling-2-mini-q8` on `GodGMN/llama.cpp`, branch `inkling-rdna3`, a third-party branch tuned for the RX 7900 XTX, after a trial the same night ([report](INKLING-2-MINI-2026-11-21.md#november-22-the-route-moved-to-a-build-tuned-for-this-card-owner-decision)).

@@ -258,7 +258,7 @@
   "reasoning_effort": "none",
   "engine_fork": {
     "repository": "https://github.com/nicejunjie/Strata-rdna3.git",
-    "commit": "8b01b0c8512d388552e8601b3aff6753d05286e0",
+    "commit": "238d6a79966cfb2193065b753a667d8339db2789",
     "engine_version": "0.1.49.1",
     "installed": "2026-11-17",
     "previous_build": {
@@ -267,7 +267,10 @@
       "release": "0.2.15"
     },
     "note": "Owner choice: Flash-Next runs only the RDNA3 fork. Upstream Strata updates do not apply to this route; track the fork's head.",
-    "evidence": "hardware/STRATA-RDNA3-FORK-TEST-2026-11-17.md"
+    "evidence": "hardware/STRATA-RDNA3-FORK-TEST-2026-11-17.md",
+    "previous_fork_commit": "8b01b0c8512d388552e8601b3aff6753d05286e0",
+    "branch": "rows2-20261116",
+    "updated": "2026-11-22"
   },
   "expert_ram_mode": "all-off-card"
 }
