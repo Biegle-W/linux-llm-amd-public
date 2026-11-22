@@ -1,0 +1,30 @@
+{
+ "date": "2026-11-22",
+ "owner_request": "Test Maya-M",
+ "model": "tencent/Hy4-flash (220B, about 12B active)",
+ "pack": "Project Maya's Hy4-Flash Maya-M (routed experts IQ3_XXS, IQ4_XS on 7 layers)",
+ "files_bytes": {
+  "Hy4-Flash-Maya-M-IQ3_XXS-00001-of-00002.gguf": 68391812128,
+  "Hy4-Flash-Maya-XS-IQ2_XXS-00002-of-00002.gguf": 63360616160,
+  "Hy4-Flash-mtp-BF16.gguf": 7486183072,
+  "Hy4-Flash-Maya-M-drafter.dfly2": 898772352,
+  "mmproj-Hy4-Flash-Maya-XS.gguf": 784524096
+ },
+ "checksums": "verified against the sizes and SHA-256 in Maya 1.1.73's tools/hy4/download.json, and again by Maya's setup",
+ "engine": {"name": "maya-hy4", "release": "Project Maya 1.1.73", "source": "f9a053dcb5a9", "build": "the installed production build, copied; nothing compiled"},
+ "settings": {"context": 32768, "cards": "both, layer split 0-16 / 17-41", "drafting": "auto (MTP block chosen)", "vision": "on", "vram_reserve_mib": 2048, "cpu_threads": 14},
+ "load_seconds": 21.1,
+ "warmup_seconds": 27.8,
+ "first_start_measuring_seconds": 395,
+ "decode_tok_s": {"400_token_answer": [13.2, 20.0, 14.9, 31.8], "quality_test_median_answers_40_tokens_up": 26.5, "quality_test_range": [6.8, 44.1], "after_6624_token_prompt": [11.9, 25.0]},
+ "prompt_read_tok_s": [248, 329],
+ "prompt_cache": {"follow_up_cached_tokens": 6624, "follow_up_prompt_tokens": 6641, "follow_up_seconds": 3.9},
+ "memory": {"engine_rss_gb": [49, 55], "available_ram_gb_min": 56.1, "swap_used_gb": [2.4, 2.8], "vram_mib": {"display_card": 22917, "second_card": 22640}},
+ "placement": {"experts_in_vram": 7626, "experts_routed": 20992, "tensor_parallel": "not taken"},
+ "cpu_temp_max_c": 89,
+ "quick_quality_test": {"class": "slow", "minutes_total": 11, "harness_minutes": 6.5, "harness_core": [11, 12], "harness_extra": [8, 8], "failed": {"edit_config": "step limit, 9 tool calls in 6 steps"}, "tool_calls_per_passed_task": 3.3, "rejected_calls": 0, "B": [9, 16], "C_core": [6, 10], "conditions": "temperature 0, one attempt"},
+ "not_tested": ["contexts above 32768", "long reasoning", "vision", "sustained load", "memory pressure from other programs", "the 216-item suite"],
+ "hub_route": false,
+ "gpu_hold": "none",
+ "kernel_gpu_fault": "none"
+}

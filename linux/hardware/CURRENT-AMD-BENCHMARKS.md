@@ -62,7 +62,8 @@ Not measured yet: a sustained, matched benchmark across all 10 routes, thinking 
 | Model | State | Harness tasks, core (12) | Harness extra (8) | Function calls (16) | General (10) | Decode tok/s | Minutes |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Hy4-Flash SQ-64 on Strata 0.2.18 | trial on a side install, not a hub route | 12 | 8 | 9 | 5 | 26–30 | 11 |
+| Hy4-Flash Maya-M on Maya 1.1.73, both cards | trial on a side copy, not a hub route | 11 | 8 | 9 | 6 | 13–32 (median 26.5) | 11 |
 
-The function-call and general columns use 26 items shared with the 216-item suite. Rescored from saved answers, without rerunning, the existing routes get 8–14 and 3–10 on them (Flash-Next 9 and 7, DeepSeek on Maya 12 and 10, GLM 12 and 4, Inkling 10 and 4). Twenty-six items do not rank models. [Hy4-Flash report](HY4-FLASH-SQ64-2026-11-22.md) · [How the test works](quant-eval/quick/README.md)
+The function-call and general columns use 26 items shared with the 216-item suite. Rescored from saved answers, without rerunning, the existing routes get 8–14 and 3–10 on them (Flash-Next 9 and 7, DeepSeek on Maya 12 and 10, GLM 12 and 4, Inkling 10 and 4). Twenty-six items do not rank models. [Hy4-Flash on Strata](HY4-FLASH-SQ64-2026-11-22.md) · [Hy4-Flash on Maya](HY4-FLASH-MAYA-M-2026-11-22.md) · [How the test works](quant-eval/quick/README.md)
 
 **From November 22 (owner):** routes already in this table are not rerun. A new model or new weight file gets the [quick quality test](quant-eval/quick/README.md) once: harness tool tasks first, 15 minutes for a fast model and 60 for a slow one. Its scores will be shown in their own columns; they are not comparable with the 216-item column above except through the 60 items both share.
