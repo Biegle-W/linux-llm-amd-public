@@ -1,6 +1,6 @@
 # Quick quality test plan — November 22, 2026
 
-Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. It is a plan: nothing here is built yet, and the harness-task times are estimates until the pilot in step 2 measures them.
+Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. **Status, November 22:** the harness tasks, their graders, the no-network jail, the runner and the frozen item lists are built and tested without running any model ([how to run it](quant-eval/quick/README.md)). It has not been run against a model yet: the first new model is the pilot, and the harness-task times stay estimates until then.
 
 ## Why change
 
@@ -93,6 +93,10 @@ When a block reaches its limit, its remaining items are marked "not run" and the
 Expected, for a model as slow as DeepSeek on Maya: B 14 minutes and C-core about 11, from its saved run. A-core is the unknown. Its answers are short tool calls, but each step also has to read the tool's result at 35–110 tok/s, and an edit has to write the changed text at 5–10 tok/s, so 1.5 to 2.5 minutes per task is likely: 18 to 30 minutes. This is an estimate and stays one until a new model that slow arrives, because existing routes are not rerun to measure it.
 
 ## Build steps
+
+Done on November 22: steps 1, 3 and 4 (20 tasks rather than 26 candidates; a two-turn follow-up is included). Open: steps 2, 5 and 6, which need a new model.
+
+The held-out check in step 4 came out as follows: on the six routes not used for choosing, the 60 items of B and C order the routes much as the full 216 do (rank correlation 0.77), but B and C-core alone, the 26 items a slow model runs, do so only weakly (0.49). For a slow model the general score is a rough indication and no more.
 
 1. Write about 26 candidate harness tasks with graders and the sandbox. No network use; no item content from the public datasets is added to the repository.
 2. **Pilot on the next new model**, as the first part of its run: one task of each kind. (The owner closed quality testing of `inkling-2-mini-q8` on November 22 with its first full run, so it is not used for the pilot.) Log per step: answer tokens, newly read prompt tokens, cached tokens, time. Confirm the harness prompt stays cached from task to task. Drop only tasks that are broken, judged from the transcripts. Set the limits from these numbers and freeze 12 core plus 8 extra.

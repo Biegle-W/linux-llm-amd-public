@@ -1,0 +1,254 @@
+{
+ "schema": 1,
+ "frozen": "2026-11-22",
+ "rule": "choose on half of the routes (every second route by full-suite score), keep only items that the selection\nhalf does not answer uniformly, prefer middle difficulty, then the cheapest items on the slowest selection route;\nthen check on the other half that the subset orders the routes as the full suite does.",
+ "selection_routes": [
+  "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+  "qwen3.8-27b-sglang-dflash2",
+  "empero-qwen3.8-35b-a3b",
+  "ornith-1.5-122b",
+  "sage-a1.5",
+  "ripple-65b-vllm"
+ ],
+ "check_routes": [
+  "qwen3.8-flash-next-iq3_xxs",
+  "qwen3.8-27b-vllm",
+  "inkling-2-mini-q8",
+  "nemotron-3.5-bolt-vllm",
+  "glm-5.3-flash-maya",
+  "flint-40b-a2.5b"
+ ],
+ "slowest_selection_route": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+ "blocks": {
+  "B": [
+   "tools_multiple:multiple_184",
+   "tools_multiple:multiple_196",
+   "tools_multiple:multiple_50",
+   "tools_multiple:multiple_194",
+   "tools_parallel_multiple:parallel_multiple_31",
+   "tools_parallel_multiple:parallel_multiple_52",
+   "tools_parallel_multiple:parallel_multiple_128",
+   "tools_parallel_multiple:parallel_multiple_121",
+   "tools_parallel_multiple:parallel_multiple_166",
+   "tools_parallel_multiple:parallel_multiple_81",
+   "tools_parallel_multiple:parallel_multiple_102",
+   "tools_parallel_multiple:parallel_multiple_73",
+   "tools_irrelevance:irrelevance_229",
+   "tools_irrelevance:irrelevance_120",
+   "tools_irrelevance:irrelevance_203",
+   "tools_irrelevance:irrelevance_232"
+  ],
+  "C_core": [
+   "code:BigCodeBench/824",
+   "code:BigCodeBench/777",
+   "ifeval:3415",
+   "ifeval:3442",
+   "math:test/prealgebra/2066.json",
+   "math:test/geometry/1140.json",
+   "mmlu:1642",
+   "mmlu:7605",
+   "musr_object:180",
+   "musr_object:129"
+  ],
+  "C_extra": [
+   "code:BigCodeBench/755",
+   "code:BigCodeBench/669",
+   "code:BigCodeBench/794",
+   "code:BigCodeBench/854",
+   "code:BigCodeBench/268",
+   "code:BigCodeBench/862",
+   "ifeval:1233",
+   "ifeval:2844",
+   "ifeval:2751",
+   "ifeval:3680",
+   "ifeval:1691",
+   "ifeval:1643",
+   "aime24:86",
+   "aime25:21",
+   "math:test/intermediate_algebra/1166.json",
+   "math:test/counting_and_probability/430.json",
+   "math:test/intermediate_algebra/1806.json",
+   "aime24:77",
+   "mmlu:1455",
+   "mmlu:3927",
+   "mmlu:10742",
+   "mmlu:1865",
+   "mmlu:10762",
+   "mmlu:9328",
+   "mmlu:11488",
+   "mmlu:10709",
+   "mmlu:12185",
+   "mmlu:909",
+   "musr_team:27",
+   "musr_team:210",
+   "musr_object:85",
+   "musr_object:103",
+   "musr_object:63",
+   "musr_object:71"
+  ]
+ },
+ "check": {
+  "spearman_quick60_vs_full_on_check_half": 0.77,
+  "spearman_quick60_vs_full_on_selection_half_in_sample": 0.99,
+  "spearman_core26_vs_full_on_check_half": 0.49
+ },
+ "rescored_saved_runs": {
+  "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+   "half": "selection",
+   "full_216": 168,
+   "B_16": 12,
+   "C_core_10": 10,
+   "C_extra_34": 29,
+   "minutes": {
+    "full_216": 198.2,
+    "B": 13.8,
+    "C_core": 7.2,
+    "C_extra": 36.0
+   }
+  },
+  "qwen3.8-flash-next-iq3_xxs": {
+   "half": "check",
+   "full_216": 164,
+   "B_16": 9,
+   "C_core_10": 7,
+   "C_extra_34": 26,
+   "minutes": {
+    "full_216": 55.5,
+    "B": 1.1,
+    "C_core": 1.7,
+    "C_extra": 12.3
+   }
+  },
+  "qwen3.8-27b-sglang-dflash2": {
+   "half": "selection",
+   "full_216": 163,
+   "B_16": 13,
+   "C_core_10": 9,
+   "C_extra_34": 23,
+   "minutes": {
+    "full_216": 23.6,
+    "B": 0.5,
+    "C_core": 0.8,
+    "C_extra": 5.0
+   }
+  },
+  "qwen3.8-27b-vllm": {
+   "half": "check",
+   "full_216": 157,
+   "B_16": 11,
+   "C_core_10": 9,
+   "C_extra_34": 24,
+   "minutes": {
+    "full_216": 28.0,
+    "B": 0.5,
+    "C_core": 1.2,
+    "C_extra": 6.2
+   }
+  },
+  "empero-qwen3.8-35b-a3b": {
+   "half": "selection",
+   "full_216": 151,
+   "B_16": 14,
+   "C_core_10": 3,
+   "C_extra_34": 25,
+   "minutes": {
+    "full_216": 14.5,
+    "B": 0.3,
+    "C_core": 0.5,
+    "C_extra": 2.8
+   }
+  },
+  "inkling-2-mini-q8": {
+   "half": "check",
+   "full_216": 149,
+   "B_16": 10,
+   "C_core_10": 4,
+   "C_extra_34": 18,
+   "minutes": {
+    "full_216": 134.9,
+    "B": 3.0,
+    "C_core": 10.0,
+    "C_extra": 32.9
+   }
+  },
+  "ornith-1.5-122b": {
+   "half": "selection",
+   "full_216": 146,
+   "B_16": 11,
+   "C_core_10": 5,
+   "C_extra_34": 18,
+   "minutes": {
+    "full_216": 132.4,
+    "B": 4.2,
+    "C_core": 4.3,
+    "C_extra": 25.2
+   }
+  },
+  "nemotron-3.5-bolt-vllm": {
+   "half": "check",
+   "full_216": 143,
+   "B_16": 11,
+   "C_core_10": 7,
+   "C_extra_34": 22,
+   "minutes": {
+    "full_216": 39.3,
+    "B": 0.8,
+    "C_core": 0.7,
+    "C_extra": 9.5
+   }
+  },
+  "sage-a1.5": {
+   "half": "selection",
+   "full_216": 142,
+   "B_16": 8,
+   "C_core_10": 6,
+   "C_extra_34": 20,
+   "minutes": {
+    "full_216": 20.7,
+    "B": 0.2,
+    "C_core": 0.7,
+    "C_extra": 4.9
+   }
+  },
+  "glm-5.3-flash-maya": {
+   "half": "check",
+   "full_216": 136,
+   "B_16": 12,
+   "C_core_10": 4,
+   "C_extra_34": 20,
+   "minutes": {
+    "full_216": 40.7,
+    "B": 3.3,
+    "C_core": 2.0,
+    "C_extra": 7.1
+   }
+  },
+  "ripple-65b-vllm": {
+   "half": "selection",
+   "full_216": 134,
+   "B_16": 10,
+   "C_core_10": 5,
+   "C_extra_34": 13,
+   "minutes": {
+    "full_216": 155.4,
+    "B": 3.5,
+    "C_core": 10.5,
+    "C_extra": 38.4
+   }
+  },
+  "flint-40b-a2.5b": {
+   "half": "check",
+   "full_216": 121,
+   "B_16": 9,
+   "C_core_10": 4,
+   "C_extra_34": 15,
+   "minutes": {
+    "full_216": 18.7,
+    "B": 0.9,
+    "C_core": 0.6,
+    "C_extra": 3.2
+   }
+  }
+ },
+ "note": "Scores of selection-half routes on these items are in-sample. No route was run to produce this file."
+}
