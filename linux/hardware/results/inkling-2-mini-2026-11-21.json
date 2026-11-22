@@ -183,5 +183,91 @@
   "dsh": 62
  },
  "gpu_hold": "none",
- "kernel_gpu_fault": "none"
+ "kernel_gpu_fault": "none",
+ "rdna3_branch_2026_11_22": {
+  "owner_decision": "Yes, switch route",
+  "source": "GodGMN/llama.cpp branch inkling-rdna3",
+  "commit": "cb0e469607c19b63b3d06a8b654fcebdd76fb889",
+  "settings": "route layout, 131072 context, batch 2048, ubatch 512, f16 KV, graph capture off",
+  "upstream_settings_tried_no_gain": {
+   "graph chunk size 0 (graphs on)": 30.9,
+   "graphs off + graph optimizer": 26.7,
+   "graphs off, 2 threads": 26.8,
+   "graphs off, 12 threads": 26.8
+  },
+  "side_server": {
+   "decode_tok_s": 45.6,
+   "prompt_tok_s": 1626,
+   "compute_buffer_mib": 298,
+   "vram_mib": [
+    9256,
+    17344
+   ],
+   "graphs_on_decode_tok_s": 50.3,
+   "one_card_layout_decode_tok_s": 47.1
+  },
+  "gpu_op_tests": "20787/20787 on each card; test-ink-rel-bias passed",
+  "long_context": {
+   "prompt_tokens": 112604,
+   "facts_recalled": "10/10",
+   "prompt_tok_s": 983,
+   "decode_tok_s": 31.0
+  },
+  "public_suite": {
+   "correct": 144,
+   "cut_off": 50,
+   "wrong": 22,
+   "errors": 0,
+   "minutes": 90,
+   "by_category": {
+    "code": 8,
+    "instructions": 25,
+    "knowledge": 41,
+    "math": 31,
+    "reasoning": 16,
+    "tools": 23
+   },
+   "paired_vs_upstream": {
+    "both": 137,
+    "only_upstream": 12,
+    "only_branch": 7,
+    "mcnemar_exact_p": 0.359
+   },
+   "vram_second_card_mib": [
+    17312,
+    17370
+   ]
+  },
+  "reproducibility": {
+   "upstream_identical_runs": true,
+   "branch_identical_runs": false,
+   "max_logprob_diff_between_identical_runs": 0.16,
+   "fusion_off_identical_runs": true,
+   "fusion_off_decode_tok_s": 28.4
+  },
+  "strict_tool_gate_through_hub": {
+   "inkling-2-mini-q8": {
+    "passed": true,
+    "load_seconds": 48.7,
+    "first_token_seconds": [
+     5.04,
+     0.3
+    ],
+    "prompt_tokens": 7600,
+    "prompt_read_tok_s": 1508,
+    "decode_tok_s": 43.0
+   },
+   "empero-qwen3.8-35b-a3b": {
+    "passed": true,
+    "load_seconds": 46.7,
+    "note": "an earlier attempt the same hour stopped on a progress-file rename error inside the test harness; the model's answer was correct"
+   }
+  },
+  "unit_tests": {
+   "hardware": "669 (2 skipped)",
+   "dsh": 62
+  },
+  "gpu_hold": "none",
+  "kernel_gpu_fault": "none"
+ }
 }

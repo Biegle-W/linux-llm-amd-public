@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-22 — Inkling route moved to the RDNA3 llama.cpp branch (owner decision)
+
+Not an upstream update: the owner chose to run `inkling-2-mini-q8` on `GodGMN/llama.cpp`, branch `inkling-rdna3`, a third-party branch tuned for the RX 7900 XTX, after a trial the same night ([report](INKLING-2-MINI-2026-11-21.md#november-22-the-route-moved-to-a-build-tuned-for-this-card-owner-decision)).
+
+| Engine | From → to | Routes checked | Result | What the branch changes (researched before install) |
+|---|---|---|---|---|
+| llama.cpp (Inkling route only) | upstream `19bc41dbb41e` → branch `cb0e469607c1` | inkling-2-mini-q8, empero | **Installed for this route.** Strict tool check passed, bare marker; first token 5.0 s on 7,600 tokens (12.4 s before), decode 43 tok/s (26), load 49 s. `empero`, still on upstream, passed. | Gains: fused GPU kernels for Inkling's small operations (about 7,650 → 3,000 kernel launches per token by its author's count) and the attention bias computed in-kernel, which removes a 3 GB compute buffer. Losses: output is not identical between identical runs; it is third-party code based on upstream from November 20, so later upstream fixes are absent. |
+
+**From now on upstream llama.cpp updates do not reach this route** (`manual_runtime_pin`); it is updated by hand from the branch's repository. A first attempt at the check stopped on a progress-file rename error inside the test harness with a correct answer from the model; the rerun passed. No kernel fault, no hold. Evidence: `hardware/generated/daily-update/2026-11-22T-inkling-rdna3b/`.
+
 ## 2026-11-21 — manual update: llama.cpp promoted; Inkling 2 Mini route added (owner request)
 
 The owner asked for the backend to support Inkling 2 Mini. Upstream check: llama.cpp was 159 commits behind and had merged support for the model on November 20 and 21. Other engines were not checked in this run. Researched before install, as the last column records.

@@ -7,7 +7,14 @@
   ],
   "source_commit": "19bc41dbb41e858eebc269b49ccdec1f0d28880c",
   "runtime_overrides": {},
-  "source_overrides": {},
+  "source_overrides": {
+    "inkling-2-mini-q8": {
+      "path": "/opt/local-llm/hardware/generated/inkling-trial-2026-11-21/llama.cpp-rdna3",
+      "source_commit": "cb0e469607c19b63b3d06a8b654fcebdd76fb889",
+      "manual_runtime_pin": "cb0e469607c19b63b3d06a8b654fcebdd76fb889",
+      "origin": "https://github.com/GodGMN/llama.cpp branch inkling-rdna3 (third-party, unreviewed upstream; owner decision November 22)"
+    }
+  },
   "paused_models": {
     "nemotron-3.5-super-iq3": "Removed by owner November 2 to reclaim storage; IQ3 retired. Await RAM and separate guarded vLLM INT4 qualification; no automatic fallback or resume."
   },

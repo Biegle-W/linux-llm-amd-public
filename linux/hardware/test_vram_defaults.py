@@ -76,7 +76,7 @@ class VramDefaults(unittest.TestCase):
                 moe_memory.validate_profiles(p)
         check()
         for old,new in [('tensor-split = 48,1','tensor-split = 1,1'),('device = ROCm1,ROCm0','device = ROCm1'),
-                        ('exps[.]weight$=ROCm0,','exps[.]weight$=CPU,'),('ubatch-size = 128','ubatch-size = 512'),
+                        ('exps[.]weight$=ROCm0,','exps[.]weight$=CPU,'),('ubatch-size = 512','ubatch-size = 128'),
                         ('ctx-size = 131072','ctx-size = 262144')]:
             with self.subTest(setting=old):
                 head,section=base.split('['+ident+']');self.assertEqual(section.count(old),1)

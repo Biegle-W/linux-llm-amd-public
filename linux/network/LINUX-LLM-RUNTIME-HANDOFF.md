@@ -23,7 +23,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 | API model ID | Engine | Weights | Mode | Context | Key settings |
 |---|---|---|---|---:|---|
 | `empero-qwen3.8-35b-a3b` | llama.cpp | Empero Qwen3.8-35B-A3B IQ4_XS | VRAM | 262,144 | layer split, MTP |
-| `inkling-2-mini-q8` | llama.cpp | Inkling 2 Mini UD-Q8_K_XL (upstream layout) | VRAM | 131,072 | all layer passes on the second card, expert blocks 20–23 and output on the display card; f16 KV; graph capture off (`no_graph_models`: ROCm 7.2.3 leaks VRAM on graph updates); reasons briefly even at effort `none` |
+| `inkling-2-mini-q8` | llama.cpp | Inkling 2 Mini UD-Q8_K_XL (upstream layout) | VRAM | 131,072 | all layer passes on the second card, expert blocks 20–23 and output on the display card; f16 KV; graph capture off (`no_graph_models`: ROCm 7.2.3 leaks VRAM on graph updates); since November 22 on the RDNA3 branch build `cb0e469607c1` through `source_overrides` (owner decision; upstream updates do not apply to this route); reasons briefly even at effort `none` |
 | `qwen3.8-27b-vllm` | vLLM TP2 | Qwen3.8-27B AutoRound W4A16 | VRAM | 163,840 | compiled MTP3, BF16 KV |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | same Qwen3.8-27B weights + DFlash2 drafter | VRAM | 163,840 | BF16 KV, prefix cache |
 | `nemotron-3.5-bolt-vllm` | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | VRAM | 262,144 | runtime globaldev229 |
@@ -66,7 +66,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `19bc41dbb41e` (258 commits past 1.0.0) |
+| llama.cpp | `19bc41dbb41e` (258 commits past 1.0.0); the Inkling route alone runs `GodGMN/llama.cpp` `inkling-rdna3` at `cb0e469607c1` |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata (Flash-Next) | `8b01b0c8512d`, the RDNA3 fork `nicejunjie/Strata-rdna3`, engine 0.1.49.1 (owner choice November 17; upstream Strata does not apply) |

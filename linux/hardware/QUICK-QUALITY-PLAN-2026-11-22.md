@@ -95,10 +95,10 @@ Expected, for a model as slow as DeepSeek on Maya: B 14 minutes and C-core about
 ## Build steps
 
 1. Write about 26 candidate harness tasks with graders and the sandbox. No network use; no item content from the public datasets is added to the repository.
-2. **Pilot on the newest model only** (`inkling-2-mini-q8`, which is new): one task of each kind. Log per step: answer tokens, newly read prompt tokens, cached tokens, time. Confirm the harness prompt stays cached from task to task. Drop only tasks that are broken, judged from the transcripts. Set the limits from these numbers and freeze 12 core plus 8 extra.
+2. **Pilot on the next new model**, as the first part of its run: one task of each kind. (The owner closed quality testing of `inkling-2-mini-q8` on November 22 with its first full run, so it is not used for the pilot.) Log per step: answer tokens, newly read prompt tokens, cached tokens, time. Confirm the harness prompt stays cached from task to task. Drop only tasks that are broken, judged from the transcripts. Set the limits from these numbers and freeze 12 core plus 8 extra.
 3. Add the harness runner beside the strict tool check, reusing its guarded launch, with one model load for the whole run.
 4. Freeze the B and C lists by the half-and-half rule, using saved results only, and add a `quick` tier to the existing runner and grader. Rescore the saved runs of the existing routes on B and C-core for the comparison table; no route is run.
-5. Run the whole test once on Inkling as the first real use, and from then on once for each new model or new weight file.
+5. Run the whole test once for each new model or new weight file from then on. This test replaces the 216-item suite for those runs.
 6. Report one table per run: tool score, B, general score, not-finished and not-run counts, tool calls per task, minutes, and load time, beside the rescored B and C-core of the existing routes.
 
 **Limits of this rule, stated plainly:** how often a harness task flips between runs is not measured, because that would need reruns. A single harness score therefore carries unknown run-to-run noise of at least a task or two; a fast model's two passes give a first indication.

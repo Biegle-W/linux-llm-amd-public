@@ -47,4 +47,27 @@ The suite was run before the switch was added, at the 30 tok/s setting. The swit
 - An RX 7900 XTX owner reports 64 tok/s from a private, unreviewed branch of llama.cpp; not tested.
 - Strict gate note: `empero` answered with the correct marker in all six checks that day, and wrapped it in a sentence in two of them, which the strict gate counts as a failure. The requests were identical apart from the marker; the route samples at temperature 0.6.
 
+## November 22: the route moved to a build tuned for this card (owner decision)
+
+The owner found the route still slow. No setting on upstream llama.cpp helped (graph chunking, the graph optimizer and 2 or 12 CPU threads all left decode at 26.7–30.9 tok/s). The owner then approved a trial of `GodGMN/llama.cpp`, branch `inkling-rdna3`: six commits on upstream by an RX 7900 XTX owner that fuse Inkling's many small GPU operations and compute the attention bias inside the attention kernel. After the trial the owner chose to run this route on it. Only this route uses it, through `source_overrides`, pinned to commit `cb0e469607c1`; `empero` stays on upstream.
+
+| | Upstream `19bc41dbb41e` | Branch `cb0e469607c1` |
+|---|---:|---:|
+| Decode, 400-token answer | 26.8 tok/s | 45.6 tok/s |
+| Prompt read, 6,949-token prompt | 656 tok/s (ubatch 128) | 1,626 tok/s (ubatch 512) |
+| Compute buffer at 131,072 context | 3.2 GB | 0.3 GB |
+| VRAM, display card / second card | 9.2 / 20.2 GB | 9.3 / 17.3 GB |
+| Strict tool check through the hub | passed | passed: first token 5.0 s on 7,600 tokens (1,508 tok/s), decode 43.0 tok/s, load 49 s |
+| Public suite (216) | 149, 45 cut off | 144, 50 cut off |
+| Suite time | 135 min | 90 min |
+
+What was checked before the switch:
+- **The diff was read in full** (29 files, about 3,300 lines) and reviewed independently: GPU kernels, graph code, tests and four environment switches; no network, file or process access; no defect found. The review's main point was that the author's tests do not cover this setup (this file's weight types, two cards, long context), so those were tested here.
+- **Its GPU tests:** 20,787 of 20,787 on each card, and the bias comparison test passed.
+- **Long context:** a 112,604-token prompt with 10 facts spread through it: 10 of 10 recalled; read at 983 tok/s, decode 31 tok/s at that depth.
+- **Suite:** 144 against 149 is not a detected difference: 137 items right on both builds, 12 only on upstream, 7 only on the branch (exact paired test p = 0.36); 22 wrong on both. No request error. VRAM on the second card moved 58 MiB in 90 minutes with graph capture off.
+- **Reproducibility:** upstream returns identical output for identical requests. The branch does not: token log-probabilities differ by up to about 0.13 between two identical runs, and greedy text can diverge after 80 or more tokens. The cause is the fused kernels (turning them off with `GGML_INK_NO_FUSE=1` restores identical output and drops decode to 28 tok/s). The difference is the same size as the numerical difference between the branch and upstream.
+
+Known limits: the branch is third-party and not an upstream pull request; it is based on upstream from November 20 plus the loop fix, so it lacks the later scale-tensor commit (the suite shows no effect on this file). Upstream llama.cpp updates do not reach this route; it changes only by hand. To go back to upstream, remove the route's entry from `source_overrides` and set its batch sizes back to 512 and 128. The published quality figure for the route stays the 149 from the first full run; at the owner's request no further quality run is made on this model.
+
 Evidence: `hardware/generated/daily-update/2026-11-21T-inkling/` and `2026-11-21T-inkling-gate*/` (not in Git), and [results](results/inkling-2-mini-2026-11-21.json).
