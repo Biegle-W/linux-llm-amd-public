@@ -63,6 +63,27 @@ class VramDefaults(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError,'VRAM-only preset'):
                     moe_memory.validate_profiles(p)
 
+    def test_plan_declared_layout_is_enforced(self):
+        ident='inkling-2-mini-q8';plan=self.plans[ident];base=(ROOT/'dsh/models-hip.ini').read_text()
+        self.assertEqual(plan['memory_placement'],'vram_only');self.assertNotIn('CPU',plan['override_tensor'])
+        def check(ini=base,change=None):
+            with tempfile.TemporaryDirectory() as tmp:
+                p=Path(tmp);plans=copy.deepcopy(self.plans)
+                if change:plans[ident].update(change)
+                (p/'models.json').write_bytes((ROOT/'dsh/models.json').read_bytes())
+                (p/'moe-offload.json').write_text(json.dumps({'models':plans}))
+                (p/'models-hip.ini').write_text(ini)
+                moe_memory.validate_profiles(p)
+        check()
+        for old,new in [('tensor-split = 48,1','tensor-split = 1,1'),('device = ROCm1,ROCm0','device = ROCm1'),
+                        ('exps[.]weight$=ROCm0,','exps[.]weight$=CPU,'),('ubatch-size = 128','ubatch-size = 512'),
+                        ('ctx-size = 131072','ctx-size = 262144')]:
+            with self.subTest(setting=old):
+                head,section=base.split('['+ident+']');self.assertEqual(section.count(old),1)
+                with self.assertRaisesRegex(RuntimeError,'VRAM-only preset'):check(head+'['+ident+']'+section.replace(old,new))
+        for change in [{'device':'ROCm1'},{'device':'ROCm1,ROCm1'},{'override_tensor':'^output[.]weight$=CPU'}]:
+            with self.subTest(plan=change),self.assertRaisesRegex(RuntimeError,'both cards'):check(change=change)
+
     def router(self):
         spec=importlib.util.spec_from_file_location('vram_router_test',ROOT/'dsh/llama-router.py')
         m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)

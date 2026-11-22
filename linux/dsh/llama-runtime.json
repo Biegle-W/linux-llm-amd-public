@@ -2,9 +2,10 @@
   "backend": "hip-amd",
   "models": [
     "empero-qwen3.8-35b-a3b",
+    "inkling-2-mini-q8",
     "nemotron-3.5-super-iq3"
   ],
-  "source_commit": "9581154a2250cc9e6948e4c2a2fc4b4e19d1a57e",
+  "source_commit": "19bc41dbb41e858eebc269b49ccdec1f0d28880c",
   "runtime_overrides": {},
   "source_overrides": {},
   "paused_models": {
@@ -13,5 +14,8 @@
   "p2p_models": [
     "empero-qwen3.8-35b-a3b"
   ],
-  "source_path": "hardware/generated/daily-update/2026-11-09T-manual/llama/llama.cpp"
+  "source_path": "hardware/generated/daily-update/2026-11-21T-inkling/llama/llama.cpp",
+  "no_graph_models": [
+    "inkling-2-mini-q8"
+  ]
 }

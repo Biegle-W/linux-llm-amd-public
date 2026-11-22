@@ -1,0 +1,187 @@
+{
+ "date": "2026-11-21",
+ "owner_request": "Update backend to support it (Inkling 2 Mini)",
+ "llama_cpp": {
+  "from": "9581154a2250cc9e6948e4c2a2fc4b4e19d1a57e",
+  "to": "19bc41dbb41e858eebc269b49ccdec1f0d28880c",
+  "commits": 159,
+  "preflight_backend_ops": {
+   "GATED_DELTA_NET": "84/84 on each card",
+   "MUL_MAT_ID": "1077/1077 on each card"
+  },
+  "guarded_install": {
+   "route": "empero-qwen3.8-35b-a3b",
+   "load_seconds": 46.7,
+   "tool_steps_seconds": [
+    2.5,
+    0.3
+   ],
+   "first_token_seconds": [
+    2.06,
+    0.14
+   ],
+   "result": "promoted"
+  }
+ },
+ "route": {
+  "id": "inkling-2-mini-q8",
+  "file": "Inkling-2-Mini-UD-Q8_K_XL (upstream layout)",
+  "file_bytes": 22867452896,
+  "context": 131072,
+  "layout": "device ROCm1,ROCm0; tensor-split 48,1; blocks 20-23 expert tensors and output.weight on ROCm0; batch 512, ubatch 128; f16 KV",
+  "graph_capture": "off (GGML_CUDA_DISABLE_GRAPHS=1 via no_graph_models)",
+  "vram_mib_at_load": {
+   "display_card": 9151,
+   "second_card": 20180
+  }
+ },
+ "strict_tool_gate": {
+  "inkling-2-mini-q8": {
+   "runs": 3,
+   "passed": 3,
+   "load_seconds": 48.7,
+   "first_token_seconds": [
+    12.35,
+    0.37
+   ],
+   "prompt_tokens": 7594,
+   "prompt_read_tok_s": 615,
+   "decode_tok_s": 25.9
+  },
+  "empero-qwen3.8-35b-a3b": {
+   "runs": 6,
+   "bare_marker": 4,
+   "marker_wrapped_in_sentence": 2,
+   "marker_correct": 6,
+   "note": "identical requests apart from the marker; temperature 0.6"
+  }
+ },
+ "layout_speed_side_server_32k": [
+  {
+   "layout": "all on second card, output layer on display card, ubatch 256",
+   "decode_tok_s": 31.6,
+   "prompt_tok_s": 822,
+   "vram_mib": [
+    1405,
+    23530
+   ]
+  },
+  {
+   "layout": "blocks 20-23 experts and output on display card, ubatch 256",
+   "decode_tok_s": 30.8,
+   "prompt_tok_s": 804,
+   "vram_mib": [
+    9141,
+    15579
+   ]
+  },
+  {
+   "layout": "same, ubatch 128",
+   "decode_tok_s": 30.8,
+   "prompt_tok_s": 656,
+   "vram_mib": [
+    9121,
+    14741
+   ]
+  },
+  {
+   "layout": "same, ubatch 256, 65,536 context",
+   "decode_tok_s": 31.0,
+   "prompt_tok_s": 802,
+   "vram_mib": [
+    9138,
+    18185
+   ]
+  },
+  {
+   "layout": "same, ubatch 128, 131,072 context",
+   "decode_tok_s": 31.0,
+   "prompt_tok_s": 656,
+   "vram_mib": [
+    9115,
+    20185
+   ]
+  }
+ ],
+ "vram_growth": {
+  "suite_run_graphs_on": {
+   "minutes": 136,
+   "second_card_mib_start": 20230,
+   "second_card_mib_end": 23319,
+   "mib_per_minute": 22.7
+  },
+  "seventeen_request_test_mib_delta": {
+   "default": 343,
+   "GGML_CUDA_DISABLE_GRAPHS=1": 18,
+   "DEBUG_CLR_GRAPH_PACKET_CAPTURE=0": 18,
+   "hub_route_with_switch": 6
+  },
+  "decode_tok_s": {
+   "default": 30.8,
+   "GGML_CUDA_DISABLE_GRAPHS=1": 26.8,
+   "DEBUG_CLR_GRAPH_PACKET_CAPTURE=0": 26.7
+  },
+  "cause": "ROCm 7.2.3 allocates kernel-argument VRAM on every graph update and frees it only when the graph is destroyed"
+ },
+ "public_suite": {
+  "items": 216,
+  "correct": 149,
+  "cut_off": 45,
+  "wrong": 22,
+  "errors": 0,
+  "score": 0.69,
+  "interval95": [
+   0.625,
+   0.748
+  ],
+  "by_category": {
+   "code": [
+    8,
+    20
+   ],
+   "instructions": [
+    26,
+    32
+   ],
+   "knowledge": [
+    41,
+    60
+   ],
+   "math": [
+    33,
+    40
+   ],
+   "reasoning": [
+    19,
+    32
+   ],
+   "tools": [
+    22,
+    32
+   ]
+  },
+  "cut_off_by_category": {
+   "code": 8,
+   "knowledge": 17,
+   "instructions": 6,
+   "math": 7,
+   "reasoning": 6,
+   "tools": 1
+  },
+  "conditions": "through the hub, reasoning effort none, graph capture on (before the switch was added), temperature 0"
+ },
+ "first_trial_partial": {
+  "note": "side build on one card, stopped by the server crash after 47 minutes",
+  "answered": 88,
+  "correct": 59,
+  "cut_off": 19,
+  "wrong": 7,
+  "errors": 3
+ },
+ "unit_tests": {
+  "hardware": "669 (2 skipped)",
+  "dsh": 62
+ },
+ "gpu_hold": "none",
+ "kernel_gpu_fault": "none"
+}

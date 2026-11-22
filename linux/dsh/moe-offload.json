@@ -57,6 +57,25 @@
       "validation": "Passed arithmetic, JSON, tool round trip, streaming, residency and fixed ~8K timing trials; near-28K input marker retrieval passed",
       "tensor_split": "21,19",
       "mtp_draft_experts_on_gpu": false
+    },
+    "inkling-2-mini-q8": {
+      "backend": "hip-amd",
+      "context": 131072,
+      "minimum_host_ram_gib": 12,
+      "cpu_expert_layers": [],
+      "host_expert_bytes": 0,
+      "gpu_expert_cache_mib": 0,
+      "kv_cache": "f16",
+      "load_mode": "dio",
+      "memory_placement": "vram_only",
+      "minimum_available_ram_gib": 1,
+      "batch_size": 512,
+      "ubatch_size": 128,
+      "min_free_vram_gib": 3,
+      "min_start_vram_gib": 21,
+      "device": "ROCm1,ROCm0",
+      "tensor_split": "48,1",
+      "override_tensor": "^blk[.]2[0-3][.]ffn_(gate_up|down)_exps[.]weight$=ROCm0,^output[.]weight$=ROCm0"
     }
   }
 }

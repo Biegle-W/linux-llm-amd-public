@@ -1,18 +1,19 @@
 # Current AMD results — November 11, 2026
 
-One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 18, 2026:** the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
+One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 21, 2026:** `inkling-2-mini-q8` added, a new route on llama.cpp `19bc41dbb41e` ([report](INKLING-2-MINI-2026-11-21.md)); the other rows were not remeasured on the new llama.cpp build. November 18: the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
 
 | Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Quality rank |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|
 | `empero-qwen3.8-35b-a3b` | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 |
+| `inkling-2-mini-q8` | llama.cpp | passed | 25.9 | 615 | 48.7 | — | — | 149# | 7 |
 | `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 5 |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 |
-| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 7 |
-| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 9 |
+| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 |
+| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 |
 | `qwen3.8-flash-next-iq3_xxs` | Strata (RDNA3 fork) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 |
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 2 |
-| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 8 |
+| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 |
 
 How to read it:
 - **Tool call:** one DSH read-tool round trip with about 6.4K prompt tokens and 25 tool definitions, under the guarded harness ([standard](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)).
@@ -27,6 +28,7 @@ How to read it:
 - Flash-Next on Strata was rerun on November 15 on engine `baf16363b440` (release 0.2.14, prompt reading on Strata's own kernels): 164 of 216 again, with 157 items right in both runs, 7 only in the new run and 7 only in the old; no request error and no fault. The category counts in the quality table are from this rerun. Suite pace 54.3 tok/s against 53.6 on the same items before. The speed columns in the first table were not remeasured on the new build.
 - † 400-token answers through the hub on November 8 ([report](GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Strata DeepSeek measured the same way after the November 11 engine update: 4.2 for the first answer after load, then 8.0–10.2; prompt read 119–132 tok/s with one sample at 63 ([results](results/strata-dsv41-speed-2026-11-11.json)). With the RAM store off on November 12, same method: 4.2 for the first answer after load, then 10.7–12.2; prompt read 125–143 tok/s with one sample at 79; the first answer from a cold start came after 82 s, against 71 ([results](results/strata-dsv41-speed-no-ram-store-2026-11-12.json)).
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
+- # Inkling 2 Mini, added November 21 (UD-Q8_K_XL file, both cards, 131,072 tokens of context). It reasons before every answer even at reasoning effort `none`; 45 of its 216 answers were cut off by the token limit and scored wrong, so 149 is a lower bound. It was scored alone, so it is not in the paired test, and the 54- and 64-item suites were not run. Decode is 25.9 tok/s with graph capture off, which this route needs: with it on, decode is 30.8 tok/s but VRAM grows 22 MiB per minute until the server fails ([report](INKLING-2-MINI-2026-11-21.md)).
 - **November 18 memory-guard changes (owner decisions), no speed or quality figure affected.** Every model load is admitted on 1 GiB of available RAM instead of a per-model figure (was 28.4 GiB for Flash-Next, 52 GiB for GLM and both DeepSeek routes), and after a backend switch Maya and Strata DeepSeek wait up to 15 s for the cards to report the stopped model's VRAM as free. One short request per affected route through the hub, load plus answer, not a benchmark: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s. Switching straight between loaded models was then verified the same way: Flash-Next 98 s, to DeepSeek Q1 on Maya 77 s, back to Flash-Next 148 s ([guard policy](RESOURCE-GUARDS-2026-11-03.md), [results](results/ram-floor-load-check-2026-11-18.json)).
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
 
@@ -42,9 +44,10 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 | 4 | `qwen3.8-27b-sglang-dflash2` | 163 | 75.5% | 69.3–80.7% | 21 | 8 | 31 | 47 | 32 | 18 | 27 | Ripple |
 | 5 | `qwen3.8-27b-vllm` | 157 | 72.7% | 66.4–78.2% | 26 | 10 | 28 | 45 | 31 | 19 | 24 | Ripple |
 | 6 | `empero-qwen3.8-35b-a3b` | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | — |
-| 7 | `nemotron-3.5-bolt-vllm` | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
-| 8 | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3–69.1% | 0 | 10 | 25 | 43 | 11 | 21 | 26 | — |
-| 9 | `ripple-65b-vllm` | 134 | 62.0% | 55.4–68.2% | 65 | 5 | 17 | 42 | 32 | 14 | 24 | — |
+| 7 | `inkling-2-mini-q8` | 149 | 69.0% | 62.5–74.8% | 45 | 8 | 26 | 41 | 33 | 19 | 22 | not tested |
+| 8 | `nemotron-3.5-bolt-vllm` | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
+| 9 | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3–69.1% | 0 | 10 | 25 | 43 | 11 | 21 | 26 | — |
+| 10 | `ripple-65b-vllm` | 134 | 62.0% | 55.4–68.2% | 65 | 5 | 17 | 42 | 32 | 14 | 24 | — |
 
 - **Ranks 1–5 are a tie.** No difference among DeepSeek on Strata, DeepSeek on Maya, Flash-Next and the two Qwen3.8-27B routes is statistically detected. The same holds among ranks 6–9.
 - **Measurably better than** lists the routes a route beats on the paired test (exact McNemar, Holm-corrected over the 55 pairs of the eleven routes scored on November 11, before three were removed). An empty cell means the suite cannot tell the route from any route below it.

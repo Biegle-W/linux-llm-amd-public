@@ -4,7 +4,7 @@ This is the current operational summary for Linux, Windows and phone API clients
 
 ## State in one paragraph
 
-Nine qualified routes are enabled (`ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b` were removed on November 11 at the owner's request). All nine passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. Engine updates are no longer scripted: the owner retired the nightly updater on November 9, and the agent checks upstream and upgrades each engine by hand with the guarded short tool check.
+Ten qualified routes are enabled: `inkling-2-mini-q8` was added on November 21 at the owner's request (see the [report](../hardware/INKLING-2-MINI-2026-11-21.md)). Before that there were nine (`ornith-1.5-122b`, `sage-a1.5` and `flint-40b-a2.5b` were removed on November 11 at the owner's request). All nine passed the guarded short tool-call check on November 7 in the [working layout](../hardware/AMD-WORKING-SETUP-2026-11-07.md), and again on November 9 together with both graded quality suites ([report](../hardware/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md)). Maya DeepSeek refuses to start while desktop GPU apps hold about 1 GiB of card 0; close them first. The GPU fault hold was released by the owner on November 7 at 03:56; `hardware/generated/GPU-LOCK` is absent. On November 8 GLM and both DeepSeek routes got larger RAM tiers, expert profiles and 2 GiB VRAM reserves, which made them about 2× (DeepSeek) to 7× (GLM) faster ([report](../hardware/GLM-DEEPSEEK-RAM-RESERVE-TUNING-2026-11-08.md)). Three routes were removed after the [quant comparison](../hardware/QUANT-QUALITY-COMPARISON-2026-11-08.md), and their weights were deleted. Engine updates are no longer scripted: the owner retired the nightly updater on November 9, and the agent checks upstream and upgrades each engine by hand with the guarded short tool check.
 
 ## First five minutes
 
@@ -23,6 +23,7 @@ uname -r   # expect 7.0.14-42-vmpt1
 | API model ID | Engine | Weights | Mode | Context | Key settings |
 |---|---|---|---|---:|---|
 | `empero-qwen3.8-35b-a3b` | llama.cpp | Empero Qwen3.8-35B-A3B IQ4_XS | VRAM | 262,144 | layer split, MTP |
+| `inkling-2-mini-q8` | llama.cpp | Inkling 2 Mini UD-Q8_K_XL (upstream layout) | VRAM | 131,072 | all layer passes on the second card, expert blocks 20–23 and output on the display card; f16 KV; graph capture off (`no_graph_models`: ROCm 7.2.3 leaks VRAM on graph updates); reasons briefly even at effort `none` |
 | `qwen3.8-27b-vllm` | vLLM TP2 | Qwen3.8-27B AutoRound W4A16 | VRAM | 163,840 | compiled MTP3, BF16 KV |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | same Qwen3.8-27B weights + DFlash2 drafter | VRAM | 163,840 | BF16 KV, prefix cache |
 | `nemotron-3.5-bolt-vllm` | vLLM | Nemotron-3.5-Bolt-74B-A9B AutoRound W4A16 | VRAM | 262,144 | runtime globaldev229 |
@@ -61,17 +62,19 @@ uname -r   # expect 7.0.14-42-vmpt1
 ## Runtime and source identities
 
 <!-- daily-update:begin -->
-**Engine versions in production** (last update November 16, by hand; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
+**Engine versions in production** (last update November 21, by hand, llama.cpp only; the scripted updater is retired; details in `hardware/DAILY-UPDATES.md`):
 
 | Engine | Production |
 |---|---|
-| llama.cpp | `9581154a2250` (99 commits past 1.0.0) |
+| llama.cpp | `19bc41dbb41e` (258 commits past 1.0.0) |
 | vLLM | `0.33.0rc1.dev229+g3966924d5.rocm72` |
 | SGLang | `f84475ccf593` |
 | Strata (Flash-Next) | `8b01b0c8512d`, the RDNA3 fork `nicejunjie/Strata-rdna3`, engine 0.1.49.1 (owner choice November 17; upstream Strata does not apply) |
 | Maya | `c89ebef32cdb` (10 commits past 1.1.65) |
 | Strata DeepSeek | `13eedf552417` (frozen: upstream removed this engine) |
 | Graphics | See `graphics/runtime-versions.json` for the selected ComfyUI/Torch/HIP identities |
+
+November 21: llama.cpp `9581154a2250` → `19bc41dbb41e` promoted for Inkling 2 Mini support; strict gate passed on `empero` and on the new `inkling-2-mini-q8` route. Other engines were not checked that day.
 
 Last update (November 12, manual): llama.cpp, Strata, Strata DeepSeek and Maya promoted after strict short tool checks; all six engines were current that evening. November 13: llama.cpp 1.0.0 (`fe14cad51bbf`) failed the strict tool gate twice on `empero` (correct marker, wrapped in a sentence); a third stage at `9daa0aa22b8a` passed the strict gate and was promoted. That afternoon llama.cpp moved on to `ded522f83045` (strict gate passed first time), so all six engines are current. November 15: llama.cpp `9fba51d2c9a1`, Strata `baf16363b440` and Maya 1.1.65 promoted, each on the first stage; the 216-item suite on the new Strata build scored 164, unchanged. Strata upstream has removed its DeepSeek engine, so Strata DeepSeek stays in service on `13eedf552417` by the owner's decision and has no further updates; the upstream check reports it as behind, which is expected. Before any engine update, research the newer version's bug fixes and performance changes and record them in the ledger (owner, November 15). The `empero` tool check can fail on answer wording alone because the route samples at temperature 0.6 ([ledger](../hardware/DAILY-UPDATES.md)). On November 11 llama.cpp, Strata and Strata DeepSeek had been promoted. The Maya candidate `6fba6be98125` faulted the second GPU that day and was rolled back; a rerun on November 12 passed on both Maya routes and it was promoted, then Maya was updated to `c5842c5e5be0` (1.1.61) the same day after the same checks. If a Maya route page-faults again, record it and roll back to `00655481ce2b`.
 <!-- daily-update:end -->

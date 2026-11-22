@@ -78,7 +78,9 @@ def runtime_identity(mode, model=None):
     verify_source_pin(source, commit)
     settings=json.loads((ROOT/'llama-runtime.json').read_text())
     peer=mode=='hip-amd' and model in settings.get('p2p_models',[])
-    return mode,str(source),commit,peer
+    # Graph capture is part of the worker's identity: the switch is read once at process start.
+    no_graph=mode=='hip-amd' and model in settings.get('no_graph_models',[])
+    return mode,str(source),commit,peer,no_graph
 
 
 def verify_source_pin(source, commit):
@@ -128,6 +130,10 @@ def launch_spec(backend=None, model=None):
         # The retained switch is presence-based: even value0 enables it.
         env.pop('GGML_CUDA_P2P', None)
         if model in settings.get('p2p_models',[]):env['GGML_CUDA_P2P']='1'
+        # ROCm 7.2.3 allocates fresh kernel-argument VRAM on every hipGraphExecUpdate and frees it only
+        # when the graph is destroyed. Listed models run without graph capture (presence-based switch).
+        env.pop('GGML_CUDA_DISABLE_GRAPHS', None)
+        if model in settings.get('no_graph_models',[]):env['GGML_CUDA_DISABLE_GRAPHS']='1'
     devices = amd_devices()
     if (not binary.is_file() or len(devices) != 2):
         raise RuntimeError('Selected 24 GB AMD runtime is unavailable; no backend has been stopped.')

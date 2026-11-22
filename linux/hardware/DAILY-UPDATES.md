@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-21 — manual update: llama.cpp promoted; Inkling 2 Mini route added (owner request)
+
+The owner asked for the backend to support Inkling 2 Mini. Upstream check: llama.cpp was 159 commits behind and had merged support for the model on November 20 and 21. Other engines were not checked in this run. Researched before install, as the last column records.
+
+| Engine | From → to | Routes checked | Result | What the new version changes (researched before install) |
+|---|---|---|---|---|
+| llama.cpp | `9581154a2250` → `19bc41dbb41e` (159 commits) | empero, inkling-2-mini-q8 (new) | **Promoted.** `empero`: bare marker, load 47 s, tool steps 2.5 s (first token 2.1 s) and 0.3 s, unchanged. `inkling-2-mini-q8`: bare marker three times, load 49 s, first token 12.4 s on a 7,594-token prompt. | Inkling 2 Mini (looped layout) and its fix; per-expert scale tensors applied automatically; a NaN that persisted in recurrent state fixed; 64-bit offsets in the quantized matrix multiply; rewritten expert-selection kernel, with no RX 7900 figures upstream; grammar and slot-cache fixes in the server. Upstream's CI fails one gated-delta test on another Radeon; that test passes on both cards here. |
+
+Pre-flight before the guarded stage: backend op tests on both cards, 84 of 84 (gated delta) and 1,077 of 1,077 (expert matrix multiply). In later rechecks that day `empero` wrapped the correct marker in a sentence twice out of six checks, on identical requests; the build was not changed. The Inkling route runs with graph capture off because the ROCm 7.2.3 runtime leaks VRAM on every graph update. No kernel fault and no hold. Unsloth's own llama.cpp build was researched and not installed. Evidence: `hardware/generated/daily-update/2026-11-21T-inkling/` and `2026-11-21T-inkling-gate*/`. [Report](INKLING-2-MINI-2026-11-21.md)
+
 ## 2026-11-18 — one free-RAM floor for loading (owner decision; not an engine update)
 
 No engine changed. The memory guards now admit every model load on the 1 GiB host reserve alone, with no per-model available-RAM figure. Unit tests pass (662 and 62). One short request each through the hub: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s, all answered; no hold, no kernel fault. A switch straight from Flash-Next to Maya was refused twice by the single-read VRAM check; that check now waits up to 15 s for the release (fixed the same day; in the first retest it passed, and the load then stopped on the whole-card headroom check because a game was using the display card). Verified later the same day with the display card free: Flash-Next 98 s, then straight to DeepSeek Q1 on Maya 77 s, then straight back to Flash-Next 148 s, all answered; no hold, no kernel fault. [Guard policy](RESOURCE-GUARDS-2026-11-03.md#november-18-2026-one-free-ram-floor-for-loading-owner-decision)

@@ -10,7 +10,7 @@ from model_catalog import catalog
 class Retirement(unittest.TestCase):
     def test_both_xs_aliases_remain_and_retired_s_cannot_be_selected(self):
         models = catalog(ROOT)
-        self.assertEqual(len(models), 9)
+        self.assertEqual(len(models), 10)
         self.assertIn('empero-qwen3.8-35b-a3b', models)
         for model in ['flint-40b-a2.5b', 'ornith-1.5-122b', 'sage-a1.5']:  # removed by owner Nov 11
             self.assertNotIn(model, models)

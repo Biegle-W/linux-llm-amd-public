@@ -12,13 +12,13 @@ class PeerSelection(unittest.TestCase):
         self.root=Path(self.tmp.name)/'dsh';self.root.mkdir()
         self.source=self.root.parent/'source';self.binary=self.source/'build-hip/bin/llama-server'
         self.binary.parent.mkdir(parents=True);self.binary.touch();(self.root/'models-hip.ini').touch()
-        self.cfg={'models':['qualified','other'],'p2p_models':['qualified']}
+        self.cfg={'models':['qualified','other'],'p2p_models':['qualified'],'no_graph_models':['other']}
         self.write();p=patch.object(runtime,'ROOT',self.root);p.start();self.addCleanup(p.stop)
     def write(self):(self.root/'llama-runtime.json').write_text(json.dumps(self.cfg))
     def launch(self,model):
         inventory='ROCm0: AMD Radeon RX 7900 XTX\nROCm1: AMD Radeon RX 7900 XTX\n'
         def run(cmd,**kw):
-            if cmd[0]=='bash':return types.SimpleNamespace(stdout=b'GGML_CUDA_P2P=0\0LD_LIBRARY_PATH=/sdk\0KEEP_ME=yes\0')
+            if cmd[0]=='bash':return types.SimpleNamespace(stdout=b'GGML_CUDA_P2P=0\0GGML_CUDA_DISABLE_GRAPHS=0\0LD_LIBRARY_PATH=/sdk\0KEEP_ME=yes\0')
             self.assertEqual('GGML_CUDA_P2P' in kw['env'],model=='qualified')
             return types.SimpleNamespace(stdout=inventory,stderr='')
         with patch.object(runtime,'runtime_source',return_value=(self.source,None)),patch.object(runtime,'verify_source_pin'), \
@@ -33,5 +33,11 @@ class PeerSelection(unittest.TestCase):
         with patch.object(runtime,'runtime_source',return_value=(self.source,None)),patch.object(runtime,'verify_source_pin'):
             before=runtime.runtime_identity('hip-amd','qualified');self.cfg['p2p_models']=[];self.write()
             self.assertNotEqual(before,runtime.runtime_identity('hip-amd','qualified'))
+    def test_graph_capture_is_off_only_for_listed_models_and_changes_identity(self):
+        self.assertEqual(self.launch('other')['GGML_CUDA_DISABLE_GRAPHS'],'1')
+        self.assertNotIn('GGML_CUDA_DISABLE_GRAPHS',self.launch('qualified'))
+        with patch.object(runtime,'runtime_source',return_value=(self.source,None)),patch.object(runtime,'verify_source_pin'):
+            before=runtime.runtime_identity('hip-amd','other');self.cfg['no_graph_models']=[];self.write()
+            self.assertNotEqual(before,runtime.runtime_identity('hip-amd','other'))
 
 if __name__=='__main__':unittest.main()

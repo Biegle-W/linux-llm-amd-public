@@ -96,7 +96,13 @@ def validate_profiles(root=None):
         placement = section.get('override-tensor', '')
         if mode == 'vram_only':
             vram_worker_limits(plan)
-            required = {'device':'ROCm0,ROCm1', 'split-mode':'layer', 'tensor-split':'1,1',
+            # A plan may declare its own two-card layout (card order, split, on-card tensor
+            # placement); it must still name both cards and may never place a tensor on the CPU.
+            device = plan.get('device', 'ROCm0,ROCm1')
+            expected_placement = plan.get('override_tensor', 'token_embd.*=ROCm0')
+            if sorted(device.split(',')) != ['ROCm0', 'ROCm1'] or 'CPU' in expected_placement:
+                raise RuntimeError(f"MoE {model['id']} VRAM-only plan must use both cards and no CPU tensors.")
+            required = {'device':device, 'split-mode':'layer', 'tensor-split':plan.get('tensor_split', '1,1'),
                         'n-gpu-layers':'99', 'fit':'off', 'n-cpu-moe':'0', 'load-mode':'dio',
                         'ctx-size':str(model['context']), 'batch-size':str(plan['batch_size']),
                         'ubatch-size':str(plan['ubatch_size']),
@@ -109,7 +115,7 @@ def validate_profiles(root=None):
                     raise RuntimeError('VRAM-only reasoning budget differs from the bounded model plan.')
                 required.update({'reasoning-budget':str(budget), 'reasoning':'on' if budget else 'off'})
             effective = lambda key: section.get(key, cfg['*'].get(key, ''))
-            if (cache != 0 or 'CPU' in placement or placement != 'token_embd.*=ROCm0' or
+            if (cache != 0 or 'CPU' in placement or placement != expected_placement or
                     model.get('memory_category') != 'vram_only' or plan['context'] != model['context'] or
                     any(effective(k) != v for k,v in required.items())):
                 raise RuntimeError(f"MoE {model['id']} VRAM-only preset no longer matches its bounded placement plan.")
