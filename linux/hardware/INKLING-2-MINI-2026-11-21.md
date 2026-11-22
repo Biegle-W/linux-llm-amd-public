@@ -70,4 +70,20 @@ What was checked before the switch:
 
 Known limits: the branch is third-party and not an upstream pull request; it is based on upstream from November 20 plus the loop fix, so it lacks the later scale-tensor commit (the suite shows no effect on this file). Upstream llama.cpp updates do not reach this route; it changes only by hand. To go back to upstream, remove the route's entry from `source_overrides` and set its batch sizes back to 512 and 128. The published quality figure for the route stays the 149 from the first full run; at the owner's request no further quality run is made on this model.
 
+## Decision on the route's role (November 22)
+
+The owner asked for a decision on whether Inkling should become a default model for routing. It should not. It stays an enabled route that loads only when a client names it.
+
+| | `inkling-2-mini-q8` | `empero-qwen3.8-35b-a3b` | `qwen3.8-27b-sglang-dflash2` | `qwen3.8-flash-next-iq3_xxs` (current default) |
+|---|---:|---:|---:|---:|
+| Public suite (216) | 149 | 151 | 163 | 169 |
+| Decode tok/s | 43 | 173 | 211 | 86 |
+| Prompt read tok/s | 1,508 | 2,893 | 1,736 | 740 |
+| Context | 131,072 | 262,144 | 163,840 | 262,144 |
+| Engine | third-party llama.cpp branch | upstream llama.cpp | SGLang | Strata fork |
+
+- **Against making it the default:** every alternative above scores as well or better and decodes two to five times faster. It reasons before every answer, which cannot be turned off, so short requests take longer and 45 of 216 suite answers ran out of tokens. Its speed depends on a third-party branch outside the normal update flow, whose output is not identical between identical runs. Vision is not enabled.
+- **For keeping it available:** it runs fully in VRAM with no streaming from disk, recalled 10 of 10 facts from a 112,604-token prompt, passes the strict tool check, and costs nothing while idle. Its 22.9 GB file sits on a drive that is 32% used.
+- **Revisit when:** upstream llama.cpp merges its own speed work for this model (then the route can return to upstream), or a drafter becomes available, or space is needed. If space gets tight it is the first candidate for removal together with Ripple, the lowest-ranked route.
+
 Evidence: `hardware/generated/daily-update/2026-11-21T-inkling/` and `2026-11-21T-inkling-gate*/` (not in Git), and [results](results/inkling-2-mini-2026-11-21.json).

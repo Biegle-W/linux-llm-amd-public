@@ -1,5 +1,7 @@
 # NVIDIA recovery archive — October 18, 2026
 
+**November 22, 2026:** the archive described here was deleted from the shared drive at the owner's request. Nothing in it can be restored any more; what follows is a record of what existed.
+
 The retired NVIDIA setup has been archived separately from the active dual-AMD
 workspace. **The user approved removal of the original rollback environments
 and unused Flash-MTP source tree on October 18.** Their deletion is recorded in

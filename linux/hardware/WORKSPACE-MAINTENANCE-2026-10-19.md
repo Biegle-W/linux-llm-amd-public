@@ -1,5 +1,7 @@
 # Workspace maintenance — October 19, 2026
 
+**November 22, 2026:** the archive described here was deleted from the shared drive at the owner's request. Nothing in it can be restored any more; what follows is a record of what existed.
+
 This maintenance reconciles saved records and removes approved unused files.
 It does not upgrade engines, rerun benchmarks, load a model or change production
 inference settings. [Documentation index](DOCUMENTATION.md).
