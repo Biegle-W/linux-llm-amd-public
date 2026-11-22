@@ -1,5 +1,7 @@
 # Future model checks and benchmark guardrails — November 2, 2026
 
+**November 22, 2026:** the quality step for a new model is now the [quick quality test](quant-eval/quick/README.md), run once per new model or weight file; existing routes are not rerun. The loading, guard and unload steps below still apply.
+
 The normal sequence is **admit one model → one short harness tool round trip →
 unload and verify release → switch to the next model**. Apply this to future
 model additions and authorized updates. The existing benchmark speeds remain

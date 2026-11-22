@@ -2,7 +2,7 @@
 
 Sanitized public reference for a separately maintained private operational repository. The Linux tree is in [`linux/`](linux/); example paths use `/opt/local-llm`, `/mnt/shared` and `/mnt/shared-nvme`. Configure them locally.
 
-Nine qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins.
+Ten qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins.
 
 ## Rules
 
@@ -21,6 +21,7 @@ Nine qualified routes are served through one OpenAI-compatible API on TCP 10000.
 **Engines and models**
 - Engine update policy (owner, November 7): always take the latest engine version unless it breaks something. A minor slowdown is never a reason to reject.
 - Engine updates are manual since November 9 (owner): upstream is checked by hand, and each update is built in isolation, qualified and promoted by hand. The scheduled nightly updater is retired and no timer runs it. Method and the retired script are in [the updater README](linux/hardware/daily-update/README.md).
+- Quality testing (owner, November 22): a new model or new weight file gets the [quick quality test](linux/hardware/quant-eval/quick/README.md) once. Existing routes are not rerun, and the 216-item suite runs only when the owner asks.
 - New engines or models need isolated qualification before promotion. For a new model, check a gfx1100 vLLM or SGLang INT4 route before keeping it on GGUF.
 - Deleting weights or data is the owner's call.
 
@@ -60,6 +61,7 @@ Dated reports stay flat in `hardware/` because many links and a few code strings
 | Current state, routes, guards, pins, open items | [Runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) |
 | Current measurements | [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md) |
 | What changed and when | [Changelog](linux/hardware/CHANGELOG.md) |
+| Quality test for a new model | [Quick quality test](linux/hardware/quant-eval/quick/README.md), [plan](linux/hardware/QUICK-QUALITY-PLAN-2026-11-22.md) |
 | Engine updates (manual since November 9) | [Ledger](linux/hardware/DAILY-UPDATES.md), [method](linux/hardware/daily-update/README.md) |
 | Drives and weight files | [Storage inventory](linux/hardware/MODEL-STORAGE-INVENTORY.md) |
 | Card layout and crash runbook | [AMD working setup](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md) |

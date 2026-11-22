@@ -34,7 +34,7 @@ How to read it:
 
 ## Quality ranking
 
-Ranked by correct answers on the 216-item public suite, the only quality test here that spreads the routes out. The 54- and 64-item suites do not rank them: all nine routes score 51–54 and 61–63.
+Ranked by correct answers on the 216-item public suite, the only quality test here that spreads the routes out. The 54- and 64-item suites do not rank them: the nine routes scored on them all got 51–54 and 61–63, and they are retired from routine use.
 
 | Rank | Route | Correct / 216 | Score | 95% interval | Cut off | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Measurably better than |
 |---:|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|---|
@@ -55,4 +55,6 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 - DeepSeek on Strata uses the same weights as DeepSeek on Maya and scores the same: 166 against 168, with 160 items right on both, 6 only on Strata and 8 only on Maya (169 against 168 in the November 12 run). It was scored on November 13, after the other routes, so it is not in the paired test behind the last column.
 - **Removed November 11 (owner request):** `ornith-1.5-122b` (146, rank 6 of 11), `sage-a1.5` (142, rank 8) and `flint-40b-a2.5b` (121, rank 11). Ranks here are renumbered among the remaining routes; the removed routes' results stay in the report.
 - One attempt per item, temperature 0, thinking off. Details and per-pair numbers: [report](PUBLIC-QUALITY-SUITE-2026-11-11.md).
-Not measured yet: a sustained, matched benchmark across all 9 routes, thinking mode, and full-context quality.
+Not measured yet: a sustained, matched benchmark across all 10 routes, thinking mode, and full-context quality.
+
+**From November 22 (owner):** routes already in this table are not rerun. A new model or new weight file gets the [quick quality test](quant-eval/quick/README.md) once: harness tool tasks first, 15 minutes for a fast model and 60 for a slow one. Its scores will be shown in their own columns; they are not comparable with the 216-item column above except through the 60 items both share.
