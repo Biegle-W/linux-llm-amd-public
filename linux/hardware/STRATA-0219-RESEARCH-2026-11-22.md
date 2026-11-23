@@ -109,4 +109,42 @@ link (built without position-independent code); the tokenizer was converted with
 - No 216-item suite and no sustained run on either new route; no Flash-Next prompt over 47,716 tokens on 0.2.19.
 - Neither new route is the default. The fork stays the default Flash-Next and the llama.cpp route the default Inkling.
 
+## Update to Strata 0.2.20 (November 23)
+
+0.2.20 (tag `v0.2.20`, `a34979fc`, engines 0.1.66) came out the next day: 81 commits. It was built from source in
+`hardware/generated/strata-0220-2026-11-23/` (the Inkling engine needed the same no-PIE link fix plus the quant library on the link line).
+Relevant here: Inkling on two AMD cards (expert parallel: experts split between the cards, everything else on the first card),
+Inkling running Unsloth GGUF experts on AMD cards, a fix so hidden reasoning no longer eats `max_tokens`, multi-GPU fixes. The server now
+checks the model name in each request (0.2.19 ignored it); the hub always sends the right name.
+
+**Flash-Next, same settings, three alternating runs each (tok/s):**
+
+| | 0.2.19 | 0.2.20 |
+|---|---:|---:|
+| Prose decode | 101–109 | 82–106 |
+| Code decode | 112–143 | 119–146 |
+| Agent turn, 12,862 tokens: read | 1,972–2,548 | 2,364–2,554 |
+| Long prompt, 47,716 tokens: read | 4,148–4,172 | 4,137–4,149 |
+| Decode after long prompt | 93–119 | 107–127 |
+
+No difference outside run-to-run noise; same expert-cache layout (13,312 + 9,937 slots).
+
+**Inkling 2 Mini SQ-20:**
+
+| | 0.2.19, one card (was the entry) | 0.2.20, one card (now the entry) | 0.2.20, both cards, 262K, 16-bit cache (not an entry) |
+|---|---:|---:|---:|
+| Code decode, 1,500-token limit | 87 | 89 | 81–84 |
+| 256-token code request | empty (hidden reasoning used it all) | 829 characters of code | about 800 characters |
+| 38K-token prompt: read | 1,752 | 1,750 | 2,020 |
+| 112K-token prompt: read | 1,171 | 1,172 | 1,396 |
+| 217,533-token prompt | does not fit | does not fit | 961 tok/s, correct answer |
+| VRAM (display card / second card) | 0 / 24.0 GB | 0 / 24.0 GB | 9.6 / 23.2 GB |
+
+Tool calls worked in all three. With two cards the engine put 8.9 GB of experts on the display card and 5.7 GB on the second card,
+which keeps the model, the context cache and the drafter; the cards talk to each other directly (`p2p=on`).
+
+**Promoted (owner policy: update unless it breaks):** both entries, `qwen3.8-flash-next-iq3_xxs-upstream` and `inkling-2-mini-sq-20-strata`,
+now run 0.2.20 with unchanged settings; both were resealed and passed the strict tool round trip through the hub again.
+The two-card 262K Inkling setup is not an entry: it would use 9.6 GB of the display card.
+
 Data: [results](results/strata-0219-flash-next-2026-11-22.json).
