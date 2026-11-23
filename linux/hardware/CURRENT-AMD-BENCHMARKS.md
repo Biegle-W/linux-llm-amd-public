@@ -5,7 +5,7 @@ One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-Q
 | Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Quality rank |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|
 | `empero-qwen3.8-35b-a3b` (retired Nov 23) | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 |
-| `inkling-2-mini-q8` | llama.cpp (RDNA3 branch) | passed | 43.0 | 1,508 | 48.7 | — | — | 149# | 7 |
+| `inkling-2-mini-q8` (retired Nov 23) | llama.cpp (RDNA3 branch) | passed | 43.0 | 1,508 | 48.7 | — | — | 149# | 7 |
 | `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 5 |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 |
 | `nemotron-3.5-bolt-vllm` (retired Nov 23) | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 |
@@ -45,7 +45,7 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 | 4 | `qwen3.8-27b-sglang-dflash2` | 163 | 75.5% | 69.3–80.7% | 21 | 8 | 31 | 47 | 32 | 18 | 27 | Ripple |
 | 5 | `qwen3.8-27b-vllm` | 157 | 72.7% | 66.4–78.2% | 26 | 10 | 28 | 45 | 31 | 19 | 24 | Ripple |
 | 6 | `empero-qwen3.8-35b-a3b` (retired Nov 23) | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | — |
-| 7 | `inkling-2-mini-q8` | 149 | 69.0% | 62.5–74.8% | 45 | 8 | 26 | 41 | 33 | 19 | 22 | not tested |
+| 7 | `inkling-2-mini-q8` (retired Nov 23) | 149 | 69.0% | 62.5–74.8% | 45 | 8 | 26 | 41 | 33 | 19 | 22 | not tested |
 | 8 | `nemotron-3.5-bolt-vllm` (retired Nov 23) | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
 | 9 | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3–69.1% | 0 | 10 | 25 | 43 | 11 | 21 | 26 | — |
 | 10 | `ripple-65b-vllm` | 134 | 62.0% | 55.4–68.2% | 65 | 5 | 17 | 42 | 32 | 14 | 24 | — |
@@ -63,7 +63,7 @@ Not measured yet: a sustained, matched benchmark across all 10 routes, thinking 
 | Model | State | Harness tasks, core (12) | Harness extra (8) | Function calls (16) | General (10) | Decode tok/s | Minutes |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Hy4-Flash SQ-64 on Strata 0.2.18 | trial on a side install, not a hub route | 12 | 8 | 9 | 5 | 26–30 | 11 |
-| `inkling-2-mini-sq-20-strata` (Inkling 2 Mini SQ-20 on Strata 0.2.19, one card) | hub route since November 23 | 12 | 8 | 11 | 4 | 86–90 | 11 |
+| `inkling-2-mini-sq-20-strata` (Inkling 2 Mini SQ-20 on Strata 0.2.19, one card) | hub route November 23, retired the same day for `inkling-2-mini-sq-20-strata-2gpu` (same weights) | 12 | 8 | 11 | 4 | 86–90 | 11 |
 | Hy4-Flash Maya-M on Maya 1.1.73, both cards | trial on a side copy, not a hub route | 11 | 8 | 9 | 6 | 13–32 (median 26.5) | 11 |
 
 The function-call and general columns use 26 items shared with the 216-item suite. Rescored from saved answers, without rerunning, the existing routes get 8–14 and 3–10 on them (Flash-Next 9 and 7, DeepSeek on Maya 12 and 10, GLM 12 and 4, Inkling 10 and 4). Twenty-six items do not rank models. [Hy4-Flash on Strata](HY4-FLASH-SQ64-2026-11-22.md) · [Hy4-Flash on Maya](HY4-FLASH-MAYA-M-2026-11-22.md) · [How the test works](quant-eval/quick/README.md)

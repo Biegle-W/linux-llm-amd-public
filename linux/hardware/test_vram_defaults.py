@@ -11,6 +11,14 @@ GIB=1024**3
 # as MemoryHigh=max / MemoryMax=MemTotal-1GiB / SwapMax=SwapTotal; RAM floor 1 GiB, VRAM floor 128 MiB.
 POLICY_LIMITS={'memory.high':'max','memory.max':63*GIB,'memory.swap.max':36000755712}
 IDS=('empero-qwen3.8-35b-a3b',)
+def enabled_catalog(ident):
+    # Retired presets are skipped at launch (owner retired Empero and Inkling Q8 on November 23); the guard
+    # tests re-enable their subject in a temporary copy so the VRAM-only checks themselves stay covered.
+    rows=json.loads((ROOT/'dsh/models.json').read_text())
+    for r in rows:
+        if r['id']==ident:
+            for k in ('enabled','disabled_reason','resume_requires_owner_instruction'):r.pop(k,None)
+    return json.dumps(rows)
 
 class VramDefaults(unittest.TestCase):
     def setUp(self):
@@ -59,7 +67,7 @@ class VramDefaults(unittest.TestCase):
                         ('device = ROCm1,ROCm0','device = ROCm0')]:
             with self.subTest(setting=old),tempfile.TemporaryDirectory() as tmp:
                 p=Path(tmp);self.assertEqual(section.count(old),1)
-                for name in ['models.json','moe-offload.json']:(p/name).write_bytes((ROOT/'dsh'/name).read_bytes())
+                (p/'moe-offload.json').write_bytes((ROOT/'dsh/moe-offload.json').read_bytes());(p/'models.json').write_text(enabled_catalog(ident))
                 (p/'models-hip.ini').write_text(head+'['+ident+']'+section.replace(old,new))
                 with self.assertRaisesRegex(RuntimeError,'VRAM-only preset'):
                     moe_memory.validate_profiles(p)
@@ -71,7 +79,7 @@ class VramDefaults(unittest.TestCase):
             with tempfile.TemporaryDirectory() as tmp:
                 p=Path(tmp);plans=copy.deepcopy(self.plans)
                 if change:plans[ident].update(change)
-                (p/'models.json').write_bytes((ROOT/'dsh/models.json').read_bytes())
+                (p/'models.json').write_text(enabled_catalog(ident))
                 (p/'moe-offload.json').write_text(json.dumps({'models':plans}))
                 (p/'models-hip.ini').write_text(ini)
                 moe_memory.validate_profiles(p)

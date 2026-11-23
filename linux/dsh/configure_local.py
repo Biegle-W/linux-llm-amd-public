@@ -7,7 +7,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent
 HUB_PORT = 30100
 AMD_PROVIDER = 'amd-server'
-LOCAL = {'llama-local': 'inkling-2-mini-q8',
+LOCAL = {'llama-local': 'inkling-2-mini-sq-20-strata-2gpu',
          'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm',
          'strata-local': 'qwen3.8-flash-next-iq3_xxs',
@@ -16,6 +16,8 @@ LOCAL = {'llama-local': 'inkling-2-mini-q8',
 # Default when the selected model is gone (owner retired the Empero default November 23).
 FALLBACK = 'qwen3.8-27b-sglang-dflash2'
 REPLACEMENTS = {
+    'inkling-2-mini-q8': 'inkling-2-mini-sq-20-strata-2gpu',
+    'inkling-2-mini-sq-20-strata': 'inkling-2-mini-sq-20-strata-2gpu',
     'qwen3.8-27b-q4': 'qwen3.8-27b-vllm',
     'deepseek-v4.1-flash-1017-maya-s': 'deepseek-v4.1-flash-1017-maya',
     'deepseek-v4.1-flash-1017-strata-s': 'deepseek-v4.1-flash-1017-strata-xs',
