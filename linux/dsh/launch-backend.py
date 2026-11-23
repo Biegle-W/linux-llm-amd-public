@@ -61,7 +61,9 @@ try:
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
         selected_profile=available[strata_model]
-        if selected_profile.get('family')!='deepseek41':
+        if selected_profile.get('family')=='inkling2':
+            ensure_strata_models(ROOT / selected_profile['config'])
+        elif selected_profile.get('family')!='deepseek41':
             profile_config = ROOT / (os.environ.get('STRATA_PROFILE_CONFIG') or selected_profile['config'])
             ensure_strata_models(profile_config)
         require_strata(before_handover=True,model=strata_model)

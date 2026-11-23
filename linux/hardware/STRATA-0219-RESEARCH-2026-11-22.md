@@ -58,7 +58,55 @@ on November 17. Same model files, same 262,144-token context, both cards. All sp
 
 - No quality or tool test of 0.2.19 on this model (speed only), no long or sustained run, no context above 47,716 tokens.
 - Single runs for most settings; the fork varies a lot between identical runs.
-- Inkling on `strata-inkling` was not run: the engine is built, but it needs the 19.35 GB SQ-20 file, which is not on the server.
-- The route was not switched. The owner rule of November 17 keeps Flash-Next on the fork.
+- Inkling was measured afterwards (below).
+- The fork route was not switched; the owner asked for separate entries instead (below).
+
+## New routes (owner, November 22–23: "Have all of them on different entry")
+
+Every engine now has its own hub entry; nothing was removed. Pick one by its model name.
+
+| Model name | Engine | Cards | Context | Note |
+|---|---|---|---:|---|
+| `qwen3.8-flash-next-iq3_xxs` | Strata RDNA3 fork (unchanged, still the default Flash-Next) | both, tensor-parallel decode | 262,144 | faster code decode |
+| `qwen3.8-flash-next-iq3_xxs-upstream` | upstream Strata 0.2.19 | both, layer split | 262,144 | about twice the prompt-reading speed, half the RAM |
+| `inkling-2-mini-q8` | llama.cpp RDNA3 branch (unchanged) | both | 131,072 | thinking available |
+| `inkling-2-mini-sq-20-strata` | upstream Strata 0.2.19 `strata-inkling` | second card only | 131,072 | about twice the decode speed, thinking always off |
+
+Both new entries are sealed packages (engine binary, Strata Control source, configs and weight files hashed in
+`dsh/qualified-strata-qwen-profiles.json`) and each passed the strict tool round trip through the hub with no hold or memory-guard event.
+The hub code gained a second sealed Strata family for Inkling (`strata-inkling`, one card, card order checked so it can never land on
+the display card); an independent review found four problems in the first draft, all fixed, with new unit tests (677 pass).
+
+### Inkling 2 Mini SQ-20 on Strata 0.2.19
+
+The SQ-20 file (19.35 GB, plus the 0.64 GB vision part) came from `strata-engine/Inkling-2-Mini-Strata`; both hashes match the ones
+pinned in the 0.2.19 source. It sits on the streaming NVMe drive (`LLM-Models/Inkling-2-Mini-Strata`). The engine needed one local fix to
+link (built without position-independent code); the tokenizer was converted with Strata's own tool.
+
+| | llama.cpp route (`inkling-2-mini-q8`) | Strata 0.2.19 (`inkling-2-mini-sq-20-strata`) |
+|---|---:|---:|
+| Code answer decode (visible tokens) | 43–46 tok/s | 86–90 tok/s |
+| Prose decode, 256 tokens | — | 171–385 tok/s (the draft model guesses prose well) |
+| Agent turn, 13,040 tokens: prompt read | 1,508 tok/s (one prompt) | 1,310–1,944 tok/s |
+| 38,131-token prompt: read | — | 1,761–1,903 tok/s |
+| 111,731-token prompt: read | — | 1,174 tok/s (101 s in all) |
+| Load | 48.7 s | about 30 s |
+| VRAM | both cards | 19.2 GB idle on the second card, 24.0 GB at the 111,731-token prompt |
+| Quick test: harness core / extra | not run (existing route) | 12 of 12 / 8 of 8 |
+| Function calls (16) / general (10) | 10 / 4 (rescored from saved answers) | 11 / 4 |
+
+- **Thinking is always off in this engine**, but the model still produces hidden reasoning that the server throws away. Those tokens count
+  against `max_tokens`: a 256-token code request came back empty, and 6 of the 10 general items hit the 2,048–3,072-token limit with no
+  visible answer. Give it a generous `max_tokens`.
+- **Context cache in 8 bits** (`--kv fp8`). With the default 16-bit cache the 131,072 context loads but a 111,731-token prompt ran out of card
+  memory and the engine stopped (no kernel GPU error, no hold). With 8 bits that prompt worked, peaking at 24.0 of 24.6 GB. A prompt near the
+  full 131,072 tokens was not tried and may still not fit.
+- Short-request speed with the 8-bit cache was close to the 16-bit runs (prompt read a little lower).
+- It uses one card only: on AMD the engine has no two-card mode.
+
+### Not done
+
+- No 216-item suite and no sustained run on either new route; no Flash-Next prompt over 47,716 tokens on 0.2.19.
+- Neither new route is the default. The fork stays the default Flash-Next and the llama.cpp route the default Inkling.
 
 Data: [results](results/strata-0219-flash-next-2026-11-22.json).

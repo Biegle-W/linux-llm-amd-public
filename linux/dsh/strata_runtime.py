@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from amd_device import amd_devices
 from moe_memory import host_memory
-from streaming_memory import check_32gb
+from streaming_memory import check_32gb, scope_limits
 import resource_policy
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -91,6 +91,33 @@ def required_weight_assets(cfg):
     return required
 
 
+def inkling_weight_assets(cfg):
+    """Inkling 2 Mini on strata-inkling: the .strata checkpoint, its Vision shard when asked for, and the converted tokenizer."""
+    args = cfg['args']
+    required = [Path(args[args.index('--native') + 1])]
+    if '--vision' in args:
+        required.append(Path(args[args.index('--vision') + 1]))
+    return required + [Path(cfg['tokenizer'])/name for name in ('vocab.json', 'merges.txt', 'chat_template.jinja')]
+
+
+def check_inkling_config(cfg, total, available, *, check_available=True):
+    """One card, one session; the host-wide free-RAM floor like every other model."""
+    args = cfg['args']
+    if (cfg.get('arch') != 'inkling2_loop' or cfg.get('backend') != 'hip' or cfg.get('gpu') != 1
+            or cfg.get('parallel') != 1 or '--gpus' in args or '--parallel' in args
+            or args[args.index('--gpu') + 1] != '1'):
+        raise RuntimeError('Strata Inkling requires its single-card HIP profile on the second card with one session.')
+    env = cfg.get('env', {})
+    if env.get('ROCR_VISIBLE_DEVICES') != '0,1' or env.get('HIP_VISIBLE_DEVICES') != '0,1':
+        raise RuntimeError('Strata Inkling must keep the identity card order so --gpu 1 is the second card, not the display card.')
+    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None:
+        raise RuntimeError('Strata uses phase-aware swap without a fixed resident-byte cap.')
+    scope_limits(cfg)
+    problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], check_available=check_available)
+    if problems:
+        raise RuntimeError(' '.join(problems))
+
+
 def require_weight_assets(cfg):
     required = required_weight_assets(cfg)
     if not all(p.is_file() and p.stat().st_size for p in required):
@@ -104,7 +131,7 @@ def require_strata(before_handover=False,model=None):
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
     if not enabled:
         raise RuntimeError('All Strata profiles are paused or disabled. Wait for owner-authorized resume; no backend has been stopped.')
-    qwen = {k:p for k,p in enabled.items() if p.get('family')!='deepseek41'}
+    qwen = {k:p for k,p in enabled.items() if p.get('family') not in ('deepseek41', 'inkling2')}
     if not qwen:
         raise RuntimeError('No validated Strata Qwen profile is enabled. No backend has been stopped.')
     # Preserve the existing GSQ default when another independently sealed quant is added.
@@ -119,6 +146,27 @@ def require_strata(before_handover=False,model=None):
         if cfg['model_name']!=selected or profile['context']!=32768:
             raise RuntimeError('Strata DeepSeek catalog and sealed model/context must match.')
         return require_profile(cfg,before_handover=before_handover)
+    if profile.get('family')=='inkling2':
+        cfg = json.loads((ROOT / 'dsh' / profile['config']).read_text())
+        args = cfg['args']
+        if cfg.get('model_name') != selected or int(args[args.index('--max-context') + 1]) != profile['context']:
+            raise RuntimeError('Strata Inkling catalog and sealed model/context must match.')
+        from strata_qwen_qualification import require_package
+        require_package(cfg)
+        check_inkling_config(cfg, *host_memory(), check_available=not before_handover)
+        amd_devices()
+        if not shutil.which('systemd-run'):
+            raise RuntimeError('Strata requires systemd-run for its worker-only no-swap scope.')
+        try:
+            subprocess.run(['systemctl', '--user', 'is-active', 'default.target'],
+                           check=True, capture_output=True, timeout=10)
+        except (OSError, subprocess.SubprocessError) as error:
+            raise RuntimeError('The user service manager is unavailable; cannot enforce Strata-only no-swap.') from error
+        if not os.access('/dev/kfd', os.R_OK | os.W_OK) or not os.access(cfg['exe'], os.X_OK):
+            raise RuntimeError('Strata Inkling requires KFD access and its sealed engine. No backend has been stopped.')
+        if not all(p.is_file() and p.stat().st_size for p in inkling_weight_assets(cfg)):
+            raise RuntimeError('Strata Inkling files are missing. Check the model drive.')
+        return cfg
     # STRATA_PROFILE_CONFIG permits an isolated candidate check before promotion,
     # like LLAMA_CPP_DIR/VLLM_ENV_PATH; its own RAM gate and guards still apply.
     cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])).read_text())

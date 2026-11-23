@@ -170,7 +170,7 @@ def runtime_paths(results=None):
         for model,record in data['profiles'].items():
             profile=catalog.get(model,{})
             name=profile.get('config','')
-            if (record.get('status')!='passed' or record.get('family')!='strata-qwen'
+            if (record.get('status')!='passed' or record.get('family') not in ('strata-qwen','strata-inkling')
                     or not profile.get('qualified_qwen_package') or not name
                     or Path(name).name!=name):
                 raise RuntimeError('Unreviewed packaged Qwen reference')
@@ -189,7 +189,7 @@ def public_runtime_references(results=None):
     packaged=ROOT/'dsh/qualified-strata-qwen-profiles.json'
     packaged_profiles=json.loads(packaged.read_text())['profiles'] if packaged.exists() else {}
     for record in packaged_profiles.values():
-        base='/opt/local-llm/qualified-packages/strata-qwen-'+record['binary_sha256'][:12]
+        base='/opt/local-llm/qualified-packages/'+record.get('family','strata-qwen')+'-'+record['binary_sha256'][:12]
         mapping[str(Path(record['binary']).parent)]=base+'/engine'
         mapping[record['control']]=base+'/control'
     pin=json.loads((ROOT/'dsh/llama-runtime.json').read_text())

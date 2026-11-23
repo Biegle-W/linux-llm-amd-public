@@ -831,5 +831,167 @@
     }
    }
   ]
+ },
+ "inkling_sq20": {
+  "engine": "strata-inkling 0.1.65 (v0.2.19 c6f6427d), second card, DSpark",
+  "runs": {
+   "ink-32kb": [
+    {
+     "name": "prose-256",
+     "prompt_tokens": 30,
+     "completion_tokens": 256,
+     "prompt_tok_s": 11.3,
+     "decode_tok_s": 385.3,
+     "ttft_s": 2.644,
+     "finish": "length"
+    },
+    {
+     "name": "code-256",
+     "prompt_tokens": 35,
+     "completion_tokens": 256,
+     "prompt_tok_s": null,
+     "decode_tok_s": null,
+     "ttft_s": null,
+     "finish": "length"
+    },
+    {
+     "name": "agent-turn1-6k",
+     "prompt_tokens": 13040,
+     "completion_tokens": 256,
+     "prompt_tok_s": null,
+     "decode_tok_s": null,
+     "ttft_s": null,
+     "finish": "length"
+    },
+    {
+     "name": "agent-turn2-tool-result",
+     "prompt_tokens": 13399,
+     "completion_tokens": 73,
+     "prompt_tok_s": 1943.6,
+     "decode_tok_s": 301.2,
+     "ttft_s": 6.894,
+     "finish": "stop"
+    }
+   ],
+   "ink-128k": [
+    {
+     "name": "prose-256",
+     "prompt_tokens": 30,
+     "completion_tokens": 256,
+     "prompt_tok_s": 14.5,
+     "decode_tok_s": 219.9,
+     "ttft_s": 2.068,
+     "finish": "length"
+    },
+    {
+     "name": "code-256",
+     "prompt_tokens": 35,
+     "completion_tokens": 256,
+     "prompt_tok_s": null,
+     "decode_tok_s": null,
+     "ttft_s": null,
+     "finish": "length"
+    },
+    {
+     "name": "agent-turn1-6k",
+     "prompt_tokens": 13040,
+     "completion_tokens": 243,
+     "prompt_tok_s": 1422.8,
+     "decode_tok_s": 557818.0,
+     "ttft_s": 9.165,
+     "finish": "tool_calls"
+    },
+    {
+     "name": "agent-turn2-tool-result",
+     "prompt_tokens": 13399,
+     "completion_tokens": 81,
+     "prompt_tok_s": 1938.7,
+     "decode_tok_s": 216.2,
+     "ttft_s": 6.911,
+     "finish": "stop"
+    },
+    {
+     "name": "cold-32k",
+     "prompt_tokens": 41131,
+     "completion_tokens": 256,
+     "prompt_tok_s": null,
+     "decode_tok_s": null,
+     "ttft_s": null,
+     "finish": "length"
+    }
+   ],
+   "ink-fp8b": [
+    {
+     "name": "prose-256",
+     "prompt_tokens": 30,
+     "completion_tokens": 256,
+     "prompt_tok_s": 15.3,
+     "decode_tok_s": 170.6,
+     "ttft_s": 1.955,
+     "finish": "length"
+    },
+    {
+     "name": "code-256",
+     "prompt_tokens": 35,
+     "completion_tokens": 256,
+     "prompt_tok_s": null,
+     "decode_tok_s": null,
+     "ttft_s": null,
+     "finish": "length"
+    },
+    {
+     "name": "agent-turn1-6k",
+     "prompt_tokens": 13040,
+     "completion_tokens": 226,
+     "prompt_tok_s": 1310.1,
+     "decode_tok_s": 1025617.8,
+     "ttft_s": 9.953,
+     "finish": "tool_calls"
+    },
+    {
+     "name": "agent-turn2-tool-result",
+     "prompt_tokens": 13399,
+     "completion_tokens": 82,
+     "prompt_tok_s": 1740.8,
+     "decode_tok_s": 142.0,
+     "ttft_s": 7.697,
+     "finish": "stop"
+    }
+   ]
+  },
+  "long_prompt": {
+   "fp16_kv": {
+    "38131": {
+     "read_tok_s": 1903,
+     "peak_vram_mib": 23035
+    },
+    "111731": "engine out of card memory (kv grow), no kernel GPU error"
+   },
+   "fp8_kv": {
+    "38131": {
+     "read_tok_s": 1761,
+     "peak_vram_mib": 21941
+    },
+    "111731": {
+     "read_tok_s": 1174,
+     "wall_s": 100.8,
+     "peak_vram_mib": 23977
+    }
+   }
+  },
+  "visible_code_decode_tok_s": [
+   90.2,
+   87.6
+  ],
+  "quick_test": {
+   "harness_core": "12/12",
+   "harness_extra": "8/8",
+   "function_calls": "11/16",
+   "general": "4/10 (6 capped at the token limit)"
+  },
+  "routes": {
+   "qwen3.8-flash-next-iq3_xxs-upstream": "strict tool check passed 2026-11-22",
+   "inkling-2-mini-sq-20-strata": "strict tool check passed 2026-11-23, 131072 context, --kv fp8"
+  }
  }
 }

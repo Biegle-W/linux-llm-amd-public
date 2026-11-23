@@ -173,7 +173,7 @@ def ensure_strata_models(config=None):
     config = Path(config) if config is not None else Path(__file__).resolve().parent / 'strata-iq3-profile.json'
     cfg = json.loads(config.read_text())
     args = cfg['args']
-    pack = Path(args[args.index('--pack') + 1])
+    pack = Path(args[args.index('--pack' if '--pack' in args else '--native') + 1])
     if pack.is_relative_to(INTERNAL_STREAM_MODELS):
         ensure_streaming_models()
     elif pack.is_relative_to(NEW_STREAM_MODELS):

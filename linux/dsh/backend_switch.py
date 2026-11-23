@@ -157,10 +157,10 @@ def qualified_strata_qwen_entries(root):
             filename = profile.get('config', '')
             binary, control = record.get('binary'), record.get('control')
             if (not profile.get('enabled', False) or record.get('status') != 'passed'
-                    or record.get('family') != 'strata-qwen'
+                    or record.get('family') not in ('strata-qwen', 'strata-inkling')
                     or not filename or Path(filename).name != filename
                     or not isinstance(binary, str) or not Path(binary).is_absolute()
-                    or Path(binary).name != 'strata'
+                    or Path(binary).name != ('strata-inkling' if record.get('family') == 'strata-inkling' else 'strata')
                     or not isinstance(control, str) or not Path(control).is_absolute()
                     or not re.fullmatch(r'[0-9a-f]{64}', record.get('binary_sha256', ''))):
                 continue
