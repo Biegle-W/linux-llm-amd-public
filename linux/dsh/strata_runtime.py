@@ -101,11 +101,26 @@ def inkling_weight_assets(cfg):
 
 
 def check_inkling_config(cfg, total, available, *, check_available=True):
-    """One card, one session; the host-wide free-RAM floor like every other model."""
+    """One session on the second card, or (0.2.20) expert parallel over both cards with the
+    second card first so the trunk, cache and drafter stay off the display card. The host-wide
+    free-RAM floor applies like every other model."""
     args = cfg['args']
     if (cfg.get('arch') != 'inkling2_loop' or cfg.get('backend') != 'hip' or cfg.get('gpu') != 1
-            or cfg.get('parallel') != 1 or '--gpus' in args or '--parallel' in args
-            or args[args.index('--gpu') + 1] != '1'):
+            or cfg.get('parallel') != 1 or '--parallel' in args):
+        raise RuntimeError('Strata Inkling requires its HIP profile led by the second card with one session.')
+    placement = ('--gpu', '--gpus', '--ep-split')
+    if (any(a.startswith(f + '=') for a in args for f in placement + ('--parallel',))
+            or any(args.count(f) > 1 for f in placement)
+            or any(args[-1] == f for f in placement)):
+        raise RuntimeError('Strata Inkling card flags must appear once each, as separate tokens with a value.')
+    if '--gpus' in args:
+        try:
+            split = float(args[args.index('--ep-split') + 1])
+        except ValueError:
+            split = None
+        if '--gpu' in args or args[args.index('--gpus') + 1] != '1,0' or split is None or not 0.5 <= split < 1:
+            raise RuntimeError('Two-card Strata Inkling must list the second card first (--gpus 1,0) and keep most experts there (--ep-split 0.5 to 1).')
+    elif '--ep-split' in args or '--gpu' not in args or args[args.index('--gpu') + 1] != '1':
         raise RuntimeError('Strata Inkling requires its single-card HIP profile on the second card with one session.')
     env = cfg.get('env', {})
     if env.get('ROCR_VISIBLE_DEVICES') != '0,1' or env.get('HIP_VISIBLE_DEVICES') != '0,1':

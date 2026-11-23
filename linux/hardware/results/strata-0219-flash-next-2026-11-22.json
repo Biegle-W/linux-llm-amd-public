@@ -1531,5 +1531,24 @@
    "inkling-2-mini-sq-20-strata"
   ],
   "strict_tool_check": "passed 2026-11-23"
+ },
+ "inkling_two_card_entry": {
+  "date": "2026-11-23",
+  "model": "inkling-2-mini-sq-20-strata-2gpu",
+  "config": "dsh/strata-inkling-sq20-2gpu-profile.json",
+  "args": [
+   "--max-context",
+   "262144",
+   "--gpus",
+   "1,0",
+   "--ep-split",
+   "0.6",
+   "--kv",
+   "fp16"
+  ],
+  "strict_tool_gate": "passed",
+  "stage": "2026-11-23T-strata-inkling2gpu-gate",
+  "display_card_vram_gb": 9.6,
+  "second_card_vram_gb": 23.2
  }
 }

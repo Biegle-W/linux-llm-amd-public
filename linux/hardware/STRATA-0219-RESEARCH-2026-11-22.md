@@ -131,7 +131,7 @@ No difference outside run-to-run noise; same expert-cache layout (13,312 + 9,937
 
 **Inkling 2 Mini SQ-20:**
 
-| | 0.2.19, one card (was the entry) | 0.2.20, one card (now the entry) | 0.2.20, both cards, 262K, 16-bit cache (not an entry) |
+| | 0.2.19, one card (was the entry) | 0.2.20, one card (now the entry) | 0.2.20, both cards, 262K, 16-bit cache (entry `inkling-2-mini-sq-20-strata-2gpu` since November 23) |
 |---|---:|---:|---:|
 | Code decode, 1,500-token limit | 87 | 89 | 81–84 |
 | 256-token code request | empty (hidden reasoning used it all) | 829 characters of code | about 800 characters |
@@ -145,6 +145,16 @@ which keeps the model, the context cache and the drafter; the cards talk to each
 
 **Promoted (owner policy: update unless it breaks):** both entries, `qwen3.8-flash-next-iq3_xxs-upstream` and `inkling-2-mini-sq-20-strata`,
 now run 0.2.20 with unchanged settings; both were resealed and passed the strict tool round trip through the hub again.
-The two-card 262K Inkling setup is not an entry: it would use 9.6 GB of the display card.
+The two-card 262K Inkling setup was first left out because it uses 9.6 GB of the display card; the owner then asked for it as its own entry (below).
 
 Data: [results](results/strata-0219-flash-next-2026-11-22.json).
+
+### Two-card Inkling entry (owner, November 23: "Yes, add it")
+
+`inkling-2-mini-sq-20-strata-2gpu` is the measured setup above, sealed as its own entry beside the one-card entry, which is unchanged:
+same 0.2.20 engine, weights, tokenizer and Strata Control; `--max-context 262144 --gpus 1,0 --ep-split 0.6 --kv fp16`.
+The second card leads (trunk, context cache, DSpark drafter, 60% of the experts); the display card holds the rest of the experts, about 9.6 GB.
+The hub's Inkling check now accepts this one two-card shape: second card listed first, `--ep-split` from 0.5 to below 1,
+identity card order, one session; anything else is refused, including repeated card flags, the `--flag=value` form and `--ep-split` on a one-card profile (added after an independent review; tests added). Quality is shared with the one-card entry (same weights; no rerun).
+Strict tool round trip through the hub: passed (stage `2026-11-23T-strata-inkling2gpu-gate`).
+While it is loaded a game on the display card has about 9.6 GB less memory; pick the one-card entry when gaming.
