@@ -114,12 +114,12 @@ def ensure_worker(model):
         stop_worker()
         require_strata(model=model)
         profile = PROFILES[model]
-        override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family') not in ('deepseek41','inkling2') else None
+        override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family') not in ('deepseek41','inkling2') and not profile.get('qualified_qwen_package') else None
         config = ROOT / (override or profile['config'])
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
         script='run-strata-deepseek-backend' if profile.get('family')=='deepseek41' else 'run-strata-backend'
-        if profile.get('family')!='deepseek41' and model!='qwen3.8-flash-next-iq3_xxs':
+        if profile.get('family')!='deepseek41' and (model!='qwen3.8-flash-next-iq3_xxs' or profile.get('qualified_qwen_package')):
             script='run-strata-qwen-backend'
         cfg=json.loads(config.read_text())
         from qualified_native_runtime import record_for

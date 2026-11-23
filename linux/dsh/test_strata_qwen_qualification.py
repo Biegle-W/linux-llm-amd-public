@@ -171,5 +171,20 @@ class SelectionAdmission(unittest.TestCase):
             self.assertEqual(strata_runtime.require_strata(), self.cfg)
 
 
+    def test_sealed_main_name_is_checked_against_its_seal_and_ignores_the_override(self):
+        # November 23: the main Flash-Next name became a sealed upstream package (fork replaced).
+        profiles = {self.baseline: {'enabled': True, 'config': 'old.json', 'qualified_qwen_package': True}}
+        (self.root / 'dsh/strata-profiles.json').write_text(json.dumps(profiles))
+        (self.root / 'dsh/cand.json').write_text(json.dumps(dict(self.cfg, exe='/candidate/strata')))
+        with patch.dict(strata_runtime.os.environ, {'STRATA_PROFILE_CONFIG': 'cand.json'}), \
+             patch.object(strata_runtime, 'check_config') as resources, \
+             patch('strata_qwen_qualification.require_package', side_effect=RuntimeError('sealed check')) as sealed, \
+             patch.object(strata_runtime, 'host_memory', return_value=(64 * 2**30, 60 * 2**30)):
+            with self.assertRaisesRegex(RuntimeError, 'sealed check'):
+                strata_runtime.require_strata(model=self.baseline, before_handover=True)
+            resources.assert_not_called()
+            self.assertEqual(sealed.call_args[0][0], self.cfg)
+
+
 if __name__ == '__main__':
     unittest.main()

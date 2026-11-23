@@ -182,10 +182,14 @@ def require_strata(before_handover=False,model=None):
         if not all(p.is_file() and p.stat().st_size for p in inkling_weight_assets(cfg)):
             raise RuntimeError('Strata Inkling files are missing. Check the model drive.')
         return cfg
-    # STRATA_PROFILE_CONFIG permits an isolated candidate check before promotion,
-    # like LLAMA_CPP_DIR/VLLM_ENV_PATH; its own RAM gate and guards still apply.
-    cfg = json.loads((ROOT / 'dsh' / (os.environ.get('STRATA_PROFILE_CONFIG') or profile['config'])).read_text())
-    additional = selected != 'qwen3.8-flash-next-iq3_xxs'
+    # A sealed package (qualified_qwen_package) is checked against its seal whatever its name;
+    # since November 23 the main Flash-Next name is one. STRATA_PROFILE_CONFIG permits an isolated
+    # candidate check of an unsealed profile before promotion, like LLAMA_CPP_DIR/VLLM_ENV_PATH;
+    # its own RAM gate and guards still apply.
+    sealed = bool(profile.get('qualified_qwen_package'))
+    override = None if sealed else os.environ.get('STRATA_PROFILE_CONFIG')
+    cfg = json.loads((ROOT / 'dsh' / (override or profile['config'])).read_text())
+    additional = sealed or selected != 'qwen3.8-flash-next-iq3_xxs'
     if additional:
         if cfg.get('model_name') != selected:
             raise RuntimeError('Strata Qwen catalog and qualified model must match.')

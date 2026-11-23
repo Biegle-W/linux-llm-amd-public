@@ -158,3 +158,17 @@ The hub's Inkling check now accepts this one two-card shape: second card listed 
 identity card order, one session; anything else is refused, including repeated card flags, the `--flag=value` form and `--ep-split` on a one-card profile (added after an independent review; tests added). Quality is shared with the one-card entry (same weights; no rerun).
 Strict tool round trip through the hub: passed (stage `2026-11-23T-strata-inkling2gpu-gate`).
 While it is loaded a game on the display card has about 9.6 GB less memory; pick the one-card entry when gaming.
+
+## Fork replaced (owner, November 23: "Replace the fork")
+
+The main Flash-Next name `qwen3.8-flash-next-iq3_xxs` now runs the sealed upstream 0.2.20 setup that was the separate `qwen3.8-flash-next-iq3_xxs-upstream` entry; that name is removed, and the hub lists one Flash-Next. Settings are unchanged: layer split 26, upstream RDNA3 defaults, `STRATA_HC_Q8=0`, 262,144 context.
+
+| Against the fork (measured November 22–23) | Upstream 0.2.20 | RDNA3 fork |
+|---|---:|---:|
+| Long prompt, 47,716 tokens: read (tok/s) | about 4,140 | 1,590–2,368 |
+| Code decode (tok/s) | 119–146 | 127–164 |
+| RAM in use while loaded | about 19 GB | about 37 GB |
+
+The hub used to treat the main name as the unsealed fork (no seal check, a test-config override allowed, fixed engine path). It now decides that by the profile's `qualified_qwen_package` flag, so the main name is checked against its seal like the other upstream entries. A unit test covers the admission check, including that the test-config override is ignored (it fails if the override is honoured); the matching router and launcher changes are covered by the hub run below, not by a unit test. The seal record moved to the main name and was resealed for the changed name and log path. Strict tool round trip through the hub under the main name: passed (stage `2026-11-23T-strata-replacefork-gate`).
+
+Kept for rollback, with no hub entry: the fork engine in `strata/` (build `238d6a79966c`) and its config `dsh/strata-iq3-profile.json`. Quality figures in the benchmark table were measured on the fork; the weights are the same, so they were not rerun (owner rule).
