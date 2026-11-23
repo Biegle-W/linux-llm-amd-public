@@ -169,8 +169,8 @@ def ensure_sglang_models(config):
     ensure_model_paths(paths)
 
 
-def ensure_strata_models(config=None):
-    config = Path(config) if config is not None else Path(__file__).resolve().parent / 'strata-iq3-profile.json'
+def ensure_strata_models(config):
+    config = Path(config)
     cfg = json.loads(config.read_text())
     args = cfg['args']
     pack = Path(args[args.index('--pack' if '--pack' in args else '--native') + 1])

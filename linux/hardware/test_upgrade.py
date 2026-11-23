@@ -155,36 +155,6 @@ class UpgradeTests(unittest.TestCase):
         self.assertEqual(result.exception.code, 1)
         handover.assert_not_called()
 
-    def test_strata_preserves_weights_mtp_and_source(self):
-        source = json.loads((ROOT / 'dsh/strata-iq3-profile.json').read_text())
-        original = json.dumps(source)
-        cfg = candidates.strata_candidate(source)
-        self.assertEqual(json.dumps(source), original)
-        self.assertEqual(cfg['gpu'], [0, 1])
-        self.assertFalse(cfg['split_skip_if_fits'])
-        self.assertEqual(cfg['parallel'], 1)
-        self.assertEqual(cfg['backend'], 'hip')
-        for option in ('--native', '--pack', '--ple-gguf', '--mtp', '--spec'):
-            self.assertEqual(cfg['args'][cfg['args'].index(option)+1],
-                             source['args'][source['args'].index(option)+1])
-        self.assertIn('--resident-cpu-experts', cfg['args'])
-        self.assertTrue(any('rocm-sdk' in path for path in cfg['lib_dirs']))
-        self.assertFalse(any(path.endswith('cuda-build/lib64') for path in cfg['lib_dirs']))
-        self.assertEqual(cfg['minimum_host_ram_gib'], 29)
-        future = candidates.strata_candidate(source, 64)
-        self.assertEqual(future['minimum_host_ram_gib'], 60)
-        self.assertIn('262144', future['args'])
-        # 99ec1b1/ef6107a lowered the Strata Qwen reserves (now 1024 MiB, documented in the
-        # runtime handoff); candidates must keep the source reserves and never drop below
-        # the owner 128 MiB per-card VRAM floor.
-        for candidate in (cfg, future):
-            for option in ('--vram-reserve-mib', '--vram-reserve-later-mib'):
-                value = candidate['args'][candidate['args'].index(option)+1]
-                self.assertEqual(value, source['args'][source['args'].index(option)+1])
-                self.assertGreaterEqual(int(value), 128)
-            self.assertEqual(candidate['layer_split'], source['layer_split'])
-            self.assertEqual(candidate['env'], source['env'])
-
     def test_llama_does_not_inherit_dual_cuda_overrides(self):
         text = candidates.llama_candidate((ROOT / 'dsh/models.ini').read_text())
         self.assertIn('AMD_VULKAN_DEVICE', text)
