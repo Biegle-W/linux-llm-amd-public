@@ -49,17 +49,18 @@ class VramDefaults(unittest.TestCase):
                 self.assertEqual(moe_memory.vram_worker_limits({**self.plan,'worker_memory_limits':limits}),POLICY_LIMITS)
 
     def test_preset_mutations_reject_before_launch(self):
-        base=(ROOT/'dsh/models-hip.ini').read_text()
-        for old,new in [('override-tensor = token_embd.*=ROCm0','override-tensor = token_embd.*=CPU'),
+        # The enabled VRAM-only preset (Empero, the earlier subject, was retired by the owner on November 23).
+        ident='inkling-2-mini-q8';base=(ROOT/'dsh/models-hip.ini').read_text();head,section=base.split('['+ident+']')
+        for old,new in [('^output[.]weight$=ROCm0','^output[.]weight$=CPU'),
                         ('moe-cache-mib = 0','moe-cache-mib = 4096'),
                         ('load-mode = dio','load-mode = mmap'),
-                        ('spec-type = draft-mtp','spec-type = none'),
-                        ('ctx-size = 262144','ctx-size = 32768'),
-                        ('device = ROCm0,ROCm1','device = ROCm0')]:
+                        ('n-cpu-moe = 0','n-cpu-moe = 8'),
+                        ('ctx-size = 131072','ctx-size = 32768'),
+                        ('device = ROCm1,ROCm0','device = ROCm0')]:
             with self.subTest(setting=old),tempfile.TemporaryDirectory() as tmp:
-                p=Path(tmp)
+                p=Path(tmp);self.assertEqual(section.count(old),1)
                 for name in ['models.json','moe-offload.json']:(p/name).write_bytes((ROOT/'dsh'/name).read_bytes())
-                (p/'models-hip.ini').write_text(base.replace(old,new))
+                (p/'models-hip.ini').write_text(head+'['+ident+']'+section.replace(old,new))
                 with self.assertRaisesRegex(RuntimeError,'VRAM-only preset'):
                     moe_memory.validate_profiles(p)
 

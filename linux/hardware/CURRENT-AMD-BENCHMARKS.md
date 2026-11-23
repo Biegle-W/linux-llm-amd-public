@@ -4,11 +4,11 @@ One row per enabled route, from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-Q
 
 | Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Quality rank |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|
-| `empero-qwen3.8-35b-a3b` | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 |
+| `empero-qwen3.8-35b-a3b` (retired Nov 23) | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 |
 | `inkling-2-mini-q8` | llama.cpp (RDNA3 branch) | passed | 43.0 | 1,508 | 48.7 | — | — | 149# | 7 |
 | `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 5 |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 |
-| `nemotron-3.5-bolt-vllm` | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 |
+| `nemotron-3.5-bolt-vllm` (retired Nov 23) | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 |
 | `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 |
 | `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 since Nov 23 (figures from the RDNA3 fork‖) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 |
@@ -44,9 +44,9 @@ Ranked by correct answers on the 216-item public suite, the only quality test he
 | 3 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 166 | 76.9% | 70.8–82.0% | 12 | 11 | 27 | 52 | 31 | 19 | 26 | not tested |
 | 4 | `qwen3.8-27b-sglang-dflash2` | 163 | 75.5% | 69.3–80.7% | 21 | 8 | 31 | 47 | 32 | 18 | 27 | Ripple |
 | 5 | `qwen3.8-27b-vllm` | 157 | 72.7% | 66.4–78.2% | 26 | 10 | 28 | 45 | 31 | 19 | 24 | Ripple |
-| 6 | `empero-qwen3.8-35b-a3b` | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | — |
+| 6 | `empero-qwen3.8-35b-a3b` (retired Nov 23) | 151 | 69.9% | 63.5–75.6% | 12 | 11 | 25 | 47 | 24 | 16 | 28 | — |
 | 7 | `inkling-2-mini-q8` | 149 | 69.0% | 62.5–74.8% | 45 | 8 | 26 | 41 | 33 | 19 | 22 | not tested |
-| 8 | `nemotron-3.5-bolt-vllm` | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
+| 8 | `nemotron-3.5-bolt-vllm` (retired Nov 23) | 143 | 66.2% | 59.7–72.2% | 13 | 7 | 23 | 46 | 30 | 15 | 22 | — |
 | 9 | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3–69.1% | 0 | 10 | 25 | 43 | 11 | 21 | 26 | — |
 | 10 | `ripple-65b-vllm` | 134 | 62.0% | 55.4–68.2% | 65 | 5 | 17 | 42 | 32 | 14 | 24 | — |
 

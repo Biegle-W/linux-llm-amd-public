@@ -7,19 +7,16 @@ import yaml
 ROOT = Path(__file__).resolve().parent
 HUB_PORT = 30100
 AMD_PROVIDER = 'amd-server'
-LOCAL = {'llama-local': 'empero-qwen3.8-35b-a3b',
+LOCAL = {'llama-local': 'inkling-2-mini-q8',
          'sglang-local': 'qwen3.8-27b-sglang-dflash2',
          'vllm-local': 'qwen3.8-27b-vllm',
          'strata-local': 'qwen3.8-flash-next-iq3_xxs',
          'maya-local': 'glm-5.3-flash-maya',
          'hyperqwen-local': 'qwen3.8-27b-hyperqwen-dflash2'}
+# Default when the selected model is gone (owner retired the Empero default November 23).
+FALLBACK = 'qwen3.8-27b-sglang-dflash2'
 REPLACEMENTS = {
-    'nemotron-3.5-lightning': 'nemotron-3.5-bolt-vllm',
-    'gpt-oss-20b': 'nemotron-3.5-bolt-vllm',
-    'gpt-oss-120b': 'nemotron-3.5-bolt-vllm',
-    'nemotron-3.5-bolt': 'nemotron-3.5-bolt-vllm',
     'qwen3.8-27b-q4': 'qwen3.8-27b-vllm',
-    'qwen3.6-35b-a3b': 'empero-qwen3.8-35b-a3b',
     'deepseek-v4.1-flash-1017-maya-s': 'deepseek-v4.1-flash-1017-maya',
     'deepseek-v4.1-flash-1017-strata-s': 'deepseek-v4.1-flash-1017-strata-xs',
 }
@@ -100,7 +97,7 @@ def configure(default_provider=None, *, profile='web'):
         chosen = (LOCAL.get(default_provider) if default_provider else selection.get('model'))
         chosen = REPLACEMENTS.get(chosen, chosen)
         if chosen not in ids:
-            chosen = 'empero-qwen3.8-35b-a3b' if 'empero-qwen3.8-35b-a3b' in ids else models[0]['id']
+            chosen = FALLBACK if FALLBACK in ids else models[0]['id']
         settings['agent-default-model'] = {'provider': AMD_PROVIDER, 'model': chosen}
     if use_profile:
         for entry_id in ('llm-pi-ai', 'agent-default-model'):
