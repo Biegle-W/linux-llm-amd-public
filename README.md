@@ -191,6 +191,7 @@ Dated reports stay flat in `hardware/` because many links and a few code strings
 | Engine updates (manual since November 9) | [Ledger](linux/hardware/DAILY-UPDATES.md), [method](linux/hardware/daily-update/README.md) |
 | Drives and weight files | [Storage inventory](linux/hardware/MODEL-STORAGE-INVENTORY.md) |
 | Card layout and crash runbook | [AMD working setup](linux/hardware/AMD-WORKING-SETUP-2026-11-07.md) (November 7 state) |
+| Website summary (what biegle.ca reads) | [docs/WEBSITE-SUMMARY.md](docs/WEBSITE-SUMMARY.md) |
 | Model trials | [Kolibri 1.1](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md), [Hy4-Flash on Strata](linux/hardware/HY4-FLASH-SQ64-2026-11-22.md), [Hy4-Flash on Maya](linux/hardware/HY4-FLASH-MAYA-M-2026-11-22.md) |
 | Clients and gateway | [Network](linux/network/README.md), [DSH](linux/dsh/README.md) |
 | Image and video | [Graphics](linux/graphics/README.md) |
