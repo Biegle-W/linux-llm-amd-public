@@ -1,6 +1,6 @@
 # Kolibri 1.1 trial: November 23–24, 2026
 
-The owner asked to try Aleph Alpha's Kolibri 1.1, released November 23, and asked whether any engine other than llama.cpp could run it. **It runs, on a side build of an unmerged llama.cpp pull request.** It is a trial on a side server, not a hub route: adding it to the hub is the owner's decision. Every figure is from one session.
+The owner asked to try Aleph Alpha's Kolibri 1.1, released November 23, and asked whether any engine other than llama.cpp could run it. **It runs, on a side build of an unmerged llama.cpp pull request.** It was tried on a side server first; the owner then had it added to the hub as `kolibri-1.1-iq4_xs` ([last section](#the-hub-route-november-24-owner-decision)). Every figure is from one session.
 
 ## What it is
 
@@ -68,8 +68,13 @@ Run once under the owner's rule for new models, slow class (60 minutes allowed).
 
 For comparison, the other new models tested this way passed 11 or 12 of the 12 core harness tasks (Hy4-Flash on Strata 12, the one-card Inkling 12, Hy4-Flash on Maya 11), so Kolibri's 8 is the lowest so far. Aleph Alpha's own benchmarks put Kolibri 1.1 at 73.2 overall against 80.1 for Qwen3.8 Flash Next and 80.0 for GLM-5.3 Flash; it is weakest on long context and terminal tasks.
 
-## What it would take to make it a route
+## The hub route (November 24, owner decision)
 
-It would be the first llama.cpp route since the owner retired the last ones on November 23. It needs the side build (an unmerged pull request, so every rebase is a fresh build and a fresh check), a hub profile and a strict qualification through the hub. Until the pull request merges, an engine update of production llama.cpp would not carry it.
+The owner chose to add it ("Add it as a route"). It is the only llama.cpp route since the last ones were retired on November 23.
 
-Files: the side build is outside the repo; the logs, speed rows and quick-test results are in `hardware/generated/kolibri-trial-2026-11-23/` (ignored), with the summary in [results/kolibri-1.1-trial-2026-11-24.json](results/kolibri-1.1-trial-2026-11-24.json).
+- **Build:** the same pull-request commit `5f4d222898dd`, rebuilt inside the repo's ignored tree at `hardware/generated/kolibri-trial-2026-11-23/llama.cpp-kolibri` with the production HIP flags. The side build could not simply be moved, because its binary has its own folder built in. `dsh/llama-runtime.json` pins the build for this route only (`source_overrides` with `manual_runtime_pin`), the way the Inkling Q8 route used its branch build. The installed llama.cpp is unchanged and serves no route.
+- **Settings:** those of the trial: both cards in the order `ROCm1,ROCm0`, layer split 1:1, 262,144 context, 16-bit cache, batch 2048 and micro-batch 512, flash attention, `enable_thinking: false`, temperature 1.0. As on every VRAM-only llama.cpp route, the token embedding sits on the first card (`token_embd.*=ROCm0`), and prompt-cache RAM and context checkpoints are off.
+- **Strict tool check through the hub (November 24):** passed. Load 83 s from a cold start, first token 2.6 s on a 6,351-token prompt (about 2,470 tok/s), 82 answer tokens at 80 tok/s, and the follow-up step reused the cached prompt (first token 0.16 s). Lowest free VRAM 2.30 and 2.18 GB on the two cards, no swap, no spill, all GPU memory released afterwards.
+- **Upkeep:** the pull request is still open. When it changes or merges, build the new revision in a fresh folder, run the strict tool check, then move the pin. Once the installed llama.cpp carries Kolibri 1.1, drop the override. Graph capture is on, as in the trial. If VRAM creeps up over a long session, as it did for the Inkling Q8 route, turn it off for this route with `no_graph_models`.
+
+Files: the trial's side build is outside the repo; the route's build, the logs, speed rows and quick-test results are in `hardware/generated/kolibri-trial-2026-11-23/` (ignored), with the summary in [results/kolibri-1.1-trial-2026-11-24.json](results/kolibri-1.1-trial-2026-11-24.json).

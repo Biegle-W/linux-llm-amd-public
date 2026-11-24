@@ -2,7 +2,7 @@
 
 Sanitized public reference for a separately maintained private operational repository. The Linux tree is in [`linux/`](linux/). Example paths use `/opt/local-llm`, `/mnt/shared` and `/mnt/shared-nvme`; configure them locally.
 
-Eight qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins. State on this page: November 24, 2026.
+Nine qualified routes are served through one OpenAI-compatible API on TCP 10000. The [runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md) lists them with their settings, guards and pins. State on this page: November 24, 2026.
 
 ## Project overview
 
@@ -21,7 +21,7 @@ Eight qualified routes are served through one OpenAI-compatible API on TCP 10000
 | Strata | upstream `v0.2.20` (`a34979fc94f3`, engines 0.1.66), built from source | Large mixture-of-experts model streamed from SSD (`qwen3.8-flash-next-iq3_xxs`), and Inkling 2 Mini through its `strata-inkling` engine (`inkling-2-mini-sq-20-strata-2gpu`) |
 | Strata DeepSeek | `13eedf552417`, frozen (upstream removed this engine) | `deepseek-v4.1-flash-1017-strata-unsloth-q1` |
 | Maya | `f9a053dcb5a9` (1.1.73) | SSD-streamed models with an expert RAM tier: `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` |
-| llama.cpp | `1fb8a269603b` | Installed, but no route has been enabled since November 23 |
+| llama.cpp | installed release `1fb8a269603b`; pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
 | ComfyUI | 0.45.5 | Image and video ([graphics](linux/graphics/README.md)); not part of the LLM hub |
 
 ### Enabled models
@@ -38,14 +38,18 @@ Speed figures come from the standard short tool-call check: one DSH read-tool ro
 | `glm-5.3-flash-maya` | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS | 32,768 | SSD streaming, 40 GB RAM tier | 5.2 (17.8–22.1 on 400-token answers) | 57 | 136/216 |
 | `ripple-65b-vllm` | vLLM TP2 | Ripple-65B-Preview GPTQ W4A16 | 65,536 | VRAM, both cards | 28.0 | 764 | 134/216³ |
 | `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.20 `strata-inkling` | Inkling 2 Mini SQ-20 `.strata` + vision | 262,144 | VRAM, both cards, expert parallel (second card leads; about 9.6 GB on the display card) | 81–84 (code, 1,500-token limit)² | 2,020 at 38K; 1,396 at 112K; 961 at 217,533 tokens² | Quick test 12/12 and 8/8 harness, 11/16 function calls, 4/10 general⁴; no 216-item run |
+| `kolibri-1.1-iq4_xs` | llama.cpp, pull-request build | Aleph Alpha Kolibri 1.1 IQ4_XS GGUF (40.2 GB) | 262,144 | VRAM, both cards (layer split 1:1, 16-bit cache; about 2.2 GB left free per card) | 80⁶; 77 short, 52 at 21K, 26 at 84K, 12 at 238K tokens⁷ | 2,470⁶; 1,413 at 84K, 666 at 238K⁷ | Quick test G 14/14, harness 8/12 and 7/8, function calls 12/16, general 7/10⁷; no 216-item run |
 
 1. Measured on the Strata RDNA3 fork, which was replaced and deleted on November 23. The weights are the same, and quality was not rerun (owner rule).
 2. Source: [Strata 0.2.19/0.2.20 report](linux/hardware/STRATA-0219-RESEARCH-2026-11-22.md). These requests differ from the table's standard 6.4K-token tool check.
 3. 65 of Ripple's 216 answers were cut off at the token limit while still reasoning, so its score is a lower bound.
 4. Scored on the retired one-card entry `inkling-2-mini-sq-20-strata` (Strata 0.2.19), which used the same weights. Thinking is always off on this route.
 5. The route has run with the RAM store off since November 12. The standard tool check (5.6 and 111) was measured with the store on and has not been rerun. The store-off figures are 400-token answers through the hub on November 12. The 166 was scored with the store off on engine `13eedf552417` (sources: current results, handoff open item 2).
+6. Strict tool check through the hub on November 24: an 82-token answer to a 6,351-token prompt from a cold start, load 83 s.
+7. Source: [Kolibri 1.1 report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md). Measured on the side server before the route was added, with the same build and settings, one request at a time.
 
 Every enabled route has passed a tool round trip through the hub. The latest check for each route:
+- Kolibri 1.1: strict tool check, November 24, on the pull-request build ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
 - Flash-Next on 0.2.20 and the two-card Inkling: strict tool check, November 23 ([changelog](linux/hardware/CHANGELOG.md)).
 - Both Maya routes: strict tool check, November 22, on Maya 1.1.73 ([engine update ledger](linux/hardware/DAILY-UPDATES.md)).
 - Strata DeepSeek: strict tool check, November 12, on `13eedf552417` (changelog).
@@ -57,11 +61,10 @@ New models tried on side servers. Adding one to the hub is the owner's decision.
 
 | Model | Date | Engine | Placement | Decode tok/s | Prompt read tok/s | Quick quality test |
 |---|---|---|---|---:|---:|---|
-| Aleph Alpha Kolibri 1.1, IQ4_XS GGUF (40.2 GB) | Nov 24 | llama.cpp from the unmerged pull request ggml-org/llama.cpp#32891, side build | both cards, 262,144 context | 77 short; 52 at 21K, 26 at 84K, 12 at 238K tokens | 2,690–3,136 short; 1,413 at 84K, 666 at 238K | G 14/14, harness 8/12 and 7/8, function calls 12/16, general 7/10, in 3 minutes |
 | Hy4-Flash SQ-64 | Nov 22 | Strata 0.2.18 side install | one card, 32,768 context | 26–30 | 1,146 | harness 12/12 and 8/8, function calls 9/16, general 5/10 |
 | Hy4-Flash Maya-M | Nov 22 | Maya 1.1.73 side copy | both cards | 13–32 | — | harness 11/12 and 8/8, function calls 9/16, general 6/10 |
 
-No engine other than llama.cpp can run Kolibri 1.1 on these cards yet: Aleph Alpha's vLLM plugin needs NVIDIA H100 or B200, and vLLM, SGLang and the rest support only Kolibri 1. Reports: [Kolibri 1.1](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md), [Hy4-Flash on Strata](linux/hardware/HY4-FLASH-SQ64-2026-11-22.md), [Hy4-Flash on Maya](linux/hardware/HY4-FLASH-MAYA-M-2026-11-22.md).
+Kolibri 1.1 was tried on a side server first and became the hub route `kolibri-1.1-iq4_xs` on November 24 (table above). No engine other than llama.cpp can run it on these cards yet: Aleph Alpha's vLLM plugin needs NVIDIA H100 or B200, and vLLM, SGLang and the rest support only Kolibri 1. Reports: [Kolibri 1.1](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md), [Hy4-Flash on Strata](linux/hardware/HY4-FLASH-SQ64-2026-11-22.md), [Hy4-Flash on Maya](linux/hardware/HY4-FLASH-MAYA-M-2026-11-22.md).
 
 ### Retired models
 
@@ -100,10 +103,11 @@ The registry entries of the routes retired on November 23 stay disabled. They ar
 
 ### Latest changes (November 17–24)
 
+- **Nov 24:** Kolibri 1.1 added as the hub route `kolibri-1.1-iq4_xs` (owner decision). It runs on its own pinned build of the llama.cpp pull request, on both cards with 262,144 context. The strict tool check passed through the hub (load 83 s, decode 80 tok/s). The hub now serves nine models ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
 - **Nov 24:** Kolibri 1.1 tried on a side build of the llama.cpp pull request: it loads on both cards with the full 262,144 context and finds a code word at 238K tokens; quick test G 14/14, harness 8/12, function calls 12/16, general 7/10. Not a hub route ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
 - **Nov 23:** standing rule: when a new model does not fit, retired weights may be deleted without asking again, only as much as needed ([handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md)).
 - **Nov 23:** gBench Golden Set added as block G of the quick quality test ([changelog](linux/hardware/CHANGELOG.md), [quick test](linux/hardware/quant-eval/quick/README.md)).
-- **Nov 23:** Inkling 2 Mini kept only as `inkling-2-mini-sq-20-strata-2gpu`; `inkling-2-mini-sq-20-strata` and `inkling-2-mini-q8` retired with weights kept. The hub now serves eight models, and no llama.cpp route is enabled ([changelog](linux/hardware/CHANGELOG.md)).
+- **Nov 23:** Inkling 2 Mini kept only as `inkling-2-mini-sq-20-strata-2gpu`; `inkling-2-mini-sq-20-strata` and `inkling-2-mini-q8` retired with weights kept. The hub then served eight models, with no llama.cpp route until Kolibri 1.1 on November 24 ([changelog](linux/hardware/CHANGELOG.md)).
 - **Nov 23:** `empero-qwen3.8-35b-a3b` and `nemotron-3.5-bolt-vllm` retired with weights kept; the hub then listed ten models ([changelog](linux/hardware/CHANGELOG.md)).
 - **Nov 23:** Strata RDNA3 fork and the 0.2.19 build deleted (about 1.6 GB); `strata/` keeps only `.venv` ([changelog](linux/hardware/CHANGELOG.md)).
 - **Nov 23:** Flash-Next switched from the fork to sealed upstream Strata 0.2.20. It reads long prompts about twice as fast, uses about half the RAM (19 against 37 GB) and decodes code about 10% slower ([report](linux/hardware/STRATA-0219-RESEARCH-2026-11-22.md)).
