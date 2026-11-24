@@ -9,7 +9,7 @@ GUI log viewers require explicit `LOCAL_LLM_GUI_LOGS=1` opt-in; manual desktop
 launchers remain available on demand. See the
 [headless server setup](../network/HEADLESS-INFERENCE-2026-11-02.md).
 
-Nine qualified routes are enabled. Use the [current handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md#enabled-routes) and authenticated `/v1/models` for the exact catalog; older availability lists are historical.
+Eight qualified routes are enabled. Use the [current handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md#enabled-routes) and authenticated `/v1/models` for the exact catalog; older availability lists are historical.
 
 `configure_local.py` migrates former local engine providers to `amd-server`,
 preserves an available selected model and unrelated providers/settings, and

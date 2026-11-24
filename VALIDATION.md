@@ -71,3 +71,5 @@ October 25 publication: retained the latest already-public NVIDIA-host preparati
 combined Windows subtree. Existing public history and all archived source/numeric
 payloads are preserved. The hardware-specific split changes no runtime settings;
 no inference or native GPU-unlock installation was performed for publication.
+
+November 23–24: the quick quality test's block G (gBench Golden Set) was checked against a scripted stand-in (timing and unit tests), then run once on Kolibri 1.1. The Kolibri 1.1 trial used a side build of an unmerged llama.cpp pull request on a side server, outside production; its speed and quality figures come from one session. The README overview and the pages it links were audited against the live route registry on November 24; no route was rerun for it.

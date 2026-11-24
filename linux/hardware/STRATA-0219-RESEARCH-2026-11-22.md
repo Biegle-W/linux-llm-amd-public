@@ -1,7 +1,7 @@
 # Strata 0.2.19: research and Flash-Next comparison, November 22 2026
 
 The owner reported that Strata 0.2.19 is much faster for Qwen3.8-Flash-Next and Inkling 2 Mini and asked for research and optimisation.
-Nothing in production was changed: the Flash-Next route still runs the RDNA3 fork.
+**Status, November 23 (read first):** the sections below are the November 22 research, followed by the November 23 steps. Since November 23 Flash-Next runs upstream Strata 0.2.20 under its main name, the RDNA3 fork and the 0.2.19 build are deleted, and Inkling 2 Mini is served only as `inkling-2-mini-sq-20-strata-2gpu`. On November 22 nothing in production was changed: the Flash-Next route still ran the RDNA3 fork.
 
 ## What 0.2.19 changed (source review, v0.2.18 to v0.2.19, 55 commits)
 

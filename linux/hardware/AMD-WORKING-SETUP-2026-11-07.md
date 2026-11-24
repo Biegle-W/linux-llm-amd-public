@@ -1,5 +1,7 @@
 # AMD working setup and recovery runbook — November 7, 2026
 
+**Status, November 24:** a dated snapshot of November 7. The card layout, guard design and crash runbook still apply. Superseded since: the nightly updater (retired November 9), the model list (eight routes now, see the [handoff](../network/LINUX-LLM-RUNTIME-HANDOFF.md)) and the archive notes.
+
 [Investigation and test log](SAPPHIRE-POST-CRASH-LINK-TRAINING-2026-11-06.md). This page records the hardware and software layout that passed every test on November 7, how to check it, and what to do if a GPU crash happens again. Owner rule: "if it works, don't fix it". Keep this layout unless a new test says otherwise.
 
 ## Layout

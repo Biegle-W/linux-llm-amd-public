@@ -6,6 +6,7 @@ This is the sanitized public reference for a dual RX 7900 XTX Linux server. The 
 2. [Runtime handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md): current state, enabled routes, guards, pins and open items.
 3. [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md): only when the task needs measurements.
 4. [Changelog](linux/hardware/CHANGELOG.md): what changed recently, with links to the dated reports.
+5. [Quick quality test](linux/hardware/quant-eval/quick/README.md): how a new model is tested (block G, gBench's Golden Set, first).
 
 Before acting on a real machine, check the Git tree, the GPU lock (`hardware/generated/GPU-LOCK`; absent means no hold) and the actual inference processes and `/dev/kfd` users. Never stop work you did not start.
 

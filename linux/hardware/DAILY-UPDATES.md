@@ -4,6 +4,10 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-23 — Strata 0.2.20 for Flash-Next and Inkling; the RDNA3 fork deleted
+
+Upstream Strata 0.2.20 (`a34979fc94f3`, engines 0.1.66) was built from source in a fresh stage folder and sealed; Flash-Next and the two-card Inkling passed the strict tool check and were promoted. The owner then had 0.2.20 replace the RDNA3 fork under the main Flash-Next name, and the fork tree and the 0.2.19 build were deleted: there is no fork rollback, and the November 22 note below that Strata shows as behind upstream no longer applies. Four routes were retired the same day, including the last llama.cpp routes, so a llama.cpp update has no route to check until one is added. [Report](STRATA-0219-RESEARCH-2026-11-22.md)
+
 ## 2026-11-22 (later) — manual update: llama.cpp, Maya 1.1.73 and the Flash-Next engine promoted
 
 Upstream check: llama.cpp, Maya and the Strata RDNA3 fork were behind and ComfyUI had a new release (0.46.0); vLLM and SGLang were current; Strata DeepSeek stays frozen; the Inkling route's llama.cpp branch had not moved. Changes were researched before install. **New owner rule that day: use the latest version best supported on these RDNA3 cards, not simply the newest release.**
