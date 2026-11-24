@@ -4,6 +4,7 @@ The routine quality test for **new models and new weights only** (owner rule, No
 
 | Block | What | Run with |
 |---|---|---|
+| G, first | gBench's Golden Set (pinned 0.5.0.post1): 16 fixed serving checks, about 11 on a text-only route; two chat-template pairs tell a broken template or tool parser from a weak model | `run_golden.py` |
 | A | 12 core + 8 extra tasks inside the DSH harness, in a no-network jail | `run_quick.py` |
 | B, C | 16 function-call items, 10 core + 34 extra general items from the public suite | `../pub/run_pub.py --only`, then `../pub/grade_pub.py` |
 
@@ -12,6 +13,13 @@ The routine quality test for **new models and new weights only** (owner rule, No
 The route must already load through the hub. Check first that no GPU hold is present and that nothing the owner is using is loaded. `fast` is for a model that decodes at about 80 tok/s or more.
 
 ```bash
+# Once per server: gBench in its own venv (not committed).
+uv venv --python 3.13 ../gbench/.venv && uv pip install --python ../gbench/.venv/bin/python gbench==0.5.0.post1 transformers
+
+# Block G first: 2 minutes for a fast model, 5 for a slow one. --tokenizer is the model's Hugging Face tokenizer
+# (its repo id, or a local folder that has tokenizer files and the chat template).
+python3 run_golden.py <out>/golden <route> --class slow --tokenizer <tokenizer> --abort-file <hold file>
+
 # Block A: 6 minutes for a fast model (core tasks twice), 30 for a slow one.
 python3 run_quick.py <out>/harness <route> --class slow --context <route context> --abort-file <hold file>
 
@@ -27,6 +35,8 @@ python3 ../pub/grade_pub.py <out>/items <route> --items <items.jsonl> --tier cor
 
 - `python3 -m unittest test_quick.py`: every grader passes its reference solution and fails an untouched folder, a decoy answer, an edit to the wrong file, an edited test and a hard-coded value.
 - `./smoke.sh`: the runner, the jail and the harness work end to end against a scripted stand-in (`stub_model.py`); the jail has no network and a throwaway home.
+- `python3 -m unittest test_golden.py` and `./golden_smoke.sh <tokenizer folder>`: block G against a scripted stand-in (`golden_stub.py`, which answers each case from the installed gBench package; no case text is kept here). Measured on November 23 with the stand-in: a fast route 0.04 min, a slow one at 7 tok/s 0.3 min, and the worst cases, every answer running to gBench's 512-token cap, 1.6 of 2 min at 80 tok/s and 3.5 of 5 min at 5 tok/s (2 cases run, the rest "not run"). A GPU hold stops it before the next case. The code case runs in bubblewrap. Not yet run against a model.
+- **Block G, what to know.** gBench sends no thinking switch and caps every answer at 512 tokens, so `run_golden.py` adds the same thinking-off switch as the other blocks and raises gBench's 30 s request timeout to 60 s (fast) or 150 s (slow); a warm-up request loads the route before the clock starts. A case starts only if the slowest case so far still fits, so the block ends inside its limit, and the time it does not use goes to the next blocks. Tool cases need the route to return OpenAI `tool_calls`; a tool call written as text fails. gBench 0.5.0 marks a refusal written with a curly apostrophe as a failure (open fix, google-deepmind/gbench pull 13); the summary flags it. A template pair that fails only on its structured half points at the template or parser, not the model.
 - **Not yet run against any model.** The first new model is also the pilot: read its transcripts, drop tasks that turn out broken, and set the time limits from its measured steps before trusting the score.
 
 ## Item lists

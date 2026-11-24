@@ -1,6 +1,6 @@
 # Quick quality test plan — November 22, 2026
 
-Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. **Status, November 22:** the harness tasks, their graders, the no-network jail, the runner and the frozen item lists are built and tested without running any model ([how to run it](quant-eval/quick/README.md)). **First run, November 22:** Hy4-Flash SQ-64, a new model, in 11 minutes: all 20 harness tasks passed, function calls 9 of 16, general 5 of 10 ([report](HY4-FLASH-SQ64-2026-11-22.md)). Nothing in the runner, jail or graders needed changing. Two things it showed: one model passing everything cannot say whether the harness tasks are hard enough, and that engine did not cache the harness prompt between steps, which a slow prompt reader would not survive within its budget.
+Owner request: the current quality test is too long. This plan replaces it for routine use with a test that puts tool use inside the agent harness first, and finishes in 15 minutes for the fast routes and in at most one hour for the slow ones. **Status, November 22:** the harness tasks, their graders, the no-network jail, the runner and the frozen item lists are built and tested without running any model ([how to run it](quant-eval/quick/README.md)). **November 23 (owner):** block G added, gBench's Golden Set, run first; it takes its minutes from the same budgets, which stay 15 and 60 ([how to run it](quant-eval/quick/README.md)). **First run, November 22:** Hy4-Flash SQ-64, a new model, in 11 minutes: all 20 harness tasks passed, function calls 9 of 16, general 5 of 10 ([report](HY4-FLASH-SQ64-2026-11-22.md)). Nothing in the runner, jail or graders needed changing. Two things it showed: one model passing everything cannot say whether the harness tasks are hard enough, and that engine did not cache the harness prompt between steps, which a slow prompt reader would not survive within its budget.
 
 ## Why change
 
@@ -25,6 +25,7 @@ For a new model it answers two questions: does it use tools correctly inside the
 
 | Block | What | Items | Who runs it | Reported as |
 |---|---|---:|---|---|
+| G | gBench Golden Set: chat-template pairs and tool calls first, then code, JSON, math, safety, knowledge | 16 (about 11 text-only) | every route, first | serving check: passed of applicable, and the template diagnosis |
 | A-core | Harness tasks: multi-step work inside the DSH harness | 12 | every route | **tool score, the headline** |
 | B | Single-reply function calls, kept from the public suite | 16 | every route | its own column, linked to past runs |
 | C-core | General: code, instructions, math, knowledge, reasoning, 2 each | 10 | every route | general score |
@@ -85,8 +86,10 @@ The clock starts when the route reports ready. Load time, one warm-up call that 
 
 | Class | Routes | Budget | Block limits |
 |---|---|---|---|
-| Fast | a new model that decodes at about 80 tok/s or more (like `empero`, the Qwen3.8-27B routes, Flash-Next) | 15 min | A-core twice within 6 min, B within 2, C-core within 3, then A-extra and C-extra with what is left |
-| Slow | a slower new model (like Inkling, Nemotron, GLM, Ripple, DeepSeek) | 60 min | A-core within 30 min, B within 15, C-core with the rest, A-extra only if 10 minutes remain |
+| Fast | a new model that decodes at about 80 tok/s or more (like `empero`, the Qwen3.8-27B routes, Flash-Next) | 15 min | G within 2 min, A-core twice within 6, B within 2, C-core within 3, then A-extra and C-extra with what is left |
+| Slow | a slower new model (like Inkling, Nemotron, GLM, Ripple, DeepSeek) | 60 min | G within 5 min, A-core within 30, B within 15, C-core with the rest, A-extra only if 10 minutes remain |
+
+Block G (added November 23) normally needs well under a minute: its answers are short with thinking off. Its limit is for the worst case, every answer running to gBench's 512-token cap; measured with a stand-in, that is 1.6 minutes at 80 tok/s and, at 5 tok/s, 3.5 minutes with only 2 of its cases run. Minutes G does not use go to the blocks after it, so on a slow route C-core keeps at least 10 minutes and usually about 14.
 
 When a block reaches its limit, its remaining items are marked "not run" and the next block starts. "Not run" is never counted as wrong. Missing the budget is reported as its own pass or fail.
 
