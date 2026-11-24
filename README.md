@@ -21,7 +21,7 @@ Nine qualified routes are served through one OpenAI-compatible API on TCP 10000.
 | Strata | upstream `v0.2.20` (`a34979fc94f3`, engines 0.1.66), built from source | Large mixture-of-experts model streamed from SSD (`qwen3.8-flash-next-iq3_xxs`), and Inkling 2 Mini through its `strata-inkling` engine (`inkling-2-mini-sq-20-strata-2gpu`) |
 | Strata DeepSeek | `13eedf552417`, frozen (upstream removed this engine) | `deepseek-v4.1-flash-1017-strata-unsloth-q1` |
 | Maya | `f9a053dcb5a9` (1.1.73) | SSD-streamed models with an expert RAM tier: `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` |
-| llama.cpp | installed release `1fb8a269603b`; pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
+| llama.cpp | installed build b12681 (`d141011c2578`, November 24); pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
 | ComfyUI | 0.45.5 | Image and video ([graphics](linux/graphics/README.md)); not part of the LLM hub |
 
 ### Enabled models
@@ -103,6 +103,7 @@ The registry entries of the routes retired on November 23 stay disabled. They ar
 
 ### Latest changes (November 17–24)
 
+- **Nov 24:** llama.cpp updated to build b12681 (`d141011c2578`, 52 commits). No enabled route uses the installed build, so it was checked on a guarded side server on both cards: answers, a tool round trip and a 42,619-token prompt passed. Kolibri stays on its pull-request pin, which has not moved ([ledger](linux/hardware/DAILY-UPDATES.md)).
 - **Nov 24:** Kolibri 1.1 added as the hub route `kolibri-1.1-iq4_xs` (owner decision). It runs on its own pinned build of the llama.cpp pull request, on both cards with 262,144 context. The strict tool check passed through the hub (load 83 s, decode 80 tok/s). The hub now serves nine models ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
 - **Nov 24:** Kolibri 1.1 tried on a side build of the llama.cpp pull request: it loads on both cards with the full 262,144 context and finds a code word at 238K tokens; quick test G 14/14, harness 8/12, function calls 12/16, general 7/10. Not a hub route ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
 - **Nov 23:** standing rule: when a new model does not fit, retired weights may be deleted without asking again, only as much as needed ([handoff](linux/network/LINUX-LLM-RUNTIME-HANDOFF.md)).

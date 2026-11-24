@@ -4,6 +4,16 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-24 — llama.cpp b12681 promoted (no enabled route uses it)
+
+Upstream check (llama.cpp only, at the owner's request): master was 90 commits past the installed `1fb8a269603b`, and the newest build tag, b12681 (`d141011c2578`), 52. Kolibri 1.1's pull request (#32891) had not moved from `5f4d222898dd`. It is still open and conflicting with no review, so `kolibri-1.1-iq4_xs` stays on its own pin. The other engines were not checked in this pass.
+
+| Engine | From → to | Check | Result | What the new version changes (researched before install) |
+|---|---|---|---|---|
+| llama.cpp | `1fb8a269603b` → `d141011c2578` (b12681, 52 commits) | No enabled route uses the installed build, so there was no strict hub check. Instead: a guarded side-server smoke on both cards with the retired Empero Qwen3.8-35B-A3B IQ4_XS weights (65,536 context, plain `llama-server`, not router mode) | **Promoted.** Up in 55 s; arithmetic right; one well-formed tool call, and the tool result used correctly; code word found in a 42,619-token prompt (prompt read 5,664 tok/s, decode 74 tok/s); about 10 GB per card; no GPU error. | Little for these cards. The one kernel change that runs on gfx1100 (#31669, replay for gated delta net state) acts only with a draft model or MTP on Qwen3.5-style and KDA models, none of which is served. Tool-call parsing changed: token-aware parsing in several parsers (#29307), a lazy grammar for bare-JSON tool calls (#32497), and Inkling 2 parser and tokenizer fixes (#32833, #32799). Clearing the KV cache now uses a device memset (#32574). Router-mode model events were reworked (#32398). Fixes for CDNA3, few-row MMQ, WebGPU, Metal and OpenCL do not apply here. |
+
+The next route placed on this build gets its own strict check, which also covers router mode. To roll back, restore `llama-before.private.json` from the stage folder `hardware/generated/daily-update/2026-11-24T-llama-b12681/`.
+
 ## 2026-11-23 — Strata 0.2.20 for Flash-Next and Inkling; the RDNA3 fork deleted
 
 Upstream Strata 0.2.20 (`a34979fc94f3`, engines 0.1.66) was built from source in a fresh stage folder and sealed; Flash-Next and the two-card Inkling passed the strict tool check and were promoted. The owner then had 0.2.20 replace the RDNA3 fork under the main Flash-Next name, and the fork tree and the 0.2.19 build were deleted: there is no fork rollback, and the November 22 note below that Strata shows as behind upstream no longer applies. Four routes were retired the same day, including the last llama.cpp routes, so a llama.cpp update has no route to check until one is added. [Report](STRATA-0219-RESEARCH-2026-11-22.md)
