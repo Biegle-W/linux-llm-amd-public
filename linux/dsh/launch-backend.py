@@ -61,7 +61,7 @@ try:
         worker_env.pop('CUDA_VISIBLE_DEVICES', None)
     elif kind == 'strata':
         selected_profile=available[strata_model]
-        if selected_profile.get('family')=='inkling2':
+        if selected_profile.get('family') in ('inkling2','hy4'):
             ensure_strata_models(ROOT / selected_profile['config'])
         elif selected_profile.get('family')!='deepseek41':
             override = None if selected_profile.get('qualified_qwen_package') else os.environ.get('STRATA_PROFILE_CONFIG')

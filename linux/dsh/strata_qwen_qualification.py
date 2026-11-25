@@ -15,7 +15,7 @@ def require_package(cfg, *, root=None):
         raise RuntimeError('Additional Strata Qwen profile has no qualification registry.')
     data = json.loads(registry.read_text())
     record = data.get('profiles', {}).get(cfg.get('model_name'))
-    family = 'strata-inkling' if cfg.get('arch') == 'inkling2_loop' else 'strata-qwen'
+    family = {'inkling2_loop': 'strata-inkling', 'hy4flash': 'strata-hy4'}.get(cfg.get('arch'), 'strata-qwen')
     if (data.get('schema_version') != 1 or not record or record.get('status') != 'passed'
             or record.get('family') != family):
         raise RuntimeError('Additional Strata Qwen profile requires local qualification.')
@@ -37,8 +37,9 @@ def require_package(cfg, *, root=None):
         if path.is_absolute() or '..' in path.parts or digest(control / path) != expected:
             raise RuntimeError('Qualified Strata Control source changed.')
     identities = record.get('backing_identity', {})
-    from strata_runtime import required_weight_assets, inkling_weight_assets
-    required = {str(p) for p in (inkling_weight_assets if family == 'strata-inkling' else required_weight_assets)(cfg)}
+    from strata_runtime import required_weight_assets, inkling_weight_assets, hy4_weight_assets
+    assets = {'strata-inkling': inkling_weight_assets, 'strata-hy4': hy4_weight_assets}.get(family, required_weight_assets)
+    required = {str(p) for p in assets(cfg)}
     required.update(record.get('gguf_files', []))
     if not record.get('gguf_files') or not required.issubset(identities):
         raise RuntimeError('Qualified Strata Qwen input identities are incomplete.')

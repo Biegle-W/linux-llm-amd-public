@@ -170,7 +170,7 @@ def runtime_paths(results=None):
         for model,record in data['profiles'].items():
             profile=catalog.get(model,{})
             name=profile.get('config','')
-            if (record.get('status')!='passed' or record.get('family') not in ('strata-qwen','strata-inkling')
+            if (record.get('status')!='passed' or record.get('family') not in ('strata-qwen','strata-inkling','strata-hy4')
                     or not profile.get('qualified_qwen_package') or not name
                     or Path(name).name!=name):
                 raise RuntimeError('Unreviewed packaged Qwen reference')

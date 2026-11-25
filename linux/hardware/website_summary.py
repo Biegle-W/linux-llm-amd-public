@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT.parent / 'local-llm-public' / 'docs' / 'WEBSITE-SUMMARY.md'
-UPDATED = '2026-11-24'
+UPDATED = '2026-11-25'
 GH = 'https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/'
 
 # 1. Enabled routes ---------------------------------------------------------------------------------------
@@ -30,6 +30,8 @@ ROUTES = [  # id, model and quant, engine and version, context, weights (size, d
      'llama.cpp HIP, pull request 32891 at `5f4d222898dd` (unmerged, pinned for this route)', 262144, '40.2 GB, shared SATA SSD', 'VRAM only (both cards)'),
     ('inkling-2-mini-sq-20-strata-2gpu', 'Inkling 2 Mini SQ-20 `.strata` + vision',
      'Strata `v0.2.21.1` (`2af30ccaa072`) `strata-inkling`', 262144, '19 GB, shared NVMe SSD', 'VRAM only (both cards, expert parallel)'),
+    ('hy4-flash-sq-64-strata', 'Tencent Hy4-Flash SQ-64 `.strata` + Engram Q8 + vision',
+     'Strata `v0.2.21.1` (`2af30ccaa072`) `strata-hy4`', 32768, '130 GB, shared NVMe SSD', 'Partly in system memory (experts split between both cards and RAM, nothing streamed from SSD)'),
     ('qwen3.8-flash-next-iq3_xxs', 'Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS GGUF',
      'Strata `v0.2.21.1` (`2af30ccaa072`)', 262144, '71 GB + 2.3 GB pack and MTP head, system NVMe SSD', 'Partly in system memory (experts in RAM, streamed from SSD)'),
     ('deepseek-v4.1-flash-1017-maya-unsloth-q1', 'DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S GGUF',
@@ -49,12 +51,14 @@ SPEED = {  # id: (prefill t/s, TTFT s, decode t/s or None, prompt tokens, answer
     'ripple-65b-vllm': (764, 8.18, 27.6, 6244, 76, '2026-11-09', 'hardware/results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json'),
     'kolibri-1.1-iq4_xs': (2466, 2.58, 80.2, 6351, 82, '2026-11-24', 'hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md'),
     'inkling-2-mini-sq-20-strata-2gpu': (2115, 3.67, 96.6, 7761, 123, '2026-11-24', 'hardware/DAILY-UPDATES.md'),
+    'hy4-flash-sq-64-strata': (613, 10.18, 73.2, 6239, 69, '2026-11-25', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
     'qwen3.8-flash-next-iq3_xxs': (1548, 4.09, 173.4, 6332, 83, '2026-11-24', 'hardware/DAILY-UPDATES.md'),
     'deepseek-v4.1-flash-1017-maya-unsloth-q1': (92, 70.42, 6.6, 6448, 105, '2026-11-24', 'hardware/DAILY-UPDATES.md'),
     'deepseek-v4.1-flash-1017-strata-unsloth-q1': (108, 58.91, 4.4, 6338, 107, '2026-11-12', 'hardware/DAILY-UPDATES.md'),
     'glm-5.3-flash-maya': (170, 35.89, 11.1, 6104, 54, '2026-11-24', 'hardware/DAILY-UPDATES.md'),
 }
 SPEED_NOTES = [
+    'Hy4-Flash: the strict tool check when the route was added on November 25 (load 35 s).',
     'Flash-Next and Inkling: checked after Strata 0.2.21.1 was installed on November 24 (one check each on the new engine). Flash-Next loaded from a cold file cache (178 s) after the Maya routes had run.',
     'DeepSeek on Maya and GLM: checked after Maya 1.1.78 was installed on November 24 (one check each on the new engine).',
     'DeepSeek on Strata: checked after its last engine update on November 12; the engine is frozen.',
@@ -83,6 +87,7 @@ RETIRED = [
 TOOLUSE = [  # route, model and quant, engine at the run, score, single/40, episodes/9, 15-episode score or None, coverage note
     ('qwen3.8-27b-sglang-dflash2', 'Qwen3.8-27B AutoRound W4A16 + DFlash2', 'SGLang TP2 `f84475ccf593`', 74.6, 33, 6, None, 'complete'),
     ('glm-5.3-flash-maya', 'GLM-5.3-Flash Maya-S v2 IQ2_XXS', 'Maya 1.1.73', 72.1, 31, 6, 68.8, 'complete'),
+    ('hy4-flash-sq-64-strata', 'Hy4-Flash SQ-64', 'Strata 0.2.21.1 `strata-hy4`, side server on November 24 (same settings as the route)', 72.1, 31, 6, 62.1, 'complete'),
     ('qwen3.8-27b-vllm', 'Qwen3.8-27B AutoRound W4A16', 'vLLM TP2 0.33.0rc1', 71.5, 35, 5, None, 'complete'),
     ('deepseek-v4.1-flash-1017-strata-unsloth-q1', 'DeepSeek-V4.1-Flash-1017 UD-IQ1_S', 'Strata DeepSeek `13eedf552417`', 64.0, 29, 5, 52.9,
      'core complete; 4 of 6 extra episodes cut by the time budget'),
@@ -108,6 +113,7 @@ RANKING_216 = [  # model, best route, correct/216, score, 95% interval, code/20,
 # 5. Short quality test run here so far (AMD quick quality test; not the short tool-use test) -----------------
 QUICK = [  # model, route, agent core/12, agent extra/8, tool calls/16, general/10, date, note
     ('Kolibri 1.1 IQ4_XS', 'kolibri-1.1-iq4_xs', 8, 7, 12, 7, '2026-11-24', 'llama.cpp; gBench Golden Set 14/14'),
+    ('Hy4-Flash SQ-64', 'hy4-flash-sq-64-strata', 12, 8, 9, 5, '2026-11-22', 'tested on the one-card Strata 0.2.18 trial with the same weights'),
     ('Inkling 2 Mini SQ-20', 'inkling-2-mini-sq-20-strata-2gpu', 12, 8, 11, 4, '2026-11-23',
      'tested on the retired one-card entry (Strata 0.2.19) with the same weights'),
 ]
@@ -115,7 +121,7 @@ QUICK = [  # model, route, agent core/12, agent extra/8, tool calls/16, general/
 # 6. Trials (not router entries) ---------------------------------------------------------------------------
 TRIALS = [
     ('Hy4-Flash SQ-64 (retry)', 'Strata 0.2.21.1 side server, both cards (expert parallel), 32,768 context', '2026-11-24',
-     'short tool-use test 72.1 (single-turn 31/40, episodes 6/9; would tie GLM for second); decode 41-45 t/s; about 36 GiB of RAM left; Maya-M on Maya 1.1.78 was slower (16-22 t/s)', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
+     'short tool-use test 72.1 (single-turn 31/40, episodes 6/9); became the route `hy4-flash-sq-64-strata` on November 25; decode 41-45 t/s; about 36 GiB of RAM left; Maya-M on Maya 1.1.78 was slower (16-22 t/s)', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
     ('Hy4-Flash SQ-64', 'Strata 0.2.18 side install, one card, 32,768 context', '2026-11-22',
      'quick test: agent 12/12 and 8/8, tool calls 9/16, general 5/10; decode 26-30 t/s', 'hardware/HY4-FLASH-SQ64-2026-11-22.md'),
     ('Hy4-Flash Maya-M', 'Maya 1.1.73 side copy, both cards', '2026-11-22',
@@ -161,7 +167,7 @@ def render():
     L += ['', '## 4. Quality ranking', '',
           '**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by.** 40 single-turn BFCL v4 tool-calling items '
           '(parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. '
-          'Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on all nine routes on November 24, one route at a time through the hub, '
+          'Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on November 24 on the nine routes then enabled, one route at a time through the hub, and on Hy4-Flash through its side server before it became the tenth route on November 25; '
           'temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.', '',
           '| Rank | Route | Model and quant | Engine at the run | Score /100 | Single-turn /40 | Episodes /9 | 15-episode score | Coverage |',
           '|---:|---|---|---|---:|---:|---:|---:|---|']
@@ -181,7 +187,7 @@ def render():
     for i, r in enumerate(RANKING_216, 1):
         L.append(f'| {i} | {r[0]} | `{r[1]}` | {r[2]} | {r[3]} | {r[4]} | ' + ' | '.join(str(x) for x in r[5:11]) + f' | {r[11]} |')
     L += ['', '- Old-standard ties: ranks 1-3 are not statistically separated, nor are ranks 4-5 (exact McNemar, Holm-corrected).',
-          '- Not on the old standard: `kolibri-1.1-iq4_xs` and `inkling-2-mini-sq-20-strata-2gpu` (no 216-item run).',
+          '- Not on the old standard: `kolibri-1.1-iq4_xs`, `inkling-2-mini-sq-20-strata-2gpu` and `hy4-flash-sq-64-strata` (no 216-item run).',
           f'- Source: [current results]({GH}hardware/CURRENT-AMD-BENCHMARKS.md#old-quality-ranking-216-item-public-suite).', '']
     L += ['## 5. Short quality test', '',
           'The AMD quick quality test for new models (run once per new model or new weights since November 22). It is not the short tool-use test and is too small to rank models.', '',

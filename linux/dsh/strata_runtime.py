@@ -133,6 +133,49 @@ def check_inkling_config(cfg, total, available, *, check_available=True):
         raise RuntimeError(' '.join(problems))
 
 
+def hy4_weight_assets(cfg):
+    """Hy4-Flash on strata-hy4: the SQ checkpoint, its Engram and Vision shards, and the tokenizer files."""
+    args = cfg['args']
+    required = [Path(args[args.index(flag) + 1]) for flag in ('--native', '--engram', '--vision') if flag in args]
+    return required + [Path(cfg['tokenizer'])/name for name in
+                       ('vocab.json', 'merges.txt', 'chat_template.jinja', 'token_type.json', 'tokenizer.json')]
+
+
+HY4_VRAM_EXPERTS_MAX_GB = 32.0   # left to its own plan the engine filled one card (November 24)
+HY4_RAM_EXPERTS_MAX_GB = 24.5
+
+
+def check_hy4_config(cfg, total, available, *, check_available=True):
+    """Both cards in identity order, expert parallel (no layer split), one session, experts in VRAM
+    capped so neither card fills. The host-wide free-RAM floor applies like every other model."""
+    args = cfg['args']
+    if (cfg.get('arch') != 'hy4flash' or cfg.get('backend') != 'hip' or cfg.get('gpu') != [0, 1]
+            or cfg.get('parallel') != 1 or 'layer_split' in cfg
+            or any(a.split('=')[0] in ('--parallel', '--gpu', '--gpus', '--layer-split', '--ep-split') for a in args)):
+        raise RuntimeError('Strata Hy4 requires its two-card expert-parallel HIP profile with one session.')
+    caps = ('--native', '--engram', '--max-context', '--vram-experts-gb', '--ram-experts-gb')
+    if (any(a.startswith(f + '=') for a in args for f in caps) or any(args.count(f) != 1 for f in caps)
+            or any(args[-1] == f for f in caps)):
+        raise RuntimeError('Strata Hy4 flags must appear once each, as separate tokens with a value.')
+    try:
+        vram = float(args[args.index('--vram-experts-gb') + 1])
+        ram = float(args[args.index('--ram-experts-gb') + 1])
+    except ValueError:
+        vram = ram = None
+    if vram is None or not 0 < vram <= HY4_VRAM_EXPERTS_MAX_GB or not 0 < ram <= HY4_RAM_EXPERTS_MAX_GB:
+        raise RuntimeError('Strata Hy4 must cap experts at 32 GB in VRAM and 24.5 GB in RAM.')
+    env = cfg.get('env', {})
+    if (env.get('ROCR_VISIBLE_DEVICES') != '0,1' or env.get('HIP_VISIBLE_DEVICES') != '0,1'
+            or env.get('HY4_DEC_PCIE_SHARE') != '0'):
+        raise RuntimeError('Strata Hy4 must keep the identity card order and HY4_DEC_PCIE_SHARE=0.')
+    if 'worker_swap_max_bytes' not in cfg or cfg['worker_swap_max_bytes'] is not None:
+        raise RuntimeError('Strata uses phase-aware swap without a fixed resident-byte cap.')
+    scope_limits(cfg)
+    problems = memory_blockers(total, available, cfg['minimum_host_ram_gib'], check_available=check_available)
+    if problems:
+        raise RuntimeError(' '.join(problems))
+
+
 def require_weight_assets(cfg):
     required = required_weight_assets(cfg)
     if not all(p.is_file() and p.stat().st_size for p in required):
@@ -146,7 +189,7 @@ def require_strata(before_handover=False,model=None):
     enabled = {k:p for k,p in profiles.items() if p.get('enabled', True)}
     if not enabled:
         raise RuntimeError('All Strata profiles are paused or disabled. Wait for owner-authorized resume; no backend has been stopped.')
-    qwen = {k:p for k,p in enabled.items() if p.get('family') not in ('deepseek41', 'inkling2')}
+    qwen = {k:p for k,p in enabled.items() if p.get('family') not in ('deepseek41', 'inkling2', 'hy4')}
     if not qwen:
         raise RuntimeError('No validated Strata Qwen profile is enabled. No backend has been stopped.')
     # Preserve the existing GSQ default when another independently sealed quant is added.
@@ -161,14 +204,18 @@ def require_strata(before_handover=False,model=None):
         if cfg['model_name']!=selected or profile['context']!=32768:
             raise RuntimeError('Strata DeepSeek catalog and sealed model/context must match.')
         return require_profile(cfg,before_handover=before_handover)
-    if profile.get('family')=='inkling2':
+    if profile.get('family') in ('inkling2', 'hy4'):
+        hy4 = profile['family'] == 'hy4'
+        label = 'Strata Hy4' if hy4 else 'Strata Inkling'
         cfg = json.loads((ROOT / 'dsh' / profile['config']).read_text())
         args = cfg['args']
         if cfg.get('model_name') != selected or int(args[args.index('--max-context') + 1]) != profile['context']:
-            raise RuntimeError('Strata Inkling catalog and sealed model/context must match.')
+            raise RuntimeError(label + ' catalog and sealed model/context must match.')
+        if cfg.get('arch') != ('hy4flash' if hy4 else 'inkling2_loop'):
+            raise RuntimeError(label + ' catalog family and sealed architecture must match.')
         from strata_qwen_qualification import require_package
         require_package(cfg)
-        check_inkling_config(cfg, *host_memory(), check_available=not before_handover)
+        (check_hy4_config if hy4 else check_inkling_config)(cfg, *host_memory(), check_available=not before_handover)
         amd_devices()
         if not shutil.which('systemd-run'):
             raise RuntimeError('Strata requires systemd-run for its worker-only no-swap scope.')
@@ -178,9 +225,9 @@ def require_strata(before_handover=False,model=None):
         except (OSError, subprocess.SubprocessError) as error:
             raise RuntimeError('The user service manager is unavailable; cannot enforce Strata-only no-swap.') from error
         if not os.access('/dev/kfd', os.R_OK | os.W_OK) or not os.access(cfg['exe'], os.X_OK):
-            raise RuntimeError('Strata Inkling requires KFD access and its sealed engine. No backend has been stopped.')
-        if not all(p.is_file() and p.stat().st_size for p in inkling_weight_assets(cfg)):
-            raise RuntimeError('Strata Inkling files are missing. Check the model drive.')
+            raise RuntimeError(label + ' requires KFD access and its sealed engine. No backend has been stopped.')
+        if not all(p.is_file() and p.stat().st_size for p in (hy4_weight_assets if hy4 else inkling_weight_assets)(cfg)):
+            raise RuntimeError(label + ' files are missing. Check the model drive.')
         return cfg
     # A sealed package (qualified_qwen_package) is checked against its seal whatever its name;
     # since November 23 the main Flash-Next name is one. STRATA_PROFILE_CONFIG permits an isolated

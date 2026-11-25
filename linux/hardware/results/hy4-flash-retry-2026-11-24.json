@@ -2,6 +2,11 @@
   "trial": "Hy4-Flash retry on the updated engines (owner, November 24)",
   "date": "2026-11-24",
   "status": "trial on side servers, not a hub route",
+  "route_added": {
+    "date": "2026-11-25",
+    "route": "hy4-flash-sq-64-strata",
+    "note": "Owner decision; the Strata expert-parallel setup became this hub route with the same settings. Strict hub tool check: load 34.7 s, 6,239-token prompt TTFT 10.18 s, 69 answer tokens at 73.2 tok/s, follow-up TTFT 0.78 s with cache reuse, 2.46 and 3.65 GiB free VRAM at readiness."
+  },
   "bench_note": "same fixed request set, one at a time, temperature 0, 32,768 context, 47.7K-token request skipped",
   "setups": {
     "strata-0.2.21.1-expert-parallel": {

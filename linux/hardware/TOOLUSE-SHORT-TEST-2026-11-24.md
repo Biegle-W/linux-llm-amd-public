@@ -39,6 +39,7 @@ Correct / scored. Single-turn: parallel calls (15), irrelevance (15: the right a
 
 - Simple calls are near the ceiling for every route. The spread comes from irrelevance (the large mixture-of-experts models call a tool when none fits) and from the multi-turn episodes.
 - Kolibri declines irrelevant requests best (13/15) but passes one episode of nine; Inkling and Qwen3.8-27B vLLM have the most single-turn items right (35/40).
+- **Added November 25:** Hy4-Flash SQ-64 ran the same test on a Strata 0.2.21.1 side server on November 24 (large group, same items and settings): 72.1 (31/40, 6/9; 7 of 15 episodes, 62.1). It became the hub route `hy4-flash-sq-64-strata` on November 25 and ranks second, tied with GLM ([report](HY4-FLASH-RETRY-2026-11-24.md)).
 
 ## Method
 

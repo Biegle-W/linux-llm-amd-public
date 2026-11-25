@@ -1,6 +1,6 @@
 # Hy4-Flash retried on the new engines — November 24, 2026
 
-**Owner, November 24:** "update the engines to the latest version and try again with the downloaded weights." The weights from the November 22 trials were reused (nothing downloaded). Both engines were updated first ([ledger](DAILY-UPDATES.md)). This is a trial on side servers, not a hub route; adding it is the owner's decision.
+**Owner, November 24:** "update the engines to the latest version and try again with the downloaded weights." The weights from the November 22 trials were reused (nothing downloaded). Both engines were updated first ([ledger](DAILY-UPDATES.md)). This was a trial on side servers; on November 25 the owner made the Strata setup the hub route `hy4-flash-sq-64-strata` (see [Route](#route-november-25)).
 
 ## Result
 
@@ -26,9 +26,11 @@
 - **Maya's first start measures the machine.** Every Maya 1.1.78 start in this trial timed the prompt path first, for 308–349 s (it says the next starts skip this, but the second start of each layout measured again), and the default plan also restarted once to keep more VRAM free. The 7–12 minute loads are therefore what to expect on each start. The first attempt timed out in the test harness for that reason only. Maya's tensor parallel (`--tp 2`, the decode path upstream sped up) was not taken: each card would need 36.2 GB of VRAM for this pack, so its default fell back to a layer split. Maya-M is slower than Strata here on every request.
 - Not addressed: upstream reports repetition with Hy4-Flash on long answers (issue 6530; a sampler workaround exists) and no prompt-cache reuse across separate conversations (issues 6996 and 6652). The follow-up turn above does reuse its own conversation's prompt.
 
-## If it becomes a route
+## Route (November 25)
 
-A hub route would be a sealed Strata config like Flash-Next's: `strata-hy4` from the 0.2.21.1 package, both cards, the VRAM cap above, 32,768 context, and the three SQ-64, Engram and Vision files on the shared NVMe drive (130 GB). It needs the owner's decision, a strict tool check through the hub, and the usual docs. It loads in under a minute, and with about 36 GiB of RAM left it can stay loaded beside a desktop.
+**Owner, November 25:** "Yes, add it." The Strata setup above is now the hub route `hy4-flash-sq-64-strata`: a sealed package like Flash-Next's, `strata-hy4` from the 0.2.21.1 build, both cards, experts capped at 32 GB in VRAM and 24.5 GB in RAM, `HY4_DEC_PCIE_SHARE=0` and `HY4_HIP_PEERS=1`, 32,768 context, vision on, and the three SQ-64, Engram and Vision files on the shared NVMe drive (130 GB). The Strata backend got a `hy4` family that checks the card order, the expert-parallel layout and the expert caps before it loads.
+
+Strict tool check through the hub, November 25: load 34.7 s; a 6,239-token prompt read in 10.2 s (613 tok/s) from a cold start; 69 answer tokens at 73 tok/s; the follow-up turn reused the prompt cache (first token 0.8 s); at least 2.4 GiB free on each card at readiness. Not checked: sustained use and contexts longer than 32,768 tokens.
 
 ## Evidence
 

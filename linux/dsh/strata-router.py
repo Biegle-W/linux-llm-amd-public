@@ -114,7 +114,7 @@ def ensure_worker(model):
         stop_worker()
         require_strata(model=model)
         profile = PROFILES[model]
-        override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family') not in ('deepseek41','inkling2') and not profile.get('qualified_qwen_package') else None
+        override=os.environ.get('STRATA_PROFILE_CONFIG') if profile.get('family') not in ('deepseek41','inkling2','hy4') and not profile.get('qualified_qwen_package') else None
         config = ROOT / (override or profile['config'])
         logfile = (ROOT / 'logs' / ('strata-' + model + '.log')).open('a')
         print('Loading', model, 'from its configured model volume; other Strata weights are unloaded.', flush=True)
@@ -225,7 +225,7 @@ class Handler(BaseHTTPRequestHandler):
                 ensure_worker(model)
                 if self.path == '/models/load':
                     return self.send_json(200, {'success': True})
-                if PROFILES[model].get('family') not in ('deepseek41','inkling2'):
+                if PROFILES[model].get('family') not in ('deepseek41','inkling2','hy4'):
                     data = add_document_prefix(data)
                 with swap_guard.inference(worker):
                     connection = http.client.HTTPConnection('127.0.0.1', WORKER_PORT, timeout=86400)

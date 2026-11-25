@@ -1,6 +1,6 @@
-# Current AMD results — November 24, 2026
+# Current AMD results — November 25, 2026
 
-One row per route measured in the November 9–11 runs (routes retired since are marked; nine routes are enabled now), from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 24, 2026 (evening): the short tool-use test ran on all nine routes and is now the quality ranking** ([report](TOOLUSE-SHORT-TEST-2026-11-24.md), table [below](#short-tool-use-ranking)). Earlier that day: Kolibri 1.1 was tried, then became the hub route `kolibri-1.1-iq4_xs` (owner decision; its strict tool check is in the first table, its quick test in the last; [report](KOLIBRI-1.1-TRIAL-2026-11-24.md)). November 23: Flash-Next moved to upstream Strata 0.2.20, and `empero-qwen3.8-35b-a3b`, `nemotron-3.5-bolt-vllm`, `inkling-2-mini-q8` and the one-card `inkling-2-mini-sq-20-strata` were retired. **November 22:** the `inkling-2-mini-q8` speed columns now come from the RX 7900 XTX build of llama.cpp that the route moved to that day. November 21: `inkling-2-mini-q8` added ([report](INKLING-2-MINI-2026-11-21.md)); the other rows were not remeasured on the new llama.cpp build. November 18: the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
+One row per route measured in the November 9–11 runs (routes retired since are marked; ten routes are enabled now), from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 25, 2026: Hy4-Flash SQ-64 became the hub route `hy4-flash-sq-64-strata`** (owner decision; strict tool check in the first table, tool-use score 72.1 from its November 24 side-server run; [report](HY4-FLASH-RETRY-2026-11-24.md)). November 24 (evening): the short tool-use test ran on all nine routes then enabled and is now the quality ranking ([report](TOOLUSE-SHORT-TEST-2026-11-24.md), table [below](#short-tool-use-ranking)). Earlier that day: Kolibri 1.1 was tried, then became the hub route `kolibri-1.1-iq4_xs` (owner decision; its strict tool check is in the first table, its quick test in the last; [report](KOLIBRI-1.1-TRIAL-2026-11-24.md)). November 23: Flash-Next moved to upstream Strata 0.2.20, and `empero-qwen3.8-35b-a3b`, `nemotron-3.5-bolt-vllm`, `inkling-2-mini-q8` and the one-card `inkling-2-mini-sq-20-strata` were retired. **November 22:** the `inkling-2-mini-q8` speed columns now come from the RX 7900 XTX build of llama.cpp that the route moved to that day. November 21: `inkling-2-mini-q8` added ([report](INKLING-2-MINI-2026-11-21.md)); the other rows were not remeasured on the new llama.cpp build. November 18: the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
 
 | Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Old rank (216) | Tool-use /100 |
 |---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -15,6 +15,7 @@ One row per route measured in the November 9–11 runs (routes retired since are
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 2 | 62.2 |
 | `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 | 72.1 |
 | `kolibri-1.1-iq4_xs` (added Nov 24) | llama.cpp (pull-request build) | passed | 80.3 | 2,466 | 82.8 | — | — | — | — | 45.6 |
+| `hy4-flash-sq-64-strata` (added Nov 25) | Strata 0.2.21.1 `strata-hy4` | passed | 73.2 | 613 | 34.7 | — | — | — | — | 72.1 |
 
 How to read it:
 - **Tool call:** one DSH read-tool round trip with about 6.4K prompt tokens and 25 tool definitions, under the guarded harness ([standard](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)).
@@ -33,6 +34,7 @@ How to read it:
 - ‡ GLM ran with a 30 s watchdog heartbeat instead of 6 s (owner choice), because its expert warm-up stalls disk writes on the system drive.
 - # Inkling 2 Mini, added November 21 (UD-Q8_K_XL file, both cards, 131,072 tokens of context). It reasons before every answer even at reasoning effort `none`; 45 of its 216 answers were cut off by the token limit and scored wrong, so 149 is a lower bound. It was scored alone, so it is not in the paired test, and the 54- and 64-item suites were not run. Since November 22 the route runs on a third-party llama.cpp branch tuned for this card (`GodGMN/llama.cpp` `inkling-rdna3` at `cb0e469607c1`, owner decision): decode 43.0 tok/s and prompt read 1,508 tok/s, against 25.9 and 615 on upstream. The 149 was scored on upstream; the branch scored 144 on the same items, with no difference detected (137 right on both, 12 only on upstream, 7 only on the branch), and the owner kept 149 as the route's figure. Graph capture is off on both builds: with it on, VRAM grows until the server fails ([report](INKLING-2-MINI-2026-11-21.md)).
 - `kolibri-1.1-iq4_xs`, added November 24: Kolibri 1.1 IQ4_XS on both cards with 262,144 context, on llama.cpp pull request #32891 at `5f4d222898dd`, pinned for this route only. Strict tool check through the hub: 82 answer tokens in 1.01 s after the first token, a 6,351-token prompt read in 2.58 s from a cold start, load 82.8 s, at least 2.2 GB free on each card. It has not run the 54-, 64- or 216-item suites; its quick-test scores are in the last table ([report](KOLIBRI-1.1-TRIAL-2026-11-24.md)).
+- `hy4-flash-sq-64-strata`, added November 25: Hy4-Flash SQ-64 on Strata 0.2.21.1 `strata-hy4` across both cards (expert parallel, experts capped at 32 GB in VRAM), 32,768 context. Strict tool check through the hub: 69 answer tokens in 0.93 s after the first token, a 6,239-token prompt read in 10.2 s from a cold start, load 34.7 s, at least 2.4 GiB free on each card. Its tool-use score is from the November 24 side-server run with the same engine and settings; it has not run the 54-, 64- or 216-item suites ([report](HY4-FLASH-RETRY-2026-11-24.md)).
 - **November 18 memory-guard changes (owner decisions), no speed or quality figure affected.** Every model load is admitted on 1 GiB of available RAM instead of a per-model figure (was 28.4 GiB for Flash-Next, 52 GiB for GLM and both DeepSeek routes), and after a backend switch Maya and Strata DeepSeek wait up to 15 s for the cards to report the stopped model's VRAM as free. One short request per affected route through the hub, load plus answer, not a benchmark: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s. Switching straight between loaded models was then verified the same way: Flash-Next 98 s, to DeepSeek Q1 on Maya 77 s, back to Flash-Next 148 s ([guard policy](RESOURCE-GUARDS-2026-11-03.md), [results](results/ram-floor-load-check-2026-11-18.json)).
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
 
@@ -44,18 +46,19 @@ The quality ranking since November 24 (owner: "Use the short tool-use test as th
 |---:|---|---|---:|---:|---:|---:|---:|
 | 1 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | 74.6 | 33 | 6 | 80 | 3.2 |
 | 2 | `glm-5.3-flash-maya` | Maya 1.1.73 | 72.1 (68.8) | 31 | 6 | 151 | 35.2 |
-| 3 | `qwen3.8-27b-vllm` | vLLM TP2 | 71.5 | 35 | 5 | 45 | 3.5 |
-| 4 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek `13eedf552417` | 64.0 (52.9†) | 29 | 5 | 72 | 56.0 |
-| 5 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya 1.1.73 | 62.2 (56.7†) | 32 | 4 | 70 | 56.0 |
-| 5 | `ripple-65b-vllm` | vLLM TP2 | 62.2 (56.7) | 32 | 4 | 121 | 35.3 |
-| 7 | `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.20 `strata-inkling` | 60.4 | 35 | 3 | 58 | 10.0 |
-| 8 | `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 | 52.9 | 29 | 3 | 149 | 9.1 |
-| 9 | `kolibri-1.1-iq4_xs` | llama.cpp PR 32891 | 45.6 | 32 | 1 | 85 | 2.7 |
+| 2 | `hy4-flash-sq-64-strata` | Strata 0.2.21.1 `strata-hy4`, side server‡‡ | 72.1 (62.1) | 31 | 6 | under 60 | 47 |
+| 4 | `qwen3.8-27b-vllm` | vLLM TP2 | 71.5 | 35 | 5 | 45 | 3.5 |
+| 5 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek `13eedf552417` | 64.0 (52.9†) | 29 | 5 | 72 | 56.0 |
+| 6 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya 1.1.73 | 62.2 (56.7†) | 32 | 4 | 70 | 56.0 |
+| 6 | `ripple-65b-vllm` | vLLM TP2 | 62.2 (56.7) | 32 | 4 | 121 | 35.3 |
+| 8 | `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.20 `strata-inkling` | 60.4 | 35 | 3 | 58 | 10.0 |
+| 9 | `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 | 52.9 | 29 | 3 | 149 | 9.1 |
+| 10 | `kolibri-1.1-iq4_xs` | llama.cpp PR 32891 | 45.6 | 32 | 1 | 85 | 2.7 |
 
 - One episode moves the score by 5.6 points, one single-turn item by 1.25; routes a few points apart are not separated (no significance test was run).
 - † The 56-minute item budget ended before the last extra episodes (DeepSeek on Strata ran 11 of 15, on Maya 13 of 15); unrun episodes count as not passed in the bracket. The ranking score is complete.
 - The items were drawn by the NVIDIA rule but need not match the NVIDIA server's frozen list; compare ranks within one machine.
-- Not a route, not ranked: Hy4-Flash SQ-64 on a Strata 0.2.21.1 side server across both cards scored 72.1 (31/40, 6/9; large group 62.1) on November 24 ([report](HY4-FLASH-RETRY-2026-11-24.md)).
+- ‡‡ Hy4-Flash ran through a Strata 0.2.21.1 side server on November 24 (55 items, 7 of 15 episodes in the large group), before it became the route `hy4-flash-sq-64-strata` on November 25 with the same engine and settings; the other routes ran through the hub ([report](HY4-FLASH-RETRY-2026-11-24.md)).
 
 ## Old quality ranking (216-item public suite)
 
@@ -88,7 +91,7 @@ Not measured yet: a sustained, matched benchmark across all 9 enabled routes, th
 
 | Model | State | Harness tasks, core (12) | Harness extra (8) | Function calls (16) | General (10) | Decode tok/s | Minutes |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Hy4-Flash SQ-64 on Strata 0.2.18 | trial on a side install, not a hub route | 12 | 8 | 9 | 5 | 26–30 | 11 |
+| Hy4-Flash SQ-64 on Strata 0.2.18 | trial on a side install (one card); the same weights became the hub route `hy4-flash-sq-64-strata` on November 25 | 12 | 8 | 9 | 5 | 26–30 | 11 |
 | `inkling-2-mini-sq-20-strata` (Inkling 2 Mini SQ-20 on Strata 0.2.19, one card) | hub route November 23, retired the same day for `inkling-2-mini-sq-20-strata-2gpu` (same weights) | 12 | 8 | 11 | 4 | 86–90 | 11 |
 | Hy4-Flash Maya-M on Maya 1.1.73, both cards | trial on a side copy, not a hub route | 11 | 8 | 9 | 6 | 13–32 (median 26.5) | 11 |
 | Kolibri 1.1 IQ4_XS on a llama.cpp pull-request build, both cards | hub route `kolibri-1.1-iq4_xs` since November 24 (tested as a trial with the same build and settings); block G 14 of 14 | 8 | 7 | 12 | 7 | 77 short, 52 at 21K, 12 at 238K tokens | 3 |
