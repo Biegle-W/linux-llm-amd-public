@@ -1,0 +1,251 @@
+{
+  "trial": "Hy4-Flash retry on the updated engines (owner, November 24)",
+  "date": "2026-11-24",
+  "status": "trial on side servers, not a hub route",
+  "bench_note": "same fixed request set, one at a time, temperature 0, 32,768 context, 47.7K-token request skipped",
+  "setups": {
+    "strata-0.2.21.1-expert-parallel": {
+      "engine": "strata-hy4 0.1.67 (Strata v0.2.21.1 2af30ccaa072)",
+      "weights": "Hy4-Flash SQ-64 + Engram Q8 + Vision (.strata)",
+      "cards": 2,
+      "args_extra": [
+        "--vram-experts-gb",
+        "32.0",
+        "--ram-experts-gb",
+        "24.5"
+      ],
+      "env": {
+        "HY4_DEC_PCIE_SHARE": "0",
+        "HY4_HIP_PEERS": "1"
+      },
+      "bench": {
+        "prose-256": {
+          "ttft_s": 0.312,
+          "total_s": 6.506,
+          "prompt_tokens": 39,
+          "completion_tokens": 256,
+          "prompt_tok_s": 125.2,
+          "decode_tok_s": 41.3,
+          "finish": "length"
+        },
+        "code-256": {
+          "ttft_s": 0.354,
+          "total_s": 6.023,
+          "prompt_tokens": 44,
+          "completion_tokens": 256,
+          "prompt_tok_s": 124.3,
+          "decode_tok_s": 45.2,
+          "finish": "length"
+        },
+        "agent-turn1-6k": {
+          "ttft_s": 13.066,
+          "total_s": 13.348,
+          "prompt_tokens": 10888,
+          "completion_tokens": 32,
+          "prompt_tok_s": 833.3,
+          "decode_tok_s": 113.4,
+          "finish": "tool_calls"
+        },
+        "agent-turn2-tool-result": {
+          "ttft_s": 1.979,
+          "total_s": 2.327,
+          "prompt_tokens": 11209,
+          "completion_tokens": 33,
+          "prompt_tok_s": 5662.9,
+          "decode_tok_s": 95.1,
+          "finish": "stop"
+        }
+      },
+      "memory": {
+        "ram_available_MiB": 36884,
+        "swap_used_MiB": 1406
+      }
+    },
+    "strata-0.2.21.1-layer-split-auto": {
+      "engine": "strata-hy4 0.1.67",
+      "cards": 2,
+      "bench": {
+        "prose-256": {
+          "ttft_s": 0.319,
+          "total_s": 6.677,
+          "prompt_tokens": 39,
+          "completion_tokens": 256,
+          "prompt_tok_s": 122.4,
+          "decode_tok_s": 40.3,
+          "finish": "length"
+        },
+        "code-256": {
+          "ttft_s": 0.347,
+          "total_s": 6.043,
+          "prompt_tokens": 44,
+          "completion_tokens": 256,
+          "prompt_tok_s": 126.9,
+          "decode_tok_s": 44.9,
+          "finish": "length"
+        },
+        "agent-turn1-6k": {
+          "ttft_s": 13.828,
+          "total_s": 14.091,
+          "prompt_tokens": 10888,
+          "completion_tokens": 32,
+          "prompt_tok_s": 787.4,
+          "decode_tok_s": 121.9,
+          "finish": "tool_calls"
+        },
+        "agent-turn2-tool-result": {
+          "ttft_s": 1.979,
+          "total_s": 2.336,
+          "prompt_tokens": 11209,
+          "completion_tokens": 33,
+          "prompt_tok_s": 5664.7,
+          "decode_tok_s": 92.4,
+          "finish": "stop"
+        }
+      },
+      "memory": {
+        "ram_available_MiB": 36884,
+        "swap_used_MiB": 1406
+      }
+    },
+    "maya-1.1.78-maya-m-default": {
+      "engine": "maya-hy4 (Maya 1530120a124e)",
+      "weights": "Hy4-Flash Maya-M",
+      "cards": 2,
+      "layout": "layer split 24/18 (tensor parallel not taken: 36.2 GB per card needed)",
+      "bench": {
+        "prose-256": {
+          "ttft_s": 1.863,
+          "total_s": 18.094,
+          "prompt_tokens": 39,
+          "completion_tokens": 256,
+          "prompt_tok_s": 20.9,
+          "decode_tok_s": 15.8,
+          "finish": "length"
+        },
+        "code-256": {
+          "ttft_s": 1.005,
+          "total_s": 12.704,
+          "prompt_tokens": 44,
+          "completion_tokens": 256,
+          "prompt_tok_s": 43.8,
+          "decode_tok_s": 21.9,
+          "finish": "length"
+        },
+        "agent-turn1-6k": {
+          "ttft_s": 36.176,
+          "total_s": 37.012,
+          "prompt_tokens": 10888,
+          "completion_tokens": 32,
+          "prompt_tok_s": 301.0,
+          "decode_tok_s": 38.3,
+          "finish": "tool_calls"
+        },
+        "agent-turn2-tool-result": {
+          "ttft_s": 2.898,
+          "total_s": 3.886,
+          "prompt_tokens": 11209,
+          "completion_tokens": 33,
+          "prompt_tok_s": 3868.5,
+          "decode_tok_s": 33.4,
+          "finish": "stop"
+        }
+      },
+      "memory": {
+        "ram_available_MiB": 57967,
+        "swap_used_MiB": 2685
+      }
+    },
+    "maya-1.1.78-maya-m-tp0": {
+      "engine": "maya-hy4 (Maya 1530120a124e)",
+      "cards": 2,
+      "layout": "layer split 17/25",
+      "bench": {
+        "prose-256": {
+          "ttft_s": 0.546,
+          "total_s": 14.678,
+          "prompt_tokens": 39,
+          "completion_tokens": 256,
+          "prompt_tok_s": 71.5,
+          "decode_tok_s": 18.1,
+          "finish": "length"
+        },
+        "code-256": {
+          "ttft_s": 1.306,
+          "total_s": 13.822,
+          "prompt_tokens": 44,
+          "completion_tokens": 256,
+          "prompt_tok_s": 33.7,
+          "decode_tok_s": 20.5,
+          "finish": "length"
+        },
+        "agent-turn1-6k": {
+          "ttft_s": 38.929,
+          "total_s": 39.76,
+          "prompt_tokens": 10888,
+          "completion_tokens": 32,
+          "prompt_tok_s": 279.7,
+          "decode_tok_s": 38.5,
+          "finish": "tool_calls"
+        },
+        "agent-turn2-tool-result": {
+          "ttft_s": 3.041,
+          "total_s": 4.045,
+          "prompt_tokens": 11209,
+          "completion_tokens": 33,
+          "prompt_tok_s": 3686.1,
+          "decode_tok_s": 32.9,
+          "finish": "stop"
+        }
+      },
+      "memory": {
+        "ram_available_MiB": 58007,
+        "swap_used_MiB": 2607
+      }
+    }
+  },
+  "tooluse_short_test": {
+    "setup": "strata-0.2.21.1-expert-parallel",
+    "group": "large",
+    "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+    "item_seconds": 2797.396383,
+    "status": "completed",
+    "single_correct": 31,
+    "episodes_passed": 6,
+    "episodes15_passed": 7,
+    "coverage": "single 40/40, episodes 9/9, episodes15 15/15",
+    "complete": true,
+    "score": 72.1,
+    "score15": 62.1,
+    "timeouts": 0,
+    "pools": {
+      "parallel": {
+        "correct": 12,
+        "scored": 15
+      },
+      "irrelevance": {
+        "correct": 10,
+        "scored": 15
+      },
+      "simple": {
+        "correct": 9,
+        "scored": 10
+      },
+      "mt_base": {
+        "correct": 3,
+        "scored": 5
+      },
+      "mt_miss_param": {
+        "correct": 2,
+        "scored": 5
+      },
+      "mt_miss_func": {
+        "correct": 2,
+        "scored": 5
+      }
+    },
+    "memory_after": {
+      "ram_available_MiB": 36824,
+      "swap_used_MiB": 1409
+    }
+  }
+}

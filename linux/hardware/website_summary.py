@@ -114,6 +114,8 @@ QUICK = [  # model, route, agent core/12, agent extra/8, tool calls/16, general/
 
 # 6. Trials (not router entries) ---------------------------------------------------------------------------
 TRIALS = [
+    ('Hy4-Flash SQ-64 (retry)', 'Strata 0.2.21.1 side server, both cards (expert parallel), 32,768 context', '2026-11-24',
+     'short tool-use test 72.1 (single-turn 31/40, episodes 6/9; would tie GLM for second); decode 41-45 t/s; about 36 GiB of RAM left; Maya-M on Maya 1.1.78 was slower (16-22 t/s)', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
     ('Hy4-Flash SQ-64', 'Strata 0.2.18 side install, one card, 32,768 context', '2026-11-22',
      'quick test: agent 12/12 and 8/8, tool calls 9/16, general 5/10; decode 26-30 t/s', 'hardware/HY4-FLASH-SQ64-2026-11-22.md'),
     ('Hy4-Flash Maya-M', 'Maya 1.1.73 side copy, both cards', '2026-11-22',

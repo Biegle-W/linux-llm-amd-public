@@ -55,6 +55,7 @@ The quality ranking since November 24 (owner: "Use the short tool-use test as th
 - One episode moves the score by 5.6 points, one single-turn item by 1.25; routes a few points apart are not separated (no significance test was run).
 - † The 56-minute item budget ended before the last extra episodes (DeepSeek on Strata ran 11 of 15, on Maya 13 of 15); unrun episodes count as not passed in the bracket. The ranking score is complete.
 - The items were drawn by the NVIDIA rule but need not match the NVIDIA server's frozen list; compare ranks within one machine.
+- Not a route, not ranked: Hy4-Flash SQ-64 on a Strata 0.2.21.1 side server across both cards scored 72.1 (31/40, 6/9; large group 62.1) on November 24 ([report](HY4-FLASH-RETRY-2026-11-24.md)).
 
 ## Old quality ranking (216-item public suite)
 

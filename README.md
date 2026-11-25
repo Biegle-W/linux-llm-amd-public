@@ -61,6 +61,8 @@ New models tried on side servers. Adding one to the hub is the owner's decision.
 
 | Model | Date | Engine | Placement | Decode tok/s | Prompt read tok/s | Quick quality test |
 |---|---|---|---|---:|---:|---|
+| **Hy4-Flash SQ-64** | **Nov 24** | **Strata 0.2.21.1 side server (`strata-hy4` 0.1.67)** | **both cards, expert parallel, 34 GB of experts in VRAM and 22 GB in RAM, 32,768 context; about 36 GiB of RAM left** | **41–45** | **833 (10.9K-token agent prompt)** | **short tool-use test 72.1** (31/40, episodes 6/9; would tie GLM for second in the ranking) ([report](linux/hardware/HY4-FLASH-RETRY-2026-11-24.md)) |
+| Hy4-Flash Maya-M | Nov 24 | Maya 1.1.78 side copy | both cards, layer split (tensor parallel does not fit) | 16–22 | 280–301 | not run (slower than Strata on every request) |
 | Hy4-Flash SQ-64 | Nov 22 | Strata 0.2.18 side install | one card, 32,768 context | 26–30 | 1,146 | harness 12/12 and 8/8, function calls 9/16, general 5/10 |
 | Hy4-Flash Maya-M | Nov 22 | Maya 1.1.73 side copy | both cards | 13–32 | — | harness 11/12 and 8/8, function calls 9/16, general 6/10 |
 
@@ -105,6 +107,7 @@ The registry entries of the routes retired on November 23 stay disabled. They ar
 
 ### Latest changes (November 17–24)
 
+- **Nov 24:** Hy4-Flash retried on the updated engines with the downloaded weights. On Strata 0.2.21.1 across both cards it decodes at 41–45 tok/s (26–30 on one card on November 22), leaves about 36 GiB of RAM free (about 4 GB before) and scores 72.1 on the short tool-use test, level with GLM; Maya-M on Maya 1.1.78 is slower. Still a trial; adding it as a route is the owner's call ([report](linux/hardware/HY4-FLASH-RETRY-2026-11-24.md)).
 - **Nov 24:** Strata 0.2.21.1 (Flash-Next and the two-card Inkling) and Maya 1.1.78 (GLM and DeepSeek) promoted after a side-by-side speed run and the strict tool check. Inkling reads a 13K agent prompt faster (5.8 against 7.7 s) and now reuses the prompt cache on the next turn; Flash-Next is unchanged; DeepSeek on Maya reads its first prompt faster, GLM decodes slightly slower ([ledger](linux/hardware/DAILY-UPDATES.md)).
 - **Nov 24:** the short tool-use test (the NVIDIA server's ranking test) was rebuilt here from BFCL v4 and run on all nine routes; it is now the quality ranking. Top three: Qwen3.8-27B on SGLang 74.6, GLM-5.3-Flash 72.1, Qwen3.8-27B on vLLM 71.5 ([report](linux/hardware/TOOLUSE-SHORT-TEST-2026-11-24.md)).
 - **Nov 24:** llama.cpp updated to build b12681 (`d141011c2578`, 52 commits). No enabled route uses the installed build, so it was checked on a guarded side server on both cards: answers, a tool round trip and a 42,619-token prompt passed. Kolibri stays on its pull-request pin, which has not moved ([ledger](linux/hardware/DAILY-UPDATES.md)).
