@@ -1,27 +1,28 @@
 # Current AMD results — November 24, 2026
 
-One row per route measured in the November 9–11 runs (routes retired since are marked; nine routes are enabled now), from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 24, 2026:** Kolibri 1.1 was tried, then became the hub route `kolibri-1.1-iq4_xs` (owner decision; its strict tool check is in the first table, its quick test in the last; [report](KOLIBRI-1.1-TRIAL-2026-11-24.md)). November 23: Flash-Next moved to upstream Strata 0.2.20, and `empero-qwen3.8-35b-a3b`, `nemotron-3.5-bolt-vllm`, `inkling-2-mini-q8` and the one-card `inkling-2-mini-sq-20-strata` were retired. **November 22:** the `inkling-2-mini-q8` speed columns now come from the RX 7900 XTX build of llama.cpp that the route moved to that day. November 21: `inkling-2-mini-q8` added ([report](INKLING-2-MINI-2026-11-21.md)); the other rows were not remeasured on the new llama.cpp build. November 18: the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
+One row per route measured in the November 9–11 runs (routes retired since are marked; nine routes are enabled now), from the [November 9 rerun](AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.md) and the [November 10–11 public-benchmark suite](PUBLIC-QUALITY-SUITE-2026-11-11.md). Every number comes from a short guarded check or the graded quality suites; none is a sustained or full-context benchmark. Older results are in the [benchmark history](BENCHMARK-HISTORY.md) and the [changelog](CHANGELOG.md). **Last updated November 24, 2026 (evening): the short tool-use test ran on all nine routes and is now the quality ranking** ([report](TOOLUSE-SHORT-TEST-2026-11-24.md), table [below](#short-tool-use-ranking)). Earlier that day: Kolibri 1.1 was tried, then became the hub route `kolibri-1.1-iq4_xs` (owner decision; its strict tool check is in the first table, its quick test in the last; [report](KOLIBRI-1.1-TRIAL-2026-11-24.md)). November 23: Flash-Next moved to upstream Strata 0.2.20, and `empero-qwen3.8-35b-a3b`, `nemotron-3.5-bolt-vllm`, `inkling-2-mini-q8` and the one-card `inkling-2-mini-sq-20-strata` were retired. **November 22:** the `inkling-2-mini-q8` speed columns now come from the RX 7900 XTX build of llama.cpp that the route moved to that day. November 21: `inkling-2-mini-q8` added ([report](INKLING-2-MINI-2026-11-21.md)); the other rows were not remeasured on the new llama.cpp build. November 18: the Flash-Next speed columns now come from the current engine and profile, and the November 18 memory-guard changes are noted at the end of the notes; no other row was rerun.
 
-| Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Quality rank |
-|---|---|---|---:|---:|---:|---:|---:|---:|---:|
-| `empero-qwen3.8-35b-a3b` (retired Nov 23) | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 |
-| `inkling-2-mini-q8` (retired Nov 23) | llama.cpp (RDNA3 branch) | passed | 43.0 | 1,508 | 48.7 | — | — | 149# | 7 |
-| `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 5 |
-| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 |
-| `nemotron-3.5-bolt-vllm` (retired Nov 23) | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 |
-| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 |
-| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 since Nov 23 (figures from the RDNA3 fork‖) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 |
-| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 2 |
-| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 |
-| `kolibri-1.1-iq4_xs` (added Nov 24) | llama.cpp (pull-request build) | passed | 80.3 | 2,466 | 82.8 | — | — | — | — |
+| Route | Engine | Tool call | Decode tok/s | Prompt read tok/s | Load s | 54-item suite | 64-item suite | Public suite (216) | Old rank (216) | Tool-use /100 |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `empero-qwen3.8-35b-a3b` (retired Nov 23) | llama.cpp | passed | 173.3 | 2,893 | 47.7 | 53 | 62 | 151 | 6 | — |
+| `inkling-2-mini-q8` (retired Nov 23) | llama.cpp (RDNA3 branch) | passed | 43.0 | 1,508 | 48.7 | — | — | 149# | 7 | — |
+| `qwen3.8-27b-vllm` | vLLM TP2 | passed | 155.1 | 1,766 | 89.5 | 52 | 62 | 157 | 5 | 71.5 |
+| `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 | 74.6 |
+| `nemotron-3.5-bolt-vllm` (retired Nov 23) | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 | — |
+| `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 | 62.2 |
+| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 since Nov 23 (figures from the RDNA3 fork‖) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 | 52.9 |
+| `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 | 64.0 |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 2 | 62.2 |
+| `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 | 72.1 |
+| `kolibri-1.1-iq4_xs` (added Nov 24) | llama.cpp (pull-request build) | passed | 80.3 | 2,466 | 82.8 | — | — | — | — | 45.6 |
 
 How to read it:
 - **Tool call:** one DSH read-tool round trip with about 6.4K prompt tokens and 25 tool definitions, under the guarded harness ([standard](AMD-ALL-MODELS-SHORT-TOOL-2026-11-07.md)).
 - **Decode** is measured on that short tool-call answer (54–171 tokens). **Prompt read** is that prompt divided by time to first token, from a cold start.
 - **Suites:** the 54-item suite and the harder 64-item suite from the [quant comparison](QUANT-QUALITY-COMPARISON-2026-11-08.md), through the hub at temperature 0 with thinking off.
 - \* Ripple's scores are from the [November 10 rerun](FLINT-RIPPLE-BUDGET-RERUN-2026-11-10.md) with every answer budget raised to at least 4,096 tokens. It keeps reasoning with thinking off, so under the suites' 60-token short-answer limit it returned empty answers and scored 50 and 56 on November 9. Give this route about a thousand answer tokens.
-- **Quality rank:** position by public-suite score; see [Quality ranking](#quality-ranking) for which differences are real.
+- **Old rank (216):** position by public-suite score, the ranking until November 24; see [Old quality ranking](#old-quality-ranking-216-item-public-suite) for which differences are real.
+- **Tool-use /100:** the short tool-use test, the ranking since November 24; see [Short tool-use ranking](#short-tool-use-ranking).
 - **Public suite:** correct answers out of 216 items sampled from MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL and MuSR ([report](PUBLIC-QUALITY-SUITE-2026-11-11.md)). The 95% interval is about ±6 points (±13 items); the top four routes are not separated.
 - § 65 of Ripple's 216 answers were cut off by the 2,048–4,096-token limit while still reasoning.
 - ¶ DeepSeek on Strata, measured November 13 on engine `13eedf552417` with its RAM store turned off (`--ssd-cache 0`): all 216 items answered, no NaN error ([report](STRATA-DEEPSEEK-NO-RAM-STORE-2026-11-12.md)). The first store-off run, on November 12 with engine `c1ff07f1a181`, scored 169; the two runs agree within run-to-run variation (155 items right in both, 11 only in the new run, 14 only in the old). With the 36 GB RAM store on, three earlier attempts stopped on NaN errors (after 4 items, after 88 with 5 errors, and after 17 when the server's kernel crashed). The tool-call figures in this row (5.6, 111, 140.1) were measured with the store on; † has the speed with it off. The suite ran at 8.7 tok/s end to end with the store off (8.6 on November 12), against 7.4 with it on.
@@ -35,7 +36,29 @@ How to read it:
 - **November 18 memory-guard changes (owner decisions), no speed or quality figure affected.** Every model load is admitted on 1 GiB of available RAM instead of a per-model figure (was 28.4 GiB for Flash-Next, 52 GiB for GLM and both DeepSeek routes), and after a backend switch Maya and Strata DeepSeek wait up to 15 s for the cards to report the stopped model's VRAM as free. One short request per affected route through the hub, load plus answer, not a benchmark: Flash-Next 65 s, DeepSeek Q1 on Maya 225 s, GLM on Maya 165 s, DeepSeek Q1 on Strata 84 s. Switching straight between loaded models was then verified the same way: Flash-Next 98 s, to DeepSeek Q1 on Maya 77 s, back to Flash-Next 148 s ([guard policy](RESOURCE-GUARDS-2026-11-03.md), [results](results/ram-floor-load-check-2026-11-18.json)).
 - Machine-readable results: [results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json), [results/public-quality-suite-2026-11-11.json](results/public-quality-suite-2026-11-11.json).
 
-## Quality ranking
+## Short tool-use ranking
+
+The quality ranking since November 24 (owner: "Use the short tool-use test as the ranking", "Rebuild it on AMD"). The NVIDIA server's method, rebuilt from BFCL v4 with seed 20261122: 40 single-turn tool-call items (parallel calls 15, irrelevance 15, simple 10) and 9 multi-turn episodes, through the hub, temperature 0.6. Score = 50 x single-turn correct / 40 + 50 x episodes passed / 9. The larger models also ran 6 extra episodes (15-episode score in brackets). Every route covered all 49 scored items with no timeout. [Report](TOOLUSE-SHORT-TEST-2026-11-24.md) · [results JSON](results/tooluse-short-2026-11-24.json) · [test code](quant-eval/tooluse/README.md)
+
+| Rank | Route | Engine at the run | Score /100 | Single-turn /40 | Episodes /9 | Load s | Items min |
+|---:|---|---|---:|---:|---:|---:|---:|
+| 1 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | 74.6 | 33 | 6 | 80 | 3.2 |
+| 2 | `glm-5.3-flash-maya` | Maya 1.1.73 | 72.1 (68.8) | 31 | 6 | 151 | 35.2 |
+| 3 | `qwen3.8-27b-vllm` | vLLM TP2 | 71.5 | 35 | 5 | 45 | 3.5 |
+| 4 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek `13eedf552417` | 64.0 (52.9†) | 29 | 5 | 72 | 56.0 |
+| 5 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya 1.1.73 | 62.2 (56.7†) | 32 | 4 | 70 | 56.0 |
+| 5 | `ripple-65b-vllm` | vLLM TP2 | 62.2 (56.7) | 32 | 4 | 121 | 35.3 |
+| 7 | `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.20 `strata-inkling` | 60.4 | 35 | 3 | 58 | 10.0 |
+| 8 | `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 | 52.9 | 29 | 3 | 149 | 9.1 |
+| 9 | `kolibri-1.1-iq4_xs` | llama.cpp PR 32891 | 45.6 | 32 | 1 | 85 | 2.7 |
+
+- One episode moves the score by 5.6 points, one single-turn item by 1.25; routes a few points apart are not separated (no significance test was run).
+- † The 56-minute item budget ended before the last extra episodes (DeepSeek on Strata ran 11 of 15, on Maya 13 of 15); unrun episodes count as not passed in the bracket. The ranking score is complete.
+- The items were drawn by the NVIDIA rule but need not match the NVIDIA server's frozen list; compare ranks within one machine.
+
+## Old quality ranking (216-item public suite)
+
+The ranking until November 24, kept as reference.
 
 Ranked by correct answers on the 216-item public suite, the only quality test here that spreads the routes out. The 54- and 64-item suites do not rank them: the nine routes scored on them all got 51–54 and 61–63, and they are retired from routine use.
 

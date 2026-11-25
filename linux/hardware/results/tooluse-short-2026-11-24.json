@@ -1,0 +1,532 @@
+{
+  "test": "short tool-use test (AMD rebuild of the NVIDIA method)",
+  "date": "2026-11-24",
+  "source": "BFCL v4 (ShishirPatil/gorilla, Apache-2.0), ranking seed 20261122; items are listed by id in hardware/quant-eval/tooluse/fast_amd/manifest.json",
+  "score": "50 x single-turn correct / 40 + 50 x core multi-turn episodes passed / 9; large group also score15 with all 15 episodes",
+  "settings": "temperature 0.6, top_p 0.95, max_tokens 2048, seed 20261122, no system prompt, thinking as served; one request at a time through the hub",
+  "limits_seconds": {
+    "load_cap": 300,
+    "item_budget_small": 690,
+    "item_budget_large": 3360,
+    "hard_limit_small": 1020,
+    "hard_limit_large": 3720,
+    "per_item": 120,
+    "per_episode": 480
+  },
+  "runs": [
+    {
+      "model": "qwen3.8-27b-sglang-dflash2",
+      "group": "small",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T22:11:32.949020+00:00",
+      "end_utc": "2026-11-24T22:16:05.984919+00:00",
+      "load_seconds": 80.306059,
+      "item_seconds": 192.701986,
+      "status": "completed",
+      "single_correct": 33,
+      "episodes_passed": 6,
+      "coverage": "single 40/40, episodes 9/9",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 74.6,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 13,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 11,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 9,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 3,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 2,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 1,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        }
+      },
+      "engine": "SGLang TP2 f84475ccf593"
+    },
+    {
+      "model": "glm-5.3-flash-maya",
+      "group": "large",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T23:31:09.287197+00:00",
+      "end_utc": "2026-11-25T00:08:54.817662+00:00",
+      "load_seconds": 151.217629,
+      "item_seconds": 2114.288944,
+      "status": "completed",
+      "single_correct": 31,
+      "episodes_passed": 6,
+      "episodes15_passed": 9,
+      "coverage": "single 40/40, episodes 9/9, episodes15 15/15",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 72.1,
+      "score15": 68.8,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 14,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 7,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 3,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 3,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 3,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        }
+      },
+      "engine": "Maya 1.1.73 f9a053dcb5a9"
+    },
+    {
+      "model": "qwen3.8-27b-vllm",
+      "group": "small",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T22:26:12.880285+00:00",
+      "end_utc": "2026-11-24T22:30:25.931245+00:00",
+      "load_seconds": 45.319977,
+      "item_seconds": 207.704987,
+      "status": "completed",
+      "single_correct": 35,
+      "episodes_passed": 5,
+      "coverage": "single 40/40, episodes 9/9",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 71.5,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 14,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 11,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 2,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 1,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 2,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        }
+      },
+      "engine": "vLLM TP2 0.33.0rc1.dev229+g3966924d5.rocm72"
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "group": "large",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-25T01:16:46.682829+00:00",
+      "end_utc": "2026-11-25T02:13:58.398596+00:00",
+      "load_seconds": 71.617847,
+      "item_seconds": 3360.009057,
+      "status": "cut",
+      "single_correct": 29,
+      "episodes_passed": 5,
+      "episodes15_passed": 5,
+      "coverage": "single 40/40, episodes 9/9, episodes15 11/15",
+      "complete": false,
+      "score_meaningful": true,
+      "score": 64.0,
+      "score15": 52.9,
+      "covered_score": 64.0,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 13,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 6,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 3,
+          "scored": 4,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 1,
+          "scored": 4,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 1,
+          "scored": 3,
+          "total": 5,
+          "timeouts": 0
+        }
+      },
+      "engine": "Strata DeepSeek 13eedf552417 (frozen)"
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "group": "large",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-25T00:09:00.214926+00:00",
+      "end_utc": "2026-11-25T01:06:10.624606+00:00",
+      "load_seconds": 70.163803,
+      "item_seconds": 3360.001923,
+      "status": "cut",
+      "single_correct": 32,
+      "episodes_passed": 4,
+      "episodes15_passed": 5,
+      "coverage": "single 40/40, episodes 9/9, episodes15 13/15",
+      "complete": false,
+      "score_meaningful": true,
+      "score": 62.2,
+      "score15": 56.7,
+      "covered_score": 62.2,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 14,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 8,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 2,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 1,
+          "scored": 4,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 2,
+          "scored": 4,
+          "total": 5,
+          "timeouts": 0
+        }
+      },
+      "engine": "Maya 1.1.73 f9a053dcb5a9"
+    },
+    {
+      "model": "ripple-65b-vllm",
+      "group": "large",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T22:53:11.972589+00:00",
+      "end_utc": "2026-11-24T23:30:33.621551+00:00",
+      "load_seconds": 121.359592,
+      "item_seconds": 2120.267429,
+      "status": "completed",
+      "single_correct": 32,
+      "episodes_passed": 4,
+      "episodes15_passed": 5,
+      "coverage": "single 40/40, episodes 9/9, episodes15 15/15",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 62.2,
+      "score15": 56.7,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 14,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 8,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 3,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 1,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 1,
+          "scored": 5,
+          "total": 5,
+          "timeouts": 0
+        }
+      },
+      "engine": "vLLM TP2 0.33.0rc1.dev229+g3966924d5.rocm72"
+    },
+    {
+      "model": "inkling-2-mini-sq-20-strata-2gpu",
+      "group": "small",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T22:42:16.671554+00:00",
+      "end_utc": "2026-11-24T22:53:11.704111+00:00",
+      "load_seconds": 57.944952,
+      "item_seconds": 597.064823,
+      "status": "completed",
+      "single_correct": 35,
+      "episodes_passed": 3,
+      "coverage": "single 40/40, episodes 9/9",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 60.4,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 13,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 12,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 1,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 2,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 0,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        }
+      },
+      "engine": "Strata v0.2.20 a34979fc94f3 (strata-inkling)"
+    },
+    {
+      "model": "qwen3.8-flash-next-iq3_xxs",
+      "group": "small",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T22:30:41.367558+00:00",
+      "end_utc": "2026-11-24T22:42:16.389851+00:00",
+      "load_seconds": 148.530715,
+      "item_seconds": 546.469893,
+      "status": "completed",
+      "single_correct": 29,
+      "episodes_passed": 3,
+      "coverage": "single 40/40, episodes 9/9",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 52.9,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 12,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 7,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 10,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 1,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 2,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 0,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        }
+      },
+      "engine": "Strata v0.2.20 a34979fc94f3"
+    },
+    {
+      "model": "kolibri-1.1-iq4_xs",
+      "group": "small",
+      "manifest_hash": "79a5937f05c13cdc71a96f991ead90bee40a2016914b0cecfaea90291ece5990",
+      "start_utc": "2026-11-24T21:57:15.808106+00:00",
+      "end_utc": "2026-11-24T22:01:19.893309+00:00",
+      "load_seconds": 84.82782,
+      "item_seconds": 159.231561,
+      "status": "completed",
+      "single_correct": 32,
+      "episodes_passed": 1,
+      "coverage": "single 40/40, episodes 9/9",
+      "complete": true,
+      "score_meaningful": true,
+      "score": 45.6,
+      "timeouts": 0,
+      "pools": {
+        "parallel": {
+          "correct": 11,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "irrelevance": {
+          "correct": 13,
+          "scored": 15,
+          "total": 15,
+          "timeouts": 0
+        },
+        "simple": {
+          "correct": 8,
+          "scored": 10,
+          "total": 10,
+          "timeouts": 0
+        },
+        "mt_base": {
+          "correct": 1,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_param": {
+          "correct": 0,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        },
+        "mt_miss_func": {
+          "correct": 0,
+          "scored": 3,
+          "total": 3,
+          "timeouts": 0
+        }
+      },
+      "engine": "llama.cpp PR 32891 5f4d222898dd"
+    }
+  ]
+}

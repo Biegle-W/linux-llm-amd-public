@@ -80,7 +80,20 @@ RETIRED = [
 
 # 4. Quality ranking --------------------------------------------------------------------------------------
 # Owner, November 24: the short tool-use test (the NVIDIA server's test) is the ranking on both machines.
-# Until it has run here, the AMD ranking is pending; the old 216-item results stay below as reference.
+# First AMD run: November 24 (hardware/TOOLUSE-SHORT-TEST-2026-11-24.md). The old 216-item results stay below as reference.
+TOOLUSE = [  # route, model and quant, engine at the run, score, single/40, episodes/9, 15-episode score or None, coverage note
+    ('qwen3.8-27b-sglang-dflash2', 'Qwen3.8-27B AutoRound W4A16 + DFlash2', 'SGLang TP2 `f84475ccf593`', 74.6, 33, 6, None, 'complete'),
+    ('glm-5.3-flash-maya', 'GLM-5.3-Flash Maya-S v2 IQ2_XXS', 'Maya 1.1.73', 72.1, 31, 6, 68.8, 'complete'),
+    ('qwen3.8-27b-vllm', 'Qwen3.8-27B AutoRound W4A16', 'vLLM TP2 0.33.0rc1', 71.5, 35, 5, None, 'complete'),
+    ('deepseek-v4.1-flash-1017-strata-unsloth-q1', 'DeepSeek-V4.1-Flash-1017 UD-IQ1_S', 'Strata DeepSeek `13eedf552417`', 64.0, 29, 5, 52.9,
+     'core complete; 4 of 6 extra episodes cut by the time budget'),
+    ('deepseek-v4.1-flash-1017-maya-unsloth-q1', 'DeepSeek-V4.1-Flash-1017 UD-IQ1_S', 'Maya 1.1.73', 62.2, 32, 4, 56.7,
+     'core complete; 2 of 6 extra episodes cut by the time budget'),
+    ('ripple-65b-vllm', 'Ripple-65B-Preview GPTQ W4A16', 'vLLM TP2 0.33.0rc1', 62.2, 32, 4, 56.7, 'complete'),
+    ('inkling-2-mini-sq-20-strata-2gpu', 'Inkling 2 Mini SQ-20', 'Strata 0.2.20 `strata-inkling`', 60.4, 35, 3, None, 'complete'),
+    ('qwen3.8-flash-next-iq3_xxs', 'Qwen3.8-Flash-Next IQ3_XXS', 'Strata 0.2.20', 52.9, 29, 3, None, 'complete'),
+    ('kolibri-1.1-iq4_xs', 'Kolibri 1.1 IQ4_XS', 'llama.cpp PR 32891 `5f4d222898dd`', 45.6, 32, 1, None, 'complete'),
+]
 RANKING_216 = [  # model, best route, correct/216, score, 95% interval, code/20, instr/32, knowledge/60, math/40, reasoning/32, tools/32, other engines
     ('Qwen3.8-Flash-Next IQ3_XXS', 'qwen3.8-flash-next-iq3_xxs', 169, '78.2%', '72.3-83.2%', 12, 30, 48, 33, 23, 23,
      'scored November 18 on the Strata RDNA3 fork (replaced by Strata 0.2.20 on November 23, same weights, not rerun)'),
@@ -145,18 +158,30 @@ def render():
     L += ['## 3. Retired or removed routes', '', '| Route | Date | What happened |', '|---|---|---|']
     L += [f'| {r[0] if "," in r[0] or " " in r[0] else "`" + r[0] + "`"} | {r[1]} | {r[2]} |' for r in RETIRED]
     L += ['', '## 4. Quality ranking', '',
-          '**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by** (49 BFCL tool-calling items for smaller models, '
-          '55 for larger ones; score = 50 x single-turn correct / 40 + 50 x multi-turn episodes passed / 9, out of 100). '
-          '**No AMD route has run it yet, so there is no AMD ranking on this standard.** Until it has run, show no AMD ranking, or the reference table below clearly labelled as the old standard.', '',
-          'Reference, old standard (not comparable with the NVIDIA ranking): 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), '
+          '**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by.** 40 single-turn BFCL v4 tool-calling items '
+          '(parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. '
+          'Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on all nine routes on November 24, one route at a time through the hub, '
+          'temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.', '',
+          '| Rank | Route | Model and quant | Engine at the run | Score /100 | Single-turn /40 | Episodes /9 | 15-episode score | Coverage |',
+          '|---:|---|---|---|---:|---:|---:|---:|---|']
+    prev, rank = None, 0
+    for i, r in enumerate(sorted(TOOLUSE, key=lambda r: -r[3]), 1):
+        rank = rank if r[3] == prev else i
+        prev = r[3]
+        L.append(f'| {rank} | `{r[0]}` | {r[1]} | {r[2]} | {r[3]:.1f} | {r[4]} | {r[5]} | {"—" if r[6] is None else f"{r[6]:.1f}"} | {r[7]} |')
+    L += ['', '- One episode moves the score by 5.6 points and one single-turn item by 1.25; routes a few points apart are not separated (no significance test).',
+          '- Every route ran all 40 single-turn items and all 9 core episodes with no timeout, so every score is complete.',
+          f'- Source: [report]({GH}hardware/TOOLUSE-SHORT-TEST-2026-11-24.md), [results JSON]({GH}hardware/results/tooluse-short-2026-11-24.json), [test code]({GH}hardware/quant-eval/tooluse/README.md).', '',
+          '### Reference: old standard (216-item public suite)', '',
+          'Not comparable with the ranking above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), '
           'one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.', '',
           '| Rank | Model and quant | Route | Correct / 216 | Score | 95% interval | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Other engines and notes |',
           '|---:|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---|']
     for i, r in enumerate(RANKING_216, 1):
         L.append(f'| {i} | {r[0]} | `{r[1]}` | {r[2]} | {r[3]} | {r[4]} | ' + ' | '.join(str(x) for x in r[5:11]) + f' | {r[11]} |')
-    L += ['', '- Ties: ranks 1-3 are not statistically separated, nor are ranks 4-5 (exact McNemar, Holm-corrected).',
-          '- Not ranked: `kolibri-1.1-iq4_xs` and `inkling-2-mini-sq-20-strata-2gpu` (no 216-item run).',
-          f'- Source: [current results]({GH}hardware/CURRENT-AMD-BENCHMARKS.md#quality-ranking).', '']
+    L += ['', '- Old-standard ties: ranks 1-3 are not statistically separated, nor are ranks 4-5 (exact McNemar, Holm-corrected).',
+          '- Not on the old standard: `kolibri-1.1-iq4_xs` and `inkling-2-mini-sq-20-strata-2gpu` (no 216-item run).',
+          f'- Source: [current results]({GH}hardware/CURRENT-AMD-BENCHMARKS.md#old-quality-ranking-216-item-public-suite).', '']
     L += ['## 5. Short quality test', '',
           'The AMD quick quality test for new models (run once per new model or new weights since November 22). It is not the short tool-use test and is too small to rank models.', '',
           '| Model and quant | Route | Agent core /12 | Agent extra /8 | Tool calls /16 | General /10 | Date | Note |', '|---|---|---:|---:|---:|---:|---|---|']
@@ -175,6 +200,7 @@ def main():
         sys.exit(f'Route list differs from the live registry: missing {sorted(set(live) - set(mine))}, extra {sorted(set(mine) - set(live))}, '
                  f'context {[k for k in live if k in mine and live[k] != mine[k]]}')
     assert set(SPEED) == set(mine)
+    assert {r[0] for r in TOOLUSE} == set(mine), 'every enabled route needs a short tool-use row'
     text = render()
     if '--check' in sys.argv:
         sys.exit(0 if OUT.exists() and OUT.read_text() == text else 'docs/WEBSITE-SUMMARY.md is out of date')

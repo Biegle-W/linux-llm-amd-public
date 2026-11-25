@@ -1,0 +1,9 @@
+This directory includes source from the Berkeley Function Calling Leaderboard
+in ShishirPatil/gorilla, https://github.com/ShishirPatil/gorilla.
+Source commit: 6ea57973c7a6097fd7c5915698c54c17c5b1b6c8
+License: Apache License, Version 2.0 (https://www.apache.org/licenses/LICENSE-2.0).
+The checker, execution utility and environment classes have local import
+paths. The backend registry, long-context placeholders and Decimal adapter
+are local compatibility code.
+The OpenAI Chat Completions schema converter is adapted from
+model_handler/utils.py, with a local type mapping for the supplied data.

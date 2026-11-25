@@ -59,9 +59,27 @@ One DSH read-tool round trip through the hub from a cold start: about 6.2-7.6K p
 
 ## 4. Quality ranking
 
-**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by** (49 BFCL tool-calling items for smaller models, 55 for larger ones; score = 50 x single-turn correct / 40 + 50 x multi-turn episodes passed / 9, out of 100). **No AMD route has run it yet, so there is no AMD ranking on this standard.** Until it has run, show no AMD ranking, or the reference table below clearly labelled as the old standard.
+**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by.** 40 single-turn BFCL v4 tool-calling items (parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on all nine routes on November 24, one route at a time through the hub, temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.
 
-Reference, old standard (not comparable with the NVIDIA ranking): 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.
+| Rank | Route | Model and quant | Engine at the run | Score /100 | Single-turn /40 | Episodes /9 | 15-episode score | Coverage |
+|---:|---|---|---|---:|---:|---:|---:|---|
+| 1 | `qwen3.8-27b-sglang-dflash2` | Qwen3.8-27B AutoRound W4A16 + DFlash2 | SGLang TP2 `f84475ccf593` | 74.6 | 33 | 6 | — | complete |
+| 2 | `glm-5.3-flash-maya` | GLM-5.3-Flash Maya-S v2 IQ2_XXS | Maya 1.1.73 | 72.1 | 31 | 6 | 68.8 | complete |
+| 3 | `qwen3.8-27b-vllm` | Qwen3.8-27B AutoRound W4A16 | vLLM TP2 0.33.0rc1 | 71.5 | 35 | 5 | — | complete |
+| 4 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S | Strata DeepSeek `13eedf552417` | 64.0 | 29 | 5 | 52.9 | core complete; 4 of 6 extra episodes cut by the time budget |
+| 5 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S | Maya 1.1.73 | 62.2 | 32 | 4 | 56.7 | core complete; 2 of 6 extra episodes cut by the time budget |
+| 5 | `ripple-65b-vllm` | Ripple-65B-Preview GPTQ W4A16 | vLLM TP2 0.33.0rc1 | 62.2 | 32 | 4 | 56.7 | complete |
+| 7 | `inkling-2-mini-sq-20-strata-2gpu` | Inkling 2 Mini SQ-20 | Strata 0.2.20 `strata-inkling` | 60.4 | 35 | 3 | — | complete |
+| 8 | `qwen3.8-flash-next-iq3_xxs` | Qwen3.8-Flash-Next IQ3_XXS | Strata 0.2.20 | 52.9 | 29 | 3 | — | complete |
+| 9 | `kolibri-1.1-iq4_xs` | Kolibri 1.1 IQ4_XS | llama.cpp PR 32891 `5f4d222898dd` | 45.6 | 32 | 1 | — | complete |
+
+- One episode moves the score by 5.6 points and one single-turn item by 1.25; routes a few points apart are not separated (no significance test).
+- Every route ran all 40 single-turn items and all 9 core episodes with no timeout, so every score is complete.
+- Source: [report](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/TOOLUSE-SHORT-TEST-2026-11-24.md), [results JSON](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/tooluse-short-2026-11-24.json), [test code](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/quant-eval/tooluse/README.md).
+
+### Reference: old standard (216-item public suite)
+
+Not comparable with the ranking above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.
 
 | Rank | Model and quant | Route | Correct / 216 | Score | 95% interval | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Other engines and notes |
 |---:|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---|
@@ -71,9 +89,9 @@ Reference, old standard (not comparable with the NVIDIA ranking): 216-item publi
 | 4 | GLM-5.3-Flash Maya-S v2 IQ2_XXS | `glm-5.3-flash-maya` | 136 | 63.0% | 56.3-69.1% | 10 | 25 | 43 | 11 | 21 | 26 |  |
 | 5 | Ripple-65B-Preview GPTQ W4A16 | `ripple-65b-vllm` | 134 | 62.0% | 55.4-68.2% | 5 | 17 | 42 | 32 | 14 | 24 | lower bound: 65 answers cut off while still reasoning |
 
-- Ties: ranks 1-3 are not statistically separated, nor are ranks 4-5 (exact McNemar, Holm-corrected).
-- Not ranked: `kolibri-1.1-iq4_xs` and `inkling-2-mini-sq-20-strata-2gpu` (no 216-item run).
-- Source: [current results](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/CURRENT-AMD-BENCHMARKS.md#quality-ranking).
+- Old-standard ties: ranks 1-3 are not statistically separated, nor are ranks 4-5 (exact McNemar, Holm-corrected).
+- Not on the old standard: `kolibri-1.1-iq4_xs` and `inkling-2-mini-sq-20-strata-2gpu` (no 216-item run).
+- Source: [current results](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/CURRENT-AMD-BENCHMARKS.md#old-quality-ranking-216-item-public-suite).
 
 ## 5. Short quality test
 
