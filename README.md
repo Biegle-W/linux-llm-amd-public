@@ -18,9 +18,9 @@ Nine qualified routes are served through one OpenAI-compatible API on TCP 10000.
 |---|---|---|
 | vLLM (ROCm) | `0.33.0rc1.dev229+g3966924d5.rocm72` | Weights fully in VRAM, two-card tensor parallel: `qwen3.8-27b-vllm`, `ripple-65b-vllm` |
 | SGLang (gfx1100 build) | `f84475ccf593` | Weights fully in VRAM, two-card tensor parallel, with a DFlash2 draft model: `qwen3.8-27b-sglang-dflash2` |
-| Strata | upstream `v0.2.20` (`a34979fc94f3`, engines 0.1.66), built from source | Large mixture-of-experts model streamed from SSD (`qwen3.8-flash-next-iq3_xxs`), and Inkling 2 Mini through its `strata-inkling` engine (`inkling-2-mini-sq-20-strata-2gpu`) |
+| Strata | upstream `v0.2.21.1` (`2af30ccaa072`, engines 0.1.67), built from source (November 24) | Large mixture-of-experts model streamed from SSD (`qwen3.8-flash-next-iq3_xxs`), and Inkling 2 Mini through its `strata-inkling` engine (`inkling-2-mini-sq-20-strata-2gpu`) |
 | Strata DeepSeek | `13eedf552417`, frozen (upstream removed this engine) | `deepseek-v4.1-flash-1017-strata-unsloth-q1` |
-| Maya | `f9a053dcb5a9` (1.1.73) | SSD-streamed models with an expert RAM tier: `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` |
+| Maya | `1530120a124e` (1.1.78, November 24) | SSD-streamed models with an expert RAM tier: `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` |
 | llama.cpp | installed build b12681 (`d141011c2578`, November 24); pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
 | ComfyUI | 0.45.5 | Image and video ([graphics](linux/graphics/README.md)); not part of the LLM hub |
 
@@ -30,14 +30,14 @@ Speed figures come from the standard short tool-call check: one DSH read-tool ro
 
 | Hub name | Engine | Weights / quant | Context | Placement | Decode tok/s | Prompt read tok/s | Quality: tool-use /100 (old 216) |
 |---|---|---|---:|---|---:|---:|---|
-| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | 262,144 | SSD streaming, both cards (layer split 26) | 86.3¹; on 0.2.20: code 119–146, prose 82–106² | 740¹; on 0.2.20: 4,137–4,149 at 47,716 tokens² | 52.9 (169/216¹) |
+| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.21.1 | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | 262,144 | SSD streaming, both cards (layer split 26) | 86.3¹; on 0.2.20: code 119–146, prose 82–106² | 740¹; on 0.2.20: 4,137–4,149 at 47,716 tokens² | 52.9 (169/216¹) |
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S | 32,768 | SSD streaming, `64gb-q1-v1` RAM tier | 6.8 (9.5–17.1 on 400-token answers) | 35 | 62.2 (168/216) |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | same UD-IQ1_S weights | 32,768 | SSD streaming, RAM store off | 5.6 with the store on; 10.7–12.2 on 400-token answers with it off⁵ | 111 with the store on; 125–143 with it off⁵ | 64.0 (166/216) |
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | Qwen3.8-27B AutoRound W4A16 + DFlash2 drafter | 163,840 | VRAM, both cards | 211.2 | 1,736 | 74.6 (163/216) |
 | `qwen3.8-27b-vllm` | vLLM TP2 | Qwen3.8-27B AutoRound W4A16 | 163,840 | VRAM, both cards | 155.1 | 1,766 | 71.5 (157/216) |
 | `glm-5.3-flash-maya` | Maya | GLM-5.3-Flash Maya-S v2 IQ2_XXS | 32,768 | SSD streaming, 40 GB RAM tier | 5.2 (17.8–22.1 on 400-token answers) | 57 | 72.1 (136/216) |
 | `ripple-65b-vllm` | vLLM TP2 | Ripple-65B-Preview GPTQ W4A16 | 65,536 | VRAM, both cards | 28.0 | 764 | 62.2 (134/216³) |
-| `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.20 `strata-inkling` | Inkling 2 Mini SQ-20 `.strata` + vision | 262,144 | VRAM, both cards, expert parallel (second card leads; about 9.6 GB on the display card) | 81–84 (code, 1,500-token limit)² | 2,020 at 38K; 1,396 at 112K; 961 at 217,533 tokens² | 60.4; quick test 12/12 and 8/8 harness, 11/16 function calls, 4/10 general⁴; no 216-item run |
+| `inkling-2-mini-sq-20-strata-2gpu` | Strata 0.2.21.1 `strata-inkling` | Inkling 2 Mini SQ-20 `.strata` + vision | 262,144 | VRAM, both cards, expert parallel (second card leads; about 9.6 GB on the display card) | 81–84 (code, 1,500-token limit)² | 2,020 at 38K; 1,396 at 112K; 961 at 217,533 tokens² | 60.4; quick test 12/12 and 8/8 harness, 11/16 function calls, 4/10 general⁴; no 216-item run |
 | `kolibri-1.1-iq4_xs` | llama.cpp, pull-request build | Aleph Alpha Kolibri 1.1 IQ4_XS GGUF (40.2 GB) | 262,144 | VRAM, both cards (layer split 1:1, 16-bit cache; about 2.2 GB left free per card) | 80⁶; 77 short, 52 at 21K, 26 at 84K, 12 at 238K tokens⁷ | 2,470⁶; 1,413 at 84K, 666 at 238K⁷ | 45.6; quick test G 14/14, harness 8/12 and 7/8, function calls 12/16, general 7/10⁷; no 216-item run |
 
 1. Measured on the Strata RDNA3 fork, which was replaced and deleted on November 23. The weights are the same, and quality was not rerun (owner rule).
@@ -50,8 +50,8 @@ Speed figures come from the standard short tool-call check: one DSH read-tool ro
 
 Every enabled route has passed a tool round trip through the hub. The latest check for each route:
 - Kolibri 1.1: strict tool check, November 24, on the pull-request build ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).
-- Flash-Next on 0.2.20 and the two-card Inkling: strict tool check, November 23 ([changelog](linux/hardware/CHANGELOG.md)).
-- Both Maya routes: strict tool check, November 22, on Maya 1.1.73 ([engine update ledger](linux/hardware/DAILY-UPDATES.md)).
+- Flash-Next and the two-card Inkling: strict tool check, November 24, on Strata 0.2.21.1 ([engine update ledger](linux/hardware/DAILY-UPDATES.md)).
+- Both Maya routes: strict tool check, November 24, on Maya 1.1.78 ([engine update ledger](linux/hardware/DAILY-UPDATES.md)).
 - Strata DeepSeek: strict tool check, November 12, on `13eedf552417` (changelog).
 - Both Qwen3.8-27B routes and Ripple: guarded short tool-call check, November 7 and November 9. vLLM and SGLang have had no update since (changelog, handoff).
 
@@ -99,12 +99,13 @@ The registry entries of the routes retired on November 23 stay disabled. They ar
 - [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md): speed table, tool-use ranking, the old 216-item ranking and the quick-test table.
 - [Kolibri 1.1 trial](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md) and its [results JSON](linux/hardware/results/kolibri-1.1-trial-2026-11-24.json).
 - [Strata 0.2.19/0.2.20 report](linux/hardware/STRATA-0219-RESEARCH-2026-11-22.md): Flash-Next and Inkling on upstream Strata, the fork comparison, and the November 23 update to 0.2.20.
-- [Engine update ledger](linux/hardware/DAILY-UPDATES.md): engine version changes and their checks up to November 22. The November 23 Strata 0.2.20 update is in the Strata report and the changelog.
+- [Engine update ledger](linux/hardware/DAILY-UPDATES.md): engine version changes and their checks, latest November 24 (Strata 0.2.21.1 and Maya 1.1.78). The November 23 Strata 0.2.20 update is in the Strata report and the changelog.
 - [Changelog](linux/hardware/CHANGELOG.md): every change, with links to dated reports.
 - [Validation](VALIDATION.md): validation scope of this public reference.
 
 ### Latest changes (November 17–24)
 
+- **Nov 24:** Strata 0.2.21.1 (Flash-Next and the two-card Inkling) and Maya 1.1.78 (GLM and DeepSeek) promoted after a side-by-side speed run and the strict tool check. Inkling reads a 13K agent prompt faster (5.8 against 7.7 s) and now reuses the prompt cache on the next turn; Flash-Next is unchanged; DeepSeek on Maya reads its first prompt faster, GLM decodes slightly slower ([ledger](linux/hardware/DAILY-UPDATES.md)).
 - **Nov 24:** the short tool-use test (the NVIDIA server's ranking test) was rebuilt here from BFCL v4 and run on all nine routes; it is now the quality ranking. Top three: Qwen3.8-27B on SGLang 74.6, GLM-5.3-Flash 72.1, Qwen3.8-27B on vLLM 71.5 ([report](linux/hardware/TOOLUSE-SHORT-TEST-2026-11-24.md)).
 - **Nov 24:** llama.cpp updated to build b12681 (`d141011c2578`, 52 commits). No enabled route uses the installed build, so it was checked on a guarded side server on both cards: answers, a tool round trip and a 42,619-token prompt passed. Kolibri stays on its pull-request pin, which has not moved ([ledger](linux/hardware/DAILY-UPDATES.md)).
 - **Nov 24:** Kolibri 1.1 added as the hub route `kolibri-1.1-iq4_xs` (owner decision). It runs on its own pinned build of the llama.cpp pull request, on both cards with 262,144 context. The strict tool check passed through the hub (load 83 s, decode 80 tok/s). The hub now serves nine models ([report](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md)).

@@ -10,7 +10,7 @@ One row per route measured in the November 9–11 runs (routes retired since are
 | `qwen3.8-27b-sglang-dflash2` | SGLang TP2 | passed | 211.2 | 1,736 | 34.4 | 52 | 62 | 163 | 4 | 74.6 |
 | `nemotron-3.5-bolt-vllm` (retired Nov 23) | vLLM | passed | 40.1 | 1,963 | 219.4 | 52 | 61 | 143 | 8 | — |
 | `ripple-65b-vllm` | vLLM TP2 | passed | 28.0 | 764 | 117.6 | 53* | 63* | 134§ | 10 | 62.2 |
-| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.20 since Nov 23 (figures from the RDNA3 fork‖) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 | 52.9 |
+| `qwen3.8-flash-next-iq3_xxs` | Strata 0.2.21.1 since Nov 24 (figures from the RDNA3 fork‖) | passed | 86.3‖ | 740‖ | 86.8 | 51 | 62 | 169‖ | 1 | 52.9 |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | Strata DeepSeek | passed | 5.6 (7.5–10.1†) | 111 | 140.1 | 54 | 62 | 166¶ | 3 | 64.0 |
 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | Maya | passed | 6.8 (9.5–17.1†) | 35 | 72.7 | 54 | 63 | 168 | 2 | 62.2 |
 | `glm-5.3-flash-maya` | Maya | passed‡ | 5.2 (17.8–22.1†) | 57 | 119.0 | 53 | 62 | 136 | 9 | 72.1 |

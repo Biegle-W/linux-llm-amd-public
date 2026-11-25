@@ -10,11 +10,11 @@ Machine-readable summary for biegle.ca (read every 6 hours). AMD server only (tw
 | `qwen3.8-27b-vllm` | Qwen3.8-27B AutoRound W4A16 (GPTQ) | vLLM TP2 `0.33.0rc1.dev229+g3966924d5.rocm72` | 163,840 | 19 GB, shared SATA SSD (same files as SGLang) | VRAM only (both cards) |
 | `ripple-65b-vllm` | Ripple-65B-Preview GPTQ W4A16 | vLLM TP2 `0.33.0rc1.dev229+g3966924d5.rocm72` | 65,536 | 33 GB, shared SATA SSD | VRAM only (both cards) |
 | `kolibri-1.1-iq4_xs` | Aleph Alpha Kolibri 1.1 (75B MoE, 3.4B active) IQ4_XS GGUF | llama.cpp HIP, pull request 32891 at `5f4d222898dd` (unmerged, pinned for this route) | 262,144 | 40.2 GB, shared SATA SSD | VRAM only (both cards) |
-| `inkling-2-mini-sq-20-strata-2gpu` | Inkling 2 Mini SQ-20 `.strata` + vision | Strata `v0.2.20` (`a34979fc94f3`) `strata-inkling` | 262,144 | 19 GB, shared NVMe SSD | VRAM only (both cards, expert parallel) |
-| `qwen3.8-flash-next-iq3_xxs` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS GGUF | Strata `v0.2.20` (`a34979fc94f3`) | 262,144 | 71 GB + 2.3 GB pack and MTP head, system NVMe SSD | Partly in system memory (experts in RAM, streamed from SSD) |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S GGUF | Maya 1.1.73 (`f9a053dcb5a9`) | 32,768 | 217 GB, system NVMe SSD (shared with the Strata route) | Partly in system memory (RAM expert tier, streamed from SSD) |
+| `inkling-2-mini-sq-20-strata-2gpu` | Inkling 2 Mini SQ-20 `.strata` + vision | Strata `v0.2.21.1` (`2af30ccaa072`) `strata-inkling` | 262,144 | 19 GB, shared NVMe SSD | VRAM only (both cards, expert parallel) |
+| `qwen3.8-flash-next-iq3_xxs` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS GGUF | Strata `v0.2.21.1` (`2af30ccaa072`) | 262,144 | 71 GB + 2.3 GB pack and MTP head, system NVMe SSD | Partly in system memory (experts in RAM, streamed from SSD) |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S GGUF | Maya 1.1.78 (`1530120a124e`) | 32,768 | 217 GB, system NVMe SSD (shared with the Strata route) | Partly in system memory (RAM expert tier, streamed from SSD) |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | DeepSeek-V4.1-Flash-1017 Unsloth UD-IQ1_S GGUF | Strata DeepSeek `13eedf552417` (frozen) | 32,768 | 217 GB, system NVMe SSD (shared with the Maya route) | Partly in system memory (streamed from SSD, RAM store off) |
-| `glm-5.3-flash-maya` | GLM-5.3-Flash Maya-S v2 IQ2_XXS GGUF | Maya 1.1.73 (`f9a053dcb5a9`) | 32,768 | 91 GB, system NVMe SSD | Partly in system memory (40 GB RAM tier, streamed from SSD) |
+| `glm-5.3-flash-maya` | GLM-5.3-Flash Maya-S v2 IQ2_XXS GGUF | Maya 1.1.78 (`1530120a124e`) | 32,768 | 91 GB, system NVMe SSD | Partly in system memory (40 GB RAM tier, streamed from SSD) |
 
 One model is loaded at a time through one OpenAI-compatible API; an idle model unloads after 600 s.
 
@@ -28,18 +28,17 @@ One DSH read-tool round trip through the hub from a cold start: about 6.2-7.6K p
 | `qwen3.8-27b-vllm` | 1,766 | 3.64 s | 153.1 | 6,420 / 77 | 2026-11-09 | [AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json) |
 | `ripple-65b-vllm` | 764 | 8.18 s | 27.6 | 6,244 / 76 | 2026-11-09 | [AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/AMD-ALL-MODELS-TOOL-AND-QUALITY-2026-11-09.json) |
 | `kolibri-1.1-iq4_xs` | 2,466 | 2.58 s | 80.2 | 6,351 / 82 | 2026-11-24 | [KOLIBRI-1.1-TRIAL-2026-11-24.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md) |
-| `inkling-2-mini-sq-20-strata-2gpu` | 1,518 | 5.03 s | n/a | 7,640 / 120 | 2026-11-23 | [STRATA-0219-RESEARCH-2026-11-22.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/STRATA-0219-RESEARCH-2026-11-22.md) |
-| `qwen3.8-flash-next-iq3_xxs` | 1,321 | 4.70 s | 186.7 | 6,205 / 81 | 2026-11-23 | [CHANGELOG.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/CHANGELOG.md) |
-| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 37 | 169.12 s | 6.7 | 6,329 / 106 | 2026-11-22 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
+| `inkling-2-mini-sq-20-strata-2gpu` | 2,115 | 3.67 s | 96.6 | 7,761 / 123 | 2026-11-24 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
+| `qwen3.8-flash-next-iq3_xxs` | 1,548 | 4.09 s | 173.4 | 6,332 / 83 | 2026-11-24 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
+| `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 92 | 70.42 s | 6.6 | 6,448 / 105 | 2026-11-24 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 108 | 58.91 s | 4.4 | 6,338 / 107 | 2026-11-12 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
-| `glm-5.3-flash-maya` | 190 | 31.45 s | 12.9 | 5,989 / 55 | 2026-11-22 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
+| `glm-5.3-flash-maya` | 170 | 35.89 s | 11.1 | 6,104 / 54 | 2026-11-24 | [DAILY-UPDATES.md](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/DAILY-UPDATES.md) |
 
-- Inkling: the answer streamed in one burst after the first token, so this check gives no decode rate. Code answers decode at 81-84 t/s on this route (Strata report, November 23).
-- Flash-Next and Inkling were checked after the Strata 0.2.20 install on November 23; Flash-Next's fastest check was the one taken when it replaced the RDNA3 fork that day.
-- DeepSeek on Maya and GLM: checked after Maya 1.1.73 was installed on November 22. The slow first token of DeepSeek on Maya (169 s) came after builds had emptied the file cache.
+- Flash-Next and Inkling: checked after Strata 0.2.21.1 was installed on November 24 (one check each on the new engine). Flash-Next loaded from a cold file cache (178 s) after the Maya routes had run.
+- DeepSeek on Maya and GLM: checked after Maya 1.1.78 was installed on November 24 (one check each on the new engine).
 - DeepSeek on Strata: checked after its last engine update on November 12; the engine is frozen.
 - The Qwen3.8-27B routes and Ripple: their engines have not changed since the November 9 check.
-- Decode here is a short burst (54-120 answer tokens), not a sustained rate.
+- Decode here is a short burst (54-123 answer tokens), not a sustained rate.
 - Each evidence link is the page that records the check or the engine update it followed; the raw per-request timings stay in the private stage folders.
 
 ## 3. Retired or removed routes

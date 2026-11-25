@@ -4,6 +4,17 @@
 
 **Policy:** see [Promotion policy](daily-update/README.md#promotion-policy-owner-november-7). The Strata DeepSeek `146df3c` rejection (IQ3_XXS 3.14e-3 vs 3e-3, unchanged since October 25) was cleared for retry.
 
+## 2026-11-24 (evening) — Strata 0.2.21.1 and Maya 1.1.78 promoted (owner: "update the engines to the latest version")
+
+Researched first (release notes and open issues), then built in fresh stage folders, compared or gated, and promoted by policy. vLLM, SGLang and the frozen Strata DeepSeek were not rechecked in this pass.
+
+| Engine | From → to | Check | Result | What the new version changes |
+|---|---|---|---|---|
+| Strata (Flash-Next, two-card Inkling) | `v0.2.20` `a34979fc94f3` (engines 0.1.66) → `v0.2.21.1` `2af30ccaa072` (engines 0.1.67) | Side-by-side speed run on the same request set (short prose and code, a 12.9K-token agent turn and its follow-up, a 47.7K-token prompt), then resealed and one strict DSH read-tool check per route through the hub | **Promoted.** Flash-Next: the same speed within run-to-run variation (47.7K prompt read 4,137 against 4,148 tok/s); strict check first token 4.1 s, prompt read 1,548 tok/s, decode 173 tok/s, load 178 s from a cold file cache. Inkling: the 13K agent prompt reads in 5.8 s against 7.7 s; the follow-up turn reuses the prompt cache (first token 0.33 s) where 0.2.20 returned no tokens on it; code decode 72 against 66 tok/s, a long answer 44 against 31; strict check first token 3.7 s, prompt read 2,115 tok/s, decode 97 tok/s | Hy4-Flash on several cards over HIP, the RAM budget fix, Inkling expert-plan changes, the adaptive-mid path off on HIP. Build note: `strata-inkling` still needs a hand link with `-no-pie`; 0.2.21 adds `libstrata_quant.a` to that link (the build script now reuses CMake's own link line) |
+| Maya | `f9a053dcb5a9` (1.1.73) → `1530120a124e` (1.1.78 plus four README-only commits) | Isolated build, provisional install, strict DSH read-tool check on both routes | **Promoted.** DeepSeek: load 57 s, first token 70.4 s (prompt read 92 tok/s against 37), decode 6.6 tok/s. GLM: load 153 s, first token 35.9 s (170 against 190 tok/s), decode 11.1 against 12.9 tok/s, a minor slowdown that is not a reason to reject (owner policy) | Decode gains on gfx1100, a DeepSeek router GPU-fault fix, tool calls inside thinking, GLM releases about 6.4 GB of RAM after load, `MAYA_GLM_SAME_ANSWERS` on by default (slightly slower prompts, different wording), `STRATA_*` settings renamed `MAYA_*` (old names still read) |
+
+Rollback: Strata, copy the files in the promotion backup (`~/tune/promote-0221-before`, the 0.2.20 package stays in `hardware/generated/strata-0220-2026-11-23/`); Maya, `rollback maya` with the stage `hardware/generated/daily-update/2026-11-24T-maya/`.
+
 ## 2026-11-24 — llama.cpp b12681 promoted (no enabled route uses it)
 
 Upstream check (llama.cpp only, at the owner's request): master was 90 commits past the installed `1fb8a269603b`, and the newest build tag, b12681 (`d141011c2578`), 52. Kolibri 1.1's pull request (#32891) had not moved from `5f4d222898dd`. It is still open and conflicting with no review, so `kolibri-1.1-iq4_xs` stays on its own pin. The other engines were not checked in this pass.
