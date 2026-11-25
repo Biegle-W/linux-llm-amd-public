@@ -32,6 +32,21 @@
 
 Strict tool check through the hub, November 25: load 34.7 s; a 6,239-token prompt read in 10.2 s (613 tok/s) from a cold start; 69 answer tokens at 73 tok/s; the follow-up turn reused the prompt cache (first token 0.8 s); at least 2.4 GiB free on each card at readiness. Not checked: sustained use and contexts longer than 32,768 tokens.
 
+## Maya-M tensor parallel (November 25)
+
+**Owner, November 25:** "use the council to research the best setup settings", then "Yes, test them." Read-only research by the agent council (Maya 1.1.78 source, the November 24 logs, upstream reports) found that Maya's automatic mode refused tensor parallel only because fewer than half of the experts would sit on the cards; an explicit `--tp 2` keeps the rest in RAM and runs them on the CPU. Putting every expert on the cards cannot fit (36.2 GB per card). Three side-server runs followed, same request set and settings as above, all with `--drafting mtp`, `HY4_ROUTE=stream` and `HY4_MEASURE=0` (these skip the 5–6 minute start-up measurement):
+
+| Setup | Experts on the cards | Decode tok/s (prose / code) | 10.9K-token agent prompt | Its follow-up turn | Swap in use after |
+|---|---:|---:|---:|---:|---:|
+| `--tp 2 --kv q8 --chunk 1024`, `HY4_HOT=1` | 45% | 12.3 / 21.6 | 65.1 s | 7.5 s | 1.6 GB |
+| `--tp 2 --kv q8 --chunk 4096`, `HY4_HOT=1` | 35% | 7.0 / 11.6 | 37.3 s | 7.0 s | 4.1 GB |
+| `--tp 0 --chunk 4096` (layer split) | 37% | 0.3* / 11.7 | 35.3 s | 3.9 s | 3.0 GB |
+| *November 24 layer split, start-up measurement on* | 36% | 18.1 / 20.5 | 38.9 s | 3.0 s | — |
+
+- Tensor parallel loaded as the research predicted (on the start that served requests the log reports the CPU lane holding 45% and 35% of experts; each server restarted once to keep more VRAM free) and started in about a minute, but it is no faster than the layer split and its follow-up turns are slower. It does not come near Strata on the same model (41–45 tok/s, 13.1 s, 2.0 s).
+- \* In the layer-split run the prose request stalled at token 80 for about 12 minutes, then finished normally; the kernel log shows no GPU error and nothing latched. Its code decode (11.7) was also slower than on November 24 (20.5). The cause is unknown: swap in use after that run (3.0 GB) was no higher than after runs that did not stall.
+- Result: no Maya-M setting tested on two cards is worth a route; the Strata route stays. Maya-M's 132 GB of weights stay on the shared NVMe drive until the owner decides.
+
 ## Evidence
 
 Side-server logs and per-item replies stay in the private stage folders (`hardware/generated/strata-0221-2026-11-24/`, `hardware/generated/hy4-maya-trial-2026-11-24/`, `hardware/generated/fast-tooluse-2026-11-24/trial-hy4-flash-sq-64-hy4ep/`). Scores and timings: [results/hy4-flash-retry-2026-11-24.json](results/hy4-flash-retry-2026-11-24.json).

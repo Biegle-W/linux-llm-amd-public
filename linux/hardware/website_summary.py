@@ -120,6 +120,8 @@ QUICK = [  # model, route, agent core/12, agent extra/8, tool calls/16, general/
 
 # 6. Trials (not router entries) ---------------------------------------------------------------------------
 TRIALS = [
+    ('Hy4-Flash Maya-M, tensor parallel', 'Maya 1.1.78 side copy, both cards, `--tp 2` with experts partly in RAM, 32,768 context', '2026-11-25',
+     'decode 7-22 t/s and a 10.9K prompt in 37-65 s, no faster than the layer split; the Strata route is far ahead (41-45 t/s)', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
     ('Hy4-Flash SQ-64 (retry)', 'Strata 0.2.21.1 side server, both cards (expert parallel), 32,768 context', '2026-11-24',
      'short tool-use test 72.1 (single-turn 31/40, episodes 6/9); became the route `hy4-flash-sq-64-strata` on November 25; decode 41-45 t/s; about 36 GiB of RAM left; Maya-M on Maya 1.1.78 was slower (16-22 t/s)', 'hardware/HY4-FLASH-RETRY-2026-11-24.md'),
     ('Hy4-Flash SQ-64', 'Strata 0.2.18 side install, one card, 32,768 context', '2026-11-22',

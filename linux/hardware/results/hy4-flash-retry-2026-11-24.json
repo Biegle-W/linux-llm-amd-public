@@ -252,5 +252,43 @@
       "ram_available_MiB": 36824,
       "swap_used_MiB": 1409
     }
+  },
+  "maya_tensor_parallel_2026_11_25": {
+    "engine": "Maya 1.1.78 (1530120a) side copy",
+    "common": "--max-context 32768 --reserve-gb 2.147 --drafting mtp; HY4_ROUTE=stream HY4_MEASURE=0",
+    "runs": {
+      "tp2-chunk1024": {
+        "args": "--tp 2 --kv q8 --chunk 1024",
+        "env": "HY4_HOT=1",
+        "experts_on_cards_pct": 45,
+        "decode_prose": 12.3,
+        "decode_code": 21.6,
+        "agent_10888_ttft_s": 65.099,
+        "followup_ttft_s": 7.485,
+        "swap_after_mib": 1649
+      },
+      "tp2-chunk4096": {
+        "args": "--tp 2 --kv q8 --chunk 4096",
+        "env": "HY4_HOT=1",
+        "experts_on_cards_pct": 35,
+        "decode_prose": 7.0,
+        "decode_code": 11.6,
+        "agent_10888_ttft_s": 37.309,
+        "followup_ttft_s": 7.009,
+        "swap_after_mib": 4147
+      },
+      "layer-split-chunk4096": {
+        "args": "--tp 0 --chunk 4096",
+        "decode_prose": 0.3,
+        "decode_prose_note": "stalled at token 80 for about 12 minutes, no kernel GPU error, cause unknown",
+        "decode_code": 11.7,
+        "agent_10888_ttft_s": 35.31,
+        "followup_ttft_s": 3.876,
+        "swap_after_mib": 2952,
+        "experts_on_cards_pct": 37
+      }
+    },
+    "conclusion": "no Maya-M setting tested on two cards beats the layer split; none is a route candidate",
+    "note": "expert shares are from the start that served requests (each server restarted once to keep more VRAM free)"
   }
 }
