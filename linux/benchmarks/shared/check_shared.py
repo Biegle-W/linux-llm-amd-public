@@ -6,7 +6,8 @@
 Run from the repository root (on AMD's public mirror, from linux/). Stdlib only; reads files, starts nothing.
 Checks:
   1. the shared files are intact (hashes recorded in benchmarks.json);
-  2. every shared model has an enabled route here, and every enabled route is in models.json;
+  2. every shared model has an enabled route here, every enabled route is in models.json, and every shared
+     API name points at an enabled route here without hiding another route;
   3. the short tool-use test here uses the shared 55 items in the shared order, with the same core episodes;
   4. the gBench part of the engine-update check runs the six shared cases.
 Routes listed under "extra" in models.json are reported as notes, not failures.
@@ -73,6 +74,13 @@ def check(server, root=ROOT, tooluse_manifest=None, check_routes=True):
     for r in sorted(routes - listed):
         (notes if r in pending else errors).append(
             f"{r}: enabled here, {'server-specific extra route (models.json "extra")' if r in pending else 'not in models.json'}")
+
+    for public, servers in models.get('api_names', {}).items():
+        internal = servers[server]
+        if check_routes and internal not in routes:
+            errors.append(f'API name {public}: route {internal} is not enabled here')
+        if check_routes and public != internal and public in routes:
+            errors.append(f'API name {public} would hide the route of the same id here')
 
     path = tooluse_manifest
     if path is None:

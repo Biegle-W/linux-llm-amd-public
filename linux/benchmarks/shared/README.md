@@ -4,7 +4,7 @@ Owner, November 26, 2026: both LLM servers run the same models and the same benc
 
 | File | What it defines |
 |---|---|
-| [models.json](models.json) | The shared model set and each server's routes and weights for it, plus models only one server runs |
+| [models.json](models.json) | The shared API names, the shared model set with each server's routes and weights, and the routes only one server runs |
 | [benchmarks.json](benchmarks.json) | The quality ranking test, the engine-update check and the speed report fields |
 | [tooluse-short-manifest.json](tooluse-short-manifest.json) | The 55 frozen items of the short tool-use test (ids and hashes only, no item text) |
 | [check_shared.py](check_shared.py) | Checks one server against all of the above; reads files only |
@@ -18,6 +18,22 @@ Seven models run on both servers, on the same engines: Qwen3.8-27B (vLLM and SGL
 Server-specific extra routes, kept as they are: `ripple-65b-vllm` on AMD and `hy4-flash-maya` on NVIDIA (a second engine for Hy4-Flash). They are listed under `extra` in `models.json`.
 
 When a model is added on one server, list it in `models.json`: under `models` if both servers run it, under `extra` if only one does.
+
+## API names
+
+The model names clients see through each server's OpenAI-compatible API are the same on both servers (owner, November 26). `api_names` in `models.json` maps each shared name to the internal route that serves it on AMD and on NVIDIA. `/v1/models` lists the shared names, and requests may use either the shared name or the old internal route id, so saved client selections keep working. A response carries the name the request used. The two extra routes keep their names: `ripple-65b-vllm` and `hy4-flash-maya`.
+
+| API name | AMD route | NVIDIA route |
+|---|---|---|
+| `qwen3.8-27b-vllm` | `qwen3.8-27b-vllm` | `qwen27b-hyperqwen` |
+| `qwen3.8-27b-sglang` | `qwen3.8-27b-sglang-dflash2` | `qwen27b-sglang` |
+| `qwen3.8-flash-next-strata` | `qwen3.8-flash-next-iq3_xxs` | `flash-next-strata` |
+| `deepseek-v4.1-flash-maya` | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | `deepseek-maya` |
+| `deepseek-v4.1-flash-strata` | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | `deepseek-unsloth-strata` |
+| `glm-5.3-flash-maya` | `glm-5.3-flash-maya` | `glm-maya` |
+| `inkling-2-mini-strata` | `inkling-2-mini-sq-20-strata-2gpu` | `inkling-strata` |
+| `kolibri-1.1-llamacpp` | `kolibri-1.1-iq4_xs` | `kolibri-llamacpp` |
+| `hy4-flash-strata` | `hy4-flash-sq-64-strata` | `hy4-flash-strata` |
 
 ## Benchmarks
 
