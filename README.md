@@ -21,7 +21,7 @@ Ten qualified routes are served through one OpenAI-compatible API on TCP 10000. 
 | Strata | upstream `v0.2.22` (`b28ca95e3e68`; `strata` and `strata-inkling` 0.1.69, `strata-hy4` 0.1.67), built from source (November 25) | Large mixture-of-experts model streamed from SSD (`qwen3.8-flash-next-iq3_xxs`), Inkling 2 Mini through its `strata-inkling` engine (`inkling-2-mini-sq-20-strata-2gpu`), and Hy4-Flash through its `strata-hy4` engine (`hy4-flash-sq-64-strata`) |
 | Strata DeepSeek | `13eedf552417`, frozen (upstream removed this engine) | `deepseek-v4.1-flash-1017-strata-unsloth-q1` |
 | Maya | `53885cef8faf` (1.1.81 plus two README-only commits, November 25) | SSD-streamed models with an expert RAM tier: `glm-5.3-flash-maya`, `deepseek-v4.1-flash-1017-maya-unsloth-q1` |
-| llama.cpp | installed build b12738 (`48ac7369600b`, November 25); pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
+| llama.cpp | installed build b12782 (`b671865c7bd4`, November 26); pull request ggml-org/llama.cpp#32891 at `5f4d222898dd` | `kolibri-1.1-iq4_xs` runs on its own pinned build of the pull request (unmerged); no route uses the installed release |
 | ComfyUI | 0.45.5 | Image and video ([graphics](linux/graphics/README.md)); not part of the LLM hub |
 
 ### Enabled models
@@ -106,12 +106,13 @@ The registry entries of the routes retired on November 23 stay disabled. They ar
 - [Current results](linux/hardware/CURRENT-AMD-BENCHMARKS.md): speed table, the broad quality ranking, the tool-use ranking, the old 216-item ranking and the quick-test table.
 - [Kolibri 1.1 trial](linux/hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md) and its [results JSON](linux/hardware/results/kolibri-1.1-trial-2026-11-24.json).
 - [Strata 0.2.19/0.2.20 report](linux/hardware/STRATA-0219-RESEARCH-2026-11-22.md): Flash-Next and Inkling on upstream Strata, the fork comparison, and the November 23 update to 0.2.20.
-- [Engine update ledger](linux/hardware/DAILY-UPDATES.md): engine version changes and their checks, latest November 25 (Strata 0.2.22, Maya 1.1.81 and llama.cpp b12738). The November 23 Strata 0.2.20 update is in the Strata report and the changelog.
+- [Engine update ledger](linux/hardware/DAILY-UPDATES.md): engine version changes and their checks, latest November 26 (llama.cpp b12782; November 25: Strata 0.2.22, Maya 1.1.81 and llama.cpp b12738). The November 23 Strata 0.2.20 update is in the Strata report and the changelog.
 - [Changelog](linux/hardware/CHANGELOG.md): every change, with links to dated reports.
 - [Validation](VALIDATION.md): validation scope of this public reference.
 
-### Latest changes (November 17–25)
+### Latest changes (November 17–26)
 
+- **Nov 26:** daily engine update. llama.cpp updated to build b12782 (no route uses it; kernel tests on each card and a guarded two-card smoke passed). vLLM, SGLang, Maya and Strata are current; vLLM 0.34.0 is out only for ROCm 10.0 and was not installed ([ledger](linux/hardware/DAILY-UPDATES.md)).
 - **Nov 26:** the broad ranking test is now the main quality ranking (owner); the short tool-use test stays as the tool-calling ranking.
 - **Nov 25–26:** broad ranking test run on all ten routes, 4 hours ([report](linux/hardware/RANK-TEST-2026-11-26.md)): Flash-Next, Qwen3.8-27B SGLang and DeepSeek on Maya lead on the 45 shared items; GLM and Inkling last; most of the order is not statistically separated.
 - **Nov 25:** broad quality ranking test built (rank tier: 30-item core for every route, up to 144 items within 15 or 30 minutes; not run on any route yet; [how it works](linux/hardware/quant-eval/rank/README.md)).
