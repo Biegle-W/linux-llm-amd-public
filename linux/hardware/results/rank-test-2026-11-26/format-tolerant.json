@@ -1,0 +1,238 @@
+{
+ "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+  "answered_prefix": 51,
+  "recovered": [],
+  "frozen": {
+   "30": 24,
+   "45": 35
+  },
+  "format_tolerant": {
+   "30": 24,
+   "45": 35
+  }
+ },
+ "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+  "answered_prefix": 50,
+  "recovered": [
+   "musr_team:27"
+  ],
+  "frozen": {
+   "30": 23,
+   "45": 33
+  },
+  "format_tolerant": {
+   "30": 24,
+   "45": 34
+  }
+ },
+ "glm-5.3-flash-maya": {
+  "answered_prefix": 111,
+  "recovered": [],
+  "frozen": {
+   "30": 16,
+   "45": 22,
+   "60": 33,
+   "75": 43,
+   "90": 51,
+   "105": 61
+  },
+  "format_tolerant": {
+   "30": 16,
+   "45": 22,
+   "60": 33,
+   "75": 43,
+   "90": 51,
+   "105": 61
+  }
+ },
+ "hy4-flash-sq-64-strata": {
+  "answered_prefix": 144,
+  "recovered": [
+   "math:test/prealgebra/2086.json",
+   "math:test/intermediate_algebra/1508.json",
+   "aime25:21",
+   "math:test/intermediate_algebra/1806.json",
+   "aime24:86",
+   "math:test/intermediate_algebra/2196.json",
+   "aime24:79",
+   "aime24:76",
+   "math:test/prealgebra/465.json"
+  ],
+  "frozen": {
+   "30": 18,
+   "45": 28,
+   "60": 43,
+   "75": 53,
+   "90": 62,
+   "105": 71,
+   "120": 78,
+   "135": 88,
+   "144": 91
+  },
+  "format_tolerant": {
+   "30": 19,
+   "45": 29,
+   "60": 44,
+   "75": 54,
+   "90": 63,
+   "105": 73,
+   "120": 82,
+   "135": 94,
+   "144": 100
+  }
+ },
+ "inkling-2-mini-sq-20-strata-2gpu": {
+  "answered_prefix": 144,
+  "recovered": [
+   "math:test/prealgebra/2086.json",
+   "math:test/prealgebra/1436.json",
+   "mmlu:4180",
+   "math:test/algebra/2391.json",
+   "aime25:0",
+   "mmlu:4616",
+   "math:test/counting_and_probability/134.json",
+   "math:test/prealgebra/2037.json",
+   "aime25:21",
+   "mmlu:11488",
+   "aime24:86",
+   "math:test/intermediate_algebra/1166.json",
+   "aime24:79",
+   "math:test/prealgebra/465.json",
+   "math:test/counting_and_probability/230.json"
+  ],
+  "frozen": {
+   "30": 16,
+   "45": 23,
+   "60": 31,
+   "75": 39,
+   "90": 51,
+   "105": 60,
+   "120": 67,
+   "135": 73,
+   "144": 73
+  },
+  "format_tolerant": {
+   "30": 19,
+   "45": 27,
+   "60": 36,
+   "75": 46,
+   "90": 58,
+   "105": 68,
+   "120": 77,
+   "135": 85,
+   "144": 88
+  }
+ },
+ "kolibri-1.1-iq4_xs": {
+  "answered_prefix": 144,
+  "recovered": [
+   "mmlu:7605",
+   "mmlu:10483",
+   "mmlu:10709",
+   "mmlu:11298",
+   "math:test/prealgebra/1646.json"
+  ],
+  "frozen": {
+   "30": 23,
+   "45": 34,
+   "60": 45,
+   "75": 55,
+   "90": 63,
+   "105": 70,
+   "120": 80,
+   "135": 89,
+   "144": 96
+  },
+  "format_tolerant": {
+   "30": 23,
+   "45": 34,
+   "60": 46,
+   "75": 56,
+   "90": 65,
+   "105": 73,
+   "120": 83,
+   "135": 93,
+   "144": 101
+  }
+ },
+ "qwen3.8-27b-sglang-dflash2": {
+  "answered_prefix": 134,
+  "recovered": [],
+  "frozen": {
+   "30": 26,
+   "45": 36,
+   "60": 49,
+   "75": 59,
+   "90": 70,
+   "105": 80,
+   "120": 88
+  },
+  "format_tolerant": {
+   "30": 26,
+   "45": 36,
+   "60": 49,
+   "75": 59,
+   "90": 70,
+   "105": 80,
+   "120": 88
+  }
+ },
+ "qwen3.8-27b-vllm": {
+  "answered_prefix": 123,
+  "recovered": [],
+  "frozen": {
+   "30": 25,
+   "45": 34,
+   "60": 47,
+   "75": 57,
+   "90": 69,
+   "105": 77,
+   "120": 86
+  },
+  "format_tolerant": {
+   "30": 25,
+   "45": 34,
+   "60": 47,
+   "75": 57,
+   "90": 69,
+   "105": 77,
+   "120": 86
+  }
+ },
+ "qwen3.8-flash-next-iq3_xxs": {
+  "answered_prefix": 137,
+  "recovered": [],
+  "frozen": {
+   "30": 24,
+   "45": 37,
+   "60": 50,
+   "75": 64,
+   "90": 76,
+   "105": 89,
+   "120": 100,
+   "135": 107
+  },
+  "format_tolerant": {
+   "30": 24,
+   "45": 37,
+   "60": 50,
+   "75": 64,
+   "90": 76,
+   "105": 89,
+   "120": 100,
+   "135": 107
+  }
+ },
+ "ripple-65b-vllm": {
+  "answered_prefix": 47,
+  "recovered": [],
+  "frozen": {
+   "30": 21,
+   "45": 29
+  },
+  "format_tolerant": {
+   "30": 21,
+   "45": 29
+  }
+ }
+}
