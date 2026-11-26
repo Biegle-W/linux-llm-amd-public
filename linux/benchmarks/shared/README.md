@@ -15,9 +15,9 @@ Hardware-specific parts stay in each repo: engines and their launch settings, qu
 
 Seven models run on both servers, on the same engines: Qwen3.8-27B (vLLM and SGLang), Qwen3.8-Flash-Next (Strata), DeepSeek-V4.1-Flash-1017 (Maya and Strata DeepSeek), GLM-5.3-Flash (Maya), Inkling 2 Mini (Strata), Kolibri 1.1 (llama.cpp) and Hy4-Flash (Strata). Each server picks the quant that fits it, so Inkling, Hy4-Flash, Kolibri and GLM use different weights on each side.
 
-Not matched yet (owner decision pending): `ripple-65b-vllm` runs only on AMD (it does not fit NVIDIA's 22 GB of VRAM), and `hy4-flash-maya` runs only on NVIDIA (a second engine for Hy4-Flash).
+Server-specific extra routes, kept as they are: `ripple-65b-vllm` on AMD and `hy4-flash-maya` on NVIDIA (a second engine for Hy4-Flash). They are listed under `extra` in `models.json`.
 
-Adding or retiring a model on one server means doing the same on the other, or listing it under `unmatched` in `models.json` with the reason.
+When a model is added on one server, list it in `models.json`: under `models` if both servers run it, under `extra` if only one does.
 
 ## Benchmarks
 
@@ -34,4 +34,4 @@ python3 benchmarks/shared/check_shared.py --server amd      # on the AMD server,
 python3 benchmarks/shared/check_shared.py --server nvidia   # on the NVIDIA server; reads ~/quality-eval-build/quality/fast/manifest.json
 ```
 
-It exits 1 if a shared model has no enabled route, an enabled route is not listed, the tool-use items differ or the gBench cases differ. Routes listed as unmatched are reported as pending.
+It exits 1 if a shared model has no enabled route, an enabled route is not listed, the tool-use items differ or the gBench cases differ. Routes listed under `extra` are reported as notes, not failures.

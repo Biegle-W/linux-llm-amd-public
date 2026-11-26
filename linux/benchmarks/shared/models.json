@@ -1,5 +1,5 @@
 {
-  "purpose": "The model set both LLM servers serve. Each server picks its own weights, quant, context and placement for its hardware (owner, November 26, 2026: different weights are fine, the same models are the goal). A model is matched when both servers list at least one route for it.",
+  "purpose": "The model set both LLM servers serve. Each server picks its own weights, quant, context and placement for its hardware (owner, November 26, 2026: different weights are fine, the same models are the goal). A model is matched when both servers list at least one route for it. Routes only one server runs are listed under extra and stay as they are.",
   "updated": "2026-11-26",
   "models": [
     {"model": "Qwen3.8-27B", "engines": ["vLLM", "SGLang"],
@@ -24,10 +24,10 @@
      "amd": {"routes": ["hy4-flash-sq-64-strata"], "weights": "SQ-64"},
      "nvidia": {"routes": ["hy4-flash-strata"], "weights": "SQ-96"}}
   ],
-  "unmatched": [
+  "extra": [
     {"model": "Ripple-65B-Preview", "server": "amd", "routes": ["ripple-65b-vllm"],
-     "note": "GPTQ W4A16, about 35 GB in VRAM; does not fit NVIDIA's 22 GB of VRAM. Owner decision pending: retire on AMD or trial on NVIDIA with RAM offload."},
+     "note": "GPTQ W4A16, about 35 GB in VRAM. Runs only on AMD; kept as it is."},
     {"model": "Hy4-Flash (Maya engine)", "server": "nvidia", "routes": ["hy4-flash-maya"],
-     "note": "Second engine for a model both servers already serve on Strata. Owner decision pending: retire on NVIDIA or add Hy4 Maya-M as an AMD route."}
+     "note": "Second engine for Hy4-Flash, which both servers serve on Strata. Runs only on NVIDIA; kept as it is."}
   ]
 }

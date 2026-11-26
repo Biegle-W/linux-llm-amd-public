@@ -9,7 +9,7 @@ Checks:
   2. every shared model has an enabled route here, and every enabled route is in models.json;
   3. the short tool-use test here uses the shared 55 items in the shared order, with the same core episodes;
   4. the gBench part of the engine-update check runs the six shared cases.
-Routes listed under "unmatched" in models.json are reported as pending, not as failures.
+Routes listed under "extra" in models.json are reported as notes, not failures.
 --skip-routes leaves out check 2, for a public mirror whose registries are not kept current.
 Exit 0 when everything matches, 1 otherwise.
 """
@@ -69,10 +69,10 @@ def check(server, root=ROOT, tooluse_manifest=None, check_routes=True):
         missing = want - routes
         if missing and check_routes:
             errors.append(f"{m['model']}: route(s) not enabled here: {', '.join(sorted(missing))}")
-    pending = {r for u in models['unmatched'] if u['server'] == server for r in u['routes']}
+    pending = {r for u in models['extra'] if u['server'] == server for r in u['routes']}
     for r in sorted(routes - listed):
         (notes if r in pending else errors).append(
-            f"{r}: enabled here, {'only on this server (owner decision pending)' if r in pending else 'not in models.json'}")
+            f"{r}: enabled here, {'server-specific extra route (models.json "extra")' if r in pending else 'not in models.json'}")
 
     path = tooluse_manifest
     if path is None:
