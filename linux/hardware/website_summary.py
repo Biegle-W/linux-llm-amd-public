@@ -52,13 +52,13 @@ SPEED = {  # id: (prefill t/s, TTFT s, decode t/s or None, prompt tokens, answer
     'kolibri-1.1-iq4_xs': (2466, 2.58, 80.2, 6351, 82, '2026-11-24', 'hardware/KOLIBRI-1.1-TRIAL-2026-11-24.md'),
     'inkling-2-mini-sq-20-strata-2gpu': (2060, 3.77, 90.7, 7761, 157, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
     'hy4-flash-sq-64-strata': (605, 10.30, 72.4, 6233, 67, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
-    'qwen3.8-flash-next-iq3_xxs': (1429, 4.43, 104.6, 6332, 83, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
+    'qwen3.8-flash-next-iq3_xxs': (1393, 4.55, 171.5, 6335, 84, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
     'deepseek-v4.1-flash-1017-maya-unsloth-q1': (68, 94.45, 7.2, 6448, 104, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
     'deepseek-v4.1-flash-1017-strata-unsloth-q1': (108, 58.91, 4.4, 6338, 107, '2026-11-12', 'hardware/DAILY-UPDATES.md'),
     'glm-5.3-flash-maya': (165, 37.07, 10.8, 6104, 54, '2026-11-25', 'hardware/DAILY-UPDATES.md'),
 }
 SPEED_NOTES = [
-    'Flash-Next, Inkling and Hy4-Flash: checked after Strata 0.2.22 was installed on November 25 (one check each on the new engine). Flash-Next now samples with the model card settings when a request names none (greedy before); the check sends none, so its decode is lower here (104.6 against 173.4 on 0.2.21.1). A side test confirmed the cause: 51-57 t/s without sampling settings against 94-103 t/s with temperature 0.',
+    'Flash-Next, Inkling and Hy4-Flash: checked after Strata 0.2.22 was installed on November 25 (one check each on the new engine). Strata 0.2.22 gave Flash-Next requests that name no sampling the model card settings (greedy before), halving their decode; the owner had greedy restored with a route-config sampling block, and the figures shown are from the recheck after it (171.5 t/s, 173.4 on 0.2.21.1). A side test confirmed the cause: 51-57 t/s without sampling settings against 94-103 t/s with temperature 0.',
     'DeepSeek on Maya and GLM: checked after Maya 1.1.81 was installed on November 25 (one check each on the new engine). The DeepSeek engine code did not change; its slower first token than on November 24 (70.4 s) most likely comes from a cold file cache.',
     'DeepSeek on Strata: checked after its last engine update on November 12; the engine is frozen.',
     'The Qwen3.8-27B routes and Ripple: their engines have not changed since the November 9 check.',
