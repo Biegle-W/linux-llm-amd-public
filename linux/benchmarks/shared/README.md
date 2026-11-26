@@ -37,11 +37,11 @@ The model names clients see through each server's OpenAI-compatible API are the 
 
 ## Benchmarks
 
-1. **Quality ranking: the short tool-use test.** BFCL v4, 55 frozen items, seed 20261122, temperature 0.6, top-p 0.95, 2,048 output tokens, thinking as served, one request at a time. 120 s per single-turn item and 480 s per episode; item budget 690 s (small group, 49 items) or 3,360 s (large group, 55 items). Score = 50 × single-turn correct / 40 + 50 × core episodes passed / 9. Both groups are ranked on the same 49 items. The item list is NVIDIA's frozen `fast-1` list; until November 26 AMD used its own draw of other items, so AMD scores from before then are not on these items.
+1. **Tool-use ranking: the short tool-use test, run the same way on both servers.** It is NVIDIA's main quality ranking. Since November 26 AMD's main quality ranking is its broad rank tier (owner), and the short tool-use test is AMD's tool-calling ranking. BFCL v4, 55 frozen items, seed 20261122, temperature 0.6, top-p 0.95, 2,048 output tokens, thinking as served, one request at a time. 120 s per single-turn item and 480 s per episode; item budget 690 s (small group, 49 items) or 3,360 s (large group, 55 items). Score = 50 × single-turn correct / 40 + 50 × core episodes passed / 9. Both groups are ranked on the same 49 items. The item list is NVIDIA's frozen `fast-1` list; until November 26 AMD used its own draw of other items, so AMD scores from before then are not on these items.
 2. **Engine-update check.** One strict DSH read-tool round trip with an owned unload, then the six gBench 0.5.0.post1 Golden Set cases for chat templates and tool calls. AMD: `hardware/quant-eval/quick/run_golden.py --engine-check`. NVIDIA: `scripts/gbench_template_check.py`.
 3. **Speed report.** Measured on that round trip from a cold start. Report the model and quant, the engine and version, prompt tokens, prompt read tok/s, time to first token, decode tok/s, answer tokens, context, and weights size and drive. Say whether the prompt cache was reused, and that one run is one run.
 
-Not shared yet: AMD's rank tier (`hardware/quant-eval/rank`), NVIDIA's mix quality test (`docs/QUALITY-MIX-TEST-PLAN.md`; neither is the ranking) and the archived deep suites (AMD 216 items, NVIDIA 390 items).
+Not shared yet: AMD's rank tier (`hardware/quant-eval/rank`, AMD's main quality ranking since November 26), NVIDIA's mix quality test (`docs/QUALITY-MIX-TEST-PLAN.md`; neither is the ranking) and the archived deep suites (AMD 216 items, NVIDIA 390 items).
 
 ## Check
 

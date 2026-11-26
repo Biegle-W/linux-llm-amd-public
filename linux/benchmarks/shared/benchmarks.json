@@ -9,19 +9,46 @@
     "items_file_sha256": "7536b3c515d35834b9df79d3e00574fdc61d2230a601c5d386ab93f03824c3d4",
     "items_note": "NVIDIA's frozen list (version fast-1, built November 22, 2026); committed here on November 26 so both servers use the same 55 items.",
     "seed": 20261122,
-    "request": {"temperature": 0.6, "top_p": 0.95, "max_tokens": 2048, "seed": 20261122, "thinking": "as served", "concurrency": 1},
+    "request": {
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "max_tokens": 2048,
+      "seed": 20261122,
+      "thinking": "as served",
+      "concurrency": 1
+    },
     "order": "the 40 single-turn items first, then multi-turn episodes in triplets (base, missing parameter, missing function), in the manifest's order",
     "groups": {
-      "small": {"items": 49, "item_budget_s": 690, "for": "models held fully in VRAM"},
-      "large": {"items": 55, "item_budget_s": 3360, "for": "models that stream from SSD or keep experts in RAM; adds the 6 \"ext\" episodes"}
+      "small": {
+        "items": 49,
+        "item_budget_s": 690,
+        "for": "models held fully in VRAM"
+      },
+      "large": {
+        "items": 55,
+        "item_budget_s": 3360,
+        "for": "models that stream from SSD or keep experts in RAM; adds the 6 \"ext\" episodes"
+      }
     },
-    "per_item_timeout_s": {"single": 120, "multi": 480},
+    "per_item_timeout_s": {
+      "single": 120,
+      "multi": 480
+    },
     "score": "50 * (single-turn correct / 40) + 50 * (core episodes passed / 9), out of 100; both groups are ranked on these 49 items; large runs also report a 15-episode figure",
     "cut_items": "left out, not wrong; coverage is reported",
-    "per_server": ["load cap (load time is not scored)", "outer kill timer", "which route goes in which group", "GPU hold and guard checks"],
+    "per_server": [
+      "load cap (load time is not scored)",
+      "outer kill timer",
+      "which route goes in which group",
+      "GPU hold and guard checks"
+    ],
     "runners": {
       "amd": "hardware/quant-eval/tooluse (fast_amd, fast_chain.sh)",
       "nvidia": "~/quality-eval-build/quality/fast (fast.sh, outside the repository)"
+    },
+    "role": {
+      "nvidia": "main quality ranking",
+      "amd": "tool-calling ranking; AMD's main quality ranking is the rank tier since November 26 (owner)"
     }
   },
   "engine_update_check": {
@@ -30,7 +57,14 @@
       "gBench Golden Set, the six chat-template and tool-call cases below"
     ],
     "gbench_version": "0.5.0.post1",
-    "gbench_tasks": ["template_tool_response", "template_tool_response_twin", "template_multi_turn", "template_multi_turn_twin", "function_call_single", "tool_call_minimal"],
+    "gbench_tasks": [
+      "template_tool_response",
+      "template_tool_response_twin",
+      "template_multi_turn",
+      "template_multi_turn_twin",
+      "function_call_single",
+      "tool_call_minimal"
+    ],
     "runners": {
       "amd": "hardware/quant-eval/quick/run_golden.py --engine-check",
       "nvidia": "scripts/gbench_template_check.py"
@@ -38,11 +72,28 @@
   },
   "speed_report": {
     "measurement": "the DSH read-tool round trip above, from a cold start, one request at a time, single run unless stated",
-    "fields": ["model and quant", "engine and version", "prompt tokens", "prompt read tok/s", "time to first token s", "decode tok/s", "answer tokens", "context", "weights size GB and drive"],
+    "fields": [
+      "model and quant",
+      "engine and version",
+      "prompt tokens",
+      "prompt read tok/s",
+      "time to first token s",
+      "decode tok/s",
+      "answer tokens",
+      "context",
+      "weights size GB and drive"
+    ],
     "label": "say whether the prompt cache was reused and that one run is one run"
   },
   "not_shared": {
-    "amd": ["rank tier (hardware/quant-eval/rank), not yet on NVIDIA", "216-item public suite (archived)", "quick quality test blocks beyond block G"],
-    "nvidia": ["mix quality test (docs/QUALITY-MIX-TEST-PLAN.md, 36 items, first live runs November 26; not the ranking), not yet on AMD", "390-item test (archived)"]
+    "amd": [
+      "rank tier (hardware/quant-eval/rank), AMD's main quality ranking since November 26; not yet on NVIDIA",
+      "216-item public suite (archived)",
+      "quick quality test blocks beyond block G"
+    ],
+    "nvidia": [
+      "mix quality test (docs/QUALITY-MIX-TEST-PLAN.md, 36 items, first live runs November 26; not the ranking), not yet on AMD",
+      "390-item test (archived)"
+    ]
   }
 }
