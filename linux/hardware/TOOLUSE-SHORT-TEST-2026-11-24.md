@@ -19,7 +19,7 @@
 - **Score** = 50 × single-turn correct / 40 + 50 × core multi-turn episodes passed / 9. Every route ran all 40 single-turn items and all 9 core episodes, with no per-item timeout, so every score is complete and comparable.
 - **Large group** (SSD-streamed models and Ripple) also ran six extra episodes; the figure in brackets is the 15-episode score (50 × single / 40 + 50 × episodes / 15, unrun episodes counted as not passed). Both DeepSeek routes reached the 56-minute item budget before the last extra episodes; that does not touch the ranking score.
 - **How far apart:** one episode moves the score by 5.6 points and one single-turn item by 1.25. With 9 episodes, routes a few points apart are not separated; no significance test was run.
-- The NVIDIA server's ranking uses the same method, seed and score, but its frozen item list is not in this repository; these items were drawn again from BFCL v4 by the same rule and need not match. Compare ranks within one machine, and treat cross-machine score comparisons as approximate.
+- The NVIDIA server's ranking uses the same method, seed and score, but these items were drawn again from BFCL v4 and none of the 55 matches NVIDIA's frozen list (checked November 26). Compare ranks within one machine only. **Since November 26 the test uses NVIDIA's items** ([shared benchmarks](../benchmarks/shared/README.md)); the scores on this page are from the old items until the routes are rerun.
 
 ## By pool
 

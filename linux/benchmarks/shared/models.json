@@ -1,0 +1,197 @@
+{
+  "purpose": "The model set both LLM servers serve. Each server picks its own weights, quant, context and placement for its hardware (owner, November 26, 2026: different weights are fine, the same models are the goal). A model is matched when both servers list at least one route for it. Routes only one server runs are listed under extra and stay as they are.",
+  "updated": "2026-11-26",
+  "api_names_note": "Owner, November 26: the model names clients see through each server's API match. Each key of api_names is the shared API name; amd and nvidia give the internal route it serves on that server. /v1/models lists the shared names. The internal route ids are still accepted, so saved client selections keep working. Extra routes keep their own name.",
+  "api_names": {
+    "qwen3.8-27b-vllm": {
+      "amd": "qwen3.8-27b-vllm",
+      "nvidia": "qwen27b-hyperqwen"
+    },
+    "qwen3.8-27b-sglang": {
+      "amd": "qwen3.8-27b-sglang-dflash2",
+      "nvidia": "qwen27b-sglang"
+    },
+    "qwen3.8-flash-next-strata": {
+      "amd": "qwen3.8-flash-next-iq3_xxs",
+      "nvidia": "flash-next-strata"
+    },
+    "deepseek-v4.1-flash-maya": {
+      "amd": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "nvidia": "deepseek-maya"
+    },
+    "deepseek-v4.1-flash-strata": {
+      "amd": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "nvidia": "deepseek-unsloth-strata"
+    },
+    "glm-5.3-flash-maya": {
+      "amd": "glm-5.3-flash-maya",
+      "nvidia": "glm-maya"
+    },
+    "inkling-2-mini-strata": {
+      "amd": "inkling-2-mini-sq-20-strata-2gpu",
+      "nvidia": "inkling-strata"
+    },
+    "kolibri-1.1-llamacpp": {
+      "amd": "kolibri-1.1-iq4_xs",
+      "nvidia": "kolibri-llamacpp"
+    },
+    "hy4-flash-strata": {
+      "amd": "hy4-flash-sq-64-strata",
+      "nvidia": "hy4-flash-strata"
+    }
+  },
+  "models": [
+    {
+      "model": "Qwen3.8-27B",
+      "engines": [
+        "vLLM",
+        "SGLang"
+      ],
+      "amd": {
+        "routes": [
+          "qwen3.8-27b-vllm",
+          "qwen3.8-27b-sglang-dflash2"
+        ],
+        "weights": "AutoRound W4A16 (+ DFlash2 drafter on SGLang)"
+      },
+      "nvidia": {
+        "routes": [
+          "qwen27b-hyperqwen",
+          "qwen27b-sglang"
+        ],
+        "weights": "AutoRound INT4 (fast heads, INT8 embedding)"
+      }
+    },
+    {
+      "model": "Qwen3.8-Flash-Next",
+      "engines": [
+        "Strata"
+      ],
+      "amd": {
+        "routes": [
+          "qwen3.8-flash-next-iq3_xxs"
+        ],
+        "weights": "GSQ-RCO IQ3_XXS"
+      },
+      "nvidia": {
+        "routes": [
+          "flash-next-strata"
+        ],
+        "weights": "GSQ-RCO IQ3_XXS"
+      }
+    },
+    {
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engines": [
+        "Maya",
+        "Strata DeepSeek"
+      ],
+      "amd": {
+        "routes": [
+          "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "deepseek-v4.1-flash-1017-strata-unsloth-q1"
+        ],
+        "weights": "Unsloth UD-IQ1_S"
+      },
+      "nvidia": {
+        "routes": [
+          "deepseek-maya",
+          "deepseek-unsloth-strata"
+        ],
+        "weights": "Unsloth UD-IQ1_S"
+      }
+    },
+    {
+      "model": "GLM-5.3-Flash",
+      "engines": [
+        "Maya"
+      ],
+      "amd": {
+        "routes": [
+          "glm-5.3-flash-maya"
+        ],
+        "weights": "Maya-S v2 IQ2_XXS"
+      },
+      "nvidia": {
+        "routes": [
+          "glm-maya"
+        ],
+        "weights": "Maya-S24"
+      }
+    },
+    {
+      "model": "Inkling 2 Mini",
+      "engines": [
+        "Strata"
+      ],
+      "amd": {
+        "routes": [
+          "inkling-2-mini-sq-20-strata-2gpu"
+        ],
+        "weights": "SQ-20"
+      },
+      "nvidia": {
+        "routes": [
+          "inkling-strata"
+        ],
+        "weights": "SQ-10"
+      }
+    },
+    {
+      "model": "Kolibri 1.1",
+      "engines": [
+        "llama.cpp"
+      ],
+      "amd": {
+        "routes": [
+          "kolibri-1.1-iq4_xs"
+        ],
+        "weights": "IQ4_XS GGUF"
+      },
+      "nvidia": {
+        "routes": [
+          "kolibri-llamacpp"
+        ],
+        "weights": "Q5_K_M GGUF"
+      }
+    },
+    {
+      "model": "Hy4-Flash",
+      "engines": [
+        "Strata"
+      ],
+      "amd": {
+        "routes": [
+          "hy4-flash-sq-64-strata"
+        ],
+        "weights": "SQ-64"
+      },
+      "nvidia": {
+        "routes": [
+          "hy4-flash-strata"
+        ],
+        "weights": "SQ-96"
+      }
+    }
+  ],
+  "extra": [
+    {
+      "model": "Ripple-65B-Preview",
+      "server": "amd",
+      "routes": [
+        "ripple-65b-vllm"
+      ],
+      "note": "GPTQ W4A16, about 35 GB in VRAM. Runs only on AMD; kept as it is.",
+      "api_name": "ripple-65b-vllm"
+    },
+    {
+      "model": "Hy4-Flash (Maya engine)",
+      "server": "nvidia",
+      "routes": [
+        "hy4-flash-maya"
+      ],
+      "note": "Second engine for Hy4-Flash, which both servers serve on Strata. Runs only on NVIDIA; kept as it is.",
+      "api_name": "hy4-flash-maya"
+    }
+  ]
+}

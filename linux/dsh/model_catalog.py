@@ -30,3 +30,31 @@ def catalog(root=None):
                                  'owned_by': 'local-' + backend, 'name': row['name'],
                                  'context_length': row['context'], 'backend': backend}
     return models
+
+
+def api_names(root=None):
+    """Shared API name -> this server's route (owner, November 26: the same names on both servers).
+
+    Comes from benchmarks/shared/models.json, which is identical on the NVIDIA server.
+    """
+    root = Path(root) if root is not None else ROOT
+    try:
+        names = json.loads((root / 'benchmarks/shared/models.json').read_text()).get('api_names', {})
+    except (OSError, ValueError):
+        return {}
+    return {public: servers['amd'] for public, servers in names.items() if servers.get('amd')}
+
+
+def public_catalog(root=None):
+    """The catalog as clients see it: shared API names where one exists, with the internal route in 'route'."""
+    models = catalog(root)
+    public = {route: name for name, route in api_names(root).items() if route in models}
+    return {public.get(route, route): dict(model, id=public.get(route, route), route=route)
+            for route, model in models.items()}
+
+
+def resolve(name, root=None):
+    """The internal route for a shared API name or an internal route id; None when unknown or retired."""
+    models = catalog(root)
+    route = name if name in models else api_names(root).get(name)
+    return route if route in models else None

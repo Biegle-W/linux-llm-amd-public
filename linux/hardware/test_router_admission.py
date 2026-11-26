@@ -313,6 +313,38 @@ class HttpTests(unittest.TestCase):
         self.assertEqual(status, 200); self.assertNotIn('Authorization', self.headers)
         self.assertEqual(json.loads(self.body)['model'], 'qwen3.8-27b-vllm')
 
+    def test_shared_api_names_listed_resolved_and_renamed_back(self):
+        # Owner, November 26: the same model names through the API on both servers; old route ids keep working.
+        shared = json.loads((ROOT/'benchmarks/shared/models.json').read_text())
+        with patch.object(gw, 'backend_models', return_value=set()):
+            listed = {m['id']: m['route'] for m in json.loads(self.request('GET', '/v1/models')[2])['data']}
+        routes = set(gw.catalog())  # the public mirror's registries are not current, so check the routes it has
+        for name, servers in shared['api_names'].items():
+            if servers['amd'] in routes:
+                self.assertEqual(listed[name], servers['amd'])
+        self.assertIn('qwen3.8-27b-sglang', listed)
+        self.assertEqual(len(listed), len(gw.catalog()))
+        self.assertEqual(json.loads(self.request('GET', '/v1/models/qwen3.8-27b-sglang')[2])['route'], 'qwen3.8-27b-sglang-dflash2')
+        self.assertEqual(json.loads(self.request('GET', '/v1/models/qwen3.8-27b-sglang-dflash2')[2])['id'], 'qwen3.8-27b-sglang')
+        route = 'qwen3.8-27b-sglang-dflash2'
+        self.payload = json.dumps({'model': route, 'choices': []}).encode()
+        with patch.dict(mh.BACKENDS, {'sglang': ('sglang-profiles.json', self.backend.server_port, 'fixture')}):
+            for model in ('qwen3.8-27b-sglang', route):
+                with self.subTest(model=model):
+                    status, _, data = self.request(data={'model': model, 'messages': []})
+                    self.assertEqual(status, 200); self.assertEqual(json.loads(self.body)['model'], route)
+                    self.assertEqual(json.loads(data)['model'], model)
+        self.assertEqual(self.request(data={'model': 'kolibri-unknown', 'messages': []})[0], 404)
+
+    def test_shared_name_stream_frames_renamed(self):
+        raw = b'data: {"model":"kolibri-1.1-iq4_xs","choices":[]}\n\n'
+        self.assertEqual(json.loads(gw.rename_frame(raw, 'kolibri-1.1-iq4_xs', 'kolibri-1.1-llamacpp')[6:])['model'], 'kolibri-1.1-llamacpp')
+        done = b'data: [DONE]\n\n'
+        self.assertEqual(gw.rename_frame(done, 'kolibri-1.1-iq4_xs', 'kolibri-1.1-llamacpp'), done)
+        event = b'event: response.completed\ndata: {"type":"response.completed","response":{"model":"kolibri-1.1-iq4_xs"}}\n\n'
+        out = gw.rename_frame(event, 'kolibri-1.1-iq4_xs', 'kolibri-1.1-llamacpp')
+        self.assertTrue(out.startswith(b'event: response.completed\n')); self.assertIn(b'"model": "kolibri-1.1-llamacpp"', out)
+
     def test_backend_http_json_status_and_code_survive_gateway(self):
         self.backend_status = 422; self.payload = b'{"error":{"message":"too long", "code":"context_length"}}'
         status, headers, data = self.request()

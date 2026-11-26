@@ -29,6 +29,35 @@ HUB_PORT = 30100
 def catalog():
     return model_catalog.catalog(ROOT)
 
+
+def public_catalog():
+    return model_catalog.public_catalog(ROOT)
+
+
+def rename_model(value, route, name):
+    """Give a response the model name the client asked for (a shared API name), not the internal route."""
+    if isinstance(value, dict):
+        if value.get('model') == route:
+            value['model'] = name
+        if isinstance(value.get('response'), dict) and value['response'].get('model') == route:
+            value['response']['model'] = name
+    return value
+
+
+def rename_frame(raw, route, name):
+    """Rewrite the model field inside one SSE frame; anything that is not a JSON data line passes unchanged."""
+    if route.encode() not in raw:
+        return raw
+    out = []
+    for line in raw.split(b'\n'):
+        if line.startswith(b'data:') and line[5:].strip() not in (b'', b'[DONE]'):
+            try:
+                line = b'data: ' + json.dumps(rename_model(json.loads(line[5:]), route, name)).encode()
+            except (ValueError, UnicodeDecodeError):
+                pass
+        out.append(line)
+    return b'\n'.join(out)
+
 MAX_BODY = 32 * 1024 * 1024
 config = {}
 token = b''
@@ -97,15 +126,17 @@ class Handler(BaseHTTPRequestHandler):
                 return self.error_json(503, 'The local model hub is not reachable.', 'hub_unavailable')
             finally:
                 connection.close()
-        models = catalog()
+        models = public_catalog()
         online = {backend: backend_models(backend) for backend in BACKENDS}
         for model in models.values():
-            model['backend_available'] = model['id'] in online[model['backend']]
+            model['backend_available'] = model['route'] in online[model['backend']]
             model['auto_start'] = True
         if path == '/v1/models':
             return self.send_json(200, {'object': 'list', 'data': list(models.values())})
         if path.startswith('/v1/models/'):
-            model = models.get(unquote(path.removeprefix('/v1/models/')))
+            identifier = unquote(path.removeprefix('/v1/models/'))
+            route = model_catalog.resolve(identifier, ROOT)
+            model = next((m for m in models.values() if m['route'] == route), None)
             if model:
                 return self.send_json(200, model)
             return self.error_json(404, 'Unknown model.', 'model_not_found')
@@ -132,9 +163,15 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError('An object with a model ID is required')
         except (ValueError, OSError):
             return self.error_json(400, 'Invalid JSON request or framing.', 'bad_request')
-        model = catalog().get(data['model'])
-        if model is None:
+        requested = data['model']
+        route = model_catalog.resolve(requested, ROOT)
+        if route is None:
             return self.error_json(404, 'Unknown or retired model. Use GET /v1/models.', 'model_not_found')
+        model = catalog()[route]
+        if route != requested:
+            # A shared API name: the hub and backends know the internal route id.
+            data['model'] = route
+            body = json.dumps(data).encode()
         backend = model['backend']
         if backend in ('strata', 'maya') and path not in ('/v1/chat/completions', '/v1/responses'):
             return self.error_json(400, f'{BACKENDS[backend][2]} supports chat completions and Responses.', 'unsupported_endpoint')
@@ -182,10 +219,19 @@ class Handler(BaseHTTPRequestHandler):
             def output(chunk):
                 self.wfile.write(chunk)
                 self.wfile.flush()
+            renamed = route != requested
             if response.status >= 400:
                 output(clean_error_body(response.read(), secrets))
             elif 'text/event-stream' in response.getheader('Content-Type', ''):
-                relay_sse(response, output, secrets, responses=path == "/v1/responses")
+                write = (lambda raw: output(rename_frame(raw, route, requested))) if renamed else output
+                relay_sse(response, write, secrets, responses=path == "/v1/responses")
+            elif renamed:
+                raw = response.read()
+                try:
+                    raw = json.dumps(rename_model(json.loads(raw), route, requested)).encode()
+                except (ValueError, UnicodeDecodeError):
+                    pass
+                output(raw)
             else:
                 while chunk := response.read1(65536):
                     output(chunk)
