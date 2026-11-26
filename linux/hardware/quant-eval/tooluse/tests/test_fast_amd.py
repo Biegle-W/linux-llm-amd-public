@@ -81,7 +81,12 @@ def mock_server(reply):
             thread.join()
 
 
-def replay_steps(gold, remove_call=False):
+def replay_steps(gold, remove_call=False, docs=None):
+    # Positional ground-truth arguments are named from the function docs, in their declared order.
+    params = {
+        function["name"]: list(function["parameters"]["properties"])
+        for functions in (docs or {}).values() for function in functions
+    }
     steps = []
     removed = False
     for turn in gold:
@@ -90,9 +95,11 @@ def replay_steps(gold, remove_call=False):
                 removed = True
                 continue
             call = ast.parse(text, mode="eval").body
-            if call.args:
-                raise AssertionError("Expected named arguments in replay")
-            args = {arg.arg: ast.literal_eval(arg.value) for arg in call.keywords}
+            names = params.get(call.func.id, [])
+            if len(call.args) > len(names):
+                raise AssertionError(f"Cannot name the positional arguments of {call.func.id}")
+            args = {name: ast.literal_eval(value) for name, value in zip(names, call.args)}
+            args.update({arg.arg: ast.literal_eval(arg.value) for arg in call.keywords})
             steps.append(completion(
                 calls=[tool_call(call.func.id, args, f"call_{len(steps)}")], finish="tool_calls",
             ))
@@ -135,10 +142,9 @@ class BenchmarkTests(unittest.TestCase):
             ["parallel"] * 15 + ["irrelevance"] * 15 + ["simple"] * 10
             + ["mt_base", "mt_miss_param", "mt_miss_func"] * 5,
         )
-        for pool in build_manifest.POOLS:
-            pool_items = [item for item in items if item["pool"] == pool]
-            ranks = [build_manifest.sha(f"20261122|{pool}|{item['id']}".encode()) for item in pool_items]
-            self.assertEqual(ranks, sorted(ranks))
+        shared = json.loads(build_manifest.SHARED.read_bytes())["entries"]
+        self.assertEqual([item["id"] for item in items], [entry["id"] for entry in shared])
+        self.assertEqual([item["core"] for item in items], [entry["tier"] == "core" for entry in shared])
 
         source = self.out / "bfcl-src"
         shutil.copytree(build_manifest.SOURCE, source)
@@ -181,7 +187,7 @@ class BenchmarkTests(unittest.TestCase):
             gold = answer["ground_truth"]
             for remove in (False, True) if index < 3 else (False,):
                 with self.subTest(item=item["id"], remove=remove):
-                    replies = iter(replay_steps(gold, remove))
+                    replies = iter(replay_steps(gold, remove, self.docs))
                     with mock_server(lambda _: next(replies)) as (url, requests):
                         record = run.item_record(item)
 
@@ -449,7 +455,7 @@ class BenchmarkTests(unittest.TestCase):
         for item in self.manifest["items"]:
             _, answer = self.data[item["id"]]
             if item["part"] == "multi":
-                responses.extend(replay_steps(answer["ground_truth"]))
+                responses.extend(replay_steps(answer["ground_truth"], docs=self.docs))
             elif item["pool"] == "irrelevance":
                 responses.append(completion("No tool needed."))
             else:

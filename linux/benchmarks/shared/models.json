@@ -1,0 +1,33 @@
+{
+  "purpose": "The model set both LLM servers serve. Each server picks its own weights, quant, context and placement for its hardware (owner, November 26, 2026: different weights are fine, the same models are the goal). A model is matched when both servers list at least one route for it.",
+  "updated": "2026-11-26",
+  "models": [
+    {"model": "Qwen3.8-27B", "engines": ["vLLM", "SGLang"],
+     "amd": {"routes": ["qwen3.8-27b-vllm", "qwen3.8-27b-sglang-dflash2"], "weights": "AutoRound W4A16 (+ DFlash2 drafter on SGLang)"},
+     "nvidia": {"routes": ["qwen27b-hyperqwen", "qwen27b-sglang"], "weights": "AutoRound INT4 (fast heads, INT8 embedding)"}},
+    {"model": "Qwen3.8-Flash-Next", "engines": ["Strata"],
+     "amd": {"routes": ["qwen3.8-flash-next-iq3_xxs"], "weights": "GSQ-RCO IQ3_XXS"},
+     "nvidia": {"routes": ["flash-next-strata"], "weights": "GSQ-RCO IQ3_XXS"}},
+    {"model": "DeepSeek-V4.1-Flash-1017", "engines": ["Maya", "Strata DeepSeek"],
+     "amd": {"routes": ["deepseek-v4.1-flash-1017-maya-unsloth-q1", "deepseek-v4.1-flash-1017-strata-unsloth-q1"], "weights": "Unsloth UD-IQ1_S"},
+     "nvidia": {"routes": ["deepseek-maya", "deepseek-unsloth-strata"], "weights": "Unsloth UD-IQ1_S"}},
+    {"model": "GLM-5.3-Flash", "engines": ["Maya"],
+     "amd": {"routes": ["glm-5.3-flash-maya"], "weights": "Maya-S v2 IQ2_XXS"},
+     "nvidia": {"routes": ["glm-maya"], "weights": "Maya-S24"}},
+    {"model": "Inkling 2 Mini", "engines": ["Strata"],
+     "amd": {"routes": ["inkling-2-mini-sq-20-strata-2gpu"], "weights": "SQ-20"},
+     "nvidia": {"routes": ["inkling-strata"], "weights": "SQ-10"}},
+    {"model": "Kolibri 1.1", "engines": ["llama.cpp"],
+     "amd": {"routes": ["kolibri-1.1-iq4_xs"], "weights": "IQ4_XS GGUF"},
+     "nvidia": {"routes": ["kolibri-llamacpp"], "weights": "Q5_K_M GGUF"}},
+    {"model": "Hy4-Flash", "engines": ["Strata"],
+     "amd": {"routes": ["hy4-flash-sq-64-strata"], "weights": "SQ-64"},
+     "nvidia": {"routes": ["hy4-flash-strata"], "weights": "SQ-96"}}
+  ],
+  "unmatched": [
+    {"model": "Ripple-65B-Preview", "server": "amd", "routes": ["ripple-65b-vllm"],
+     "note": "GPTQ W4A16, about 35 GB in VRAM; does not fit NVIDIA's 22 GB of VRAM. Owner decision pending: retire on AMD or trial on NVIDIA with RAM offload."},
+    {"model": "Hy4-Flash (Maya engine)", "server": "nvidia", "routes": ["hy4-flash-maya"],
+     "note": "Second engine for a model both servers already serve on Strata. Owner decision pending: retire on NVIDIA or add Hy4 Maya-M as an AMD route."}
+  ]
+}

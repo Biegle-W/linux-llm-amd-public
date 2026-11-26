@@ -1,4 +1,10 @@
-"""Build and verify the frozen selection from the local BFCL snapshot."""
+"""Build and verify the frozen selection from the local BFCL snapshot.
+
+The items are the ones in the shared manifest both servers use
+(benchmarks/shared/tooluse-short-manifest.json, NVIDIA's frozen list since
+November 26, 2026), in its order; core episodes are its "core" tier. The
+seeded draw this file did before is gone: it picked other items than NVIDIA's.
+"""
 
 import argparse
 import hashlib
@@ -11,6 +17,7 @@ from fast_amd.tooling import tool_schema, validate_tool_names
 PACKAGE = Path(__file__).resolve().parent
 SOURCE = PACKAGE.parent / "bfcl-src"
 MANIFEST = PACKAGE / "manifest.json"
+SHARED = PACKAGE.parents[3] / "benchmarks" / "shared" / "tooluse-short-manifest.json"
 SEED = 20261122
 POOLS = {
     "parallel": ("parallel", 15),
@@ -48,8 +55,20 @@ def index_rows(data, name):
     return rows
 
 
-def build(src):
+def shared_selection(path):
+    data = path.read_bytes()
+    shared = json.loads(data)
+    if shared.get("seed") != SEED:
+        raise ValueError(f"Shared manifest seed {shared.get('seed')} is not {SEED}")
+    by_subset = {}
+    for entry in shared["entries"]:
+        by_subset.setdefault(entry["subset"], []).append((entry["id"], entry["tier"] == "core"))
+    return shared, sha(data), by_subset
+
+
+def build(src, shared_path=SHARED):
     files = {}
+    shared, shared_sha, by_subset = shared_selection(shared_path)
 
     def read(relative):
         data = (src / relative).read_bytes()
@@ -98,18 +117,20 @@ def build(src):
                 except (KeyError, TypeError, AttributeError, ValueError):
                     continue
             eligible.append(item_id)
-        eligible.sort(key=lambda item_id: (sha(f"{SEED}|{pool}|{item_id}".encode()), item_id))
-        if len(eligible) < count:
-            raise ValueError(f"Too few eligible items in {pool}")
+        chosen = by_subset.get(filename[len("BFCL_v4_"):-len(".json")], [])
+        if len(chosen) != count:
+            raise ValueError(f"Shared manifest has {len(chosen)} items for {pool}, expected {count}")
         selected[pool] = []
-        for index, item_id in enumerate(eligible[:count]):
+        for item_id, core in chosen:
+            if item_id not in eligible:
+                raise ValueError(f"Shared item {item_id} is missing or not runnable here")
             row, answer = questions[item_id], answers.get(item_id)
             if multi and answer is None:
                 raise ValueError(f"Missing answer for {item_id}")
             data[item_id] = row, answer
             selected[pool].append({
                 "id": item_id, "pool": pool, "part": "multi" if multi else "single",
-                "core": not multi or index < 3,
+                "core": core,
                 "sha256": sha(canonical([row, answer])),
             })
 
@@ -122,6 +143,7 @@ def build(src):
     }
     manifest = {
         "seed": SEED, "source_commit": commit, "source_sha256": files,
+        "shared_manifest": {"version": shared["version"], "sha256": shared["sha256"], "file_sha256": shared_sha},
         "counts": {pool: len(items) for pool, items in selected.items()},
         "items": items, "groups": groups,
     }
@@ -129,9 +151,9 @@ def build(src):
     return manifest, data, docs
 
 
-def verify(src, path):
+def verify(src, path, shared_path=SHARED):
     frozen = json.loads(path.read_bytes())
-    expected, data, docs = build(src)
+    expected, data, docs = build(src, shared_path)
     if frozen != expected:
         raise ValueError("Manifest or BFCL source hash mismatch")
     return frozen, data, docs
@@ -141,8 +163,9 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--src", type=Path, default=SOURCE)
     parser.add_argument("--out", type=Path, default=MANIFEST)
+    parser.add_argument("--shared", type=Path, default=SHARED)
     args = parser.parse_args(argv)
-    manifest, _, _ = build(args.src)
+    manifest, _, _ = build(args.src, args.shared)
     write_json(args.out, manifest)
 
 

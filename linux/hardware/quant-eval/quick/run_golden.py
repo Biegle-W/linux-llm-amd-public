@@ -2,7 +2,11 @@
 """Quick quality test, block G: gBench's Golden Set as a serving check for a new route.
 
   run_golden.py <out_dir> <route> --tokenizer <HF id or local tokenizer folder>
-                [--url http://127.0.0.1:30100] [--class fast|slow] [--minutes M] [--abort-file PATH]
+                [--url http://127.0.0.1:30100] [--class fast|slow] [--minutes M] [--abort-file PATH] [--engine-check]
+
+--engine-check runs only the six chat-template and tool-call cases (FIRST below). That is the gBench part of
+the engine-update check both servers share (benchmarks/shared/README.md); NVIDIA runs the same six cases with
+scripts/gbench_template_check.py.
 
 Owner rule (November 22, 2026): run only for a new model or new weights; existing routes are not rerun.
 
@@ -168,12 +172,14 @@ def main():
     ap.add_argument('out'); ap.add_argument('route'); ap.add_argument('--tokenizer', required=True)
     ap.add_argument('--url', default='http://127.0.0.1:30100'); ap.add_argument('--class', dest='cls', choices=['fast', 'slow'], default='slow')
     ap.add_argument('--minutes', type=float); ap.add_argument('--abort-file'); ap.add_argument('--trust-remote-code', action='store_true')
+    ap.add_argument('--engine-check', action='store_true', help='only the six shared template and tool cases')
     a = ap.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     if not GB_PY.exists(): sys.exit(f'gBench venv missing: {GB_PY} (see README.md)')
     if a.abort_file and os.path.exists(a.abort_file): print('GPU hold present; not started'); return 3
     minutes, timeout = a.minutes or BLOCK_MINUTES[a.cls], REQUEST_TIMEOUT[a.cls]
     first, rest = task_ids()
+    if a.engine_check: rest = []
 
     ok, warm = warm_up(a.url, a.route)
     if not ok:
@@ -198,7 +204,7 @@ def main():
     count = lambda s: sum(1 for c in cases.values() if c['status'] == s)
     reqs = [r for r in relay.log if 'refused' not in r]
     summary = {
-        'route': a.route, 'class': a.cls, 'gbench': GB_VERSION, 'scoring_version': meta.get('scoring_version'),
+        'route': a.route, 'class': a.cls, 'engine_check': a.engine_check, 'gbench': GB_VERSION, 'scoring_version': meta.get('scoring_version'),
         'tokenizer': a.tokenizer, 'block_minutes': minutes, 'minutes_used': used, 'within_block': used <= minutes,
         'warmup_seconds': warm, 'request_timeout_seconds': timeout,
         'passed': count('passed'), 'applicable': sum(1 for c in cases.values() if c['status'] not in ('not_applicable', 'not_run')),
