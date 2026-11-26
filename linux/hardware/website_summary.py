@@ -81,7 +81,8 @@ RETIRED = [
 ]
 
 # 4. Quality ranking --------------------------------------------------------------------------------------
-# Owner, November 24: the short tool-use test (the NVIDIA server's test) is the ranking on both machines.
+# Owner, November 26 ("Yes, make it main"): the broad rank tier (BROAD) is the main quality ranking.
+# November 24-26 the short tool-use test (the NVIDIA server's test) was the ranking; it stays as the tool-calling ranking.
 # First AMD run: November 24 (hardware/TOOLUSE-SHORT-TEST-2026-11-24.md). The old 216-item results stay below as reference.
 TOOLUSE = [  # route, model and quant, engine at the run, score, single/40, episodes/9, 15-episode score or None, coverage note
     ('qwen3.8-27b-sglang-dflash2', 'Qwen3.8-27B AutoRound W4A16 + DFlash2', 'SGLang TP2 `f84475ccf593`', 74.6, 33, 6, None, 'complete'),
@@ -116,7 +117,7 @@ RANKING_216 = [  # model, best route, correct/216, score, 95% interval, code/20,
      'lower bound: 65 answers cut off while still reasoning'),
 ]
 
-# 5. Short quality test run here so far (AMD quick quality test; not the short tool-use test) -----------------
+# 5. Short quality test run here so far (AMD quick quality test; not a ranking test) -----------------
 QUICK = [  # model, route, agent core/12, agent extra/8, tool calls/16, general/10, date, note
     ('Kolibri 1.1 IQ4_XS', 'kolibri-1.1-iq4_xs', 8, 7, 12, 7, '2026-11-24', 'llama.cpp; gBench Golden Set 14/14'),
     ('Hy4-Flash SQ-64', 'hy4-flash-sq-64-strata', 12, 8, 9, 5, '2026-11-22', 'tested on the one-card Strata 0.2.18 trial with the same weights'),
@@ -173,7 +174,15 @@ def render():
     L += ['## 3. Retired or removed routes', '', '| Route | Date | What happened |', '|---|---|---|']
     L += [f'| {r[0] if "," in r[0] or " " in r[0] else "`" + r[0] + "`"} | {r[1]} | {r[2]} |' for r in RETIRED]
     L += ['', '## 4. Quality ranking', '',
-          '**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by.** 40 single-turn BFCL v4 tool-calling items '
+          '**Standard (owner, November 26): the broad ranking test.** A broad mix (knowledge, math, code, instructions, reasoning, tool calls) in 15 minutes for smaller models and 30 for large ones. '
+          'Every route answers the same 30-item core from the public suite, then up to 144 items while the next one fits. Ranked on the first 45 items, which all ten routes reached on November 25-26; '
+          'routes sharing a letter are not separated (exact McNemar, Holm). Temperature 0, thinking off, through the hub.', '',
+          '| Rank | Route | Correct /45 | Format-tolerant /45 | Group | Core /30 | Items answered in budget |', '|---:|---|---:|---:|---|---:|---:|']
+    L += [f'| {b[0]} | `{b[1]}` | {b[2]} | {b[3]} | {b[4]} | {b[5]} | {b[6]} |' for b in BROAD]
+    L += ['', '- About ±12 points of uncertainty at 45 items; only four pairs are separated. Format-tolerant re-grades answers the frozen grader could not read (bold final lines, run-together answer markers); with it, Flash-Next and SGLang are no longer separated from Inkling.',
+          f'- Source: [report]({GH}hardware/RANK-TEST-2026-11-26.md), [results]({GH}hardware/results/rank-test-2026-11-26/ranking.md), [test code]({GH}hardware/quant-eval/rank/README.md).', '',
+          '### Tool-calling ranking: short tool-use test (the standard November 24-26)', '',
+          'The same test the NVIDIA server ranks by. 40 single-turn BFCL v4 tool-calling items '
           '(parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. '
           'Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on November 24 on the nine routes then enabled, one route at a time through the hub, and on Hy4-Flash through its side server before it became the tenth route on November 25; '
           'temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.', '',
@@ -187,16 +196,8 @@ def render():
     L += ['', '- One episode moves the score by 5.6 points and one single-turn item by 1.25; routes a few points apart are not separated (no significance test).',
           '- Every route ran all 40 single-turn items and all 9 core episodes with no timeout, so every score is complete.',
           f'- Source: [report]({GH}hardware/TOOLUSE-SHORT-TEST-2026-11-24.md), [results JSON]({GH}hardware/results/tooluse-short-2026-11-24.json), [test code]({GH}hardware/quant-eval/tooluse/README.md).', '',
-          '### Broad ranking test (November 25-26)', '',
-          'Owner request: a broad mix (knowledge, math, code, instructions, reasoning, tool calls) in 15 minutes for smaller models and 30 for large ones. '
-          'Every route answers the same 30-item core from the public suite, then up to 144 items while the next one fits. Ranked on the first 45 items, which all ten routes reached; '
-          'routes sharing a letter are not separated (exact McNemar, Holm). Temperature 0, thinking off, through the hub.', '',
-          '| Rank | Route | Correct /45 | Format-tolerant /45 | Group | Core /30 | Items answered in budget |', '|---:|---|---:|---:|---|---:|---:|']
-    L += [f'| {b[0]} | `{b[1]}` | {b[2]} | {b[3]} | {b[4]} | {b[5]} | {b[6]} |' for b in BROAD]
-    L += ['', '- About ±12 points of uncertainty at 45 items; only four pairs are separated. Format-tolerant re-grades answers the frozen grader could not read (bold final lines, run-together answer markers); with it, Flash-Next and SGLang are no longer separated from Inkling.',
-          f'- Source: [report]({GH}hardware/RANK-TEST-2026-11-26.md), [results]({GH}hardware/results/rank-test-2026-11-26/ranking.md), [test code]({GH}hardware/quant-eval/rank/README.md).', '',
           '### Reference: old standard (216-item public suite)', '',
-          'Not comparable with the ranking above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), '
+          'Not comparable with the rankings above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), '
           'one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.', '',
           '| Rank | Model and quant | Route | Correct / 216 | Score | 95% interval | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Other engines and notes |',
           '|---:|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---|']
@@ -206,7 +207,7 @@ def render():
           '- Not on the old standard: `kolibri-1.1-iq4_xs`, `inkling-2-mini-sq-20-strata-2gpu` and `hy4-flash-sq-64-strata` (no 216-item run).',
           f'- Source: [current results]({GH}hardware/CURRENT-AMD-BENCHMARKS.md#old-quality-ranking-216-item-public-suite).', '']
     L += ['## 5. Short quality test', '',
-          'The AMD quick quality test for new models (run once per new model or new weights since November 22). It is not the short tool-use test and is too small to rank models.', '',
+          'The AMD quick quality test for new models (run once per new model or new weights since November 22). It is neither ranking test and is too small to rank models.', '',
           '| Model and quant | Route | Agent core /12 | Agent extra /8 | Tool calls /16 | General /10 | Date | Note |', '|---|---|---:|---:|---:|---:|---|---|']
     L += [f'| {q[0]} | `{q[1]}` | {q[2]} | {q[3]} | {q[4]} | {q[5]} | {q[6]} | {q[7]} |' for q in QUICK]
     L += ['', 'Other engines: none of these models runs on a second engine here.', '']
@@ -224,6 +225,7 @@ def main():
                  f'context {[k for k in live if k in mine and live[k] != mine[k]]}')
     assert set(SPEED) == set(mine)
     assert {r[0] for r in TOOLUSE} == set(mine), 'every enabled route needs a short tool-use row'
+    assert {b[1] for b in BROAD} == set(mine), 'every enabled route needs a broad ranking row'
     text = render()
     if '--check' in sys.argv:
         sys.exit(0 if OUT.exists() and OUT.read_text() == text else 'docs/WEBSITE-SUMMARY.md is out of date')

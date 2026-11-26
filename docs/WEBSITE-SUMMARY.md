@@ -60,7 +60,27 @@ One DSH read-tool round trip through the hub from a cold start: about 6.2-7.6K p
 
 ## 4. Quality ranking
 
-**Standard (owner, November 24): the short tool-use test, the same test the NVIDIA server ranks by.** 40 single-turn BFCL v4 tool-calling items (parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on November 24 on the nine routes then enabled, one route at a time through the hub, and on Hy4-Flash through its side server before it became the tenth route on November 25; temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.
+**Standard (owner, November 26): the broad ranking test.** A broad mix (knowledge, math, code, instructions, reasoning, tool calls) in 15 minutes for smaller models and 30 for large ones. Every route answers the same 30-item core from the public suite, then up to 144 items while the next one fits. Ranked on the first 45 items, which all ten routes reached on November 25-26; routes sharing a letter are not separated (exact McNemar, Holm). Temperature 0, thinking off, through the hub.
+
+| Rank | Route | Correct /45 | Format-tolerant /45 | Group | Core /30 | Items answered in budget |
+|---:|---|---:|---:|---|---:|---:|
+| 1 | `qwen3.8-flash-next-iq3_xxs` | 37 | 37 | A B | 24 | 137 |
+| 2 | `qwen3.8-27b-sglang-dflash2` | 36 | 36 | A | 26 | 134 |
+| 3 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 35 | 35 | A C | 24 | 51 |
+| 4 | `kolibri-1.1-iq4_xs` | 34 | 34 | A B C D | 23 | 144 |
+| 4 | `qwen3.8-27b-vllm` | 34 | 34 | A B C D | 25 | 123 |
+| 6 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 33 | 34 | A B C D | 23 | 50 |
+| 7 | `ripple-65b-vllm` | 29 | 29 | A B C D | 21 | 47 |
+| 8 | `hy4-flash-sq-64-strata` | 28 | 29 | A B C D | 18 | 144 |
+| 9 | `inkling-2-mini-sq-20-strata-2gpu` | 23 | 27 | C D | 16 | 144 |
+| 10 | `glm-5.3-flash-maya` | 22 | 22 | B D | 16 | 111 |
+
+- About ±12 points of uncertainty at 45 items; only four pairs are separated. Format-tolerant re-grades answers the frozen grader could not read (bold final lines, run-together answer markers); with it, Flash-Next and SGLang are no longer separated from Inkling.
+- Source: [report](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/RANK-TEST-2026-11-26.md), [results](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/rank-test-2026-11-26/ranking.md), [test code](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/quant-eval/rank/README.md).
+
+### Tool-calling ranking: short tool-use test (the standard November 24-26)
+
+The same test the NVIDIA server ranks by. 40 single-turn BFCL v4 tool-calling items (parallel calls, irrelevance, simple calls) and 9 multi-turn episodes; score = 50 x single-turn correct / 40 + 50 x episodes passed / 9, out of 100. Larger models (the large group) also ran 6 extra episodes, shown as a 15-episode score. Run on November 24 on the nine routes then enabled, one route at a time through the hub, and on Hy4-Flash through its side server before it became the tenth route on November 25; temperature 0.6. Items were drawn from BFCL v4 by the NVIDIA rule (seed 20261122) but need not match its frozen list, so compare ranks within one machine.
 
 | Rank | Route | Model and quant | Engine at the run | Score /100 | Single-turn /40 | Episodes /9 | 15-episode score | Coverage |
 |---:|---|---|---|---:|---:|---:|---:|---|
@@ -79,29 +99,9 @@ One DSH read-tool round trip through the hub from a cold start: about 6.2-7.6K p
 - Every route ran all 40 single-turn items and all 9 core episodes with no timeout, so every score is complete.
 - Source: [report](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/TOOLUSE-SHORT-TEST-2026-11-24.md), [results JSON](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/tooluse-short-2026-11-24.json), [test code](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/quant-eval/tooluse/README.md).
 
-### Broad ranking test (November 25-26)
-
-Owner request: a broad mix (knowledge, math, code, instructions, reasoning, tool calls) in 15 minutes for smaller models and 30 for large ones. Every route answers the same 30-item core from the public suite, then up to 144 items while the next one fits. Ranked on the first 45 items, which all ten routes reached; routes sharing a letter are not separated (exact McNemar, Holm). Temperature 0, thinking off, through the hub.
-
-| Rank | Route | Correct /45 | Format-tolerant /45 | Group | Core /30 | Items answered in budget |
-|---:|---|---:|---:|---|---:|---:|
-| 1 | `qwen3.8-flash-next-iq3_xxs` | 37 | 37 | A B | 24 | 137 |
-| 2 | `qwen3.8-27b-sglang-dflash2` | 36 | 36 | A | 26 | 134 |
-| 3 | `deepseek-v4.1-flash-1017-maya-unsloth-q1` | 35 | 35 | A C | 24 | 51 |
-| 4 | `kolibri-1.1-iq4_xs` | 34 | 34 | A B C D | 23 | 144 |
-| 4 | `qwen3.8-27b-vllm` | 34 | 34 | A B C D | 25 | 123 |
-| 6 | `deepseek-v4.1-flash-1017-strata-unsloth-q1` | 33 | 34 | A B C D | 23 | 50 |
-| 7 | `ripple-65b-vllm` | 29 | 29 | A B C D | 21 | 47 |
-| 8 | `hy4-flash-sq-64-strata` | 28 | 29 | A B C D | 18 | 144 |
-| 9 | `inkling-2-mini-sq-20-strata-2gpu` | 23 | 27 | C D | 16 | 144 |
-| 10 | `glm-5.3-flash-maya` | 22 | 22 | B D | 16 | 111 |
-
-- About ±12 points of uncertainty at 45 items; only four pairs are separated. Format-tolerant re-grades answers the frozen grader could not read (bold final lines, run-together answer markers); with it, Flash-Next and SGLang are no longer separated from Inkling.
-- Source: [report](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/RANK-TEST-2026-11-26.md), [results](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/results/rank-test-2026-11-26/ranking.md), [test code](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/quant-eval/rank/README.md).
-
 ### Reference: old standard (216-item public suite)
 
-Not comparable with the ranking above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.
+Not comparable with the rankings above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.
 
 | Rank | Model and quant | Route | Correct / 216 | Score | 95% interval | Code /20 | Instructions /32 | Knowledge /60 | Math /40 | Reasoning /32 | Tools /32 | Other engines and notes |
 |---:|---|---|---:|---:|---|---:|---:|---:|---:|---:|---:|---|
@@ -117,7 +117,7 @@ Not comparable with the ranking above or with the NVIDIA ranking: 216-item publi
 
 ## 5. Short quality test
 
-The AMD quick quality test for new models (run once per new model or new weights since November 22). It is not the short tool-use test and is too small to rank models.
+The AMD quick quality test for new models (run once per new model or new weights since November 22). It is neither ranking test and is too small to rank models.
 
 | Model and quant | Route | Agent core /12 | Agent extra /8 | Tool calls /16 | General /10 | Date | Note |
 |---|---|---:|---:|---:|---:|---|---|
