@@ -1,0 +1,447 @@
+{
+  "version": "fast-1",
+  "seed": 20261122,
+  "entries": [
+    {
+      "id": "parallel_138",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "f89b71cbfe36596c0f12814ffc17f145418d08558ca5a0f72a26a7cdbb7de5b2"
+    },
+    {
+      "id": "parallel_14",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "22c3d88790416a727c3b377dace817a1b07ad8ca2d87e48a66dc400c8ab85015"
+    },
+    {
+      "id": "parallel_150",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "1a71b91c006ba7418371a6759fde8e7838abe1739b510420b9ab409ef989417e"
+    },
+    {
+      "id": "parallel_167",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "bef45fecc2d912276dc8b9f613b074e12dc032187562a974607f1f51a7afd8d3"
+    },
+    {
+      "id": "parallel_171",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "ed4d221b3c703815740d158a23ecc3f34e3b5332adc50edfc910c8623d6c1ce1"
+    },
+    {
+      "id": "parallel_173",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "4de938893db8feeacea1ec9fa125fcb8e8cfbb29ba904975f049804d620e1c97"
+    },
+    {
+      "id": "parallel_184",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "5e830aaa0c31324ae4e8f4f4d5227809210ce51d7ad2f5a9e88a368013998454"
+    },
+    {
+      "id": "parallel_27",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "edd94c9e179b8ac5984a60ad34b47c112fe5101454cb8d728e1436dd2d55b80d"
+    },
+    {
+      "id": "parallel_48",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "f476e7bb0817b20ea22498b5d082343631ae905af0e4fd881daedf1743be065d"
+    },
+    {
+      "id": "parallel_49",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "9430490c78ccbab1abdf213d7521de9e9987d1be6ee699dba125ea00be5892b9"
+    },
+    {
+      "id": "parallel_68",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "43d85d31f211c4f41aa2f759b9eb4897c3fbc048352217b10f46beced2fd4801"
+    },
+    {
+      "id": "parallel_71",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "13306b5c3804b41a7eba063bd95df730b7131a43dc3f2407654cfb2dba042e68"
+    },
+    {
+      "id": "parallel_84",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "b7e49846ccf75e3baf3ec3d7e6bf23c0ab1dd03f20f59a73dbfb53d3657f58bb"
+    },
+    {
+      "id": "parallel_86",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "12123e1f8cc086529d3c98873f9773667cf0467a1c546d24e5cd0cb59d337955"
+    },
+    {
+      "id": "parallel_87",
+      "bench": "bfcl_single",
+      "subset": "parallel",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "3fb37c640b10859920e0849837a64df7be2d235fce0a3e088291f1eb528e21d4"
+    },
+    {
+      "id": "irrelevance_138",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "a5d3a7134e9189da814eb3a9a00f1d6b016db91526b2667318bc54e109dea59c"
+    },
+    {
+      "id": "irrelevance_14",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "f5b49a80f4f4787a0174b076f8916d211f8c2537ee7ee5e4c278221033afaee7"
+    },
+    {
+      "id": "irrelevance_167",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "4afc217c0b0a2e7e2a10cf40af338cef7c73019938c4da949e397753ef90bfcd"
+    },
+    {
+      "id": "irrelevance_171",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "763b085ab7e838ab35e7a83336817c1c4077d44fbb23233a4a7ce75337952ac9"
+    },
+    {
+      "id": "irrelevance_173",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "a105bb1ec9c609a8d6c53cafb1f177163d34718a3ff7c8faef16026f257db4e8"
+    },
+    {
+      "id": "irrelevance_184",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "dc5de4cacdf8a425895ae19c7085ab22c89bd95a2eeb768a3f1de48ab2dc3435"
+    },
+    {
+      "id": "irrelevance_206",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "585c4cbb6512f160510bb1a4bfbe99dc2cbc61138a191a50ed55dc11b56942aa"
+    },
+    {
+      "id": "irrelevance_227",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "585f9ddd847d43429a0663d253d23c2e593b82cbb63fd9b5a2986d9f0bfdc546"
+    },
+    {
+      "id": "irrelevance_228",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "2ce526c7832007a15ea27a243b7df2427c0a5be9daa6f33e15893d694a034963"
+    },
+    {
+      "id": "irrelevance_31",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "6f90ebf5a980ed8fbf8c2717a9adeb28f59483299143d1ec2b598f535b0ef3a6"
+    },
+    {
+      "id": "irrelevance_35",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "125de7cb5352404a5873bcdc7bbea67789428d3e4c7818fe0b72c4efe2a39203"
+    },
+    {
+      "id": "irrelevance_48",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "6953f6a22fcee5f75c563235081c9e6940651d332d8039d7326163dd88843fe8"
+    },
+    {
+      "id": "irrelevance_5",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "6f7a5f387aa7b61e476b1b5f6758c8df16913b4e6512aa4a6977a72a3a0c6594"
+    },
+    {
+      "id": "irrelevance_50",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "6357db402aaf774991330c17f015a31d1b826a77e320c8d21959b08d701ae27f"
+    },
+    {
+      "id": "irrelevance_76",
+      "bench": "bfcl_single",
+      "subset": "irrelevance",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "262967ecddaf4d2b3813beefb5bc9829e929b2dd8c47748cac24ab7d1e77153d"
+    },
+    {
+      "id": "simple_python_359",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "bda3696f7671b0f1e5124bd7c9942b6220468a0b05a4094f178f3cbdc01485a9"
+    },
+    {
+      "id": "simple_python_356",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "228d39619a4c4ba860298eceb90704717ea0f752c323d4744dcac6885f172362"
+    },
+    {
+      "id": "simple_python_236",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "325b5391ac7c1b7c849f5540af47febda132c1d130d42015202b23d96cb4ad2f"
+    },
+    {
+      "id": "simple_python_396",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "482237ea86028a4adfbdfad01dedc0e9ae5fcc5ec85842fe08e04f15a99e91cc"
+    },
+    {
+      "id": "simple_python_270",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "8233c375545d068ac8aacdd9bab07aa628dff2bb86d6785b4498d453225c348f"
+    },
+    {
+      "id": "simple_python_74",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "427b68a9c25ed17e3c1fb13ed69c976bfaf5f28e6636d5bb5de6cf86986d038c"
+    },
+    {
+      "id": "simple_python_179",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "eee23b76dead7ebe640f66358f944c5c30f58fb0e15b3fda18630c6d27467f08"
+    },
+    {
+      "id": "simple_python_72",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "110ce24b840940beca5e6ba9f0b9bca63eac4b82198e9510b5d4f132a522f6ae"
+    },
+    {
+      "id": "simple_python_249",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "faf5e6ce8ac4eb9b7d3a0ac5a3eb3d5997ea75ffc7b4b2afd44f25a53bbdda4b"
+    },
+    {
+      "id": "simple_python_7",
+      "bench": "bfcl_single",
+      "subset": "simple_python",
+      "part": "single",
+      "tier": "core",
+      "item_hash": "dc3192dfa07c03886bf89ba03aec61b157e3cf25ed0fa57c885eaeb262d56837"
+    },
+    {
+      "id": "multi_turn_base_138",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_base",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "d73915d91bc89619523f44b4be0ae971e68a95e542a8539dc2e46cf23cd7a419"
+    },
+    {
+      "id": "multi_turn_miss_param_84",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_param",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "b5085389058152987c970ff8886519b16a92cfe3b3ba788d2d20c62d77cfbc14"
+    },
+    {
+      "id": "multi_turn_miss_func_87",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_func",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "82fa301e22eba7e8c5e41ad702e818583c187ef2b0f6e64152b57b4e457d1138"
+    },
+    {
+      "id": "multi_turn_base_184",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_base",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "cde08bb31864ce1b97f33dc6e98da7c843c8d9de667ebefbc2874a7bd458aa7b"
+    },
+    {
+      "id": "multi_turn_miss_param_27",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_param",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "a7d6e6a6bb668b4ed896a4d5e850a2a55e462cdca980a859a2c580412206aacf"
+    },
+    {
+      "id": "multi_turn_miss_func_5",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_func",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "0a3002cd29bd1544b2e263b61c266a907653efb9598338476382ce8e5ee0808b"
+    },
+    {
+      "id": "multi_turn_base_71",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_base",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "c97886ed2023cc12d9d222c420b2ecc3a2dac0a3cb832f4317a1f4c26bcceb05"
+    },
+    {
+      "id": "multi_turn_miss_param_68",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_param",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "420401c9ff653fe21608e4632384e401c04f481eb23d5c0dd8b988e8c7902138"
+    },
+    {
+      "id": "multi_turn_miss_func_85",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_func",
+      "part": "multi",
+      "tier": "core",
+      "item_hash": "ec1e60c41323599398364fea19abc1049b604087c61ea9d57ab1e359f1a2cfc0"
+    },
+    {
+      "id": "multi_turn_base_27",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_base",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "cd08a69f86bd88425bb18410c3a94dc6723bbb2db29bf2d52e8c051b3df556cf"
+    },
+    {
+      "id": "multi_turn_miss_param_184",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_param",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "263b814c73556ad21a575d67491a635265b97c20b9ccacc61c10026d480eac02"
+    },
+    {
+      "id": "multi_turn_miss_func_184",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_func",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "50334121bc39c19842c88e90210f38cb1e42450a76c42b5bf11627977b8bf8f7"
+    },
+    {
+      "id": "multi_turn_base_68",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_base",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "5239eb0330cf971fa66947466a778e855157fa4ef6f1b48c562602d03f1c5676"
+    },
+    {
+      "id": "multi_turn_miss_param_86",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_param",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "83859029d7eed24e13921319a912d496e464599ee9f2ddaac7bbc9c06009d0f7"
+    },
+    {
+      "id": "multi_turn_miss_func_72",
+      "bench": "bfcl_multi",
+      "subset": "multi_turn_miss_func",
+      "part": "multi",
+      "tier": "ext",
+      "item_hash": "637dde72e52bd8b066445d54295a4b116d532a2992fec84383d26c38226045b4"
+    }
+  ],
+  "sha256": "b29b71cd91bd18c40b4ac9eeb6c5a03f47a6c929d12b3f731c403a5d0e5e69f9"
+}

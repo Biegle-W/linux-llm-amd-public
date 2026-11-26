@@ -2,7 +2,8 @@
 
 Fast AMD scores one model served through an OpenAI-compatible chat completions
 endpoint. It reproduces NVIDIA's published method using BFCL v4 and seed
-`20261122`. The selected items may differ from NVIDIA's frozen list. This short
+`20261122`, on NVIDIA's frozen item list, which both servers share since
+November 26, 2026 (`benchmarks/shared/tooluse-short-manifest.json`). This short
 benchmark measures tool use on six specific BFCL pools. It does not produce a
 full BFCL leaderboard score or measure general reasoning or serving throughput.
 
@@ -42,8 +43,11 @@ The MathAPI logarithm uses a Decimal-backed adapter for the unavailable
 ## On the AMD server (November 24, 2026)
 
 The owner made this short tool-use test the ranking on both servers. It was rebuilt here from BFCL v4 because the
-NVIDIA server's frozen item list is not in this repository; the item selection rule and the score are the same,
-the items need not be.
+NVIDIA server's frozen item list was not in this repository, and drew other items than NVIDIA's. **Since November 26
+(owner: "same models and benchmarks" on both servers) the items are NVIDIA's frozen list**, committed in
+[`benchmarks/shared/`](../../../benchmarks/shared/README.md): `build_manifest.py` takes the 55 ids, their order and
+the core episodes from there and checks that each one is runnable here. All 55 replay their reference answers
+correctly in the unit tests. Scores from before November 26 used the old items and are not comparable with these.
 
 - **BFCL files:** `python3 fetch_bfcl.py` downloads the pinned files listed in `fast_amd/manifest.json` into
   `bfcl-src/` and checks each sha256. `bfcl-src/` holds dataset content and is not committed.
