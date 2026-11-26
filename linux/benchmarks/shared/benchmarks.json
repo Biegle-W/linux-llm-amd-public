@@ -43,6 +43,6 @@
   },
   "not_shared": {
     "amd": ["rank tier (hardware/quant-eval/rank), not yet on NVIDIA", "216-item public suite (archived)", "quick quality test blocks beyond block G"],
-    "nvidia": ["390-item test (archived)"]
+    "nvidia": ["mix quality test (docs/QUALITY-MIX-TEST-PLAN.md, 36 items, first live runs November 26; not the ranking), not yet on AMD", "390-item test (archived)"]
   }
 }

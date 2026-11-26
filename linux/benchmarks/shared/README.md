@@ -41,7 +41,7 @@ The model names clients see through each server's OpenAI-compatible API are the 
 2. **Engine-update check.** One strict DSH read-tool round trip with an owned unload, then the six gBench 0.5.0.post1 Golden Set cases for chat templates and tool calls. AMD: `hardware/quant-eval/quick/run_golden.py --engine-check`. NVIDIA: `scripts/gbench_template_check.py`.
 3. **Speed report.** Measured on that round trip from a cold start. Report the model and quant, the engine and version, prompt tokens, prompt read tok/s, time to first token, decode tok/s, answer tokens, context, and weights size and drive. Say whether the prompt cache was reused, and that one run is one run.
 
-Not shared yet: AMD's rank tier (`hardware/quant-eval/rank`) and the archived deep suites (AMD 216 items, NVIDIA 390 items).
+Not shared yet: AMD's rank tier (`hardware/quant-eval/rank`), NVIDIA's mix quality test (`docs/QUALITY-MIX-TEST-PLAN.md`; neither is the ranking) and the archived deep suites (AMD 216 items, NVIDIA 390 items).
 
 ## Check
 
