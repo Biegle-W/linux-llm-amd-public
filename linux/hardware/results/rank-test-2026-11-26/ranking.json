@@ -1,0 +1,7433 @@
+{
+  "schema_version": 2,
+  "historical": false,
+  "note": "Supplied graded runs. Without run.json, coverage is inferred from grades; timing is unknown.",
+  "item_ids": [
+    "mmlu:7181",
+    "math:test/prealgebra/2066.json",
+    "code:BigCodeBench/1117",
+    "ifeval:3345",
+    "musr_object:129",
+    "tools_multiple:multiple_184",
+    "mmlu:10742",
+    "math:test/prealgebra/2086.json",
+    "code:BigCodeBench/268",
+    "ifeval:3442",
+    "musr_object:103",
+    "tools_multiple:multiple_39",
+    "mmlu:7450",
+    "math:test/prealgebra/1353.json",
+    "code:BigCodeBench/755",
+    "ifeval:2069",
+    "musr_team:27",
+    "tools_multiple:multiple_196",
+    "mmlu:9147",
+    "math:test/prealgebra/1436.json",
+    "code:BigCodeBench/777",
+    "ifeval:3415",
+    "musr_object:71",
+    "tools_parallel_multiple:parallel_multiple_31",
+    "mmlu:4180",
+    "aime24:69",
+    "tools_irrelevance:irrelevance_232",
+    "mmlu:10688",
+    "mmlu:4302",
+    "mmlu:9246",
+    "ifeval:3479",
+    "code:BigCodeBench/305",
+    "musr_object:173",
+    "tools_parallel_multiple:parallel_multiple_128",
+    "mmlu:10762",
+    "math:test/algebra/2232.json",
+    "ifeval:340",
+    "mmlu:9412",
+    "tools_irrelevance:irrelevance_203",
+    "code:BigCodeBench/794",
+    "musr_object:230",
+    "mmlu:3927",
+    "math:test/algebra/2391.json",
+    "ifeval:2616",
+    "tools_parallel_multiple:parallel_multiple_176",
+    "mmlu:11955",
+    "code:BigCodeBench/862",
+    "musr_object:180",
+    "aime25:0",
+    "mmlu:7605",
+    "tools_parallel_multiple:parallel_multiple_121",
+    "ifeval:2751",
+    "code:BigCodeBench/824",
+    "musr_team:46",
+    "mmlu:4456",
+    "tools_parallel_multiple:parallel_multiple_159",
+    "math:test/number_theory/149.json",
+    "ifeval:1466",
+    "mmlu:1455",
+    "code:BigCodeBench/854",
+    "musr_object:208",
+    "tools_multiple:multiple_50",
+    "mmlu:3989",
+    "math:test/intermediate_algebra/986.json",
+    "ifeval:2084",
+    "mmlu:1759",
+    "tools_parallel_multiple:parallel_multiple_52",
+    "code:BigCodeBench/991",
+    "musr_object:39",
+    "mmlu:4616",
+    "math:test/counting_and_probability/134.json",
+    "ifeval:1691",
+    "tools_multiple:multiple_16",
+    "mmlu:3871",
+    "code:BigCodeBench/876",
+    "musr_team:165",
+    "math:test/geometry/1140.json",
+    "ifeval:3538",
+    "mmlu:1865",
+    "tools_irrelevance:irrelevance_229",
+    "code:BigCodeBench/669",
+    "mmlu:9687",
+    "musr_team:192",
+    "aime25:15",
+    "ifeval:3680",
+    "tools_parallel_multiple:parallel_multiple_166",
+    "mmlu:10483",
+    "code:BigCodeBench/1021",
+    "musr_team:130",
+    "mmlu:9328",
+    "math:test/prealgebra/2037.json",
+    "ifeval:2844",
+    "tools_parallel_multiple:parallel_multiple_164",
+    "mmlu:1642",
+    "musr_object:189",
+    "math:test/counting_and_probability/430.json",
+    "ifeval:3569",
+    "tools_irrelevance:irrelevance_120",
+    "mmlu:1245",
+    "mmlu:10709",
+    "tools_parallel_multiple:parallel_multiple_136",
+    "math:test/intermediate_algebra/1508.json",
+    "ifeval:337",
+    "musr_object:85",
+    "mmlu:12065",
+    "tools_parallel_multiple:parallel_multiple_20",
+    "aime25:16",
+    "ifeval:2497",
+    "musr_object:231",
+    "mmlu:12223",
+    "tools_parallel_multiple:parallel_multiple_81",
+    "mmlu:909",
+    "aime25:21",
+    "ifeval:127",
+    "musr_object:63",
+    "mmlu:11488",
+    "math:test/intermediate_algebra/1806.json",
+    "ifeval:1643",
+    "mmlu:1023",
+    "musr_team:186",
+    "mmlu:12235",
+    "aime24:86",
+    "ifeval:1233",
+    "musr_team:210",
+    "mmlu:12185",
+    "aime24:77",
+    "ifeval:19",
+    "mmlu:1821",
+    "musr_team:120",
+    "mmlu:11597",
+    "math:test/intermediate_algebra/2196.json",
+    "musr_team:228",
+    "mmlu:11298",
+    "math:test/intermediate_algebra/1166.json",
+    "mmlu:11664",
+    "aime24:79",
+    "mmlu:4128",
+    "aime24:76",
+    "math:test/prealgebra/465.json",
+    "math:test/counting_and_probability/230.json",
+    "aime25:7",
+    "math:test/prealgebra/1646.json",
+    "math:test/counting_and_probability/525.json",
+    "aime25:28"
+  ],
+  "core_n": 30,
+  "prefix_checkpoints": [
+    30,
+    45,
+    60,
+    75,
+    90,
+    105,
+    120,
+    135,
+    144
+  ],
+  "alpha": 0.05,
+  "category_counts": {
+    "code": 13,
+    "instruction": 21,
+    "knowledge": 38,
+    "math": 31,
+    "reasoning": 21,
+    "tools": 20
+  },
+  "routes": {
+    "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+      "n": 144,
+      "scored": 51,
+      "correct": 40,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 6,
+          "scored": 7,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 6,
+          "scored": 7,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 13,
+          "scored": 13,
+          "n": 38
+        },
+        "math": {
+          "correct": 8,
+          "scored": 8,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 2,
+          "scored": 7,
+          "n": 21
+        },
+        "tools": {
+          "correct": 5,
+          "scored": 9,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "correct": 40,
+        "error": 1,
+        "not_run": 93,
+        "wrong": 10
+      },
+      "capped": 0,
+      "malformed": 0,
+      "not_run": 93,
+      "ungraded": 0,
+      "elapsed_min": 30.0002,
+      "budget_min": 30.0,
+      "answered_prefix": 51,
+      "scored_prefix": 51,
+      "core_complete": true
+    },
+    "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+      "n": 144,
+      "scored": 50,
+      "correct": 37,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 6,
+          "scored": 7,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 5,
+          "scored": 7,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 12,
+          "scored": 13,
+          "n": 38
+        },
+        "math": {
+          "correct": 8,
+          "scored": 8,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 1,
+          "scored": 7,
+          "n": 21
+        },
+        "tools": {
+          "correct": 5,
+          "scored": 8,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "correct": 37,
+        "error": 1,
+        "malformed": 1,
+        "not_run": 94,
+        "wrong": 11
+      },
+      "capped": 0,
+      "malformed": 1,
+      "not_run": 94,
+      "ungraded": 0,
+      "elapsed_min": 30.0043,
+      "budget_min": 30.0,
+      "answered_prefix": 50,
+      "scored_prefix": 50,
+      "core_complete": true
+    },
+    "glm-5.3-flash-maya": {
+      "n": 144,
+      "scored": 111,
+      "correct": 65,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 8,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 14,
+          "scored": 17,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 16,
+          "scored": 28,
+          "n": 38
+        },
+        "math": {
+          "correct": 5,
+          "scored": 17,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 8,
+          "scored": 16,
+          "n": 21
+        },
+        "tools": {
+          "correct": 14,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "correct": 65,
+        "error": 1,
+        "not_run": 33,
+        "wrong": 45
+      },
+      "capped": 0,
+      "malformed": 0,
+      "not_run": 33,
+      "ungraded": 0,
+      "elapsed_min": 30.00003333333333,
+      "budget_min": 30.0,
+      "answered_prefix": 111,
+      "scored_prefix": 111,
+      "core_complete": true
+    },
+    "hy4-flash-sq-64-strata": {
+      "n": 144,
+      "scored": 144,
+      "correct": 91,
+      "complete": true,
+      "percent": 63.19444444444444,
+      "ci95_wilson": [
+        0.5507002056059215,
+        0.7063318901479992
+      ],
+      "categories": {
+        "code": {
+          "correct": 6,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 18,
+          "scored": 21,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 28,
+          "scored": 38,
+          "n": 38
+        },
+        "math": {
+          "correct": 17,
+          "scored": 31,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 10,
+          "scored": 21,
+          "n": 21
+        },
+        "tools": {
+          "correct": 12,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "correct": 91,
+        "malformed": 9,
+        "wrong": 44
+      },
+      "capped": 0,
+      "malformed": 9,
+      "not_run": 0,
+      "ungraded": 0,
+      "elapsed_min": 16.433483333333335,
+      "budget_min": 30.0,
+      "answered_prefix": 144,
+      "scored_prefix": 144,
+      "core_complete": true
+    },
+    "inkling-2-mini-sq-20-strata-2gpu": {
+      "n": 144,
+      "scored": 144,
+      "correct": 73,
+      "complete": true,
+      "percent": 50.69444444444444,
+      "ci95_wilson": [
+        0.4261743705804492,
+        0.5873536344592308
+      ],
+      "categories": {
+        "code": {
+          "correct": 9,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 10,
+          "scored": 21,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 20,
+          "scored": 38,
+          "n": 38
+        },
+        "math": {
+          "correct": 13,
+          "scored": 31,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 7,
+          "scored": 21,
+          "n": 21
+        },
+        "tools": {
+          "correct": 14,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 6,
+        "correct": 73,
+        "malformed": 20,
+        "wrong": 45
+      },
+      "capped": 6,
+      "malformed": 20,
+      "not_run": 0,
+      "ungraded": 0,
+      "elapsed_min": 13.941650000000001,
+      "budget_min": 15.0,
+      "answered_prefix": 144,
+      "scored_prefix": 144,
+      "core_complete": true
+    },
+    "kolibri-1.1-iq4_xs": {
+      "n": 144,
+      "scored": 144,
+      "correct": 96,
+      "complete": true,
+      "percent": 66.66666666666667,
+      "ci95_wilson": [
+        0.5862249854783737,
+        0.7384471354739475
+      ],
+      "categories": {
+        "code": {
+          "correct": 9,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 8,
+          "scored": 21,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 28,
+          "scored": 38,
+          "n": 38
+        },
+        "math": {
+          "correct": 29,
+          "scored": 31,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 8,
+          "scored": 21,
+          "n": 21
+        },
+        "tools": {
+          "correct": 14,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 3,
+        "correct": 96,
+        "malformed": 5,
+        "wrong": 40
+      },
+      "capped": 3,
+      "malformed": 5,
+      "not_run": 0,
+      "ungraded": 0,
+      "elapsed_min": 12.986066666666666,
+      "budget_min": 15.0,
+      "answered_prefix": 144,
+      "scored_prefix": 144,
+      "core_complete": true
+    },
+    "qwen3.8-27b-sglang-dflash2": {
+      "n": 144,
+      "scored": 134,
+      "correct": 95,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 6,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 18,
+          "scored": 21,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 22,
+          "scored": 36,
+          "n": 38
+        },
+        "math": {
+          "correct": 22,
+          "scored": 23,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 10,
+          "scored": 21,
+          "n": 21
+        },
+        "tools": {
+          "correct": 17,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 16,
+        "correct": 95,
+        "not_run": 10,
+        "wrong": 23
+      },
+      "capped": 16,
+      "malformed": 0,
+      "not_run": 10,
+      "ungraded": 0,
+      "elapsed_min": 14.843616666666666,
+      "budget_min": 15.0,
+      "answered_prefix": 134,
+      "scored_prefix": 134,
+      "core_complete": true
+    },
+    "qwen3.8-27b-vllm": {
+      "n": 144,
+      "scored": 123,
+      "correct": 88,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 7,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 17,
+          "scored": 20,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 23,
+          "scored": 32,
+          "n": 38
+        },
+        "math": {
+          "correct": 19,
+          "scored": 20,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 8,
+          "scored": 18,
+          "n": 21
+        },
+        "tools": {
+          "correct": 14,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 14,
+        "correct": 88,
+        "malformed": 1,
+        "not_run": 21,
+        "wrong": 20
+      },
+      "capped": 14,
+      "malformed": 1,
+      "not_run": 21,
+      "ungraded": 0,
+      "elapsed_min": 14.9745,
+      "budget_min": 15.0,
+      "answered_prefix": 123,
+      "scored_prefix": 123,
+      "core_complete": true
+    },
+    "qwen3.8-flash-next-iq3_xxs": {
+      "n": 144,
+      "scored": 137,
+      "correct": 108,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 8,
+          "scored": 13,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 17,
+          "scored": 21,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 28,
+          "scored": 38,
+          "n": 38
+        },
+        "math": {
+          "correct": 24,
+          "scored": 24,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 14,
+          "scored": 21,
+          "n": 21
+        },
+        "tools": {
+          "correct": 17,
+          "scored": 20,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 9,
+        "correct": 108,
+        "not_run": 7,
+        "wrong": 20
+      },
+      "capped": 9,
+      "malformed": 0,
+      "not_run": 7,
+      "ungraded": 0,
+      "elapsed_min": 14.7675,
+      "budget_min": 15.0,
+      "answered_prefix": 137,
+      "scored_prefix": 137,
+      "core_complete": true
+    },
+    "ripple-65b-vllm": {
+      "n": 144,
+      "scored": 47,
+      "correct": 30,
+      "complete": false,
+      "percent": null,
+      "ci95_wilson": [
+        null,
+        null
+      ],
+      "categories": {
+        "code": {
+          "correct": 1,
+          "scored": 7,
+          "n": 13
+        },
+        "instruction": {
+          "correct": 6,
+          "scored": 7,
+          "n": 21
+        },
+        "knowledge": {
+          "correct": 10,
+          "scored": 12,
+          "n": 38
+        },
+        "math": {
+          "correct": 7,
+          "scored": 7,
+          "n": 31
+        },
+        "reasoning": {
+          "correct": 2,
+          "scored": 6,
+          "n": 21
+        },
+        "tools": {
+          "correct": 4,
+          "scored": 8,
+          "n": 20
+        }
+      },
+      "status_counts": {
+        "capped": 10,
+        "correct": 30,
+        "not_run": 97,
+        "wrong": 7
+      },
+      "capped": 10,
+      "malformed": 0,
+      "not_run": 97,
+      "ungraded": 0,
+      "elapsed_min": 29.406616666666665,
+      "budget_min": 30.0,
+      "answered_prefix": 47,
+      "scored_prefix": 47,
+      "core_complete": true
+    }
+  },
+  "core": {
+    "category_counts": {
+      "code": 4,
+      "instruction": 4,
+      "knowledge": 8,
+      "math": 5,
+      "reasoning": 4,
+      "tools": 5
+    },
+    "ranking": [
+      "qwen3.8-27b-sglang-dflash2",
+      "qwen3.8-27b-vllm",
+      "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "qwen3.8-flash-next-iq3_xxs",
+      "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "kolibri-1.1-iq4_xs",
+      "ripple-65b-vllm",
+      "hy4-flash-sq-64-strata",
+      "glm-5.3-flash-maya",
+      "inkling-2-mini-sq-20-strata-2gpu"
+    ],
+    "incomplete": [],
+    "routes": {
+      "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+        "n": 30,
+        "scored": 30,
+        "correct": 24,
+        "complete": true,
+        "percent": 80.0,
+        "ci95_wilson": [
+          0.6269430358685175,
+          0.9049489282271013
+        ],
+        "categories": {
+          "code": {
+            "correct": 4,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 24,
+          "wrong": 6
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 30.0002,
+        "budget_min": 30.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+        "n": 30,
+        "scored": 30,
+        "correct": 23,
+        "complete": true,
+        "percent": 76.66666666666667,
+        "ci95_wilson": [
+          0.5907167384187784,
+          0.8820761185551049
+        ],
+        "categories": {
+          "code": {
+            "correct": 4,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 0,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 23,
+          "malformed": 1,
+          "wrong": 6
+        },
+        "capped": 0,
+        "malformed": 1,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 30.0043,
+        "budget_min": 30.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "glm-5.3-flash-maya": {
+        "n": 30,
+        "scored": 30,
+        "correct": 16,
+        "complete": true,
+        "percent": 53.333333333333336,
+        "ci95_wilson": [
+          0.36142299619873297,
+          0.6976761109230025
+        ],
+        "categories": {
+          "code": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 4,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 4,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 16,
+          "wrong": 14
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 30.00003333333333,
+        "budget_min": 30.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "hy4-flash-sq-64-strata": {
+        "n": 30,
+        "scored": 30,
+        "correct": 18,
+        "complete": true,
+        "percent": 60.0,
+        "ci95_wilson": [
+          0.42320360253322475,
+          0.7540937188319815
+        ],
+        "categories": {
+          "code": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 4,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 7,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 2,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 18,
+          "malformed": 1,
+          "wrong": 11
+        },
+        "capped": 0,
+        "malformed": 1,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 16.433483333333335,
+        "budget_min": 30.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "inkling-2-mini-sq-20-strata-2gpu": {
+        "n": 30,
+        "scored": 30,
+        "correct": 16,
+        "complete": true,
+        "percent": 53.333333333333336,
+        "ci95_wilson": [
+          0.36142299619873297,
+          0.6976761109230025
+        ],
+        "categories": {
+          "code": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 7,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 0,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 2,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 16,
+          "malformed": 4,
+          "wrong": 10
+        },
+        "capped": 0,
+        "malformed": 4,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 13.941650000000001,
+        "budget_min": 15.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "kolibri-1.1-iq4_xs": {
+        "n": 30,
+        "scored": 30,
+        "correct": 23,
+        "complete": true,
+        "percent": 76.66666666666667,
+        "ci95_wilson": [
+          0.5907167384187784,
+          0.8820761185551049
+        ],
+        "categories": {
+          "code": {
+            "correct": 4,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 23,
+          "wrong": 7
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 12.986066666666666,
+        "budget_min": 15.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "qwen3.8-27b-sglang-dflash2": {
+        "n": 30,
+        "scored": 30,
+        "correct": 26,
+        "complete": true,
+        "percent": 86.66666666666667,
+        "ci95_wilson": [
+          0.703186733179637,
+          0.9469034451594526
+        ],
+        "categories": {
+          "code": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 4,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 26,
+          "wrong": 4
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 14.843616666666666,
+        "budget_min": 15.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "qwen3.8-27b-vllm": {
+        "n": 30,
+        "scored": 30,
+        "correct": 25,
+        "complete": true,
+        "percent": 83.33333333333333,
+        "ci95_wilson": [
+          0.6643564949358398,
+          0.9266345762815145
+        ],
+        "categories": {
+          "code": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 4,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 25,
+          "wrong": 5
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 14.9745,
+        "budget_min": 15.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "qwen3.8-flash-next-iq3_xxs": {
+        "n": 30,
+        "scored": 30,
+        "correct": 24,
+        "complete": true,
+        "percent": 80.0,
+        "ci95_wilson": [
+          0.6269430358685175,
+          0.9049489282271013
+        ],
+        "categories": {
+          "code": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 3,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "correct": 24,
+          "wrong": 6
+        },
+        "capped": 0,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 14.7675,
+        "budget_min": 15.0,
+        "groups": [
+          "A"
+        ]
+      },
+      "ripple-65b-vllm": {
+        "n": 30,
+        "scored": 30,
+        "correct": 21,
+        "complete": true,
+        "percent": 70.0,
+        "ci95_wilson": [
+          0.5212421254128504,
+          0.8333525173175619
+        ],
+        "categories": {
+          "code": {
+            "correct": 1,
+            "scored": 4,
+            "n": 4
+          },
+          "instruction": {
+            "correct": 3,
+            "scored": 4,
+            "n": 4
+          },
+          "knowledge": {
+            "correct": 8,
+            "scored": 8,
+            "n": 8
+          },
+          "math": {
+            "correct": 5,
+            "scored": 5,
+            "n": 5
+          },
+          "reasoning": {
+            "correct": 2,
+            "scored": 4,
+            "n": 4
+          },
+          "tools": {
+            "correct": 2,
+            "scored": 5,
+            "n": 5
+          }
+        },
+        "status_counts": {
+          "capped": 5,
+          "correct": 21,
+          "wrong": 4
+        },
+        "capped": 5,
+        "malformed": 0,
+        "not_run": 0,
+        "ungraded": 0,
+        "elapsed_min": 29.406616666666665,
+        "budget_min": 30.0,
+        "groups": [
+          "A"
+        ]
+      }
+    },
+    "pairs": [
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "qwen3.8-27b-vllm",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 25,
+        "a_only": 2,
+        "b_only": 1,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 24,
+        "a_only": 4,
+        "b_only": 2,
+        "p_exact": 0.6875000000000016,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "qwen3.8-flash-next-iq3_xxs",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 24,
+        "a_only": 4,
+        "b_only": 2,
+        "p_exact": 0.6875000000000016,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 23,
+        "a_only": 5,
+        "b_only": 2,
+        "p_exact": 0.4531249999999999,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "kolibri-1.1-iq4_xs",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 23,
+        "a_only": 6,
+        "b_only": 3,
+        "p_exact": 0.5078124999999987,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 21,
+        "a_only": 5,
+        "b_only": 0,
+        "p_exact": 0.0625,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 18,
+        "a_only": 9,
+        "b_only": 1,
+        "p_exact": 0.02148437500000002,
+        "p_holm": 0.9023437500000009,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 16,
+        "a_only": 11,
+        "b_only": 1,
+        "p_exact": 0.006347656249999991,
+        "p_holm": 0.2856445312499996,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-sglang-dflash2",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 26,
+        "b_correct": 16,
+        "a_only": 11,
+        "b_only": 1,
+        "p_exact": 0.006347656249999991,
+        "p_holm": 0.2856445312499996,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 24,
+        "a_only": 3,
+        "b_only": 2,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "qwen3.8-flash-next-iq3_xxs",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 24,
+        "a_only": 3,
+        "b_only": 2,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 23,
+        "a_only": 5,
+        "b_only": 3,
+        "p_exact": 0.7265624999999989,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "kolibri-1.1-iq4_xs",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 23,
+        "a_only": 5,
+        "b_only": 3,
+        "p_exact": 0.7265624999999989,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 21,
+        "a_only": 5,
+        "b_only": 1,
+        "p_exact": 0.21875000000000014,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 18,
+        "a_only": 9,
+        "b_only": 2,
+        "p_exact": 0.06542968750000028,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 16,
+        "a_only": 10,
+        "b_only": 1,
+        "p_exact": 0.011718750000000019,
+        "p_holm": 0.5039062500000008,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-27b-vllm",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 25,
+        "b_correct": 16,
+        "a_only": 11,
+        "b_only": 2,
+        "p_exact": 0.022460937499999993,
+        "p_holm": 0.9023437500000009,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "qwen3.8-flash-next-iq3_xxs",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 24,
+        "a_only": 2,
+        "b_only": 2,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 23,
+        "a_only": 2,
+        "b_only": 1,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "kolibri-1.1-iq4_xs",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 23,
+        "a_only": 2,
+        "b_only": 1,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 21,
+        "a_only": 5,
+        "b_only": 2,
+        "p_exact": 0.4531249999999999,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 18,
+        "a_only": 7,
+        "b_only": 1,
+        "p_exact": 0.07031249999999992,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 1,
+        "p_exact": 0.02148437500000002,
+        "p_holm": 0.9023437500000009,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 1,
+        "p_exact": 0.02148437500000002,
+        "p_holm": 0.9023437500000009,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 23,
+        "a_only": 4,
+        "b_only": 3,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "kolibri-1.1-iq4_xs",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 23,
+        "a_only": 4,
+        "b_only": 3,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 21,
+        "a_only": 5,
+        "b_only": 2,
+        "p_exact": 0.4531249999999999,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 18,
+        "a_only": 8,
+        "b_only": 2,
+        "p_exact": 0.109375,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 16,
+        "a_only": 11,
+        "b_only": 3,
+        "p_exact": 0.05737304687500017,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "qwen3.8-flash-next-iq3_xxs",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 24,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 1,
+        "p_exact": 0.02148437500000002,
+        "p_holm": 0.9023437500000009,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "b": "kolibri-1.1-iq4_xs",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 23,
+        "a_only": 2,
+        "b_only": 2,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 21,
+        "a_only": 5,
+        "b_only": 3,
+        "p_exact": 0.7265624999999989,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 18,
+        "a_only": 7,
+        "b_only": 2,
+        "p_exact": 0.1796874999999996,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 2,
+        "p_exact": 0.06542968750000028,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 16,
+        "a_only": 8,
+        "b_only": 1,
+        "p_exact": 0.039062499999999965,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "kolibri-1.1-iq4_xs",
+        "b": "ripple-65b-vllm",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 21,
+        "a_only": 6,
+        "b_only": 4,
+        "p_exact": 0.7539062499999989,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "kolibri-1.1-iq4_xs",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 18,
+        "a_only": 7,
+        "b_only": 2,
+        "p_exact": 0.1796874999999996,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "kolibri-1.1-iq4_xs",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 2,
+        "p_exact": 0.06542968750000028,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "kolibri-1.1-iq4_xs",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 23,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 2,
+        "p_exact": 0.06542968750000028,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "ripple-65b-vllm",
+        "b": "hy4-flash-sq-64-strata",
+        "n": 30,
+        "a_correct": 21,
+        "b_correct": 18,
+        "a_only": 6,
+        "b_only": 3,
+        "p_exact": 0.5078124999999987,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "ripple-65b-vllm",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 21,
+        "b_correct": 16,
+        "a_only": 9,
+        "b_only": 4,
+        "p_exact": 0.2668457031250002,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "ripple-65b-vllm",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 21,
+        "b_correct": 16,
+        "a_only": 7,
+        "b_only": 2,
+        "p_exact": 0.1796874999999996,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "hy4-flash-sq-64-strata",
+        "b": "glm-5.3-flash-maya",
+        "n": 30,
+        "a_correct": 18,
+        "b_correct": 16,
+        "a_only": 8,
+        "b_only": 6,
+        "p_exact": 0.7905273437500018,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "hy4-flash-sq-64-strata",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 18,
+        "b_correct": 16,
+        "a_only": 5,
+        "b_only": 3,
+        "p_exact": 0.7265624999999989,
+        "p_holm": 1.0,
+        "separated": false
+      },
+      {
+        "a": "glm-5.3-flash-maya",
+        "b": "inkling-2-mini-sq-20-strata-2gpu",
+        "n": 30,
+        "a_correct": 16,
+        "b_correct": 16,
+        "a_only": 6,
+        "b_only": 6,
+        "p_exact": 1.0,
+        "p_holm": 1.0,
+        "separated": false
+      }
+    ],
+    "holm_family_size": 45,
+    "prefix_n": 30
+  },
+  "extended": [
+    {
+      "category_counts": {
+        "knowledge": 11,
+        "math": 7,
+        "code": 6,
+        "instruction": 7,
+        "reasoning": 6,
+        "tools": 8
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+        "kolibri-1.1-iq4_xs",
+        "qwen3.8-27b-vllm",
+        "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+        "ripple-65b-vllm",
+        "hy4-flash-sq-64-strata",
+        "inkling-2-mini-sq-20-strata-2gpu",
+        "glm-5.3-flash-maya"
+      ],
+      "incomplete": [],
+      "routes": {
+        "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+          "n": 45,
+          "scored": 45,
+          "correct": 35,
+          "complete": true,
+          "percent": 77.77777777777777,
+          "ci95_wilson": [
+            0.6373070782524372,
+            0.8745531446737361
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 6,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 35,
+            "wrong": 10
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.0002,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "C"
+          ]
+        },
+        "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+          "n": 45,
+          "scored": 45,
+          "correct": 33,
+          "complete": true,
+          "percent": 73.33333333333333,
+          "ci95_wilson": [
+            0.5896116224686505,
+            0.8403509647893348
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 0,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 33,
+            "malformed": 1,
+            "wrong": 11
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.0043,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "glm-5.3-flash-maya": {
+          "n": 45,
+          "scored": 45,
+          "correct": 22,
+          "complete": true,
+          "percent": 48.888888888888886,
+          "ci95_wilson": [
+            0.349570237528785,
+            0.6299553535541681
+          ],
+          "categories": {
+            "code": {
+              "correct": 4,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 4,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 5,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 3,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 22,
+            "wrong": 23
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.00003333333333,
+          "budget_min": 30.0,
+          "groups": [
+            "B",
+            "D"
+          ]
+        },
+        "hy4-flash-sq-64-strata": {
+          "n": 45,
+          "scored": 45,
+          "correct": 28,
+          "complete": true,
+          "percent": 62.22222222222222,
+          "ci95_wilson": [
+            0.47629934480889535,
+            0.7489191532786209
+          ],
+          "categories": {
+            "code": {
+              "correct": 2,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 8,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 5,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 28,
+            "malformed": 1,
+            "wrong": 16
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 45,
+          "scored": 45,
+          "correct": 23,
+          "complete": true,
+          "percent": 51.111111111111114,
+          "ci95_wilson": [
+            0.3700446464458318,
+            0.650429762471215
+          ],
+          "categories": {
+            "code": {
+              "correct": 3,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 3,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 9,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 4,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 0,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 4,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 23,
+            "malformed": 5,
+            "wrong": 16
+          },
+          "capped": 1,
+          "malformed": 5,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "C",
+            "D"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 45,
+          "scored": 45,
+          "correct": 34,
+          "complete": true,
+          "percent": 75.55555555555556,
+          "ci95_wilson": [
+            0.6132661994297965,
+            0.8576452056622828
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 4,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 6,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 34,
+            "wrong": 11
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 45,
+          "scored": 45,
+          "correct": 36,
+          "complete": true,
+          "percent": 80.0,
+          "ci95_wilson": [
+            0.6617703088385799,
+            0.8910387319216871
+          ],
+          "categories": {
+            "code": {
+              "correct": 4,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 10,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 36,
+            "wrong": 7
+          },
+          "capped": 2,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 45,
+          "scored": 45,
+          "correct": 34,
+          "complete": true,
+          "percent": 75.55555555555556,
+          "ci95_wilson": [
+            0.6132661994297965,
+            0.8576452056622828
+          ],
+          "categories": {
+            "code": {
+              "correct": 3,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 6,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 10,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 34,
+            "malformed": 1,
+            "wrong": 8
+          },
+          "capped": 2,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 45,
+          "scored": 45,
+          "correct": 37,
+          "complete": true,
+          "percent": 82.22222222222223,
+          "ci95_wilson": [
+            0.6867017537354023,
+            0.9070561048589585
+          ],
+          "categories": {
+            "code": {
+              "correct": 4,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "correct": 37,
+            "wrong": 8
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "ripple-65b-vllm": {
+          "n": 45,
+          "scored": 45,
+          "correct": 29,
+          "complete": true,
+          "percent": 64.44444444444444,
+          "ci95_wilson": [
+            0.4983581419637687,
+            0.7678091739578413
+          ],
+          "categories": {
+            "code": {
+              "correct": 1,
+              "scored": 6,
+              "n": 6
+            },
+            "instruction": {
+              "correct": 6,
+              "scored": 7,
+              "n": 7
+            },
+            "knowledge": {
+              "correct": 9,
+              "scored": 11,
+              "n": 11
+            },
+            "math": {
+              "correct": 7,
+              "scored": 7,
+              "n": 7
+            },
+            "reasoning": {
+              "correct": 2,
+              "scored": 6,
+              "n": 6
+            },
+            "tools": {
+              "correct": 4,
+              "scored": 8,
+              "n": 8
+            }
+          },
+          "status_counts": {
+            "capped": 9,
+            "correct": 29,
+            "wrong": 7
+          },
+          "capped": 9,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 29.406616666666665,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 36,
+          "a_only": 5,
+          "b_only": 4,
+          "p_exact": 0.9999999999999973,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 35,
+          "a_only": 4,
+          "b_only": 2,
+          "p_exact": 0.6875000000000016,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 34,
+          "a_only": 7,
+          "b_only": 4,
+          "p_exact": 0.5488281250000008,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 34,
+          "a_only": 6,
+          "b_only": 3,
+          "p_exact": 0.5078124999999987,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 33,
+          "a_only": 7,
+          "b_only": 3,
+          "p_exact": 0.3437499999999998,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 29,
+          "a_only": 10,
+          "b_only": 2,
+          "p_exact": 0.03857421875000006,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 28,
+          "a_only": 12,
+          "b_only": 3,
+          "p_exact": 0.03515625000000004,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 23,
+          "a_only": 15,
+          "b_only": 1,
+          "p_exact": 0.0005187988281250003,
+          "p_holm": 0.023345947265625014,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 37,
+          "b_correct": 22,
+          "a_only": 18,
+          "b_only": 3,
+          "p_exact": 0.0014896392822265632,
+          "p_holm": 0.06107521057128909,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 35,
+          "a_only": 4,
+          "b_only": 3,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 34,
+          "a_only": 7,
+          "b_only": 5,
+          "p_exact": 0.7744140624999998,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 34,
+          "a_only": 3,
+          "b_only": 1,
+          "p_exact": 0.6249999999999994,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 33,
+          "a_only": 6,
+          "b_only": 3,
+          "p_exact": 0.5078124999999987,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 29,
+          "a_only": 7,
+          "b_only": 0,
+          "p_exact": 0.015625000000000003,
+          "p_holm": 0.5156250000000001,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 28,
+          "a_only": 10,
+          "b_only": 2,
+          "p_exact": 0.03857421875000006,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 23,
+          "a_only": 14,
+          "b_only": 1,
+          "p_exact": 0.0009765624999999976,
+          "p_holm": 0.041992187499999896,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 36,
+          "b_correct": 22,
+          "a_only": 15,
+          "b_only": 1,
+          "p_exact": 0.0005187988281250003,
+          "p_holm": 0.023345947265625014,
+          "separated": true
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 34,
+          "a_only": 3,
+          "b_only": 2,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "qwen3.8-27b-vllm",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 34,
+          "a_only": 4,
+          "b_only": 3,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 33,
+          "a_only": 3,
+          "b_only": 1,
+          "p_exact": 0.6249999999999994,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 29,
+          "a_only": 8,
+          "b_only": 2,
+          "p_exact": 0.109375,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 28,
+          "a_only": 9,
+          "b_only": 2,
+          "p_exact": 0.06542968750000028,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 23,
+          "a_only": 13,
+          "b_only": 1,
+          "p_exact": 0.0018310546875000074,
+          "p_holm": 0.07324218750000029,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 35,
+          "b_correct": 22,
+          "a_only": 14,
+          "b_only": 1,
+          "p_exact": 0.0009765624999999976,
+          "p_holm": 0.041992187499999896,
+          "separated": true
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 34,
+          "a_only": 6,
+          "b_only": 6,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 33,
+          "a_only": 3,
+          "b_only": 2,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 29,
+          "a_only": 10,
+          "b_only": 5,
+          "p_exact": 0.3017578125000002,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 28,
+          "a_only": 9,
+          "b_only": 3,
+          "p_exact": 0.14599609375000028,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 23,
+          "a_only": 14,
+          "b_only": 3,
+          "p_exact": 0.012725830078125014,
+          "p_holm": 0.4708557128906255,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 22,
+          "a_only": 15,
+          "b_only": 3,
+          "p_exact": 0.007537841796875004,
+          "p_holm": 0.28643798828125017,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 33,
+          "a_only": 6,
+          "b_only": 5,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 29,
+          "a_only": 7,
+          "b_only": 2,
+          "p_exact": 0.1796874999999996,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 28,
+          "a_only": 10,
+          "b_only": 4,
+          "p_exact": 0.17956542968750067,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 23,
+          "a_only": 14,
+          "b_only": 3,
+          "p_exact": 0.012725830078125014,
+          "p_holm": 0.4708557128906255,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 34,
+          "b_correct": 22,
+          "a_only": 13,
+          "b_only": 1,
+          "p_exact": 0.0018310546875000074,
+          "p_holm": 0.07324218750000029,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "b": "ripple-65b-vllm",
+          "n": 45,
+          "a_correct": 33,
+          "b_correct": 29,
+          "a_only": 8,
+          "b_only": 4,
+          "p_exact": 0.38769531250000044,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 33,
+          "b_correct": 28,
+          "a_only": 9,
+          "b_only": 4,
+          "p_exact": 0.2668457031250002,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 33,
+          "b_correct": 23,
+          "a_only": 12,
+          "b_only": 2,
+          "p_exact": 0.012939453125000071,
+          "p_holm": 0.4708557128906255,
+          "separated": false
+        },
+        {
+          "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 33,
+          "b_correct": 22,
+          "a_only": 14,
+          "b_only": 3,
+          "p_exact": 0.012725830078125014,
+          "p_holm": 0.4708557128906255,
+          "separated": false
+        },
+        {
+          "a": "ripple-65b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 45,
+          "a_correct": 29,
+          "b_correct": 28,
+          "a_only": 7,
+          "b_only": 6,
+          "p_exact": 0.9999999999999979,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "ripple-65b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 29,
+          "b_correct": 23,
+          "a_only": 10,
+          "b_only": 4,
+          "p_exact": 0.17956542968750067,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "ripple-65b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 29,
+          "b_correct": 22,
+          "a_only": 13,
+          "b_only": 6,
+          "p_exact": 0.167068481445313,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 45,
+          "a_correct": 28,
+          "b_correct": 23,
+          "a_only": 9,
+          "b_only": 4,
+          "p_exact": 0.2668457031250002,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 28,
+          "b_correct": 22,
+          "a_only": 12,
+          "b_only": 6,
+          "p_exact": 0.237884521484375,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "inkling-2-mini-sq-20-strata-2gpu",
+          "b": "glm-5.3-flash-maya",
+          "n": 45,
+          "a_correct": 23,
+          "b_correct": 22,
+          "a_only": 9,
+          "b_only": 8,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 45,
+      "prefix_n": 45
+    },
+    {
+      "category_counts": {
+        "knowledge": 15,
+        "math": 9,
+        "code": 9,
+        "instruction": 9,
+        "reasoning": 8,
+        "tools": 10
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm",
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "glm-5.3-flash-maya",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "glm-5.3-flash-maya": {
+          "n": 60,
+          "scored": 60,
+          "correct": 33,
+          "complete": true,
+          "percent": 55.0,
+          "ci95_wilson": [
+            0.4249193588533434,
+            0.6690634559324476
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 6,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 8,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 3,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 2,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 7,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "correct": 33,
+            "wrong": 27
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.00003333333333,
+          "budget_min": 30.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "hy4-flash-sq-64-strata": {
+          "n": 60,
+          "scored": 60,
+          "correct": 43,
+          "complete": true,
+          "percent": 71.66666666666667,
+          "ci95_wilson": [
+            0.5923271483560882,
+            0.8149317157156729
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 12,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 7,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 7,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "correct": 43,
+            "malformed": 1,
+            "wrong": 16
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 60,
+          "scored": 60,
+          "correct": 31,
+          "complete": true,
+          "percent": 51.666666666666664,
+          "ci95_wilson": [
+            0.39307810032592494,
+            0.6382495046026722
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 4,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 11,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 5,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 5,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 31,
+            "malformed": 6,
+            "wrong": 22
+          },
+          "capped": 1,
+          "malformed": 6,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 60,
+          "scored": 60,
+          "correct": 45,
+          "complete": true,
+          "percent": 75.0,
+          "ci95_wilson": [
+            0.6276792992295218,
+            0.8422347746994333
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 14,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 2,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 8,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "correct": 45,
+            "malformed": 1,
+            "wrong": 14
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 60,
+          "scored": 60,
+          "correct": 49,
+          "complete": true,
+          "percent": 81.66666666666667,
+          "ci95_wilson": [
+            0.7008024625353194,
+            0.8944220311080237
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 13,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 7,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 49,
+            "wrong": 9
+          },
+          "capped": 2,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 60,
+          "scored": 60,
+          "correct": 47,
+          "complete": true,
+          "percent": 78.33333333333333,
+          "ci95_wilson": [
+            0.6637997242680521,
+            0.868769559518097
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 8,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 13,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 6,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 47,
+            "malformed": 1,
+            "wrong": 9
+          },
+          "capped": 3,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 60,
+          "scored": 60,
+          "correct": 50,
+          "complete": true,
+          "percent": 83.33333333333333,
+          "ci95_wilson": [
+            0.7196838683638547,
+            0.9068682302080855
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 9,
+              "n": 9
+            },
+            "instruction": {
+              "correct": 7,
+              "scored": 9,
+              "n": 9
+            },
+            "knowledge": {
+              "correct": 15,
+              "scored": 15,
+              "n": 15
+            },
+            "math": {
+              "correct": 9,
+              "scored": 9,
+              "n": 9
+            },
+            "reasoning": {
+              "correct": 6,
+              "scored": 8,
+              "n": 8
+            },
+            "tools": {
+              "correct": 7,
+              "scored": 10,
+              "n": 10
+            }
+          },
+          "status_counts": {
+            "correct": 50,
+            "wrong": 10
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 49,
+          "a_only": 7,
+          "b_only": 6,
+          "p_exact": 0.9999999999999979,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 47,
+          "a_only": 8,
+          "b_only": 5,
+          "p_exact": 0.5810546874999994,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 45,
+          "a_only": 10,
+          "b_only": 5,
+          "p_exact": 0.3017578125000002,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 43,
+          "a_only": 12,
+          "b_only": 5,
+          "p_exact": 0.1434631347656256,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "glm-5.3-flash-maya",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 33,
+          "a_only": 22,
+          "b_only": 5,
+          "p_exact": 0.0015137195587158353,
+          "p_holm": 0.027246952056885036,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 50,
+          "b_correct": 31,
+          "a_only": 21,
+          "b_only": 2,
+          "p_exact": 6.604194641113296e-05,
+          "p_holm": 0.001386880874633792,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 60,
+          "a_correct": 49,
+          "b_correct": 47,
+          "a_only": 4,
+          "b_only": 2,
+          "p_exact": 0.6875000000000016,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 60,
+          "a_correct": 49,
+          "b_correct": 45,
+          "a_only": 11,
+          "b_only": 7,
+          "p_exact": 0.48068237304687456,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 60,
+          "a_correct": 49,
+          "b_correct": 43,
+          "a_only": 10,
+          "b_only": 4,
+          "p_exact": 0.17956542968750067,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "glm-5.3-flash-maya",
+          "n": 60,
+          "a_correct": 49,
+          "b_correct": 33,
+          "a_only": 19,
+          "b_only": 3,
+          "p_exact": 0.0008554458618164027,
+          "p_holm": 0.01625347137451165,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 49,
+          "b_correct": 31,
+          "a_only": 20,
+          "b_only": 2,
+          "p_exact": 0.00012111663818359309,
+          "p_holm": 0.0024223327636718616,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 60,
+          "a_correct": 47,
+          "b_correct": 45,
+          "a_only": 10,
+          "b_only": 8,
+          "p_exact": 0.8145294189453125,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 60,
+          "a_correct": 47,
+          "b_correct": 43,
+          "a_only": 10,
+          "b_only": 6,
+          "p_exact": 0.4544982910156247,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 60,
+          "a_correct": 47,
+          "b_correct": 33,
+          "a_only": 17,
+          "b_only": 3,
+          "p_exact": 0.002576828002929684,
+          "p_holm": 0.041229248046874944,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 47,
+          "b_correct": 31,
+          "a_only": 20,
+          "b_only": 4,
+          "p_exact": 0.0015438795089721745,
+          "p_holm": 0.027246952056885036,
+          "separated": true
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 60,
+          "a_correct": 45,
+          "b_correct": 43,
+          "a_only": 9,
+          "b_only": 7,
+          "p_exact": 0.8036193847656252,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "glm-5.3-flash-maya",
+          "n": 60,
+          "a_correct": 45,
+          "b_correct": 33,
+          "a_only": 18,
+          "b_only": 6,
+          "p_exact": 0.022655844688415597,
+          "p_holm": 0.29452598094940274,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 45,
+          "b_correct": 31,
+          "a_only": 18,
+          "b_only": 4,
+          "p_exact": 0.004343509674072266,
+          "p_holm": 0.06515264511108398,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "glm-5.3-flash-maya",
+          "n": 60,
+          "a_correct": 43,
+          "b_correct": 33,
+          "a_only": 16,
+          "b_only": 6,
+          "p_exact": 0.05247879028320302,
+          "p_holm": 0.6297454833984363,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 43,
+          "b_correct": 31,
+          "a_only": 16,
+          "b_only": 4,
+          "p_exact": 0.011817932128906292,
+          "p_holm": 0.16545104980468808,
+          "separated": false
+        },
+        {
+          "a": "glm-5.3-flash-maya",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 60,
+          "a_correct": 33,
+          "b_correct": 31,
+          "a_only": 13,
+          "b_only": 11,
+          "p_exact": 0.8388197422027598,
+          "p_holm": 1.0,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 21,
+      "prefix_n": 60
+    },
+    {
+      "category_counts": {
+        "knowledge": 19,
+        "math": 11,
+        "code": 11,
+        "instruction": 11,
+        "reasoning": 10,
+        "tools": 13
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm",
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "glm-5.3-flash-maya",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "glm-5.3-flash-maya": {
+          "n": 75,
+          "scored": 75,
+          "correct": 43,
+          "complete": true,
+          "percent": 57.333333333333336,
+          "ci95_wilson": [
+            0.46052792329276937,
+            0.6789925798097526
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 8,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 10,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 5,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "correct": 43,
+            "wrong": 32
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.00003333333333,
+          "budget_min": 30.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "hy4-flash-sq-64-strata": {
+          "n": 75,
+          "scored": 75,
+          "correct": 53,
+          "complete": true,
+          "percent": 70.66666666666667,
+          "ci95_wilson": [
+            0.5955955483261394,
+            0.7975985967809675
+          ],
+          "categories": {
+            "code": {
+              "correct": 5,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 15,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 9,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 4,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "correct": 53,
+            "malformed": 1,
+            "wrong": 21
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 75,
+          "scored": 75,
+          "correct": 39,
+          "complete": true,
+          "percent": 52.0,
+          "ci95_wilson": [
+            0.4087421577281785,
+            0.6293088885725093
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 12,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 6,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 1,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 39,
+            "malformed": 9,
+            "wrong": 26
+          },
+          "capped": 1,
+          "malformed": 9,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "C"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 75,
+          "scored": 75,
+          "correct": 55,
+          "complete": true,
+          "percent": 73.33333333333333,
+          "ci95_wilson": [
+            0.6236920098227623,
+            0.8202368636852615
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 18,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "correct": 55,
+            "malformed": 1,
+            "wrong": 19
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 75,
+          "scored": 75,
+          "correct": 59,
+          "complete": true,
+          "percent": 78.66666666666667,
+          "ci95_wilson": [
+            0.6812003421070318,
+            0.8641979882028261
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 15,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 6,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 59,
+            "wrong": 13
+          },
+          "capped": 3,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 75,
+          "scored": 75,
+          "correct": 57,
+          "complete": true,
+          "percent": 76.0,
+          "ci95_wilson": [
+            0.6522123385089702,
+            0.8424512633999708
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 10,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 16,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "capped": 5,
+            "correct": 57,
+            "malformed": 1,
+            "wrong": 12
+          },
+          "capped": 5,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 75,
+          "scored": 75,
+          "correct": 64,
+          "complete": true,
+          "percent": 85.33333333333333,
+          "ci95_wilson": [
+            0.7561523214068765,
+            0.9160828299052742
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 11,
+              "n": 11
+            },
+            "instruction": {
+              "correct": 9,
+              "scored": 11,
+              "n": 11
+            },
+            "knowledge": {
+              "correct": 19,
+              "scored": 19,
+              "n": 19
+            },
+            "math": {
+              "correct": 11,
+              "scored": 11,
+              "n": 11
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 10,
+              "n": 10
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            }
+          },
+          "status_counts": {
+            "correct": 64,
+            "wrong": 11
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 59,
+          "a_only": 11,
+          "b_only": 6,
+          "p_exact": 0.3323059082031255,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 57,
+          "a_only": 12,
+          "b_only": 5,
+          "p_exact": 0.1434631347656256,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 55,
+          "a_only": 15,
+          "b_only": 6,
+          "p_exact": 0.07835388183593765,
+          "p_holm": 0.8307056725025251,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 53,
+          "a_only": 16,
+          "b_only": 5,
+          "p_exact": 0.026603698730468785,
+          "p_holm": 0.3458480834960942,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "glm-5.3-flash-maya",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 43,
+          "a_only": 26,
+          "b_only": 5,
+          "p_exact": 0.000192195177078244,
+          "p_holm": 0.0038439035415648803,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 64,
+          "b_correct": 39,
+          "a_only": 28,
+          "b_only": 3,
+          "p_exact": 4.64916229248049e-06,
+          "p_holm": 9.763240814209029e-05,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 75,
+          "a_correct": 59,
+          "b_correct": 57,
+          "a_only": 5,
+          "b_only": 3,
+          "p_exact": 0.7265624999999989,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 75,
+          "a_correct": 59,
+          "b_correct": 55,
+          "a_only": 15,
+          "b_only": 11,
+          "p_exact": 0.5571970939636283,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 75,
+          "a_correct": 59,
+          "b_correct": 53,
+          "a_only": 12,
+          "b_only": 6,
+          "p_exact": 0.237884521484375,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "glm-5.3-flash-maya",
+          "n": 75,
+          "a_correct": 59,
+          "b_correct": 43,
+          "a_only": 21,
+          "b_only": 5,
+          "p_exact": 0.0024939179420471447,
+          "p_holm": 0.04239660501480146,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 59,
+          "b_correct": 39,
+          "a_only": 25,
+          "b_only": 5,
+          "p_exact": 0.00032491423189640175,
+          "p_holm": 0.006173370406031633,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 75,
+          "a_correct": 57,
+          "b_correct": 55,
+          "a_only": 13,
+          "b_only": 11,
+          "p_exact": 0.8388197422027598,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 75,
+          "a_correct": 57,
+          "b_correct": 53,
+          "a_only": 12,
+          "b_only": 8,
+          "p_exact": 0.5034446716308604,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 75,
+          "a_correct": 57,
+          "b_correct": 43,
+          "a_only": 18,
+          "b_only": 4,
+          "p_exact": 0.004343509674072266,
+          "p_holm": 0.06949615478515625,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 57,
+          "b_correct": 39,
+          "a_only": 25,
+          "b_only": 7,
+          "p_exact": 0.0021024015732109347,
+          "p_holm": 0.03784322831779682,
+          "separated": true
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 75,
+          "a_correct": 55,
+          "b_correct": 53,
+          "a_only": 12,
+          "b_only": 10,
+          "p_exact": 0.831811904907226,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "glm-5.3-flash-maya",
+          "n": 75,
+          "a_correct": 55,
+          "b_correct": 43,
+          "a_only": 21,
+          "b_only": 9,
+          "p_exact": 0.04277394525706799,
+          "p_holm": 0.5132873430848159,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 55,
+          "b_correct": 39,
+          "a_only": 23,
+          "b_only": 7,
+          "p_exact": 0.0052228793501854194,
+          "p_holm": 0.07834319025278129,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "glm-5.3-flash-maya",
+          "n": 75,
+          "a_correct": 53,
+          "b_correct": 43,
+          "a_only": 18,
+          "b_only": 8,
+          "p_exact": 0.07551869750022956,
+          "p_holm": 0.8307056725025251,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 53,
+          "b_correct": 39,
+          "a_only": 21,
+          "b_only": 7,
+          "p_exact": 0.012540951371192842,
+          "p_holm": 0.17557331919669977,
+          "separated": false
+        },
+        {
+          "a": "glm-5.3-flash-maya",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 75,
+          "a_correct": 43,
+          "b_correct": 39,
+          "a_only": 18,
+          "b_only": 14,
+          "p_exact": 0.5966148958541402,
+          "p_holm": 1.0,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 21,
+      "prefix_n": 75
+    },
+    {
+      "category_counts": {
+        "knowledge": 23,
+        "math": 13,
+        "code": 13,
+        "instruction": 13,
+        "reasoning": 13,
+        "tools": 15
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm",
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "glm-5.3-flash-maya",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "glm-5.3-flash-maya": {
+          "n": 90,
+          "scored": 90,
+          "correct": 51,
+          "complete": true,
+          "percent": 56.666666666666664,
+          "ci95_wilson": [
+            0.46364097523724423,
+            0.6642342746875122
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 12,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 5,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 11,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "correct": 51,
+            "wrong": 39
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.00003333333333,
+          "budget_min": 30.0,
+          "groups": [
+            "C"
+          ]
+        },
+        "hy4-flash-sq-64-strata": {
+          "n": 90,
+          "scored": 90,
+          "correct": 62,
+          "complete": true,
+          "percent": 68.88888888888889,
+          "ci95_wilson": [
+            0.5871717545902345,
+            0.7751414535299087
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 12,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 19,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 10,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "correct": 62,
+            "malformed": 1,
+            "wrong": 27
+          },
+          "capped": 0,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 90,
+          "scored": 90,
+          "correct": 51,
+          "complete": true,
+          "percent": 56.666666666666664,
+          "ci95_wilson": [
+            0.46364097523724423,
+            0.6642342746875122
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 7,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 15,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 2,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 51,
+            "malformed": 9,
+            "wrong": 28
+          },
+          "capped": 2,
+          "malformed": 9,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 90,
+          "scored": 90,
+          "correct": 63,
+          "complete": true,
+          "percent": 70.0,
+          "ci95_wilson": [
+            0.598734894751539,
+            0.7848908550227303
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 21,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 13,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 4,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 11,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "correct": 63,
+            "malformed": 2,
+            "wrong": 25
+          },
+          "capped": 0,
+          "malformed": 2,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 90,
+          "scored": 90,
+          "correct": 70,
+          "complete": true,
+          "percent": 77.77777777777777,
+          "ci95_wilson": [
+            0.6815268960895451,
+            0.8512866452636068
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 13,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 18,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 13,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "capped": 5,
+            "correct": 70,
+            "wrong": 15
+          },
+          "capped": 5,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 90,
+          "scored": 90,
+          "correct": 69,
+          "complete": true,
+          "percent": 76.66666666666667,
+          "ci95_wilson": [
+            0.6694829435426721,
+            0.8420180561563537
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 12,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 20,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 13,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 10,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "capped": 6,
+            "correct": 69,
+            "malformed": 1,
+            "wrong": 14
+          },
+          "capped": 6,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 90,
+          "scored": 90,
+          "correct": 76,
+          "complete": true,
+          "percent": 84.44444444444444,
+          "ci95_wilson": [
+            0.7556715472270163,
+            0.9050172440508919
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 11,
+              "scored": 13,
+              "n": 13
+            },
+            "knowledge": {
+              "correct": 23,
+              "scored": 23,
+              "n": 23
+            },
+            "math": {
+              "correct": 13,
+              "scored": 13,
+              "n": 13
+            },
+            "reasoning": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 15,
+              "n": 15
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 76,
+            "wrong": 13
+          },
+          "capped": 1,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 70,
+          "a_only": 13,
+          "b_only": 7,
+          "p_exact": 0.263175964355469,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 69,
+          "a_only": 13,
+          "b_only": 6,
+          "p_exact": 0.167068481445313,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 63,
+          "a_only": 20,
+          "b_only": 7,
+          "p_exact": 0.01915729045867932,
+          "p_holm": 0.2682020664215105,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 62,
+          "a_only": 20,
+          "b_only": 6,
+          "p_exact": 0.009355306625366301,
+          "p_holm": 0.14032959938049452,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "glm-5.3-flash-maya",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 51,
+          "a_only": 31,
+          "b_only": 6,
+          "p_exact": 4.125759005546576e-05,
+          "p_holm": 0.0008251518011093152,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 76,
+          "b_correct": 51,
+          "a_only": 29,
+          "b_only": 4,
+          "p_exact": 1.0928604751825382e-05,
+          "p_holm": 0.00022950069978833302,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 90,
+          "a_correct": 70,
+          "b_correct": 69,
+          "a_only": 6,
+          "b_only": 5,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 90,
+          "a_correct": 70,
+          "b_correct": 63,
+          "a_only": 21,
+          "b_only": 14,
+          "p_exact": 0.31050465907901603,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 90,
+          "a_correct": 70,
+          "b_correct": 62,
+          "a_only": 17,
+          "b_only": 9,
+          "p_exact": 0.16863754391670405,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "glm-5.3-flash-maya",
+          "n": 90,
+          "a_correct": 70,
+          "b_correct": 51,
+          "a_only": 26,
+          "b_only": 7,
+          "p_exact": 0.0013187271542847065,
+          "p_holm": 0.02373708877712472,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 70,
+          "b_correct": 51,
+          "a_only": 26,
+          "b_only": 7,
+          "p_exact": 0.0013187271542847065,
+          "p_holm": 0.02373708877712472,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 90,
+          "a_correct": 69,
+          "b_correct": 63,
+          "a_only": 18,
+          "b_only": 12,
+          "p_exact": 0.3615946080535679,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 90,
+          "a_correct": 69,
+          "b_correct": 62,
+          "a_only": 16,
+          "b_only": 9,
+          "p_exact": 0.22952294349670435,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 90,
+          "a_correct": 69,
+          "b_correct": 51,
+          "a_only": 23,
+          "b_only": 5,
+          "p_exact": 0.0009122341871261501,
+          "p_holm": 0.017332449555396853,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 69,
+          "b_correct": 51,
+          "a_only": 27,
+          "b_only": 9,
+          "p_exact": 0.0039331730222329315,
+          "p_holm": 0.0629307683557269,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 90,
+          "a_correct": 63,
+          "b_correct": 62,
+          "a_only": 13,
+          "b_only": 12,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "glm-5.3-flash-maya",
+          "n": 90,
+          "a_correct": 63,
+          "b_correct": 51,
+          "a_only": 25,
+          "b_only": 13,
+          "p_exact": 0.07295138851623038,
+          "p_holm": 0.919822097755965,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 63,
+          "b_correct": 51,
+          "a_only": 25,
+          "b_only": 13,
+          "p_exact": 0.07295138851623038,
+          "p_holm": 0.919822097755965,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "glm-5.3-flash-maya",
+          "n": 90,
+          "a_correct": 62,
+          "b_correct": 51,
+          "a_only": 21,
+          "b_only": 10,
+          "p_exact": 0.07075554598122807,
+          "p_holm": 0.919822097755965,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 62,
+          "b_correct": 51,
+          "a_only": 23,
+          "b_only": 12,
+          "p_exact": 0.08953107893466954,
+          "p_holm": 0.919822097755965,
+          "separated": false
+        },
+        {
+          "a": "glm-5.3-flash-maya",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 90,
+          "a_correct": 51,
+          "b_correct": 51,
+          "a_only": 19,
+          "b_only": 19,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 21,
+      "prefix_n": 90
+    },
+    {
+      "category_counts": {
+        "knowledge": 27,
+        "math": 16,
+        "code": 13,
+        "instruction": 16,
+        "reasoning": 15,
+        "tools": 18
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm",
+        "hy4-flash-sq-64-strata",
+        "kolibri-1.1-iq4_xs",
+        "glm-5.3-flash-maya",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "glm-5.3-flash-maya": {
+          "n": 105,
+          "scored": 105,
+          "correct": 61,
+          "complete": true,
+          "percent": 58.095238095238095,
+          "ci95_wilson": [
+            0.4853569524888766,
+            0.6708335302940296
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 13,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 15,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 5,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 13,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "correct": 61,
+            "wrong": 44
+          },
+          "capped": 0,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 30.00003333333333,
+          "budget_min": 30.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "hy4-flash-sq-64-strata": {
+          "n": 105,
+          "scored": 105,
+          "correct": 71,
+          "complete": true,
+          "percent": 67.61904761904762,
+          "ci95_wilson": [
+            0.5818439542505351,
+            0.758100037688731
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 15,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 21,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 12,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 6,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 11,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "correct": 71,
+            "malformed": 2,
+            "wrong": 32
+          },
+          "capped": 0,
+          "malformed": 2,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 105,
+          "scored": 105,
+          "correct": 60,
+          "complete": true,
+          "percent": 57.142857142857146,
+          "ci95_wilson": [
+            0.4759032494751174,
+            0.6619118823921526
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 8,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 17,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 10,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 3,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 13,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 60,
+            "malformed": 10,
+            "wrong": 32
+          },
+          "capped": 3,
+          "malformed": 10,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "C"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 105,
+          "scored": 105,
+          "correct": 70,
+          "complete": true,
+          "percent": 66.66666666666667,
+          "ci95_wilson": [
+            0.5720277421485502,
+            0.7495408988750798
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 5,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 23,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 15,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 13,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 70,
+            "malformed": 3,
+            "wrong": 31
+          },
+          "capped": 1,
+          "malformed": 3,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 105,
+          "scored": 105,
+          "correct": 80,
+          "complete": true,
+          "percent": 76.19047619047619,
+          "ci95_wilson": [
+            0.6721129566522359,
+            0.8332091935277541
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 15,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 20,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 16,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 15,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "capped": 6,
+            "correct": 80,
+            "wrong": 19
+          },
+          "capped": 6,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 105,
+          "scored": 105,
+          "correct": 77,
+          "complete": true,
+          "percent": 73.33333333333333,
+          "ci95_wilson": [
+            0.6416128839600874,
+            0.8085832134729944
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 14,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 22,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 15,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "capped": 10,
+            "correct": 77,
+            "malformed": 1,
+            "wrong": 17
+          },
+          "capped": 10,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 105,
+          "scored": 105,
+          "correct": 89,
+          "complete": true,
+          "percent": 84.76190476190476,
+          "ci95_wilson": [
+            0.7667269516059707,
+            0.9039733568147432
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 13,
+              "scored": 16,
+              "n": 16
+            },
+            "knowledge": {
+              "correct": 26,
+              "scored": 27,
+              "n": 27
+            },
+            "math": {
+              "correct": 16,
+              "scored": 16,
+              "n": 16
+            },
+            "reasoning": {
+              "correct": 11,
+              "scored": 15,
+              "n": 15
+            },
+            "tools": {
+              "correct": 15,
+              "scored": 18,
+              "n": 18
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 89,
+            "wrong": 14
+          },
+          "capped": 2,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 80,
+          "a_only": 16,
+          "b_only": 7,
+          "p_exact": 0.09313964843750033,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 77,
+          "a_only": 18,
+          "b_only": 6,
+          "p_exact": 0.022655844688415597,
+          "p_holm": 0.29452598094940274,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 71,
+          "a_only": 25,
+          "b_only": 7,
+          "p_exact": 0.0021024015732109347,
+          "p_holm": 0.03574082674458589,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 70,
+          "a_only": 26,
+          "b_only": 7,
+          "p_exact": 0.0013187271542847065,
+          "p_holm": 0.025055815931409424,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "glm-5.3-flash-maya",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 61,
+          "a_only": 36,
+          "b_only": 8,
+          "p_exact": 2.5448598648836436e-05,
+          "p_holm": 0.0005089719729767287,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 89,
+          "b_correct": 60,
+          "a_only": 34,
+          "b_only": 5,
+          "p_exact": 2.4299079086631422e-06,
+          "p_holm": 5.102806608192599e-05,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 105,
+          "a_correct": 80,
+          "b_correct": 77,
+          "a_only": 8,
+          "b_only": 5,
+          "p_exact": 0.5810546874999994,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 105,
+          "a_correct": 80,
+          "b_correct": 71,
+          "a_only": 20,
+          "b_only": 11,
+          "p_exact": 0.14961278438568046,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 105,
+          "a_correct": 80,
+          "b_correct": 70,
+          "a_only": 25,
+          "b_only": 15,
+          "p_exact": 0.15385994416282953,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "glm-5.3-flash-maya",
+          "n": 105,
+          "a_correct": 80,
+          "b_correct": 61,
+          "a_only": 30,
+          "b_only": 11,
+          "p_exact": 0.004324004934460341,
+          "p_holm": 0.06918407895136545,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 80,
+          "b_correct": 60,
+          "a_only": 29,
+          "b_only": 9,
+          "p_exact": 0.0016580525261815683,
+          "p_holm": 0.02984494547126823,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 105,
+          "a_correct": 77,
+          "b_correct": 71,
+          "a_only": 18,
+          "b_only": 12,
+          "p_exact": 0.3615946080535679,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 105,
+          "a_correct": 77,
+          "b_correct": 70,
+          "a_only": 22,
+          "b_only": 15,
+          "p_exact": 0.32400860008783644,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "glm-5.3-flash-maya",
+          "n": 105,
+          "a_correct": 77,
+          "b_correct": 61,
+          "a_only": 25,
+          "b_only": 9,
+          "p_exact": 0.009041185490787033,
+          "p_holm": 0.1356177823618055,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 77,
+          "b_correct": 60,
+          "a_only": 30,
+          "b_only": 13,
+          "p_exact": 0.013718185058678578,
+          "p_holm": 0.1920545908215001,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 105,
+          "a_correct": 71,
+          "b_correct": 70,
+          "a_only": 16,
+          "b_only": 15,
+          "p_exact": 0.9999999999999952,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "glm-5.3-flash-maya",
+          "n": 105,
+          "a_correct": 71,
+          "b_correct": 61,
+          "a_only": 24,
+          "b_only": 14,
+          "p_exact": 0.14330665429588343,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 71,
+          "b_correct": 60,
+          "a_only": 26,
+          "b_only": 15,
+          "p_exact": 0.11727520595741041,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "glm-5.3-flash-maya",
+          "n": 105,
+          "a_correct": 70,
+          "b_correct": 61,
+          "a_only": 28,
+          "b_only": 19,
+          "p_exact": 0.24296021728332354,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 70,
+          "b_correct": 60,
+          "a_only": 26,
+          "b_only": 16,
+          "p_exact": 0.16414940178310533,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "glm-5.3-flash-maya",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 105,
+          "a_correct": 61,
+          "b_correct": 60,
+          "a_only": 23,
+          "b_only": 22,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 21,
+      "prefix_n": 105
+    },
+    {
+      "category_counts": {
+        "knowledge": 31,
+        "math": 19,
+        "code": 13,
+        "instruction": 19,
+        "reasoning": 18,
+        "tools": 20
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "qwen3.8-27b-sglang-dflash2",
+        "qwen3.8-27b-vllm",
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "hy4-flash-sq-64-strata": {
+          "n": 120,
+          "scored": 120,
+          "correct": 78,
+          "complete": true,
+          "percent": 65.0,
+          "ci95_wilson": [
+            0.561213245977243,
+            0.729481004097146
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 17,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 22,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 13,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "correct": 78,
+            "malformed": 4,
+            "wrong": 38
+          },
+          "capped": 0,
+          "malformed": 4,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 120,
+          "scored": 120,
+          "correct": 67,
+          "complete": true,
+          "percent": 55.833333333333336,
+          "ci95_wilson": [
+            0.4690452309131966,
+            0.6440025330046214
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 10,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 17,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 12,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 5,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 67,
+            "malformed": 12,
+            "wrong": 38
+          },
+          "capped": 3,
+          "malformed": 12,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "C"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 120,
+          "scored": 120,
+          "correct": 80,
+          "complete": true,
+          "percent": 66.66666666666667,
+          "ci95_wilson": [
+            0.5783110162063498,
+            0.7446825949874156
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 7,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 25,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 18,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 1,
+            "correct": 80,
+            "malformed": 3,
+            "wrong": 36
+          },
+          "capped": 1,
+          "malformed": 3,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-27b-sglang-dflash2": {
+          "n": 120,
+          "scored": 120,
+          "correct": 88,
+          "complete": true,
+          "percent": 73.33333333333333,
+          "ci95_wilson": [
+            0.647875606138524,
+            0.8043154495327476
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 17,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 21,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 18,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 9,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 17,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 10,
+            "correct": 88,
+            "wrong": 22
+          },
+          "capped": 10,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.843616666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B"
+          ]
+        },
+        "qwen3.8-27b-vllm": {
+          "n": 120,
+          "scored": 120,
+          "correct": 86,
+          "complete": true,
+          "percent": 71.66666666666667,
+          "ci95_wilson": [
+            0.6302979754694596,
+            0.7895937190824355
+          ],
+          "categories": {
+            "code": {
+              "correct": 7,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 16,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 23,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 18,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 13,
+            "correct": 86,
+            "malformed": 1,
+            "wrong": 20
+          },
+          "capped": 13,
+          "malformed": 1,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.9745,
+          "budget_min": 15.0,
+          "groups": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 120,
+          "scored": 120,
+          "correct": 100,
+          "complete": true,
+          "percent": 83.33333333333333,
+          "ci95_wilson": [
+            0.7565471860673773,
+            0.8894400363201539
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 16,
+              "scored": 19,
+              "n": 19
+            },
+            "knowledge": {
+              "correct": 27,
+              "scored": 31,
+              "n": 31
+            },
+            "math": {
+              "correct": 19,
+              "scored": 19,
+              "n": 19
+            },
+            "reasoning": {
+              "correct": 13,
+              "scored": 18,
+              "n": 18
+            },
+            "tools": {
+              "correct": 17,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 100,
+            "wrong": 17
+          },
+          "capped": 3,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-sglang-dflash2",
+          "n": 120,
+          "a_correct": 100,
+          "b_correct": 88,
+          "a_only": 19,
+          "b_only": 7,
+          "p_exact": 0.028959274291992406,
+          "p_holm": 0.26063346862793163,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "qwen3.8-27b-vllm",
+          "n": 120,
+          "a_correct": 100,
+          "b_correct": 86,
+          "a_only": 21,
+          "b_only": 7,
+          "p_exact": 0.012540951371192842,
+          "p_holm": 0.12540951371192843,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 120,
+          "a_correct": 100,
+          "b_correct": 80,
+          "a_only": 28,
+          "b_only": 8,
+          "p_exact": 0.0011932429624721445,
+          "p_holm": 0.015512158512137879,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 120,
+          "a_correct": 100,
+          "b_correct": 78,
+          "a_only": 29,
+          "b_only": 7,
+          "p_exact": 0.00031255115754902477,
+          "p_holm": 0.004375716205686346,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 120,
+          "a_correct": 100,
+          "b_correct": 67,
+          "a_only": 39,
+          "b_only": 6,
+          "p_exact": 5.417768988991148e-07,
+          "p_holm": 8.12665348348672e-06,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "qwen3.8-27b-vllm",
+          "n": 120,
+          "a_correct": 88,
+          "b_correct": 86,
+          "a_only": 9,
+          "b_only": 7,
+          "p_exact": 0.8036193847656252,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 120,
+          "a_correct": 88,
+          "b_correct": 80,
+          "a_only": 27,
+          "b_only": 19,
+          "p_exact": 0.30199561318966445,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 120,
+          "a_correct": 88,
+          "b_correct": 78,
+          "a_only": 23,
+          "b_only": 13,
+          "p_exact": 0.1324981639627368,
+          "p_holm": 0.9274871477391576,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-sglang-dflash2",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 120,
+          "a_correct": 88,
+          "b_correct": 67,
+          "a_only": 32,
+          "b_only": 11,
+          "p_exact": 0.001913961001264417,
+          "p_holm": 0.022967532015173004,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 120,
+          "a_correct": 86,
+          "b_correct": 80,
+          "a_only": 24,
+          "b_only": 18,
+          "p_exact": 0.4407990673425942,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 120,
+          "a_correct": 86,
+          "b_correct": 78,
+          "a_only": 23,
+          "b_only": 15,
+          "p_exact": 0.2558750795433294,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "qwen3.8-27b-vllm",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 120,
+          "a_correct": 86,
+          "b_correct": 67,
+          "a_only": 33,
+          "b_only": 14,
+          "p_exact": 0.007942726509483434,
+          "p_holm": 0.08736999160431777,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 120,
+          "a_correct": 80,
+          "b_correct": 78,
+          "a_only": 18,
+          "b_only": 16,
+          "p_exact": 0.8641662404406849,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 120,
+          "a_correct": 80,
+          "b_correct": 67,
+          "a_only": 32,
+          "b_only": 19,
+          "p_exact": 0.0919145498158516,
+          "p_holm": 0.7353163985268129,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 120,
+          "a_correct": 78,
+          "b_correct": 67,
+          "a_only": 30,
+          "b_only": 19,
+          "p_exact": 0.1524077719614798,
+          "p_holm": 0.9274871477391576,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 15,
+      "prefix_n": 120
+    },
+    {
+      "category_counts": {
+        "knowledge": 37,
+        "math": 23,
+        "code": 13,
+        "instruction": 21,
+        "reasoning": 21,
+        "tools": 20
+      },
+      "ranking": [
+        "qwen3.8-flash-next-iq3_xxs",
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "hy4-flash-sq-64-strata": {
+          "n": 135,
+          "scored": 135,
+          "correct": 88,
+          "complete": true,
+          "percent": 65.18518518518519,
+          "ci95_wilson": [
+            0.568299019288954,
+            0.7270018249131313
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 18,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 27,
+              "scored": 37,
+              "n": 37
+            },
+            "math": {
+              "correct": 15,
+              "scored": 23,
+              "n": 23
+            },
+            "reasoning": {
+              "correct": 10,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "correct": 88,
+            "malformed": 6,
+            "wrong": 41
+          },
+          "capped": 0,
+          "malformed": 6,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 135,
+          "scored": 135,
+          "correct": 73,
+          "complete": true,
+          "percent": 54.074074074074076,
+          "ci95_wilson": [
+            0.4567139794723165,
+            0.6225130762892186
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 10,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 20,
+              "scored": 37,
+              "n": 37
+            },
+            "math": {
+              "correct": 13,
+              "scored": 23,
+              "n": 23
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 5,
+            "correct": 73,
+            "malformed": 15,
+            "wrong": 42
+          },
+          "capped": 5,
+          "malformed": 15,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 135,
+          "scored": 135,
+          "correct": 89,
+          "complete": true,
+          "percent": 65.92592592592592,
+          "ci95_wilson": [
+            0.5758930961040766,
+            0.7338126673273783
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 8,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 28,
+              "scored": 37,
+              "n": 37
+            },
+            "math": {
+              "correct": 22,
+              "scored": 23,
+              "n": 23
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 2,
+            "correct": 89,
+            "malformed": 4,
+            "wrong": 40
+          },
+          "capped": 2,
+          "malformed": 4,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "qwen3.8-flash-next-iq3_xxs": {
+          "n": 135,
+          "scored": 135,
+          "correct": 107,
+          "complete": true,
+          "percent": 79.25925925925925,
+          "ci95_wilson": [
+            0.7165717620317186,
+            0.8524225475283965
+          ],
+          "categories": {
+            "code": {
+              "correct": 8,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 17,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 28,
+              "scored": 37,
+              "n": 37
+            },
+            "math": {
+              "correct": 23,
+              "scored": 23,
+              "n": 23
+            },
+            "reasoning": {
+              "correct": 14,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 17,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 8,
+            "correct": 107,
+            "wrong": 20
+          },
+          "capped": 8,
+          "malformed": 0,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 14.7675,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "kolibri-1.1-iq4_xs",
+          "n": 135,
+          "a_correct": 107,
+          "b_correct": 89,
+          "a_only": 28,
+          "b_only": 10,
+          "p_exact": 0.0050976432976313,
+          "p_holm": 0.0254882164881565,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 135,
+          "a_correct": 107,
+          "b_correct": 88,
+          "a_only": 31,
+          "b_only": 12,
+          "p_exact": 0.005401572654591337,
+          "p_holm": 0.0254882164881565,
+          "separated": true
+        },
+        {
+          "a": "qwen3.8-flash-next-iq3_xxs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 135,
+          "a_correct": 107,
+          "b_correct": 73,
+          "a_only": 43,
+          "b_only": 9,
+          "p_exact": 2.0377698612961317e-06,
+          "p_holm": 1.222661916777679e-05,
+          "separated": true
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 135,
+          "a_correct": 89,
+          "b_correct": 88,
+          "a_only": 20,
+          "b_only": 19,
+          "p_exact": 1.0,
+          "p_holm": 1.0,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 135,
+          "a_correct": 89,
+          "b_correct": 73,
+          "a_only": 36,
+          "b_only": 20,
+          "p_exact": 0.04404654610215151,
+          "p_holm": 0.13213963830645453,
+          "separated": false
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 135,
+          "a_correct": 88,
+          "b_correct": 73,
+          "a_only": 35,
+          "b_only": 20,
+          "p_exact": 0.058064146792409274,
+          "p_holm": 0.13213963830645453,
+          "separated": false
+        }
+      ],
+      "holm_family_size": 6,
+      "prefix_n": 135
+    },
+    {
+      "category_counts": {
+        "code": 13,
+        "instruction": 21,
+        "knowledge": 38,
+        "math": 31,
+        "reasoning": 21,
+        "tools": 20
+      },
+      "ranking": [
+        "kolibri-1.1-iq4_xs",
+        "hy4-flash-sq-64-strata",
+        "inkling-2-mini-sq-20-strata-2gpu"
+      ],
+      "incomplete": [],
+      "routes": {
+        "hy4-flash-sq-64-strata": {
+          "n": 144,
+          "scored": 144,
+          "correct": 91,
+          "complete": true,
+          "percent": 63.19444444444444,
+          "ci95_wilson": [
+            0.5507002056059215,
+            0.7063318901479992
+          ],
+          "categories": {
+            "code": {
+              "correct": 6,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 18,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 28,
+              "scored": 38,
+              "n": 38
+            },
+            "math": {
+              "correct": 17,
+              "scored": 31,
+              "n": 31
+            },
+            "reasoning": {
+              "correct": 10,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 12,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "correct": 91,
+            "malformed": 9,
+            "wrong": 44
+          },
+          "capped": 0,
+          "malformed": 9,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 16.433483333333335,
+          "budget_min": 30.0,
+          "groups": [
+            "A"
+          ]
+        },
+        "inkling-2-mini-sq-20-strata-2gpu": {
+          "n": 144,
+          "scored": 144,
+          "correct": 73,
+          "complete": true,
+          "percent": 50.69444444444444,
+          "ci95_wilson": [
+            0.4261743705804492,
+            0.5873536344592308
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 10,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 20,
+              "scored": 38,
+              "n": 38
+            },
+            "math": {
+              "correct": 13,
+              "scored": 31,
+              "n": 31
+            },
+            "reasoning": {
+              "correct": 7,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 6,
+            "correct": 73,
+            "malformed": 20,
+            "wrong": 45
+          },
+          "capped": 6,
+          "malformed": 20,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 13.941650000000001,
+          "budget_min": 15.0,
+          "groups": [
+            "B"
+          ]
+        },
+        "kolibri-1.1-iq4_xs": {
+          "n": 144,
+          "scored": 144,
+          "correct": 96,
+          "complete": true,
+          "percent": 66.66666666666667,
+          "ci95_wilson": [
+            0.5862249854783737,
+            0.7384471354739475
+          ],
+          "categories": {
+            "code": {
+              "correct": 9,
+              "scored": 13,
+              "n": 13
+            },
+            "instruction": {
+              "correct": 8,
+              "scored": 21,
+              "n": 21
+            },
+            "knowledge": {
+              "correct": 28,
+              "scored": 38,
+              "n": 38
+            },
+            "math": {
+              "correct": 29,
+              "scored": 31,
+              "n": 31
+            },
+            "reasoning": {
+              "correct": 8,
+              "scored": 21,
+              "n": 21
+            },
+            "tools": {
+              "correct": 14,
+              "scored": 20,
+              "n": 20
+            }
+          },
+          "status_counts": {
+            "capped": 3,
+            "correct": 96,
+            "malformed": 5,
+            "wrong": 40
+          },
+          "capped": 3,
+          "malformed": 5,
+          "not_run": 0,
+          "ungraded": 0,
+          "elapsed_min": 12.986066666666666,
+          "budget_min": 15.0,
+          "groups": [
+            "A"
+          ]
+        }
+      },
+      "pairs": [
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "hy4-flash-sq-64-strata",
+          "n": 144,
+          "a_correct": 96,
+          "b_correct": 91,
+          "a_only": 25,
+          "b_only": 20,
+          "p_exact": 0.5514843298025217,
+          "p_holm": 0.5514843298025217,
+          "separated": false
+        },
+        {
+          "a": "kolibri-1.1-iq4_xs",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 144,
+          "a_correct": 96,
+          "b_correct": 73,
+          "a_only": 43,
+          "b_only": 20,
+          "p_exact": 0.0051523970420920455,
+          "p_holm": 0.015457191126276137,
+          "separated": true
+        },
+        {
+          "a": "hy4-flash-sq-64-strata",
+          "b": "inkling-2-mini-sq-20-strata-2gpu",
+          "n": 144,
+          "a_correct": 91,
+          "b_correct": 73,
+          "a_only": 38,
+          "b_only": 20,
+          "p_exact": 0.02474603584244034,
+          "p_holm": 0.04949207168488068,
+          "separated": true
+        }
+      ],
+      "holm_family_size": 3,
+      "prefix_n": 144
+    }
+  ],
+  "skipped_checkpoints": [],
+  "longest_common_pairs": [
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 33,
+      "a_only": 3,
+      "b_only": 1,
+      "p_exact": 0.6249999999999994,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "glm-5.3-flash-maya",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 22,
+      "a_only": 14,
+      "b_only": 1,
+      "p_exact": 0.0009765624999999976,
+      "p_holm": 0.041992187499999896,
+      "separated": true
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 28,
+      "a_only": 9,
+      "b_only": 2,
+      "p_exact": 0.06542968750000028,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 23,
+      "a_only": 13,
+      "b_only": 1,
+      "p_exact": 0.0018310546875000074,
+      "p_holm": 0.0769042968750003,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "kolibri-1.1-iq4_xs",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 34,
+      "a_only": 3,
+      "b_only": 2,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "n": 45,
+      "a_correct": 36,
+      "b_correct": 35,
+      "a_only": 4,
+      "b_only": 3,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "qwen3.8-27b-vllm",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 34,
+      "a_only": 4,
+      "b_only": 3,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "n": 45,
+      "a_correct": 37,
+      "b_correct": 35,
+      "a_only": 4,
+      "b_only": 2,
+      "p_exact": 0.6875000000000016,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-maya-unsloth-q1",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 35,
+      "b_correct": 29,
+      "a_only": 8,
+      "b_only": 2,
+      "p_exact": 0.109375,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "b": "glm-5.3-flash-maya",
+      "n": 45,
+      "a_correct": 33,
+      "b_correct": 22,
+      "a_only": 14,
+      "b_only": 3,
+      "p_exact": 0.012725830078125014,
+      "p_holm": 0.42639234662055664,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 45,
+      "a_correct": 33,
+      "b_correct": 28,
+      "a_only": 9,
+      "b_only": 4,
+      "p_exact": 0.2668457031250002,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 45,
+      "a_correct": 33,
+      "b_correct": 23,
+      "a_only": 12,
+      "b_only": 2,
+      "p_exact": 0.012939453125000071,
+      "p_holm": 0.42639234662055664,
+      "separated": false
+    },
+    {
+      "a": "kolibri-1.1-iq4_xs",
+      "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "n": 45,
+      "a_correct": 34,
+      "b_correct": 33,
+      "a_only": 3,
+      "b_only": 2,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "n": 45,
+      "a_correct": 36,
+      "b_correct": 33,
+      "a_only": 6,
+      "b_only": 3,
+      "p_exact": 0.5078124999999987,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "n": 45,
+      "a_correct": 34,
+      "b_correct": 33,
+      "a_only": 6,
+      "b_only": 5,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "n": 45,
+      "a_correct": 37,
+      "b_correct": 33,
+      "a_only": 7,
+      "b_only": 3,
+      "p_exact": 0.3437499999999998,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "deepseek-v4.1-flash-1017-strata-unsloth-q1",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 33,
+      "b_correct": 29,
+      "a_only": 8,
+      "b_only": 4,
+      "p_exact": 0.38769531250000044,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "hy4-flash-sq-64-strata",
+      "b": "glm-5.3-flash-maya",
+      "n": 105,
+      "a_correct": 71,
+      "b_correct": 61,
+      "a_only": 24,
+      "b_only": 14,
+      "p_exact": 0.14330665429588343,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "glm-5.3-flash-maya",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 105,
+      "a_correct": 61,
+      "b_correct": 60,
+      "a_only": 23,
+      "b_only": 22,
+      "p_exact": 1.0,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "kolibri-1.1-iq4_xs",
+      "b": "glm-5.3-flash-maya",
+      "n": 105,
+      "a_correct": 70,
+      "b_correct": 61,
+      "a_only": 28,
+      "b_only": 19,
+      "p_exact": 0.24296021728332354,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "glm-5.3-flash-maya",
+      "n": 105,
+      "a_correct": 80,
+      "b_correct": 61,
+      "a_only": 30,
+      "b_only": 11,
+      "p_exact": 0.004324004934460341,
+      "p_holm": 0.17296019737841364,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "glm-5.3-flash-maya",
+      "n": 105,
+      "a_correct": 77,
+      "b_correct": 61,
+      "a_only": 25,
+      "b_only": 9,
+      "p_exact": 0.009041185490787033,
+      "p_holm": 0.31644149217754614,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "glm-5.3-flash-maya",
+      "n": 105,
+      "a_correct": 89,
+      "b_correct": 61,
+      "a_only": 36,
+      "b_only": 8,
+      "p_exact": 2.5448598648836436e-05,
+      "p_holm": 0.0011197383405488032,
+      "separated": true
+    },
+    {
+      "a": "ripple-65b-vllm",
+      "b": "glm-5.3-flash-maya",
+      "n": 45,
+      "a_correct": 29,
+      "b_correct": 22,
+      "a_only": 13,
+      "b_only": 6,
+      "p_exact": 0.167068481445313,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "hy4-flash-sq-64-strata",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 144,
+      "a_correct": 91,
+      "b_correct": 73,
+      "a_only": 38,
+      "b_only": 20,
+      "p_exact": 0.02474603584244034,
+      "p_holm": 0.7423810752732102,
+      "separated": false
+    },
+    {
+      "a": "kolibri-1.1-iq4_xs",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 144,
+      "a_correct": 96,
+      "b_correct": 91,
+      "a_only": 25,
+      "b_only": 20,
+      "p_exact": 0.5514843298025217,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 120,
+      "a_correct": 88,
+      "b_correct": 78,
+      "a_only": 23,
+      "b_only": 13,
+      "p_exact": 0.1324981639627368,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 120,
+      "a_correct": 86,
+      "b_correct": 78,
+      "a_only": 23,
+      "b_only": 15,
+      "p_exact": 0.2558750795433294,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 135,
+      "a_correct": 107,
+      "b_correct": 88,
+      "a_only": 31,
+      "b_only": 12,
+      "p_exact": 0.005401572654591337,
+      "p_holm": 0.19985818821987947,
+      "separated": false
+    },
+    {
+      "a": "ripple-65b-vllm",
+      "b": "hy4-flash-sq-64-strata",
+      "n": 45,
+      "a_correct": 29,
+      "b_correct": 28,
+      "a_only": 7,
+      "b_only": 6,
+      "p_exact": 0.9999999999999979,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "kolibri-1.1-iq4_xs",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 144,
+      "a_correct": 96,
+      "b_correct": 73,
+      "a_only": 43,
+      "b_only": 20,
+      "p_exact": 0.0051523970420920455,
+      "p_holm": 0.1988080886076207,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 120,
+      "a_correct": 88,
+      "b_correct": 67,
+      "a_only": 32,
+      "b_only": 11,
+      "p_exact": 0.001913961001264417,
+      "p_holm": 0.0784724010518411,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 120,
+      "a_correct": 86,
+      "b_correct": 67,
+      "a_only": 33,
+      "b_only": 14,
+      "p_exact": 0.007942726509483434,
+      "p_holm": 0.2859381543414036,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 135,
+      "a_correct": 107,
+      "b_correct": 73,
+      "a_only": 43,
+      "b_only": 9,
+      "p_exact": 2.0377698612961317e-06,
+      "p_holm": 9.169964375832592e-05,
+      "separated": true
+    },
+    {
+      "a": "ripple-65b-vllm",
+      "b": "inkling-2-mini-sq-20-strata-2gpu",
+      "n": 45,
+      "a_correct": 29,
+      "b_correct": 23,
+      "a_only": 10,
+      "b_only": 4,
+      "p_exact": 0.17956542968750067,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "kolibri-1.1-iq4_xs",
+      "n": 120,
+      "a_correct": 88,
+      "b_correct": 80,
+      "a_only": 27,
+      "b_only": 19,
+      "p_exact": 0.30199561318966445,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "kolibri-1.1-iq4_xs",
+      "n": 120,
+      "a_correct": 86,
+      "b_correct": 80,
+      "a_only": 24,
+      "b_only": 18,
+      "p_exact": 0.4407990673425942,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "kolibri-1.1-iq4_xs",
+      "n": 135,
+      "a_correct": 107,
+      "b_correct": 89,
+      "a_only": 28,
+      "b_only": 10,
+      "p_exact": 0.0050976432976313,
+      "p_holm": 0.1988080886076207,
+      "separated": false
+    },
+    {
+      "a": "kolibri-1.1-iq4_xs",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 34,
+      "b_correct": 29,
+      "a_only": 10,
+      "b_only": 5,
+      "p_exact": 0.3017578125000002,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "qwen3.8-27b-vllm",
+      "n": 120,
+      "a_correct": 88,
+      "b_correct": 86,
+      "a_only": 9,
+      "b_only": 7,
+      "p_exact": 0.8036193847656252,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "qwen3.8-27b-sglang-dflash2",
+      "n": 120,
+      "a_correct": 100,
+      "b_correct": 88,
+      "a_only": 19,
+      "b_only": 7,
+      "p_exact": 0.028959274291992406,
+      "p_holm": 0.8398189544677798,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-sglang-dflash2",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 36,
+      "b_correct": 29,
+      "a_only": 7,
+      "b_only": 0,
+      "p_exact": 0.015625000000000003,
+      "p_holm": 0.4843750000000001,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "qwen3.8-27b-vllm",
+      "n": 120,
+      "a_correct": 100,
+      "b_correct": 86,
+      "a_only": 21,
+      "b_only": 7,
+      "p_exact": 0.012540951371192842,
+      "p_holm": 0.42639234662055664,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-27b-vllm",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 34,
+      "b_correct": 29,
+      "a_only": 7,
+      "b_only": 2,
+      "p_exact": 0.1796874999999996,
+      "p_holm": 1.0,
+      "separated": false
+    },
+    {
+      "a": "qwen3.8-flash-next-iq3_xxs",
+      "b": "ripple-65b-vllm",
+      "n": 45,
+      "a_correct": 37,
+      "b_correct": 29,
+      "a_only": 10,
+      "b_only": 2,
+      "p_exact": 0.03857421875000006,
+      "p_holm": 1.0,
+      "separated": false
+    }
+  ],
+  "longest_common_holm_family_size": 45,
+  "rank_items_sha256": "caf36d87640be51379923af7e6134801cc91f8681f49e0eb2ed431707aee5cd3"
+}

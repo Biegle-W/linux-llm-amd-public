@@ -1,0 +1,166 @@
+{
+ "date": "2026-11-26",
+ "test": "hardware/quant-eval/rank",
+ "routes": {
+  "deepseek-v4.1-flash-1017-maya-unsloth-q1": {
+   "class": "large",
+   "budget_s": 1800,
+   "elapsed_s": 1800.012,
+   "answered_prefix": 51,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "deadline",
+   "counts": {
+    "ok": 50,
+    "capped": 0,
+    "error": 1,
+    "not_run": 93,
+    "attempted": 51
+   }
+  },
+  "deepseek-v4.1-flash-1017-strata-unsloth-q1": {
+   "class": "large",
+   "budget_s": 1800,
+   "elapsed_s": 1800.258,
+   "answered_prefix": 50,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "deadline",
+   "counts": {
+    "ok": 49,
+    "capped": 0,
+    "error": 1,
+    "not_run": 94,
+    "attempted": 50
+   }
+  },
+  "glm-5.3-flash-maya": {
+   "class": "large",
+   "budget_s": 1800,
+   "elapsed_s": 1800.002,
+   "answered_prefix": 111,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "deadline",
+   "counts": {
+    "ok": 110,
+    "capped": 0,
+    "error": 1,
+    "not_run": 33,
+    "attempted": 111
+   }
+  },
+  "hy4-flash-sq-64-strata": {
+   "class": "large",
+   "budget_s": 1800,
+   "elapsed_s": 986.009,
+   "answered_prefix": 144,
+   "core_complete": true,
+   "complete": true,
+   "stop_reason": "complete",
+   "counts": {
+    "ok": 144,
+    "capped": 0,
+    "error": 0,
+    "not_run": 0,
+    "attempted": 144
+   }
+  },
+  "inkling-2-mini-sq-20-strata-2gpu": {
+   "class": "small",
+   "budget_s": 900,
+   "elapsed_s": 836.499,
+   "answered_prefix": 144,
+   "core_complete": true,
+   "complete": true,
+   "stop_reason": "complete",
+   "counts": {
+    "ok": 138,
+    "capped": 6,
+    "error": 0,
+    "not_run": 0,
+    "attempted": 144
+   }
+  },
+  "kolibri-1.1-iq4_xs": {
+   "class": "small",
+   "budget_s": 900,
+   "elapsed_s": 779.164,
+   "answered_prefix": 144,
+   "core_complete": true,
+   "complete": true,
+   "stop_reason": "complete",
+   "counts": {
+    "ok": 141,
+    "capped": 3,
+    "error": 0,
+    "not_run": 0,
+    "attempted": 144
+   }
+  },
+  "qwen3.8-27b-sglang-dflash2": {
+   "class": "small",
+   "budget_s": 900,
+   "elapsed_s": 890.617,
+   "answered_prefix": 134,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "estimate_exceeds_remaining",
+   "counts": {
+    "ok": 118,
+    "capped": 16,
+    "error": 0,
+    "not_run": 10,
+    "attempted": 134
+   }
+  },
+  "qwen3.8-27b-vllm": {
+   "class": "small",
+   "budget_s": 900,
+   "elapsed_s": 898.47,
+   "answered_prefix": 123,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "estimate_exceeds_remaining",
+   "counts": {
+    "ok": 109,
+    "capped": 14,
+    "error": 0,
+    "not_run": 21,
+    "attempted": 123
+   }
+  },
+  "qwen3.8-flash-next-iq3_xxs": {
+   "class": "small",
+   "budget_s": 900,
+   "elapsed_s": 886.05,
+   "answered_prefix": 137,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "estimate_exceeds_remaining",
+   "counts": {
+    "ok": 128,
+    "capped": 9,
+    "error": 0,
+    "not_run": 7,
+    "attempted": 137
+   }
+  },
+  "ripple-65b-vllm": {
+   "class": "large",
+   "budget_s": 1800,
+   "elapsed_s": 1764.397,
+   "answered_prefix": 47,
+   "core_complete": true,
+   "complete": false,
+   "stop_reason": "estimate_exceeds_remaining",
+   "counts": {
+    "ok": 37,
+    "capped": 10,
+    "error": 0,
+    "not_run": 97,
+    "attempted": 47
+   }
+  }
+ }
+}

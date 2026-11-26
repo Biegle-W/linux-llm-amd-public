@@ -97,6 +97,13 @@ TOOLUSE = [  # route, model and quant, engine at the run, score, single/40, epis
     ('qwen3.8-flash-next-iq3_xxs', 'Qwen3.8-Flash-Next IQ3_XXS', 'Strata 0.2.20', 52.9, 29, 3, None, 'complete'),
     ('kolibri-1.1-iq4_xs', 'Kolibri 1.1 IQ4_XS', 'llama.cpp PR 32891 `5f4d222898dd`', 45.6, 32, 1, None, 'complete'),
 ]
+BROAD = [  # rank, route, correct/45, format-tolerant/45, group, core/30, items answered (Nov 25-26, hardware/RANK-TEST-2026-11-26.md)
+    (1, 'qwen3.8-flash-next-iq3_xxs', 37, 37, 'A B', 24, 137), (2, 'qwen3.8-27b-sglang-dflash2', 36, 36, 'A', 26, 134),
+    (3, 'deepseek-v4.1-flash-1017-maya-unsloth-q1', 35, 35, 'A C', 24, 51), (4, 'kolibri-1.1-iq4_xs', 34, 34, 'A B C D', 23, 144),
+    (4, 'qwen3.8-27b-vllm', 34, 34, 'A B C D', 25, 123), (6, 'deepseek-v4.1-flash-1017-strata-unsloth-q1', 33, 34, 'A B C D', 23, 50),
+    (7, 'ripple-65b-vllm', 29, 29, 'A B C D', 21, 47), (8, 'hy4-flash-sq-64-strata', 28, 29, 'A B C D', 18, 144),
+    (9, 'inkling-2-mini-sq-20-strata-2gpu', 23, 27, 'C D', 16, 144), (10, 'glm-5.3-flash-maya', 22, 22, 'B D', 16, 111),
+]
 RANKING_216 = [  # model, best route, correct/216, score, 95% interval, code/20, instr/32, knowledge/60, math/40, reasoning/32, tools/32, other engines
     ('Qwen3.8-Flash-Next IQ3_XXS', 'qwen3.8-flash-next-iq3_xxs', 169, '78.2%', '72.3-83.2%', 12, 30, 48, 33, 23, 23,
      'scored November 18 on the Strata RDNA3 fork (replaced by Strata 0.2.20 on November 23, same weights, not rerun)'),
@@ -180,6 +187,14 @@ def render():
     L += ['', '- One episode moves the score by 5.6 points and one single-turn item by 1.25; routes a few points apart are not separated (no significance test).',
           '- Every route ran all 40 single-turn items and all 9 core episodes with no timeout, so every score is complete.',
           f'- Source: [report]({GH}hardware/TOOLUSE-SHORT-TEST-2026-11-24.md), [results JSON]({GH}hardware/results/tooluse-short-2026-11-24.json), [test code]({GH}hardware/quant-eval/tooluse/README.md).', '',
+          '### Broad ranking test (November 25-26)', '',
+          'Owner request: a broad mix (knowledge, math, code, instructions, reasoning, tool calls) in 15 minutes for smaller models and 30 for large ones. '
+          'Every route answers the same 30-item core from the public suite, then up to 144 items while the next one fits. Ranked on the first 45 items, which all ten routes reached; '
+          'routes sharing a letter are not separated (exact McNemar, Holm). Temperature 0, thinking off, through the hub.', '',
+          '| Rank | Route | Correct /45 | Format-tolerant /45 | Group | Core /30 | Items answered in budget |', '|---:|---|---:|---:|---|---:|---:|']
+    L += [f'| {b[0]} | `{b[1]}` | {b[2]} | {b[3]} | {b[4]} | {b[5]} | {b[6]} |' for b in BROAD]
+    L += ['', '- About ±12 points of uncertainty at 45 items; only four pairs are separated. Format-tolerant re-grades answers the frozen grader could not read (bold final lines, run-together answer markers); with it, Flash-Next and SGLang are no longer separated from Inkling.',
+          f'- Source: [report]({GH}hardware/RANK-TEST-2026-11-26.md), [results]({GH}hardware/results/rank-test-2026-11-26/ranking.md), [test code]({GH}hardware/quant-eval/rank/README.md).', '',
           '### Reference: old standard (216-item public suite)', '',
           'Not comparable with the ranking above or with the NVIDIA ranking: 216-item public suite (MMLU-Pro, MATH-500, AIME, BigCodeBench, IFEval, BFCL, MuSR), '
           'one attempt, temperature 0, thinking off, November 10-18. One row per model, best engine first.', '',
