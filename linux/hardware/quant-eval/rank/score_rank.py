@@ -150,6 +150,8 @@ def _fixed(rank_items, routes, runs=None, historical=False, compare=True):
                              'capped': counts['capped'], 'malformed': counts['malformed'],
                              'not_run': counts['not_run'], 'ungraded': counts['ungraded'],
                              'elapsed_min': elapsed, 'budget_min': budget, 'groups': []}
+        if run and run.get('stop_reason') == 'abort_file':
+            r['routes'][name]['stop_reason'] = 'abort_file'
         if complete and compare:
             binary[name] = answers
     order = sorted(binary, key=lambda x: (-r['routes'][x]['correct'], x))
@@ -206,7 +208,8 @@ def score(rank_items, routes, runs=None, historical=False):
 
     extended, skipped_points, longest = [], [], {}
     for p in sorted({c, *points}):
-        eligible = [r for r, s in diagnostics.items() if s['core_complete'] and s['scored_prefix'] >= p
+        eligible = [r for r, s in diagnostics.items() if s.get('stop_reason') != 'abort_file'
+                    and s['core_complete'] and s['scored_prefix'] >= p
                     and (p < n or s['complete'])]
         if p != c and len(eligible) < 3:
             skipped_points.append({'prefix_n': p, 'eligible_routes': eligible})
@@ -256,7 +259,8 @@ def scope_markdown(r):
             pct = '—' if s['percent'] is None else f"{s['percent']:.1f}%"
             ci = '—' if not s['complete'] else '–'.join(f'{100*x:.1f}%' for x in s['ci95_wilson'])
             time = '—' if s['elapsed_min'] is None else f"{s['elapsed_min']:.2f}/{s['budget_min']:g}"
-            lines.append(f"| {name} | {' '.join(s['groups']) or '—'} | {'yes' if s['complete'] else 'no'} | "
+            label = f"{name} ({s['stop_reason']})" if 'stop_reason' in s else name
+            lines.append(f"| {label} | {' '.join(s['groups']) or '—'} | {'yes' if s['complete'] else 'no'} | "
                          f"{s['correct']}/{s['scored']} | {s['scored']}/{s['n']} | {pct} | {ci} | {s['capped']} | "
                          f"{s['malformed']} | {s['not_run']} | {s['ungraded']} | {time} |")
         lines.append('')
@@ -284,7 +288,7 @@ def pair_table(pairs):
 
 def markdown(r):
     lines = ['# Frozen rank-tier results', '', r['note'], '',
-             'Only the core compares every core-complete route on the same items. Extensions require at least three '
+             'The core compares routes with a fully graded core. GPU holds exclude a run from every ranking. Extensions require at least three '
              'routes with a fully graded prefix. Capped, malformed and started errors are wrong; not-run and ungraded are not.', '',
              'Wilson intervals are pointwise approximations for a fixed item mix. Each ranking and the longest-shared '
              'table uses its own exact two-sided McNemar/Holm family at α=0.05. No simultaneous guarantee across tables. '

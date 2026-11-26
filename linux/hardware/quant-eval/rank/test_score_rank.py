@@ -192,6 +192,21 @@ class ScoreTests(unittest.TestCase):
         counts = sorted(p['n'] for p in out['longest_common_pairs'])
         self.assertEqual(counts, [2, 2, 2, 2, 2, 6])
 
+    def test_abort_excludes_finished_core_and_short_prefix_stays_incomplete(self):
+        ids = list('abc')
+        full = {k: grade('correct') for k in ids}
+        routes = {r: full for r in ('a', 'b', 'c', 'held')}
+        routes['short'] = {'a': full['a']}
+        run = dict(complete=True, not_run=[], elapsed_s=1, budget_s=2)
+        runs = {'held': dict(run, answered_prefix=3, stop_reason='abort_file'),
+                'short': dict(run, complete=False, not_run=ids[1:], answered_prefix=1, stop_reason='deadline')}
+        out = sr.score({'order': ids, 'core_n': 2}, routes, runs)
+        self.assertEqual(out['core']['incomplete'], ['held', 'short'])
+        self.assertEqual(out['extended'][0]['ranking'], ['a', 'b', 'c'])
+        self.assertTrue(all('held' not in (p['a'], p['b']) for p in out['longest_common_pairs']))
+        self.assertEqual(out['core']['routes']['held']['stop_reason'], 'abort_file')
+        self.assertIn('held (abort_file)', sr.markdown(out))
+
     def test_nested_validation(self):
         ids = list('abcd')
         plan = {'order': ids, 'core_n': 2, 'prefix_checkpoints': [2, 4]}

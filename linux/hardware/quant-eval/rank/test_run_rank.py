@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import tempfile
 import threading
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import run_rank
 import grade_pub
@@ -257,12 +257,28 @@ class RunnerTest(unittest.TestCase):
         self.assertEqual(self.report["not_run"], self.ids)
 
     def test_gpu_hold_during_request(self):
-        self.server.abort_at = "first"
+        self.server.abort_at = "second"
         self.assertEqual(self.invoke(), 4)
         self.assertEqual(self.report["stop_reason"], "abort_file")
         self.assertEqual(self.report["counts"]["attempted"], 1)
         self.assertEqual(self.report["not_run"], self.ids[1:])
-        self.assertIn("error", self.answers[self.ids[0]])
+        self.assertFalse(self.report["core_complete"])
+        self.assertEqual(self.report["answered_prefix"], 1)
+        self.assertNotIn(self.ids[1], self.answers)
+        self.assertEqual(self.report["items"][self.ids[1]]["status"], "not_run")
+        self.assertEqual(self.grade(self.ids[1])["status"], "pending")
+
+    def test_early_request_timeout_continues(self):
+        reply = {"choices": [{"finish_reason": "stop", "message": {"content": "OK"}}]}
+        success = (reply, None, 0)
+        pipe = MagicMock()
+        pipe.recv.side_effect = [success, (None, "TimeoutError: read timed out", 0), success, success]
+        with patch.object(run_rank, "client") as client:
+            client.return_value.__enter__.return_value = (pipe, MagicMock())
+            self.assertEqual(self.invoke(), 0)
+        self.assertEqual(self.report["items"][self.ids[0]]["status"], "error")
+        self.assertEqual(self.report["stop_reason"], "complete")
+        self.assertEqual(self.report["answered_prefix"], 3)
 
     def test_warmup_failure_never_starts_clock(self):
         self.server.malformed_at = "Reply OK."

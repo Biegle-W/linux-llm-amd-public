@@ -79,7 +79,7 @@ def request(client_pair, url, cat, body, deadline, abort_file, monotonic):
             reply, error, _ = pipe.recv()
             if error:
                 return {"cat": cat, "error": error}, (
-                    "deadline" if error.startswith("TimeoutError") else None)
+                    "deadline" if error.startswith("TimeoutError") and monotonic() >= deadline else None)
             try:
                 row = run_pub.to_row(cat, reply)
                 if row["finish"] not in ("stop", "length", "tool_calls"):
@@ -89,7 +89,7 @@ def request(client_pair, url, cat, body, deadline, abort_file, monotonic):
                 return {"cat": cat, "error": f"{type(exc).__name__}: {exc}"}, None
         if held(abort_file):
             proc.terminate()
-            return {"cat": cat, "error": "GPU hold during request"}, "abort_file"
+            return None, "abort_file"
 
 
 def finite(value, name, *, positive=False):
